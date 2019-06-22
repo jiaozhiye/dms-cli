@@ -1,0 +1,70 @@
+<template>
+  <div class="header">
+    <span class="trigger fl" @click="clickHandler">
+      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
+    </span>
+    <div class="setting fr">
+      <slot name="setting"></slot>
+    </div>
+    <div class="menus">
+      <slot name="menu"></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'global-header',
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
+    },
+    toggle: {
+      type: Function,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      isCollapse: this.collapsed
+    };
+  },
+  methods: {
+    clickHandler() {
+      this.isCollapse = !this.isCollapse;
+      this.toggle(this.isCollapse);
+    }
+  }
+};
+</script>
+
+<style lang="less" scoped>
+.header {
+  height: 60px;
+  margin: 0 -20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e4e7ed;
+  position: relative;
+  z-index: 1;
+  .trigger {
+    display: inline-block;
+    font-size: 24px;
+    line-height: 60px;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
+  .menus {
+    margin: 0 200px 0 65px;
+    padding-top: 20px;
+  }
+  .setting {
+    height: 60px;
+    width: 200px;
+  }
+}
+</style>
