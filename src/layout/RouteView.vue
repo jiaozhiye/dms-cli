@@ -1,7 +1,9 @@
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'RouteView',
   computed: {
+    ...mapState('app', ['keepAliveNames']),
     key() {
       return this.$route.name !== undefined ? this.$route.name + +new Date() : 'view-' + +new Date();
     }
@@ -9,10 +11,11 @@ export default {
   render() {
     const {
       key,
+      keepAliveNames,
       $route: { meta }
     } = this;
     const inKeep = (
-      <keep-alive>
+      <keep-alive max={10} include={keepAliveNames}>
         <router-view />
       </keep-alive>
     );

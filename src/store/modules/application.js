@@ -25,7 +25,8 @@ const state = {
   navList: [],
   dict: {}, // 数据字典、筛选条件
   btnLoading: false, // 按钮的加载中状态
-  isLeaveRemind: false // true -> 开启提醒     false -> 关闭提醒
+  isLeaveRemind: false, // true -> 开启提醒     false -> 关闭提醒
+  keepAliveNames: []
 };
 
 // actions
@@ -88,6 +89,20 @@ const actions = {
       type: types.DICT_DATA,
       data
     });
+  },
+  addKeepAliveNames({ commit, state }, params = '') {
+    if (!params) return;
+    commit({
+      type: types.ADD_CNAME,
+      data: params
+    });
+  },
+  removeKeepAliveNames({ commit, state }, params = '') {
+    if (!params) return;
+    commit({
+      type: types.DEL_CNAME,
+      data: params
+    });
   }
 };
 
@@ -110,6 +125,12 @@ const mutations = {
   },
   [types.DICT_DATA](state, { data }) {
     state.dict = data;
+  },
+  [types.ADD_CNAME](state, { data }) {
+    state.keepAliveNames = [...new Set([...state.keepAliveNames, data])];
+  },
+  [types.DEL_CNAME](state, { data }) {
+    state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x === data), 1);
   }
 };
 

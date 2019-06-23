@@ -22,7 +22,7 @@ const menuRoutes = [
               keepAlive: true,
               permission: []
             },
-            component: loadComponent('home/index')
+            component: loadComponent('test/index')
           },
           {
             path: '/bjgl/cggl/rk',

@@ -1,4 +1,5 @@
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'MultiTab',
   data() {
@@ -16,6 +17,7 @@ export default {
     $route(val) {
       this.activeKey = val.path;
       if (!this.pathList.includes(this.activeKey)) {
+        this.addKeepAliveNames(val.matched[val.matched.length - 1].components.default.name);
         this.pages.push(val);
       }
     },
@@ -24,7 +26,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames']),
     removeTab(targetKey) {
+      this.removeKeepAliveNames('Test');
       this.pages = this.pages.filter(page => page.path !== targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
       if (!this.pathList.includes(this.activeKey)) {
