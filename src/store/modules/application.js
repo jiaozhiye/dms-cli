@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import * as types from '../types';
 import { setToken, removeToken, setUser, removeUser } from '@/assets/js/auth';
-import dictData from '@/config/dictData';
+import dictData from '@/mock/dictData';
 import { getNavList, getAllDict } from '@/api';
 
 // 递归添加父节点
@@ -51,7 +52,7 @@ const actions = {
     if (state.navList.length) return;
     let data = [];
     if (process.env.MOCK_DATA === 'true') {
-      const res = require('@/config/sideMenu').default;
+      const res = require('@/mock/sideMenu').default;
       data = res;
     } else {
       const res = await getNavList();
@@ -90,15 +91,13 @@ const actions = {
       data
     });
   },
-  addKeepAliveNames({ commit, state }, params = '') {
-    if (!params) return;
+  addKeepAliveNames({ commit, state }, params) {
     commit({
       type: types.ADD_CNAME,
       data: params
     });
   },
-  removeKeepAliveNames({ commit, state }, params = '') {
-    if (!params) return;
+  removeKeepAliveNames({ commit, state }, params) {
     commit({
       type: types.DEL_CNAME,
       data: params
@@ -127,10 +126,10 @@ const mutations = {
     state.dict = data;
   },
   [types.ADD_CNAME](state, { data }) {
-    state.keepAliveNames = [...new Set([...state.keepAliveNames, data])];
+    state.keepAliveNames = _.uniqWith([...state.keepAliveNames, data], _.isEqual);
   },
   [types.DEL_CNAME](state, { data }) {
-    state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x === data), 1);
+    state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x.key === data), 1);
   }
 };
 

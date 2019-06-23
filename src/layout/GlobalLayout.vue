@@ -1,5 +1,5 @@
 <script>
-import SideMenu from '@/components/SideMenu/SideMenu';
+import SideMenu from '@/components/SideMenu';
 import GlobalHeader from '@/components/GlobalHeader';
 import MultiTab from '@/components/MultiTab';
 
@@ -47,7 +47,6 @@ export default {
   .sidebar {
     transition: width 0.3s;
     overflow: visible;
-    z-index: 2;
   }
   .container {
     padding: 10px 20px;

@@ -1,5 +1,6 @@
 <script>
 import { mapState } from 'vuex';
+import config from '@/config';
 export default {
   name: 'RouteView',
   computed: {
@@ -15,7 +16,7 @@ export default {
       $route: { meta }
     } = this;
     const inKeep = (
-      <keep-alive max={10} include={keepAliveNames}>
+      <keep-alive max={config.maxCacheNum} include={keepAliveNames.map(x => x.value)}>
         <router-view />
       </keep-alive>
     );

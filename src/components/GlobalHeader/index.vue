@@ -44,7 +44,7 @@ export default {
   height: 60px;
   margin: 0 -20px;
   background-color: #fff;
-  border-bottom: 1px solid #e4e7ed;
+  border-bottom: 1px solid @borderColor;
   position: relative;
   z-index: 1;
   .trigger {

@@ -1,5 +1,6 @@
 <script>
 import { mapActions } from 'vuex';
+
 export default {
   name: 'MultiTab',
   data() {
@@ -13,11 +14,15 @@ export default {
       return this.pages.map(x => x.path);
     }
   },
+  created() {
+    this.addKeepAlive(this.$route);
+  },
   watch: {
     $route(val) {
       this.activeKey = val.path;
       if (!this.pathList.includes(this.activeKey)) {
-        this.addKeepAliveNames(val.matched[val.matched.length - 1].components.default.name);
+        const { name = '' } = this.getRouteComponent(val);
+        this.addKeepAlive(val);
         this.pages.push(val);
       }
     },
@@ -27,9 +32,19 @@ export default {
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames']),
+    getRouteComponent(route) {
+      return route.matched[route.matched.length - 1].components.default;
+    },
+    addKeepAlive(route) {
+      if (!route.meta.keepAlive) return;
+      const { name = '' } = this.getRouteComponent(route);
+      // 添加组件缓存列表
+      this.addKeepAliveNames({ key: this.activeKey, value: name });
+    },
     removeTab(targetKey) {
-      this.removeKeepAliveNames('Test');
       this.pages = this.pages.filter(page => page.path !== targetKey);
+      // 移除组件缓存列表
+      this.removeKeepAliveNames(targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
       if (!this.pathList.includes(this.activeKey)) {
         this.activeKey = this.pathList[this.pathList.length - 1];

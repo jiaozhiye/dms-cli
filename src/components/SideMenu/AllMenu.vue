@@ -7,8 +7,7 @@
     <div :class="['mask', poperShow]" :style="{left: asideWidth}"></div>
     <div :style="{left: asideWidth}" :class="['poper', poperShow]" @click.stop>
       <div class="box">
-        <div class="left"></div>
-        <div class="right"></div>
+        <slot :visible="visible"></slot>
       </div>
     </div>
   </div>
@@ -46,6 +45,9 @@ export default {
       this.evHandler = addEventListener(document, 'click', ev => {
         this.visible = false;
       });
+    },
+    close() {
+      this.visible = false;
     }
   },
   mounted() {
@@ -60,6 +62,7 @@ export default {
 <style lang="less" scoped>
 .all-menu {
   height: 56px;
+  background-color: @asideBgColor;
   .title {
     line-height: 56px;
     color: rgba(255, 255, 255, 0.65);
@@ -85,7 +88,7 @@ export default {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.65);
-    z-index: 0;
+    z-index: -2;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
     transform-origin: 50% 50% 0px;
@@ -98,32 +101,23 @@ export default {
   .poper {
     position: absolute;
     top: 0;
-    width: 0;
+    width: 650px;
     height: 100%;
     background: #374f64;
-    z-index: 2;
+    z-index: -1;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+    transform: translate3d(-100%, 0, 0);
     transition: all 0.4s cubic-bezier(0.7, 0.3, 0.1, 1);
     transform-origin: 50% 50% 0px;
     opacity: 0;
     visibility: hidden;
     &.show {
-      width: 650px;
+      transform: translate3d(0, 0, 0);
       opacity: 1;
       visibility: visible;
     }
     .box {
       height: 100%;
-      display: flex;
-      .left {
-        padding-top: 100px;
-        flex: 1;
-      }
-      .right {
-        padding-top: 100px;
-        width: 160px;
-        background-color: #001529;
-      }
     }
   }
 }

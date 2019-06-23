@@ -1,16 +1,19 @@
 <template>
   <div class="wrapper">
     <logo :collapsed="collapsed"/>
-    <all-menu :collapsed="collapsed"/>
-    <menu-tree class="menu-list" :menu="navList" :collapsed="collapsed"/>
+    <all-menu :collapsed="collapsed">
+      <MenuList :menu="navList"/>
+    </all-menu>
+    <menu-tree class="menu-tree" :menu="navList" :collapsed="collapsed"/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import MenuTree from './index';
+import MenuTree from './menuTree';
 import AllMenu from './AllMenu';
-import Logo from '@/components/Logo';
+import MenuList from './MenuList';
+import Logo from './Logo';
 export default {
   name: 'side-menu',
   props: {
@@ -25,7 +28,8 @@ export default {
   components: {
     Logo,
     MenuTree,
-    AllMenu
+    AllMenu,
+    MenuList
   }
 };
 </script>
@@ -34,10 +38,12 @@ export default {
 .wrapper {
   position: relative;
   height: 100%;
-  background-color: #001529;
+  background-color: @asideBgColor;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-  .menu-list {
+  z-index: 2;
+  .menu-tree {
     height: calc(100% - 116px);
+    background-color: @asideBgColor;
     overflow-y: auto;
   }
 }
