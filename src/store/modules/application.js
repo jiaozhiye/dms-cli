@@ -2,15 +2,28 @@ import _ from 'lodash';
 import * as types from '../types';
 import { setToken, removeToken, setUser, removeUser } from '@/assets/js/auth';
 import dictData from '@/mock/dictData';
-import { getNavList, getAllDict } from '@/api';
+import { getNavList, getAllDict, getStarMenuList } from '@/api';
+
+// 提取可点击的菜单项
+const formateMenu = list => {
+  const res = [];
+  list.forEach(x => {
+    if (Array.isArray(x.children)) {
+      res.push(...formateMenu(x.children));
+    } else {
+      res.push(x);
+    }
+  });
+  return res;
+};
 
 // 递归添加父节点
 const addParentNode = list => {
-  (function func(arr, obj) {
+  (function fn(arr, obj) {
     for (let i = 0; i < arr.length; i++) {
       if (Array.isArray(arr[i].children) && arr[i].children.length > 0) {
         let { title, key, icon } = arr[i];
-        func(arr[i].children, { title, key, icon });
+        fn(arr[i].children, { title, key, icon });
       }
       if (typeof obj !== 'undefined') {
         arr[i].parent = obj;
@@ -24,6 +37,8 @@ const addParentNode = list => {
 const state = {
   loginInfo: {},
   navList: [],
+  menuList: [],
+  starMenuList: [],
   dict: {}, // 数据字典、筛选条件
   btnLoading: false, // 按钮的加载中状态
   isLeaveRemind: false, // true -> 开启提醒     false -> 关闭提醒
@@ -61,9 +76,30 @@ const actions = {
       }
     }
     commit({
+      type: types.MENULIST,
+      data: formateMenu(data)
+    });
+    commit({
       type: types.NAVLIST,
       data: addParentNode(data)
     });
+  },
+  async createStarMenuList({ commit, state }, params) {
+    if (state.starMenuList.length) return;
+    if (process.env.MOCK_DATA === 'true') return;
+    const res = await getStarMenuList();
+    if (res.resultCode === 200) {
+      commit({
+        type: types.STAR_MENU,
+        data: res.data
+      });
+    }
+  },
+  checkAuthority({ commit, state }, params) {
+    if (!state.menuList.length) {
+      return false;
+    }
+    return state.menuList.some(x => x.key === params);
   },
   setBtnLoading({ commit, state }, params) {
     commit({
@@ -86,10 +122,7 @@ const actions = {
         data = { ...data, ...res.data };
       }
     }
-    commit({
-      type: types.DICT_DATA,
-      data
-    });
+    commit({ type: types.DICT_DATA, data });
   },
   addKeepAliveNames({ commit, state }, params) {
     commit({
@@ -100,6 +133,18 @@ const actions = {
   removeKeepAliveNames({ commit, state }, params) {
     commit({
       type: types.DEL_CNAME,
+      data: params
+    });
+  },
+  addStarMenuList({ commit, state }, params) {
+    commit({
+      type: types.ADD_STAR_MENU,
+      data: params
+    });
+  },
+  removeStarMenuList({ commit, state }, params) {
+    commit({
+      type: types.DEL_STAR_MENU,
       data: params
     });
   }
@@ -116,6 +161,12 @@ const mutations = {
   [types.NAVLIST](state, { data }) {
     state.navList = data;
   },
+  [types.STAR_MENU](state, { data }) {
+    state.starMenuList = data;
+  },
+  [types.MENULIST](state, { data }) {
+    state.menuList = data;
+  },
   [types.BUTTON_LOADING](state, { data }) {
     state.btnLoading = data;
   },
@@ -130,6 +181,12 @@ const mutations = {
   },
   [types.DEL_CNAME](state, { data }) {
     state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x.key === data), 1);
+  },
+  [types.ADD_STAR_MENU](state, { data }) {
+    state.starMenuList = _.uniqWith([...state.starMenuList, data], _.isEqual);
+  },
+  [types.DEL_STAR_MENU](state, { data }) {
+    state.starMenuList.splice(state.starMenuList.findIndex(x => x.key === data), 1);
   }
 };
 

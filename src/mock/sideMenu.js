@@ -15,7 +15,8 @@ export default [
             title: '备件采购订单',
             key: '/bjgl/cggl/dd',
             pyt: 'bjcgdd',
-            icon: ''
+            icon: '',
+            permission: ['save', 'update']
           },
           {
             title: '备件采购入库',

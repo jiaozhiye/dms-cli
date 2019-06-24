@@ -6,11 +6,13 @@ import RouteView from '@/layout/RouteView';
 export default {
   name: 'BasicLayout',
   methods: {
-    ...mapActions('app', ['createDictData'])
+    ...mapActions('app', ['createDictData', 'createStarMenuList'])
   },
   mounted() {
     // 登录后，获取所有的数据字典值
     this.createDictData();
+    // 获取收藏导航
+    this.createStarMenuList();
   },
   render() {
     return (

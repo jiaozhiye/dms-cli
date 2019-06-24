@@ -19,8 +19,7 @@ const menuRoutes = [
             path: '/bjgl/cggl/dd',
             meta: {
               title: '备件采购订单',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('test/index')
           },
@@ -28,8 +27,7 @@ const menuRoutes = [
             path: '/bjgl/cggl/rk',
             meta: {
               title: '备件采购入库',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -37,8 +35,7 @@ const menuRoutes = [
             path: '/bjgl/cggl/tk',
             meta: {
               title: '备件采购退库',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -54,8 +51,7 @@ const menuRoutes = [
             path: '/bjgl/kcgl/lb',
             meta: {
               title: '备件清单列表',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -79,8 +75,7 @@ const menuRoutes = [
             path: '/xsgl/xugl/fp',
             meta: {
               title: '线索分配',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -88,8 +83,7 @@ const menuRoutes = [
             path: '/xsgl/xugl/jl',
             meta: {
               title: '线索记录',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -97,8 +91,7 @@ const menuRoutes = [
             path: '/xsgl/xugl/jh',
             meta: {
               title: '线索跟进计划',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -106,8 +99,7 @@ const menuRoutes = [
             path: '/xsgl/xugl/zy',
             meta: {
               title: '线索转移',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -123,8 +115,7 @@ const menuRoutes = [
             path: '/xsgl/jhgl/xsjh',
             meta: {
               title: '销售机会',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -132,8 +123,7 @@ const menuRoutes = [
             path: '/xsgl/jhgl/jhsz',
             meta: {
               title: '跟进计划设置',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -141,8 +131,7 @@ const menuRoutes = [
             path: '/xsgl/jhgl/gjjh',
             meta: {
               title: '机会跟进计划',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -158,8 +147,7 @@ const menuRoutes = [
             path: '/xsgl/khgl/dd',
             meta: {
               title: '客户订单管理',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -167,8 +155,7 @@ const menuRoutes = [
             path: '/xsgl/khgl/cx',
             meta: {
               title: '车辆资源查询',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -176,8 +163,7 @@ const menuRoutes = [
             path: '/xsgl/khgl/gl',
             meta: {
               title: '车辆资源管理',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -201,8 +187,7 @@ const menuRoutes = [
             path: '/kfgl/hf/xs',
             meta: {
               title: '销售回访',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           },
@@ -210,8 +195,7 @@ const menuRoutes = [
             path: '/kfgl/hf/fp',
             meta: {
               title: '回访分配',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }
@@ -227,8 +211,7 @@ const menuRoutes = [
             path: '/kfgl/ts/gl',
             meta: {
               title: '投诉管理',
-              keepAlive: true,
-              permission: []
+              keepAlive: true
             },
             component: loadComponent('home/index')
           }

@@ -9,3 +9,6 @@ export const getNavList = params => axios.get('/api/test', { params });
 
 // 获取所有数据字典值
 export const getAllDict = params => axios.get('/api/test', { params });
+
+// 获取收藏导航
+export const getStarMenuList = params => axios.get('/api/test', { params });

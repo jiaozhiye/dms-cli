@@ -6,19 +6,23 @@ import 'nprogress/nprogress.css'; // Progress 进度条样式
 import { MessageBox } from 'element-ui';
 
 // 访问白名单
-const whiteList = ['/login', '/register'];
+const whiteList = ['/login'];
+// 权限白名单
+const whiteAuth = ['/login', '/home', '/404'];
 
 const messageConfirm = next => {
-  MessageBox.confirm({
-    title: '您有未保存的数据，确认离开此页面吗？',
-    onOk() {
+  MessageBox.confirm('您有未保存的数据，确认离开此页面吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(() => {
       next();
-    },
-    onCancel() {
+    })
+    .catch(() => {
       NProgress.done();
       next(false);
-    }
-  });
+    });
 };
 
 router.beforeEach(async (to, from, next) => {
@@ -33,10 +37,17 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('app/createNavList');
         next({ ...to, replace: true });
       } else {
-        if (!store.state.app.isLeaveRemind) {
-          next();
+        let isAuth = await store.dispatch('app/checkAuthority', to.path);
+        // 权限校验
+        if (isAuth || whiteAuth.includes(to.path)) {
+          // 离开页面的校验
+          if (!store.state.app.isLeaveRemind) {
+            next();
+          } else {
+            messageConfirm(next);
+          }
         } else {
-          messageConfirm(next);
+          next('/404');
         }
       }
     }

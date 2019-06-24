@@ -45,6 +45,9 @@ export default {
     height: calc(100% - 116px);
     background-color: @asideBgColor;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 </style>

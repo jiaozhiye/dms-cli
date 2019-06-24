@@ -9,7 +9,7 @@
           placeholder="请输入菜单名称/拼音头"
           @select="handleSelect"
         >
-          <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+          <i class="el-icon-search el-input__icon" slot="prefix"></i>
           <template slot-scope="{ item }">
             <span class="name">{{ item.title }}</span>
           </template>
@@ -17,23 +17,36 @@
       </div>
     </div>
     <div class="collect">
-      <el-tabs tab-position="right" style="height: 100%">
+      <el-tabs tab-position="right">
         <el-tab-pane key="k1" label="我的收藏" lazy>
-          <div class="cont">我的收藏</div>
+          <div class="wrap">
+            <h4>我的收藏</h4>
+            <ul>
+              <li v-for="item in starMenuList" :key="item.key">
+                <router-link :to="item.key" @click.native="clickHandle">{{ item.title }}</router-link>
+              </li>
+            </ul>
+          </div>
         </el-tab-pane>
         <el-tab-pane key="k2" label="常用导航" lazy>
-          <div class="cont">常用导航</div>
+          <div class="wrap">
+            <h4>常用导航</h4>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
     <div class="main">
-      <el-tabs tab-position="right" style="height: 100%">
-        <el-tab-pane v-for="item in menu" :key="item.key" :label="item.title" lazy>
+      <el-tabs tab-position="right">
+        <el-tab-pane v-for="item in packMenuList" :key="item.key" :label="item.title" lazy>
           <div class="column-wrap">
             <div v-for="sub in item.children" :key="sub.key" class="box">
               <h4>{{ sub.title }}</h4>
               <ul>
                 <li v-for="x in sub.children" :key="x.key">
+                  <i
+                    :class="[x.star ? 'el-icon-star-on' : 'el-icon-star-off']"
+                    @click.stop="starClickHandle(x.star, x.key, x.title)"
+                  ></i>
                   <router-link :to="x.key" @click.native="clickHandle">{{ x.title }}</router-link>
                 </li>
               </ul>
@@ -46,6 +59,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'MenuList',
   props: {
@@ -56,24 +70,29 @@ export default {
   },
   data() {
     return {
-      menuPath: '',
-      list: this.formateData(this.menu)
+      menuPath: ''
     };
   },
+  computed: {
+    ...mapState('app', ['menuList', 'starMenuList']),
+    packMenuList() {
+      return this.createMenuList(this.menu);
+    }
+  },
   methods: {
-    formateData(list) {
-      const res = [];
-      list.forEach(x => {
+    ...mapActions('app', ['addStarMenuList', 'removeStarMenuList']),
+    createMenuList(list) {
+      return list.map(x => {
+        const t = { ...x };
         if (Array.isArray(x.children)) {
-          res.push(...this.formateData(x.children));
-        } else {
-          res.push(x);
+          t.children = this.createMenuList(x.children);
         }
+        t.star = this.starMenuList.some(k => k.key === t.key);
+        return t;
       });
-      return res;
     },
     querySearch(queryString = '', cb) {
-      const res = queryString ? this.list.filter(this.createFilter(queryString)) : this.list;
+      const res = queryString ? this.menuList.filter(this.createFilter(queryString)) : this.menuList;
       cb(res);
     },
     createFilter(queryString) {
@@ -93,10 +112,14 @@ export default {
       setTimeout(() => {
         this.$parent.close();
       }, 200);
+    },
+    starClickHandle(star, key, title) {
+      if (!star) {
+        this.addStarMenuList({ key, title });
+      } else {
+        this.removeStarMenuList(key);
+      }
     }
-  },
-  mounted() {
-    console.log(this.list);
   }
 };
 </script>
@@ -114,39 +137,92 @@ export default {
     background: @asideBgColor;
   }
   .search {
-    height: 130px;
+    height: 120px;
     .top {
       padding: 60px 0 0 100px;
       .el-autocomplete {
         width: 300px;
+        .el-input__inner {
+          color: #fff;
+          border-radius: 0;
+          background: #374f64;
+          border: none;
+          border-bottom: 1px solid #7990a6;
+        }
       }
     }
   }
   .collect {
-    height: 150px;
-    .cont {
+    height: 140px;
+    .wrap {
       margin-left: 30px;
       color: #fff;
+      h4 {
+        padding: 10px 0;
+        color: #7c93a8;
+        font-weight: 700;
+        line-height: 20px;
+      }
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        li {
+          width: 33%;
+          line-height: 26px;
+          a {
+            font-size: 12px;
+            color: #fff;
+          }
+        }
+      }
     }
   }
   .main {
-    .column-wrap {
-      column-count: 2;
-      .box {
-        margin: 0 0 30px 30px;
-        -webkit-column-break-inside: avoid;
-        break-inside: avoid;
-        h4 {
-          padding: 10px 0;
-          color: #fff;
-          line-height: 20px;
-        }
-        ul {
-          li {
-            line-height: 30px;
-            a {
-              font-size: 12px;
-              color: #fff;
+    position: relative;
+    height: calc(100% - 120px - 140px);
+    .el-tabs {
+      height: 100%;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .el-tabs__header {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .el-tabs__content {
+        margin-right: 150px;
+        .column-wrap {
+          column-count: 2;
+          .box {
+            margin: 0 0 30px 30px;
+            -webkit-column-break-inside: avoid;
+            break-inside: avoid;
+            h4 {
+              padding: 10px 0;
+              color: #7c93a8;
+              font-weight: 700;
+              line-height: 20px;
+            }
+            ul {
+              li {
+                line-height: 26px;
+                i {
+                  font-size: 14px;
+                  cursor: pointer;
+                }
+                .el-icon-star-on {
+                  color: #fff;
+                }
+                .el-icon-star-off {
+                  color: #7c93a8;
+                }
+                a {
+                  font-size: 12px;
+                  color: #fff;
+                }
+              }
             }
           }
         }

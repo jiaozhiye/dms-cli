@@ -25,9 +25,8 @@ export const constantRouterMap = [
       {
         path: '/home',
         meta: {
-          title: '概览',
-          keepAlive: true,
-          permission: []
+          title: '全局概览',
+          keepAlive: true
         },
         component: Home
       },
