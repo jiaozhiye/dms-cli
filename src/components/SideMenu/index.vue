@@ -15,7 +15,7 @@ import AllMenu from './AllMenu';
 import MenuList from './MenuList';
 import Logo from './Logo';
 export default {
-  name: 'side-menu',
+  name: 'SideMenu',
   props: {
     collapsed: {
       type: Boolean,

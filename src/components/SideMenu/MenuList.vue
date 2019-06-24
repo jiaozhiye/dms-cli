@@ -115,6 +115,9 @@ export default {
     },
     starClickHandle(star, key, title) {
       if (!star) {
+        if (this.starMenuList.length >= 9) {
+          return this.$message.warning('最多只能收藏 9 个菜单');
+        }
         this.addStarMenuList({ key, title });
       } else {
         this.removeStarMenuList(key);
@@ -144,6 +147,7 @@ export default {
         width: 300px;
         .el-input__inner {
           color: #fff;
+          font-size: 14px;
           border-radius: 0;
           background: #374f64;
           border: none;

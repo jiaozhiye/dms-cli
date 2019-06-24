@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'no-match',
+  name: 'NoMatch',
 }
 </script>
 

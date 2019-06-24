@@ -86,14 +86,20 @@ const actions = {
   },
   async createStarMenuList({ commit, state }, params) {
     if (state.starMenuList.length) return;
-    if (process.env.MOCK_DATA === 'true') return;
-    const res = await getStarMenuList();
-    if (res.resultCode === 200) {
-      commit({
-        type: types.STAR_MENU,
-        data: res.data
-      });
+    let data = [];
+    if (process.env.MOCK_DATA === 'true') {
+      const res = require('@/mock/starMenu').default;
+      data = res;
+    } else {
+      const res = await getStarMenuList();
+      if (res.resultCode === 200) {
+        data = res.data;
+      }
     }
+    commit({
+      type: types.STAR_MENU,
+      data
+    });
   },
   checkAuthority({ commit, state }, params) {
     if (!state.menuList.length) {

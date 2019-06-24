@@ -28,21 +28,20 @@ export default {
   height: 60px;
   line-height: 60px;
   padding-left: 16px;
-  -webkit-transition: all 0.3s;
   transition: all 0.3s;
   background: #002140;
   overflow: hidden;
   img {
     height: 32px;
+    display: inline-block;
     vertical-align: middle;
   }
   h1 {
+    display: inline-block;
     color: #fff;
     font-size: 16px;
     font-weight: normal;
     margin: 0 0 0 10px;
-    display: inline-block;
-    vertical-align: middle;
   }
 }
 </style>

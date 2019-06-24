@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'global-header',
+  name: 'GlobalHeader',
   props: {
     collapsed: {
       type: Boolean,

@@ -10,6 +10,7 @@ const whiteList = ['/login'];
 // 权限白名单
 const whiteAuth = ['/login', '/home', '/404'];
 
+// 页面离开提醒
 const messageConfirm = next => {
   MessageBox.confirm('您有未保存的数据，确认离开此页面吗？', '提示', {
     confirmButtonText: '确定',
@@ -25,10 +26,17 @@ const messageConfirm = next => {
     });
 };
 
+const isLogin = () => {
+  if (process.env.MOCK_DATA === 'true') {
+    return true;
+  } else {
+    return getToken();
+  }
+};
+
 router.beforeEach(async (to, from, next) => {
   NProgress.start();
-  // getToken()
-  if (true) {
+  if (isLogin()) {
     if (to.path === '/login') {
       next('/');
     } else {
@@ -56,8 +64,8 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.includes(to.path)) {
       next();
     } else {
-      next('/login');
       NProgress.done();
+      next('/login');
     }
   }
 });

@@ -55,9 +55,9 @@ export default {
           router
           default-active={selectedKey}
           style={{ borderRight: 'none' }}
+          background-color="#001529"
           text-color="rgba(255,255,255,0.65)"
           active-text-color="#1890ff"
-          background-color="#001529"
         >
           {this.createMenuTree(this.menu)}
         </el-menu>

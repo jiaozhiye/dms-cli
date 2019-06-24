@@ -1,5 +1,5 @@
 <template>
-  <el-row class="login-wrapper">
+  <el-row class="wrapper">
     <el-col :span="6" :offset="9">
       <h3 class="welcome">欢迎使用</h3>
       <el-form class="app-form" ref="form" label-position="top" :model="form" :rules="rules">
@@ -45,6 +45,9 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState('app', ['btnLoading'])
+  },
   methods: {
     ...mapActions('app', ['createLoginInfo']),
     async doLogin() {
@@ -52,11 +55,10 @@ export default {
         username: this.form.username,
         password: this.form.password
       });
-      if (res.code === 1) {
+      if (res.resultCode === 200) {
         this.createLoginInfo({
           id: res.data.id,
           name: res.data.name,
-          roles: res.data.roles || [],
           token: res.data.token
         });
         this.$router.push({ path: '/' });
@@ -69,7 +71,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.login-wrapper {
+.wrapper {
   height: 100vh;
   background: #f2f2f2;
   .welcome {
@@ -82,8 +84,8 @@ export default {
   .app-form {
     padding: 10px 20px 0;
     background-color: #fff;
-    border: 1px solid #d8dee2;
-    border-radius: 5px;
+    border: 1px solid @borderColor;
+    border-radius: @borderRadius;
   }
 }
 </style>
