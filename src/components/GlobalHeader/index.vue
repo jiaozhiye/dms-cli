@@ -3,8 +3,8 @@
     <span class="trigger fl" @click="clickHandler">
       <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
     </span>
-    <div class="setting fr">
-      <slot name="setting"></slot>
+    <div class="action fr">
+      <slot name="action"></slot>
     </div>
     <div class="menus">
       <slot name="menu"></slot>
@@ -62,7 +62,7 @@ export default {
     margin: 0 200px 0 65px;
     padding-top: 20px;
   }
-  .setting {
+  .action {
     height: 60px;
     width: 200px;
   }

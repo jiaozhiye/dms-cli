@@ -38,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (isLogin()) {
     if (to.path === '/login') {
-      next('/');
+      next({ path: '/' });
     } else {
       if (store.state.app.navList.length == 0) {
         // 通过 vuex 管理导航数据
@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
             messageConfirm(next);
           }
         } else {
-          next('/404');
+          next({ path: '/404' });
         }
       }
     }
@@ -65,7 +65,7 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       NProgress.done();
-      next('/login');
+      next({ path: '/login' });
     }
   }
 });

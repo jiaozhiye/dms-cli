@@ -6,7 +6,7 @@ export default {
   computed: {
     ...mapState('app', ['keepAliveNames']),
     key() {
-      return this.$route.name !== undefined ? this.$route.name + +new Date() : 'view-' + +new Date();
+      return this.$route.path;
     }
   },
   render() {

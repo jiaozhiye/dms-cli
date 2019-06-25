@@ -8,9 +8,12 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from '@/routes';
 import store from '@/store';
+import '@/filters';
 import '@/routes/permission';
-import '@/utils/filter';
 import '@/config/use';
+
+import SvgIcon from '@/components/SvgIcon';
+Vue.use(SvgIcon);
 
 // 关闭生产环境的提示
 Vue.config.productionTip = false;

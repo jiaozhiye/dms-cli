@@ -2,6 +2,7 @@
 import SideMenu from '@/components/SideMenu';
 import GlobalHeader from '@/components/GlobalHeader';
 import MultiTab from '@/components/MultiTab';
+import HeadAction from '@/components/HeadAction';
 
 export default {
   name: 'GlobalLayout',
@@ -31,6 +32,7 @@ export default {
           <el-header>
             <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
               <MultiTab slot="menu" />
+              <HeadAction slot="action" />
             </GlobalHeader>
           </el-header>
           <el-main class="container">{$slots.default}</el-main>

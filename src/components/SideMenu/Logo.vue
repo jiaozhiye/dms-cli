@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link to="/">
-      <img src="@/assets/img/logo.svg" alt="logo">
+      <img src="@/assets/img/logo.png" alt="logo">
       <h1 v-if="!collapsed">{{ title }}</h1>
     </router-link>
   </div>

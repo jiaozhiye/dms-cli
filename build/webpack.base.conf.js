@@ -37,8 +37,16 @@ module.exports = {
         exclude: /(node_modules|bower_components)/
       },
       {
-        test: /\.(png|jpe?g|gif|svg|ico)(\?.*)?$/,
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        options: {
+          symbolId: 'icon-[name]'
+        }
+      },
+      {
+        test: /\.(png|jpe?g|svg|gif|ico)(\?.*)?$/,
         loader: 'url-loader',
+        include: utils.resolve('src/assets/img'),
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')

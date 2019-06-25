@@ -51,8 +51,8 @@ export default {
       <div>
         <el-menu
           collapse={collapsed}
-          unique-opened
           router
+          collapse-transition={false}
           default-active={selectedKey}
           style={{ borderRight: 'none' }}
           background-color="#001529"

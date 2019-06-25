@@ -11,6 +11,10 @@ Vue.filter('NumberFormat', value => {
   return intPartFormat;
 });
 
-Vue.filter('moment', (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') => {
-  return moment(dataStr).format(pattern);
+Vue.filter('DateFormat', (input, pattern = 'YYYY-MM-DD') => {
+  return moment(input).format(pattern);
+});
+
+Vue.filter('DateTimeFormat', (input, pattern = 'YYYY-MM-DD HH:mm:ss') => {
+  return moment(input).format(pattern);
 });

@@ -14,6 +14,7 @@ import MenuTree from './menuTree';
 import AllMenu from './AllMenu';
 import MenuList from './MenuList';
 import Logo from './Logo';
+
 export default {
   name: 'SideMenu',
   props: {
