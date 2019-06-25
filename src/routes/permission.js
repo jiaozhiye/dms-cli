@@ -1,5 +1,12 @@
+/**
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
+ */
 import router from '@/routes';
 import store from '@/store';
+import config from '@/config';
 import { getToken } from '@/assets/js/auth';
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
@@ -72,7 +79,7 @@ router.beforeEach(async (to, from, next) => {
 
 router.afterEach(to => {
   if (to.meta && typeof to.meta.title !== 'undefined') {
-    document.title = to.meta.title;
+    document.title = `${config.systemName}-${to.meta.title}`;
   }
   NProgress.done(); // 结束Progress
   store.dispatch('app/setLeaveRemind', !1);

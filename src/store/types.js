@@ -1,8 +1,8 @@
 /**
- * @Author: jzy
- * @Date: 2017/9/19
- * @Last Modified by: jzy
- * @Last Modified time: 2017/9/19
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
  */
 // app
 export const LOGININFO = 'LOGININFO';

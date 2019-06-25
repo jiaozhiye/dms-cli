@@ -1,8 +1,8 @@
 /**
- * @Author: Jzy
- * @Date: 2017/12/12
- * @Last Modified by:   jzy
- * @Last Modified time: 2018-02-21 17:52:11
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
  */
 // 等待
 export const sleep = async timeLen => {

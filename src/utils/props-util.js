@@ -1,3 +1,9 @@
+/**
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
+ */
 import isPlainObject from 'lodash/isPlainObject';
 
 function getType(fn) {
@@ -41,8 +47,7 @@ const getOptionProps = instance => {
     for (const [k, v] of Object.entries(props)) {
       const def = v.default;
       if (def !== undefined) {
-        res[k] =
-          typeof def === 'function' && getType(v.type) !== 'Function' ? def.call(instance) : def;
+        res[k] = typeof def === 'function' && getType(v.type) !== 'Function' ? def.call(instance) : def;
       }
     }
     return { ...res, ...propsData };

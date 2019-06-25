@@ -1,8 +1,8 @@
 /**
- * @Author: jzy
- * @Date: 2018/1/19
- * @Last Modified by:   jzy
- * @Last Modified time: 2018-08-31 15:45:09
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
  */
 import Vue from 'vue';
 import App from './App.vue';
@@ -12,6 +12,7 @@ import '@/filters';
 import '@/routes/permission';
 import '@/config/use';
 
+// 全局挂载 SvgIcon 组件
 import SvgIcon from '@/components/SvgIcon';
 Vue.use(SvgIcon);
 
