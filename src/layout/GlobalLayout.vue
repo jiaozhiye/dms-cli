@@ -28,7 +28,7 @@ export default {
         <el-aside class="sidebar" style={{ width: asideWidth }}>
           <SideMenu collapsed={collapsed} />
         </el-aside>
-        <el-container>
+        <el-container style="width: 0;">
           <el-header>
             <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
               <MultiTab slot="menu" />

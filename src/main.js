@@ -12,24 +12,15 @@ import '@/filters';
 import '@/routes/permission';
 import '@/config/use';
 
-// 全局挂载 SvgIcon 组件
+// 全局挂载组件
 import SvgIcon from '@/components/SvgIcon';
 Vue.use(SvgIcon);
 
-import FilterTable from '@/components/BaseTable';
-Vue.use(FilterTable);
-
-import LazyLoadTab from '@/components/LazyLoadTab';
-Vue.use(LazyLoadTab);
-
-import Drawer from '@/components/Drawer';
-Vue.use(Drawer);
-
-import BaseDialog from '@/components/BaseDialog';
-Vue.use(BaseDialog);
-
 import TopFilter from '@/components/TopFilter';
 Vue.use(TopFilter);
+
+import FilterTable from '@/components/BaseTable';
+Vue.use(FilterTable);
 
 // 关闭生产环境的提示
 Vue.config.productionTip = false;

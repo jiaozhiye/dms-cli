@@ -5,7 +5,6 @@
     "transform-vue-jsx",
     "transform-runtime",
     "syntax-dynamic-import",
-    "transform-class-properties",
     [
       "component",
       {

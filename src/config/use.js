@@ -5,7 +5,7 @@
  * @Last Modified time: 2019-06-20 15:45:00
  */
 import Vue from 'vue';
-import '@/assets/css/element-variables.scss';
+
 import {
   Divider,
   Pagination,
@@ -76,6 +76,9 @@ import {
   Message,
   Notification
 } from 'element-ui';
+
+// 自定义主题
+import '@/assets/css/element-variables.scss';
 
 // 全局设置
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 1000 };
