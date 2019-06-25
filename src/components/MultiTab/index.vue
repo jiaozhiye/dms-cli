@@ -60,7 +60,7 @@ export default {
   },
   render() {
     return (
-      <el-tabs class="multi-tab" type="card" value={this.activeKey} on-tab-click={this.handleClick} on-tab-remove={this.removeTab}>
+      <el-tabs class="multi-tab" z type="card" value={this.activeKey} on-tab-click={this.handleClick} on-tab-remove={this.removeTab}>
         {this.createPanelList()}
       </el-tabs>
     );

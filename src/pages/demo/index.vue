@@ -216,7 +216,7 @@ export default {
         {
           type: 'RANGE_DATE',
           label: '日期区间',
-          style: { minWidth: '220px' },
+          style: { minWidth: '200px' },
           fieldName: 'startTime|endTime'
         },
         {

@@ -134,7 +134,7 @@ export default {
             type="daterange"
             v-model={form[fieldName]}
             value-format="yyyy-MM-dd HH:mm:ss"
-            range-separator="至"
+            range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             style={{ ...style }}
@@ -237,6 +237,16 @@ export default {
   }
   .el-date-editor {
     width: 100%;
+  }
+  .el-range-editor {
+    padding-right: 5px;
+    .el-range-separator {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .el-range__close-icon {
+      width: 20px;
+    }
   }
 }
 </style>

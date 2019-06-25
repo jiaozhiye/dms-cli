@@ -28,8 +28,8 @@ const messageConfirm = next => {
       next();
     })
     .catch(() => {
-      NProgress.done();
       next(false);
+      NProgress.done();
     });
 };
 
@@ -71,7 +71,6 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.includes(to.path)) {
       next();
     } else {
-      NProgress.done();
       next({ path: '/login' });
     }
   }
@@ -81,6 +80,6 @@ router.afterEach(to => {
   if (to.meta && typeof to.meta.title !== 'undefined') {
     document.title = `${config.systemName}-${to.meta.title}`;
   }
-  NProgress.done(); // 结束Progress
   store.dispatch('app/setLeaveRemind', !1);
+  NProgress.done(); // 结束Progress
 });
