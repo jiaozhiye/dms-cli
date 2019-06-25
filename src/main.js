@@ -16,6 +16,21 @@ import '@/config/use';
 import SvgIcon from '@/components/SvgIcon';
 Vue.use(SvgIcon);
 
+import FilterTable from '@/components/BaseTable';
+Vue.use(FilterTable);
+
+import LazyLoadTab from '@/components/LazyLoadTab';
+Vue.use(LazyLoadTab);
+
+import Drawer from '@/components/Drawer';
+Vue.use(Drawer);
+
+import BaseDialog from '@/components/BaseDialog';
+Vue.use(BaseDialog);
+
+import TopFilter from '@/components/TopFilter';
+Vue.use(TopFilter);
+
 // 关闭生产环境的提示
 Vue.config.productionTip = false;
 

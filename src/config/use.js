@@ -7,6 +7,7 @@
 import Vue from 'vue';
 import '@/assets/css/element-variables.scss';
 import {
+  Divider,
   Pagination,
   Dialog,
   Autocomplete,
@@ -79,6 +80,7 @@ import {
 // 全局设置
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 1000 };
 
+Vue.use(Divider);
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Autocomplete);

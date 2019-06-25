@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="screen-full">
     <SvgIcon
       class="screenfull-svg"
       :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'"
@@ -49,10 +49,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.screenfull-svg {
-  display: inline-block;
-  font-size: 18px;
-  fill: @textColor;
-  cursor: pointer;
+.screen-full {
+  .screenfull-svg {
+    display: inline-block;
+    padding: 10px;
+    font-size: 18px;
+    fill: @textColor;
+    cursor: pointer;
+  }
 }
 </style>

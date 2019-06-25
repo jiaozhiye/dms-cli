@@ -41,7 +41,7 @@ export default {
   height: 100%;
   background-color: @asideBgColor;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-  z-index: 2;
+  z-index: 5;
   .menu-tree {
     height: calc(100% - 116px);
     background-color: @asideBgColor;

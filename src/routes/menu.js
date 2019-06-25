@@ -27,7 +27,7 @@ const menuRoutes = [
               title: '备件采购订单',
               keepAlive: true
             },
-            component: loadComponent('test/index')
+            component: loadComponent('demo/index')
           },
           {
             path: '/bjgl/cggl/rk',

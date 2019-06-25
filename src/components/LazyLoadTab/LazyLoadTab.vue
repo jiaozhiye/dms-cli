@@ -1,0 +1,81 @@
+<script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-05-06 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-05-07 11:00:00
+ **/
+export default {
+  name: 'LazyLoadTab',
+  props: {
+    value: {
+      type: String,
+      required: true
+    },
+    tabMenus: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    type: {
+      type: String,
+      default: ''
+    },
+    position: {
+      type: String,
+      default: 'top'
+    },
+    destroyOnClose: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    // 组件路径的前缀
+    this.pathFix = 'pages';
+    return {
+      activeName: this.value
+    };
+  },
+  created() {
+    this.loadComponent();
+  },
+  methods: {
+    loadComponent(tab, ev) {
+      ev && ev.stopPropagation();
+      tab && this.$emit('tab-click', tab, ev);
+      this.$emit('input', this.activeName);
+      if (this.$options.components[this.activeName]) return;
+      // 动态加载组件
+      this.$options.components[this.activeName] = () => import(`@/${this.pathFix}/${this.tabMenus.find(x => x.title === this.activeName).path}.vue`);
+    },
+    createTabPanel(h) {
+      return this.tabMenus.map(x => {
+        // JSX 中的动态组件不能用 <component /> 标签，必须这样实现
+        let component = h(this.$options.components[x.title], {
+          props: x.params,
+          on: x.on
+        });
+        return (
+          <el-tab-pane key={x.title} label={x.title} name={x.title} lazy>
+            {this.destroyOnClose && x.title === this.activeName ? component : null}
+            {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : null}
+          </el-tab-pane>
+        );
+      });
+    }
+  },
+  render(h) {
+    const { type, position, loadComponent } = this;
+    return (
+      <el-tabs v-model={this.activeName} type={type} tab-position={position} on-tab-click={loadComponent}>
+        {this.createTabPanel(h)}
+      </el-tabs>
+    );
+  }
+};
+</script>
+
+<style lang="less" scoped>
+</style>

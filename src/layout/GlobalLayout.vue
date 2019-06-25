@@ -51,7 +51,7 @@ export default {
     overflow: visible;
   }
   .container {
-    padding: 10px 20px;
+    padding: 0 10px;
   }
 }
 </style>
