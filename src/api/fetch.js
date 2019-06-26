@@ -12,7 +12,7 @@ import { getToken, removeToken } from '@/assets/js/auth';
 import router from '@/routes';
 import { Message, Notification } from 'element-ui';
 
-console.info(config.env);
+console.info(config.envText);
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',

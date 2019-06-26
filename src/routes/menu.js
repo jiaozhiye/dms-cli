@@ -11,13 +11,13 @@ const loadComponent = name => () => import(`@/pages/${name}`);
 const menuRoutes = [
   {
     path: '/bjgl',
-    meta: { title: '备件管理' },
+    meta: { title: '备件管理', icon: 'el-icon-data-analysis' },
     redirect: '/bjgl/cggl',
     component: RouteView,
     children: [
       {
         path: '/bjgl/cggl',
-        meta: { title: '采购管理' },
+        meta: { title: '采购管理', icon: 'el-icon-folder-opened' },
         redirect: '/bjgl/cggl/dd',
         component: RouteView,
         children: [
@@ -49,7 +49,7 @@ const menuRoutes = [
       },
       {
         path: '/bjgl/kcgl',
-        meta: { title: '库存管理' },
+        meta: { title: '库存管理', icon: 'el-icon-folder-opened' },
         redirect: '/bjgl/kcgl/lb',
         component: RouteView,
         children: [
@@ -67,13 +67,13 @@ const menuRoutes = [
   },
   {
     path: '/xsgl',
-    meta: { title: '销售管理' },
+    meta: { title: '销售管理', icon: 'el-icon-shopping-bag-1' },
     redirect: '/xsgl/xugl',
     component: RouteView,
     children: [
       {
         path: '/xsgl/xugl',
-        meta: { title: '线索管理' },
+        meta: { title: '线索管理', icon: 'el-icon-folder-opened' },
         redirect: '/xsgl/xugl/fp',
         component: RouteView,
         children: [
@@ -113,7 +113,7 @@ const menuRoutes = [
       },
       {
         path: '/xsgl/jhgl',
-        meta: { title: '机会管理' },
+        meta: { title: '机会管理', icon: 'el-icon-folder-opened' },
         redirect: '/xsgl/jhgl/xsjh',
         component: RouteView,
         children: [
@@ -145,7 +145,7 @@ const menuRoutes = [
       },
       {
         path: '/xsgl/khgl',
-        meta: { title: '客户管理' },
+        meta: { title: '客户管理', icon: 'el-icon-folder-opened' },
         redirect: '/xsgl/khgl/dd',
         component: RouteView,
         children: [
@@ -179,13 +179,13 @@ const menuRoutes = [
   },
   {
     path: '/kfgl',
-    meta: { title: '客服管理' },
+    meta: { title: '客服管理', icon: 'el-icon-headset' },
     redirect: '/kfgl/hf',
     component: RouteView,
     children: [
       {
         path: '/kfgl/hf',
-        meta: { title: '回访' },
+        meta: { title: '回访', icon: 'el-icon-folder-opened' },
         redirect: '/kfgl/hf/xs',
         component: RouteView,
         children: [
@@ -209,7 +209,7 @@ const menuRoutes = [
       },
       {
         path: '/kfgl/ts',
-        meta: { title: '投诉' },
+        meta: { title: '投诉', icon: 'el-icon-folder-opened' },
         redirect: '/kfgl/ts/gl',
         component: RouteView,
         children: [

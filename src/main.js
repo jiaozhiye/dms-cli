@@ -12,16 +12,6 @@ import '@/filters';
 import '@/routes/permission';
 import '@/config/use';
 
-// 全局挂载组件
-import SvgIcon from '@/components/SvgIcon';
-Vue.use(SvgIcon);
-
-import TopFilter from '@/components/TopFilter';
-Vue.use(TopFilter);
-
-import FilterTable from '@/components/BaseTable';
-Vue.use(FilterTable);
-
 // 关闭生产环境的提示
 Vue.config.productionTip = false;
 

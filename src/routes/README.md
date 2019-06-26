@@ -12,19 +12,16 @@
     title: '备件管理',
     key: '/bjgl',
     pyt: 'bjgl',
-    icon: 'el-icon-data-analysis',
     children: [
       {
         title: '采购管理',
         key: '/bjgl/cggl',
         pyt: 'cggl',
-        icon: 'el-icon-folder-opened',
         children: [
           {
             title: '备件采购订单',                // 标题
             key: '/bjgl/cggl/dd',                // 路由路径
             pyt: 'bjcgdd',                       // 拼音头
-            icon: '',                            // 图标
             permission: ['saveBtn', 'updateBtn'] // 不具备的操作权限
           },
         ]

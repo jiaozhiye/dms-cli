@@ -6,9 +6,44 @@
  */
 import _ from 'lodash';
 import * as types from '../types';
+import router from '@/routes';
 import { setToken, removeToken, setUser, removeUser } from '@/assets/js/auth';
 import dictData from '@/mock/dictData';
 import { getNavList, getAllDict, getStarMenuList } from '@/api';
+
+// 路由映射表
+const routesMap = router.options.routes;
+
+// 数组的递归查找
+const deepFind = (arr, mark) => {
+  let res = null;
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i].children)) {
+      res = deepFind(arr[i].children, mark);
+    }
+    if (res !== null) {
+      return res;
+    }
+    if (arr[i].path === mark) {
+      res = arr[i];
+      break;
+    }
+  }
+  return res;
+};
+
+// 给导航数据添加图标属性
+const formateNavList = list => {
+  list.forEach(x => {
+    if (Array.isArray(x.children)) {
+      formateNavList(x.children);
+    }
+    let {
+      meta: { icon = '' }
+    } = deepFind(routesMap, x.key);
+    x.icon = icon;
+  });
+};
 
 // 提取可点击的菜单项
 const formateMenu = list => {
@@ -21,22 +56,6 @@ const formateMenu = list => {
     }
   });
   return res;
-};
-
-// 递归添加父节点
-const addParentNode = list => {
-  (function fn(arr, obj) {
-    for (let i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i].children) && arr[i].children.length > 0) {
-        let { title, key, icon } = arr[i];
-        fn(arr[i].children, { title, key, icon });
-      }
-      if (typeof obj !== 'undefined') {
-        arr[i].parent = obj;
-      }
-    }
-  })(list);
-  return list;
 };
 
 // state
@@ -81,13 +100,12 @@ const actions = {
         data = res.data;
       }
     }
+    // 处理图标
+    formateNavList(data);
+    commit({ type: types.NAVLIST, data });
     commit({
       type: types.MENULIST,
       data: formateMenu(data)
-    });
-    commit({
-      type: types.NAVLIST,
-      data: addParentNode(data)
     });
   },
   async createStarMenuList({ commit, state }, params) {
@@ -102,10 +120,7 @@ const actions = {
         data = res.data;
       }
     }
-    commit({
-      type: types.STAR_MENU,
-      data
-    });
+    commit({ type: types.STAR_MENU, data });
   },
   checkAuthority({ commit, state }, params) {
     if (!state.menuList.length) {
