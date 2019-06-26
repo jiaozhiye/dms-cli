@@ -30,7 +30,7 @@ module.exports = {
     /**
      * Source Maps
      */
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-source-map',
     cacheBusting: true,
     cssSourceMap: true
   },
@@ -48,6 +48,6 @@ module.exports = {
      * Source Maps
      */
     productionSourceMap: false,
-    devtool: '#source-map'
+    devtool: 'source-map'
   }
 };

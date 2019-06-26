@@ -8,6 +8,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const vueLoaderConfig = require('./vue-loader.conf');
 
 module.exports = {
+  context: utils.resolve('/'),
   entry: {
     app: ['babel-polyfill', utils.resolve('src/main.js')]
   },
@@ -39,6 +40,7 @@ module.exports = {
       {
         test: /\.svg$/,
         loader: 'svg-sprite-loader',
+        include: [utils.resolve('src/components/SvgIcon/svg')],
         options: {
           symbolId: 'icon-[name]'
         }
