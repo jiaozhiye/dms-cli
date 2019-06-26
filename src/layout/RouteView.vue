@@ -1,6 +1,7 @@
 <script>
 import { mapState } from 'vuex';
 import config from '@/config';
+
 export default {
   name: 'RouteView',
   computed: {

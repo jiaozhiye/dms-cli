@@ -9,10 +9,7 @@ import '@/assets/css/reset.css';
 import '@/assets/css/style.less';
 
 export default {
-  name: 'app',
-  data() {
-    return {};
-  }
+  name: 'app'
 };
 </script>
 

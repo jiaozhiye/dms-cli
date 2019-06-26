@@ -18,7 +18,7 @@ const Home = () => import('@/pages/home/index');
 export const constantRouterMap = [
   {
     path: '/login',
-    meta: { title: '登录页' },
+    meta: { title: '用户登录' },
     component: Login,
     hidden: true
   },

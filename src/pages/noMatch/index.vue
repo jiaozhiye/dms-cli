@@ -4,9 +4,9 @@
 
 <script>
 export default {
-  name: 'NoMatch',
-}
+  name: 'NoMatch'
+};
 </script>
 
-<style>
+<style lang="less">
 </style>

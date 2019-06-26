@@ -27,14 +27,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/*
- * The following styles are auto-applied to elements with
- * transition="page-transition" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the page transition by editing
- * these styles.
- */
 .page-transition-enter-active {
   transition: all 0.3s ease-in 0.2s;
 }

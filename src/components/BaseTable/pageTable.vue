@@ -360,6 +360,8 @@ export default {
       }
       // 校验数字的正则
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+      // 默认精度是两位
+      const precision = _.isUndefined(column.precision) ? 2 : Number(column.precision);
       return (
         <el-input
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
@@ -378,6 +380,14 @@ export default {
             if (column.editType === 'number') {
               let isPassCheck = (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
               if (!isPassCheck) return;
+              // 不允许是负数
+              if (column.min === 0 && val === '-') return;
+              let chunks = val.split('.');
+              // 判断整型
+              if (precision === 0 && chunks.length > 1) return;
+              // 判断浮点型
+              if (precision > 0 && chunks.length > 1 && chunks[1].length > precision) return;
+              // 判断最大值/最小值
               if (_.isNumber(column.max) && Number(val) > column.max) return;
               if (_.isNumber(column.min) && Number(val) < column.min) return;
             }
@@ -385,14 +395,14 @@ export default {
           }}
           onChange={value => {
             if (column.editType === 'number') {
-              value = this.parseNumber(value);
+              value = this.parseNumber(value, precision);
             }
             this.editCellChangeHandle(value, props.row._uid, dataIndex);
           }}
           onBlur={e => {
             const { value } = e.target;
             if (column.editType === 'number') {
-              _.set(props.row, dataIndex, this.parseNumber(value));
+              _.set(props.row, dataIndex, this.parseNumber(value, precision));
             }
             // 单元格非空校验
             if (column.editRequired) {
@@ -629,12 +639,12 @@ export default {
       return f * l + 60;
     },
     // 格式化数值类型
-    parseNumber(value) {
+    parseNumber(value, n) {
       // '.' 在最后或者仅有一个字符 '-'
       if (value.charAt(value.length - 1) === '.' || value === '-') {
         value = value.slice(0, -1);
       }
-      return value !== '' ? Number(value) : value;
+      return value !== '' ? Number(value).toFixed(n) : '';
     },
     // 金融格式数字的格式化方法
     numberFormat(column, input) {
@@ -1045,7 +1055,9 @@ export default {
         }, 0);
         // 单位
         const unit = targetColumn.summationUnit ? targetColumn.summationUnit : '';
-        sums[index] = `${this.formatNumber(Number.parseFloat(result.toFixed(4)))} ${unit}`;
+        // 精度
+        const precision = _.isUndefined(targetColumn.summationPrecision) ? 2 : Number(targetColumn.summationPrecision);
+        sums[index] = `${this.formatNumber(result.toFixed(precision))} ${unit}`;
       });
       return sums;
     },

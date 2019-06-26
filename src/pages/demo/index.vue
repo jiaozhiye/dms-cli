@@ -20,7 +20,7 @@ import { authority } from '@/utils/mixin';
 import res from '@/mock/tableData';
 
 export default {
-  name: 'Test',
+  name: 'Demo',
   mixins: [authority],
   data() {
     this.BaseTable = null;
