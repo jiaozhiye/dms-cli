@@ -8,7 +8,8 @@ export default {
   name: 'GlobalLayout',
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      breadcrumb: true
     };
   },
   computed: {
@@ -22,7 +23,7 @@ export default {
     }
   },
   render() {
-    const { $slots = {}, collapsed, asideWidth } = this;
+    const { $slots = {}, collapsed, asideWidth, breadcrumb } = this;
     return (
       <el-container class="layout">
         <el-aside class="sidebar" style={{ width: asideWidth }}>
@@ -31,11 +32,13 @@ export default {
         <el-container style="width: 0;">
           <el-header>
             <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
-              <MultiTab slot="menu" />
+              <MultiTab slot="menu" isBreadcrumb={breadcrumb} />
               <HeadNavBar slot="action" />
             </GlobalHeader>
           </el-header>
-          <el-main class="container">{$slots.default}</el-main>
+          <el-main class="container" style={{ marginTop: breadcrumb ? '30px' : 0 }}>
+            {$slots.default}
+          </el-main>
         </el-container>
       </el-container>
     );
