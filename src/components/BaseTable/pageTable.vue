@@ -424,6 +424,7 @@ export default {
           size="mini"
           popper-class="autocomplete"
           placeholder="请输入"
+          maxlength={column.maxlength}
           value={_.get(props.row, dataIndex)}
           onInput={val => _.set(props.row, dataIndex, val)}
           onSelect={val => this.syncAllCellValue(val, props.row, column)}
@@ -1493,9 +1494,6 @@ export default {
   .table-header {
     background-color: #f5f7fa !important;
     .cell {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
       &.is-required::before {
         content: '*';
         color: #f56c6c;
