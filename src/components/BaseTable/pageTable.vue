@@ -425,6 +425,7 @@ export default {
           popper-class="autocomplete"
           placeholder="请输入"
           maxlength={column.maxlength}
+          style={{ width: '100%' }}
           value={_.get(props.row, dataIndex)}
           onInput={val => _.set(props.row, dataIndex, val)}
           onSelect={val => this.syncAllCellValue(val, props.row, column)}
