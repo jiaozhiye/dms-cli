@@ -188,9 +188,14 @@ export default {
       return this.$refs.appTable.tableData;
     },
     listChange() {
+      const editableKeys = this.createEditableKeys();
+      // 不可编辑表格
+      if (!editableKeys.length) {
+        return null;
+      }
       return this.list.map(x => {
         let item = {};
-        this.createEditableKeys().forEach(key => _.set(item, key, _.get(x, key)));
+        editableKeys.forEach(key => _.set(item, key, _.get(x, key)));
         return item;
       });
     }
@@ -222,7 +227,7 @@ export default {
     },
     listChange(newVal, oldVal) {
       if (_.isEqual(newVal, oldVal)) return;
-      this.$nextTick(this.syncTableList);
+      this.syncTableList();
     }
   },
   methods: {
@@ -258,6 +263,8 @@ export default {
       // 处理列表数据
       this.list = this.createTableDataKey(dataList, uidkey);
       this.originData = [...this.list];
+      // 同步表格数据
+      this.syncTableList();
       // 总记录数
       let totalRow = 0;
       if (Array.isArray(data)) {
@@ -295,9 +302,11 @@ export default {
     },
     // 同步组件数据列表
     syncTableList() {
-      // 重置组件数据列表的索引
-      this.tableData.forEach((row, i) => (row.$index = i));
-      this.onSyncTableData(this.tableData);
+      this.$nextTick(() => {
+        // 重置组件数据列表的索引
+        this.tableData.forEach((row, i) => (row.$index = i));
+        this.onSyncTableData(this.tableData);
+      });
     },
     // 跳转到第一页
     toFirstPage() {
