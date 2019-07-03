@@ -38,17 +38,17 @@ export default {
     };
   },
   watch: {
-    columns(val, oldVal) {
-      if (_.isEqual(val, oldVal)) return;
-      this.checkedKeys = this.createCheckedKeys(val);
-      this.treeList = this.createTreeList(val);
-      this.setLocalColumns(val);
+    columns(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
+      this.checkedKeys = this.createCheckedKeys(nextProps);
+      this.treeList = this.createTreeList(nextProps);
+      this.setLocalColumns(nextProps);
     },
-    columnInfo(val) {
+    columnInfo(nextProps) {
       const result = this.columns.map(column => {
-        let [key] = Object.keys(val);
+        let [key] = Object.keys(nextProps);
         if (column.dataIndex === key) {
-          column.width = val[key];
+          column.width = nextProps[key];
         }
         return column;
       });

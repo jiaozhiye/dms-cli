@@ -334,6 +334,7 @@ export default {
     },
     // 外部通过组件实例调用的方法
     CLEAR_SEARCH_PARAMS() {
+      this.filters = {};
       this.search = this.createSearchData(this.columns);
     }
   },

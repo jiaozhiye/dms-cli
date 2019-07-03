@@ -201,32 +201,33 @@ export default {
     }
   },
   watch: {
-    height(val) {
-      this.tableHeight = Number(val);
+    height(nextProps) {
+      this.tableHeight = Number(nextProps);
     },
-    params(val) {
+    params(nextProps) {
       // 不返回到第一页
-      if (val.noJumper) return;
+      if (nextProps.noJumper) return;
       this.toFirstPage();
     },
     fetchParams() {
       this.getTableData();
     },
-    filters() {
+    defaultSelections(nextProps) {
+      this.createRowSelection(nextProps);
+    },
+    columns(nextProps) {
+      this.editPos.marks = this.createEditableKeys(this.createFilterColumns(nextProps));
+    },
+    filters(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
       this.filterHandler();
     },
-    defaultSelections(val) {
-      this.createRowSelection(val);
-    },
-    columns(val) {
-      this.editPos.marks = this.createEditableKeys(this.createFilterColumns(val));
-    },
-    dataSource(newVal, oldVal) {
-      if (_.isEqual(newVal, oldVal)) return;
+    dataSource(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
       this.createTableList(newVal);
     },
-    listChange(newVal, oldVal) {
-      if (_.isEqual(newVal, oldVal)) return;
+    listChange(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
       this.syncTableList();
     }
   },
@@ -959,6 +960,10 @@ export default {
         });
         filterList.push(tmpList);
       }
+      // 表头筛选条件为空
+      if (!Object.keys(this.filters).length) {
+        filterList.push(this.originData);
+      }
       // 求给定数组的交集
       const interList = _.intersection(...filterList);
       this.list.length = 0;
@@ -1290,6 +1295,11 @@ export default {
       const { CLEAR_SEARCH_PARAMS } = this.$parent;
       CLEAR_SEARCH_PARAMS && CLEAR_SEARCH_PARAMS();
     },
+    // 表格上方的清空操作
+    clearTableHandler() {
+      this.clearSelectionHandle();
+      this.clearTHeadFilters();
+    },
     // 外部通过组件实例调用的方法
     EXECUTE_INSERT(rows) {
       this.addRowHandler(rows);
@@ -1367,7 +1377,7 @@ export default {
       $scopedSlots
     } = this;
     const toperInfoProps = {
-      props: { total: pagination.total, selectionRows, isSelectColumn, clearSelectionHandle: this.clearSelectionHandle, deleteHandler: this.deleteHandler }
+      props: { total: pagination.total, selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
     };
     const columnFilterProps = {
       props: { columns, columnsRef, columnInfo, onColumnsChange: this.onColumnsChange }
@@ -1421,7 +1431,7 @@ export default {
   },
   components: {
     ToperInfo: {
-      props: ['total', 'selectionRows', 'isSelectColumn', 'clearSelectionHandle', 'deleteHandler'],
+      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler', 'deleteHandler'],
       render() {
         return (
           <div class="info">
@@ -1431,7 +1441,7 @@ export default {
                 {this.isSelectColumn ? (
                   <span>
                     ，已选择 <i>{this.selectionRows.length}</i> 项
-                    <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearSelectionHandle}>
+                    <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearTableHandler}>
                       清空
                     </el-button>
                   </span>
