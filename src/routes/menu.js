@@ -35,7 +35,7 @@ const menuRoutes = [
               title: '备件采购入库',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: loadComponent('upload/index')
           },
           {
             path: '/bjgl/cggl/tk',
