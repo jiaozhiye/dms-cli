@@ -282,6 +282,8 @@ export default {
       this.clearTableHandleLog();
       // 清空表头筛选条件
       this.clearTHeadFilters();
+      // 清空表头排序条件
+      this.clearTHeadSort();
       // 重置可编辑单元格坐标
       this.editPos.rowIndex = -1;
       this.editPos.editableColumnIndex = -1;
@@ -1295,10 +1297,17 @@ export default {
       const { CLEAR_SEARCH_PARAMS } = this.$parent;
       CLEAR_SEARCH_PARAMS && CLEAR_SEARCH_PARAMS();
     },
+    // 清空表头排序条件
+    clearTHeadSort() {
+      this.$refs.appTable.clearSort();
+      // 清除表头排序箭头的选中状态
+      this.$refs.appTable.columns.forEach(x => (x.order = ''));
+    },
     // 表格上方的清空操作
     clearTableHandler() {
       this.clearSelectionHandle();
       this.clearTHeadFilters();
+      this.clearTHeadSort();
     },
     // 外部通过组件实例调用的方法
     EXECUTE_INSERT(rows) {
