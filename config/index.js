@@ -13,13 +13,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api': {
-      //   target: 'http://www.server.com/',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/api': '/cms-api'
-      //   }
-      // }
+      '/api': {
+        target: 'http://jettadms-dev.faw-vw.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/api'
+        }
+      }
     },
 
     // Various Dev Server settings
