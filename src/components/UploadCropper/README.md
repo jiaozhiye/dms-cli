@@ -30,7 +30,7 @@ Vue.use(UploadCropper);
     action-url="/api/basedata/upload"
     :initial-value="form.imgPath"
     :fixed-size="[4, 5]"
-    @success="handler"
+    @success="successHandler"
   />
 </template>
 
@@ -44,7 +44,7 @@ export default {
     };
   },
   methods: {
-    handler(val) {
+    successHandler(val) {
       this.form.imgPath = val;
     }
   }

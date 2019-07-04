@@ -90,6 +90,7 @@ export default {
   watch: {
     initialValue(val) {
       this.imageUrl = val;
+      !val && this.clearFiles();
     },
     imageUrl(val) {
       this.toggle(val);
@@ -99,7 +100,7 @@ export default {
     initial() {
       this.toggle(this.imageUrl);
       if (!this.imageUrl) return;
-      this.fileList = [{ name: '', url: '' }];
+      this.fileList = [{ name: '-', url: '' }];
     },
     // element ui upload 组件的 dom 样式操作
     toggle(_path) {
@@ -116,6 +117,9 @@ export default {
     },
     handleRemove(file) {
       this.imageUrl = '';
+      this.clearFiles();
+    },
+    clearFiles() {
       this.$refs.upload.clearFiles();
     },
     changeHandle(file, files) {
@@ -147,14 +151,14 @@ export default {
           this.$message.error(data.message);
         }
       } catch (err) {
-        this.$refs.upload.clearFiles();
+        this.clearFiles();
         this.$emit('error', err);
         this.$message.error('上传文件失败！');
       }
       this.cropperModel = false;
     },
     beforeClose() {
-      this.$refs.upload.clearFiles();
+      this.clearFiles();
       this.cropperModel = false;
     },
     // base64 转成 bolb 对象
@@ -193,6 +197,8 @@ export default {
 
 <style lang="less">
 .upload-wrap {
+  display: inline-block;
+  width: 100%;
   .el-upload-list {
     height: 148px;
     li {
