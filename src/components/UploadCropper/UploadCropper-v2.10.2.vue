@@ -94,6 +94,7 @@ export default {
     },
     imageUrl(val) {
       this.toggle(val);
+      this.$emit('success', val);
     }
   },
   methods: {
@@ -146,7 +147,6 @@ export default {
         const { data } = await axios.post(this.actionUrl, formData);
         if (data.resultCode === 200) {
           this.imageUrl = data.data;
-          this.$emit('success', this.imageUrl);
         } else {
           this.$message.error(data.message);
         }

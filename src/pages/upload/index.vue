@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import UploadCropper from '@/components/UploadCropper/UploadCropper';
+import UploadCropper from '@/components/UploadCropper/UploadCropper-v2.9.1.vue';
 
 export default {
   name: 'Upload',
