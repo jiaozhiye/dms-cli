@@ -24,3 +24,9 @@ Vue.use(TopFilter);
 
 import FilterTable from '@/components/BaseTable';
 Vue.use(FilterTable);
+
+import Drawer from '@/components/Drawer';
+Vue.use(Drawer);
+
+import BaseDialog from '@/components/BaseDialog';
+Vue.use(BaseDialog);

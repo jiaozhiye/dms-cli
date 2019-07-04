@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import exifmin from './exif';
+import exifjs from './exif-js';
 
 export default {
   name: 'Cropper',
@@ -481,7 +481,7 @@ export default {
         }
         let width = img.width;
         let height = img.height;
-        exifmin.getData(img).then(data => {
+        exifjs.getData(img).then(data => {
           this.orientation = data.orientation || 1;
           let max = this.maxImgSize;
           if (!this.orientation && (width < max) & (height < max)) {

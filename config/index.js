@@ -14,7 +14,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://jettadms-dev.faw-vw.com',
+        target: 'http://jettadms-test.faw-vw.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
