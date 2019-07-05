@@ -201,6 +201,9 @@ export default {
     }
   },
   watch: {
+    dataSource(nextProps) {
+      this.createTableList(nextProps);
+    },
     height(nextProps) {
       this.tableHeight = Number(nextProps);
     },
@@ -221,10 +224,6 @@ export default {
     filters(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
       this.filterHandler();
-    },
-    dataSource(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
-      this.createTableList(nextProps);
     },
     listChange(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
