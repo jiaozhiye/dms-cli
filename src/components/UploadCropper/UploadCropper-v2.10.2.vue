@@ -9,14 +9,14 @@
       :multiple="false"
       :auto-upload="false"
       :file-list="fileList"
-      :on-change="changeHandle"
+      :on-change="changeHandler"
       :http-request="upload"
     >
       <i slot="default" class="el-icon-plus"></i>
       <div slot="file" slot-scope="{file}">
         <img class="el-upload-list__item-thumbnail" :src="imageUrl" alt />
         <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+          <span class="el-upload-list__item-preview" @click="handlePreview(file)">
             <i class="el-icon-zoom-in"></i>
           </span>
           <span class="el-upload-list__item-delete" @click="handleRemove(file)">
@@ -28,7 +28,7 @@
     </el-upload>
     <!-- 图片预览弹窗 -->
     <el-dialog title="图片预览" :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt />
+      <img width="100%" class="img" :src="dialogImageUrl" alt />
     </el-dialog>
     <!-- 剪裁组件弹窗 -->
     <el-dialog title="图片裁剪" :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
@@ -95,6 +95,10 @@ export default {
     imageUrl(val) {
       this.toggle(val);
       this.$emit('success', val);
+      // 取消表单校验
+      if (val !== '' && this.$parent.clearValidate) {
+        this.$parent.clearValidate();
+      }
     }
   },
   methods: {
@@ -113,7 +117,7 @@ export default {
         this.uploadCard.style.display = 'block';
       }
     },
-    handlePictureCardPreview(file) {
+    handlePreview(file) {
       this.dialogVisible = true;
     },
     handleRemove(file) {
@@ -123,7 +127,7 @@ export default {
     clearFiles() {
       this.$refs.upload.clearFiles();
     },
-    changeHandle(file, files) {
+    changeHandler(file, files) {
       if (this.uid === file.uid) return;
       this.uid = file.uid;
       this.file = file;
@@ -208,6 +212,12 @@ export default {
   }
   .el-dialog__body {
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    .img {
+      display: block;
+      max-width: 100%;
+    }
   }
 }
 </style>

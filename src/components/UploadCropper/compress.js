@@ -7,6 +7,7 @@
  * @param {Number} options.quality 生成目标图片质量
  * @param {String} options.fit 图片压缩填充模式默认 scale：按比例缩放，可选 fill：按使用目标尺寸
  * @param {String} options.type 图片压缩类型默认 jpg，可选 png
+ * @param {String} options.fillColor 在jpeg格式下，留白区域的填充色
  * @returns {Promise} then {width,height,img}
  */
 function pictureCompress(options) {
@@ -20,6 +21,7 @@ function pictureCompress(options) {
       height = options.height || 1000,
       type = options.type || 'jpg',
       quality = options.quality || 0.92,
+      fillColor = options.fillColor || '#fff',
       fit = options.fit || 'scale';
     if (width <= 0 || height <= 0) {
       reject(new Error('dist width or height need > 0'));
@@ -43,7 +45,7 @@ function pictureCompress(options) {
         },
         fit
       );
-      let imgData = compress(this, distSize.width, distSize.height, type, quality);
+      let imgData = compress(this, distSize.width, distSize.height, type, fillColor, quality);
       resolve({
         ...distSize,
         img: imgData
@@ -60,9 +62,10 @@ function pictureCompress(options) {
  * @param {Number} width 转换之后的图片宽度
  * @param {Number} height 转换之后的图片高度
  * @param {String} type base64的图片类型 jpg png
+ * @param {String} fillColor 填充颜色
  * @param {Number} quality 转换之后的图片质量
  */
-function compress(img, width, height, type, quality) {
+function compress(img, width, height, type, fillColor, quality) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   let types = {
@@ -72,6 +75,11 @@ function compress(img, width, height, type, quality) {
   };
   canvas.width = width;
   canvas.height = height;
+  // 非 png 图片留白区域背景颜色填充
+  if (type !== 'png') {
+    ctx.fillStyle = fillColor;
+    ctx.fillRect(0, 0, width, height);
+  }
   ctx.drawImage(img, 0, 0, width, height);
   return canvas.toDataURL(types[type], quality);
 }

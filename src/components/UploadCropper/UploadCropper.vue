@@ -9,13 +9,13 @@
       :multiple="false"
       :auto-upload="false"
       :show-file-list="false"
-      :on-change="changeHandle"
+      :on-change="changeHandler"
       :http-request="upload"
     >
       <div v-if="imageUrl" class="el-upload-list__item" @click.stop>
         <img class="img" :src="imageUrl" alt />
         <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-dot" @click="handlePictureCardPreview">
+          <span class="el-upload-list__item-dot" @click="handlePreview">
             <i class="el-icon-zoom-in"></i>
           </span>
           <span class="el-upload-list__item-dot" @click="handleRemove">
@@ -23,12 +23,12 @@
           </span>
         </span>
       </div>
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      <i v-else class="el-icon-plus"></i>
       <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
     <el-dialog title="图片预览" :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt />
+      <img class="img" :src="dialogImageUrl" alt />
     </el-dialog>
     <!-- 剪裁组件弹窗 -->
     <el-dialog title="图片裁剪" :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
@@ -91,10 +91,14 @@ export default {
     },
     imageUrl(val) {
       this.$emit('success', val);
+      // 取消表单校验
+      if (val !== '' && this.$parent.clearValidate) {
+        this.$parent.clearValidate();
+      }
     }
   },
   methods: {
-    handlePictureCardPreview() {
+    handlePreview() {
       this.dialogVisible = true;
     },
     handleRemove() {
@@ -104,7 +108,7 @@ export default {
     clearFiles() {
       this.$refs.upload.clearFiles();
     },
-    changeHandle(file, files) {
+    changeHandler(file, files) {
       if (this.uid === file.uid) return;
       this.uid = file.uid;
       this.file = file;
@@ -118,9 +122,9 @@ export default {
       const formData = new FormData();
       const base64 = await canvasCompress({
         img: this.fileData,
-        type: 'png',
-        width: 640,
-        quality: 0.8
+        type: 'jpg',
+        fillColor: '#fff',
+        width: 750
       });
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);
@@ -177,24 +181,22 @@ export default {
   width: 100%;
   .el-upload-list__item {
     position: relative;
-    overflow: hidden;
-    background-color: #fff;
-    border-radius: 6px;
     width: 146px;
     height: 146px;
     margin: 0;
-    .img {
-      width: 100%;
-    }
+    border-radius: 6px;
+    background-color: #fff;
+    overflow: hidden;
     .el-upload-list__item-actions {
       display: flex;
       align-items: center;
       justify-content: center;
-      position: absolute;
       width: 100%;
       height: 100%;
+      position: absolute;
       left: 0;
       top: 0;
+      z-index: 1;
       cursor: default;
       opacity: 0;
       background-color: rgba(0, 0, 0, 0.5);
@@ -216,6 +218,12 @@ export default {
   }
   .el-dialog__body {
     padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .img {
+    display: block;
+    max-width: 100%;
   }
 }
 </style>

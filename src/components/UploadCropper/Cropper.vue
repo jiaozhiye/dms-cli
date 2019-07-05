@@ -465,7 +465,6 @@ export default {
         1
       );
     },
-    // checkout img
     checkedImg() {
       if (this.img === '') return;
       this.loading = true;
@@ -1128,9 +1127,11 @@ export default {
       let trueHeight = this.trueHeight;
       let cropOffsertX = this.cropOffsertX;
       let cropOffsertY = this.cropOffsertY;
+      let ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, 1000, 1000);
       img.onload = () => {
         if (this.cropW !== 0) {
-          let ctx = canvas.getContext('2d');
           let dpr = 1;
           if (this.high & !this.full) {
             dpr = window.devicePixelRatio;
@@ -1147,7 +1148,6 @@ export default {
           let dx = (this.x - cropOffsertX + (this.trueWidth * (1 - this.scale)) / 2) * dpr;
           // 图片y轴偏移
           let dy = (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) * dpr;
-          // console.log(dx, dy)
           //保存状态
           setCanvasSize(width, height);
           ctx.save();
@@ -1221,7 +1221,6 @@ export default {
         } else {
           let width = trueWidth * this.scale;
           let height = trueHeight * this.scale;
-          let ctx = canvas.getContext('2d');
           ctx.save();
           switch (rotate) {
             case 0:
@@ -1266,13 +1265,13 @@ export default {
         canvas.height = Math.round(height);
       }
     },
-    // 获取转换成base64 的图片信息
+    // 获取转换成 base64 的图片信息
     getCropData(cb) {
       this.getCropChecked(data => {
         cb(data.toDataURL('image/' + this.outputType, this.outputSize));
       });
     },
-    //canvas获取为blob对象
+    //canvas获取为 blob 对象
     getCropBlob(cb) {
       this.getCropChecked(data => {
         data.toBlob(blob => cb(blob), 'image/' + this.outputType, this.outputSize);
@@ -1484,7 +1483,6 @@ export default {
     },
     // 重置函数， 恢复组件置初始状态
     refresh() {
-      // console.log('refresh')
       let img = this.img;
       this.imgs = '';
       this.scale = 1;
@@ -1618,9 +1616,6 @@ export default {
 }
 .cropper-modal {
   background: rgba(0, 0, 0, 0.5);
-}
-.cropper-crop-box {
-  /*border: 2px solid #39f;*/
 }
 .cropper-view-box {
   display: block;

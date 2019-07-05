@@ -224,7 +224,7 @@ export default {
     },
     dataSource(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
-      this.createTableList(newVal);
+      this.createTableList(nextProps);
     },
     listChange(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
@@ -435,7 +435,6 @@ export default {
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
           size="mini"
           popper-class="autocomplete"
-          placeholder="请输入"
           maxlength={column.maxlength}
           style={{ width: '100%' }}
           value={_.get(props.row, dataIndex)}
