@@ -151,7 +151,9 @@ export default {
       this.cropperModel = false;
     },
     setUploadWrapHeight() {
-      this.$refs.upload.$el.querySelector('.el-upload').style.height = `${this.height}px`;
+      const uploadDom = this.$refs.upload.$el.querySelector('.el-upload');
+      uploadDom.style.height = `${this.height}px`;
+      uploadDom.style.lineHeight = `${Number(this.height) - 2}px`;
     },
     // base64 转成 bolb 对象
     dataURItoBlob(base64Data) {
@@ -189,6 +191,9 @@ export default {
 .upload-wrap {
   display: inline-block;
   width: 100%;
+  .el-icon-plus {
+    vertical-align: middle;
+  }
   .el-upload-list__item {
     position: relative;
     width: 100%;
