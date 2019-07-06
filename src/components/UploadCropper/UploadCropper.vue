@@ -27,11 +27,11 @@
       <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
-    <el-dialog title="图片预览" :visible.sync="dialogVisible">
+    <el-dialog custom-class="dialog-wrap" title="图片预览" :visible.sync="dialogVisible">
       <img class="img" :src="dialogImageUrl" alt />
     </el-dialog>
     <!-- 剪裁组件弹窗 -->
-    <el-dialog title="图片裁剪" :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
+    <el-dialog custom-class="dialog-wrap" title="图片裁剪" :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
       <CropperPanel
         ref="uploadCropper"
         :img-file="file"
@@ -63,6 +63,10 @@ export default {
       default() {
         return [5, 4];
       }
+    },
+    height: {
+      type: [Number, String],
+      default: 148
     },
     tipText: {
       type: String,
@@ -146,6 +150,9 @@ export default {
       this.clearFiles();
       this.cropperModel = false;
     },
+    setUploadWrapHeight() {
+      this.$refs.upload.$el.querySelector('.el-upload').style.height = `${this.height}px`;
+    },
     // base64 转成 bolb 对象
     dataURItoBlob(base64Data) {
       let byteString;
@@ -165,6 +172,9 @@ export default {
       return new Blob([ia], { type: mimeString });
     }
   },
+  mounted() {
+    this.setUploadWrapHeight();
+  },
   updated() {
     const { uploadCropper } = this.$refs;
     uploadCropper && uploadCropper.Update();
@@ -181,12 +191,16 @@ export default {
   width: 100%;
   .el-upload-list__item {
     position: relative;
-    width: 146px;
-    height: 146px;
+    width: 100%;
+    height: 100%;
     margin: 0;
     border-radius: 6px;
     background-color: #fff;
     overflow: hidden;
+    .img {
+      display: block;
+      max-width: 100%;
+    }
     .el-upload-list__item-actions {
       display: flex;
       align-items: center;
@@ -216,14 +230,16 @@ export default {
       }
     }
   }
-  .el-dialog__body {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-  }
-  .img {
-    display: block;
-    max-width: 100%;
+  .dialog-wrap {
+    .el-dialog__body {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      .img {
+        display: block;
+        max-width: 100%;
+      }
+    }
   }
 }
 </style>
