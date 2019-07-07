@@ -184,6 +184,9 @@ export default {
       console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
+    editableColumns() {
+      return this.columnFlatMap(this.columns).filter(x => x.editable);
+    },
     tableData() {
       return this.$refs.appTable.tableData;
     },
@@ -297,6 +300,15 @@ export default {
       dataList.forEach((x, i) => {
         x.index = i; // 序号
         x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
+        // 处理数值类型的可编辑单元格，显示数据的精度
+        this.editableColumns.forEach(column => {
+          if (column.editType === 'number') {
+            let { dataIndex, precision = 2 } = column;
+            if (!isNaN(Number(x[dataIndex]))) {
+              x[dataIndex] = Number(x[dataIndex]).toFixed(precision);
+            }
+          }
+        });
         // 单元格默认为不可编辑状态
         this.createEditableKeys().forEach(dataIndex => this.setCellEditState(x, dataIndex, false));
       });
@@ -372,7 +384,7 @@ export default {
       // 校验数字的正则
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       // 默认精度是两位
-      const precision = _.isUndefined(column.precision) ? 2 : Number(column.precision);
+      const { precision = 2 } = column;
       return (
         <el-input
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
@@ -1072,8 +1084,8 @@ export default {
         // 单位
         const unit = targetColumn.summationUnit ? targetColumn.summationUnit : '';
         // 精度
-        const precision = _.isUndefined(targetColumn.summationPrecision) ? 2 : Number(targetColumn.summationPrecision);
-        sums[index] = `${this.formatNumber(result.toFixed(precision))} ${unit}`;
+        const { summationPrecision = 2 } = targetColumn;
+        sums[index] = `${this.formatNumber(result.toFixed(summationPrecision))} ${unit}`;
       });
       return sums;
     },
@@ -1335,10 +1347,9 @@ export default {
       return this.actionsLog.remove;
     },
     GET_REQUIRED_ERROR() {
-      const allColumns = this.columnFlatMap(this.columns);
       this.list.forEach(row => {
-        allColumns.forEach(column => {
-          if (column.editable && column.editRequired) {
+        this.editableColumns.forEach(column => {
+          if (column.editRequired) {
             this.validateRequired(column.dataIndex, row._uid, _.get(row, column.dataIndex, ''));
           }
         });

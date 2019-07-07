@@ -134,6 +134,7 @@ export default {
           sorter: true,
           editable: true,
           editType: 'number',
+          precision: 0,
           editRequired: true,
           max: 300,
           min: 0
