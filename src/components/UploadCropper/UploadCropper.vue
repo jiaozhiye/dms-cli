@@ -31,7 +31,13 @@
       <img class="img" :src="dialogImageUrl" alt />
     </el-dialog>
     <!-- 剪裁组件弹窗 -->
-    <el-dialog custom-class="dialog-wrap" title="图片裁剪" :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
+    <el-dialog
+      custom-class="dialog-wrap"
+      title="图片裁剪"
+      :visible.sync="cropperModel"
+      width="800px"
+      :before-close="beforeClose"
+    >
       <CropperPanel
         ref="uploadCropper"
         :img-file="file"
@@ -58,15 +64,15 @@ export default {
       type: String,
       default: ''
     },
+    isCalcHeight: {
+      type: Boolean,
+      default: false
+    },
     fixedSize: {
       type: Array,
       default() {
         return [5, 4];
       }
-    },
-    height: {
-      type: [Number, String],
-      default: 148
     },
     tipText: {
       type: String,
@@ -74,8 +80,11 @@ export default {
     }
   },
   data() {
+    this.uploadWrap = null;
     this.fileData = null; // 文件裁剪之后的 blob
     this.uid = ''; // 文件的 uid
+    this.width = 148;
+    this.height = 148;
     return {
       file: null, // 当前被选择的图片文件
       imageUrl: this.initialValue,
@@ -151,9 +160,10 @@ export default {
       this.cropperModel = false;
     },
     setUploadWrapHeight() {
-      const uploadDom = this.$refs.upload.$el.querySelector('.el-upload');
-      uploadDom.style.height = `${this.height}px`;
-      uploadDom.style.lineHeight = `${Number(this.height) - 2}px`;
+      const iHeight = !this.isCalcHeight ? this.height : Number.parseInt((this.width * this.fixedSize[1]) / this.fixedSize[0]);
+      this.uploadWrap.style.width = `${this.width}px`;
+      this.uploadWrap.style.height = `${iHeight}px`;
+      this.uploadWrap.style.lineHeight = `${iHeight - 2}px`;
     },
     // base64 转成 bolb 对象
     dataURItoBlob(base64Data) {
@@ -175,6 +185,7 @@ export default {
     }
   },
   mounted() {
+    this.uploadWrap = this.$refs.upload.$el.querySelector('.el-upload');
     this.setUploadWrapHeight();
   },
   updated() {
