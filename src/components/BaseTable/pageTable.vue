@@ -688,11 +688,22 @@ export default {
     },
     // 组装搜索帮助数据列表
     createSerachHelperList(arr, aliasKey) {
+      const allColumns = this.columnFlatMap(this.columns);
       return arr.map(x => {
-        let item = {};
+        const item = {};
         for (let attr in x) {
           if (Object.keys(aliasKey).includes(attr)) {
-            item[aliasKey[attr].dataIndex] = x[attr];
+            let { dataIndex } = aliasKey[attr];
+            let column = allColumns.find(x => x.dataIndex === dataIndex);
+            // 处理数值类型的可编辑单元格，显示数据的精度
+            if (column.editType === 'number'){
+              let { precision = 2 } = column;
+              if (!isNaN(Number(x[attr]))) {
+                item[dataIndex] = Number(x[attr]).toFixed(precision);
+              }
+            } else {
+              item[dataIndex] = x[attr];
+            }
           }
         }
         return item;
