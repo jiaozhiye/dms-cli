@@ -1361,7 +1361,8 @@ export default {
       this.list.forEach(row => {
         this.editableColumns.forEach(column => {
           if (column.editRequired) {
-            this.validateRequired(column.dataIndex, row._uid, _.get(row, column.dataIndex, ''));
+            let val = _.get(row, column.dataIndex) || '';
+            this.validateRequired(column.dataIndex, row._uid, val);
           }
         });
       });
