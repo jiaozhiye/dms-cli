@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cropper-wrap">
     <div class="cropper-content">
       <!-- 剪裁框 -->
       <div class="cropper">
@@ -110,46 +110,50 @@ export default {
   }
 };
 </script>
+
 <style lang="less">
-.cropper-content {
-  display: flex;
-  justify-content: flex-end;
-  -webkit-justify-content: flex-end;
-}
-.cropper-content .cropper {
-  width: 350px;
-  height: 300px;
-}
-.cropper-content .show-preview {
+.cropper-wrap {
   flex: 1;
-  -webkit-flex: 1;
-  display: flex;
-  justify-content: center;
-  -webkit-justify-content: center;
-  overflow: hidden;
-  background: #d8d8d8;
-  margin-left: 20px;
-}
-.preview {
-  overflow: hidden;
-}
-.footer-btn {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  -webkit-justify-content: flex-end;
-}
-.footer-btn .scope-btn {
-  width: 350px;
-  display: flex;
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-}
-.footer-btn .upload-btn {
-  flex: 1;
-  -webkit-flex: 1;
-  display: flex;
-  justify-content: center;
-  -webkit-justify-content: center;
+  .cropper-content {
+    display: flex;
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+    .cropper {
+      width: 350px;
+      height: 300px;
+    }
+    .show-preview {
+      flex: 1;
+      -webkit-flex: 1;
+      display: flex;
+      justify-content: center;
+      -webkit-justify-content: center;
+      overflow: hidden;
+      background: #d8d8d8;
+      margin-left: 20px;
+    }
+  }
+  .preview {
+    overflow: hidden;
+  }
+  .footer-btn {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+  }
+  .footer-btn .scope-btn {
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+  }
+  .footer-btn .upload-btn {
+    flex: 1;
+    -webkit-flex: 1;
+    display: flex;
+    justify-content: center;
+    -webkit-justify-content: center;
+  }
 }
 </style>
