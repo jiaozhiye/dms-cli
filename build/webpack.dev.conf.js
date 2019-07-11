@@ -35,7 +35,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
     compress: true,
-    contentBase: false, // since we use CopyWebpackPlugin.
+    overlay: {
+      warnings: false,
+      errors: true // webpack 在编译的时候如果出现了错误，可以在网页上显示
+    },
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
