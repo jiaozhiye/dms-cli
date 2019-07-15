@@ -70,7 +70,7 @@ export default {
       const { label, fieldName, style = {}, placeholder } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-input v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable />
+          <el-input v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable nativeOnKeydown={this.enterEventHandle} />
         </el-form-item>
       );
     },
@@ -84,6 +84,7 @@ export default {
             placeholder={placeholder}
             style={{ ...style }}
             clearable
+            nativeOnKeydown={this.enterEventHandle}
             fetchSuggestions={(queryString, cb) => this.querySearchAsync(request, fieldName, queryString, cb)}
           />
         </el-form-item>
@@ -94,7 +95,7 @@ export default {
       const { label, fieldName, itemList, style = {}, placeholder } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable>
+          <el-select v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable nativeOnKeydown={this.enterEventHandle}>
             <el-option key="-" label="全部" value="0" />
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -121,7 +122,7 @@ export default {
       const { label, fieldName, style = {}, placeholder } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="date" v-model={form[fieldName]} value-format="yyyy-MM-dd HH:mm:ss" placeholder={placeholder} style={{ ...style }} />
+          <el-date-picker type="date" v-model={form[fieldName]} value-format="yyyy-MM-dd HH:mm:ss" placeholder={placeholder} style={{ ...style }} nativeOnKeydown={this.enterEventHandle}/>
         </el-form-item>
       );
     },
@@ -165,6 +166,10 @@ export default {
       return this.list.map(item => {
         return !this[item.type] ? null : this[item.type](item);
       });
+    },
+    enterEventHandle(e) {
+      if (e.keyCode !== 13) return;
+      this.submitForm(e);
     },
     submitForm(e) {
       e.preventDefault();
