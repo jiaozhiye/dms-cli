@@ -109,4 +109,16 @@ const webpackConfig = merge(baseWebpackConfig, {
   ]
 });
 
+if (config.build.productionGzip) {
+  const CompressionWebpackPlugin = require('compression-webpack-plugin');
+  webpackConfig.plugins.push(
+    new CompressionWebpackPlugin({
+      algorithm: 'gzip',
+      test: new RegExp('\\.(' + config.build.productionGzipExtensions.join('|') + ')$'),
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  );
+}
+
 module.exports = webpackConfig;

@@ -4,8 +4,16 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-06-20 15:45:00
  */
+import RouteLoading from '@/components/RouteLoading';
 const RouteView = () => import('@/layout/RouteView');
-const loadComponent = name => () => import(`@/pages/${name}`);
+
+// 异步路由组件加载
+const AsyncComponent = __name__ => {
+  return () => ({
+    component: import(`@/pages/${__name__}`),
+    loading: RouteLoading
+  });
+};
 
 // 菜单路由
 const menuRoutes = [
@@ -27,7 +35,7 @@ const menuRoutes = [
               title: '备件采购订单',
               keepAlive: true
             },
-            component: loadComponent('demo/index')
+            component: AsyncComponent('demo/index')
           },
           {
             path: '/bjgl/cggl/rk',
@@ -35,7 +43,7 @@ const menuRoutes = [
               title: '备件采购入库',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/bjgl/cggl/tk',
@@ -43,7 +51,7 @@ const menuRoutes = [
               title: '备件采购退库',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       },
@@ -59,7 +67,7 @@ const menuRoutes = [
               title: '备件清单列表',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       }
@@ -83,7 +91,7 @@ const menuRoutes = [
               title: '线索分配',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/xugl/jl',
@@ -91,7 +99,7 @@ const menuRoutes = [
               title: '线索记录',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/xugl/jh',
@@ -99,7 +107,7 @@ const menuRoutes = [
               title: '线索跟进计划',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/xugl/zy',
@@ -107,7 +115,7 @@ const menuRoutes = [
               title: '线索转移',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       },
@@ -123,7 +131,7 @@ const menuRoutes = [
               title: '销售机会',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/jhgl/jhsz',
@@ -131,7 +139,7 @@ const menuRoutes = [
               title: '跟进计划设置',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/jhgl/gjjh',
@@ -139,7 +147,7 @@ const menuRoutes = [
               title: '机会跟进计划',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       },
@@ -155,7 +163,7 @@ const menuRoutes = [
               title: '客户订单管理',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/khgl/cx',
@@ -163,7 +171,7 @@ const menuRoutes = [
               title: '车辆资源查询',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/xsgl/khgl/gl',
@@ -171,7 +179,7 @@ const menuRoutes = [
               title: '车辆资源管理',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       }
@@ -195,7 +203,7 @@ const menuRoutes = [
               title: '销售回访',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           },
           {
             path: '/kfgl/hf/fp',
@@ -203,7 +211,7 @@ const menuRoutes = [
               title: '回访分配',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       },
@@ -219,7 +227,7 @@ const menuRoutes = [
               title: '投诉管理',
               keepAlive: true
             },
-            component: loadComponent('home/index')
+            component: AsyncComponent('home/index')
           }
         ]
       }

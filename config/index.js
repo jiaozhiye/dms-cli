@@ -27,11 +27,8 @@ module.exports = {
     port: 8080,
     autoOpenBrowser: true,
 
-    /**
-     * Source Maps
-     */
+    // Source Maps
     devtool: 'cheap-source-map',
-    cacheBusting: true,
     cssSourceMap: true
   },
 
@@ -44,10 +41,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '',
 
-    /**
-     * Source Maps
-     */
+    // Source Maps
     productionSourceMap: false,
-    devtool: 'source-map'
+    devtool: 'source-map',
+
+    // Gzip
+    productionGzip: false,
+    productionGzipExtensions: ['js', 'css']
   }
 };

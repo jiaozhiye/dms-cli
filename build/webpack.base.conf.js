@@ -5,7 +5,11 @@ const webpack = require('webpack');
 const config = require('../config');
 const Dotenv = require('dotenv-webpack');
 const { VueLoaderPlugin } = require('vue-loader');
-const vueLoaderConfig = require('./vue-loader.conf');
+
+// 多进程处理loader
+const HappyPack = require('happypack');
+const os = require('os');
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 module.exports = {
   context: utils.resolve('/'),
@@ -30,12 +34,21 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: {
+          loaders: {
+            ...utils.cssLoaders({
+              sourceMap: process.env.NODE_ENV === 'production' ? config.build.productionSourceMap : config.dev.cssSourceMap,
+              extract: process.env.NODE_ENV === 'production'
+            }),
+            js: 'happypack/loader?id=babel'
+          }
+        }
       },
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /(node_modules|bower_components)/
+        test: /\.(js|jsx)$/,
+        use: 'happypack/loader?id=babel',
+        include: utils.resolve('src'),
+        exclude: /node_modules/
       },
       {
         test: /\.svg$/,
@@ -72,5 +85,14 @@ module.exports = {
       }
     ]
   },
-  plugins: [new Dotenv(), new VueLoaderPlugin()]
+  plugins: [
+    new Dotenv(),
+    new VueLoaderPlugin(),
+    new HappyPack({
+      id: 'babel',
+      loaders: ['babel-loader?cacheDirectory=true'],
+      threadPool: happyThreadPool,
+      verbose: true
+    })
+  ]
 };
