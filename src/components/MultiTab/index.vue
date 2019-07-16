@@ -46,10 +46,13 @@ export default {
     },
     activeKey(val) {
       this.$router.push({ path: val });
+    },
+    pages(val) {
+      this.createTabMenuList(val.map(x => ({ key: x.path, title: x.meta.title })));
     }
   },
   methods: {
-    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames']),
+    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList']),
     getRouteComponent(route) {
       return route.matched[route.matched.length - 1].components.default;
     },

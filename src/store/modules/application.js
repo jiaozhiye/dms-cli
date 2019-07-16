@@ -60,14 +60,15 @@ const formateMenu = list => {
 
 // state
 const state = {
-  loginInfo: {},
-  navList: [],
-  menuList: [],
-  starMenuList: [],
+  loginInfo: {}, // 登录信息
+  navList: [], // 导航菜单树
+  menuList: [], // 可点击(三级)的子菜单列表
+  starMenuList: [], // 收藏的菜单列表
+  tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
-  btnLoading: false, // 按钮的加载中状态
-  isLeaveRemind: false, // true -> 开启提醒     false -> 关闭提醒
-  keepAliveNames: []
+  btnLoading: false, // 按钮状态
+  isLeaveRemind: false, // 页面离开提醒
+  keepAliveNames: [] // 路由组件缓存列表
 };
 
 // actions
@@ -121,6 +122,12 @@ const actions = {
       }
     }
     commit({ type: types.STAR_MENU, data });
+  },
+  createTabMenuList({ commit, state }, params) {
+    commit({
+      type: types.TAB_MENU,
+      data: params
+    });
   },
   checkAuthority({ commit, state }, params) {
     if (!state.menuList.length) {
@@ -193,6 +200,9 @@ const mutations = {
   },
   [types.MENULIST](state, { data }) {
     state.menuList = data;
+  },
+  [types.TAB_MENU](state, { data }) {
+    state.tabMenuList = data;
   },
   [types.BUTTON_LOADING](state, { data }) {
     state.btnLoading = data;

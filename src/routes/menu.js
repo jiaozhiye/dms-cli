@@ -4,16 +4,9 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-06-20 15:45:00
  */
-import RouteLoading from '@/components/RouteLoading';
 const RouteView = () => import('@/layout/RouteView');
-
 // 异步路由组件加载
-const AsyncComponent = __name__ => {
-  return () => ({
-    component: import(`@/pages/${__name__}`),
-    loading: RouteLoading
-  });
-};
+const AsyncComponent = __name__ => () => import(`@/pages/${__name__}`);
 
 // 菜单路由
 const menuRoutes = [

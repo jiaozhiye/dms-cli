@@ -10,12 +10,18 @@ import config from '@/config';
 import { getToken } from '@/assets/js/auth';
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
-import { MessageBox } from 'element-ui';
+import { MessageBox, Notification } from 'element-ui';
 
 // 访问白名单
 const whiteList = ['/login'];
 // 权限白名单
 const whiteAuth = ['/login', '/home', '/404'];
+
+// 阻止跳转
+const noJump = next => {
+  next(false);
+  NProgress.done();
+};
 
 // 页面离开提醒
 const messageConfirm = next => {
@@ -28,11 +34,11 @@ const messageConfirm = next => {
       next();
     })
     .catch(() => {
-      next(false);
-      NProgress.done();
+      noJump(next);
     });
 };
 
+// 登录判断
 const isLogin = () => {
   if (process.env.MOCK_DATA === 'true') {
     return true;
@@ -52,6 +58,14 @@ router.beforeEach(async (to, from, next) => {
         await store.dispatch('app/createNavList');
         next({ ...to, replace: true });
       } else {
+        let { tabMenuList } = store.state.app;
+        if (tabMenuList.length >= config.maxCacheNum && !tabMenuList.some(x => x.key === to.path)) {
+          Notification.warning({
+            title: '提示信息',
+            message: `最多支持 ${config.maxCacheNum} 个菜单项！`
+          });
+          return noJump(next);
+        }
         let isAuth = await store.dispatch('app/checkAuthority', to.path);
         // 权限校验
         if (isAuth || whiteAuth.includes(to.path)) {

@@ -9,6 +9,7 @@ export const LOGININFO = 'LOGININFO';
 export const LOGOUT = 'LOGOUT';
 export const NAVLIST = 'NAVLIST';
 export const MENULIST = 'MENULIST';
+export const TAB_MENU = 'TAB_MENU';
 export const STAR_MENU = 'STAR_MENU';
 export const BUTTON_LOADING = 'BUTTON_LOADING';
 export const LEAVE_REMIND = 'LEAVE_REMIND';
