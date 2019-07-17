@@ -1,10 +1,19 @@
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import config from '@/config';
 import GlobalLayout from '@/layout/GlobalLayout';
-import RouteView from '@/layout/RouteView';
 
 export default {
   name: 'BasicLayout',
+  computed: {
+    ...mapState('app', ['keepAliveNames']),
+    cachedViews() {
+      return this.keepAliveNames.map(x => x.value);
+    },
+    key() {
+      return this.$route.fullPath;
+    }
+  },
   methods: {
     ...mapActions('app', ['createDictData', 'createStarMenuList'])
   },
@@ -17,8 +26,10 @@ export default {
   render() {
     return (
       <GlobalLayout>
-        <transition name="page-transition">
-          <RouteView />
+        <transition name="page-transition" mode="out-in">
+          <keep-alive include={this.cachedViews}>
+            <router-view key={this.key} />
+          </keep-alive>
         </transition>
       </GlobalLayout>
     );

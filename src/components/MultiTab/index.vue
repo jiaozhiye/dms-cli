@@ -39,7 +39,6 @@ export default {
     $route(val) {
       this.activeKey = val.path;
       if (!this.pathList.includes(this.activeKey)) {
-        const { name = '' } = this.getRouteComponent(val);
         this.addKeepAlive(val);
         this.pages.push(val);
       }

@@ -214,7 +214,8 @@ const mutations = {
     state.dict = data;
   },
   [types.ADD_CNAME](state, { data }) {
-    state.keepAliveNames = _.uniqWith([...state.keepAliveNames, data], _.isEqual);
+    if (state.keepAliveNames.some(x => x.value === data.value)) return;
+    state.keepAliveNames = [...state.keepAliveNames, data];
   },
   [types.DEL_CNAME](state, { data }) {
     state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x.key === data), 1);

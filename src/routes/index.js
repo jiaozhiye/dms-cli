@@ -10,9 +10,9 @@ import menuRoutes from './menu';
 Vue.use(VueRouter);
 
 const BasicLayout = () => import('@/layout/BasicLayout');
-const NoMatch = () => import('@/pages/noMatch/index');
-const Login = () => import('@/pages/login/index');
-const Home = () => import('@/pages/home/index');
+const Login = () => import('@/pages/login');
+const Dashboard = () => import('@/pages/dashboard');
+const NoMatch = () => import('@/pages/noMatch');
 
 // 基础路由
 export const constantRouterMap = [
@@ -30,11 +30,8 @@ export const constantRouterMap = [
     children: [
       {
         path: '/home',
-        meta: {
-          title: '概览',
-          keepAlive: true
-        },
-        component: Home
+        meta: { title: '概览' },
+        component: Dashboard
       },
       ...menuRoutes
     ]
