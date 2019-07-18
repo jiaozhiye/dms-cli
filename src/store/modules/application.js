@@ -159,6 +159,7 @@ const actions = {
     commit({ type: types.DICT_DATA, data });
   },
   addKeepAliveNames({ commit, state }, params) {
+    if (state.keepAliveNames.some(x => x.value === params.value)) return;
     commit({
       type: types.ADD_CNAME,
       data: params
@@ -221,7 +222,6 @@ const mutations = {
     state.dict = data;
   },
   [types.ADD_CNAME](state, { data }) {
-    if (state.keepAliveNames.some(x => x.value === data.value)) return;
     state.keepAliveNames = [...state.keepAliveNames, data];
   },
   [types.DEL_CNAME](state, { data }) {

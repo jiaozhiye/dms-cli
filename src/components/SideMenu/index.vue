@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="side-wrap">
     <logo :collapsed="collapsed" />
     <all-menu :collapsed="collapsed">
       <MenuList :menu="navList" />
@@ -37,8 +37,8 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.wrapper {
+<style lang="less">
+.side-wrap {
   position: relative;
   height: 100%;
   background-color: @asideBgColor;
@@ -47,7 +47,9 @@ export default {
   .menu-tree {
     height: calc(100vh - 116px);
     background-color: @asideBgColor;
-    overflow-x: hidden !important;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+    }
   }
 }
 </style>
