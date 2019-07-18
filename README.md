@@ -76,7 +76,7 @@ $ npm run build
 ├── .env                       # 全局环境常量
 ├── .gitignore                 # git 忽略清单
 ├── favicon.ico                # favicon 图标
-├── index.html                 # html模板
+├── index.html                 # html 模板
 ├── postcss.config.js          # postcss 配置
 ├── prettier.config.js         # Prettier 配置
 ├── README.md                  # README.md
