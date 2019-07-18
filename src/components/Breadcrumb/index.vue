@@ -42,7 +42,6 @@ export default {
   padding: 10px;
   .el-breadcrumb__item {
     .is-link {
-      font-size: 12px;
       color: @textColor;
       font-weight: 400;
       &:hover {

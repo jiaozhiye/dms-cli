@@ -1,7 +1,7 @@
 <template>
   <div class="actions">
     <ScreenFull />
-    <div class="setting" @click="clickHandle"></div>
+    <div class="setting" @click="clickHandle">刷新页面</div>
   </div>
 </template>
 
@@ -35,6 +35,8 @@ export default {
   .setting {
     width: 100%;
     height: 30px;
+    text-align: center;
+    line-height: 30px;
     background: #e3e3e3;
   }
 }

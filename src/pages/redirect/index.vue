@@ -6,7 +6,8 @@ export default {
       params: { path },
       query
     } = this.$route;
-    this.$router.replace({ path: '/' + path, query });
+    // refresh view
+    this.$router.replace({ path: `/${path}`, query });
   },
   render() {
     return null;

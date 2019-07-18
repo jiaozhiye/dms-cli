@@ -49,17 +49,22 @@ export const constantRouterMap = [
           }
         ]
       },
-      ...menuRoutes
-    ]
-  },
-  {
-    path: '/redirect',
-    component: BasicLayout,
-    hidden: true,
-    children: [
+      ...menuRoutes,
       {
-        path: '/redirect/:path*',
-        component: Redirect
+        path: '/redirect',
+        component: RouteView,
+        children: [
+          {
+            path: '',
+            component: RouteView,
+            children: [
+              {
+                path: '/redirect/:path*',
+                component: Redirect
+              }
+            ]
+          }
+        ]
       }
     ]
   },
