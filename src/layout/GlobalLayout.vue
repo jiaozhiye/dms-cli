@@ -3,13 +3,13 @@ import SideMenu from '@/components/SideMenu';
 import GlobalHeader from '@/components/GlobalHeader';
 import MultiTab from '@/components/MultiTab';
 import HeadNavBar from '@/components/HeadNavBar';
+import Breadcrumb from '@/components/Breadcrumb';
 
 export default {
   name: 'GlobalLayout',
   data() {
     return {
-      collapsed: false,
-      breadcrumb: true
+      collapsed: false
     };
   },
   computed: {
@@ -23,7 +23,7 @@ export default {
     }
   },
   render() {
-    const { $slots = {}, collapsed, asideWidth, breadcrumb } = this;
+    const { $slots = {}, collapsed, asideWidth } = this;
     return (
       <el-container class="layout">
         <el-aside class="sidebar" style={{ width: asideWidth }}>
@@ -32,12 +32,13 @@ export default {
         <el-container style="width: 0;">
           <el-header>
             <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
-              <MultiTab slot="menu" isBreadcrumb={breadcrumb} />
+              <MultiTab slot="menu" />
               <HeadNavBar slot="action" />
             </GlobalHeader>
           </el-header>
-          <el-main class="container" style={{ marginTop: breadcrumb ? '30px' : 0 }}>
-            {$slots.default}
+          <el-main class="container">
+            <Breadcrumb />
+            <section>{$slots.default}</section>
           </el-main>
         </el-container>
       </el-container>

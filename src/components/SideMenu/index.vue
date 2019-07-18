@@ -1,10 +1,12 @@
 <template>
   <div class="wrapper">
-    <logo :collapsed="collapsed"/>
+    <logo :collapsed="collapsed" />
     <all-menu :collapsed="collapsed">
-      <MenuList :menu="navList"/>
+      <MenuList :menu="navList" />
     </all-menu>
-    <menu-tree class="menu-tree" :menu="navList" :collapsed="collapsed"/>
+    <el-scrollbar class="menu-tree">
+      <menu-tree :menu="navList" :collapsed="collapsed" />
+    </el-scrollbar>
   </div>
 </template>
 
@@ -43,12 +45,9 @@ export default {
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
   z-index: 5;
   .menu-tree {
-    height: calc(100% - 116px);
+    height: calc(100vh - 116px);
     background-color: @asideBgColor;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow-x: hidden !important;
   }
 }
 </style>

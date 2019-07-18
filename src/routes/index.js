@@ -10,9 +10,11 @@ import menuRoutes from './menu';
 Vue.use(VueRouter);
 
 const BasicLayout = () => import('@/layout/BasicLayout');
+const RouteView = () => import('@/layout/RouteView');
 const Login = () => import('@/pages/login');
 const Dashboard = () => import('@/pages/dashboard');
-const NoMatch = () => import('@/pages/noMatch');
+const Redirect = () => import('@/pages/redirect');
+const Nomatch = () => import('@/pages/nomatch');
 
 // 基础路由
 export const constantRouterMap = [
@@ -30,15 +32,41 @@ export const constantRouterMap = [
     children: [
       {
         path: '/home',
-        meta: { title: '概览' },
-        component: Dashboard
+        meta: { breadcrumb: false },
+        component: RouteView,
+        children: [
+          {
+            path: '',
+            meta: { breadcrumb: false },
+            component: RouteView,
+            children: [
+              {
+                path: '',
+                meta: { title: '概览' },
+                component: Dashboard
+              }
+            ]
+          }
+        ]
       },
       ...menuRoutes
     ]
   },
   {
+    path: '/redirect',
+    component: BasicLayout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: Redirect
+      }
+    ]
+  },
+  {
     path: '/404',
-    component: NoMatch
+    hidden: true,
+    component: Nomatch
   },
   {
     path: '*',

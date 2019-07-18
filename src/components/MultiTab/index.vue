@@ -3,12 +3,6 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'MultiTab',
-  props: {
-    isBreadcrumb: {
-      type: Boolean,
-      default: true
-    }
-  },
   data() {
     return {
       activeKey: this.$route.path,
@@ -18,18 +12,6 @@ export default {
   computed: {
     pathList() {
       return this.pages.map(x => x.path);
-    },
-    breadcrumbs() {
-      return this.$route.matched.map(x => {
-        let {
-          path: key,
-          meta: { title = '' }
-        } = x;
-        if (!key) {
-          key = '/';
-        }
-        return { key, title };
-      });
     }
   },
   created() {
@@ -37,21 +19,25 @@ export default {
   },
   watch: {
     $route(val) {
+      if (this.isRedirect(val.path)) return;
       this.activeKey = val.path;
+      this.addKeepAlive(val);
       if (!this.pathList.includes(this.activeKey)) {
-        this.addKeepAlive(val);
         this.pages.push(val);
       }
     },
-    activeKey(val) {
-      this.$router.push({ path: val });
-    },
     pages(val) {
       this.createTabMenuList(val.map(x => ({ key: x.path, title: x.meta.title })));
+    },
+    activeKey(val) {
+      this.$router.push({ path: val });
     }
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList']),
+    isRedirect(path) {
+      return path.startsWith('/redirect');
+    },
     getRouteComponent(route) {
       return route.matched[route.matched.length - 1].components.default;
     },
@@ -75,22 +61,7 @@ export default {
     },
     createPanelList() {
       const Len = this.pages.length;
-      return this.pages.map(x => (
-        <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={Len > 1}>
-          <div style={{ display: this.isBreadcrumb ? 'block' : 'none' }}>
-            <div class="breadcrumb-wrap">
-              <span>位置导航：</span>
-              <el-breadcrumb separator="/">
-                {this.breadcrumbs.map(x => (
-                  <el-breadcrumb-item key={x.key} to={{ path: x.key }}>
-                    {x.title}
-                  </el-breadcrumb-item>
-                ))}
-              </el-breadcrumb>
-            </div>
-          </div>
-        </el-tab-pane>
-      ));
+      return this.pages.map(x => <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={Len > 1} />);
     }
   },
   render() {
@@ -110,30 +81,7 @@ export default {
     margin: 0;
   }
   .el-tabs__content {
-    position: absolute;
-    top: 40px;
-    left: -44px;
-    padding-top: 10px;
-    .breadcrumb-wrap {
-      display: flex;
-      .el-breadcrumb__item {
-        .is-link {
-          color: @textColor;
-          font-weight: 400;
-          &:hover {
-            color: @primaryColor;
-          }
-        }
-        &:last-child .is-link {
-          color: #909399;
-        }
-      }
-    }
-  }
-  .el-tabs__nav-wrap {
-    &::after {
-      background: none;
-    }
+    display: none;
   }
 }
 </style>

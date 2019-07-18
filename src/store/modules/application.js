@@ -181,6 +181,13 @@ const actions = {
       type: types.DEL_STAR_MENU,
       data: params
     });
+  },
+  refreshView({ commit, state }, params) {
+    commit({
+      type: types.DEL_CNAME,
+      data: params
+    });
+    router.replace({ path: `/redirect${params}` });
   }
 };
 

@@ -1,17 +1,24 @@
 <template>
   <div class="actions">
-    <ScreenFull/>
-    <div class="setting"></div>
+    <ScreenFull />
+    <div class="setting" @click="clickHandle"></div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import ScreenFull from '@/components/ScreenFull';
 
 export default {
   name: 'HeadAction',
   data() {
     return {};
+  },
+  methods: {
+    ...mapActions('app', ['refreshView']),
+    clickHandle() {
+      this.refreshView(this.$route.path);
+    }
   },
   components: {
     ScreenFull
