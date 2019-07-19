@@ -1,7 +1,7 @@
 <template>
   <div class="actions">
     <ScreenFull />
-    <div class="setting" @click="clickHandle">刷新页面</div>
+    <div class="setting" @click="clickHandle">个人中心</div>
   </div>
 </template>
 

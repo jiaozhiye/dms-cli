@@ -42,12 +42,13 @@ $ npm run build
   - 动态面包屑
 
 - 提供的组件
-  - dialog 模态框组件，支持子组件的销毁
-  - baseTable 表格组件
-  - drawer 抽屉组件，支持子组件的销毁
-  - lazyLoadTab 选项卡的按需/动态加载
-  - topFilter 页面头部筛选组件
-  - uploadCropper 图片上传组件，支持图片的裁剪和压缩
+  - Dialog 模态框组件，支持子组件的销毁
+  - BaseTable 表格组件
+  - Drawer 抽屉组件，支持子组件的销毁
+  - LazyLoadTab 选项卡的按需/动态加载
+  - TopFilter 页面头部筛选组件
+  - UploadCropper 图片上传组件，支持图片的裁剪和压缩
+  - BasePrint 基于 Lodop 插件的打印组件
 ```
 
 ## 目录结构

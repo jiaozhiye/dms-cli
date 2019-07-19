@@ -11,37 +11,55 @@
       :columns="columns"
       :dataSource="list"
       :onColumnsChange="columns => this.columns = columns"
-    />
+    >
+      <template slot="controls" slot-scope="props">
+        <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
+        <el-button size="small" icon="el-icon-printer">打印</el-button>
+      </template>
+    </FilterTable>
+    <Drawer
+      :visible.sync="visible"
+      title="标题名称"
+      :width="700"
+      destroyOnClose
+      :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
+    >
+      <Panel @close="closeHandler" />
+    </Drawer>
   </div>
 </template>
 
 <script>
 import { authority } from '@/utils/mixin';
 import res from '@/mock/tableData';
+import Panel from './Panel';
 
 export default {
   name: 'Demo',
   mixins: [authority],
+  components: {
+    Panel
+  },
   data() {
     this.BaseTable = null;
     return {
       topFilterList: this.createTopFilters(),
       list: [...res.data.items],
+      visible: false,
       columns: [
         {
           title: '操作',
           dataIndex: 'column-action',
           width: 100,
           fixed: 'left',
-          hidden: true,
           render: (props, h) => {
             return (
               <div>
-                <el-button size="mini" type="text" onClick={() => this.cellClickHandler(props.row)}>
+                <el-button size="mini" type="text">
                   编辑
                 </el-button>
                 <el-divider direction="vertical" />
-                <el-button size="mini" type="text" onClick={() => this.cellClickHandler(props.row)}>
+                <el-button size="mini" type="text">
                   查看
                 </el-button>
               </div>
@@ -249,6 +267,9 @@ export default {
       this.$nextTick(() => {
         this.BaseTable.EXECUTE_RESET_HEIGHT();
       });
+    },
+    closeHandler(val) {
+      this.visible = val;
     }
   },
   mounted() {
