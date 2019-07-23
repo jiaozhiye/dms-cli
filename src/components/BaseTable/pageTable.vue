@@ -696,7 +696,7 @@ export default {
             let { dataIndex } = aliasKey[attr];
             let column = allColumns.find(x => x.dataIndex === dataIndex);
             // 处理数值类型的可编辑单元格，显示数据的精度
-            if (column.editType === 'number'){
+            if (column.editType === 'number') {
               let { precision = 2 } = column;
               if (!isNaN(Number(x[attr]))) {
                 item[dataIndex] = Number(x[attr]).toFixed(precision);
@@ -1418,13 +1418,22 @@ export default {
     return (
       <div class="table-wrapper">
         <div class="toper-card">
-          <section>{isToperInfo && <toper-info {...toperInfoProps} />}</section>
+          <section>
+            {isToperInfo && (
+              <toper-info {...toperInfoProps}>
+                {Object.keys($slots).map(name => (
+                  <template key={name} slot={name}>
+                    {$slots[name]}
+                  </template>
+                ))}
+              </toper-info>
+            )}
+          </section>
           <section>
             <div class="slot-wrapper">
               {$scopedSlots.controls &&
                 $scopedSlots.controls({
                   data: list,
-                  columns,
                   methods: { addRecordFunc: this.addRowHandler, delRecordFunc: this.deleteHandler }
                 })}
             </div>
@@ -1461,7 +1470,7 @@ export default {
   },
   components: {
     ToperInfo: {
-      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler', 'deleteHandler'],
+      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler'],
       render() {
         return (
           <div class="info">
@@ -1478,14 +1487,18 @@ export default {
                 ) : null}
               </span>
             </el-alert>
-            {this.selectionRows.length ? (
-              <el-dropdown style={{ marginLeft: '10px' }} placement="bottom-start">
+            {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
+              <el-dropdown size="small" style={{ marginLeft: '10px' }} placement="bottom-start">
                 <el-button size="small">
                   更多操作
                   <i class="el-icon-arrow-down el-icon--right" />
                 </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item nativeOnClick={this.deleteHandler}>批量删除</el-dropdown-item>
+                <el-dropdown-menu slot="dropdown" class="dropdown-list">
+                  {this.$slots.moreActions
+                    .filter(x => x.tag)
+                    .map((x, i) => (
+                      <el-dropdown-item key={i}>{x}</el-dropdown-item>
+                    ))}
                 </el-dropdown-menu>
               </el-dropdown>
             ) : null}
@@ -1538,17 +1551,9 @@ export default {
       margin-right: 10px;
     }
   }
-  .el-table th {
-    background: none;
-  }
-  .table-header {
-    background-color: #f5f7fa !important;
-    .cell {
-      &.is-required::before {
-        content: '*';
-        color: #f56c6c;
-        margin-right: 4px;
-      }
+  .el-table__header {
+    thead > tr > th {
+      background: none;
     }
   }
   .el-table__body {
@@ -1581,6 +1586,21 @@ export default {
       }
     }
   }
+  .el-table__footer {
+    tbody > tr > td {
+      background-color: #f2f2f2 !important;
+    }
+  }
+  .table-header {
+    background-color: #f2f2f2 !important;
+    .cell {
+      &.is-required::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
+      }
+    }
+  }
 }
 .autocomplete {
   min-width: 200px;
@@ -1610,6 +1630,13 @@ export default {
         }
       }
     }
+  }
+}
+.dropdown-list {
+  li > span {
+    display: block;
+    margin: 0 -15px;
+    padding: 0 15px;
   }
 }
 </style>

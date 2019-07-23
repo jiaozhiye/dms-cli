@@ -18,7 +18,7 @@ const menuRoutes = [
     children: [
       {
         path: '/bjgl/cggl',
-        meta: { title: '采购管理', icon: 'el-icon-folder-opened' },
+        meta: { title: '采购管理' },
         redirect: '/bjgl/cggl/dd',
         component: RouteView,
         children: [
@@ -41,7 +41,7 @@ const menuRoutes = [
       },
       {
         path: '/bjgl/kcgl',
-        meta: { title: '库存管理', icon: 'el-icon-folder-opened' },
+        meta: { title: '库存管理' },
         redirect: '/bjgl/kcgl/lb',
         component: RouteView,
         children: [
@@ -62,7 +62,7 @@ const menuRoutes = [
     children: [
       {
         path: '/xsgl/xugl',
-        meta: { title: '线索管理', icon: 'el-icon-folder-opened' },
+        meta: { title: '线索管理' },
         redirect: '/xsgl/xugl/fp',
         component: RouteView,
         children: [
@@ -90,7 +90,7 @@ const menuRoutes = [
       },
       {
         path: '/xsgl/jhgl',
-        meta: { title: '机会管理', icon: 'el-icon-folder-opened' },
+        meta: { title: '机会管理' },
         redirect: '/xsgl/jhgl/xsjh',
         component: RouteView,
         children: [
@@ -113,7 +113,7 @@ const menuRoutes = [
       },
       {
         path: '/xsgl/khgl',
-        meta: { title: '客户管理', icon: 'el-icon-folder-opened' },
+        meta: { title: '客户管理' },
         redirect: '/xsgl/khgl/dd',
         component: RouteView,
         children: [
@@ -144,7 +144,7 @@ const menuRoutes = [
     children: [
       {
         path: '/kfgl/hf',
-        meta: { title: '回访', icon: 'el-icon-folder-opened' },
+        meta: { title: '回访' },
         redirect: '/kfgl/hf/xs',
         component: RouteView,
         children: [
@@ -162,7 +162,7 @@ const menuRoutes = [
       },
       {
         path: '/kfgl/ts',
-        meta: { title: '投诉', icon: 'el-icon-folder-opened' },
+        meta: { title: '投诉' },
         redirect: '/kfgl/ts/gl',
         component: RouteView,
         children: [

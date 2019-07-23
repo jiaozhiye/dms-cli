@@ -15,6 +15,7 @@
 
 <script>
 import addEventListener from 'add-dom-event-listener';
+
 export default {
   name: 'AllMenu',
   props: {

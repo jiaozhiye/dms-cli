@@ -94,10 +94,11 @@ http://localhost:8080/table
 
 `FilterTable 组件槽口`
 
-- 插槽名称：controls
-- 支持作用域插槽，参数是 json 对象，包含的属性有：
+- slot：moreActions{String|普通插槽，更多操作}
+
+- slot：controls{String|作用域插槽，控制操作区}
+- slot-scope：props{Object|插槽参数}
   - data{Array|table 数据数组}
-  - columns{Array|table 列配置数组}
   - methods{Object|操作组件方法的集合}
     - addRecordFunc{Function|新增行，参数是符合表格行数据的对象}
     - delRecordFunc{Function|移除行，前端 dom 删除操作，返回值是被移除行所组成的数组}

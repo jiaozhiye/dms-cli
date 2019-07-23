@@ -14,6 +14,10 @@ export default {
     collapsed: {
       type: Boolean,
       default: false
+    },
+    syncActive: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -52,21 +56,24 @@ export default {
     this.selectedKey = this.$route.path;
   },
   render() {
-    const { collapsed, selectedKey } = this;
+    const { collapsed, syncActive, selectedKey } = this;
+    const wrapProps = {
+      props: {
+        collapse: collapsed,
+        router: true,
+        collapseTransition: false,
+        backgroundColor: '#001529',
+        textColor: 'rgba(255, 255, 255, 0.65)',
+        activeTextColor: '#1890ff'
+      },
+      style: { borderRight: 'none' }
+    };
+    if (syncActive) {
+      wrapProps.props.defaultActive = selectedKey;
+    }
     return (
       <div>
-        <el-menu
-          collapse={collapsed}
-          router
-          collapse-transition={false}
-          default-active={selectedKey}
-          style={{ borderRight: 'none' }}
-          background-color="#001529"
-          text-color="rgba(255,255,255,0.65)"
-          active-text-color="#1890ff"
-        >
-          {this.createMenuTree(this.menu)}
-        </el-menu>
+        <el-menu {...wrapProps}>{this.createMenuTree(this.menu)}</el-menu>
       </div>
     );
   }

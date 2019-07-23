@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
-    <router-link to="/">
-      <img src="@/assets/img/logo.png" alt="logo">
+    <router-link to="/" :title="title">
+      <img src="@/assets/img/logo.png" alt="logo" :style="{ width: collapsed ? '30px' : '80px' }" />
       <h1 v-if="!collapsed">{{ title }}</h1>
     </router-link>
   </div>
@@ -13,7 +13,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'DMS 系统'
+      default: ''
     },
     collapsed: {
       type: Boolean,
@@ -32,9 +32,9 @@ export default {
   background: #002140;
   overflow: hidden;
   img {
-    height: 32px;
     display: inline-block;
     vertical-align: middle;
+    transition: all 0.3s ease;
   }
   h1 {
     display: inline-block;

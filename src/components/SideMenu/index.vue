@@ -5,6 +5,7 @@
       <MenuList :menu="navList" />
     </all-menu>
     <el-scrollbar class="menu-tree">
+      <star-menu :collapsed="collapsed" />
       <menu-tree :menu="navList" :collapsed="collapsed" />
     </el-scrollbar>
   </div>
@@ -14,6 +15,7 @@
 import { mapState } from 'vuex';
 import MenuTree from './menuTree';
 import AllMenu from './AllMenu';
+import StarMenu from './StarMenu';
 import MenuList from './MenuList';
 import Logo from './Logo';
 
@@ -32,6 +34,7 @@ export default {
     Logo,
     MenuTree,
     AllMenu,
+    StarMenu,
     MenuList
   }
 };
