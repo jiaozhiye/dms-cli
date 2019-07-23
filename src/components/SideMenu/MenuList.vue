@@ -149,9 +149,9 @@ export default {
           color: #fff;
           font-size: 14px;
           border-radius: 0;
-          background: #374f64;
+          background: #001529;
           border: none;
-          border-bottom: 1px solid #7990a6;
+          border-bottom: 1px solid #d9d9d9;
         }
       }
     }

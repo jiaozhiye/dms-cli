@@ -49,7 +49,7 @@ export default {
       }
     }
     &:last-child .is-link {
-      color: #999;
+      color: #909399;
     }
   }
 }

@@ -37,7 +37,7 @@ export default {
           return (
             <el-submenu key={item.key} index={item.key}>
               <template slot="title">
-                <i class={item.icon} />
+                {item.icon ? <i class={item.icon} /> : null}
                 <span slot="title">{item.title}</span>
               </template>
               {this.createMenuTree(item.children)}
@@ -62,9 +62,9 @@ export default {
         collapse: collapsed,
         router: true,
         collapseTransition: false,
-        backgroundColor: '#001529',
+        backgroundColor: '#333',
         textColor: 'rgba(255, 255, 255, 0.65)',
-        activeTextColor: '#1890ff'
+        activeTextColor: '#fff'
       },
       style: { borderRight: 'none' }
     };

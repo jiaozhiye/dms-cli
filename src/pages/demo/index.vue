@@ -20,7 +20,7 @@
     <Drawer
       :visible.sync="visible"
       title="标题名称"
-      :width="700"
+      :width="800"
       destroyOnClose
       :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
     >
@@ -167,7 +167,7 @@ export default {
           render: props => {
             // 计算规则
             props.row.total = props.row.price * props.row.num;
-            const domStyle = props.row.total > 1000 ? { color: 'red' } : null;
+            const domStyle = props.row.total > 1000 ? {} : null;
             return <div style={domStyle}>{props.row.total}</div>;
           }
         },

@@ -1525,10 +1525,10 @@ export default {
     .alert {
       height: 32px;
       padding: 0 12px 0 10px;
-      background-color: #e6f7ff;
-      border: 1px solid #91d5ff;
+      background-color: #f2f2f2;
+      border: 1px solid #d9d9d9;
       .el-icon-info {
-        color: #409eff;
+        color: #bb0a30;
       }
       .el-alert__content {
         display: flex;
@@ -1536,11 +1536,10 @@ export default {
         padding-right: 0;
         .text {
           font-size: 12px;
-          color: #666;
           i {
             font-size: 13px;
             font-weight: 600;
-            color: #409eff;
+            color: #bb0a30;
             font-style: normal;
           }
         }
@@ -1558,10 +1557,10 @@ export default {
   }
   .el-table__body {
     .selection-row {
-      background-color: #ecf5ff;
+      background-color: #f5f5f5;
     }
     .hover-row {
-      background-color: #ecf5ff;
+      background-color: #f5f5f5;
       & > td {
         background: none;
       }
@@ -1581,7 +1580,7 @@ export default {
     .is-error {
       .form-item-error {
         line-height: 1;
-        color: #f56c6c;
+        color: #f5222d;
         text-align: left;
       }
     }
@@ -1596,7 +1595,7 @@ export default {
     .cell {
       &.is-required::before {
         content: '*';
-        color: #f56c6c;
+        color: #f5222d;
         margin-right: 4px;
       }
     }

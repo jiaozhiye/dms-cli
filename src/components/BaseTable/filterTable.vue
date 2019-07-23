@@ -230,7 +230,7 @@ export default {
           style={{
             padding: '12px 2px 6px 10px',
             marginLeft: '-10px',
-            color: this.isValueFalse(this.search[`${property}Val`]) ? '' : '#409EFF'
+            color: this.isValueFalse(this.search[`${property}Val`]) ? '' : '#bb0a30'
           }}
           onClick={e => {
             e.stopPropagation();

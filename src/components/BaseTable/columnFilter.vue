@@ -165,7 +165,7 @@ export default {
 <style lang="less" scoped>
 .el-dropdown-link {
   cursor: pointer;
-  color: #409eff;
+  color: #bb0a30;
   .icon {
     margin-right: 4px;
     font-weight: 700;

@@ -70,7 +70,7 @@ export default {
     padding-left: 20px;
     cursor: pointer;
     &:hover {
-      background-color: rgb(0, 17, 33);
+      background-color: rgb(41, 41, 41);
     }
     i {
       width: 24px;
@@ -104,7 +104,7 @@ export default {
     top: 0;
     width: 650px;
     height: 100%;
-    background: #374f64;
+    background: #001529;
     z-index: -1;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     transform: translate3d(-100%, 0, 0);

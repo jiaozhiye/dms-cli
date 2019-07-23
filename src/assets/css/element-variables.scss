@@ -1,14 +1,24 @@
 /* 改变主题色变量 */
-$--color-primary: #1890ff;
+$--color-primary: #bb0a30;
 
 $--color-success: #52c41a !default;
 $--color-warning: #faad14 !default;
 $--color-danger: #f5222d !default;
 $--color-info: #909399 !default;
 
-$--table-border: 1px solid#dfe4ed;
+$--color-white: #ffffff !default;
+$--color-black: #000000 !default;
+
+$--color-text-primary: rgba(0, 0, 0, 0.65) !default;
+$--color-text-regular: #606266 !default;
+$--color-text-secondary: #909399 !default;
+$--border-color-base: #d9d9d9 !default;
+$--border-color-light: #e4e7ed !default;
+$--border-color-lighter: #ebeef5 !default;
+
+$--background-color-base: #f2f2f2 !default;
+$--table-border-color: #d9d9d9 !default;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
-
 @import '~element-ui/packages/theme-chalk/src/index';
