@@ -18,3 +18,6 @@ export const getAllDict = params => axios.get('/api/test', { params });
 
 // 获取收藏导航
 export const getStarMenuList = params => axios.get('/api/test', { params });
+
+// 获取常用导航
+export const getCommonMenuList = params => axios.get('/api/test', { params });

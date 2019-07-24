@@ -28,8 +28,8 @@ export default {
   height: 60px;
   line-height: 60px;
   padding-left: 16px;
-  transition: all 0.3s;
-  background: #1a1a1a;
+  transition: all 0.3s ease;
+  background-color: @logoBgColor;
   overflow: hidden;
   img {
     display: inline-block;
@@ -41,7 +41,7 @@ export default {
     color: #fff;
     font-size: 16px;
     font-weight: normal;
-    margin: 0 0 0 10px;
+    margin-left: @moduleMargin;
   }
 }
 </style>

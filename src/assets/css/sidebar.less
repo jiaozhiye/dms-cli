@@ -1,0 +1,27 @@
+#app {
+  .el-menu {
+    border: none;
+    height: 100%;
+    width: 100% !important;
+  }
+
+  .el-submenu__title {
+    &:hover {
+      background-color: @menuHover !important;
+    }
+  }
+
+  .is-active > .el-submenu__title {
+    color: @subMenuActiveText !important;
+    i {
+      color: @subMenuActiveText !important;
+    }
+  }
+
+  .el-submenu .el-menu-item {
+    background-color: @subMenuBg !important;
+    &:hover {
+      background-color: @subMenuHover !important;
+    }
+  }
+}

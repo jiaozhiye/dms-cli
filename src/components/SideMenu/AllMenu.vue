@@ -1,6 +1,6 @@
 <template>
   <div class="all-menu">
-    <div class="title" @click.stop="clickHandle">
+    <div class="title" :class="{ selected: visible ? true: false }" @click.stop="clickHandle">
       <i class="el-icon-menu"></i>
       <span class="text" v-if="!collapsed">全部导航</span>
     </div>
@@ -63,14 +63,15 @@ export default {
 <style lang="less" scoped>
 .all-menu {
   height: 56px;
-  background-color: @asideBgColor;
+  background-color: @menuBg;
   .title {
     line-height: 56px;
-    color: rgba(255, 255, 255, 0.65);
+    color: @menuText;
     padding-left: 20px;
     cursor: pointer;
+    &.selected,
     &:hover {
-      background-color: rgb(41, 41, 41);
+      background-color: @menuHover;
     }
     i {
       width: 24px;

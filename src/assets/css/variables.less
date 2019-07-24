@@ -1,17 +1,34 @@
+// 全局主色
+@primaryColor: #bb0a30;
+
 // 主文本色
 @textColor: rgba(0, 0, 0, 0.65);
+
+// 次文本色
+@textColorSecondary: rgba(0, 0, 0, 0.45);
+
+// 失效色
+@disabledColor: rgba(0, 0, 0, 0.25);
 
 // 文本大小
 @textSize: 14px;
 
-// 主要色
-@primaryColor: #bb0a30;
-
 // 边框色
 @borderColor: #d9d9d9;
 
-// 侧栏背景
-@asideBgColor: #333;
+// Logo背景
+@logoBgColor: #1a1a1a;
+
+// sidebar 侧栏
+@menuText: rgba(255, 255, 255, 0.65);
+@menuActiveText: #fff;
+@subMenuActiveText: #fff;
+
+@menuBg: #333;
+@menuHover: #292929;
+
+@subMenuBg: #1a1a1a;
+@subMenuHover: #2e2e2e;
 
 // 组件/浮层圆角
 @borderRadius: 4px;
@@ -22,3 +39,14 @@
 // 模块之间距离
 @moduleMargin: 10px;
 @modulePadding: 10px;
+
+// the :export directive is the magic sauce for webpack
+:export {
+  menuText: @menuText;
+  menuActiveText: @menuActiveText;
+  subMenuActiveText: @subMenuActiveText;
+  menuBg: @menuBg;
+  menuHover: @menuHover;
+  subMenuBg: @subMenuBg;
+  subMenuHover: @subMenuHover;
+}

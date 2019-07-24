@@ -13,11 +13,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import MenuTree from './menuTree';
-import AllMenu from './AllMenu';
-import StarMenu from './StarMenu';
-import MenuList from './MenuList';
 import Logo from './Logo';
+import AllMenu from './AllMenu';
+import MenuList from './MenuList';
+import StarMenu from './StarMenu';
+import MenuTree from './menuTree';
 
 export default {
   name: 'SideMenu',
@@ -32,10 +32,10 @@ export default {
   },
   components: {
     Logo,
-    MenuTree,
     AllMenu,
+    MenuList,
     StarMenu,
-    MenuList
+    MenuTree
   }
 };
 </script>
@@ -44,12 +44,12 @@ export default {
 .side-wrap {
   position: relative;
   height: 100%;
-  background-color: @asideBgColor;
+  background-color: @menuBg;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
   z-index: 5;
   .menu-tree {
     height: calc(100vh - 116px);
-    background-color: @asideBgColor;
+    background-color: @menuBg;
     .el-scrollbar__wrap {
       overflow-x: hidden;
     }

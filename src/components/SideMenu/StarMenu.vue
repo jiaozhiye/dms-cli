@@ -14,18 +14,15 @@ export default {
       default: false
     }
   },
-  data() {
-    return {};
-  },
   computed: {
-    ...mapState('app', ['starMenuList']),
+    ...mapState('app', ['starMenuList', 'commonMenuList']),
     navList() {
       return [
         {
           title: '常用导航',
           key: '/common',
           icon: 'el-icon-s-order',
-          children: [{ key: '/bjgl/cggl/dd', title: '备件采购订单' }]
+          children: this.commonMenuList
         },
         {
           title: '我的收藏',

@@ -4,6 +4,8 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-06-20 15:45:00
  */
+import variables from '@/assets/css/variables.less';
+
 export default {
   name: 'MenuTree',
   props: {
@@ -24,6 +26,11 @@ export default {
     return {
       selectedKey: ''
     };
+  },
+  computed: {
+    variables() {
+      return variables;
+    }
   },
   watch: {
     $route({ path }) {
@@ -56,15 +63,16 @@ export default {
     this.selectedKey = this.$route.path;
   },
   render() {
-    const { collapsed, syncActive, selectedKey } = this;
+    const { collapsed, syncActive, selectedKey, variables } = this;
     const wrapProps = {
       props: {
         collapse: collapsed,
         router: true,
+        uniqueOpened: true,
         collapseTransition: false,
-        backgroundColor: '#333',
-        textColor: 'rgba(255, 255, 255, 0.65)',
-        activeTextColor: '#fff'
+        backgroundColor: variables.menuBg,
+        textColor: variables.menuText,
+        activeTextColor: variables.menuActiveText
       },
       style: { borderRight: 'none' }
     };

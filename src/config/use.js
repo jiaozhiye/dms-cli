@@ -30,3 +30,6 @@ Vue.use(Drawer);
 
 import BaseDialog from '@/components/BaseDialog';
 Vue.use(BaseDialog);
+
+import LazyLoadTab from '@/components/LazyLoadTab';
+Vue.use(LazyLoadTab);

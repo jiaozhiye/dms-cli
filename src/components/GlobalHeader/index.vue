@@ -53,7 +53,7 @@ export default {
     line-height: 60px;
     padding: 0 20px;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: color 0.3s ease;
     &:hover {
       background-color: rgba(0, 0, 0, 0.03);
     }

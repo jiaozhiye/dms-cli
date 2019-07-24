@@ -17,6 +17,14 @@ export default {
     cols: {
       type: Number,
       default: 3
+    },
+    collapse: {
+      type: Boolean,
+      default: true
+    },
+    isSubmitBtn: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -31,7 +39,7 @@ export default {
       val.forEach(x => {
         if (x.initialValue !== this.form[x.fieldName]) {
           this.form[x.fieldName] = x.initialValue;
-          // 对组件外js动态赋值的表单元素进行校验
+          // 对组件外 js 动态赋值的表单元素进行校验
           this.$refs.form.validateField(x.fieldName);
         }
       });
@@ -43,6 +51,7 @@ export default {
       deep: true
     },
     expand(val) {
+      if (!this.collapse) return;
       this.$emit('onCollapse', val);
     }
   },
@@ -67,21 +76,41 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, focus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-input v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable nativeOnKeydown={this.enterEventHandle} />
+          <el-input v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onFocus={focus} nativeOnKeydown={this.enterEventHandle} />
+        </el-form-item>
+      );
+    },
+    INPUT_NUMBER(option) {
+      const { form } = this;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 9999, step = 1, precision } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <el-input-number
+            v-model={form[fieldName]}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            controls-position="right"
+            min={min}
+            max={max}
+            step={step}
+            precision={precision}
+          ></el-input-number>
         </el-form-item>
       );
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, request = {}, style = {}, placeholder } = option;
+      const { label, fieldName, request = {}, style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-autocomplete
             v-model={form[fieldName]}
             placeholder={placeholder}
+            disabled={disabled}
             style={{ ...style }}
             clearable
             nativeOnKeydown={this.enterEventHandle}
@@ -92,10 +121,10 @@ export default {
     },
     SELECT(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder } = option;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable nativeOnKeydown={this.enterEventHandle}>
+          <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change} nativeOnKeydown={this.enterEventHandle}>
             <el-option key="-" label="全部" value="0" />
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -106,10 +135,10 @@ export default {
     },
     MULTIPLE_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder } = option;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} style={{ ...style }} clearable>
+          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
@@ -119,16 +148,24 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder } = option;
+      const { label, fieldName, style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="date" v-model={form[fieldName]} value-format="yyyy-MM-dd HH:mm:ss" placeholder={placeholder} style={{ ...style }} nativeOnKeydown={this.enterEventHandle}/>
+          <el-date-picker
+            type="date"
+            v-model={form[fieldName]}
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            nativeOnKeydown={this.enterEventHandle}
+          />
         </el-form-item>
       );
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder } = option;
+      const { label, fieldName, style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-date-picker
@@ -138,8 +175,18 @@ export default {
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            disabled={disabled}
             style={{ ...style }}
           />
+        </el-form-item>
+      );
+    },
+    CHECKBOX(option) {
+      const { form } = this;
+      const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
         </el-form-item>
       );
     },
@@ -167,12 +214,12 @@ export default {
         return !this[item.type] ? null : this[item.type](item);
       });
     },
-    enterEventHandle(e) {
-      if (e.keyCode !== 13) return;
-      this.submitForm(e);
+    enterEventHandle(ev) {
+      if (ev.keyCode !== 13) return;
+      this.submitForm(ev);
     },
-    submitForm(e) {
-      e.preventDefault();
+    submitForm(ev) {
+      ev && ev.preventDefault();
       this.$refs.form.validate(valid => {
         if (valid) {
           this.$emit('filterChange', this.form);
@@ -191,27 +238,38 @@ export default {
     },
     createFormLayout() {
       const colSpan = 24 / this.cols;
-      const buttonNode = (
+      const buttonNode = this.isSubmitBtn ? (
         <el-col key="-" span={colSpan}>
-          <el-button size="small" type="primary" style={{ marginLeft: '10px' }} onClick={this.submitForm}>
-            搜索
-          </el-button>
-          <el-button size="small" onClick={this.resetForm}>
-            重置
-          </el-button>
-          <el-button size="small" type="text" onClick={this.toggleHandler}>
-            {this.expand ? '收起' : '展开'} <i class={this.expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
-          </el-button>
+          <el-form-item label={''}>
+            <el-button size="small" type="primary" onClick={this.submitForm}>
+              搜 索
+            </el-button>
+            <el-button size="small" onClick={this.resetForm}>
+              重 置
+            </el-button>
+            {this.collapse ? (
+              <el-button size="small" type="text" onClick={this.toggleHandler}>
+                {this.expand ? '收起' : '展开'} <i class={this.expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
+              </el-button>
+            ) : null}
+          </el-form-item>
         </el-col>
-      );
+      ) : null;
       const formItems = this.createFormItem().filter(item => item !== null);
       const count = this.expand ? formItems.length : this.cols - 1;
       const colFormItems = formItems.map((Node, i) => (
-        <el-col key={i} span={colSpan} style={{ display: i < count ? 'block' : 'none' }}>
+        <el-col key={i} span={colSpan} style={{ display: !this.collapse || i < count ? 'block' : 'none' }}>
           {Node}
         </el-col>
       ));
       return [...colFormItems, buttonNode];
+    },
+    // 外部通过组件实例调用的方法
+    SUBMIT_FORM(ev) {
+      this.submitForm(ev);
+    },
+    RESET_FORM() {
+      this.resetForm();
     }
   },
   render() {
@@ -242,6 +300,12 @@ export default {
   }
   .el-date-editor {
     width: 100%;
+  }
+  .el-input-number {
+    width: 100%;
+    .el-input__inner {
+      text-align: left !important;
+    }
   }
   .el-range-editor {
     padding-right: 5px;

@@ -9,7 +9,7 @@ import * as types from '../types';
 import router from '@/routes';
 import { setToken, removeToken, setUser, removeUser } from '@/assets/js/auth';
 import dictData from '@/mock/dictData';
-import { getNavList, getAllDict, getStarMenuList } from '@/api';
+import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
 
 // 路由映射表
 const routesMap = router.options.routes;
@@ -63,7 +63,8 @@ const state = {
   loginInfo: {}, // 登录信息
   navList: [], // 导航菜单树
   menuList: [], // 可点击(三级)的子菜单列表
-  starMenuList: [], // 收藏的菜单列表
+  starMenuList: [], // 收藏导航
+  commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
   btnLoading: false, // 按钮状态
@@ -122,6 +123,20 @@ const actions = {
       }
     }
     commit({ type: types.STAR_MENU, data });
+  },
+  async createCommonMenuList({ commit, state }, params) {
+    if (state.commonMenuList.length) return;
+    let data = [];
+    if (process.env.MOCK_DATA === 'true') {
+      const res = require('@/mock/starMenu').default;
+      data = res;
+    } else {
+      const res = await getCommonMenuList();
+      if (res.resultCode === 200) {
+        data = res.data;
+      }
+    }
+    commit({ type: types.COMMON_MENU, data });
   },
   createTabMenuList({ commit, state }, params) {
     commit({
@@ -205,6 +220,9 @@ const mutations = {
   },
   [types.STAR_MENU](state, { data }) {
     state.starMenuList = data;
+  },
+  [types.COMMON_MENU](state, { data }) {
+    state.commonMenuList = data;
   },
   [types.MENULIST](state, { data }) {
     state.menuList = data;

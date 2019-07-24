@@ -29,7 +29,7 @@ export default {
 <style lang="less" scoped>
 .actions {
   height: 100%;
-  margin-right: 10px;
+  margin-right: @moduleMargin;
   display: flex;
   align-items: center;
   .setting {

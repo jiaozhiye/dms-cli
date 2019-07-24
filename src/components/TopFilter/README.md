@@ -17,16 +17,20 @@ Vue.use(TopFilter);
 - list{Array|头部筛选条件数组，支持动态赋值(数据数组必须是新的引用)}
 - cols{Number|每行显示多小列，默认是 3}
 - filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
+- collapse{Boolean|是否显示展开/收起按钮，默认是 true}
+- isSubmitBtn{Boolean|是否显示搜索/重置按钮，默认是 true}
 - onCollapse{Function|展开-收起时的回调函数，状态变化时处罚，参数是当前状态}
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/SELECT/DATE/RANGE_DATE/MULTIPLE_SELECT/SEARCH_HELPER}
+- type{String|类型，支持 INPUT/SELECT/DATE/RANGE_DATE/MULTIPLE_SELECT/SEARCH_HELPER/INPUT_NUMBER}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
+- focus{Function|输入框获得焦点的回调}
+- change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui}
 
@@ -38,6 +42,11 @@ Vue.use(TopFilter);
   - &emsp;datakey: {String|服务端响应数据的数组列表的 key，支持路径操作('step1.step2.items')，不指定表示 res.data 就是数组数据}
   - &emsp;fieldKey: {String|数据的字段名}
 - }
+
+`组件暴露的方法`
+
+- SUBMIT_FORM{Function|获取所有表单控件数据的集合}
+- RESET_FORM{Function|重置表单控件}
 
 `示例代码`
 

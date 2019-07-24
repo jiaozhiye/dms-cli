@@ -215,6 +215,10 @@ export default {
           fieldName: 'title',
           placeholder: '请输入标题名称...',
           initialValue: '',
+          focus: () => {
+            // this.topFilterList[0].initialValue = '刘德华';
+            // this.topFilterList = [...this.topFilterList];
+          },
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
         },
         {
@@ -257,6 +261,14 @@ export default {
             fieldKey: 'name'
           },
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
+        },
+        {
+          type: 'INPUT_NUMBER',
+          label: '数量',
+          fieldName: 'number',
+          placeholder: '请输入数量...',
+          initialValue: undefined,
+          rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]
         }
       ];
     },

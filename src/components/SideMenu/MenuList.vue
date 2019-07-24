@@ -31,6 +31,11 @@
         <el-tab-pane key="k2" label="常用导航" lazy>
           <div class="wrap">
             <h4>常用导航</h4>
+            <ul>
+              <li v-for="item in commonMenuList" :key="item.key">
+                <router-link :to="item.key" @click.native="clickHandle">{{ item.title }}</router-link>
+              </li>
+            </ul>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -74,7 +79,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('app', ['menuList', 'starMenuList']),
+    ...mapState('app', ['menuList', 'starMenuList', 'commonMenuList']),
     packMenuList() {
       return this.createMenuList(this.menu);
     }
@@ -137,7 +142,7 @@ export default {
     height: 100%;
     right: 0;
     top: 0;
-    background: @asideBgColor;
+    background: @menuBg;
   }
   .search {
     height: 120px;
@@ -147,11 +152,11 @@ export default {
         width: 300px;
         .el-input__inner {
           color: #fff;
-          font-size: 14px;
+          font-size: @textSize;
           border-radius: 0;
           background: #001529;
           border: none;
-          border-bottom: 1px solid #d9d9d9;
+          border-bottom: 1px solid @borderColor;
         }
       }
     }
