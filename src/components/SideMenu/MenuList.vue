@@ -16,30 +16,6 @@
         </el-autocomplete>
       </div>
     </div>
-    <div class="collect">
-      <el-tabs tab-position="right">
-        <el-tab-pane key="k1" label="我的收藏" lazy>
-          <div class="wrap">
-            <h4>我的收藏</h4>
-            <ul>
-              <li v-for="item in starMenuList" :key="item.key">
-                <router-link :to="item.key" @click.native="clickHandle">{{ item.title }}</router-link>
-              </li>
-            </ul>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane key="k2" label="常用导航" lazy>
-          <div class="wrap">
-            <h4>常用导航</h4>
-            <ul>
-              <li v-for="item in commonMenuList" :key="item.key">
-                <router-link :to="item.key" @click.native="clickHandle">{{ item.title }}</router-link>
-              </li>
-            </ul>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
     <div class="main">
       <el-tabs tab-position="right">
         <el-tab-pane v-for="item in packMenuList" :key="item.key" :label="item.title" lazy>
@@ -79,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('app', ['menuList', 'starMenuList', 'commonMenuList']),
+    ...mapState('app', ['menuList', 'starMenuList']),
     packMenuList() {
       return this.createMenuList(this.menu);
     }
@@ -120,8 +96,8 @@ export default {
     },
     starClickHandle(star, key, title) {
       if (!star) {
-        if (this.starMenuList.length >= 9) {
-          return this.$message.warning('最多只能收藏 9 个菜单');
+        if (this.starMenuList.length >= 10) {
+          return this.$message.warning('最多只能收藏 10 个菜单');
         }
         this.addStarMenuList({ key, title });
       } else {
@@ -154,41 +130,16 @@ export default {
           color: #fff;
           font-size: @textSize;
           border-radius: 0;
-          background: #001529;
+          background: @allMenuBgColor;
           border: none;
-          border-bottom: 1px solid @borderColor;
-        }
-      }
-    }
-  }
-  .collect {
-    height: 140px;
-    .wrap {
-      margin-left: 30px;
-      color: #fff;
-      h4 {
-        padding: 10px 0;
-        color: #7c93a8;
-        font-weight: 700;
-        line-height: 20px;
-      }
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        li {
-          width: 33%;
-          line-height: 26px;
-          a {
-            font-size: 12px;
-            color: #fff;
-          }
+          border-bottom: 1px solid #626466;
         }
       }
     }
   }
   .main {
     position: relative;
-    height: calc(100% - 120px - 140px);
+    height: calc(100% - 120px);
     .el-tabs {
       height: 100%;
       overflow-y: auto;
@@ -201,20 +152,23 @@ export default {
         top: 0;
       }
       .el-tabs__content {
-        margin-right: 150px;
+        margin-right: 170px;
         .column-wrap {
           column-count: 2;
           .box {
-            margin: 0 0 30px 30px;
+            margin-left: 20px;
+            margin-bottom: 20px;
             -webkit-column-break-inside: avoid;
             break-inside: avoid;
             h4 {
               padding: 10px 0;
-              color: #7c93a8;
+              color: @menuText;
               font-weight: 700;
               line-height: 20px;
+              border-bottom: 1px solid #626466;
             }
             ul {
+              margin-top: 8px;
               li {
                 line-height: 26px;
                 i {
@@ -222,14 +176,14 @@ export default {
                   cursor: pointer;
                 }
                 .el-icon-star-on {
-                  color: #fff;
+                  color: @menuText;
                 }
                 .el-icon-star-off {
-                  color: #7c93a8;
+                  color: @menuText;
                 }
                 a {
                   font-size: 12px;
-                  color: #fff;
+                  color: @menuText;
                 }
               }
             }
@@ -246,9 +200,10 @@ export default {
       display: none;
     }
     .el-tabs__item {
-      color: #fff;
+      color: @menuText;
       &.is-active {
-        color: @primaryColor;
+        font-weight: 700;
+        color: #fff;
       }
     }
   }

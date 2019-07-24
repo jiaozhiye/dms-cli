@@ -110,7 +110,7 @@ export default {
   .el-dialog__header {
     padding: 20px;
     line-height: 1;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #d9d9d9;
     .el-dialog__title {
       font-size: 16px;
       line-height: inherit;
@@ -127,7 +127,7 @@ export default {
     line-height: 1;
     cursor: pointer;
     &:hover {
-      color: #409eff;
+      color: #bb0a30;
     }
   }
 }

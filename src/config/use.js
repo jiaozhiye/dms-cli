@@ -33,3 +33,6 @@ Vue.use(BaseDialog);
 
 import LazyLoadTab from '@/components/LazyLoadTab';
 Vue.use(LazyLoadTab);
+
+import ButtonArea from '@/components/ButtonArea';
+Vue.use(ButtonArea);

@@ -105,7 +105,7 @@ export default {
     top: 0;
     width: 650px;
     height: 100%;
-    background: #001529;
+    background: @allMenuBgColor;
     z-index: -1;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     transform: translate3d(-100%, 0, 0);
