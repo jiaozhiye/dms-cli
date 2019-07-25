@@ -1,6 +1,6 @@
 <template>
   <div class="side-wrap">
-    <logo :collapsed="collapsed" />
+    <logo :collapsed="collapsed" :title="title" />
     <all-menu :collapsed="collapsed">
       <MenuList :menu="navList" />
     </all-menu>
@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import config from '@/config';
 import Logo from './Logo';
 import AllMenu from './AllMenu';
 import MenuList from './MenuList';
@@ -28,7 +29,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['navList'])
+    ...mapState('app', ['navList']),
+    title() {
+      return config.systemName;
+    }
   },
   components: {
     Logo,
