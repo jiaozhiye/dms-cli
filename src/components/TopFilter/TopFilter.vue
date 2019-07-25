@@ -287,10 +287,9 @@ export default {
 
 <style lang="less">
 .top-filter {
-  margin-bottom: 10px;
   .el-col {
     height: 32px;
-    margin: 10px 0;
+    margin-bottom: 16px;
   }
   .el-select {
     width: 100%;

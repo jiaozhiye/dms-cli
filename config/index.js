@@ -23,7 +23,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '10.220.50.149',
+    host: '127.0.0.1',
     port: 8080,
     autoOpenBrowser: true,
 
