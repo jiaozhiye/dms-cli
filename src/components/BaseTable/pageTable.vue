@@ -184,6 +184,9 @@ export default {
       console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
+    visibleColumns() {
+      return this.columns.filter(x => !x.hidden).length;
+    },
     editableColumns() {
       return this.columnFlatMap(this.columns).filter(x => x.editable);
     },
@@ -217,6 +220,9 @@ export default {
     },
     fetchParams() {
       this.getTableData();
+    },
+    visibleColumns() {
+      // this.$nextTick(() => this.$refs.appTable.doLayout());
     },
     defaultSelections(nextProps) {
       this.createRowSelection(nextProps);
@@ -593,9 +599,8 @@ export default {
       );
     },
     // 创建表格列字段
-    createTableColumns(columns, depth) {
-      const selectionColumn = !depth && this.isSelectColumn ? this.selectionColumnRender() : null;
-      const otherColumns = columns
+    createTableColumns(columns) {
+      const tableColumns = columns
         .filter(x => !x.hidden)
         .map((x, i) => {
           const defaultRender = !x.render
@@ -631,17 +636,25 @@ export default {
               minWidth={x.minWidth || this.calcHeaderWidth(x.title)}
               fixed={x.fixed}
               align={x.align}
-              label-class-name={x.editRequired && 'is-required'}
+              labelClassName={x.editRequired && 'is-required'}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
               sortable={config.table.serverSort ? 'custom' : x.sorter}
               {...wrapProps}
             >
-              {Array.isArray(x.children) && this.createTableColumns(x.children, true)}
+              {Array.isArray(x.children) && this.createTableColumns(x.children)}
             </el-table-column>
           );
         });
-      return [selectionColumn, ...otherColumns];
+      return tableColumns;
+    },
+    // 创建表格列字段
+    createColumns(columns) {
+      let target = this.createTableColumns(columns);
+      if (this.isSelectColumn) {
+        target = [this.selectionColumnRender(), ...target];
+      }
+      return target;
     },
     // 生成 uuid key
     createUidKey(key = '') {
@@ -1462,7 +1475,7 @@ export default {
           on-cell-dblclick={this.cellDbclickHandler}
           on-header-dragend={this.headerDragendHandler}
         >
-          {this.createTableColumns(columns)}
+          {this.createColumns(columns)}
         </el-table>
         {isShowPagination && <Pagination {...paginationProps} />}
       </div>

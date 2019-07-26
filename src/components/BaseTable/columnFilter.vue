@@ -138,13 +138,14 @@ export default {
     const { treeList, checkedKeys } = this;
     return (
       <el-dropdown hide-on-click={false} trigger="click">
-        <span class="el-dropdown-link">
+        <span class="columns-dropdown">
           <i class="icon el-icon-s-operation" />
           列筛选排序
         </span>
         <el-dropdown-menu style={{ minWidth: '120px', maxHeight: 'calc(100vh - 30px)', overflowY: 'auto' }} slot="dropdown">
           <el-tree
             ref="tree"
+            class="columns-tree"
             node-key="dataIndex"
             data={treeList}
             check-on-click-node={true}
@@ -162,13 +163,21 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.el-dropdown-link {
+<style lang="less">
+.columns-dropdown {
   cursor: pointer;
   color: #bb0a30;
   .icon {
     margin-right: 4px;
     font-weight: 700;
+  }
+}
+.columns-tree {
+  .is-leaf {
+    padding: 4px;
+  }
+  .el-tree-node__label {
+    margin-left: 0px;
   }
 }
 </style>
