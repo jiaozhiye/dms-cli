@@ -32,7 +32,7 @@ Vue.use(TopFilter);
 - focus{Function|输入框获得焦点的回调}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
-- rules{Array|表单验证规则，用法请参考 Element-Ui}
+- rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
 
 `SEARCH_HELPER 配置项`
 
