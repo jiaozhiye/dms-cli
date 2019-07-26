@@ -86,7 +86,7 @@ http://localhost:8080/table
 - datakey{String|服务端响应数据的数组列表对应的 key，支持路径操作('step1.step2.items')，默认值是'items'}
 - mergeCellMethod{Function|合并行或列，具体请参考 element-ui table 组件}
 - onColumnsChange{Function|columns 变化时的回调，参数是 columns 数组}
-- onEnterEvent{Function|单元格在有焦点状态下的回车事件的监听函数，参数是当前单元格对应的行数据}
+- onEnterEvent{Function|单元格在有焦点状态下的回车事件和行双击事件的监听函数，参数是当前单元格对应的行数据}
 - onRowSelectChange{Function|table 行选中状态变化时的回调，参数是选中行记录的数组]}
 - onCellChange{Function|table 单元格数据变化时的回调，参数 1 -> 被改变单元的的对象{`uid|dataIndex`: val}，参数 2 -> 被改变单元格所对应行的对象}
 - onPageChange{Function|分页变化时的回调，参数是分页信息对象}

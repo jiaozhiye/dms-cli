@@ -1591,12 +1591,14 @@ export default {
     }
   }
   .table-header {
-    background-color: #f2f2f2 !important;
-    .cell {
-      &.is-required::before {
-        content: '*';
-        color: #f5222d;
-        margin-right: 4px;
+    th {
+      background-color: #f2f2f2 !important;
+      .cell {
+        &.is-required::before {
+          content: '*';
+          color: #f5222d;
+          margin-right: 4px;
+        }
       }
     }
   }
