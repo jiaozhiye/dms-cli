@@ -13,5 +13,5 @@ export const sleep = async timeLen => {
 
 // 判断表单控件的值是否为空
 export const isFormEmpty = val => {
-  return typeof val === 'undefined' || val.trim() === '' || val === null;
+  return typeof val === 'undefined' || val === '' || val === null;
 };

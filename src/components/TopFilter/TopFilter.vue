@@ -18,6 +18,10 @@ export default {
       type: Number,
       default: 3
     },
+    labelWidth: {
+      type: [Number, String],
+      default: 80
+    },
     collapse: {
       type: Boolean,
       default: true
@@ -273,10 +277,10 @@ export default {
     }
   },
   render() {
-    const { form, rules } = this;
+    const { form, rules, labelWidth } = this;
     return (
       <div class="top-filter">
-        <el-form ref="form" size="small" model={form} rules={rules} label-width="80px">
+        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
         </el-form>
       </div>
