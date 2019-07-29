@@ -71,8 +71,8 @@ export default {
         uniqueOpened: true,
         collapseTransition: false,
         backgroundColor: variables.menuBg,
-        textColor: variables.menuText,
-        activeTextColor: variables.menuActiveText
+        textColor: variables.menuText
+        // activeTextColor: variables.menuActiveText
       },
       style: { borderRight: 'none' }
     };

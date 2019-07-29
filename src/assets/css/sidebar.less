@@ -11,17 +11,17 @@
     }
   }
 
-  .is-active > .el-submenu__title {
-    color: @subMenuActiveText !important;
-    i {
-      color: @subMenuActiveText !important;
-    }
-  }
-
   .el-submenu .el-menu-item {
     background-color: @subMenuBg !important;
     &:hover {
       background-color: @subMenuHover !important;
+    }
+  }
+
+  .side-menu .is-active > .el-submenu__title {
+    color: @subMenuActiveText !important;
+    i {
+      color: @subMenuActiveText !important;
     }
   }
 }

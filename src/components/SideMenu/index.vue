@@ -6,7 +6,7 @@
     </all-menu>
     <el-scrollbar class="menu-tree">
       <star-menu :collapsed="collapsed" />
-      <menu-tree :menu="navList" :collapsed="collapsed" />
+      <menu-tree class="side-menu" :menu="navList" :collapsed="collapsed" />
     </el-scrollbar>
   </div>
 </template>

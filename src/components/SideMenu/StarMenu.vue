@@ -1,5 +1,11 @@
 <template>
-  <menu-tree :menu="navList" :syncActive="false" :collapsed="collapsed" />
+  <menu-tree
+    ref="starMenu"
+    class="star-menu"
+    :menu="navList"
+    :syncActive="false"
+    :collapsed="collapsed"
+  />
 </template>
 
 <script>
@@ -13,6 +19,10 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    this.starMenuRef = null;
+    return {};
   },
   computed: {
     ...mapState('app', ['starMenuList', 'commonMenuList']),
@@ -31,7 +41,22 @@ export default {
           children: this.starMenuList
         }
       ];
+    },
+    allMenuList() {
+      const keys = [...this.starMenuList, ...this.commonMenuList].map(x => x.key);
+      return [...new Set(keys)];
     }
+  },
+  watch: {
+    $route({ path }) {
+      this.starMenuRef.activeIndex = path;
+      if (!this.allMenuList.includes(path)) {
+        this.starMenuRef.activeIndex = '';
+      }
+    }
+  },
+  mounted() {
+    this.starMenuRef = this.$refs.starMenu.$children[0];
   },
   components: {
     MenuTree
