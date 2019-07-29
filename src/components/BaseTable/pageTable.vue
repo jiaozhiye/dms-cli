@@ -222,7 +222,8 @@ export default {
       this.getTableData();
     },
     visibleColumns() {
-      // this.$nextTick(() => this.$refs.appTable.doLayout());
+      // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
+      this.$nextTick(() => this.$refs.appTable.doLayout());
     },
     defaultSelections(nextProps) {
       this.createRowSelection(nextProps);
@@ -1524,6 +1525,11 @@ export default {
 </script>
 
 <style lang="less">
+@primaryColor: #bb0a30;
+@tableBgColor: #f2f2f2;
+@tableHoverColor: #f5f5f5;
+@dangerColor: #f5222d;
+
 .table-wrapper {
   .toper-card {
     font-size: 0;
@@ -1538,10 +1544,10 @@ export default {
     .alert {
       height: 32px;
       padding: 0 12px 0 10px;
-      background-color: #f2f2f2;
+      background-color: @tableBgColor;
       border: 1px solid #d9d9d9;
       .el-icon-info {
-        color: #bb0a30;
+        color: @primaryColor;
       }
       .el-alert__content {
         display: flex;
@@ -1552,7 +1558,7 @@ export default {
           i {
             font-size: 13px;
             font-weight: 600;
-            color: #bb0a30;
+            color: @primaryColor;
             font-style: normal;
           }
         }
@@ -1570,10 +1576,10 @@ export default {
   }
   .el-table__body {
     .selection-row {
-      background-color: #f5f5f5;
+      background-color: @tableHoverColor;
     }
     .hover-row {
-      background-color: #f5f5f5;
+      background-color: @tableHoverColor;
       & > td {
         background: none;
       }
@@ -1593,23 +1599,23 @@ export default {
     .is-error {
       .form-item-error {
         line-height: 1;
-        color: #f5222d;
+        color: @dangerColor;
         text-align: left;
       }
     }
   }
   .el-table__footer {
     tbody > tr > td {
-      background-color: #f2f2f2 !important;
+      background-color: @tableBgColor !important;
     }
   }
   .table-header {
     th {
-      background-color: #f2f2f2 !important;
+      background-color: @tableBgColor !important;
       .cell {
         &.is-required::before {
           content: '*';
-          color: #f5222d;
+          color: @dangerColor;
           margin-right: 4px;
         }
       }
@@ -1640,7 +1646,7 @@ export default {
         }
         &.highlighted,
         &:hover {
-          background-color: #e2e2e2;
+          background-color: @tableHoverColor;
         }
       }
     }
