@@ -22,6 +22,9 @@ Vue.use(SvgIcon);
 import TopFilter from '@/components/TopFilter';
 Vue.use(TopFilter);
 
+import FormPanel from '@/components/FormPanel';
+Vue.use(FormPanel);
+
 import FilterTable from '@/components/BaseTable';
 Vue.use(FilterTable);
 

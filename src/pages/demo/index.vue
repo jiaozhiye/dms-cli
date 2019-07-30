@@ -6,6 +6,14 @@
       @filterChange="changeHandle"
       @onCollapse="collapseHandle"
     ></TopFilter>
+    <button-area :style="{ paddingLeft: '80px' }">
+      <el-button size="small" type="primary">到货确认</el-button>
+      <el-button size="small">明细</el-button>
+      <el-button size="small">发货单</el-button>
+      <el-button size="small">销售发票</el-button>
+      <el-button size="small">欠货单</el-button>
+      <el-button size="small">出库</el-button>
+    </button-area>
     <FilterTable
       ref="table"
       :columns="columns"
@@ -24,7 +32,7 @@
     <Drawer
       :visible.sync="visible"
       title="标题名称"
-      :width="800"
+      :width="920"
       destroyOnClose
       :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
     >

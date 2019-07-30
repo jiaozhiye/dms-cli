@@ -8,11 +8,15 @@
 import _ from 'lodash';
 
 export default {
-  name: 'TopFilter',
+  name: 'FormPanel',
   props: {
     list: {
       type: Array,
       required: true
+    },
+    formType: {
+      type: String,
+      default: 'add'
     },
     cols: {
       type: Number,
@@ -21,10 +25,6 @@ export default {
     labelWidth: {
       type: [Number, String],
       default: 80
-    },
-    collapse: {
-      type: Boolean,
-      default: true
     },
     isSubmitBtn: {
       type: Boolean,
@@ -73,7 +73,6 @@ export default {
       ]
     };
     return {
-      expand: false, // 展开收起状态
       form: this.createFormData(this.list),
       rules: this.createFormRule(this.list)
     };
@@ -93,16 +92,15 @@ export default {
         this.list.forEach(x => (x.initialValue = val[x.fieldName]));
       },
       deep: true
-    },
-    expand(val) {
-      if (!this.collapse) return;
-      this.$emit('onCollapse', val);
     }
   },
   methods: {
     createFormData(list) {
       const target = {};
       list.forEach(x => {
+        if (this.formType === 'show') {
+          x.disabled = true;
+        }
         if (x.type === 'RANGE_DATE' || x.type === 'MULTIPLE_SELECT') {
           x.initialValue = [];
         }
@@ -281,49 +279,42 @@ export default {
       ev && ev.preventDefault();
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$emit('filterChange', this.form);
-        } else {
-          // 校验没通过，展开
-          this.expand = true;
-          return false;
+          return this.$emit('formChange', this.form);
         }
+        return false;
       });
     },
     resetForm() {
       this.$refs.form.resetFields();
     },
-    toggleHandler() {
-      this.expand = !this.expand;
-    },
     createFormLayout() {
       const colSpan = 24 / this.cols;
-      const buttonNode = this.isSubmitBtn ? (
-        <el-col key="-" span={colSpan}>
-          <el-form-item label={''}>
-            <el-button size="small" type="primary" onClick={this.submitForm}>
-              搜 索
-            </el-button>
-            <el-button size="small" onClick={this.resetForm}>
-              重 置
-            </el-button>
-            {this.collapse ? (
-              <el-button size="small" type="text" onClick={this.toggleHandler}>
-                {this.expand ? '收起' : '展开'} <i class={this.expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
-              </el-button>
-            ) : null}
-          </el-form-item>
-        </el-col>
-      ) : null;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const count = this.expand ? formItems.length : this.cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan} style={{ display: !this.collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan}>
             {Node}
           </el-col>
         );
       });
-      return [...colFormItems, buttonNode];
+      return colFormItems;
+    },
+    createFormButton() {
+      const colSpan = 24 / this.cols;
+      return this.isSubmitBtn && this.formType !== 'show' ? (
+        <el-row gutter={10}>
+          <el-col key="-" span={colSpan}>
+            <el-form-item label={''}>
+              <el-button size="small" type="primary" onClick={this.submitForm}>
+                {this.formType === 'add' ? '保 存' : '修 改'}
+              </el-button>
+              <el-button size="small" onClick={this.resetForm}>
+                重 置
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      ) : null;
     },
     // 外部通过组件实例调用的方法
     SUBMIT_FORM(ev) {
@@ -336,9 +327,10 @@ export default {
   render() {
     const { form, rules, labelWidth } = this;
     return (
-      <div class="top-filter">
+      <div class="form-panel">
         <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
+          {this.createFormButton()}
         </el-form>
       </div>
     );
@@ -347,7 +339,7 @@ export default {
 </script>
 
 <style lang="less">
-.top-filter {
+.form-panel {
   .el-col {
     min-height: 32px;
     margin-bottom: 16px;
