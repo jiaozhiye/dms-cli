@@ -6,20 +6,16 @@
       @filterChange="changeHandle"
       @onCollapse="collapseHandle"
     ></TopFilter>
-    <!-- <button-area :style="{ paddingLeft: '80px' }">
-      <el-button size="small" type="primary">到货确认</el-button>
-      <el-button size="small">明细</el-button>
-      <el-button size="small">发货单</el-button>
-      <el-button size="small">销售发票</el-button>
-      <el-button size="small">欠货单</el-button>
-      <el-button size="small">出库</el-button>
-    </button-area>-->
     <FilterTable
       ref="table"
       :columns="columns"
       :dataSource="list"
       :onColumnsChange="columns => this.columns = columns"
     >
+      <template slot="moreActions">
+        <span>批量删除</span>
+        <span>任务分配</span>
+      </template>
       <template slot="controls" slot-scope="props">
         <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
         <el-button size="small" icon="el-icon-printer">打印</el-button>

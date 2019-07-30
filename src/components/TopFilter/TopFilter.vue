@@ -32,6 +32,46 @@ export default {
     }
   },
   data() {
+    const createPicker = (picker, days) => {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
+      picker.$emit('pick', [start, end]);
+    };
+    this.pickerOptions = {
+      shortcuts: [
+        {
+          text: '最近一周',
+          onClick(picker) {
+            createPicker(picker, 7);
+          }
+        },
+        {
+          text: '最近一个月',
+          onClick(picker) {
+            createPicker(picker, 30);
+          }
+        },
+        {
+          text: '最近三个月',
+          onClick(picker) {
+            createPicker(picker, 90);
+          }
+        },
+        {
+          text: '最近半年',
+          onClick(picker) {
+            createPicker(picker, 180);
+          }
+        },
+        {
+          text: '最近一年',
+          onClick(picker) {
+            createPicker(picker, 365);
+          }
+        }
+      ]
+    };
     return {
       expand: false, // 展开收起状态
       form: this.createFormData(this.list),
@@ -80,10 +120,12 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, unit, readonly, disabled, focus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-input v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onFocus={focus} nativeOnKeydown={this.enterEventHandle} />
+          <el-input v-model={form[fieldName]} placeholder={placeholder} readonly={readonly} disabled={disabled} style={{ ...style }} clearable onFocus={focus} nativeOnKeydown={this.enterEventHandle}>
+            {unit && <template slot="append">{unit}</template>}
+          </el-input>
         </el-form-item>
       );
     },
@@ -179,8 +221,10 @@ export default {
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            unlink-panels={true}
             disabled={disabled}
             style={{ ...style }}
+            pickerOptions={this.pickerOptions}
           />
         </el-form-item>
       );
@@ -191,6 +235,15 @@ export default {
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
+        </el-form-item>
+      );
+    },
+    TEXT_AREA(option) {
+      const { form } = this;
+      const { label, fieldName, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
         </el-form-item>
       );
     },
@@ -215,7 +268,9 @@ export default {
     },
     createFormItem() {
       return this.list.map(item => {
-        return !this[item.type] ? null : this[item.type](item);
+        const VNode = !this[item.type] ? null : this[item.type](item);
+        VNode['type'] = item.type;
+        return VNode;
       });
     },
     enterEventHandle(ev) {
@@ -261,11 +316,13 @@ export default {
       ) : null;
       const formItems = this.createFormItem().filter(item => item !== null);
       const count = this.expand ? formItems.length : this.cols - 1;
-      const colFormItems = formItems.map((Node, i) => (
-        <el-col key={i} span={colSpan} style={{ display: !this.collapse || i < count ? 'block' : 'none' }}>
-          {Node}
-        </el-col>
-      ));
+      const colFormItems = formItems.map((Node, i) => {
+        return (
+          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan} style={{ display: !this.collapse || i < count ? 'block' : 'none' }}>
+            {Node}
+          </el-col>
+        );
+      });
       return [...colFormItems, buttonNode];
     },
     // 外部通过组件实例调用的方法
@@ -292,8 +349,14 @@ export default {
 <style lang="less">
 .top-filter {
   .el-col {
-    height: 32px;
+    min-height: 32px;
     margin-bottom: 16px;
+    .el-form-item {
+      margin-bottom: 0;
+      .el-form-item__content {
+        line-height: 30px;
+      }
+    }
   }
   .el-select {
     width: 100%;

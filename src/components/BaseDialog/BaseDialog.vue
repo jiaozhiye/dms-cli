@@ -1,4 +1,5 @@
 <script>
+import { constants } from 'crypto';
 /**
  * @Author: 焦质晔
  * @Date: 2019-05-06 10:00:00
@@ -42,6 +43,10 @@ export default {
     closeOnClickModal: {
       type: Boolean,
       default: true
+    },
+    footerHeight: {
+      type: [Number, String],
+      default: 53
     }
   },
   data() {
@@ -74,6 +79,23 @@ export default {
     handleClick(e) {
       e.stopPropagation();
       this.fullscreen = !this.fullscreen;
+    },
+    createStyles(slots) {
+      let hdHeight = '76px';
+      let ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
+      let dialogBodyHeight = this.fullscreen
+        ? {
+            height: `calc(100vh - ${ftHeight} - ${hdHeight})`
+          }
+        : {
+            maxHeight: `calc(70vh - ${ftHeight} - ${hdHeight})`
+          };
+      return {
+        overflowY: 'auto',
+        padding: '0 20px',
+        minHeight: '150px',
+        ...dialogBodyHeight
+      };
     }
   },
   render() {
@@ -95,9 +117,9 @@ export default {
           <i class="el-icon-full-screen" />
         </span>
         {Object.keys($slots).map(name => (
-          <template key={name} slot={name}>
+          <div key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
             {$slots[name]}
-          </template>
+          </div>
         ))}
       </el-dialog>
     ) : null;
@@ -108,8 +130,10 @@ export default {
 <style lang="less">
 .dialog {
   .el-dialog__header {
-    padding: 20px;
-    line-height: 1;
+    height: 56px;
+    line-height: 56px;
+    padding: 0 20px;
+    box-sizing: border-box;
     border-bottom: 1px solid #d9d9d9;
     .el-dialog__title {
       font-size: 16px;
@@ -117,7 +141,11 @@ export default {
     }
   }
   .el-dialog__body {
-    padding: 20px;
+    padding: 10px 0;
+  }
+  .el-dialog__footer {
+    padding: 10px 20px;
+    border-top: 1px solid #d9d9d9;
   }
   .fullscreen-btn {
     position: absolute;
