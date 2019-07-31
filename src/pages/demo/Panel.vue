@@ -80,6 +80,10 @@
         <br />内容...
         <br />内容1...
       </div>
+      <div slot="footer">
+        <el-button @click="visible = false">关 闭</el-button>
+        <el-button type="primary">确 定</el-button>
+      </div>
     </BaseDialog>
   </div>
 </template>
