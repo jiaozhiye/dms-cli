@@ -235,7 +235,7 @@ export default {
           font-size: 16px;
           line-height: 22px;
           font-weight: 500;
-          color: rgba(0, 0, 0, 0.85);
+          color: rgba(0, 0, 0, 0.65);
         }
       }
       .drawer-close {
