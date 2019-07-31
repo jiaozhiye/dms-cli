@@ -13,7 +13,7 @@
       <el-button size="small">销售发票</el-button>
       <el-button size="small">欠货单</el-button>
       <el-button size="small">出库</el-button>
-    </button-area> -->
+    </button-area>-->
     <FilterTable
       ref="table"
       :columns="columns"

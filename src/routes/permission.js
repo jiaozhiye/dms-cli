@@ -10,10 +10,11 @@ import config from '@/config';
 import { getToken } from '@/assets/js/auth';
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
-import { MessageBox, Notification } from 'element-ui';
+import { Notification } from 'element-ui';
 
 // 访问白名单
 const whiteList = ['/login'];
+
 // 权限白名单
 const whiteAuth = ['/login', '/home', '/redirect', '/404'];
 
@@ -21,21 +22,6 @@ const whiteAuth = ['/login', '/home', '/redirect', '/404'];
 const noJump = next => {
   next(false);
   NProgress.done();
-};
-
-// 页面离开提醒
-const messageConfirm = next => {
-  MessageBox.confirm('您有未保存的数据，确认离开此页面吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(() => {
-      next();
-    })
-    .catch(() => {
-      noJump(next);
-    });
 };
 
 // 登录判断
@@ -69,12 +55,7 @@ router.beforeEach(async (to, from, next) => {
         let isAuth = await store.dispatch('app/checkAuthority', to.path);
         // 权限校验
         if (isAuth || whiteAuth.some(x => to.path.startsWith(x))) {
-          // 离开页面的校验
-          if (!store.state.app.isLeaveRemind) {
-            next();
-          } else {
-            messageConfirm(next);
-          }
+          next();
         } else {
           next({ path: '/404' });
         }
@@ -94,6 +75,5 @@ router.afterEach(to => {
   if (to.meta && typeof to.meta.title !== 'undefined') {
     document.title = `${config.systemName}-${to.meta.title}`;
   }
-  store.dispatch('app/setLeaveRemind', !1);
   NProgress.done();
 });

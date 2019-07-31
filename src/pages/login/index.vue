@@ -73,7 +73,8 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   height: 100vh;
-  background: #f2f2f2;
+  background: #f0f2f5 url(../../assets/img/login-bg.svg) no-repeat 50%;
+  background-size: 100%;
   .welcome {
     text-align: center;
     padding: 60px 0 30px;

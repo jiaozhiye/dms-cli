@@ -23,11 +23,11 @@ export default {
     },
     width: {
       type: String,
-      default: '50%'
+      default: '60%'
     },
     top: {
       type: String,
-      default: '15vh'
+      default: '10vh'
     },
     modal: {
       type: Boolean,
@@ -88,7 +88,7 @@ export default {
             height: `calc(100vh - ${ftHeight} - ${hdHeight})`
           }
         : {
-            maxHeight: `calc(70vh - ${ftHeight} - ${hdHeight})`
+            maxHeight: `calc(80vh - ${ftHeight} - ${hdHeight})`
           };
       return {
         overflowY: 'auto',

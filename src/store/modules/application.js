@@ -68,7 +68,6 @@ const state = {
   tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
   btnLoading: false, // 按钮状态
-  isLeaveRemind: false, // 页面离开提醒
   keepAliveNames: [] // 路由组件缓存列表
 };
 
@@ -156,12 +155,6 @@ const actions = {
       data: params
     });
   },
-  setLeaveRemind({ commit, state }, params) {
-    commit({
-      type: types.LEAVE_REMIND,
-      data: params
-    });
-  },
   async createDictData({ commit, state }, params) {
     if (Object.keys(state.dict).length) return;
     let data = dictData;
@@ -232,9 +225,6 @@ const mutations = {
   },
   [types.BUTTON_LOADING](state, { data }) {
     state.btnLoading = data;
-  },
-  [types.LEAVE_REMIND](state, { data }) {
-    state.isLeaveRemind = data;
   },
   [types.DICT_DATA](state, { data }) {
     state.dict = data;

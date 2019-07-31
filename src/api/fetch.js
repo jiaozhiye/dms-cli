@@ -10,7 +10,7 @@ import config from '@/assets/js/config';
 import store from '@/store';
 import { getToken, removeToken } from '@/assets/js/auth';
 import router from '@/routes';
-import { Message, Notification } from 'element-ui';
+import { Notification } from 'element-ui';
 
 console.info(config.envText);
 

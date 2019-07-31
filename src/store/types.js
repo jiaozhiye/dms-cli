@@ -13,7 +13,6 @@ export const TAB_MENU = 'TAB_MENU';
 export const STAR_MENU = 'STAR_MENU';
 export const COMMON_MENU = 'COMMON_MENU';
 export const BUTTON_LOADING = 'BUTTON_LOADING';
-export const LEAVE_REMIND = 'LEAVE_REMIND';
 export const DICT_DATA = 'DICT_DATA';
 export const ADD_CNAME = 'ADD_CNAME';
 export const DEL_CNAME = 'DEL_CNAME';

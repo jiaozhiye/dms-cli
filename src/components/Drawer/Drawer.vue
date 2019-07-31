@@ -254,7 +254,7 @@ export default {
         outline: 0;
         padding: 0;
         &:hover {
-          color: #444;
+          color: #bb0a30;
           text-decoration: none;
         }
         .drawer-close-x {
