@@ -12,11 +12,12 @@ export default {
 
 <style lang="less" scoped>
 .btn-area {
+  font-size: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   & > * {
-    margin: 0 10px 10px 0;
+    margin: 0 @moduleMargin @moduleMargin 0;
   }
 }
 </style>

@@ -19,7 +19,7 @@
             type="primary"
             style="width: 100%"
             @click.stop="doLogin"
-            :loading="btnLoading"
+            :loading="loginBtnState"
           >登 录</el-button>
         </el-form-item>
       </el-form>
@@ -29,6 +29,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import * as types from '@/api/types';
 import { doLogin } from '@/api';
 
 export default {
@@ -46,7 +47,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('app', ['btnLoading'])
+    ...mapState('app', ['btnLoading']),
+    loginBtnState() {
+      return this.btnLoading[types.LOGIN];
+    }
   },
   methods: {
     ...mapActions('app', ['createLoginInfo']),
@@ -55,7 +59,7 @@ export default {
         username: this.form.username,
         password: this.form.password
       });
-      if (res.resultCode === 200) {
+      if (res.code === 1) {
         this.createLoginInfo({
           id: res.data.id,
           name: res.data.name,
@@ -63,7 +67,10 @@ export default {
         });
         this.$router.push({ path: '/' });
       } else {
-        this.$message.error(res.message);
+        this.$notify.error({
+          title: '提示信息',
+          message: res.message
+        });
       }
     }
   }

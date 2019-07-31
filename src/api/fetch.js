@@ -50,7 +50,7 @@ const errorHandler = error => {
     title: `请求错误 ${response.status}`,
     message: errortext
   });
-  store.dispatch('app/setBtnLoading', !1);
+  store.dispatch('app/clearBtnLoading');
   return Promise.reject(error);
 };
 
@@ -58,13 +58,15 @@ const errorHandler = error => {
 instance.interceptors.request.use(config => {
   // 请求头信息，token 验证
   config.headers = { 'x-access-token': getToken() || '' };
-  store.dispatch('app/setBtnLoading', !0);
+  if (config.mark) {
+    store.dispatch('app/createBtnLoading', { [config.mark]: true });
+  }
   return config;
 }, errorHandler);
 
 // 响应拦截
 instance.interceptors.response.use(({ data }) => {
-  store.dispatch('app/setBtnLoading', !1);
+  store.dispatch('app/clearBtnLoading');
   // token 过期，需要重新登录
   // ...
   return data;

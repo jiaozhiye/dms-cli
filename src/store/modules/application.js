@@ -67,7 +67,7 @@ const state = {
   commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
-  btnLoading: false, // 按钮状态
+  btnLoading: {}, // 按钮状态
   keepAliveNames: [] // 路由组件缓存列表
 };
 
@@ -149,10 +149,16 @@ const actions = {
     }
     return state.menuList.some(x => x.key === params);
   },
-  setBtnLoading({ commit, state }, params) {
+  createBtnLoading({ commit, state }, params) {
     commit({
       type: types.BUTTON_LOADING,
       data: params
+    });
+  },
+  clearBtnLoading({ commit, state }, params) {
+    commit({
+      type: types.BUTTON_LOADING,
+      data: {}
     });
   },
   async createDictData({ commit, state }, params) {

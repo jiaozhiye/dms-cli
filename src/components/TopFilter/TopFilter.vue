@@ -295,35 +295,39 @@ export default {
     toggleHandler() {
       this.expand = !this.expand;
     },
-    createFormLayout() {
-      const colSpan = 24 / this.cols;
-      const buttonNode = this.isSubmitBtn ? (
-        <el-col key="-" span={colSpan}>
-          <el-form-item label={''}>
-            <el-button size="small" type="primary" onClick={this.submitForm}>
-              搜 索
+    createButton(n) {
+      const { cols, expand, collapse } = this;
+      const colSpan = 24 / cols;
+      const offset = ((cols - (n % cols)) % cols) * colSpan;
+      return this.isSubmitBtn ? (
+        <el-col key="-" span={colSpan} offset={offset} style={{ textAlign: 'right' }}>
+          <el-button size="small" type="primary" onClick={this.submitForm}>
+            搜 索
+          </el-button>
+          <el-button size="small" onClick={this.resetForm}>
+            重 置
+          </el-button>
+          {collapse ? (
+            <el-button size="small" type="text" onClick={this.toggleHandler}>
+              {expand ? '收起' : '展开'} <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
-            <el-button size="small" onClick={this.resetForm}>
-              重 置
-            </el-button>
-            {this.collapse ? (
-              <el-button size="small" type="text" onClick={this.toggleHandler}>
-                {this.expand ? '收起' : '展开'} <i class={this.expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
-              </el-button>
-            ) : null}
-          </el-form-item>
+          ) : null}
         </el-col>
       ) : null;
+    },
+    createFormLayout() {
+      const { cols, expand, collapse } = this;
+      const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const count = this.expand ? formItems.length : this.cols - 1;
+      const count = expand ? formItems.length : cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan} style={{ display: !this.collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );
       });
-      return [...colFormItems, buttonNode];
+      return [...colFormItems, this.createButton(count + 1)];
     },
     // 外部通过组件实例调用的方法
     SUBMIT_FORM(ev) {
