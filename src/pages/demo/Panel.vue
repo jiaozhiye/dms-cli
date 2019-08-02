@@ -10,14 +10,15 @@
         left: 0,
         bottom: 0,
         right: 0,
+        zIndex: 9,
         borderTop: '1px solid #e9e9e9',
         padding: '10px 20px',
         background: '#fff',
         textAlign: 'right'
       }"
     >
-      <el-button @click="onClose">取 消</el-button>
-      <el-button @click="onClose" type="primary">提 交</el-button>
+      <el-button @click="closeDrawer">取 消</el-button>
+      <el-button @click="closeDrawer" type="primary">提 交</el-button>
     </div>
     <BaseDialog
       :visible.sync="visible"
@@ -105,7 +106,7 @@ export default {
         }
       ];
     },
-    onClose() {
+    closeDrawer() {
       this.$emit('close', false);
     },
     closeHandler(val) {
