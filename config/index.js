@@ -12,6 +12,8 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+
+    // http proxy
     proxyTable: {
       '/api': {
         target: 'http://jettadms-test.faw-vw.com',

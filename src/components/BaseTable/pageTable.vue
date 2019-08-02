@@ -310,8 +310,8 @@ export default {
         // 处理数值类型的可编辑单元格，显示数据的精度
         this.editableColumns.forEach(column => {
           let { dataIndex, precision = 2 } = column;
-          if (!Object.keys(x).includes(dataIndex)) {
-            x[dataIndex] = '';
+          if (_.isUndefined(_.get(x, dataIndex))) {
+            _.set(x, dataIndex, '');
           }
           if (column.editType === 'number') {
             if (!isNaN(Number(x[dataIndex]))) {
