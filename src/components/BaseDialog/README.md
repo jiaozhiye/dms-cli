@@ -31,7 +31,6 @@ Vue.use(BaseDialog);
 
 - default{Dialog 的内容}
 - title{Dialog 标题区的内容}
-- footer{Dialog 按钮操作区的内容}
 
 `示例代码`
 

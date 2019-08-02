@@ -225,7 +225,7 @@ export default {
       height: 100%;
       overflow-y: auto;
       .drawer-header {
-        padding: 16px 22px;
+        padding: 16px 20px;
         border-radius: 4px 4px 0 0;
         background: #fff;
         color: rgba(0, 0, 0, 0.65);
@@ -270,7 +270,7 @@ export default {
         }
       }
       .drawer-body {
-        padding: 20px 22px;
+        padding: 10px 20px;
         font-size: 14px;
         line-height: 1.5;
         word-wrap: break-word;

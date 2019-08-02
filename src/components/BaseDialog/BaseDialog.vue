@@ -46,6 +46,10 @@ export default {
     footerHeight: {
       type: [Number, String],
       default: 53
+    },
+    containerStyle: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -87,18 +91,17 @@ export default {
             height: `calc(100vh - ${ftHeight} - ${hdHeight})`
           }
         : {
-            maxHeight: `calc(80vh - ${ftHeight} - ${hdHeight})`
+            maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${ftHeight} - ${hdHeight})`
           };
       return {
         overflowY: 'auto',
-        padding: '0 20px',
         minHeight: '150px',
         ...dialogBodyHeight
       };
     }
   },
   render() {
-    const { $props, $attrs, $listeners, $slots } = this;
+    const { containerStyle, $props, $attrs, $listeners, $slots } = this;
     const wrapProps = {
       key: 'dialog',
       props: {
@@ -116,9 +119,11 @@ export default {
           <i class="el-icon-full-screen" />
         </span>
         {Object.keys($slots).map(name => (
-          <div key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
-            {$slots[name]}
-          </div>
+          <section key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
+            <div class="container" style={containerStyle}>
+              {$slots[name]}
+            </div>
+          </section>
         ))}
       </el-dialog>
     ) : null;
@@ -128,33 +133,39 @@ export default {
 
 <style lang="less">
 .dialog {
-  .el-dialog__header {
-    height: 56px;
-    line-height: 56px;
-    padding: 0 20px;
-    box-sizing: border-box;
-    border-bottom: 1px solid #d9d9d9;
-    .el-dialog__title {
-      font-size: 16px;
-      line-height: inherit;
+  .el-dialog {
+    margin: 0 auto;
+    .el-dialog__header {
+      height: 56px;
+      line-height: 56px;
+      padding: 0 20px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #d9d9d9;
+      .el-dialog__title {
+        font-size: 16px;
+        line-height: inherit;
+      }
     }
-  }
-  .el-dialog__body {
-    padding: 10px 0;
-  }
-  .el-dialog__footer {
-    padding: 10px 20px;
-    border-top: 1px solid #d9d9d9;
-  }
-  .fullscreen-btn {
-    position: absolute;
-    right: 42px;
-    top: 16px;
-    padding: 5px;
-    line-height: 1;
-    cursor: pointer;
-    &:hover {
-      color: #bb0a30;
+    .el-dialog__body {
+      padding: 10px 0;
+      .fullscreen-btn {
+        position: absolute;
+        right: 42px;
+        top: 16px;
+        padding: 5px;
+        line-height: 1;
+        cursor: pointer;
+        &:hover {
+          color: #bb0a30;
+        }
+      }
+      .container {
+        padding: 0 20px;
+      }
+    }
+    .el-dialog__footer {
+      padding: 10px 20px;
+      border-top: 1px solid #d9d9d9;
     }
   }
 }
