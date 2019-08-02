@@ -128,7 +128,8 @@ http://localhost:8080/table
 - filter{Boolean|是否支持表头过滤}
 - filterType{String|表头过滤类型，支持 input/checkbox/date-range}
 - filterItems{Array|checkbox 过滤类型的列表数据，[{text: '', value: ''}]}
-- editable{Boolean|单元格是否可编辑}
+- editable{Boolean|该列单元格是否可编辑}
+- defaultEditable{Boolean|该列单元格是否处于可编辑状态}
 - editType{String|单元格的编辑类型，支持 text/number/select/select-multiple/date-picker}
 - editRequired{Boolean|校验单元格是否必填，表头标题会有红色星号提示}
 - editPattern{RegExp|单元格内容格式校验，/^[0-9a-zA-Z ]+\$/}
@@ -153,7 +154,7 @@ http://localhost:8080/table
 `FilterTable 组件暴露的方法`
 
 - FilterTable 组件对象的获取方式，FilterTable 加 ref 属性 myTable（可自定义） -> this.$refs.myTable.$refs.pageTable
-- EXECUTE_INSERT{Function|执行移除列表行操作，参数是新增行的对象或数组}
+- EXECUTE_INSERT{Function|执行插入列表行操作，参数是新增行的对象或数组}
 - EXECUTE_DELETE{Function|执行移除列表选中行的操作，参数是行数据的数组(可选)，返回值是移除行组成的数组}
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}
 - CLEAR_EXECUTE_LOG{Function|清空之前对组件的 CURD 操作记录，没有参数}

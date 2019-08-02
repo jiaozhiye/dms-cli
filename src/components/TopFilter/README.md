@@ -15,7 +15,7 @@ Vue.use(TopFilter);
 `组件参数API`
 
 - list{Array|头部筛选条件数组，支持动态赋值(数据数组必须是新的引用)}
-- cols{Number|每行显示多小列，默认是 3}
+- cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
 - labelWidth{Number|label 标签的宽度，默认是 80}
 - filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
 - collapse{Boolean|是否显示展开/收起按钮，默认是 true}
@@ -30,11 +30,13 @@ Vue.use(TopFilter);
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
+- unit{String|输入框的后置单位, 只对 INPUT 有效}
 - readonly{Boolean|是否只读}
 - disabled{Boolean|禁用}
 - focus{Function|输入框获得焦点的回调}
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
 - maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
+- valueFormat{String|指定日期组件值的格式，参考 Element UI}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}

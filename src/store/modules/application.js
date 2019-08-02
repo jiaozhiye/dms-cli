@@ -163,14 +163,19 @@ const actions = {
   },
   async createDictData({ commit, state }, params) {
     if (Object.keys(state.dict).length) return;
-    let data = dictData;
-    if (process.env.MOCK_DATA !== 'true') {
+    if (process.env.MOCK_DATA === 'true') {
+      commit({ type: types.DICT_DATA, data: dictData });
+    } else {
       const res = await getAllDict();
       if (res.resultCode === 200) {
-        data = { ...data, ...res.data };
+        const data = { ...dictData, ...res.data };
+        // 数据字典本地存储
+        if (!_.isEqual(data, JSON.parse(localStorage.getItem('dict')))) {
+          localStorage.setItem('dict', JSON.stringify(data));
+        }
+        commit({ type: types.DICT_DATA, data });
       }
     }
-    commit({ type: types.DICT_DATA, data });
   },
   addKeepAliveNames({ commit, state }, params) {
     if (state.keepAliveNames.some(x => x.value === params.value)) return;

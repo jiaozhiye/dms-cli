@@ -172,7 +172,7 @@ export default {
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
-      const pagination = this.isShowPagination ? { pageNum: current, pageSize } : {};
+      const pagination = this.isShowPagination ? { pageNum: current, pageSize, limit: pageSize } : {};
       const queries = {
         ...this.sorterParams,
         ...this.filterParams,
@@ -181,7 +181,7 @@ export default {
       };
       // 移除 noJumper 属性
       delete queries.noJumper;
-      console.log('table 组件中 ajax 请求条件：', queries);
+      // console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
     visibleColumns() {
@@ -309,15 +309,18 @@ export default {
         x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
         // 处理数值类型的可编辑单元格，显示数据的精度
         this.editableColumns.forEach(column => {
+          let { dataIndex, precision = 2 } = column;
+          if (!Object.keys(x).includes(dataIndex)) {
+            x[dataIndex] = '';
+          }
           if (column.editType === 'number') {
-            let { dataIndex, precision = 2 } = column;
             if (!isNaN(Number(x[dataIndex]))) {
               x[dataIndex] = Number(x[dataIndex]).toFixed(precision);
             }
           }
+          // 单元格默认为不可编辑状态
+          this.setCellEditState(x, dataIndex, false);
         });
-        // 单元格默认为不可编辑状态
-        this.createEditableKeys().forEach(dataIndex => this.setCellEditState(x, dataIndex, false));
       });
       return dataList;
     },
@@ -946,6 +949,9 @@ export default {
     },
     // 设置单元格的编辑状态
     setCellEditState(row, dataIndex, state) {
+      if (this.editableColumns.find(x => x.dataIndex === dataIndex).defaultEditable) {
+        state = true;
+      }
       if (row.isNewRow && !state) return;
       this.$set(row, `${dataIndex}IsEdit`, state);
     },
@@ -1247,10 +1253,13 @@ export default {
       this.tableBody = this.$refs.appTable.$el.querySelector('.el-table__body');
     },
     // 设置新增行数据的默认值
-    setDefaultValue() {
+    setDefaultValue(row) {
       let res = {};
       this.columnFlatMap(this.columns).forEach(x => {
         _.set(res, x.dataIndex, '');
+        if (Object.keys(row).includes(`${x.dataIndex}IsEdit`)) {
+          delete row[`${x.dataIndex}IsEdit`];
+        }
         if (x.editable || x.editType) {
           // 新增的行默认为可编辑
           this.setCellEditState(res, x.dataIndex, true);
@@ -1263,7 +1272,7 @@ export default {
       rows = Array.isArray(rows) ? rows : [rows];
       rows.forEach(row => {
         if (typeof row !== 'object') return;
-        const target = this.setDefaultValue();
+        const target = this.setDefaultValue(row);
         // 获取最大 index
         const lastRow = this.originData[this.originData.length - 1];
         const maxIndex = _.isUndefined(lastRow) ? -1 : lastRow.index;

@@ -81,6 +81,9 @@ export default {
     list(val) {
       val.forEach(x => {
         if (x.initialValue !== this.form[x.fieldName]) {
+          if (x.type === 'INPUT' && x.numberFormat) {
+            x.initialValue = this.formatNumber(x.initialValue);
+          }
           this.form[x.fieldName] = x.initialValue;
           // 对组件外 js 动态赋值的表单元素进行校验
           this.$refs.form.validateField(x.fieldName);
@@ -103,6 +106,9 @@ export default {
         }
         if (x.type === 'RANGE_DATE' || x.type === 'MULTIPLE_SELECT') {
           x.initialValue = [];
+        }
+        if (x.type === 'INPUT' && x.numberFormat) {
+          x.initialValue = this.formatNumber(x.initialValue);
         }
         // 初始值
         target[x.fieldName] = x.initialValue;
@@ -129,7 +135,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 9999, step = 1, precision } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input-number
@@ -192,30 +198,22 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker
-            type="date"
-            v-model={form[fieldName]}
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder={placeholder}
-            disabled={disabled}
-            style={{ ...style }}
-            nativeOnKeydown={this.enterEventHandle}
-          />
+          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} nativeOnKeydown={this.enterEventHandle} />
         </el-form-item>
       );
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-date-picker
             type="daterange"
             v-model={form[fieldName]}
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format={valueFormat}
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -261,6 +259,22 @@ export default {
         }
       }
     },
+    // 数字格式化
+    formatNumber(value) {
+      value += '';
+      const list = value.split('.');
+      const prefix = list[0].charAt(0) === '-' ? '-' : '';
+      let num = prefix ? list[0].slice(1) : list[0];
+      let result = '';
+      while (num.length > 3) {
+        result = `, ${num.slice(-3)}${result}`;
+        num = num.slice(0, num.length - 3);
+      }
+      if (num) {
+        result = num + result;
+      }
+      return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+    },
     createSerachHelperList(list, fieldKey) {
       return list.map(x => ({ value: x[fieldKey] }));
     },
@@ -279,7 +293,15 @@ export default {
       ev && ev.preventDefault();
       this.$refs.form.validate(valid => {
         if (valid) {
-          return this.$emit('formChange', this.form);
+          const { form } = this;
+          for (let attr in form) {
+            if (attr.includes('|') && Array.isArray(form[attr])) {
+              let [startTime, endTime] = attr.split('|');
+              form[startTime] = form[attr][0];
+              form[endTime] = form[attr][1];
+            }
+          }
+          return this.$emit('formChange', form);
         }
         return false;
       });

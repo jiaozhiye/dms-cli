@@ -68,7 +68,10 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(({ data }) => {
   store.dispatch('app/clearBtnLoading');
   // token 过期，需要重新登录
-  // ...
+  if (data.code === 'JWT_ERROR') {
+    removeToken();
+    router.push({ path: '/' });
+  }
   return data;
 }, errorHandler);
 

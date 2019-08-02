@@ -194,30 +194,22 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker
-            type="date"
-            v-model={form[fieldName]}
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder={placeholder}
-            disabled={disabled}
-            style={{ ...style }}
-            nativeOnKeydown={this.enterEventHandle}
-          />
+          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} nativeOnKeydown={this.enterEventHandle} />
         </el-form-item>
       );
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-date-picker
             type="daterange"
             v-model={form[fieldName]}
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format={valueFormat}
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -281,7 +273,15 @@ export default {
       ev && ev.preventDefault();
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$emit('filterChange', this.form);
+          const { form } = this;
+          for (let attr in form) {
+            if (attr.includes('|') && Array.isArray(form[attr])) {
+              let [startTime, endTime] = attr.split('|');
+              form[startTime] = form[attr][0];
+              form[endTime] = form[attr][1];
+            }
+          }
+          this.$emit('filterChange', form);
         } else {
           // 校验没通过，展开
           this.expand = true;

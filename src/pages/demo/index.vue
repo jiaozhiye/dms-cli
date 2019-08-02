@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { authority } from '@/utils/mixin';
+import { authority } from '@/utils/authMixin';
 import res from '@/mock/tableData';
 import Panel from './Panel';
 
