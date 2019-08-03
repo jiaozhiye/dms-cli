@@ -39,3 +39,6 @@ Vue.use(LazyLoadTab);
 
 import ButtonArea from '@/components/ButtonArea';
 Vue.use(ButtonArea);
+
+import Anchor from '@/components/Anchor';
+Vue.use(Anchor);

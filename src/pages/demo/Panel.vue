@@ -1,8 +1,15 @@
 <template>
   <div>
-    <div style="height: 1000px">
-      <el-button @click="visible = true">三级交互</el-button>
-      <FormPanel :list="formList" formType="add" style="margin-top: 20px" />
+    <div class="wrapper">
+      <Anchor :labelList="labels">
+        <div class="line" id="row-01">
+          <FormPanel :list="formList" formType="add" />
+        </div>
+        <div class="line" id="row-02">
+          <el-button @click="visible = true">三级交互</el-button>
+        </div>
+        <div class="line" id="row-03">第三行</div>
+      </Anchor>
     </div>
     <div
       :style="{
@@ -41,6 +48,7 @@ export default {
   data() {
     return {
       visible: false,
+      labels: [{ title: '选项卡1', id: 'row-01' }, { title: '选项卡2', id: 'row-02' }, { title: '选项卡3', id: 'row-03' }],
       formList: this.createFormList()
     };
   },
@@ -115,3 +123,16 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+.wrapper {
+  height: calc(100vh - 135px);
+  .line {
+    height: 400px;
+    margin-bottom: 20px;
+    &:last-child {
+      margin: 0;
+    }
+  }
+}
+</style>

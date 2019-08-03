@@ -32,7 +32,7 @@
     <Drawer
       :visible.sync="visible"
       title="标题名称"
-      :width="920"
+      :width="960"
       destroyOnClose
       :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
     >
