@@ -29,8 +29,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import * as types from '@/api/types';
-import { doLogin } from '@/api';
+import * as types from '@/api/login/types';
+import { doLogin } from '@/api/login';
 
 export default {
   name: 'Login',

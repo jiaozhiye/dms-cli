@@ -3,7 +3,6 @@ const path = require('path');
 const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
-const Dotenv = require('dotenv-webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 
 // 多进程处理loader
@@ -86,7 +85,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new Dotenv(),
     new VueLoaderPlugin(),
     new HappyPack({
       id: 'babel',

@@ -43,6 +43,8 @@ $ npm run build
   - 动态面包屑
 
 - 提供的组件
+  - Anchor 锚点组件
+  - ButtonArea 功能按钮区的容器组件
   - Dialog 模态框组件，支持子组件的销毁
   - BaseTable 表格组件
   - Drawer 抽屉组件，支持子组件的销毁
@@ -50,6 +52,7 @@ $ npm run build
   - TopFilter 页面头部筛选组件
   - UploadCropper 图片上传组件，支持图片的裁剪和压缩
   - BasePrint 基于 Lodop 插件的打印组件
+  - FormPanel 表单操作的功能组件
 ```
 
 ## 目录结构
@@ -75,7 +78,7 @@ $ npm run build
 │   └── main.js                # 入口文件
 ├── .babelrc                   # babel-loader 配置
 ├── .editorconfig              # EditorConfig 配置
-├── .env                       # 全局环境常量
+├── .env                       # 开发环境环境常量
 ├── .gitignore                 # git 忽略清单
 ├── favicon.ico                # favicon 图标
 ├── index.html                 # html 模板

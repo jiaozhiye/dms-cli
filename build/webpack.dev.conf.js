@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const config = require('../config');
 const merge = require('webpack-merge');
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const baseWebpackConfig = require('./webpack.base.conf');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -49,6 +50,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     // new webpack.NamedModulesPlugin(),
     // new webpack.NoEmitOnErrorsPlugin(),
+    new Dotenv(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',

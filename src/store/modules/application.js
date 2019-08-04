@@ -173,6 +173,7 @@ const actions = {
         if (!_.isEqual(data, JSON.parse(localStorage.getItem('dict')))) {
           localStorage.setItem('dict', JSON.stringify(data));
         }
+        // Vuex 状态存储
         commit({ type: types.DICT_DATA, data });
       }
     }
