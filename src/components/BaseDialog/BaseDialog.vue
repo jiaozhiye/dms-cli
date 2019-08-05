@@ -12,6 +12,10 @@ export default {
       type: Boolean,
       default: false
     },
+    closable: {
+      type: Boolean,
+      default: true
+    },
     destroyOnClose: {
       type: Boolean,
       default: false
@@ -39,7 +43,7 @@ export default {
     customClass: {
       type: String
     },
-    closeOnClickModal: {
+    maskClosable: {
       type: Boolean,
       default: true
     },
@@ -101,12 +105,14 @@ export default {
     }
   },
   render() {
-    const { containerStyle, $props, $attrs, $listeners, $slots } = this;
+    const { closable, maskClosable, containerStyle, $props, $attrs, $listeners, $slots } = this;
     const wrapProps = {
       key: 'dialog',
       props: {
         ...$props,
         appendToBody: true,
+        showClose: closable,
+        closeOnClickModal: maskClosable,
         fullscreen: this.fullscreen,
         beforeClose: this.close
       },

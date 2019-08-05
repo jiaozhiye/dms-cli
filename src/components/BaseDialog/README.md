@@ -15,13 +15,15 @@ Vue.use(BaseDialog);
 `组件参数API`
 
 - visible{Boolean|是否显示 Dialog，支持 .sync 修饰符}
+- closable{Boolean|是否显示右上角的关闭按钮，默认值是 true}
 - destroyOnClose{Boolean|关闭时销毁 Dialog 里的子元素，默认值是 false}
 - title{String/slot|标题}
 - width{String|Dialog 的宽度，默认值 50%}
 - modal{Boolean|是否需要遮罩层，默认值 true}
-- lock-scroll{Boolean|是否在 Dialog 出现时将 body 滚动锁定，默认值 true}
-- custom-class{String|Dialog 的自定义类名}
-- close-on-click-modal{Boolean|是否可以通过点击 modal 关闭 Dialog，默认值 true}
+- lockScroll{Boolean|是否在 Dialog 出现时将 body 滚动锁定，默认值 true}
+- customClass{String|Dialog 的自定义类名}
+- containerStyle{Object|对话框外层容器的 style}
+- maskClosable{Boolean|是否可以通过点击 modal 关闭 Dialog，默认值 true}
 - open{Function|打开事件，没有参数}
 - opened{Function|打开动画结束时的事件，没有参数}
 - close{Function|关闭事件，没有参数}
