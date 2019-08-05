@@ -20,10 +20,10 @@
         pyt: 'cggl',
         children: [
           {
-            title: '备件采购订单',                // 标题
-            key: '/bjgl/cggl/dd',                // 路由路径
-            pyt: 'bjcgdd',                       // 拼音头
-            permission: ['save', 'update'] // 不具备的操作权限
+            title: '备件采购订单',           // 标题
+            key: '/bjgl/cggl/dd',           // 路由路径
+            pyt: 'bjcgdd',                  // 拼音头
+            permission: ['save', 'update']  // 不具备的操作权限
           },
         ]
       },
