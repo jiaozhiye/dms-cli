@@ -39,6 +39,7 @@ export default {
         click: true,
         scrollX: false,
         scrollY: true,
+        observeDom: true,
         mouseWheel: {
           speed: 2,
           invert: false,
