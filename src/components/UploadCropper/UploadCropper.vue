@@ -5,25 +5,36 @@
       action="#"
       list-type="picture-card"
       accept="image/jpeg, image/png, image/bmp"
-      :limit="1"
+      :limit="limit"
       :multiple="false"
       :auto-upload="false"
       :show-file-list="false"
       :on-change="changeHandler"
       :http-request="upload"
     >
-      <div v-if="imageUrl" class="el-upload-list__item" @click.stop>
-        <img class="img" :src="imageUrl" alt />
+      <div
+        class="el-upload-list__item"
+        v-for="(imgUrl, index) in imgUrlArr"
+        :key="imgUrl"
+        @click.stop
+      >
+        <img class="img" :src="imgUrl" alt />
         <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-dot" @click="handlePreview">
+          <span class="el-upload-list__item-dot" @click="handlePreview(index)">
             <i class="el-icon-zoom-in"></i>
           </span>
-          <span class="el-upload-list__item-dot" @click="handleRemove">
+          <span class="el-upload-list__item-dot" @click="handleRemove(index)">
             <i class="el-icon-delete"></i>
           </span>
         </span>
       </div>
-      <i v-else class="el-icon-plus"></i>
+      <div
+        v-if="imgUrlArr.length !== limit"
+        slot="default"
+        class="upload-icon-plus el-upload-list__item"
+      >
+        <i class="el-icon-plus"></i>
+      </div>
       <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
@@ -61,8 +72,8 @@ export default {
       default: '/api/upload'
     },
     initialValue: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     },
     isCalcHeight: {
       type: Boolean,
@@ -73,6 +84,10 @@ export default {
       default() {
         return [5, 4];
       }
+    },
+    limit: {
+      type: Number,
+      default: 1
     },
     tipText: {
       type: String,
@@ -85,38 +100,34 @@ export default {
     this.uid = ''; // 文件的 uid
     this.width = 148;
     this.height = 148;
+    this.dialogImageUrl = ''; // 预览图片地址
     return {
       file: null, // 当前被选择的图片文件
-      imageUrl: this.initialValue,
+      imgUrlArr: this.initialValue,
       dialogVisible: false,
       cropperModel: false
     };
   },
-  computed: {
-    dialogImageUrl() {
-      return this.imageUrl;
-    }
-  },
   watch: {
     initialValue(val) {
-      this.imageUrl = val;
-      !val && this.clearFiles();
+      this.imgUrlArr = val;
+      !val.length && this.clearFiles();
     },
-    imageUrl(val) {
+    imgUrlArr(val) {
       this.$emit('success', val);
       // 取消表单校验
-      if (val !== '' && this.$parent.clearValidate) {
+      if (val.length && this.$parent.clearValidate) {
         this.$parent.clearValidate();
       }
     }
   },
   methods: {
-    handlePreview() {
+    handlePreview(index) {
+      this.dialogImageUrl = this.imgUrlArr[index];
       this.dialogVisible = true;
     },
-    handleRemove() {
-      this.imageUrl = '';
-      this.clearFiles();
+    handleRemove(index) {
+      this.imgUrlArr.splice(index, 1);
     },
     clearFiles() {
       this.$refs.upload.clearFiles();
@@ -144,7 +155,7 @@ export default {
       try {
         const { data } = await axios.post(this.actionUrl, formData);
         if (data.resultCode === 200) {
-          this.imageUrl = data.data;
+          this.imgUrlArr.push(data.data);
         } else {
           this.$message.error(data.message);
         }
@@ -161,7 +172,6 @@ export default {
     },
     setUploadWrapHeight() {
       const iHeight = !this.isCalcHeight ? this.height : Number.parseInt((this.width * this.fixedSize[1]) / this.fixedSize[0]);
-      this.uploadWrap.style.width = `${this.width}px`;
       this.uploadWrap.style.height = `${iHeight}px`;
       this.uploadWrap.style.lineHeight = `${iHeight - 2}px`;
     },
@@ -200,51 +210,66 @@ export default {
 
 <style lang="less">
 .upload-wrap {
-  display: inline-block;
   width: 100%;
-  .el-icon-plus {
-    vertical-align: middle;
-  }
-  .el-upload-list__item {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    border-radius: 6px;
-    background-color: #fff;
-    overflow: hidden;
-    .img {
-      display: block;
-      max-width: 100%;
-    }
-    .el-upload-list__item-actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
+  float: left;
+  .el-upload--picture-card {
+    display: flex;
+    width: 100% !important;
+    height: 148px;
+    background: none;
+    border: none;
+    border-radius: 0;
+    .el-upload-list__item {
+      position: relative;
+      width: 148px;
       height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      z-index: 1;
-      cursor: default;
-      opacity: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      transition: all 0.3s;
-      &:hover {
-        opacity: 1;
+      line-height: inherit;
+      margin: 0 10px 0 0;
+      border-radius: 6px;
+      background-color: #fff;
+      border: 1px dashed #c0ccda;
+      overflow: hidden;
+      .img {
+        display: block;
+        max-width: 100%;
       }
-      .el-upload-list__item-dot {
-        display: inline-block;
-        width: 20px;
-        padding: 0 10px;
-        cursor: pointer;
-        i {
-          font-size: 20px;
-          color: #fff;
+      .el-upload-list__item-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        cursor: default;
+        opacity: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: all 0.3s;
+        &:hover {
+          opacity: 1;
+        }
+        .el-upload-list__item-dot {
+          display: inline-block;
+          width: 20px;
+          padding: 0 10px;
+          cursor: pointer;
+          i {
+            font-size: 20px;
+            color: #fff;
+          }
         }
       }
     }
+    .upload-icon-plus {
+      i {
+        vertical-align: middle;
+      }
+    }
+  }
+  .el-upload__tip {
+    line-height: 20px;
   }
   .dialog-wrap {
     .el-dialog__body {

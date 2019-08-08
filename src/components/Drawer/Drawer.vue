@@ -16,7 +16,7 @@
             <slot name="title">{{ title }}</slot>
           </div>
         </div>
-        <button v-if="closable" class="drawer-close" @click.stop="close('mask')">
+        <button v-if="closable" class="drawer-close" @click.stop="close()">
           <span class="drawer-close-x">
             <i class="anticon anticon-close">
               <svg
@@ -73,7 +73,7 @@ export default {
     },
     maskClosable: {
       type: Boolean,
-      default: true
+      default: false
     },
     width: {
       type: [Number, String],

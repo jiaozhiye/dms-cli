@@ -20,7 +20,7 @@ Vue.use(Drawer);
 - title{String/slot|标题}
 - position{String|抽屉弹出的方向，'top' | 'right' | 'bottom' | 'left'，默认是 right}
 - lockScroll{Boolean|显示抽屉时是否禁用了主体滚动，默认值 true}
-- maskClosable{Boolean|点击蒙层是否允许关闭，默认值 true}
+- maskClosable{Boolean|点击蒙层是否允许关闭，默认值 false}
 - width{String/Number|宽度}
 - height{String/Number|高度，在 position 为 top 或 bottom 时使用}
 - zIndex{Number|设置 Drawer 的 z-index}

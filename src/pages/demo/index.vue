@@ -123,7 +123,7 @@ export default {
           fieldName: 'number',
           placeholder: '请输入数量...',
           initialValue: undefined,
-          rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]
+          rules: [{ required: true, message: '请输入数量', trigger: 'change' }]
         }
       ];
     },

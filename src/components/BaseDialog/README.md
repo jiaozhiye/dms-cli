@@ -23,7 +23,7 @@ Vue.use(BaseDialog);
 - lockScroll{Boolean|是否在 Dialog 出现时将 body 滚动锁定，默认值 true}
 - customClass{String|Dialog 的自定义类名}
 - containerStyle{Object|对话框外层容器的 style}
-- maskClosable{Boolean|是否可以通过点击 modal 关闭 Dialog，默认值 true}
+- maskClosable{Boolean|是否可以通过点击 modal 关闭 Dialog，默认值 false}
 - open{Function|打开事件，没有参数}
 - opened{Function|打开动画结束时的事件，没有参数}
 - close{Function|关闭事件，没有参数}

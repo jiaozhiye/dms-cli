@@ -72,42 +72,73 @@ export default {
         }
       ]
     };
+    this.treeProps = {
+      children: 'children',
+      label: 'text'
+    };
+    this.prevForm = null;
     return {
       expand: false, // 展开收起状态
+      treeFilterText: '',
+      popoverVisible: false,
       form: this.createFormData(this.list),
       rules: this.createFormRule(this.list)
     };
   },
+  created() {
+    this.prevForm = { ...this.form };
+  },
   watch: {
-    list(val) {
-      val.forEach(x => {
-        if (x.initialValue !== this.form[x.fieldName]) {
-          this.form[x.fieldName] = x.initialValue;
-          // 对组件外 js 动态赋值的表单元素进行校验
-          this.$refs.form.validateField(x.fieldName);
-        }
-      });
+    list: {
+      handler(val) {
+        this.$nextTick(() => {
+          val.forEach(x => {
+            if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
+              this.form[x.fieldName] = x.initialValue;
+              // 对组件外 js 动态赋值的表单元素进行校验
+              this.$refs.form.validateField(x.fieldName);
+            }
+          });
+        });
+      },
+      deep: true
     },
     form: {
       handler(val) {
-        this.list.forEach(x => (x.initialValue = val[x.fieldName]));
+        const res = this.difference(val, this.prevForm);
+        if (!Object.keys(res).length) return;
+        for (let key in res) {
+          this.list.find(x => x.fieldName === key).initialValue = res[key];
+        }
+        this.prevForm = { ...val };
       },
       deep: true
     },
     expand(val) {
       if (!this.collapse) return;
       this.$emit('onCollapse', val);
+    },
+    treeFilterText(val) {
+      this.$refs.tree.filter(val);
+    },
+    popoverVisible(val) {
+      if (!val) {
+        this.treeFilterText = '';
+      }
     }
   },
   methods: {
     createFormData(list) {
       const target = {};
       list.forEach(x => {
-        if (x.type === 'RANGE_DATE' || x.type === 'MULTIPLE_SELECT') {
-          x.initialValue = [];
+        let { initialValue, type, fieldName } = x;
+        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT') {
+          initialValue = initialValue || [];
         }
+        // 设置 initialValue 为响应式数据
+        this.$set(x, 'initialValue', initialValue);
         // 初始值
-        target[x.fieldName] = x.initialValue;
+        target[fieldName] = initialValue;
       });
       return target;
     },
@@ -131,7 +162,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 9999, step = 1, precision } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input-number
@@ -145,6 +176,38 @@ export default {
             step={step}
             precision={precision}
           ></el-input-number>
+        </el-form-item>
+      );
+    },
+    INPUT_TREE(option) {
+      const { form } = this;
+      const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled } = option;
+      return (
+        <el-form-item ref={fieldName} label={label} prop={fieldName}>
+          <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+            <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
+              <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
+              <el-tree
+                ref="tree"
+                data={itemList}
+                props={this.treeProps}
+                defaultExpandAll={true}
+                expandOnClickNode={false}
+                filterNodeMethod={this.filterNodeHandle}
+                on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
+              ></el-tree>
+            </div>
+            <el-input
+              slot="reference"
+              value={this.createInputTreeValue(fieldName, itemList)}
+              placeholder={placeholder}
+              readonly={readonly}
+              disabled={disabled}
+              clearable
+              onClear={() => this.treeInputClearHandle(fieldName)}
+              nativeOnKeydown={this.enterEventHandle}
+            ></el-input>
+          </el-popover>
         </el-form-item>
       );
     },
@@ -258,6 +321,22 @@ export default {
     createSerachHelperList(list, fieldKey) {
       return list.map(x => ({ value: x[fieldKey] }));
     },
+    createInputTreeValue(fieldName, itemList) {
+      let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
+      return text;
+    },
+    treeInputClearHandle(fieldName) {
+      this.form[fieldName] = undefined;
+      this.$nextTick(() => this.$refs[fieldName].clearValidate());
+    },
+    filterNodeHandle(value, data) {
+      if (!value) return true;
+      return data.text.indexOf(value) !== -1;
+    },
+    treeNodeClickHandle(fieldName, { value }) {
+      this.form[fieldName] = value;
+      this.popoverVisible = false;
+    },
     createFormItem() {
       return this.list.map(item => {
         const VNode = !this[item.type] ? null : this[item.type](item);
@@ -328,6 +407,31 @@ export default {
         );
       });
       return [...colFormItems, this.createButton(count + 1)];
+    },
+    difference(newVal, oldVal) {
+      const res = {};
+      for (let key in newVal) {
+        if (!_.isEqual(newVal[key], oldVal[key])) {
+          res[key] = newVal[key];
+        }
+      }
+      return res;
+    },
+    deepFind(arr, mark) {
+      let res = null;
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i].children)) {
+          res = this.deepFind(arr[i].children, mark);
+        }
+        if (res !== null) {
+          return res;
+        }
+        if (arr[i].value === mark) {
+          res = arr[i];
+          break;
+        }
+      }
+      return res;
     },
     // 外部通过组件实例调用的方法
     SUBMIT_FORM(ev) {

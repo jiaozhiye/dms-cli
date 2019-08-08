@@ -24,7 +24,7 @@ Vue.use(TopFilter);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/SELECT/DATE/RANGE_DATE/MULTIPLE_SELECT/SEARCH_HELPER/INPUT_NUMBER/TEXT_AREA}
+- type{String|类型，支持 INPUT/SELECT/DATE/RANGE_DATE/MULTIPLE_SELECT/SEARCH_HELPER/INPUT_NUMBER/TEXT_AREA/INPUT_TREE}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}

@@ -45,7 +45,7 @@ export default {
     },
     maskClosable: {
       type: Boolean,
-      default: true
+      default: false
     },
     footerHeight: {
       type: [Number, String],

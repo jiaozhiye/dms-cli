@@ -72,46 +72,78 @@ export default {
         }
       ]
     };
+    this.treeProps = {
+      children: 'children',
+      label: 'text'
+    };
+    this.prevForm = null;
     return {
+      treeFilterText: '',
+      popoverVisible: false,
       form: this.createFormData(this.list),
       rules: this.createFormRule(this.list)
     };
   },
+  created() {
+    this.prevForm = { ...this.form };
+  },
   watch: {
-    list(val) {
-      val.forEach(x => {
-        if (x.initialValue !== this.form[x.fieldName]) {
-          if (x.type === 'INPUT' && x.numberFormat) {
-            x.initialValue = this.formatNumber(x.initialValue);
-          }
-          this.form[x.fieldName] = x.initialValue;
-          // 对组件外 js 动态赋值的表单元素进行校验
-          this.$refs.form.validateField(x.fieldName);
-        }
-      });
+    list: {
+      handler(val) {
+        this.$nextTick(() => {
+          val.forEach(x => {
+            if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
+              let { initialValue, type, fieldName } = x;
+              if (type === 'INPUT' && x.numberFormat) {
+                initialValue = this.formatNumber(initialValue);
+              }
+              this.form[fieldName] = initialValue;
+              // 对组件外 js 动态赋值的表单元素进行校验
+              this.$refs.form.validateField(fieldName);
+            }
+          });
+        });
+      },
+      deep: true
     },
     form: {
       handler(val) {
-        this.list.forEach(x => (x.initialValue = val[x.fieldName]));
+        const res = this.difference(val, this.prevForm);
+        if (!Object.keys(res).length) return;
+        for (let key in res) {
+          this.list.find(x => x.fieldName === key).initialValue = res[key];
+        }
+        this.prevForm = { ...val };
       },
       deep: true
+    },
+    treeFilterText(val) {
+      this.$refs.tree.filter(val);
+    },
+    popoverVisible(val) {
+      if (!val) {
+        this.treeFilterText = '';
+      }
     }
   },
   methods: {
     createFormData(list) {
       const target = {};
       list.forEach(x => {
+        let { initialValue, type, fieldName } = x;
         if (this.formType === 'show') {
           x.disabled = true;
         }
-        if (x.type === 'RANGE_DATE' || x.type === 'MULTIPLE_SELECT') {
-          x.initialValue = [];
+        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT') {
+          initialValue = initialValue || [];
         }
-        if (x.type === 'INPUT' && x.numberFormat) {
-          x.initialValue = this.formatNumber(x.initialValue);
+        if (type === 'INPUT' && x.numberFormat) {
+          initialValue = this.formatNumber(initialValue);
         }
+        // 设置 initialValue 为响应式数据
+        this.$set(x, 'initialValue', initialValue);
         // 初始值
-        target[x.fieldName] = x.initialValue;
+        target[fieldName] = initialValue;
       });
       return target;
     },
@@ -152,6 +184,38 @@ export default {
         </el-form-item>
       );
     },
+    INPUT_TREE(option) {
+      const { form } = this;
+      const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled } = option;
+      return (
+        <el-form-item ref={fieldName} label={label} prop={fieldName}>
+          <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+            <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
+              <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
+              <el-tree
+                ref="tree"
+                data={itemList}
+                props={this.treeProps}
+                defaultExpandAll={true}
+                expandOnClickNode={false}
+                filterNodeMethod={this.filterNodeHandle}
+                on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
+              ></el-tree>
+            </div>
+            <el-input
+              slot="reference"
+              value={this.createInputTreeValue(fieldName, itemList)}
+              placeholder={placeholder}
+              readonly={readonly}
+              disabled={disabled}
+              clearable
+              onClear={() => this.treeInputClearHandle(fieldName)}
+              nativeOnKeydown={this.enterEventHandle}
+            ></el-input>
+          </el-popover>
+        </el-form-item>
+      );
+    },
     SEARCH_HELPER(option) {
       const { form } = this;
       const { label, fieldName, request = {}, style = {}, placeholder, disabled } = option;
@@ -175,7 +239,7 @@ export default {
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change} nativeOnKeydown={this.enterEventHandle}>
-            <el-option key="-" label="全部" value="0" />
+            {/* <el-option key="-" label="全部" value="0" /> */}
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
@@ -185,10 +249,10 @@ export default {
     },
     MULTIPLE_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable>
+          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
@@ -260,7 +324,7 @@ export default {
       }
     },
     // 数字格式化
-    formatNumber(value) {
+    formatNumber(value = '') {
       value += '';
       const list = value.split('.');
       const prefix = list[0].charAt(0) === '-' ? '-' : '';
@@ -277,6 +341,22 @@ export default {
     },
     createSerachHelperList(list, fieldKey) {
       return list.map(x => ({ value: x[fieldKey] }));
+    },
+    createInputTreeValue(fieldName, itemList) {
+      let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
+      return text;
+    },
+    treeInputClearHandle(fieldName) {
+      this.form[fieldName] = undefined;
+      this.$nextTick(() => this.$refs[fieldName].clearValidate());
+    },
+    filterNodeHandle(value, data) {
+      if (!value) return true;
+      return data.text.indexOf(value) !== -1;
+    },
+    treeNodeClickHandle(fieldName, { value }) {
+      this.form[fieldName] = value;
+      this.popoverVisible = false;
     },
     createFormItem() {
       return this.list.map(item => {
@@ -337,6 +417,31 @@ export default {
           </el-col>
         </el-row>
       ) : null;
+    },
+    difference(newVal, oldVal) {
+      const res = {};
+      for (let key in newVal) {
+        if (!_.isEqual(newVal[key], oldVal[key])) {
+          res[key] = newVal[key];
+        }
+      }
+      return res;
+    },
+    deepFind(arr, mark) {
+      let res = null;
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i].children)) {
+          res = this.deepFind(arr[i].children, mark);
+        }
+        if (res !== null) {
+          return res;
+        }
+        if (arr[i].value === mark) {
+          res = arr[i];
+          break;
+        }
+      }
+      return res;
     },
     // 外部通过组件实例调用的方法
     SUBMIT_FORM(ev) {
