@@ -370,14 +370,18 @@ export default {
     },
     resetForm() {
       this.$refs.form.resetFields();
+      this.$emit('filterChange', this.form);
     },
     toggleHandler() {
       this.expand = !this.expand;
     },
-    createButton(n) {
+    createButton(n, total) {
       const { cols, expand, collapse } = this;
       const colSpan = 24 / cols;
-      const offset = ((cols - (n % cols)) % cols) * colSpan;
+      let offset = ((cols - (n % cols)) % cols) * colSpan;
+      if (!expand && total < cols) {
+        offset = (cols - total - 1) * colSpan;
+      }
       return this.isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset} style={{ textAlign: 'right' }}>
           <el-button size="small" type="primary" onClick={this.submitForm}>
@@ -406,7 +410,7 @@ export default {
           </el-col>
         );
       });
-      return [...colFormItems, this.createButton(count + 1)];
+      return [...colFormItems, this.createButton(count + 1, formItems.length)];
     },
     difference(newVal, oldVal) {
       const res = {};
