@@ -132,7 +132,7 @@ export default {
       const target = {};
       list.forEach(x => {
         let { initialValue, type, fieldName } = x;
-        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT') {
+        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT' || type === 'MULTIPLE_CHECKBOX') {
           initialValue = initialValue || [];
         }
         // 设置 initialValue 为响应式数据
@@ -151,11 +151,11 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, unit, readonly, disabled, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, focus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input v-model={form[fieldName]} placeholder={placeholder} readonly={readonly} disabled={disabled} style={{ ...style }} clearable onFocus={focus} nativeOnKeydown={this.enterEventHandle}>
-            {unit && <template slot="append">{unit}</template>}
+            {unitRender && <template slot="append">{unitRender()}</template>}
           </el-input>
         </el-form-item>
       );
@@ -174,6 +174,7 @@ export default {
             min={min}
             max={max}
             step={step}
+            clearable
             precision={precision}
           ></el-input-number>
         </el-form-item>
@@ -189,6 +190,7 @@ export default {
               <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
               <el-tree
                 ref="tree"
+                style={{ marginTop: '4px' }}
                 data={itemList}
                 props={this.treeProps}
                 defaultExpandAll={true}
@@ -264,6 +266,23 @@ export default {
         </el-form-item>
       );
     },
+    DATE_TIME(option) {
+      const { form } = this;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <el-date-picker
+            type="datetime"
+            v-model={form[fieldName]}
+            value-format={valueFormat}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            nativeOnKeydown={this.enterEventHandle}
+          />
+        </el-form-item>
+      );
+    },
     RANGE_DATE(option) {
       const { form } = this;
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
@@ -290,6 +309,23 @@ export default {
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
+        </el-form-item>
+      );
+    },
+    MULTIPLE_CHECKBOX(option) {
+      const { form } = this;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
+            {itemList.map(x => {
+              return (
+                <el-checkbox key={x.value} label={x.value} disabled={disabled}>
+                  {x.text}
+                </el-checkbox>
+              );
+            })}
+          </el-checkbox-group>
         </el-form-item>
       );
     },
@@ -403,9 +439,10 @@ export default {
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
       const count = expand ? formItems.length : cols - 1;
+      const allColSpan = ['TEXT_AREA', 'MULTIPLE_CHECKBOX'];
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} span={Node.type !== 'TEXT_AREA' ? colSpan : 2 * colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} span={allColSpan.includes(Node.type) ? 24 : colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );
@@ -469,6 +506,9 @@ export default {
         line-height: 30px;
       }
     }
+  }
+  .el-form-item__label {
+    font-size: @textSizeSecondary;
   }
   .el-select {
     width: 100%;

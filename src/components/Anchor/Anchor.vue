@@ -37,6 +37,7 @@ export default {
     init() {
       this.scroll = new Scroll(this.$refs.scroll, {
         click: true,
+        bounce: false,
         scrollX: false,
         scrollY: true,
         observeDom: true,

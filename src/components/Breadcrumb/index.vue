@@ -39,7 +39,7 @@ export default {
 <style lang="less">
 .breadcrumb-wrap {
   display: flex;
-  padding: @modulePadding;
+  padding: @modulePadding 0;
   .el-breadcrumb__item {
     .is-link {
       color: @textColor;

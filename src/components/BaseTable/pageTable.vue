@@ -1220,6 +1220,14 @@ export default {
     bindDocumentEvent() {
       document.addEventListener('click', this.documentEventHandle, false);
     },
+    // 鼠标滚轮事件的处理方法
+    mouseWheelEventHandle(e) {
+      e.stopPropagation();
+    },
+    // 绑定 table 内容区的鼠标滚轮事件
+    bindMouseWheelEvent() {
+      this.tableBody.parentNode.addEventListener('mousewheel', this.mouseWheelEventHandle, false);
+    },
     // 查找祖先节点
     findParents(el, parent) {
       let bool = false;
@@ -1403,6 +1411,7 @@ export default {
     this.bindWindowResizeEvent();
     this.bindkeyboardEvent();
     this.bindDocumentEvent();
+    this.bindMouseWheelEvent();
     this.$nextTick(this.calcTableHeight);
   },
   beforeDestroy() {
@@ -1410,6 +1419,7 @@ export default {
     window.removeEventListener('resize', this.calcTableHeight);
     document.removeEventListener('keydown', this.keyboardEventHandle);
     document.removeEventListener('click', this.documentEventHandle);
+    this.tableBody.parentNode.removeEventListener('mousewheel', this.mouseWheelEventHandle);
   },
   render() {
     const {
