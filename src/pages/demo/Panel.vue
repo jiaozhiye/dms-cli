@@ -111,6 +111,64 @@ export default {
           placeholder: '请输入数量...',
           initialValue: undefined,
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]
+        },
+        {
+          type: 'INPUT_TREE',
+          label: '所属机构',
+          fieldName: 'tid',
+          placeholder: '所属机构',
+          itemList: [
+            {
+              value: 1,
+              text: '一级 1',
+              children: [
+                {
+                  value: 4,
+                  text: '二级 1-1',
+                  children: [
+                    {
+                      value: 9,
+                      text: '三级 1-1-1'
+                    },
+                    {
+                      value: 10,
+                      text: '三级 1-1-2'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              value: 2,
+              text: '一级 2',
+              children: [
+                {
+                  value: 5,
+                  text: '二级 2-1'
+                },
+                {
+                  value: 6,
+                  text: '二级 2-2'
+                }
+              ]
+            },
+            {
+              value: 3,
+              text: '一级 3',
+              children: [
+                {
+                  value: 7,
+                  text: '二级 3-1'
+                },
+                {
+                  value: 8,
+                  text: '二级 3-2'
+                }
+              ]
+            }
+          ],
+          rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }],
+          disabled: true
         }
       ];
     },

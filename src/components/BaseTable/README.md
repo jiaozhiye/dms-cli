@@ -134,6 +134,7 @@ http://localhost:8080/table
 - editRequired{Boolean|校验单元格是否必填，表头标题会有红色星号提示}
 - editPattern{RegExp|单元格内容格式校验，/^[0-9a-zA-Z ]+\$/}
 - editItems{Array|select 类型的单元格编辑下拉框的数据，[{text: '', value: ''}]}
+- disabled{Boolean|指定可编辑单元格的禁用状态，默认是 false}
 - editDisableRender{Function|可编辑的单元格在强制指定不可编辑状态下的渲染函数，参数是当前单元格作用域对象，返回值是 JSX 类型节点}
 - searchHelper{Object|单元格搜索帮助}
   - 搜索帮助的配置：

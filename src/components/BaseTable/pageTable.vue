@@ -364,6 +364,7 @@ export default {
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder="请选择"
+            disabled={column.disabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -385,6 +386,7 @@ export default {
             placeholder="选择日期"
             format={dateFormat}
             value-format="yyyy-MM-dd HH:mm:ss"
+            disabled={column.disabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -401,6 +403,7 @@ export default {
           size="mini"
           maxlength={column.maxlength}
           value={prevValue}
+          disabled={column.disabled}
           onInput={val => {
             // 单元格正则校验
             if (_.isRegExp(column.editPattern)) {
@@ -819,10 +822,11 @@ export default {
         this.loading = true;
         try {
           const res = await this.fetchapi(this.fetchParams);
-          if (res.resultCode === 200) {
-            // 构建表格数据
-            this.createTableList(res.data);
-          }
+          // if (res.resultCode === 200) {
+          //   this.createTableList(res.data);
+          // }
+          // 构建表格数据
+          this.createTableList(res);
         } catch (e) {
           this.createTableList({});
         }

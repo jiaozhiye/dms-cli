@@ -151,10 +151,20 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, focus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-input v-model={form[fieldName]} placeholder={placeholder} readonly={readonly} disabled={disabled} style={{ ...style }} clearable onFocus={focus} nativeOnKeydown={this.enterEventHandle}>
+          <el-input
+            v-model={form[fieldName]}
+            placeholder={placeholder}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ ...style }}
+            clearable
+            onChange={change}
+            onFocus={focus}
+            nativeOnKeydown={this.enterEventHandle}
+          >
             {unitRender && <template slot="append">{unitRender()}</template>}
           </el-input>
         </el-form-item>
@@ -162,7 +172,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, focus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input-number
@@ -176,13 +186,15 @@ export default {
             step={step}
             clearable
             precision={precision}
+            onChange={change}
+            onFocus={focus}
           ></el-input-number>
         </el-form-item>
       );
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled } = option;
+      const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
         <el-form-item ref={fieldName} label={label} prop={fieldName}>
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
@@ -206,7 +218,9 @@ export default {
               readonly={readonly}
               disabled={disabled}
               clearable
+              style={disabled && { pointerEvents: 'none' }}
               onClear={() => this.treeInputClearHandle(fieldName)}
+              onChange={change}
               nativeOnKeydown={this.enterEventHandle}
             ></el-input>
           </el-popover>
@@ -215,7 +229,7 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, request = {}, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-autocomplete
@@ -224,6 +238,7 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             clearable
+            onChange={change}
             nativeOnKeydown={this.enterEventHandle}
             fetchSuggestions={(queryString, cb) => this.querySearchAsync(request, fieldName, queryString, cb)}
           />
@@ -246,10 +261,10 @@ export default {
     },
     MULTIPLE_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable>
+          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
