@@ -2,23 +2,6 @@
   A Vue BasePrint Component by jzy
 </h1>
 
-## Build Setup
-
-```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:8080
-$ npm run dev
-
-# build for production with minification
-$ npm run build
-
-# 演示路由
-http://localhost:8080/print
-http://localhost:8080/template
-```
-
 ## 说明文档
 
 1. element-ui >= 2.8.0 版本
@@ -32,7 +15,7 @@ http://localhost:8080/template
 `BasePrint 打印组件参数`
 
 - data{Object|打印的数据}
-- template{String|调用的打印模板名称}
+- template{String|调用的打印模板路径，默认前缀为: @/pages/printTemplate/}
 - direction{String|打印方向 vertical/horizontal，默认为纵向打印 vertical}
 
 `PrintTemplate 模板组件参数`
@@ -45,4 +28,32 @@ http://localhost:8080/template
 ```
 在打印模板文件中，需要分页的位置插入分页符，示例：
 <div style="page-break-after: always">&nbsp;</div>
+```
+
+`BasePrint 组件暴露的方法`
+
+- EXCUTE_PRINT{Function|开始执行打印}
+
+`示例代码`
+
+```bash
+# template
+<template>
+  <el-button @click="printHandler">打印</el-button>
+  <BasePrint ref="print" :data="printList" template="template1" />
+</template>
+
+# js
+export default {
+  data() {
+    return {
+      printList: {}
+    };
+  },
+  methods: {
+    printHandler() {
+      this.$refs.print.EXCUTE_PRINT();
+    }
+  }
+};
 ```

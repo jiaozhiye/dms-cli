@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-05-06 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-08-14 16:59:25
  **/
 import _ from 'lodash';
 
@@ -151,7 +151,7 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input
@@ -162,17 +162,17 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            onFocus={focus}
+            onFocus={onFocus}
             nativeOnKeydown={this.enterEventHandle}
           >
-            {unitRender && <template slot="append">{unitRender()}</template>}
+            {unitRender && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
           </el-input>
         </el-form-item>
       );
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input-number
@@ -187,7 +187,8 @@ export default {
             clearable
             precision={precision}
             onChange={change}
-            onFocus={focus}
+            onFocus={onFocus}
+            nativeOnKeydown={this.enterEventHandle}
           ></el-input-number>
         </el-form-item>
       );
@@ -277,7 +278,7 @@ export default {
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} nativeOnKeydown={this.enterEventHandle} />
+          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },
@@ -286,15 +287,7 @@ export default {
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker
-            type="datetime"
-            v-model={form[fieldName]}
-            value-format={valueFormat}
-            placeholder={placeholder}
-            disabled={disabled}
-            style={{ ...style }}
-            nativeOnKeydown={this.enterEventHandle}
-          />
+          <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },

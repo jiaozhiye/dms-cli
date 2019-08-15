@@ -64,7 +64,6 @@ export default {
   }
   .action {
     height: 60px;
-    width: 200px;
   }
 }
 </style>

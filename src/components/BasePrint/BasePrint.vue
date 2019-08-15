@@ -8,7 +8,7 @@
 import { getLodop } from './LodopFuncs';
 
 export default {
-  name: 'base-print',
+  name: 'BasePrint',
   props: {
     template: {
       type: String,
@@ -29,7 +29,8 @@ export default {
   },
   data() {
     return {
-      LODOP: getLodop()
+      LODOP: getLodop(),
+      state: 'stop'
     };
   },
   methods: {
@@ -67,14 +68,25 @@ export default {
           onPrintTable: this.getPrintTable
         }
       });
+    },
+    EXCUTE_PRINT() {
+      this.state = 'start';
+      setTimeout(() => (this.state = 'stop'), 500);
     }
   },
   created() {
     // 动态加载组件
-    this.$options.component = () => import(`./template/${this.template}.vue`);
+    this.$options.component = () => import(`@/pages/printTemplate/${this.template}.vue`);
   },
   render(h) {
-    return <div>{this.createPrintComponent(h)}</div>;
+    const vNode = this.state === 'start' ? this.createPrintComponent(h) : null;
+    return <div class="print-wrap">{vNode}</div>;
   }
 };
 </script>
+
+<style lang="less" scoped>
+.print-wrap {
+  visibility: hidden;
+}
+</style>

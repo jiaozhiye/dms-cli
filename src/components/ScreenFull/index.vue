@@ -52,7 +52,7 @@ export default {
 .screen-full {
   .screenfull-svg {
     display: inline-block;
-    padding: @modulePadding;
+    padding: 5px;
     font-size: 18px;
     fill: @textColor;
     cursor: pointer;

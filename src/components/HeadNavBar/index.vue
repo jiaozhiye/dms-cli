@@ -1,27 +1,37 @@
 <template>
   <div class="actions">
     <ScreenFull />
-    <div class="setting" @click="clickHandle">个人中心</div>
+    <NoticePanel />
+    <PersonalCenter />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { getUser, removeToken, removeUser } from '@/assets/js/auth';
 import ScreenFull from '@/components/ScreenFull';
+import NoticePanel from './NoticePanel';
+import PersonalCenter from './PersonalCenter';
 
 export default {
-  name: 'HeadAction',
+  name: 'HeadNavBar',
   data() {
-    return {};
+    return {
+      username: getUser()
+    };
   },
   methods: {
-    ...mapActions('app', ['refreshView']),
-    clickHandle() {
-      this.refreshView(this.$route.path);
+    logoutHandle() {
+      // 需要走后台推出接口
+      // ...
+      removeToken();
+      removeUser();
+      this.$router.push({ path: '/login' });
     }
   },
   components: {
-    ScreenFull
+    ScreenFull,
+    NoticePanel,
+    PersonalCenter
   }
 };
 </script>
@@ -32,12 +42,5 @@ export default {
   margin-right: @moduleMargin;
   display: flex;
   align-items: center;
-  .setting {
-    width: 100%;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    background: #e3e3e3;
-  }
 }
 </style>

@@ -23,7 +23,7 @@ Vue.use(FormPanel);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
@@ -33,7 +33,8 @@ Vue.use(FormPanel);
 - readonly{Boolean|是否只读}
 - disabled{Boolean|禁用}
 - numberFormat{Boolean|指定金融类数值格式，100,000,000, 只对 INPUT 有效}
-- focus{Function|输入框获得焦点的回调}
+- onFocus{Function|输入框获得焦点的事件}
+- onEnter{Function|输入框回车的事件}
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
 - maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
@@ -48,6 +49,17 @@ Vue.use(FormPanel);
   - &emsp;params: {Object|接口的默认参数}
   - &emsp;datakey: {String|服务端响应数据的数组列表的 key，支持路径操作('step1.step2.items')，不指定表示 res.data 就是数组数据}
   - &emsp;fieldKey: {String|数据的字段名}
+- }
+
+`UPLOAD_IMG 配置项`
+
+- upload: {
+  - &emsp;actionUrl: {String|必选参数，上传的地址}
+  - &emsp;fixedSize: {Array|裁剪框的宽高比，[w, h]}
+  - &emsp;isCalcHeight: {Boolean|是否根据裁剪图片宽高比自动计算上传组件容器高度，默认值 false}
+  - &emsp;limit: {Number|支持上传图片的数量，默认是 1}
+  - &emsp;titles: {Array|图片对应的标题，元素的个数与 limit 一致}
+  - &emsp;tipText: {String|上传图片格式的提示文字}
 - }
 
 `组件暴露的方法`
@@ -71,6 +83,12 @@ export default {
     };
   },
   methods: {
+    validateFn(rule, value, callback) {
+      if (value.length < rule.limit) {
+        return callback(new Error(rule.message));
+      }
+      callback();
+    },
     createFormList() {
       return [
         {
@@ -89,11 +107,27 @@ export default {
           placeholder: '所属分类',
           itemList: [{ text: '热点', value: '1' }, { text: '资讯', value: '2' }],
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
+        },
+        {
+          type: 'UPLOAD_IMG',
+          label: '上传身份证',
+          fieldName: 'wayPicture',
+          placeholder: '上传身份证...',
+          rules: [
+            { required: true, message: '请上传上传身份证', trigger: 'change' },
+            { limit: 2, validator: this.validateFn, message: '请上传两个图片', trigger: 'change' }
+          ],
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            fixedSize: [5, 3],
+            limit: 2,
+            isCalcHeight: true
+          }
         }
       ];
     },
     changeHandle(val){
-      console.log('表单面板的数据：', val)
+      console.log('表单面板的数据：', val);
     }
   }
 };

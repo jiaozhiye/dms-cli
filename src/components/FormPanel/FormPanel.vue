@@ -2,10 +2,11 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-05-06 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-08-14 17:02:51
  **/
 import _ from 'lodash';
+import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
 
 export default {
   name: 'FormPanel',
@@ -134,7 +135,7 @@ export default {
         if (this.formType === 'show') {
           x.disabled = true;
         }
-        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT' || type === 'MULTIPLE_CHECKBOX') {
+        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT' || type === 'MULTIPLE_CHECKBOX' || type === 'UPLOAD_IMG') {
           initialValue = initialValue || [];
         }
         if (type === 'INPUT' && x.numberFormat) {
@@ -156,7 +157,7 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {}, onEnter } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input
@@ -167,17 +168,17 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            onFocus={focus}
-            nativeOnKeydown={this.enterEventHandle}
+            onFocus={onFocus}
+            nativeOnKeydown={e => this.keydownHandle(e, onEnter)}
           >
-            {unitRender && <template slot="append">{unitRender()}</template>}
+            {unitRender && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
           </el-input>
         </el-form-item>
       );
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, focus = () => {} } = option;
+      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input-number
@@ -192,7 +193,7 @@ export default {
             clearable
             precision={precision}
             onChange={change}
-            onFocus={focus}
+            onFocus={onFocus}
           ></el-input-number>
         </el-form-item>
       );
@@ -226,7 +227,6 @@ export default {
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => this.treeInputClearHandle(fieldName)}
               onChange={change}
-              nativeOnKeydown={this.enterEventHandle}
             ></el-input>
           </el-popover>
         </el-form-item>
@@ -244,7 +244,6 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            nativeOnKeydown={this.enterEventHandle}
             fetchSuggestions={(queryString, cb) => this.querySearchAsync(request, fieldName, queryString, cb)}
           />
         </el-form-item>
@@ -255,7 +254,7 @@ export default {
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change} nativeOnKeydown={this.enterEventHandle}>
+          <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {/* <el-option key="-" label="全部" value="0" /> */}
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -282,7 +281,7 @@ export default {
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} nativeOnKeydown={this.enterEventHandle} />
+          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },
@@ -291,15 +290,7 @@ export default {
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item label={label} prop={fieldName}>
-          <el-date-picker
-            type="datetime"
-            v-model={form[fieldName]}
-            value-format={valueFormat}
-            placeholder={placeholder}
-            disabled={disabled}
-            style={{ ...style }}
-            nativeOnKeydown={this.enterEventHandle}
-          />
+          <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },
@@ -355,6 +346,29 @@ export default {
       return (
         <el-form-item label={label} prop={fieldName}>
           <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
+        </el-form-item>
+      );
+    },
+    UPLOAD_IMG(option) {
+      const { form } = this;
+      const { label, fieldName, upload = {}, style = {}, placeholder, disabled } = option;
+      return (
+        <el-form-item label={label} prop={fieldName}>
+          <UploadCropper
+            actionUrl={upload.actionUrl}
+            initialValue={form[fieldName]}
+            style={{ ...style }}
+            fixedSize={upload.fixedSize}
+            isCalcHeight={upload.isCalcHeight}
+            limit={upload.limit || 1}
+            titles={upload.titles}
+            tipText={upload.tipText}
+            disabled={disabled}
+            onSuccess={val => {
+              this.form[fieldName] = val;
+              this.$refs.form.validateField(fieldName);
+            }}
+          />
         </el-form-item>
       );
     },
@@ -416,9 +430,9 @@ export default {
         return VNode;
       });
     },
-    enterEventHandle(ev) {
-      if (ev.keyCode !== 13) return;
-      this.submitForm(ev);
+    keydownHandle(e, callback) {
+      if (e.keyCode !== 13) return;
+      callback && callback(e.target.value);
     },
     submitForm(ev) {
       ev && ev.preventDefault();

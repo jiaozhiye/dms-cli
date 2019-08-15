@@ -43,12 +43,19 @@ export default {
   },
   methods: {
     loadComponent(tab, ev) {
-      ev && ev.stopPropagation();
-      tab && this.$emit('tab-click', tab, ev);
       this.$emit('input', this.activeName);
-      if (this.$options.components[this.activeName]) return;
+      const { path } = this.tabMenus.find(x => x.title === this.activeName);
+      // if (this.$options.components[this.activeName]) return;
       // 动态加载组件
-      this.$options.components[this.activeName] = () => import(`@/${this.pathFix}/${this.tabMenus.find(x => x.title === this.activeName).path}.vue`);
+      this.$options.components[this.activeName] = () => import(`@/${this.pathFix}/${path}.vue`);
+      if (tab) {
+        this.$emit('tab-click', tab);
+      }
+      this.$nextTick(() => {
+        if (!this.destroyOnClose) {
+          this.$refs[this.activeName].isLoaded = true;
+        }
+      });
     },
     createTabPanel(h) {
       return this.tabMenus.map(x => {
@@ -58,7 +65,7 @@ export default {
           on: x.on
         });
         return (
-          <el-tab-pane key={x.title} label={x.title} name={x.title} lazy>
+          <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} lazy>
             {this.destroyOnClose && x.title === this.activeName ? component : null}
             {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : null}
           </el-tab-pane>

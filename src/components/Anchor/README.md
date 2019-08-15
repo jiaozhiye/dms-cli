@@ -17,6 +17,10 @@ Vue.use(Anchor);
 - labelList{Array|锚点选项卡的数据列表}
 - labelWidth{Number|左侧 Label 标签的宽度}
 
+`组件暴露的方法`
+
+- REFRESH{Function|重新计算 Scroll 组件}
+
 `示例代码`
 
 ```bash

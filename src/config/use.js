@@ -37,6 +37,9 @@ Vue.use(BaseDialog);
 import LazyLoadTab from '@/components/LazyLoadTab';
 Vue.use(LazyLoadTab);
 
+import BasePrint from '@/components/BasePrint';
+Vue.use(BasePrint);
+
 import ButtonArea from '@/components/ButtonArea';
 Vue.use(ButtonArea);
 

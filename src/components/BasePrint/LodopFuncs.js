@@ -74,7 +74,7 @@ export function getLodop(oOBJECT, oEMBED) {
         LODOP = getCLodop();
       } catch (err) {}
       if (!LODOP && document.readyState !== 'complete') {
-        Message.warning('网页还没下载完毕，请稍等一下再操作.');
+        Message.warning('打印组件还没有加载完毕，请稍等一下再操作');
         return;
       }
       if (!LODOP) {

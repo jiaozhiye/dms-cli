@@ -26,7 +26,7 @@
       </template>
       <template slot="controls" slot-scope="props">
         <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
-        <el-button size="small" icon="el-icon-printer">打印</el-button>
+        <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>
     </FilterTable>
     <Drawer
@@ -38,12 +38,14 @@
     >
       <Panel @close="closeHandler" />
     </Drawer>
+    <BasePrint ref="print" :data="printList" template="template1" />
   </div>
 </template>
 
 <script>
 import { authority } from '@/utils/authMixin';
 import res from '@/mock/tableData';
+import printData from '@/mock/printData';
 import Panel from './Panel';
 
 export default {
@@ -58,7 +60,8 @@ export default {
       visible: false,
       topFilterList: this.createTopFilters(),
       columns: this.createTableColumns(),
-      list: [...res.data.items]
+      list: [...res.data.items],
+      printList: printData.data
     };
   },
   methods: {
@@ -297,6 +300,9 @@ export default {
     },
     closeHandler(val) {
       this.visible = val;
+    },
+    printHandler() {
+      this.$refs.print.EXCUTE_PRINT();
     }
   },
   mounted() {

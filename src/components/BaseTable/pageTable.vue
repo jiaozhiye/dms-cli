@@ -364,7 +364,7 @@ export default {
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder="请选择"
-            disabled={column.disabled}
+            disabled={column.disabled || props.row.isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -386,7 +386,7 @@ export default {
             placeholder="选择日期"
             format={dateFormat}
             value-format="yyyy-MM-dd HH:mm:ss"
-            disabled={column.disabled}
+            disabled={column.disabled || props.row.isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -403,7 +403,7 @@ export default {
           size="mini"
           maxlength={column.maxlength}
           value={prevValue}
-          disabled={column.disabled}
+          disabled={column.disabled || props.row.isDisabled}
           onInput={val => {
             // 单元格正则校验
             if (_.isRegExp(column.editPattern)) {
@@ -454,6 +454,7 @@ export default {
         dataIndex,
         searchHelper: { aliasKey, supportInput }
       } = column;
+      const prevValue = _.get(props.row, dataIndex);
       return (
         <el-autocomplete
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
@@ -461,7 +462,8 @@ export default {
           popper-class="autocomplete"
           maxlength={column.maxlength}
           style={{ width: '100%' }}
-          value={_.get(props.row, dataIndex)}
+          value={prevValue}
+          disabled={column.disabled || props.row.isDisabled}
           onInput={val => _.set(props.row, dataIndex, val)}
           onSelect={val => this.syncAllCellValue(val, props.row, column)}
           fetchSuggestions={(queryString, cb) => this.querySearchAsync(column, props.row, queryString, cb)}
@@ -614,10 +616,7 @@ export default {
             ? {
                 scopedSlots: {
                   default: props => {
-                    let res = _.get(props.row, x.dataIndex);
-                    res = this.numberFormat(x, res);
-                    res = this.dateFormat(x, res);
-                    return this.createCellNode(res, [], x.showOverflowTooltip);
+                    return this.createCellNode(this.editedScopedRender(x, props), [], x.showOverflowTooltip);
                   }
                 }
               }
@@ -822,11 +821,10 @@ export default {
         this.loading = true;
         try {
           const res = await this.fetchapi(this.fetchParams);
-          // if (res.resultCode === 200) {
-          //   this.createTableList(res.data);
-          // }
-          // 构建表格数据
-          this.createTableList(res);
+          if (res.resultCode === 200) {
+            // 构建表格数据
+            this.createTableList(res.data);
+          }
         } catch (e) {
           this.createTableList({});
         }
@@ -1224,14 +1222,6 @@ export default {
     bindDocumentEvent() {
       document.addEventListener('click', this.documentEventHandle, false);
     },
-    // 鼠标滚轮事件的处理方法
-    mouseWheelEventHandle(e) {
-      e.stopPropagation();
-    },
-    // 绑定 table 内容区的鼠标滚轮事件
-    bindMouseWheelEvent() {
-      this.tableBody.parentNode.addEventListener('mousewheel', this.mouseWheelEventHandle, false);
-    },
     // 查找祖先节点
     findParents(el, parent) {
       let bool = false;
@@ -1300,9 +1290,11 @@ export default {
         // 修改 total 数量
         this.pagination.total += 1;
       });
-      this.$nextTick(() => {
-        this.scrollTopToPosition(10000);
-      });
+      if (rows.length && this.list.length) {
+        this.$nextTick(() => {
+          this.scrollTopToPosition(10000);
+        });
+      }
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -1415,7 +1407,6 @@ export default {
     this.bindWindowResizeEvent();
     this.bindkeyboardEvent();
     this.bindDocumentEvent();
-    this.bindMouseWheelEvent();
     this.$nextTick(this.calcTableHeight);
   },
   beforeDestroy() {
@@ -1423,7 +1414,6 @@ export default {
     window.removeEventListener('resize', this.calcTableHeight);
     document.removeEventListener('keydown', this.keyboardEventHandle);
     document.removeEventListener('click', this.documentEventHandle);
-    this.tableBody.parentNode.removeEventListener('mousewheel', this.mouseWheelEventHandle);
   },
   render() {
     const {
@@ -1432,6 +1422,7 @@ export default {
       columnInfo,
       loading,
       list,
+      height,
       tableHeight,
       selectionRows,
       isSelectColumn,
@@ -1481,7 +1472,7 @@ export default {
           ref="appTable"
           size="mini"
           border
-          height={tableHeight}
+          height={height !== 'auto' ? tableHeight : height}
           style={{ width: '100%' }}
           data={list}
           row-key={record => record._uid}

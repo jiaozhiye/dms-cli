@@ -9,6 +9,7 @@
       :multiple="false"
       :auto-upload="false"
       :show-file-list="false"
+      :disabled="disabled"
       :on-change="changeHandler"
       :http-request="upload"
     >
@@ -19,12 +20,13 @@
         @click.stop
       >
         <img class="img" :src="imgUrl" alt />
+        <h5 class="title" v-if="!!titles[index]">{{ titles[index] }}</h5>
         <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-dot" @click="handlePreview(index)">
-            <i class="el-icon-zoom-in"></i>
+          <span class="el-upload-list__item-dot">
+            <i class="el-icon-zoom-in" @click="handlePreview(index)"></i>
           </span>
-          <span class="el-upload-list__item-dot" @click="handleRemove(index)">
-            <i class="el-icon-delete"></i>
+          <span class="el-upload-list__item-dot">
+            <i class="el-icon-delete" @click="handleRemove(index)"></i>
           </span>
         </span>
       </div>
@@ -34,20 +36,21 @@
         class="upload-icon-plus el-upload-list__item"
       >
         <i class="el-icon-plus"></i>
+        <span>{{ titles[imgUrlArr.length] }}</span>
       </div>
       <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
-    <el-dialog custom-class="dialog-wrap" title="图片预览" :visible.sync="dialogVisible">
+    <BaseDialog customClass="dialog-wrap" :visible.sync="dialogVisible" title="图片预览">
       <img class="img" :src="dialogImageUrl" alt />
-    </el-dialog>
+    </BaseDialog>
     <!-- 剪裁组件弹窗 -->
-    <el-dialog
-      custom-class="dialog-wrap"
-      title="图片裁剪"
+    <BaseDialog
+      customClass="dialog-wrap"
       :visible.sync="cropperModel"
-      width="800px"
-      :before-close="beforeClose"
+      title="图片裁剪"
+      width="800"
+      @close="beforeClose"
     >
       <CropperPanel
         ref="uploadCropper"
@@ -55,7 +58,7 @@
         :fixed-number="fixedSize"
         @upload="uploadHandler"
       ></CropperPanel>
-    </el-dialog>
+    </BaseDialog>
   </div>
 </template>
 
@@ -89,9 +92,17 @@ export default {
       type: Number,
       default: 1
     },
+    titles: {
+      type: Array,
+      default: () => []
+    },
     tipText: {
       type: String,
       default: '只能上传 jpg/png/bmp 文件'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -116,7 +127,7 @@ export default {
     imgUrlArr(val) {
       this.$emit('success', val);
       // 取消表单校验
-      if (val.length && this.$parent.clearValidate) {
+      if (val.length === this.limit && this.$parent.clearValidate) {
         this.$parent.clearValidate();
       }
     }
@@ -212,6 +223,9 @@ export default {
 .upload-wrap {
   width: 100%;
   float: left;
+  & > div {
+    display: inline-block;
+  }
   .el-upload--picture-card {
     display: flex;
     width: 100% !important;
@@ -229,6 +243,18 @@ export default {
       background-color: #fff;
       border: 1px dashed #c0ccda;
       overflow: hidden;
+      .title {
+        position: absolute;
+        width: 100%;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.6);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        line-height: 20px;
+        color: #fff;
+        font-size: 12px;
+      }
       .img {
         display: block;
         max-width: 100%;

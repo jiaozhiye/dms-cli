@@ -5,8 +5,6 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
-import Scroll from './scroll';
-
 export default {
   name: 'Anchor',
   props: {
@@ -34,30 +32,6 @@ export default {
     };
   },
   methods: {
-    init() {
-      this.scroll = new Scroll(this.$refs.scroll, {
-        click: true,
-        bounce: false,
-        scrollX: false,
-        scrollY: true,
-        observeDom: true,
-        mouseWheel: {
-          speed: 2,
-          invert: false,
-          easeTime: 300
-        },
-        probeType: 3
-      });
-      this.scroll.on('scroll', ({ y }) => {
-        if (this.state === 'stop') return;
-        let index = this.findCurIndex(y);
-        if (index === -1) return;
-        this.syncLabelKey(index);
-      });
-      this.scroll.on('scrollEnd', ({ y }) => {
-        this.state = 'ready';
-      });
-    },
     createActiveKey() {
       let key = this.activeId;
       if (!key && this.labelList.length) {
@@ -84,10 +58,39 @@ export default {
       e.stopPropagation();
       this.state = 'stop';
       this.activeKey = key;
-      this.scroll.scrollToElement(document.getElementById(key), 300);
+      if (this.isIE()) {
+        this.scroll.scrollTop = document.getElementById(key).offsetTop;
+      } else {
+        this.scroll.scrollTo({ top: document.getElementById(key).offsetTop, behavior: 'smooth' });
+        setTimeout(() => {
+          this.state = 'ready';
+        }, 400);
+      }
     },
     setPositionArr() {
       this.posArr = this.labelList.map(x => document.getElementById(x.id).offsetTop);
+    },
+    // 函数防抖
+    debounce(fn, delay) {
+      return function(...args) {
+        fn.timer && clearTimeout(fn.timer);
+        fn.timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    },
+    bindScrollEvent() {
+      this.scroll.addEventListener('scroll', this.scrollEventHandle, false);
+    },
+    scrollEventHandle(e) {
+      this.debounce(this.moveHandle, 20)(e);
+    },
+    createScrollDom() {
+      this.scroll = this.$refs.scroll;
+    },
+    moveHandle(e) {
+      if (this.state !== 'ready') return;
+      let index = this.findCurIndex(e.target.scrollTop);
+      if (index === -1) return;
+      this.syncLabelKey(index);
     },
     createLabel() {
       if (!this.labelList.length) return null;
@@ -101,25 +104,30 @@ export default {
           {LabelItems}
         </div>
       );
+    },
+    isIE() {
+      return !!window.ActiveXObject || 'ActiveXObject' in window;
+    },
+    // 组件向外公开露的方法
+    REFRESH() {
+      this.setPositionArr();
     }
   },
   mounted() {
-    this.init();
+    this.createScrollDom();
     this.setPositionArr();
+    this.bindScrollEvent();
   },
   beforeDestroy() {
     // 移除事件监听
-    this.scroll.off('scroll');
-    this.scroll.off('scrollEnd');
-    // 销毁滚动对象
-    this.scroll.destroy();
+    this.scroll.removeEventListener('scroll', this.scrollEventHandle);
   },
   render() {
     return (
       <div class="anchor-wrap">
         {this.createLabel()}
         <div class="scroll-wrapper" ref="scroll">
-          <div class="scroll-content">{this.$slots['default']}</div>
+          {this.$slots['default']}
         </div>
       </div>
     );
@@ -161,9 +169,12 @@ export default {
   }
   .scroll-wrapper {
     flex: 1;
+    margin-right: -10px;
+    padding-right: 10px;
     height: 100%;
     position: relative;
-    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: auto;
   }
 }
 </style>
