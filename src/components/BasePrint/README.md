@@ -17,6 +17,7 @@
 - data{Object|打印的数据}
 - template{String|调用的打印模板路径，默认前缀为: @/pages/printTemplate/}
 - direction{String|打印方向 vertical/horizontal，默认为纵向打印 vertical}
+- alwaysPrint{Boolean|是否为连续无分页打印，默认 false}
 
 `PrintTemplate 模板组件参数`
 

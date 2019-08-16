@@ -19,6 +19,10 @@ export default {
       type: String,
       default: 'vertical'
     },
+    alwaysPrint: {
+      type: Boolean,
+      default: false
+    },
     data: {
       type: Object,
       required: true,
@@ -43,19 +47,24 @@ export default {
       }
       this.LODOP.PRINT_INIT('打印表格');
       if (this.direction === 'vertical') {
-        this.LODOP.SET_PRINT_PAGESIZE(3, '210mm', '10mm', '');
+        if (this.alwaysPrint) {
+          // 10mm -> 打印的下边距
+          this.LODOP.SET_PRINT_PAGESIZE(3, '210mm', '10mm', '');
+        } else {
+          this.LODOP.SET_PRINT_PAGESIZE(1, '210mm', '297mm', '');
+        }
       }
       if (this.direction === 'horizontal') {
         this.LODOP.SET_PRINT_PAGESIZE(2, '210mm', '297mm', '');
         this.LODOP.SET_SHOW_MODE('LANDSCAPE_DEFROTATED', 1);
       }
-      this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'width: 100.3%'); // 设置打印内容的自动缩放
+      this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'width: 100%'); // 设置打印内容的自动缩放
       this.LODOP.SET_PRINT_MODE('AUTO_CLOSE_PREWINDOW', 1); // 设置设置完打印后 是否关闭预览窗口;
       // 正则处理分页符，vue 的 template 把 page-break-after 改成了 break-after，
       // 因此需要替换回来
       const RegExp = /break-after:\s*page/g;
       const pageBreakStyle = 'page-break-after: always';
-      this.LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', printHTML.replace(RegExp, pageBreakStyle));
+      this.LODOP.ADD_PRINT_HTM(0, 10, 'RightMargin: 5', 'BottomMargin: 5', printHTML.replace(RegExp, pageBreakStyle));
       this.LODOP.PREVIEW();
     },
     createPrintComponent(h) {

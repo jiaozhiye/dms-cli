@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Notice from '@/pages/Notice/index';
+import Notice from '@/pages/notice/index';
 
 export default {
   name: 'NoticePanel',
