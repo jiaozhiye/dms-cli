@@ -45,3 +45,6 @@ Vue.use(ButtonArea);
 
 import Anchor from '@/components/Anchor';
 Vue.use(Anchor);
+
+import Tinymce from '@/components/Tinymce';
+Vue.use(Tinymce);

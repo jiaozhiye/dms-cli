@@ -8,7 +8,9 @@
         <div class="line" id="row-02">
           <el-button @click="visible = true">三级交互</el-button>
         </div>
-        <div class="line" id="row-03">第三行</div>
+        <div class="line" id="row-03">
+          <tinymce v-model="content" :height="300" />
+        </div>
       </Anchor>
     </div>
     <div
@@ -49,7 +51,8 @@ export default {
     return {
       visible: false,
       labels: [{ title: '选项卡1', id: 'row-01' }, { title: '选项卡2', id: 'row-02' }, { title: '选项卡3', id: 'row-03' }],
-      formList: this.createFormList()
+      formList: this.createFormList(),
+      content: 'qwe'
     };
   },
   methods: {
