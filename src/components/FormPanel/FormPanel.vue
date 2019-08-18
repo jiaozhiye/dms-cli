@@ -510,9 +510,9 @@ export default {
       return this.list.map(item => {
         const VNode = !this[item.type] ? null : this[item.type](item);
         VNode['type'] = item.type;
-        VNode['cols'] = item.cols;
-        VNode['offsetLeft'] = item.offsetLeft;
-        VNode['offsetRight'] = item.offsetRight;
+        VNode['cols'] = item.selfCols;
+        VNode['offsetLeft'] = item.offsetLeftCols;
+        VNode['offsetRight'] = item.offsetRightCols;
         return VNode;
       });
     },
