@@ -484,6 +484,9 @@ export default {
       }
       return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
     },
+    toPercent(num) {
+      return Number(num * 100).toFixed(5) + '%';
+    },
     createSerachHelperList(list, fieldKey) {
       return list.map(x => ({ value: x[fieldKey] }));
     },
@@ -507,6 +510,9 @@ export default {
       return this.list.map(item => {
         const VNode = !this[item.type] ? null : this[item.type](item);
         VNode['type'] = item.type;
+        VNode['cols'] = item.cols;
+        VNode['offsetLeft'] = item.offsetLeft;
+        VNode['offsetRight'] = item.offsetRight;
         return VNode;
       });
     },
@@ -555,8 +561,11 @@ export default {
       const formItems = this.createFormItem().filter(item => item !== null);
       const allColSpan = ['TEXT_AREA', 'MULTIPLE_CHECKBOX'];
       const colFormItems = formItems.map((Node, i) => {
+        const spans = _.isUndefined(Node.cols) ? colSpan : Node.cols * colSpan;
+        const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
+        const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} span={allColSpan.includes(Node.type) ? 24 : colSpan}>
+          <el-col key={i} offset={offsetLeft} span={allColSpan.includes(Node.type) ? 24 : spans} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );

@@ -45,7 +45,7 @@ $ npm run build
 - 提供的组件
   - Anchor 锚点组件
   - ButtonArea 功能按钮区的容器组件
-  - Dialog 模态框组件，支持子组件的销毁
+  - BaseDialog 模态框组件，支持子组件的销毁
   - BaseTable 表格组件
   - Drawer 抽屉组件，支持子组件的销毁
   - LazyLoadTab 选项卡的按需/动态加载
@@ -53,6 +53,7 @@ $ npm run build
   - UploadCropper 图片上传组件，支持图片的裁剪和压缩
   - BasePrint 基于 Lodop 插件的打印组件
   - FormPanel 表单操作的功能组件
+  - Tinymce 富文本编辑器组件
 ```
 
 ## 目录结构

@@ -26,6 +26,9 @@ Vue.use(FormPanel);
 - type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
+- cols{Number|表单元素占据的列数}
+- offsetLeft{Number|表单元素左侧的间隔格数}
+- offsetRight{Number|表单元素右侧的间隔格数}
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
