@@ -23,7 +23,7 @@ Vue.use(FormPanel);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
@@ -61,6 +61,15 @@ Vue.use(FormPanel);
   - &emsp;titles: {Array|图片对应的标题，元素的个数与 limit 一致}
   - &emsp;tipText: {String|上传图片格式的提示文字}
 - }
+
+`UPLOAD_FILE 配置项`
+
+- upload: {
+  - &emsp;actionUrl: {String|必选参数，上传的地址}
+  - &emsp;limit: {Number|支持上传图片的数量，默认是 1}
+  - &emsp;tipText: {String|上传图片格式的提示文字}
+- }
+- 注意：关于附件上传前后端数据交互的格式为 {name: 'xxx', url: 'xxx'}，因此服务端返回的数据格式要满足 name, url 两个字段的格式，name 用于回显文件名
 
 `组件暴露的方法`
 
@@ -114,14 +123,27 @@ export default {
           fieldName: 'wayPicture',
           placeholder: '上传身份证...',
           rules: [
-            { required: true, message: '请上传上传身份证', trigger: 'change' },
-            { limit: 2, validator: this.validateFn, message: '请上传两个图片', trigger: 'change' }
+            { required: true, message: '请上传身份证', trigger: 'change' },
+            { limit: 2, validator: this.validateFn, message: '请上传两张图片', trigger: 'change' }
           ],
           upload: {
             actionUrl: '/api/file/oss/upload',
             fixedSize: [5, 3],
             limit: 2,
             isCalcHeight: true
+          }
+        },
+        {
+          type: 'UPLOAD_FILE',
+          label: '上传文件',
+          fieldName: 'wayFiles',
+          placeholder: '上传文件...',
+          rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
+          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            limit: 2,
+            tipText: '只能上传pdf格式'
           }
         }
       ];

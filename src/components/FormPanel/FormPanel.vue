@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-05-06 10:00:00
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-08-14 17:02:51
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-08-18 12:02:51
  **/
 import _ from 'lodash';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
@@ -78,6 +78,7 @@ export default {
       label: 'text'
     };
     this.prevForm = null;
+    this.arrayTypes = ['RANGE_DATE', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       treeFilterText: '',
       popoverVisible: false,
@@ -88,6 +89,11 @@ export default {
   created() {
     this.prevForm = { ...this.form };
   },
+  computed: {
+    fieldNames() {
+      return this.list.map(x => x.fieldName);
+    }
+  },
   watch: {
     list: {
       handler(val) {
@@ -95,6 +101,9 @@ export default {
           val.forEach(x => {
             if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
               let { initialValue, type, fieldName } = x;
+              if (this.arrayTypes.includes(type)) {
+                initialValue = initialValue || [];
+              }
               if (type === 'INPUT' && x.numberFormat) {
                 initialValue = this.formatNumber(initialValue);
               }
@@ -118,6 +127,10 @@ export default {
       },
       deep: true
     },
+    fieldNames() {
+      this.rules = this.createFormRule(this.list);
+      this.$nextTick(() => this.$refs.form.clearValidate());
+    },
     treeFilterText(val) {
       this.$refs.tree.filter(val);
     },
@@ -135,7 +148,7 @@ export default {
         if (this.formType === 'show') {
           x.disabled = true;
         }
-        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT' || type === 'MULTIPLE_CHECKBOX' || type === 'UPLOAD_IMG') {
+        if (this.arrayTypes.includes(type)) {
           initialValue = initialValue || [];
         }
         if (type === 'INPUT' && x.numberFormat) {
@@ -159,7 +172,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {}, onEnter } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -180,7 +193,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input-number
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -202,7 +215,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
-        <el-form-item ref={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} ref={fieldName} label={label} prop={fieldName}>
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
@@ -236,7 +249,7 @@ export default {
       const { form } = this;
       const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-autocomplete
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -253,7 +266,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {/* <el-option key="-" label="全部" value="0" /> */}
             {itemList.map(x => (
@@ -267,7 +280,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -278,19 +291,19 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
         </el-form-item>
       );
     },
     DATE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
-          <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
         </el-form-item>
       );
     },
@@ -298,7 +311,7 @@ export default {
       const { form } = this;
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-date-picker
             type="daterange"
             v-model={form[fieldName]}
@@ -318,7 +331,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
         </el-form-item>
       );
@@ -327,7 +340,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
             {itemList.map(x => {
               return (
@@ -340,11 +353,26 @@ export default {
         </el-form-item>
       );
     },
+    RADIO(option) {
+      const { form } = this;
+      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
+            {itemList.map(x => (
+              <el-radio key={x.value} label={x.value} disabled={disabled}>
+                {x.text}
+              </el-radio>
+            ))}
+          </el-radio-group>
+        </el-form-item>
+      );
+    },
     TEXT_AREA(option) {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
         </el-form-item>
       );
@@ -353,7 +381,7 @@ export default {
       const { form } = this;
       const { label, fieldName, upload = {}, style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <UploadCropper
             actionUrl={upload.actionUrl}
             initialValue={form[fieldName]}
@@ -372,6 +400,37 @@ export default {
         </el-form-item>
       );
     },
+    UPLOAD_FILE(option) {
+      const { form } = this;
+      const { label, fieldName, upload = {}, style = {}, placeholder, disabled } = option;
+      let { actionUrl, limit = 1, tipText } = upload;
+      tipText = !tipText ? '' : `${tipText}，`;
+      const uploadProps = {
+        props: {
+          action: actionUrl,
+          fileList: form[fieldName],
+          limit,
+          multiple: false,
+          withCredentials: true,
+          disabled,
+          beforeUpload: this.beforeUploadHandle,
+          onRemove: (file, fileList) => this.handleRemove(fieldName, file, fileList),
+          onSuccess: (res, file, fileList) => this.successHandle(fieldName, res, file, fileList)
+        }
+      };
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-upload ref="upload-file" {...uploadProps} style={{ ...style }}>
+            <el-button size="small" type="primary">
+              点击上传
+            </el-button>
+            <div slot="tip" class="el-upload__tip">
+              {`${tipText}文件大小不超过5M`}
+            </div>
+          </el-upload>
+        </el-form-item>
+      );
+    },
     // 获取搜索帮助数据
     async querySearchAsync(request, fieldName, queryString = '', cb) {
       const { fetchApi, params = {}, datakey = '', fieldKey } = request;
@@ -387,6 +446,27 @@ export default {
           cb(this.createSerachHelperList(dataList, fieldKey));
         }
       }
+    },
+    // 文件上传之前的校验
+    beforeUploadHandle(file) {
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        this.$notify({ title: '警告信息', message: '上传附件大小不能超过 5MB!', type: 'warning' });
+      }
+      return isLt5M;
+    },
+    // 文件被移除
+    handleRemove(fieldName, file, fileList) {
+      this.form[fieldName] = fileList;
+    },
+    // 文件上传成功
+    successHandle(fieldName, res, file, fileList) {
+      if (res.resultCode === 200) {
+        this.createFileList(fieldName, file.name, res.data);
+      }
+    },
+    createFileList(fieldName, name, url = '') {
+      this.form[fieldName].push({ name, url });
     },
     // 数字格式化
     formatNumber(value = '') {

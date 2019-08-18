@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-05-06 10:00:00
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-08-14 16:59:25
+ * @Last Modified time: 2019-08-15 16:28:04
  **/
 import _ from 'lodash';
 
@@ -77,6 +77,7 @@ export default {
       label: 'text'
     };
     this.prevForm = null;
+    this.arrayTypes = ['RANGE_DATE', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
     return {
       expand: false, // 展开收起状态
       treeFilterText: '',
@@ -132,7 +133,7 @@ export default {
       const target = {};
       list.forEach(x => {
         let { initialValue, type, fieldName } = x;
-        if (type === 'RANGE_DATE' || type === 'MULTIPLE_SELECT' || type === 'MULTIPLE_CHECKBOX') {
+        if (this.arrayTypes.includes(type)) {
           initialValue = initialValue || [];
         }
         // 设置 initialValue 为响应式数据
@@ -153,7 +154,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -174,7 +175,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input-number
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -197,7 +198,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
-        <el-form-item ref={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} ref={fieldName} label={label} prop={fieldName}>
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
@@ -232,7 +233,7 @@ export default {
       const { form } = this;
       const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-autocomplete
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -250,7 +251,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change} nativeOnKeydown={this.enterEventHandle}>
             <el-option key="-" label="全部" value="0" />
             {itemList.map(x => (
@@ -264,7 +265,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -277,7 +278,7 @@ export default {
       const { form } = this;
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
@@ -286,7 +287,7 @@ export default {
       const { form } = this;
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
@@ -295,7 +296,7 @@ export default {
       const { form } = this;
       const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-date-picker
             type="daterange"
             v-model={form[fieldName]}
@@ -315,7 +316,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
         </el-form-item>
       );
@@ -324,7 +325,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
             {itemList.map(x => {
               return (
@@ -341,7 +342,7 @@ export default {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
       return (
-        <el-form-item label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
         </el-form-item>
       );
