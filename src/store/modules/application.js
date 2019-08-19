@@ -38,10 +38,8 @@ const formateNavList = list => {
     if (Array.isArray(x.children)) {
       formateNavList(x.children);
     }
-    let {
-      meta: { icon = '' }
-    } = deepFind(routesMap, x.key);
-    x.icon = icon;
+    let { meta } = deepFind(routesMap, x.key) || {};
+    x.icon = meta ? meta.icon : '';
   });
 };
 
