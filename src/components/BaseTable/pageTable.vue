@@ -250,16 +250,14 @@ export default {
     },
     // 初始化 table row 选中
     createRowSelection(selectedRows) {
+      // 清空行选中状态
+      this.clearSelectionHandle();
       if (!selectedRows.length) return;
       // 单选时
       if (this.selectionType === 'single') {
         selectedRows.length = 1;
       }
-      // 清空行选中状态
-      this.clearSelectionHandle();
-      this.$nextTick(() => {
-        selectedRows.filter(x => this.list.includes(x)).forEach(row => this.$refs.appTable.toggleRowSelection(row, true));
-      });
+      selectedRows.forEach(row => this.$refs.appTable.toggleRowSelection(row, true));
     },
     // 创建表格数据
     createTableList(data) {
@@ -1052,7 +1050,7 @@ export default {
       } else {
         rows = [rows];
       }
-      this.onRowSelectChange(rows);
+      this.debounce(this.onRowSelectChange, 0)(rows);
     },
     // 清空 table row 的选中
     clearSelectionHandle() {
@@ -1326,6 +1324,13 @@ export default {
       });
       return res;
     },
+    // 函数防抖
+    debounce(fn, delay) {
+      return function(...args) {
+        fn.timer && clearTimeout(fn.timer);
+        fn.timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    },
     // 重新设置记录表格操作的动作
     resetExecuteLog() {
       const { insert, remove } = this.actionsLog;
@@ -1582,6 +1587,9 @@ export default {
       display: inline-block;
       margin-right: 10px;
     }
+  }
+  .el-table th.gutter {
+    display: table-cell !important;
   }
   .el-table__header {
     thead > tr > th {
