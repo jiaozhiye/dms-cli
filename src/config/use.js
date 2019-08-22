@@ -7,10 +7,13 @@
 import Vue from 'vue';
 import config from '@/assets/js/config';
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 
-// 自定义主题
-import '@/assets/css/element-variables.scss';
+if (config.env === 'development') {
+  require('element-ui/lib/theme-chalk/index.css');
+} else {
+  // 自定义主题
+  require('@/assets/css/element-variables.scss');
+}
 
 // 全局设置 ElementUI
 Vue.use(ElementUI, { size: 'small', zIndex: 1000 });

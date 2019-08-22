@@ -173,7 +173,14 @@ export default {
           ],
           rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }],
           disabled: true
-        }
+        },
+        {
+          type: 'TIME',
+          label: '时间',
+          fieldName: 'time1',
+          placeholder: '选择时间',
+          rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
+        },
       ];
     },
     closeDrawer() {

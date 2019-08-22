@@ -327,6 +327,48 @@ export default {
         </el-form-item>
       );
     },
+    TIME(option) {
+      const { form } = this;
+      const { label, fieldName, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-time-picker 
+            v-model={form[fieldName]} 
+            pickerOptions={{
+              format: valueFormat
+            }} 
+            value-format={valueFormat} 
+            placeholder={placeholder} 
+            disabled={disabled} 
+            style={{ ...style }} 
+            onChange={change} 
+          />
+        </el-form-item>
+      );
+    },
+    RANGE_TIME(option) {
+      const { form } = this;
+      const { label, fieldName, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-time-picker 
+            isRange={true}
+            v-model={form[fieldName]} 
+            pickerOptions={{
+              format: valueFormat
+            }} 
+            value-format={valueFormat} 
+            range-separator="-"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            placeholder={placeholder} 
+            disabled={disabled} 
+            style={{ ...style }} 
+            onChange={change} 
+          />
+        </el-form-item>
+      );
+    },
     CHECKBOX(option) {
       const { form } = this;
       const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
