@@ -16,7 +16,7 @@
       <div
         class="el-upload-list__item"
         v-for="(imgUrl, index) in imgUrlArr"
-        :key="imgUrl"
+        :key="index"
         @click.stop
       >
         <img class="img" :src="imgUrl" alt />
@@ -41,17 +41,13 @@
       <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
-    <BaseDialog customClass="dialog-wrap" :visible.sync="dialogVisible" title="图片预览">
-      <img class="img" :src="dialogImageUrl" alt />
+    <BaseDialog :visible.sync="dialogVisible" title="图片预览">
+      <div class="preview-wrap">
+        <img :src="dialogImageUrl" alt />
+      </div>
     </BaseDialog>
     <!-- 剪裁组件弹窗 -->
-    <BaseDialog
-      customClass="dialog-wrap"
-      :visible.sync="cropperModel"
-      title="图片裁剪"
-      width="800"
-      @close="beforeClose"
-    >
+    <BaseDialog :visible.sync="cropperModel" title="图片裁剪" width="800" @close="beforeClose">
       <CropperPanel
         ref="uploadCropper"
         :img-file="file"
@@ -297,16 +293,13 @@ export default {
   .el-upload__tip {
     line-height: 20px;
   }
-  .dialog-wrap {
-    .el-dialog__body {
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      .img {
-        display: block;
-        max-width: 100%;
-      }
-    }
+}
+.preview-wrap {
+  display: flex;
+  justify-content: center;
+  img {
+    display: block;
+    max-width: 100%;
   }
 }
 </style>
