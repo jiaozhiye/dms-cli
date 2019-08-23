@@ -23,7 +23,7 @@ Vue.use(FormPanel);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO/TIME/RANGE_TIME}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO/TIME/RANGE_TIME/TIME_SELECT}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - selfCols{Number|表单元素自身占据的列数}
@@ -41,9 +41,20 @@ Vue.use(FormPanel);
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
 - maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
+- options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
+
+`list -> options 配置项`
+
+- options: {
+  - &emsp;trueValue: {String/Number|CHECKBOX 选中后的值，默认是 '1'}
+  - &emsp;falseValue: {String/Number|CHECKBOX 取消选中后的值，默认是 '0'}
+  - &emsp;startTime: {String|TIME_SELECT 开始时间}
+  - &emsp;endTime: {String|TIME_SELECT 结束时间}
+  - &emsp;stepTime: {String|TIME_SELECT 时间步长}
+- }
 
 `SEARCH_HELPER 配置项`
 

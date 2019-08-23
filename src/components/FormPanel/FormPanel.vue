@@ -332,16 +332,16 @@ export default {
       const { label, fieldName, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-time-picker 
-            v-model={form[fieldName]} 
+          <el-time-picker
+            v-model={form[fieldName]}
             pickerOptions={{
               format: valueFormat
-            }} 
-            value-format={valueFormat} 
-            placeholder={placeholder} 
-            disabled={disabled} 
-            style={{ ...style }} 
-            onChange={change} 
+            }}
+            value-format={valueFormat}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            onChange={change}
           />
         </el-form-item>
       );
@@ -351,30 +351,54 @@ export default {
       const { label, fieldName, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-time-picker 
+          <el-time-picker
             isRange={true}
-            v-model={form[fieldName]} 
+            v-model={form[fieldName]}
             pickerOptions={{
               format: valueFormat
-            }} 
-            value-format={valueFormat} 
+            }}
+            value-format={valueFormat}
             range-separator="-"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
-            placeholder={placeholder} 
-            disabled={disabled} 
-            style={{ ...style }} 
-            onChange={change} 
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            onChange={change}
+          />
+        </el-form-item>
+      );
+    },
+    TIME_SELECT(option) {
+      const { form } = this;
+      const { label, fieldName, valueFormat = 'HH:mm', options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-time-select
+            v-model={form[fieldName]}
+            pickerOptions={{
+              format: valueFormat,
+              start: startTime,
+              end: endTime,
+              step: stepTime
+            }}
+            value-format={valueFormat}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            onChange={change}
           />
         </el-form-item>
       );
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { trueValue = '1', falseValue = '0' } = options;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
+          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
         </el-form-item>
       );
     },
@@ -688,38 +712,39 @@ export default {
       .el-form-item__content {
         line-height: 30px;
       }
-    }
-  }
-  .el-form-item__label {
-    font-size: @textSizeSecondary;
-  }
-  .el-select {
-    width: 100%;
-  }
-  .el-autocomplete {
-    width: 100%;
-  }
-  .el-date-editor {
-    width: 100%;
-  }
-  .el-input-number {
-    width: 100%;
-    .el-input__inner {
-      text-align: left !important;
-    }
-    .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
-    .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
-      border-color: #d9d9d9;
-    }
-  }
-  .el-range-editor {
-    padding-right: 5px;
-    .el-range-separator {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    .el-range__close-icon {
-      width: 20px;
+      .el-form-item__label {
+        font-size: @textSizeSecondary;
+        padding-right: @modulePadding;
+      }
+      .el-select {
+        width: 100%;
+      }
+      .el-autocomplete {
+        width: 100%;
+      }
+      .el-date-editor {
+        width: 100%;
+      }
+      .el-input-number {
+        width: 100%;
+        .el-input__inner {
+          text-align: left !important;
+        }
+        .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
+        .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+          border-color: #d9d9d9;
+        }
+      }
+      .el-range-editor {
+        padding-right: 5px;
+        .el-range-separator {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .el-range__close-icon {
+          width: 20px;
+        }
+      }
     }
   }
 }

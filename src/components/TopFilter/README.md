@@ -37,9 +37,17 @@ Vue.use(TopFilter);
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
 - maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
+- options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
+
+`list -> options 配置项`
+
+- options: {
+  - &emsp;trueValue: {String/Number|CHECKBOX 选中后的值，默认是 '1'}
+  - &emsp;falseValue: {String/Number|CHECKBOX 取消选中后的值，默认是 '0'}
+- }
 
 `SEARCH_HELPER 配置项`
 

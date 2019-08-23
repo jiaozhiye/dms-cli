@@ -17,7 +17,7 @@ export default {
   flex-wrap: wrap;
   justify-content: flex-start;
   & > * {
-    margin: 0 @moduleMargin @moduleMargin 0;
+    margin: 0 @moduleMargin @moduleMargin 0 !important;
   }
 }
 </style>

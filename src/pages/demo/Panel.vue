@@ -175,12 +175,12 @@ export default {
           disabled: true
         },
         {
-          type: 'TIME',
+          type: 'TIME_SELECT',
           label: '时间',
           fieldName: 'time1',
           placeholder: '选择时间',
           rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
-        },
+        }
       ];
     },
     closeDrawer() {

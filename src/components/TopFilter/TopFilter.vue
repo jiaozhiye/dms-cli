@@ -314,10 +314,11 @@ export default {
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { trueValue = '1', falseValue = '0' } = options;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} true-label={'1'} false-label={'0'} onChange={change}></el-checkbox>
+          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
         </el-form-item>
       );
     },
@@ -514,38 +515,39 @@ export default {
       .el-form-item__content {
         line-height: 30px;
       }
-    }
-  }
-  .el-form-item__label {
-    font-size: @textSizeSecondary;
-  }
-  .el-select {
-    width: 100%;
-  }
-  .el-autocomplete {
-    width: 100%;
-  }
-  .el-date-editor {
-    width: 100%;
-  }
-  .el-input-number {
-    width: 100%;
-    .el-input__inner {
-      text-align: left !important;
-    }
-    .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
-    .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
-      border-color: #d9d9d9;
-    }
-  }
-  .el-range-editor {
-    padding-right: 5px;
-    .el-range-separator {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    .el-range__close-icon {
-      width: 20px;
+      .el-form-item__label {
+        font-size: @textSizeSecondary;
+        padding-right: @modulePadding;
+      }
+      .el-select {
+        width: 100%;
+      }
+      .el-autocomplete {
+        width: 100%;
+      }
+      .el-date-editor {
+        width: 100%;
+      }
+      .el-input-number {
+        width: 100%;
+        .el-input__inner {
+          text-align: left !important;
+        }
+        .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
+        .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+          border-color: #d9d9d9;
+        }
+      }
+      .el-range-editor {
+        padding-right: 5px;
+        .el-range-separator {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .el-range__close-icon {
+          width: 20px;
+        }
+      }
     }
   }
 }
