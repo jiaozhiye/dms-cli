@@ -20,6 +20,7 @@ Vue.use(LazyLoadTab);
   - {
   - &emsp;title: {String|选项卡的标题}
   - &emsp;path: {String|内容组件的路径，'tabs/user' -> '@/views/tabs/user.vue'},
+  - &emsp;disabled: {Boolean|是否禁用该选项卡}
   - &emsp;params: {Object|对按需加载的组件传参}
   - &emsp;on: {Object|对按需加载的组件传递自定义事件}
   - }
@@ -52,6 +53,7 @@ export default {
         {
           title: '配置管理',
           path: 'tabs/setting',
+          disabled: true,
           params: {
             type: 2
           }

@@ -65,7 +65,7 @@ export default {
           on: x.on
         });
         return (
-          <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} lazy>
+          <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
             {this.destroyOnClose && x.title === this.activeName ? component : null}
             {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : null}
           </el-tab-pane>

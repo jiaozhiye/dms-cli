@@ -51,3 +51,6 @@ Vue.use(Anchor);
 
 import Tinymce from '@/components/Tinymce';
 Vue.use(Tinymce);
+
+import AjaxButton from '@/components/AjaxButton';
+Vue.use(AjaxButton);
