@@ -46,6 +46,10 @@ export default {
       type: String,
       default: 'items'
     },
+    isMemoryPagination: {
+      type: Boolean,
+      default: false
+    },
     rowstyles: {
       type: Array,
       default() {

@@ -50,6 +50,10 @@ export default {
       type: String,
       default: 'items'
     },
+    isMemoryPagination: {
+      type: Boolean,
+      default: false
+    },
     rowstyles: {
       type: Array,
       default() {
@@ -119,6 +123,7 @@ export default {
   },
   data() {
     this.originData = []; // 原始数据, 用于客户端表头过滤筛选
+    this.backUpData = []; // 备份数据
     this.minHeight = 200; // table 最小高度
     this.cellValChange = false; // 单元格数据是否改变
     this.tableBody = null;
@@ -165,7 +170,7 @@ export default {
       return this.columnFlatMap(this.columns).some(x => x.summation);
     },
     isShowPagination() {
-      return this.isPagination && Boolean(this.fetchapi);
+      return (this.isPagination && Boolean(this.fetchapi)) || this.isMemoryPagination;
     },
     isMultilevelHeader() {
       return this.columns.some(x => Array.isArray(x.children) && x.children.length);
@@ -190,15 +195,10 @@ export default {
     editableColumns() {
       return this.columnFlatMap(this.columns).filter(x => x.editable);
     },
-    tableData() {
-      return this.$refs.appTable.tableData;
-    },
     listChange() {
       const editableKeys = this.createEditableKeys();
       // 不可编辑表格
-      if (!editableKeys.length) {
-        return null;
-      }
+      if (!editableKeys.length) return null;
       return this.list.map(x => {
         let item = {};
         editableKeys.forEach(key => _.set(item, key, _.get(x, key)));
@@ -218,8 +218,14 @@ export default {
       if (nextProps.noJumper) return;
       this.toFirstPage();
     },
-    fetchParams() {
-      this.getTableData();
+    fetchParams(nextProps, prevProps) {
+      const diff = Object.keys(this.difference(nextProps, prevProps)).join('');
+      // 内存分页 && 只有页码发生变化
+      if (this.isMemoryPagination && diff === 'pageNum') {
+        this.createLimitRecords();
+      } else {
+        this.getTableData();
+      }
     },
     visibleColumns() {
       // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
@@ -259,6 +265,11 @@ export default {
       }
       selectedRows.forEach(row => this.$refs.appTable.toggleRowSelection(row, true));
     },
+    // 创建内存分页的列表数据
+    createLimitRecords() {
+      const { current, pageSize } = this.pagination;
+      this.list = this.originData.slice((current - 1) * pageSize, current * pageSize);
+    },
     // 创建表格数据
     createTableList(data) {
       const keypath = this.datakey;
@@ -269,8 +280,15 @@ export default {
       // 设置数据标识符，状态变量
       dataList.dataMark = true;
       // 处理列表数据
-      this.list = this.createTableDataKey(dataList, uidkey);
-      this.originData = [...this.list];
+      if (this.isMemoryPagination) {
+        this.originData = this.createTableDataKey(dataList, uidkey);
+        // 初始化分页数据
+        this.createLimitRecords();
+        this.backUpData = [...this.originData];
+      } else {
+        this.list = this.createTableDataKey(dataList, uidkey);
+        this.originData = [...this.list];
+      }
       // 同步表格数据
       this.syncTableList();
       // 总记录数
@@ -324,11 +342,10 @@ export default {
     },
     // 同步组件数据列表
     syncTableList() {
-      this.$nextTick(() => {
-        // 重置组件数据列表的索引
-        this.tableData.forEach((row, i) => (row.$index = i));
-        this.onSyncTableData(this.tableData);
-      });
+      const rows = this.isMemoryPagination ? this.originData : this.list;
+      // 重置组件数据列表的索引
+      rows.forEach((row, i) => (row.$index = i));
+      this.onSyncTableData(rows);
     },
     // 跳转到第一页
     toFirstPage() {
@@ -602,7 +619,7 @@ export default {
           }}
         />
       ) : (
-        <el-table-column key="-" prop="-" type="selection" fixed="left" width="50" />
+        <el-table-column key="-" prop="-" type="selection" reserveSelection={true} fixed="left" width="50" />
       );
     },
     // 创建表格列字段
@@ -643,7 +660,7 @@ export default {
               labelClassName={x.editRequired && 'is-required'}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
-              sortable={config.table.serverSort ? 'custom' : x.sorter}
+              sortable={config.table.serverSort || x.sorter ? 'custom' : false}
               {...wrapProps}
             >
               {Array.isArray(x.children) && this.createTableColumns(x.children)}
@@ -762,6 +779,7 @@ export default {
     validateSearchHelper(dataIndex, uid, type) {
       this.validateHandler('searchHelper', dataIndex, uid, type);
     },
+    // 单元格校验处理方法
     validateHandler(key, dataIndex, uid, type) {
       if (type === 'add') {
         this.setCellEditState(this.list.find(x => x._uid === uid), dataIndex, true);
@@ -829,6 +847,10 @@ export default {
         this.loading = false;
       }
     },
+    // 移除数组中的记录
+    removeItemHandle(arr, item) {
+      arr.splice(arr.findIndex(x => x === item), 1);
+    },
     // 删除列表记录方法
     deleteHandler(rows = []) {
       // 需要移除的数据，选中行 + 参数
@@ -836,7 +858,10 @@ export default {
       // 移除数据
       for (let i = 0; i < this.list.length; i++) {
         if (removedRows.includes(this.list[i])) {
-          this.originData.splice(this.originData.findIndex(x => x === this.list[i]), 1);
+          if (this.isMemoryPagination) {
+            this.removeItemHandle(this.backUpData, this.list[i]);
+          }
+          this.removeItemHandle(this.originData, this.list[i]);
           this.list.splice(i--, 1);
         }
       }
@@ -886,7 +911,7 @@ export default {
       this.cancelPrevCellEditState();
       const target = this.createEditableKeys().includes(property);
       if (!target || row[`${property}DisableEdit`]) return;
-      const rowIndex = this.tableData.findIndex(x => x === row);
+      const rowIndex = this.list.findIndex(x => x === row);
       const editableColumnIndex = this.editPos.marks.findIndex(x => x === property);
       // 设置可编辑单元格索引
       this.setEditPosIndex(rowIndex, editableColumnIndex);
@@ -918,10 +943,10 @@ export default {
       // 此列不可编辑
       if (!marks[editableColumnIndex]) return;
       // 设置当前单元格可编辑
-      this.setCellEditState(this.tableData[rowIndex], marks[editableColumnIndex], true);
+      this.setCellEditState(this.list[rowIndex], marks[editableColumnIndex], true);
       // 把当前的单元格设置成上一个
       this.prevHandle = {
-        row: this.tableData[rowIndex],
+        row: this.list[rowIndex],
         key: marks[editableColumnIndex]
       };
       // 获得焦点及选中
@@ -978,7 +1003,8 @@ export default {
       const filterList = [];
       for (let attr in this.filters) {
         const [type, property] = attr.split('|');
-        const tmpList = this.originData.filter(row => {
+        const targets = this.isMemoryPagination ? this.backUpData : this.originData;
+        const tmpList = targets.filter(row => {
           const target = _.get(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
             if (typeof target === 'number') {
@@ -1005,12 +1031,20 @@ export default {
       }
       // 表头筛选条件为空
       if (!Object.keys(this.filters).length) {
-        filterList.push(this.originData);
+        filterList.push(this.isMemoryPagination ? this.backUpData : this.originData);
       }
       // 求给定数组的交集
       const interList = _.intersection(...filterList);
-      this.list.length = 0;
-      this.list.push(...interList);
+      if (this.isMemoryPagination) {
+        this.originData = [...interList];
+        this.toFirstPage();
+        this.pagination.total = this.originData.length;
+        // 处理分页数据
+        this.createLimitRecords();
+      } else {
+        this.list.length = 0;
+        this.list.push(...interList);
+      }
       // 回显之前表格行选中状态
       this.createRowSelection(this.selectionRows);
       // 取消单元格编辑状态
@@ -1021,7 +1055,7 @@ export default {
       if (config.table.serverSort) {
         this.serverSorter(column, prop, order);
       } else {
-        this.clientSorter();
+        this.clientSorter(column, prop, order);
       }
     },
     // 服务端排序
@@ -1031,17 +1065,60 @@ export default {
       if (order === 'ascending') {
         params.sort = `${prop}|asc`;
       }
+      // 降序
       if (order === 'descending') {
         params.sort = `${prop}|desc`;
       }
       this.sorterParams = params;
     },
     // 客户端排序
-    clientSorter() {
+    clientSorter(column, prop, order) {
+      if (order === 'ascending') {
+        this.ascSortHandle(this.isMemoryPagination ? this.originData : this.list, prop);
+      }
+      if (order === 'descending') {
+        this.descSortHandle(this.isMemoryPagination ? this.originData : this.list, prop);
+      }
+      if (order === null) {
+        if (this.isMemoryPagination) {
+          this.originData = [...this.backUpData];
+        } else {
+          this.list.length = 0;
+          this.list.push(...this.originData);
+        }
+      }
+      if (this.isMemoryPagination) {
+        // 处理分页数据
+        this.createLimitRecords();
+      }
       // 取消单元格编辑状态
       this.cancelPrevCellEditState();
       // 顺序变化后，同步数据
       this.syncTableList();
+    },
+    // 升序算法
+    ascSortHandle(arr, prop) {
+      arr.sort((a, b) => {
+        a = _.get(a, prop, '');
+        b = _.get(b, prop, '');
+        if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+          return a - b;
+        } else {
+          return a.toString().localeCompare(b.toString());
+        }
+      });
+    },
+    // 降序算法
+    descSortHandle(arr, prop) {
+      arr.sort((a, b) => {
+        a = _.get(a, prop, '');
+        b = _.get(b, prop, '');
+        if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+          return b - a;
+        } else {
+          return b.toString().localeCompare(a.toString());
+        }
+      });
     },
     // table row 选中状态变化时
     handleSelectionChange(rows) {
@@ -1085,7 +1162,8 @@ export default {
     },
     // 合计功能
     getSummaries(param) {
-      const { columns, data } = param;
+      const { columns } = param;
+      const data = this.isMemoryPagination ? this.originData : this.list;
       const sums = [];
       columns.forEach((column, index) => {
         const { property } = column;
@@ -1180,7 +1258,7 @@ export default {
         this.scrollTopToPosition(this.tableBody.querySelectorAll('tbody > tr')[xIndex].offsetTop);
         // 实现行选中
         if (this.isSelectColumn && this.selectionType === 'single') {
-          this.handleSelectionChange([this.tableData[xIndex]]);
+          this.handleSelectionChange([this.list[xIndex]]);
         }
       }
       // Esc 取消
@@ -1283,6 +1361,10 @@ export default {
         });
         this.list.push(newRow);
         this.originData.push(newRow);
+        // 内存分页对备份数据的处理
+        if (this.isMemoryPagination) {
+          this.backUpData.push(newRow);
+        }
         // 记录新增行操作
         this.actionsLog.insert.push(newRow);
         // 修改 total 数量
@@ -1307,6 +1389,16 @@ export default {
         if (arr[i].dataIndex === mark) {
           res = arr[i];
           break;
+        }
+      }
+      return res;
+    },
+    // 比对两个对象的差异
+    difference(newVal, oldVal) {
+      const res = {};
+      for (let key in newVal) {
+        if (!_.isEqual(newVal[key], oldVal[key])) {
+          res[key] = newVal[key];
         }
       }
       return res;

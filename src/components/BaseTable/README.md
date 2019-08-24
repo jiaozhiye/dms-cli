@@ -38,6 +38,7 @@ http://localhost:8080/table
 - 支持表头的筛选和排序，并支持扩展为服务端筛选和排序
 - 支持表格行的选中（多选/单选），并支持默认选中
 - 支持表格分页的显示和隐藏
+- 支持内存分页(前端分页)
 - 实现了表格组件的高度自适应及手动设置高度
 - 支持表头字段的本地缓存，保留用户操作列筛选排序的记录
 - 支持根据表头标题字数自动计算列宽度，避免表头文字多行显示
@@ -82,6 +83,7 @@ http://localhost:8080/table
 - isToperInfo{Boolean|是否显示组件的基础信息}
 - isColumnFilter{Boolean|是否显示组件的列筛选排序}
 - isPagination{Boolean|是否显示分页，默认显示分页，但在 dataSource 的模式下不显示分页}
+- isMemoryPagination{Boolean|是否为内存分页，默认 false}
 - uidkey{String|服务端响应数据每条记录的 uuid，默认值是'uid'}
 - datakey{String|服务端响应数据的数组列表对应的 key，支持路径操作('step1.step2.items')，默认值是'items'}
 - mergeCellMethod{Function|合并行或列，具体请参考 element-ui table 组件}
