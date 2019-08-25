@@ -128,7 +128,7 @@ http://localhost:8080/table
 - summationPrecision{Number|数值精度，保留几位小数，默认是两位}
 - sorter{Boolean|是否支持排序}
 - filter{Boolean|是否支持表头过滤}
-- filterType{String|表头过滤类型，支持 input/checkbox/date-range}
+- filterType{String|表头过滤类型，支持 input/checkbox/radio/date-range}
 - filterItems{Array|checkbox 过滤类型的列表数据，[{text: '', value: ''}]}
 - editable{Boolean|该列单元格是否可编辑}
 - defaultEditable{Boolean|该列单元格是否处于可编辑状态}

@@ -247,7 +247,7 @@ export default {
       );
     },
     // 创建底部按钮节点
-    createButtonNode(type, property, val = []) {
+    createButtonNode(type, property, val) {
       return (
         <div style={{ paddingBottom: 0, marginTop: '10px' }}>
           <el-button type="primary" size="mini" disabled={this.isValueFalse(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
@@ -298,6 +298,15 @@ export default {
                 ))}
               </el-checkbox-group>
             )}
+            {type === 'radio' && (
+              <el-radio-group v-model={this.search[`${property}Val`]} style={{ display: 'block' }}>
+                {orginColumn.filterItems.map(x => (
+                  <li key={x.value} style={{ marginBottom: '8px' }}>
+                    <el-radio label={x.value}>{x.text}</el-radio>
+                  </li>
+                ))}
+              </el-radio-group>
+            )}
             {type === 'date-range' && (
               <el-date-picker
                 size="small"
@@ -312,7 +321,7 @@ export default {
               />
             )}
           </div>
-          {this.createButtonNode(type, property, type === 'input' ? '' : [])}
+          {this.createButtonNode(type, property, ['input', 'radio'].includes(type) ? '' : [])}
         </el-popover>
       );
     },
@@ -379,6 +388,9 @@ export default {
 .popper-wrap {
   min-width: auto;
   .el-checkbox {
+    width: 100%;
+  }
+  .el-radio {
     width: 100%;
   }
   .el-table-filter__content {

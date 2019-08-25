@@ -1003,8 +1003,8 @@ export default {
       const filterList = [];
       for (let attr in this.filters) {
         const [type, property] = attr.split('|');
-        const targets = this.isMemoryPagination ? this.backUpData : this.originData;
-        const tmpList = targets.filter(row => {
+        const rows = this.isMemoryPagination ? this.backUpData : this.originData;
+        const tmpList = rows.filter(row => {
           const target = _.get(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
             if (typeof target === 'number') {
@@ -1012,6 +1012,9 @@ export default {
             } else {
               return target.includes(this.filters[attr]);
             }
+          }
+          if (type === 'radio' && this.filters[attr] !== '') {
+            return target === this.filters[attr];
           }
           if (type === 'checkbox' && this.filters[attr].length) {
             // 单元格的值是数组，说明是多选
