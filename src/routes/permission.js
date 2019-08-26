@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.path === '/login') {
       next({ path: '/' });
     } else {
-      if (store.state.app.navList.length === 0) {
+      if (!store.state.app.navList.length) {
         // 通过 vuex 管理导航数据
         await store.dispatch('app/createNavList');
         next({ ...to, replace: true });

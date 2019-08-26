@@ -8,7 +8,7 @@ import axios from 'axios';
 import qs from 'qs';
 import config from '@/assets/js/config';
 import store from '@/store';
-import { getToken, removeToken } from '@/assets/js/auth';
+import { getToken, removeToken, removeUser } from '@/assets/js/auth';
 import router from '@/routes';
 import { Notification } from 'element-ui';
 
@@ -68,8 +68,9 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(({ data }) => {
   store.dispatch('app/clearBtnLoading');
   // token 过期，需要重新登录
-  if (data.code === 'JWT_ERROR') {
+  if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
     removeToken();
+    removeUser();
     router.push({ path: '/' });
   }
   return data;

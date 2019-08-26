@@ -54,6 +54,7 @@ $ npm run build
   - BasePrint 基于 Lodop 插件的打印组件
   - FormPanel 表单操作的功能组件
   - Tinymce 富文本编辑器组件
+  - AjaxButton ajax 防止重复提交组件
 ```
 
 ## 目录结构

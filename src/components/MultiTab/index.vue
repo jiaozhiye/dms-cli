@@ -1,12 +1,16 @@
 <script>
 import { mapActions } from 'vuex';
+import addEventListener from 'add-dom-event-listener';
 
 export default {
   name: 'MultiTab',
   data() {
+    this.$multiTab = null; // DOM 节点
     return {
       activeKey: this.$route.path,
-      pages: [this.$route]
+      pages: [this.$route],
+      visible: false,
+      position: { x: 0, y: 0 }
     };
   },
   computed: {
@@ -31,10 +35,17 @@ export default {
     },
     activeKey(val) {
       this.$router.push({ path: val });
+    },
+    visible(val) {
+      if (val) {
+        document.body.addEventListener('click', this.closeContextMenu);
+      } else {
+        document.body.removeEventListener('click', this.closeContextMenu);
+      }
     }
   },
   methods: {
-    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList']),
+    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),
     isRedirect(path) {
       return path.startsWith('/redirect');
     },
@@ -59,29 +70,113 @@ export default {
     handleClick(tab, ev) {
       this.activeKey = tab.name;
     },
+    findCurTagIndex() {
+      return this.pages.findIndex(x => x.path === this.activeKey);
+    },
+    refreshTagHandle() {
+      this.refreshView(this.activeKey);
+    },
+    closeOtherTagHandle() {
+      const index = this.findCurTagIndex();
+      if (index === -1) return;
+      this.pages.forEach(({ path }, i) => {
+        if (i === index) return;
+        this.removeTab(path);
+      });
+    },
+    closeRightTagHandle() {
+      const index = this.findCurTagIndex();
+      if (index === -1) return;
+      this.pages.forEach(({ path }, i) => {
+        if (i > index) {
+          this.removeTab(path);
+        }
+      });
+    },
+    closeLeftTagHandle() {
+      const index = this.findCurTagIndex();
+      if (index === -1) return;
+      this.pages.forEach(({ path }, i) => {
+        if (i < index) {
+          this.removeTab(path);
+        }
+      });
+    },
+    showContextMenu() {
+      this.visible = true;
+    },
+    closeContextMenu() {
+      this.visible = false;
+    },
+    bindContextmenuEvent() {
+      this.eventHandler = addEventListener(this.$multiTab, 'contextmenu', ev => {
+        ev.preventDefault();
+        const classNames = [...ev.target.classList];
+        if (classNames.includes('el-tabs__item')) {
+          const path = ev.target.getAttribute('aria-controls').replace(/^pane-/, '');
+          if (this.activeKey !== path) {
+            return this.closeContextMenu();
+          }
+          this.position.x = ev.clientX || ev.pageX;
+          this.position.y = ev.clientY || ev.pageY;
+          this.showContextMenu();
+        }
+      });
+    },
     createPanelList() {
-      const Len = this.pages.length;
-      return this.pages.map(x => <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={Len > 1} />);
+      return this.pages.map(x => <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={this.pages.length > 1} />);
     }
   },
   render() {
     return (
-      <el-tabs class="multi-tab" z type="card" value={this.activeKey} on-tab-click={this.handleClick} on-tab-remove={this.removeTab}>
-        {this.createPanelList()}
-      </el-tabs>
+      <div class="multi-wrap">
+        <el-tabs ref="multiTab" class="multi-tab" type="card" value={this.activeKey} on-tab-click={this.handleClick} on-tab-remove={this.removeTab}>
+          {this.createPanelList()}
+        </el-tabs>
+        {this.visible ? (
+          <ul class="contextmenu el-dropdown-menu--small" style={{ left: `${this.position.x + 10}px`, top: `${this.position.y + 2}px` }}>
+            <el-dropdown-item nativeOnClick={this.refreshTagHandle}>刷新当前</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={this.closeRightTagHandle}>关闭右侧</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={this.closeLeftTagHandle}>关闭左侧</el-dropdown-item>
+            {this.pages.length > 1 && <el-dropdown-item nativeOnClick={this.closeOtherTagHandle}>关闭其他</el-dropdown-item>}
+          </ul>
+        ) : null}
+      </div>
     );
+  },
+  mounted() {
+    this.$multiTab = this.$refs.multiTab.$el;
+    this.bindContextmenuEvent();
+  },
+  beforeDestroy() {
+    this.eventHandler.remove();
   }
 };
 </script>
 
 <style lang="less">
-.multi-tab {
-  position: relative;
-  .el-tabs__header {
-    margin: 0;
+.multi-wrap {
+  .multi-tab {
+    position: relative;
+    .el-tabs__header {
+      margin: 0;
+    }
+    .el-tabs__content {
+      display: none;
+    }
   }
-  .el-tabs__content {
-    display: none;
+  .contextmenu {
+    list-style: none;
+    min-width: 90px;
+    position: fixed;
+    left: 300px;
+    top: 50px;
+    background-color: #fff;
+    padding: 6px 0;
+    border: 1px solid #ebeef5;
+    border-radius: @borderRadius;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    z-index: 1001;
   }
 }
 </style>

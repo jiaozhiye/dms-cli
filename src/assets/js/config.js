@@ -9,6 +9,7 @@ const createProductEnv = env => {
   if (env === 'development') {
     result.serverUrl = 'http://127.0.0.1:7001';
   } else {
+    console.log = console.warn = console.info = () => {};
     result.serverUrl = '/';
   }
   return result;
