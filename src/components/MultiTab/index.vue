@@ -10,6 +10,7 @@ export default {
       activeKey: this.$route.path,
       pages: [this.$route],
       visible: false,
+      currentKey: '',
       position: { x: 0, y: 0 }
     };
   },
@@ -71,9 +72,10 @@ export default {
       this.activeKey = tab.name;
     },
     findCurTagIndex() {
-      return this.pages.findIndex(x => x.path === this.activeKey);
+      return this.pages.findIndex(x => x.path === this.currentKey);
     },
     refreshTagHandle() {
+      this.activeKey = this.currentKey;
       this.refreshView(this.activeKey);
     },
     closeOtherTagHandle() {
@@ -83,26 +85,32 @@ export default {
         if (i === index) return;
         this.removeTab(path);
       });
+      this.activeKey = this.currentKey;
     },
-    closeRightTagHandle() {
+    closeTagHandle(dir) {
       const index = this.findCurTagIndex();
       if (index === -1) return;
+      let isClosed = false;
       this.pages.forEach(({ path }, i) => {
-        if (i > index) {
+        if (dir === 'right' && i > index) {
+          if (path === this.activeKey) {
+            isClosed = true;
+          }
+          this.removeTab(path);
+        }
+        if (dir === 'left' && i < index) {
+          if (path === this.activeKey) {
+            isClosed = true;
+          }
           this.removeTab(path);
         }
       });
+      if (isClosed) {
+        this.activeKey = this.currentKey;
+      }
     },
-    closeLeftTagHandle() {
-      const index = this.findCurTagIndex();
-      if (index === -1) return;
-      this.pages.forEach(({ path }, i) => {
-        if (i < index) {
-          this.removeTab(path);
-        }
-      });
-    },
-    showContextMenu() {
+    showContextMenu(key) {
+      this.currentKey = key;
       this.visible = true;
     },
     closeContextMenu() {
@@ -114,12 +122,12 @@ export default {
         const classNames = [...ev.target.classList];
         if (classNames.includes('el-tabs__item')) {
           const path = ev.target.getAttribute('aria-controls').replace(/^pane-/, '');
-          if (this.activeKey !== path) {
-            return this.closeContextMenu();
-          }
+          // if (this.activeKey !== path) {
+          //   return this.closeContextMenu();
+          // }
           this.position.x = ev.clientX || ev.pageX;
           this.position.y = ev.clientY || ev.pageY;
-          this.showContextMenu();
+          this.showContextMenu(path);
         }
       });
     },
@@ -136,8 +144,8 @@ export default {
         {this.visible ? (
           <ul class="contextmenu el-dropdown-menu--small" style={{ left: `${this.position.x + 10}px`, top: `${this.position.y + 2}px` }}>
             <el-dropdown-item nativeOnClick={this.refreshTagHandle}>刷新当前</el-dropdown-item>
-            <el-dropdown-item nativeOnClick={this.closeRightTagHandle}>关闭右侧</el-dropdown-item>
-            <el-dropdown-item nativeOnClick={this.closeLeftTagHandle}>关闭左侧</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('right')}>关闭右侧</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('left')}>关闭左侧</el-dropdown-item>
             {this.pages.length > 1 && <el-dropdown-item nativeOnClick={this.closeOtherTagHandle}>关闭其他</el-dropdown-item>}
           </ul>
         ) : null}
