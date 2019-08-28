@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-18 12:02:51
  **/
 import _ from 'lodash';
+import Cascader from './Cascader.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
 
 export default {
@@ -82,6 +83,7 @@ export default {
     return {
       treeFilterText: '',
       popoverVisible: false,
+      cascaderVisible: false,
       form: this.createFormData(this.list),
       rules: this.createFormRule(this.list)
     };
@@ -154,6 +156,8 @@ export default {
         if (type === 'INPUT' && x.numberFormat) {
           initialValue = this.formatNumber(initialValue);
         }
+        // 级联选择器
+        this[`${fieldName}CascaderTexts`] = ''; // 默认值
         // 设置 initialValue 为响应式数据
         this.$set(x, 'initialValue', initialValue);
         // 初始值
@@ -215,7 +219,7 @@ export default {
       const { form } = this;
       const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} ref={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
@@ -239,6 +243,31 @@ export default {
               clearable
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => this.treeInputClearHandle(fieldName)}
+              onChange={change}
+            ></el-input>
+          </el-popover>
+        </el-form-item>
+      );
+    },
+    INPUT_CASCADER(option) {
+      const { form } = this;
+      const { label, fieldName, itemList = [], options = {}, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { titles = [] } = options;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-popover v-model={this.cascaderVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+            <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
+              <Cascader defaultValue={form[fieldName]} list={itemList} labels={titles} style={style} onChange={data => this.cascaderChangeHandle(fieldName, data)} onClose={this.closeCascaderHandle} />
+            </div>
+            <el-input
+              slot="reference"
+              value={this[`${fieldName}CascaderTexts`]}
+              placeholder={placeholder}
+              readonly={readonly}
+              disabled={disabled}
+              clearable
+              style={disabled && { pointerEvents: 'none' }}
+              onClear={() => this.inputCascaderClearHandle(fieldName)}
               onChange={change}
             ></el-input>
           </el-popover>
@@ -562,7 +591,6 @@ export default {
     },
     treeInputClearHandle(fieldName) {
       this.form[fieldName] = undefined;
-      this.$nextTick(() => this.$refs[fieldName].clearValidate());
     },
     filterNodeHandle(value, data) {
       if (!value) return true;
@@ -571,6 +599,17 @@ export default {
     treeNodeClickHandle(fieldName, { value }) {
       this.form[fieldName] = value;
       this.popoverVisible = false;
+    },
+    cascaderChangeHandle(fieldName, data) {
+      this.form[fieldName] = data.map(x => x.value).join(',') || undefined;
+      this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
+    },
+    inputCascaderClearHandle(fieldName) {
+      this.form[fieldName] = undefined;
+      this[`${fieldName}CascaderTexts`] = '';
+    },
+    closeCascaderHandle(val) {
+      this.cascaderVisible = val;
     },
     createFormItem() {
       return this.list.map(item => {
