@@ -44,7 +44,7 @@ export default {
     },
     datakey: {
       type: String,
-      default: 'items'
+      default: 'records'
     },
     isMemoryPagination: {
       type: Boolean,

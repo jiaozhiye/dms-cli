@@ -48,7 +48,7 @@ export default {
     },
     datakey: {
       type: String,
-      default: 'items'
+      default: 'records'
     },
     isMemoryPagination: {
       type: Boolean,
@@ -177,7 +177,7 @@ export default {
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
-      const pagination = this.isShowPagination ? { pageNum: current, pageSize, limit: pageSize } : {};
+      const pagination = this.isShowPagination ? { pageNum: current, currentPage: current, pageSize, limit: pageSize } : {};
       const queries = {
         ...this.sorterParams,
         ...this.filterParams,

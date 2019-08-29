@@ -526,6 +526,10 @@ export default {
         </el-form-item>
       );
     },
+    // 创建搜索帮助数据列表
+    createSerachHelperList(list, fieldKey) {
+      return list.map(x => ({ value: x[fieldKey] }));
+    },
     // 获取搜索帮助数据
     async querySearchAsync(request, fieldName, queryString = '', cb) {
       const { fetchApi, params = {}, datakey = '', fieldKey } = request;
@@ -550,9 +554,9 @@ export default {
       }
       return isLt5M;
     },
-    // 文件被移除
-    handleRemove(fieldName, file, fileList) {
-      this.form[fieldName] = fileList;
+    // 创建上传文件列表
+    createFileList(fieldName, name, url = '') {
+      this.form[fieldName].push({ name, url });
     },
     // 文件上传成功
     successHandle(fieldName, res, file, fileList) {
@@ -560,54 +564,42 @@ export default {
         this.createFileList(fieldName, file.name, res.data);
       }
     },
-    createFileList(fieldName, name, url = '') {
-      this.form[fieldName].push({ name, url });
+    // 文件被移除
+    handleRemove(fieldName, file, fileList) {
+      this.form[fieldName] = fileList;
     },
-    // 数字格式化
-    formatNumber(value = '') {
-      value += '';
-      const list = value.split('.');
-      const prefix = list[0].charAt(0) === '-' ? '-' : '';
-      let num = prefix ? list[0].slice(1) : list[0];
-      let result = '';
-      while (num.length > 3) {
-        result = `, ${num.slice(-3)}${result}`;
-        num = num.slice(0, num.length - 3);
-      }
-      if (num) {
-        result = num + result;
-      }
-      return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
-    },
-    toPercent(num) {
-      return Number(num * 100).toFixed(5) + '%';
-    },
-    createSerachHelperList(list, fieldKey) {
-      return list.map(x => ({ value: x[fieldKey] }));
-    },
+    // 创建树节点的值
     createInputTreeValue(fieldName, itemList) {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
       return text;
     },
+    // 清空树节点选择器
     treeInputClearHandle(fieldName) {
       this.form[fieldName] = undefined;
     },
+    // 树结构的筛选方法
     filterNodeHandle(value, data) {
       if (!value) return true;
       return data.text.indexOf(value) !== -1;
     },
+    // 树节点单机事件
     treeNodeClickHandle(fieldName, { value }) {
       this.form[fieldName] = value;
       this.popoverVisible = false;
     },
+    // 级联选择器值变化处理方法
     cascaderChangeHandle(fieldName, data) {
       this.form[fieldName] = data.map(x => x.value).join(',') || undefined;
       this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
+      // 强制重新渲染组件
+      this.$forceUpdate();
     },
+    // 清空级联选择器
     inputCascaderClearHandle(fieldName) {
       this.form[fieldName] = undefined;
       this[`${fieldName}CascaderTexts`] = '';
     },
+    // 关闭级联选择器下拉面板方法
     closeCascaderHandle(val) {
       this.cascaderVisible = val;
     },
@@ -645,22 +637,6 @@ export default {
     resetForm() {
       this.$refs.form.resetFields();
     },
-    deepFind(arr, mark) {
-      let res = null;
-      for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i].children)) {
-          res = this.deepFind(arr[i].children, mark);
-        }
-        if (res !== null) {
-          return res;
-        }
-        if (arr[i].value === mark) {
-          res = arr[i];
-          break;
-        }
-      }
-      return res;
-    },
     createFormLayout() {
       const colSpan = 24 / this.cols;
       const formItems = this.createFormItem().filter(item => item !== null);
@@ -693,6 +669,25 @@ export default {
           </el-col>
         </el-row>
       ) : null;
+    },
+    // 数字格式化
+    formatNumber(value = '') {
+      value += '';
+      const list = value.split('.');
+      const prefix = list[0].charAt(0) === '-' ? '-' : '';
+      let num = prefix ? list[0].slice(1) : list[0];
+      let result = '';
+      while (num.length > 3) {
+        result = `, ${num.slice(-3)}${result}`;
+        num = num.slice(0, num.length - 3);
+      }
+      if (num) {
+        result = num + result;
+      }
+      return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+    },
+    toPercent(num) {
+      return Number(num * 100).toFixed(5) + '%';
     },
     difference(newVal, oldVal) {
       const res = {};
