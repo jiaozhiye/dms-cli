@@ -394,19 +394,21 @@ export default {
       if (ev.keyCode !== 13) return;
       this.submitForm(ev);
     },
+    excuteFormData(form) {
+      for (let attr in form) {
+        if (attr.includes('|') && Array.isArray(form[attr])) {
+          let [startTime, endTime] = attr.split('|');
+          form[startTime] = form[attr][0];
+          form[endTime] = form[attr][1];
+        }
+      }
+    },
     submitForm(ev) {
       ev && ev.preventDefault();
       this.$refs.form.validate(valid => {
         if (valid) {
-          const { form } = this;
-          for (let attr in form) {
-            if (attr.includes('|') && Array.isArray(form[attr])) {
-              let [startTime, endTime] = attr.split('|');
-              form[startTime] = form[attr][0];
-              form[endTime] = form[attr][1];
-            }
-          }
-          this.$emit('filterChange', form);
+          this.excuteFormData(this.form);
+          this.$emit('filterChange', this.form);
         } else {
           // 校验没通过，展开
           this.expand = true;
@@ -416,6 +418,7 @@ export default {
     },
     resetForm() {
       this.$refs.form.resetFields();
+      this.excuteFormData(this.form);
       this.$emit('filterChange', this.form);
     },
     toggleHandler() {
