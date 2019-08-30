@@ -74,7 +74,7 @@ export default {
       try {
         await this.click();
       } catch (err) {}
-      await sleep(100);
+      await this.sleep(100);
       this.ajaxing = false;
     }
   },
