@@ -353,7 +353,7 @@ export default {
     },
     // 单元格编辑后的渲染方法
     editedScopedRender(column, props) {
-      let res = _.get(props.row, column.dataIndex);
+      let res = _.get(props.row, column.dataIndex) || '';
       if (column.editType === 'select' || column.editType === 'select-multiple') {
         if (Array.isArray(column.editItems) && column.editItems.length) {
           res = Array.isArray(res) ? res : [res];
@@ -1005,9 +1005,8 @@ export default {
         const [type, property] = attr.split('|');
         const rows = this.isMemoryPagination ? this.backUpData : this.originData;
         const tmpList = rows.filter(row => {
-          const target = _.get(row, property);
+          const target = _.get(row, property) || '';
           if (type === 'input' && this.filters[attr] !== '') {
-            if (!target) return false;
             if (typeof target === 'number') {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
             } else {
