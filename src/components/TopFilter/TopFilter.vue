@@ -248,31 +248,10 @@ export default {
       );
     },
     SELECT(option) {
-      const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
-      return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-select v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change} nativeOnKeydown={this.enterEventHandle}>
-            <el-option key="-" label="全部" value="0" />
-            {itemList.map(x => (
-              <el-option key={x.value} label={x.text} value={x.value} />
-            ))}
-          </el-select>
-        </el-form-item>
-      );
+      return this.createSelectHandle(option);
     },
     MULTIPLE_SELECT(option) {
-      const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
-      return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
-          <el-select multiple={true} v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable onChange={change}>
-            {itemList.map(x => (
-              <el-option key={x.value} label={x.text} value={x.value} />
-            ))}
-          </el-select>
-        </el-form-item>
-      );
+      return this.createSelectHandle(option, true);
     },
     DATE(option) {
       const { form } = this;
@@ -355,24 +334,69 @@ export default {
         </el-form-item>
       );
     },
+    createSelectHandle(option, multiple = false) {
+      const { form } = this;
+      const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { fetchApi, params = {} } = request;
+      let { itemList } = option;
+      if (!itemList && fetchApi) {
+        itemList = this[`${fieldName}Options`] || [];
+        if (!_.isEqual(this[`${fieldName}PrevParams`], params)) {
+          this[`${fieldName}PrevParams`] = params;
+          this.querySelectOptions(request, fieldName);
+        }
+      }
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          <el-select
+            multiple={multiple}
+            v-model={form[fieldName]}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            clearable
+            onChange={change}
+            nativeOnKeydown={this.enterEventHandle}
+          >
+            {itemList.map(x => (
+              <el-option key={x.value} label={x.text} value={x.value} />
+            ))}
+          </el-select>
+        </el-form-item>
+      );
+    },
+    // 获取下拉框数据
+    async querySelectOptions({ fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' }, fieldName) {
+      if (process.env.MOCK_DATA === 'true') {
+        const res = require('@/mock/sHelperData').default;
+        this[`${fieldName}Options`] = res.data.map(x => ({ value: x[valueKey], text: x[textKey] }));
+      } else {
+        const res = await fetchApi(params);
+        if (res.resultCode === 200) {
+          const dataList = !datakey ? res.data : _.get(res.data, datakey, []);
+          this[`${fieldName}Options`] = dataList.map(x => ({ value: x[valueKey], text: x[textKey] }));
+        }
+      }
+      this.$forceUpdate();
+    },
     // 获取搜索帮助数据
     async querySearchAsync(request, fieldName, queryString = '', cb) {
-      const { fetchApi, params = {}, datakey = '', fieldKey } = request;
+      const { fetchApi, params = {}, datakey = '', valueKey } = request;
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/sHelperData').default;
         setTimeout(() => {
-          cb(this.createSerachHelperList(res.data, fieldKey));
+          cb(this.createSerachHelperList(res.data, valueKey));
         }, 500);
       } else {
         const res = await fetchApi({ ...{ [fieldName]: queryString }, ...params });
         if (res.resultCode === 200) {
           const dataList = !datakey ? res.data : _.get(res.data, datakey, []);
-          cb(this.createSerachHelperList(dataList, fieldKey));
+          cb(this.createSerachHelperList(dataList, valueKey));
         }
       }
     },
-    createSerachHelperList(list, fieldKey) {
-      return list.map(x => ({ value: x[fieldKey] }));
+    createSerachHelperList(list, valueKey) {
+      return list.map(x => ({ value: x[valueKey] }));
     },
     createInputTreeValue(fieldName, itemList) {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};

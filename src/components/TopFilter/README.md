@@ -49,13 +49,14 @@ Vue.use(TopFilter);
   - &emsp;falseValue: {String/Number|CHECKBOX 取消选中后的值，默认是 '0'}
 - }
 
-`SEARCH_HELPER 配置项`
+`SEARCH_HELPER|SELECT|MULTIPLE_SELECT 配置项`
 
 - request: {
   - &emsp;fetchApi: {Function|搜索帮助的接口函数}
   - &emsp;params: {Object|接口的默认参数}
   - &emsp;datakey: {String|服务端响应数据的数组列表的 key，支持路径操作('step1.step2.items')，不指定表示 res.data 就是数组数据}
-  - &emsp;fieldKey: {String|数据的字段名}
+  - &emsp;valueKey: {String|数据值的字段名}
+  - &emsp;textKey: {String|数据文本的字段名}
 - }
 
 `组件暴露的方法`
