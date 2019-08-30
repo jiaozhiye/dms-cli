@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style lang="less">
-@primaryColor: #bb0a30;
+// @primaryColor: #bb0a30;
 
 .columns-dropdown {
   cursor: pointer;

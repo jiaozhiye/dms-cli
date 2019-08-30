@@ -30,6 +30,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import * as types from '@/api/login/types';
+import { sleep } from '@/utils';
 import { doLogin } from '@/api/login';
 
 export default {
@@ -65,6 +66,7 @@ export default {
           name: res.data.name,
           token: res.data.token
         });
+        await sleep(100);
         this.$router.push({ path: '/' });
       } else {
         this.$notify.error({

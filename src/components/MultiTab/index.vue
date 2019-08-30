@@ -168,6 +168,10 @@ export default {
     position: relative;
     .el-tabs__header {
       margin: 0;
+      border-bottom-color: @borderColor !important;
+      .el-tabs__nav {
+        border-color: @borderColor !important;
+      }
     }
     .el-tabs__content {
       display: none;
@@ -181,7 +185,7 @@ export default {
     top: 50px;
     background-color: #fff;
     padding: 6px 0;
-    border: 1px solid #ebeef5;
+    border: 1px solid @borderColorSecondary;
     border-radius: @borderRadius;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     z-index: 1001;

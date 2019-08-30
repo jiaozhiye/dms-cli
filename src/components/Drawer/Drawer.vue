@@ -229,7 +229,7 @@ export default {
         border-radius: 4px 4px 0 0;
         background: #fff;
         color: rgba(0, 0, 0, 0.65);
-        border-bottom: 1px solid #e8e8e8;
+        border-bottom: 1px solid @borderColor;
         .drawer-title {
           margin: 0;
           font-size: 16px;
@@ -254,7 +254,7 @@ export default {
         outline: 0;
         padding: 0;
         &:hover {
-          color: #bb0a30;
+          color: @primaryColor;
           text-decoration: none;
         }
         .drawer-close-x {

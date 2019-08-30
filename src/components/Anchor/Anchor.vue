@@ -144,7 +144,7 @@ export default {
     width: 80px;
     height: 100%;
     margin-right: 10px;
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid @borderColor;
     li {
       list-style: none;
       height: 40px;
@@ -154,7 +154,7 @@ export default {
       position: relative;
       cursor: pointer;
       &.selected {
-        color: #bb0a30;
+        color: @primaryColor;
         &::after {
           content: '';
           position: absolute;
@@ -162,7 +162,7 @@ export default {
           top: 0;
           width: 2px;
           height: 100%;
-          background-color: #bb0a30;
+          background-color: @primaryColor;
         }
       }
     }

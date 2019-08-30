@@ -146,7 +146,7 @@ export default {
       line-height: 56px;
       padding: 0 20px;
       box-sizing: border-box;
-      border-bottom: 1px solid #d9d9d9;
+      border-bottom: 1px solid @borderColor;
       .el-dialog__title {
         font-size: 16px;
         line-height: inherit;
@@ -162,7 +162,7 @@ export default {
         line-height: 1;
         cursor: pointer;
         &:hover {
-          color: #bb0a30;
+          color: @primaryColor;
         }
       }
       .container {
@@ -171,7 +171,7 @@ export default {
     }
     .el-dialog__footer {
       padding: 10px 20px;
-      border-top: 1px solid #d9d9d9;
+      border-top: 1px solid @borderColor;
     }
   }
 }

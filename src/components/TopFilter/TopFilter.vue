@@ -538,7 +538,7 @@ export default {
         }
         .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
         .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
-          border-color: #d9d9d9;
+          border-color: @borderColor;
         }
       }
       .el-range-editor {

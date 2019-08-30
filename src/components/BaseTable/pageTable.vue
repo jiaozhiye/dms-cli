@@ -48,7 +48,7 @@ export default {
     },
     datakey: {
       type: String,
-      default: 'records'
+      default: 'items'
     },
     isMemoryPagination: {
       type: Boolean,
@@ -1639,7 +1639,7 @@ export default {
 </script>
 
 <style lang="less">
-@primaryColor: #bb0a30;
+// @primaryColor: #bb0a30;
 @tableBgColor: #f2f2f2;
 @tableHoverColor: #f5f5f5;
 @dangerColor: #f5222d;

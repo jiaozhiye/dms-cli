@@ -44,7 +44,7 @@ export default {
     },
     datakey: {
       type: String,
-      default: 'records'
+      default: 'items'
     },
     isMemoryPagination: {
       type: Boolean,
@@ -233,9 +233,9 @@ export default {
           slot="reference"
           style={{
             padding: '12px 2px 6px 10px',
-            marginLeft: '-10px',
-            color: this.isValueFalse(this.search[`${property}Val`]) ? '' : '#bb0a30'
+            marginLeft: '-10px'
           }}
+          class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterActived'}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
@@ -385,6 +385,8 @@ export default {
 </script>
 
 <style lang="less">
+// @primaryColor: #bb0a30;
+
 .popper-wrap {
   min-width: auto;
   .el-checkbox {
@@ -398,5 +400,8 @@ export default {
       width: auto;
     }
   }
+}
+.topFilterActived {
+  color: @primaryColor;
 }
 </style>

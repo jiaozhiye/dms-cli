@@ -59,25 +59,33 @@ export default {
     };
   },
   computed: {
-    btnDisabled() {
+    isDisabled() {
       return this.ajaxing || this.disabled;
     }
   },
   methods: {
+    async sleep(timeLen) {
+      return new Promise(resolve => {
+        setTimeout(resolve, timeLen);
+      });
+    },
     async clickHandle() {
       this.ajaxing = true;
       try {
         await this.click();
       } catch (err) {}
+      await sleep(100);
       this.ajaxing = false;
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $slots } = this;
+    const { $props, $listeners, $attrs, $slots, ajaxing, isDisabled } = this;
     const wrapProps = {
       key: 'ajax-btn',
       props: {
-        ...$props
+        ...$props,
+        loading: ajaxing,
+        disabled: isDisabled
       },
       attrs: { ...$attrs },
       on: {
