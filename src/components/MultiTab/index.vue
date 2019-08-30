@@ -171,6 +171,9 @@ export default {
       border-bottom-color: @borderColor !important;
       .el-tabs__nav {
         border-color: @borderColor !important;
+        .el-tabs__item {
+          border-left-color: @borderColor !important;
+        }
       }
     }
     .el-tabs__content {
