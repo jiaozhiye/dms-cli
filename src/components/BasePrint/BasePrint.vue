@@ -45,6 +45,7 @@ export default {
       if (!this.LODOP) {
         this.LODOP = getLodop();
       }
+      if (!this.LODOP) return;
       this.LODOP.PRINT_INIT('打印表格');
       if (this.direction === 'vertical') {
         if (this.alwaysPrint) {

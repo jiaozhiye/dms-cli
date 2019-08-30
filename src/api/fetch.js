@@ -78,7 +78,7 @@ instance.interceptors.response.use(({ data }) => {
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
     removeToken();
     removeUser();
-    router.push({ path: '/' });
+    setTimeout(() => router.push({ path: '/' }), 100);
   }
   return data;
 }, errorHandler);
