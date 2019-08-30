@@ -1007,6 +1007,7 @@ export default {
         const tmpList = rows.filter(row => {
           const target = _.get(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
+            if (!target) return false;
             if (typeof target === 'number') {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
             } else {
