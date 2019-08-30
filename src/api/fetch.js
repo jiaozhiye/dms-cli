@@ -67,6 +67,13 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(({ data }) => {
   store.dispatch('app/clearBtnLoading');
+  // 错误数据提示
+  if (data.resultCode !== 200) {
+    Notification.error({
+      title: '请求提示信息',
+      message: data.errMsg
+    });
+  }
   // token 过期，需要重新登录
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
     removeToken();
