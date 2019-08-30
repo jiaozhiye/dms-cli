@@ -308,6 +308,13 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             pickerOptions={this.pickerOptions}
+            onChange={val => {
+              // 点击了清空按钮
+              if (val === null) {
+                form[fieldName] = [];
+                this.excuteFormData(form);
+              }
+            }}
           />
         </el-form-item>
       );
