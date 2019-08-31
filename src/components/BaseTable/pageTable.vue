@@ -1476,6 +1476,12 @@ export default {
     RESET_TABLE_DATA() {
       this.createTableList({});
     },
+    START_LOADING(){
+      this.loading = true;
+    },
+    STOP_LOADING(){
+      this.loading = false;
+    },
     GET_UPDATE_ROWS() {
       return this.actionsLog.update;
     },

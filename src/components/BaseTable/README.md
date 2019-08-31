@@ -162,6 +162,8 @@ http://localhost:8080/table
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}
 - CLEAR_EXECUTE_LOG{Function|清空之前对组件的 CURD 操作记录，没有参数}
 - RESET_TABLE_DATA{Function|清空组件数据及相关配置项，没有参数}
+- START_LOADING{Function|开启 table 组件 loading 动画}
+- STOP_LOADING{Function|关闭 table 组件 loading 动画}
 - GET_UPDATE_ROWS{Function|可编辑单元格值改变所对应的行，没有参数，返回值是数据行组成的数组}
 - GET_INSERT_ROWS{Function|记录新增的行，没有参数，返回值是数据行组成的数组}
 - GET_DELETE_ROWS{Function|记录移除的行，没有参数，返回值是被移除数据行组成的数组}
