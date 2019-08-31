@@ -1,11 +1,23 @@
-#app {
+#app .sidebar {
   .el-menu {
     border: none;
     height: 100%;
     width: 100% !important;
   }
 
-  .el-submenu__title {
+  .el-submenu {
+    & [class^='el-icon-'],
+    & [class^='iconfont icon-'] {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+    }
+  }
+
+  .el-submenu .el-submenu__title {
     &:hover {
       background-color: @menuHover !important;
     }

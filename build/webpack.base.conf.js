@@ -46,7 +46,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         use: 'happypack/loader?id=babel',
-        include: utils.resolve('src'),
+        include: [utils.resolve('src')],
         exclude: /node_modules/
       },
       {
@@ -60,7 +60,7 @@ module.exports = {
       {
         test: /\.(png|jpe?g|svg|gif|ico)(\?.*)?$/,
         loader: 'url-loader',
-        include: utils.resolve('src/assets/img'),
+        exclude: [utils.resolve('src/components/SvgIcon/svg')],
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')

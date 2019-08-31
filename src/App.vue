@@ -6,6 +6,7 @@
 
 <script>
 import '@/assets/css/reset.css';
+import '@/assets/css/iconfont.css';
 import '@/assets/css/style.less';
 
 export default {

@@ -12,7 +12,7 @@ const AsyncComponent = __name__ => () => import(`@/pages/${__name__}`);
 const menuRoutes = [
   {
     path: '/bjgl',
-    meta: { title: '备件管理', icon: 'el-icon-data-analysis' },
+    meta: { title: '备件管理', icon: 'iconfont icon-shaixuan' },
     redirect: '/bjgl/cggl',
     component: RouteView,
     children: [
