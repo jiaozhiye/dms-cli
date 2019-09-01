@@ -219,9 +219,8 @@ export default {
       this.toFirstPage();
     },
     fetchParams(nextProps, prevProps) {
-      const diff = Object.keys(this.difference(nextProps, prevProps)).join('');
       // 内存分页 && 只有页码发生变化
-      if (this.isMemoryPagination && diff === 'pageNum') {
+      if (this.isMemoryPagination && this.isOnlyPageChange(nextProps, prevProps)) {
         this.createLimitRecords();
       } else {
         this.getTableData();
@@ -269,6 +268,11 @@ export default {
     createLimitRecords() {
       const { current, pageSize } = this.pagination;
       this.list = this.originData.slice((current - 1) * pageSize, current * pageSize);
+    },
+    // 是否仅有分页参数产生变化
+    isOnlyPageChange(nextProps, prevProps) {
+      const diff = Object.keys(this.difference(nextProps, prevProps)).join('|');
+      return diff === 'pageNum|currentPage' || diff === 'pageSize|limit';
     },
     // 创建表格数据
     createTableList(data) {
@@ -827,7 +831,7 @@ export default {
     },
     // ajax 获取服务端列表数据
     async getTableData() {
-      // 没有 api 接口，xhrAbort true，取消本次请求
+      // 没有 api 接口，xhrAbort: true，取消本次请求
       if (!this.fetchapi || this.fetchParams.xhrAbort) return;
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/tableData').default;
@@ -835,8 +839,11 @@ export default {
         this.createTableList(res.data);
       } else {
         this.loading = true;
+        const params = { ...this.fetchParams };
+        // 移除 xhrAbort 属性
+        delete params.xhrAbort;
         try {
-          const res = await this.fetchapi(this.fetchParams);
+          const res = await this.fetchapi(params);
           if (res.resultCode === 200) {
             // 构建表格数据
             this.createTableList(res.data);
@@ -1476,10 +1483,10 @@ export default {
     RESET_TABLE_DATA() {
       this.createTableList({});
     },
-    START_LOADING(){
+    START_LOADING() {
       this.loading = true;
     },
-    STOP_LOADING(){
+    STOP_LOADING() {
       this.loading = false;
     },
     GET_UPDATE_ROWS() {

@@ -9,7 +9,7 @@ export default {
   maxCacheNum: 10, // 路由组件最大缓存数量
   table: {
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 10, // 10, 20, 30, 40
     serverSort: false,
     serverFilter: false
   }

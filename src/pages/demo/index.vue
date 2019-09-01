@@ -18,6 +18,7 @@
       ref="table"
       :columns="columns"
       :dataSource="list"
+      :isMemoryPagination="true"
       :onColumnsChange="columns => this.columns = columns"
     >
       <template slot="moreActions">

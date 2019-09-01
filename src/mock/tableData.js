@@ -4,7 +4,7 @@ export default {
   code: 1,
   message: '',
   data: Mock.mock({
-    'items|10': [
+    'items|50': [
       {
         'id|+1': 1,
         person: {
@@ -28,6 +28,6 @@ export default {
         address: '@county(true)'
       }
     ],
-    'total|20-200': 1
+    'total|50': 1
   })
 };
