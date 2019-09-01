@@ -56,6 +56,12 @@ export default {
         return [];
       }
     },
+    cellstyles: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     selectionType: {
       type: String,
       default: 'multiple'

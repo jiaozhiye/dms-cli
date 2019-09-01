@@ -77,6 +77,7 @@ http://localhost:8080/table
   - params 中如果有 xhrAbort 属性，并且值是 true，表示取消 ajax 请求
   - params 中如果有 noJumper 属性，并且值是 true，表示当前查询不会跳回到第一页
 - rowstyles{Array|动态指定列表行的样式[{ row: 行数据, styles: {color: 'red'} }, ...]}
+- cellstyles{Array|动态指定单元格的样式[{ row: 行数据, dataIndex: 'xxx', styles: {backgroundColor: 'red'} }, ...]}
 - selectionType{String|table 行选中类型，multiple/single，默认是多选}
 - isSelectColumn{Boolean|是否显示可选择的列，默认显示可选择列}
 - defaultSelections{Array|默认选中列表行}
@@ -151,8 +152,6 @@ http://localhost:8080/table
   - &emsp;aliasKey: {name: { dataIndex: 'person.name' }, price: { dataIndex: 'price', disabled: true }}
   - }
 - render{Function|单元格作用域插槽渲染函数，参数是当前单元格作用域对象，返回值是 JSX 类型节点}
-- 切换可编辑列中某些单元格的编辑状态：xxxDisableEdit -> xxx 为 column 的 dataIndex，强制该单元格的编辑状态，true 不可编辑
-  - 实现方式：this.\$set(行数据, 'xxxDisableEdit', true);
 
 `FilterTable 组件暴露的方法`
 
@@ -160,10 +159,11 @@ http://localhost:8080/table
 - EXECUTE_INSERT{Function|执行插入列表行操作，参数是新增行的对象或数组}
 - EXECUTE_DELETE{Function|执行移除列表选中行的操作，参数是行数据的数组(可选)，返回值是移除行组成的数组}
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}
-- CLEAR_EXECUTE_LOG{Function|清空之前对组件的 CURD 操作记录，没有参数}
-- RESET_TABLE_DATA{Function|清空组件数据及相关配置项，没有参数}
+- SET_COLUMNS_EDITABLE{Function|动态设置 table 列的编辑状态，参数 1: dataIndex 或由 dataIndex 组成的数组，参数 2: 可编辑状态(true/false)}
+- SET_CELL_UNEDITABLE{Function|动态设置可编辑列单元格的禁止编辑状态，参数 1: row 或由 row 组成的数组，参数 2: dataIndex，参数 3: 是否禁止编辑(true/false)}
 - START_LOADING{Function|开启 table 组件 loading 动画}
 - STOP_LOADING{Function|关闭 table 组件 loading 动画}
+- CLEAR_EXECUTE_LOG{Function|清空之前对组件的 CURD 操作记录，没有参数}
 - GET_UPDATE_ROWS{Function|可编辑单元格值改变所对应的行，没有参数，返回值是数据行组成的数组}
 - GET_INSERT_ROWS{Function|记录新增的行，没有参数，返回值是数据行组成的数组}
 - GET_DELETE_ROWS{Function|记录移除的行，没有参数，返回值是被移除数据行组成的数组}

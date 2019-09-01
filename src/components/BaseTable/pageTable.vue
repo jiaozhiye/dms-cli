@@ -60,6 +60,12 @@ export default {
         return [];
       }
     },
+    cellstyles: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     selectionType: {
       type: String,
       default: 'multiple'
@@ -234,6 +240,7 @@ export default {
       this.createRowSelection(nextProps);
     },
     columns(nextProps) {
+      if (!this.isEditable) return;
       this.editPos.marks = this.createEditableKeys(this.createFilterColumns(nextProps));
     },
     filters(nextProps, prevProps) {
@@ -1150,7 +1157,7 @@ export default {
       }
     },
     // 设置 table row 行间样式
-    tableRowStyle({ row, rowIndex }) {
+    tableRowStyle({ row }) {
       const targetRow = this.rowstyles.find(x => x.row === row);
       if (targetRow) {
         return targetRow.styles;
@@ -1158,14 +1165,23 @@ export default {
       return '';
     },
     // 切换 table row 类选择器
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName({ row }) {
       if (this.selectionRows.includes(row)) {
         return 'selection-row';
       }
       return '';
     },
+    // 设置 table cell 行间样式
+    tableCellStyle({ row, column }) {
+      const { property = '' } = column;
+      const targetCell = this.cellstyles.find(x => x.row === row && x.dataIndex === property);
+      if (targetCell) {
+        return targetCell.styles;
+      }
+      return '';
+    },
     // 自定义单元格的 class
-    tableCellClassName({ row, column, rowIndex, columnIndex }) {
+    tableCellClassName({ column }) {
       const { property = '' } = column;
       return this.createClassName(property);
     },
@@ -1477,11 +1493,34 @@ export default {
     EXECUTE_RESET_HEIGHT() {
       this.calcTableHeight();
     },
+    SET_COLUMNS_EDITABLE(dataIndexs, state) {
+      dataIndexs = Array.isArray(dataIndexs) ? dataIndexs : [dataIndexs];
+      let index = -1;
+      dataIndexs.forEach(dataIndex => {
+        const column = this.deepFind(this.columns, dataIndex);
+        if (!column) return;
+        index++;
+        // 设置列的默认编辑状态
+        column.defaultEditable = Boolean(state);
+        const rows = this.isMemoryPagination ? this.originData : this.list;
+        // 设置单元格的编辑状态
+        rows.forEach(x => this.setCellEditState(x, dataIndex, Boolean(state)));
+      });
+      if (index !== -1) {
+        // 同步组件外 columns，非常重要
+        this.onColumnsChange(this.columns);
+      }
+    },
+    SET_CELL_UNEDITABLE(rows, dataIndex, state) {
+      rows = Array.isArray(rows) ? rows : [rows];
+      rows.forEach(row => {
+        if (!row._uid) return;
+        // 强制该单元格不可编辑
+        this.$set(row, `${dataIndex}DisableEdit`, Boolean(state));
+      });
+    },
     CLEAR_EXECUTE_LOG() {
       this.clearTableHandleLog();
-    },
-    RESET_TABLE_DATA() {
-      this.createTableList({});
     },
     START_LOADING() {
       this.loading = true;
@@ -1596,6 +1635,7 @@ export default {
           header-row-class-name="table-header"
           row-style={this.tableRowStyle}
           row-class-name={this.tableRowClassName}
+          cell-style={this.tableCellStyle}
           cell-class-name={this.tableCellClassName}
           show-summary={isShowSummary}
           summary-method={this.getSummaries}
