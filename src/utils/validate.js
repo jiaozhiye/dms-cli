@@ -6,6 +6,7 @@
  */
 import { isFormEmpty } from './index';
 
+// 手机号校验
 export const phone = (rule, value, callback) => {
   if (rule.required && isFormEmpty('手机号不能为空')) {
     return callback(new Error(message));

@@ -237,18 +237,16 @@ export default {
       return (
         <span
           slot="reference"
-          style={{
-            padding: '5px 2px 2px 10px',
-            marginLeft: '-10px'
-          }}
-          class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterActived'}
+          style={{ padding: '5px 2px 2px 10px', marginLeft: '-10px' }}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
             this.showCurrentPopover(property);
           }}
         >
-          {column.label} <i class="el-icon-arrow-down" />
+          <span class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterActived'}>
+            {column.label} <i class="el-icon-arrow-down" />
+          </span>
         </span>
       );
     },
@@ -316,9 +314,10 @@ export default {
             {type === 'date-range' && (
               <el-date-picker
                 size="small"
-                v-model={this.search[`${property}Val`]}
-                style={{ width: '240px' }}
                 type="daterange"
+                v-model={this.search[`${property}Val`]}
+                unlink-panels={true}
+                style={{ width: '240px' }}
                 format="yyyy 年 MM 月 dd 日"
                 value-format="yyyy-MM-dd"
                 range-separator="至"

@@ -1577,7 +1577,6 @@ export default {
       columnInfo,
       loading,
       list,
-      height,
       tableHeight,
       selectionRows,
       isSelectColumn,
@@ -1597,6 +1596,32 @@ export default {
     };
     const paginationProps = {
       props: { pagination, onPageChange: this.onPageChange }
+    };
+    const tHeight = this.height !== 'auto' ? { height: tableHeight } : {};
+    const tablParams = {
+      props: {
+        size: 'mini',
+        border: true,
+        ...tHeight,
+        data: list,
+        rowKey: record => record._uid,
+        headerRowClassName: 'table-header',
+        rowStyle: this.tableRowStyle,
+        rowClassName: this.tableRowClassName,
+        cellStyle: this.tableCellStyle,
+        cellClassName: this.tableCellClassName,
+        showSummary: isShowSummary,
+        summaryMethod: this.getSummaries,
+        spanMethod: this.mergeCellMethod
+      },
+      on: {
+        'sort-change': this.sortChangeHandler,
+        'selection-change': this.handleSelectionChange,
+        'cell-click': this.cellClickHandler,
+        'cell-dblclick': this.cellDbclickHandler,
+        'header-dragend': this.headerDragendHandler
+      },
+      style: { width: '100%' }
     };
     return (
       <div class="table-wrapper">
@@ -1623,29 +1648,7 @@ export default {
             {isColumnFilter && <ColumnFilter {...columnFilterProps} style={{ marginRight: '10px' }} />}
           </section>
         </div>
-        <el-table
-          ref="appTable"
-          size="mini"
-          border
-          height={height !== 'auto' ? tableHeight : height}
-          style={{ width: '100%' }}
-          data={list}
-          row-key={record => record._uid}
-          v-loading={loading}
-          header-row-class-name="table-header"
-          row-style={this.tableRowStyle}
-          row-class-name={this.tableRowClassName}
-          cell-style={this.tableCellStyle}
-          cell-class-name={this.tableCellClassName}
-          show-summary={isShowSummary}
-          summary-method={this.getSummaries}
-          span-method={this.mergeCellMethod}
-          on-sort-change={this.sortChangeHandler}
-          on-selection-change={this.handleSelectionChange}
-          on-cell-click={this.cellClickHandler}
-          on-cell-dblclick={this.cellDbclickHandler}
-          on-header-dragend={this.headerDragendHandler}
-        >
+        <el-table ref="appTable" v-loading={loading} {...tablParams}>
           {this.createColumns(columns)}
         </el-table>
         {isShowPagination && <Pagination {...paginationProps} />}

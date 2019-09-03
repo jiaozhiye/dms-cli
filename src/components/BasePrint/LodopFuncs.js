@@ -55,16 +55,16 @@ if (needCLodop()) {
 
 //====获取LODOP对象的主过程：====
 export function getLodop(oOBJECT, oEMBED) {
-  var strHtmInstall = "打印控件未安装!点击这里<a href='/static/plug/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
-  var strHtmUpdate = "打印控件需要升级!点击这里<a href='/static/plug/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。";
-  var strHtm64_Install = "打印控件未安装!点击这里<a href='/static/plug/install_lodop64.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
-  var strHtm64_Update = "打印控件需要升级!点击这里<a href='/static/plug/install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。";
+  var strHtmInstall = "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
+  var strHtmUpdate = "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。";
+  var strHtm64_Install = "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop64.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
+  var strHtm64_Update = "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。";
   var strHtmFireFox = '（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）';
   var strHtmChrome = '(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）';
-  var strCLodopInstall_1 = "Web打印服务CLodop未安装启动，点击这里<a href='/static/plug/CLodop_Setup_for_Win32NT.exe' target='_self'>下载执行安装</a>，";
+  var strCLodopInstall_1 = "Web打印服务CLodop未安装启动，点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>下载执行安装</a>，";
   var strCLodopInstall_2 = "（若此前已安装过，可<a href='CLodop.protocol:setup' target='_self'>点这里直接再次启动</a>），";
   var strCLodopInstall_3 = '成功后请<strong>刷新本页面</strong>。';
-  var strCLodopUpdate = "Web打印服务CLodop需升级!点击这里<a href='/static/plug/CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。";
+  var strCLodopUpdate = "Web打印服务CLodop需升级!点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。";
   var LODOP;
   try {
     var ua = navigator.userAgent;

@@ -16,6 +16,7 @@
     </button-area>
     <FilterTable
       ref="table"
+      columnsRef="demo-table"
       :columns="columns"
       :dataSource="list"
       :isMemoryPagination="true"
