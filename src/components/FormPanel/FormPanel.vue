@@ -766,11 +766,17 @@ export default {
 .form-panel {
   .el-col {
     min-height: 32px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
       .el-form-item__content {
         line-height: 30px;
+        .el-form-item__error {
+          margin-top: -2px;
+          transform-origin: 0 50%;
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
       }
       .el-form-item__label {
         font-size: @textSizeSecondary;
