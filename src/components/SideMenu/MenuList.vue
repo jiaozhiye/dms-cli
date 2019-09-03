@@ -184,6 +184,10 @@ export default {
                 a {
                   font-size: 12px;
                   color: @menuText;
+                  transition: all 0.3s ease;
+                  &:hover {
+                    color: @menuActiveText;
+                  }
                 }
               }
             }

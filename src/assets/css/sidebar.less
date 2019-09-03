@@ -1,4 +1,5 @@
-#app .sidebar {
+.sidebar,
+.el-menu--vertical {
   .el-menu {
     border: none;
     height: 100%;
@@ -18,22 +19,32 @@
   }
 
   .el-submenu .el-submenu__title {
+    height: 40px;
+    line-height: 40px;
     &:hover {
       background-color: @menuHover !important;
     }
   }
 
   .el-submenu .el-menu-item {
+    height: 40px;
+    line-height: 40px;
     background-color: @subMenuBg !important;
     &:hover {
       background-color: @subMenuHover !important;
     }
+    &.is-active {
+      color: @subMenuActiveText !important;
+      background-color: @primaryColor !important;
+    }
   }
 
-  .side-menu .is-active > .el-submenu__title {
-    color: @subMenuActiveText !important;
-    i {
+  .side-menu .el-menu {
+    .is-active > .el-submenu__title {
       color: @subMenuActiveText !important;
+      i {
+        color: @subMenuActiveText !important;
+      }
     }
   }
 }

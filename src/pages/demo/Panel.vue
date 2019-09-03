@@ -96,14 +96,17 @@ export default {
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
-          type: 'SEARCH_HELPER',
+          type: 'SELECT',
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
           initialValue: '',
           request: {
-            fetchApi: () => {},
-            fieldKey: 'name'
+            fetchApi: () => {}, // 接口方法
+            params: {}, // ajax 参数
+            datakey: 'records', // 服务端响应数据的数组列表的 key，支持路径操作('step1.step2.items')，不指定表示 res.data 就是数组数据
+            valueKey: 'value', // 数据值的字段名
+            textKey: 'text' // 数据文本的字段名
           },
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },

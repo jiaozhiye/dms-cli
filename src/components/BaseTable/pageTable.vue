@@ -1744,10 +1744,14 @@ export default {
   }
   .el-table__header {
     thead > tr > th {
+      padding: 2px 0;
       background: none;
     }
   }
   .el-table__body {
+    tbody > tr > td {
+      padding: 2px 0;
+    }
     .selection-row {
       background-color: @tableHoverColor;
     }
@@ -1779,6 +1783,7 @@ export default {
   }
   .el-table__footer {
     tbody > tr > td {
+      padding: 2px 0;
       background-color: @tableBgColor !important;
     }
   }

@@ -62,10 +62,10 @@ export default {
 
 <style lang="less" scoped>
 .all-menu {
-  height: 56px;
+  height: 40px;
   background-color: @menuBg;
   .title {
-    line-height: 56px;
+    line-height: 40px;
     color: @menuText;
     padding-left: 20px;
     cursor: pointer;

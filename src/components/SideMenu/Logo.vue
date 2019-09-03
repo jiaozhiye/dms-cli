@@ -40,8 +40,9 @@ export default {
   h1 {
     display: inline-block;
     color: #fff;
-    font-size: @textSize;
+    font-size: 16px;
     font-weight: normal;
+    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
   }
 }
 </style>

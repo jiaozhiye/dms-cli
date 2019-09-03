@@ -238,7 +238,7 @@ export default {
         <span
           slot="reference"
           style={{
-            padding: '12px 2px 6px 10px',
+            padding: '5px 2px 2px 10px',
             marginLeft: '-10px'
           }}
           class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterActived'}
