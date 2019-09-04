@@ -1699,6 +1699,7 @@ export default {
 
 <style lang="less">
 // @primaryColor: #bb0a30;
+// @borderColor: #d9d9d9;
 @tableBgColor: #f2f2f2;
 @tableHoverColor: #f5f5f5;
 @dangerColor: #f5222d;
@@ -1718,7 +1719,7 @@ export default {
       height: 32px;
       padding: 0 12px 0 10px;
       background-color: @tableBgColor;
-      border: 1px solid #d9d9d9;
+      border: 1px solid @borderColor;
       .el-icon-info {
         color: @primaryColor;
       }

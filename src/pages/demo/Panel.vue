@@ -181,7 +181,26 @@ export default {
           type: 'TIME_SELECT',
           label: '时间',
           fieldName: 'time1',
+          offsetRightCols: 2,
           placeholder: '选择时间',
+          rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
+        },
+        {
+          type: 'TEXT_AREA',
+          label: '时间',
+          fieldName: 'aaa',
+          placeholder: '选择时间',
+          rows: 1,
+          selfCols: 1,
+          rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
+        },
+        {
+          type: 'TEXT_AREA',
+          label: '时间',
+          fieldName: 'bbb',
+          placeholder: '选择时间',
+          rows: 1,
+          selfCols: 2,
           rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
         }
       ];

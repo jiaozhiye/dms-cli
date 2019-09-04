@@ -483,10 +483,9 @@ export default {
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
       const count = expand ? formItems.length : cols - 1;
-      const allColSpan = ['TEXT_AREA', 'MULTIPLE_CHECKBOX'];
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} span={allColSpan.includes(Node.type) ? 24 : colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );
@@ -567,6 +566,15 @@ export default {
       }
       .el-date-editor {
         width: 100%;
+      }
+      .el-textarea {
+        .el-textarea__inner {
+          font-family: inherit;
+        }
+        .el-input__count {
+          line-height: 12px;
+          right: 6px;
+        }
       }
       .el-input-number {
         width: 100%;

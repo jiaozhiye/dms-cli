@@ -666,13 +666,12 @@ export default {
     createFormLayout() {
       const colSpan = 24 / this.cols;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const allColSpan = ['TEXT_AREA', 'MULTIPLE_CHECKBOX'];
       const colFormItems = formItems.map((Node, i) => {
         const spans = _.isUndefined(Node.cols) ? colSpan : Node.cols * colSpan;
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} offset={offsetLeft} span={allColSpan.includes(Node.type) ? 24 : spans} style={{ marginRight: offsetRight }}>
+          <el-col key={i} offset={offsetLeft} span={spans} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );
@@ -790,6 +789,15 @@ export default {
       }
       .el-date-editor {
         width: 100%;
+      }
+      .el-textarea {
+        .el-textarea__inner {
+          font-family: inherit;
+        }
+        .el-input__count {
+          line-height: 12px;
+          right: 6px;
+        }
       }
       .el-input-number {
         width: 100%;
