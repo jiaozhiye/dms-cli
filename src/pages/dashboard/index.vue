@@ -32,6 +32,7 @@ export default {
           options: {
             titles: ['品牌', '车型', '车系']
           },
+          initialValue: '1,1-2,1-2-1',
           itemList: [
             {
               text: '一级分类1',

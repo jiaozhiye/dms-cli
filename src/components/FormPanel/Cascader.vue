@@ -39,8 +39,11 @@ export default {
     }
   },
   watch: {
-    values(val) {
-      this.$emit('change', val);
+    values: {
+      handler(val) {
+        this.$emit('change', val);
+      },
+      immediate: true
     },
     defaultValue(val) {
       this.values = this.createInitValue(val);
@@ -60,7 +63,6 @@ export default {
           }
         });
       }
-      this.$emit('change', res);
       return res;
     },
     clickHandle(ev, index, { value, text, children }) {
