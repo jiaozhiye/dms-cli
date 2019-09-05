@@ -5,15 +5,15 @@
  * @Last Modified time: 2019-06-20 15:45:00
  */
 'use strict';
-
 const path = require('path');
+
 module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
-    // http proxy
+    // Http Proxy
     proxyTable: {
       '/api': {
         target: 'http://jettadms-test.faw-vw.com',
@@ -26,7 +26,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: '127.0.0.1',
-    port: 8080,
+    port: 8081,
     autoOpenBrowser: true,
 
     // Source Maps

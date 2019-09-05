@@ -400,7 +400,7 @@ export default {
         );
       }
       if (column.editType === 'date-picker') {
-        const { dateFormat = 'yyyy-MM-dd' } = column;
+        const { dateFormat = 'yyyy-MM-dd HH:mm:ss' } = column;
         const dateType = dateFormat === 'yyyy-MM-dd HH:mm:ss' ? 'datetime' : 'date';
         return (
           <el-date-picker
@@ -411,7 +411,7 @@ export default {
             clearable={false}
             placeholder="选择日期"
             format={dateFormat}
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format={dateFormat}
             disabled={column.disabled || props.row.isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
