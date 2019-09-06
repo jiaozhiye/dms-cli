@@ -21,6 +21,7 @@
       :dataSource="list"
       :isMemoryPagination="true"
       :onColumnsChange="columns => this.columns = columns"
+      :onSyncTableData="tableDateChange"
     >
       <template slot="moreActions">
         <span>批量删除</span>
@@ -259,6 +260,19 @@ export default {
           }
         },
         {
+          title: '是否选择',
+          dataIndex: 'choice',
+          align: 'center',
+          sorter: true,
+          filter: true,
+          filterType: 'radio',
+          filterItems: [{ text: '未选择', value: '0' }, { text: '已选择', value: '1' }],
+          editable: true,
+          defaultEditable: true,
+          editType: 'checkbox',
+          editItems: [{ text: '', falseValue: '0' }, { text: '', trueValue: '1' }]
+        },
+        {
           title: '状态',
           dataIndex: 'state',
           width: 150,
@@ -305,6 +319,9 @@ export default {
     },
     printHandler() {
       this.$refs.print.EXCUTE_PRINT();
+    },
+    tableDateChange(list) {
+      console.log(list);
     }
   },
   mounted() {

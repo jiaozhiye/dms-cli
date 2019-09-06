@@ -364,11 +364,13 @@ export default {
     },
     // 单元格编辑后的渲染方法
     editedScopedRender(column, props) {
+      const { editType } = column;
       let res = _.get(props.row, column.dataIndex);
-      if (column.editType === 'select' || column.editType === 'select-multiple') {
+      if (editType === 'select' || editType === 'select-multiple' || editType === 'checkbox') {
         if (Array.isArray(column.editItems) && column.editItems.length) {
+          const editItems = editType === 'checkbox' ? column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x })) : column.editItems;
           res = Array.isArray(res) ? res : [res];
-          res = column.editItems
+          res = editItems
             .filter(x => res.includes(x.value))
             .map(x => x.text)
             .join(', ');
@@ -380,13 +382,13 @@ export default {
     },
     // 单元格处于可编辑状态的渲染方法
     edittingScopedRender(column, props) {
-      const { dataIndex } = column;
+      const { dataIndex, editType } = column;
       const prevValue = _.get(props.row, dataIndex);
-      if (column.editType === 'select' || column.editType === 'select-multiple') {
+      if (editType === 'select' || editType === 'select-multiple') {
         return (
           <el-select
             size="mini"
-            multiple={column.editType === 'select-multiple'}
+            multiple={editType === 'select-multiple'}
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder="请选择"
@@ -399,7 +401,26 @@ export default {
           </el-select>
         );
       }
-      if (column.editType === 'date-picker') {
+      if (editType === 'checkbox') {
+        const editItems = column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x }));
+        const { trueValue = '1' } = editItems.find(x => typeof x.trueValue !== 'undefined') || {};
+        const { falseValue = '0' } = editItems.find(x => typeof x.falseValue !== 'undefined') || {};
+        return (
+          <el-checkbox
+            value={prevValue}
+            onInput={val => _.set(props.row, dataIndex, val)}
+            disabled={column.disabled || props.row.isDisabled}
+            trueLabel={trueValue}
+            falseLabel={falseValue}
+            onChange={value => {
+              this.editCellChangeHandle(value, props.row._uid, dataIndex);
+            }}
+          >
+            {editItems.find(x => x.value === _.get(props.row, dataIndex)).text}
+          </el-checkbox>
+        );
+      }
+      if (editType === 'date-picker') {
         const { dateFormat = 'yyyy-MM-dd HH:mm:ss' } = column;
         const dateType = dateFormat === 'yyyy-MM-dd HH:mm:ss' ? 'datetime' : 'date';
         return (
@@ -439,7 +460,7 @@ export default {
               if (!isRemoveHandle && !column.editPattern.test(val)) return;
             }
             // 数值类型的校验
-            if (column.editType === 'number') {
+            if (editType === 'number') {
               let isPassCheck = (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
               if (!isPassCheck) return;
               // 不允许是负数
@@ -456,14 +477,14 @@ export default {
             _.set(props.row, dataIndex, val);
           }}
           onChange={value => {
-            if (column.editType === 'number') {
+            if (editType === 'number') {
               value = this.parseNumber(value, precision);
             }
             this.editCellChangeHandle(value, props.row._uid, dataIndex);
           }}
           onBlur={e => {
             const { value } = e.target;
-            if (column.editType === 'number') {
+            if (editType === 'number') {
               _.set(props.row, dataIndex, this.parseNumber(value, precision));
             }
             // 单元格非空校验
@@ -705,7 +726,7 @@ export default {
       let l = text.length || 1;
       let f = 14;
       // 每个字大小，其实是每个字的比例值，大概会比字体大小差不多大一点
-      return f * l + 60;
+      return f * l + 70;
     },
     // 格式化数值类型
     parseNumber(value, n) {
@@ -724,7 +745,7 @@ export default {
     },
     // 日期的格式化方法
     dateFormat(column, input) {
-      if (typeof column.dateFormat !== 'undefined') {
+      if (column.dateFormat) {
         const dateFormat = column.dateFormat.replace('yyyy-MM-dd', 'YYYY-MM-DD');
         const dateVal = moment(input).format(dateFormat);
         input = dateVal === 'Invalid date' ? input : dateVal;
@@ -1743,9 +1764,9 @@ export default {
       margin-right: 10px;
     }
   }
-  .el-table th.gutter {
-    display: table-cell !important;
-  }
+  // .el-table th.gutter {
+  //   display: table-cell !important;
+  // }
   .el-table__header {
     thead > tr > th {
       padding: 2px 0;
