@@ -584,7 +584,7 @@ export default {
 <style lang="less">
 .top-filter {
   .el-col {
-    min-height: 32px;
+    height: 32px;
     margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
