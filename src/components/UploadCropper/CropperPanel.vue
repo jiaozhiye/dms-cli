@@ -42,7 +42,7 @@
       </div>
       <!-- 确认上传按钮 -->
       <div class="upload-btn">
-        <el-button type="primary" @click="uploadImg('base64')">上传</el-button>
+        <el-button type="primary" :loading="loading" @click="uploadImg('base64')">上传</el-button>
       </div>
     </div>
   </div>
@@ -74,7 +74,7 @@ export default {
       }
     };
   },
-  props: ['imgFile', 'fixedNumber'],
+  props: ['imgFile', 'fixedNumber', 'loading'],
   methods: {
     changeScale(num = 1) {
       // 图片缩放

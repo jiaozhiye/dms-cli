@@ -52,6 +52,7 @@
         ref="uploadCropper"
         :img-file="file"
         :fixed-number="fixedSize"
+        :loading="isLoading"
         @upload="uploadHandler"
       ></CropperPanel>
     </BaseDialog>
@@ -112,7 +113,8 @@ export default {
       file: null, // 当前被选择的图片文件
       imgUrlArr: this.initialValue,
       dialogVisible: false,
-      cropperModel: false
+      cropperModel: false,
+      isLoading: false
     };
   },
   watch: {
@@ -159,6 +161,7 @@ export default {
       });
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);
+      this.isLoading = true;
       try {
         const { data } = await axios.post(this.actionUrl, formData);
         if (data.resultCode === 200) {
@@ -172,6 +175,7 @@ export default {
         this.$message.error('上传文件失败！');
       }
       this.cropperModel = false;
+      this.isLoading = false;
     },
     beforeClose() {
       this.clearFiles();
