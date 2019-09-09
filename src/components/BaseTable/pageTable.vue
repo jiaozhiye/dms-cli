@@ -402,9 +402,8 @@ export default {
         );
       }
       if (editType === 'checkbox') {
-        const editItems = column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x }));
-        const { trueValue = '1' } = editItems.find(x => typeof x.trueValue !== 'undefined') || {};
-        const { falseValue = '0' } = editItems.find(x => typeof x.falseValue !== 'undefined') || {};
+        const { trueValue = '1' } = column.editItems.find(x => typeof x.trueValue !== 'undefined') || {};
+        const { falseValue = '0' } = column.editItems.find(x => typeof x.falseValue !== 'undefined') || {};
         return (
           <el-checkbox
             value={prevValue}
@@ -416,7 +415,7 @@ export default {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
           >
-            {editItems.find(x => x.value === _.get(props.row, dataIndex)).text}
+            {this.editedScopedRender(column, props)}
           </el-checkbox>
         );
       }

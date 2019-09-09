@@ -76,6 +76,10 @@ export default {
           fieldName: 'title',
           placeholder: '请输入标题名称...',
           initialValue: '',
+          labelOptions: {
+            fieldName: 'qwe',
+            itemList: []
+          },
           focus: () => {
             // this.topFilterList[0].initialValue = '刘德华';
             // this.topFilterList = [...this.topFilterList];
@@ -327,6 +331,10 @@ export default {
   mounted() {
     this.BaseTable = this.$refs.table.$refs.pageTable;
     console.log('页面不具备的权限：', this.auths);
+    setTimeout(() => {
+      this.topFilterList[0].labelOptions.initialValue = '22';
+      this.topFilterList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
+    }, 3000);
   }
 };
 </script>

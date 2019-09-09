@@ -82,18 +82,33 @@ export default {
       expand: false, // 展开收起状态
       treeFilterText: '',
       popoverVisible: false,
-      form: this.createFormData(this.list),
+      form: {},
       rules: this.createFormRule(this.list)
     };
   },
   created() {
+    this.form = this.createFormData();
     this.prevForm = { ...this.form };
+  },
+  computed: {
+    formOptions() {
+      const res = [];
+      this.list.forEach(x => {
+        let item = { ...x };
+        if (item.labelOptions) {
+          res.push(item.labelOptions);
+          delete item.labelOptions;
+        }
+        res.push(item);
+      });
+      return res;
+    }
   },
   watch: {
     list: {
       handler(val) {
         this.$nextTick(() => {
-          val.forEach(x => {
+          this.formOptions.forEach(x => {
             if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
               this.form[x.fieldName] = x.initialValue;
               // 对组件外 js 动态赋值的表单元素进行校验
@@ -109,7 +124,9 @@ export default {
         const res = this.difference(val, this.prevForm);
         if (!Object.keys(res).length) return;
         for (let key in res) {
-          this.list.find(x => x.fieldName === key).initialValue = res[key];
+          let target = this.formOptions.find(x => x.fieldName === key);
+          if (!target) continue;
+          target.initialValue = res[key];
         }
         this.prevForm = { ...val };
       },
@@ -129,17 +146,21 @@ export default {
     }
   },
   methods: {
+    getInitialValue(item) {
+      let { initialValue, type = '', fieldName } = item;
+      if (this.arrayTypes.includes(type)) {
+        initialValue = initialValue || [];
+      }
+      return initialValue;
+    },
     createFormData(list) {
       const target = {};
-      list.forEach(x => {
-        let { initialValue, type, fieldName } = x;
-        if (this.arrayTypes.includes(type)) {
-          initialValue = initialValue || [];
-        }
+      this.formOptions.forEach(x => {
+        const val = this.getInitialValue(x);
         // 设置 initialValue 为响应式数据
-        this.$set(x, 'initialValue', initialValue);
+        this.$set(x, 'initialValue', val);
         // 初始值
-        target[fieldName] = initialValue;
+        target[x.fieldName] = val;
       });
       return target;
     },
@@ -150,11 +171,25 @@ export default {
       });
       return target;
     },
+    createFormItemLabel(option) {
+      const { form } = this;
+      const { fieldName, itemList, style = {}, disabled, change = () => {} } = option;
+      return (
+        <div class="label-wrap">
+          <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} style={{ ...style }} onChange={change}>
+            {itemList.map(x => (
+              <el-option key={x.value} label={x.text} value={x.value} />
+            ))}
+          </el-select>
+        </div>
+      );
+    },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {} } = option;
+      const { label, fieldName, labelOptions, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -173,9 +208,10 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
+      const { label, fieldName, labelOptions, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input-number
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -196,9 +232,10 @@ export default {
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
@@ -231,9 +268,10 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-autocomplete
             v-model={form[fieldName]}
             placeholder={placeholder}
@@ -255,27 +293,30 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },
     DATE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} />
         </el-form-item>
       );
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type="daterange"
             v-model={form[fieldName]}
@@ -300,19 +341,21 @@ export default {
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
         </el-form-item>
       );
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
             {itemList.map(x => {
               return (
@@ -327,16 +370,17 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
+      const { label, fieldName, labelOptions, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
         </el-form-item>
       );
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!itemList && fetchApi) {
@@ -348,6 +392,7 @@ export default {
       }
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-select
             multiple={multiple}
             v-model={form[fieldName]}
@@ -545,6 +590,13 @@ export default {
     margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
+      .label-wrap {
+        display: inline-block;
+        width: calc(100% - 10px);
+        .el-input__inner {
+          border-color: @borderColor;
+        }
+      }
       .el-form-item__content {
         line-height: 30px;
         .el-form-item__error {

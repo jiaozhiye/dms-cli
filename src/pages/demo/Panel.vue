@@ -3,7 +3,7 @@
     <div class="wrapper">
       <Anchor :labelList="labels">
         <div class="line" id="row-01">
-          <FormPanel :list="formList" formType="add" />
+          <FormPanel :list="formList" labelWidth="100" formType="add" @formChange="asdasd" />
         </div>
         <div class="line" id="row-02">
           <el-button @click="visible = true">三级交互</el-button>
@@ -61,6 +61,10 @@ export default {
         {
           type: 'INPUT',
           label: '搜索',
+          labelOptions: {
+            fieldName: 'qwe',
+            itemList: []
+          },
           fieldName: 'title',
           placeholder: '请输入标题名称...',
           initialValue: '',
@@ -100,14 +104,7 @@ export default {
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          initialValue: '',
-          request: {
-            fetchApi: () => {}, // 接口方法
-            params: {}, // ajax 参数
-            datakey: 'records', // 服务端响应数据的数组列表的 key，支持路径操作('step1.step2.items')，不指定表示 res.data 就是数组数据
-            valueKey: 'value', // 数据值的字段名
-            textKey: 'text' // 数据文本的字段名
-          },
+          itemList: [{ text: '篮球', value: '1' }, { text: '足球', value: '2' }, { text: '乒乓球', value: '3' }],
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {
@@ -174,8 +171,7 @@ export default {
               ]
             }
           ],
-          rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }],
-          disabled: true
+          rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }]
         },
         {
           type: 'TIME_SELECT',
@@ -210,7 +206,16 @@ export default {
     },
     closeHandler(val) {
       this.visible = val;
+    },
+    asdasd(val) {
+      console.log(val);
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.formList[0].labelOptions.initialValue = '22';
+      this.formList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
+    }, 3000);
   }
 };
 </script>
