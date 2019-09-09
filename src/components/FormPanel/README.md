@@ -49,23 +49,23 @@ Vue.use(FormPanel);
 `list -> options 配置项`
 
 - options: {
-  - &emsp;fieldName: {String|字段名称 key}
-  - &emsp;initialValue: initialValue{String/Array|默认值}
-  - &emsp;itemList: {Array|下拉框(SELECT)的数据，[{text: '', value: ''}]}
-  - &emsp;style: {Object|表单元素的 style}
-  - &emsp;disabled: {Boolean|禁用}
-  - &emsp;change: {Function|checkbox 或 select 值变化的回调}
-- }
-
-`list -> labelOptions 配置项`
-
-- labelOptions: {
   - &emsp;trueValue: {String/Number|CHECKBOX 选中后的值，默认是 '1'}
   - &emsp;falseValue: {String/Number|CHECKBOX 取消选中后的值，默认是 '0'}
   - &emsp;startTime: {String|TIME_SELECT 开始时间}
   - &emsp;endTime: {String|TIME_SELECT 结束时间}
   - &emsp;stepTime: {String|TIME_SELECT 时间步长}
   - &emsp;titles: {Array|级联选择器的标题，数组元素为字符串类型}
+- }
+
+`list -> labelOptions 配置项`
+
+- labelOptions: {
+  - &emsp;fieldName: {String|字段名称 key}
+  - &emsp;initialValue: initialValue{String/Array|默认值}
+  - &emsp;itemList: {Array|下拉框(SELECT)的数据，[{text: '', value: ''}]}
+  - &emsp;style: {Object|表单元素的 style}
+  - &emsp;disabled: {Boolean|禁用}
+  - &emsp;change: {Function|checkbox 或 select 值变化的回调}
 - }
 
 `SEARCH_HELPER|SELECT|MULTIPLE_SELECT 配置项`
