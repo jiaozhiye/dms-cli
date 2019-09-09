@@ -52,7 +52,7 @@
         ref="uploadCropper"
         :img-file="file"
         :fixed-number="fixedSize"
-        :loading="isLoading"
+        :loading.sync="isLoading"
         @upload="uploadHandler"
       ></CropperPanel>
     </BaseDialog>
@@ -161,7 +161,6 @@ export default {
       });
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);
-      this.isLoading = true;
       try {
         const { data } = await axios.post(this.actionUrl, formData);
         if (data.resultCode === 200) {

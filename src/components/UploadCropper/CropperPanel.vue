@@ -96,6 +96,8 @@ export default {
       this.previews = data;
     },
     uploadImg(type) {
+      // 显示 loading
+      this.$emit('update:loading', true);
       // 将剪裁好的图片回传给父组件
       event.preventDefault();
       if (type === 'blob') {
