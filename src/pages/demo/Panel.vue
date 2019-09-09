@@ -67,7 +67,6 @@ export default {
           },
           fieldName: 'title',
           placeholder: '请输入标题名称...',
-          initialValue: '',
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
         },
         {
@@ -113,7 +112,6 @@ export default {
           fieldName: 'number',
           offsetRightCols: 1,
           placeholder: '请输入数量...',
-          initialValue: undefined,
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]
         },
         {
@@ -213,6 +211,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
+      this.formList.find(x => x.fieldName === 'number').initialValue = 20;
       this.formList[0].labelOptions.initialValue = '22';
       this.formList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
     }, 3000);

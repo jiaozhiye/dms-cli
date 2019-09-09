@@ -94,21 +94,19 @@ export default {
     formOptions() {
       const res = [];
       this.list.forEach(x => {
-        let item = { ...x };
-        if (item.labelOptions) {
-          res.push(item.labelOptions);
-          delete item.labelOptions;
+        if (x.labelOptions) {
+          res.push(x.labelOptions);
         }
-        res.push(item);
+        res.push(x);
       });
       return res;
     }
   },
   watch: {
-    list: {
-      handler(val) {
+    formOptions: {
+      handler(nextProps) {
         this.$nextTick(() => {
-          this.formOptions.forEach(x => {
+          nextProps.forEach(x => {
             if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
               this.form[x.fieldName] = x.initialValue;
               // 对组件外 js 动态赋值的表单元素进行校验
@@ -120,15 +118,15 @@ export default {
       deep: true
     },
     form: {
-      handler(val) {
-        const res = this.difference(val, this.prevForm);
+      handler(nextProps) {
+        const res = this.difference(nextProps, this.prevForm);
         if (!Object.keys(res).length) return;
         for (let key in res) {
           let target = this.formOptions.find(x => x.fieldName === key);
           if (!target) continue;
           target.initialValue = res[key];
         }
-        this.prevForm = { ...val };
+        this.prevForm = { ...nextProps };
       },
       deep: true
     },

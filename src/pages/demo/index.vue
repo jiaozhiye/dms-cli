@@ -75,7 +75,6 @@ export default {
           label: '搜索',
           fieldName: 'title',
           placeholder: '请输入标题名称...',
-          initialValue: '',
           labelOptions: {
             fieldName: 'qwe',
             itemList: []
@@ -120,7 +119,6 @@ export default {
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          initialValue: '',
           request: {
             fetchApi: () => {},
             fieldKey: 'name'
@@ -132,7 +130,6 @@ export default {
           label: '数量',
           fieldName: 'number',
           placeholder: '请输入数量...',
-          initialValue: undefined,
           rules: [{ required: true, message: '请输入数量', trigger: 'change' }]
         }
       ];
@@ -332,6 +329,7 @@ export default {
     this.BaseTable = this.$refs.table.$refs.pageTable;
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
+      this.topFilterList[0].initialValue = 'asdf';
       this.topFilterList[0].labelOptions.initialValue = '22';
       this.topFilterList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
     }, 3000);
