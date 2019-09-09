@@ -593,6 +593,10 @@ export default {
         width: calc(100% - 10px);
         .el-input__inner {
           border-color: @borderColor;
+          padding: 0 8px;
+          & + span.el-input__suffix {
+            right: 0;
+          }
         }
       }
       .el-form-item__content {
