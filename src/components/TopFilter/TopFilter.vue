@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-15 16:28:04
  **/
 import _ from 'lodash';
+import Cascader from '@/components/FormPanel/Cascader.vue';
 
 export default {
   name: 'TopFilter',
@@ -82,6 +83,7 @@ export default {
       expand: false, // 展开收起状态
       treeFilterText: '',
       popoverVisible: false,
+      cascaderVisible: false,
       form: {},
       rules: this.createFormRule(this.list)
     };
@@ -148,6 +150,10 @@ export default {
       let { initialValue, type = '', fieldName } = item;
       if (this.arrayTypes.includes(type)) {
         initialValue = initialValue || [];
+      }
+      // 级联选择器
+      if (type === 'INPUT_CASCADER') {
+        this[`${fieldName}CascaderTexts`] = ''; // 默认值
       }
       return initialValue;
     },
@@ -259,6 +265,32 @@ export default {
               onClear={() => this.treeInputClearHandle(fieldName)}
               onChange={change}
               nativeOnKeydown={this.enterEventHandle}
+            ></el-input>
+          </el-popover>
+        </el-form-item>
+      );
+    },
+    INPUT_CASCADER(option) {
+      const { form } = this;
+      const { label, fieldName, labelOptions, itemList = [], options = {}, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { titles = [] } = options;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-popover v-model={this.cascaderVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+            <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
+              <Cascader defaultValue={form[fieldName]} list={itemList} labels={titles} style={style} onChange={data => this.cascaderChangeHandle(fieldName, data)} onClose={this.closeCascaderHandle} />
+            </div>
+            <el-input
+              slot="reference"
+              value={this[`${fieldName}CascaderTexts`]}
+              placeholder={placeholder}
+              readonly={readonly}
+              disabled={disabled}
+              clearable
+              style={disabled && { pointerEvents: 'none' }}
+              onClear={() => this.inputCascaderClearHandle(fieldName)}
+              onChange={change}
             ></el-input>
           </el-popover>
         </el-form-item>
@@ -438,24 +470,45 @@ export default {
         }
       }
     },
+    // 创建搜索帮助数据列表
     createSerachHelperList(list, valueKey) {
       return list.map(x => ({ value: x[valueKey] }));
     },
+    // 创建树节点的值
     createInputTreeValue(fieldName, itemList) {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
       return text;
     },
+    // 清空树节点选择器
     treeInputClearHandle(fieldName) {
       this.form[fieldName] = undefined;
       this.$nextTick(() => this.$refs[fieldName].clearValidate());
     },
+    // 树结构的筛选方法
     filterNodeHandle(value, data) {
       if (!value) return true;
       return data.text.indexOf(value) !== -1;
     },
+    // 树节点单机事件
     treeNodeClickHandle(fieldName, { value }) {
       this.form[fieldName] = value;
       this.popoverVisible = false;
+    },
+    // 级联选择器值变化处理方法
+    cascaderChangeHandle(fieldName, data) {
+      this.form[fieldName] = data.map(x => x.value).join(',') || undefined;
+      this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
+      // 强制重新渲染组件
+      this.$forceUpdate();
+    },
+    // 清空级联选择器
+    inputCascaderClearHandle(fieldName) {
+      this.form[fieldName] = undefined;
+      this[`${fieldName}CascaderTexts`] = '';
+    },
+    // 关闭级联选择器下拉面板方法
+    closeCascaderHandle(val) {
+      this.cascaderVisible = val;
     },
     createFormItem() {
       return this.list.map(item => {

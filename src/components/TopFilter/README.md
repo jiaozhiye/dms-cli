@@ -24,7 +24,7 @@ Vue.use(TopFilter);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/INPUT_CASCADER}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
@@ -47,6 +47,7 @@ Vue.use(TopFilter);
 - options: {
   - &emsp;trueValue: {String/Number|CHECKBOX 选中后的值，默认是 '1'}
   - &emsp;falseValue: {String/Number|CHECKBOX 取消选中后的值，默认是 '0'}
+  - &emsp;titles: {Array|级联选择器的标题，数组元素为字符串类型}
 - }
 
 `list -> labelOptions 配置项`

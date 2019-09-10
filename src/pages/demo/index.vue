@@ -126,11 +126,61 @@ export default {
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {
-          type: 'INPUT_NUMBER',
-          label: '数量',
-          fieldName: 'number',
-          placeholder: '请输入数量...',
-          rules: [{ required: true, message: '请输入数量', trigger: 'change' }]
+          type: 'INPUT_CASCADER',
+          label: '联机',
+          fieldName: 'hello',
+          placeholder: '请输入标题名称...',
+          style: { minWidth: '300px' },
+          options: {
+            titles: ['品牌', '车型', '车系']
+          },
+          initialValue: '1,1-2,1-2-1',
+          itemList: [
+            {
+              text: '一级分类1',
+              value: '1',
+              children: [
+                {
+                  text: '二级分类一级分类1一级分类1一级分类11-1',
+                  value: '1-1',
+                  children: [
+                    {
+                      text: '三级分类1-1',
+                      value: '1-1-1'
+                    },
+                    {
+                      text: '三级分类1-2',
+                      value: '1-1-2'
+                    }
+                  ]
+                },
+                {
+                  text: '二级分类1-2',
+                  value: '1-2',
+                  children: [
+                    {
+                      text: '三级分类2-1',
+                      value: '1-2-1'
+                    },
+                    {
+                      text: '三级分类2-2',
+                      value: '1-2-2'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              text: '一级分类2',
+              value: '2',
+              children: [
+                {
+                  text: '二级分类2-1',
+                  value: '2-1'
+                }
+              ]
+            }
+          ]
         }
       ];
     },
