@@ -178,9 +178,6 @@ export default {
     isShowPagination() {
       return (this.isPagination && Boolean(this.fetchapi)) || this.isMemoryPagination;
     },
-    isMultilevelHeader() {
-      return this.columns.some(x => Array.isArray(x.children) && x.children.length);
-    },
     fetchParams() {
       const { current, pageSize } = this.pagination;
       const pagination = this.isShowPagination ? { pageNum: current, currentPage: current, pageSize, limit: pageSize } : {};
@@ -195,8 +192,11 @@ export default {
       // console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
-    visibleColumns() {
-      return this.columns.filter(x => !x.hidden).length;
+    columnKeysChange() {
+      return this.columns
+        .filter(x => !x.hidden)
+        .map(x => x.dataIndex)
+        .join('|');
     },
     editableColumns() {
       return this.columnFlatMap(this.columns).filter(x => x.editable);
@@ -232,9 +232,9 @@ export default {
         this.getTableData();
       }
     },
-    visibleColumns() {
+    columnKeysChange() {
       // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
-      this.$nextTick(() => this.resetRender());
+      this.$nextTick(this.resetRender);
     },
     defaultSelections(nextProps) {
       this.createRowSelection(nextProps);

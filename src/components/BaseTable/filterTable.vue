@@ -212,17 +212,19 @@ export default {
       if (this.visible[property]) return;
       this.visible[property] = true;
       this.$refs[property].doShow();
-      setTimeout(() => {
-        // 诡异的问题！
-        if (this.isColumnChange) {
-          this.resetPopoverPos(this.$refs[property].$el);
-        }
-      }, 0);
+      console.log(this.$refs[property]);
+      // setTimeout(() => {
+      //   // 诡异的问题，还是因为固定列，克隆节点的问题
+      //   if (this.isColumnChange) {
+      //     this.resetPopoverPos(this.$refs[property].$el);
+      //   }
+      // }, 10);
     },
     // 重置筛选面板的位置
     resetPopoverPos(el) {
       const popoverId = el.querySelector('.el-popover__reference').getAttribute('aria-describedby');
       const popoverDom = document.getElementById(popoverId);
+      console.log(popoverDom.offsetLeft, this.tableBodyWrapper.scrollLeft);
       popoverDom.style.left = popoverDom.offsetLeft - this.tableBodyWrapper.scrollLeft + 'px';
     },
     // 参数值是否是假，假 -> 返回 ture
@@ -273,7 +275,7 @@ export default {
       return (
         <el-popover
           ref={property}
-          popper-class="popper-wrap"
+          popperClass="popper-wrap"
           trigger="manual"
           placement="bottom-start"
           // value={this.visible[property]}

@@ -16,7 +16,7 @@
     </button-area>
     <FilterTable
       ref="table"
-      columnsRef="demo-table"
+      :isSelectColumn="false"
       :columns="columns"
       :dataSource="list"
       :isMemoryPagination="true"
@@ -190,7 +190,6 @@ export default {
           title: '操作',
           dataIndex: 'column-action',
           width: 100,
-          fixed: 'left',
           render: (props, h) => {
             return (
               <div>
