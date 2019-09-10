@@ -234,7 +234,7 @@ export default {
     },
     visibleColumns() {
       // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
-      this.$nextTick(() => this.$refs.appTable.doLayout());
+      this.$nextTick(() => this.resetRender());
     },
     defaultSelections(nextProps) {
       this.createRowSelection(nextProps);
@@ -327,6 +327,7 @@ export default {
       this.$nextTick(() => {
         this.scrollTopToPosition(0);
         this.scrollLeftToPosition(0);
+        this.resetRender();
       });
     },
     // 处理列表数据
@@ -1327,7 +1328,9 @@ export default {
       if (typeof this.height !== 'undefined') return;
       const disY = this.isShowPagination ? 50 : 10;
       const iHeight = window.innerHeight - this.$refs.appTable.$el.getBoundingClientRect().top - disY;
-      this.tableHeight = iHeight < this.minHeight ? this.minHeight : iHeight;
+      this.$nextTick(() => {
+        this.tableHeight = iHeight < this.minHeight ? this.minHeight : iHeight;
+      });
     },
     // 窗口大小变化事件
     bindWindowResizeEvent() {
@@ -1424,6 +1427,10 @@ export default {
           this.scrollTopToPosition(10000);
         });
       }
+    },
+    // 重新渲染 table 组件
+    resetRender() {
+      this.$refs.appTable.doLayout();
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -1579,10 +1586,10 @@ export default {
     this.createRowSelection(this.defaultSelections);
     this.getTableData();
     this.createTableBody();
+    this.calcTableHeight();
     this.bindWindowResizeEvent();
     this.bindkeyboardEvent();
     this.bindDocumentEvent();
-    this.$nextTick(this.calcTableHeight);
   },
   beforeDestroy() {
     // 解绑事件，防止内存泄漏
@@ -1618,7 +1625,7 @@ export default {
       props: { pagination, onPageChange: this.onPageChange }
     };
     const tHeight = this.height !== 'auto' ? { height: tableHeight } : {};
-    const tablParams = {
+    const tableParams = {
       props: {
         size: 'mini',
         border: true,
@@ -1668,7 +1675,7 @@ export default {
             {isColumnFilter && <ColumnFilter {...columnFilterProps} style={{ marginRight: '10px' }} />}
           </section>
         </div>
-        <el-table ref="appTable" v-loading={loading} {...tablParams}>
+        <el-table ref="appTable" v-loading={loading} {...tableParams}>
           {this.createColumns(columns)}
         </el-table>
         {isShowPagination && <Pagination {...paginationProps} />}
@@ -1763,13 +1770,13 @@ export default {
       margin-right: 10px;
     }
   }
-  // .el-table th.gutter {
-  //   display: table-cell !important;
-  // }
   .el-table__header {
     thead > tr > th {
       padding: 2px 0;
       background: none;
+      // &.gutter {
+      //   display: table-cell !important;
+      // }
     }
   }
   .el-table__body {

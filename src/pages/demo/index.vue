@@ -63,7 +63,7 @@ export default {
       visible: false,
       topFilterList: this.createTopFilters(),
       columns: this.createTableColumns(),
-      list: [...res.data.items],
+      list: [],
       printList: printData.data
     };
   },
@@ -329,6 +329,7 @@ export default {
     this.BaseTable = this.$refs.table.$refs.pageTable;
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
+      this.list = [...res.data.items];
       this.topFilterList[0].initialValue = 'asdf';
       this.topFilterList[0].labelOptions.initialValue = '22';
       this.topFilterList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
