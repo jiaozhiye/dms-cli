@@ -121,17 +121,25 @@ export default {
     PageTable
   },
   data() {
-    this.isColumnChange = false;
     this.tableBodyWrapper = null;
+    this.isColumnsChange = false;
     return {
       visible: this.createVisibleData(this.columns),
       search: this.createSearchData(this.columns),
       filters: {}
     };
   },
+  computed: {
+    columnKeysChange() {
+      return this.columns
+        .filter(x => !x.hidden)
+        .map(x => x.dataIndex)
+        .join('|');
+    }
+  },
   watch: {
-    columns() {
-      this.isColumnChange = true;
+    columnKeysChange() {
+      this.isColumnsChange = true;
     }
   },
   methods: {
@@ -208,24 +216,28 @@ export default {
       }
     },
     // 打开当前的筛选面板
-    showCurrentPopover(property) {
+    showCurrentPopover(target, property) {
       if (this.visible[property]) return;
       this.visible[property] = true;
       this.$refs[property].doShow();
-      console.log(this.$refs[property]);
-      // setTimeout(() => {
-      //   // 诡异的问题，还是因为固定列，克隆节点的问题
-      //   if (this.isColumnChange) {
-      //     this.resetPopoverPos(this.$refs[property].$el);
-      //   }
-      // }, 10);
+      setTimeout(() => {
+        // 诡异的问题，还是因为固定列，克隆节点的问题
+        if (this.isColumnsChange) {
+          this.resetPopoverPos(this.$refs[property].$el.querySelector('.el-popover__reference').getAttribute('aria-describedby'), target);
+        }
+      }, 0);
     },
     // 重置筛选面板的位置
-    resetPopoverPos(el) {
-      const popoverId = el.querySelector('.el-popover__reference').getAttribute('aria-describedby');
-      const popoverDom = document.getElementById(popoverId);
-      console.log(popoverDom.offsetLeft, this.tableBodyWrapper.scrollLeft);
-      popoverDom.style.left = popoverDom.offsetLeft - this.tableBodyWrapper.scrollLeft + 'px';
+    resetPopoverPos(id, target) {
+      const $el = document.getElementById(id);
+      let iLeft = target.getBoundingClientRect().left;
+      if (iLeft < 0) {
+        iLeft = 0;
+      }
+      if (iLeft > window.innerWidth - $el.offsetWidth) {
+        iLeft = window.innerWidth - $el.offsetWidth - 4;
+      }
+      $el.style.left = `${iLeft}px`;
     },
     // 参数值是否是假，假 -> 返回 ture
     isValueFalse(val) {
@@ -243,10 +255,10 @@ export default {
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
-            this.showCurrentPopover(property);
+            this.showCurrentPopover(e.target, property);
           }}
         >
-          <span class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterActived'}>
+          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'selected'}>
             {column.label} <i class="el-icon-arrow-down" />
           </span>
         </span>
@@ -268,15 +280,13 @@ export default {
     // 表格头部渲染
     renderHeaderHandle({ column, $index }, type) {
       const { property, label } = column;
-      const orginColumn = this.deepFind(this.columns, property);
-      if (orginColumn.filterType !== type) {
-        return null;
-      }
-      return (
+      const target = this.deepFind(this.columns, property);
+      return target && target.filterType === type ? (
         <el-popover
           ref={property}
-          popperClass="popper-wrap"
           trigger="manual"
+          visibleArrow={true}
+          popperClass="popper-wrap"
           placement="bottom-start"
           // value={this.visible[property]}
         >
@@ -297,7 +307,7 @@ export default {
             )}
             {type === 'checkbox' && (
               <el-checkbox-group v-model={this.search[`${property}Val`]}>
-                {orginColumn.filterItems.map(x => (
+                {target.filterItems.map(x => (
                   <li key={x.value} style={{ marginBottom: '7px' }}>
                     <el-checkbox label={x.value}>{x.text}</el-checkbox>
                   </li>
@@ -306,7 +316,7 @@ export default {
             )}
             {type === 'radio' && (
               <el-radio-group v-model={this.search[`${property}Val`]} style={{ display: 'block' }}>
-                {orginColumn.filterItems.map(x => (
+                {target.filterItems.map(x => (
                   <li key={x.value} style={{ marginBottom: '8px' }}>
                     <el-radio label={x.value}>{x.text}</el-radio>
                   </li>
@@ -330,7 +340,7 @@ export default {
           </div>
           {this.createButtonNode(type, property, ['input', 'radio'].includes(type) ? '' : [])}
         </el-popover>
-      );
+      ) : null;
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -391,7 +401,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 // @primaryColor: #bb0a30;
 
 .popper-wrap {
@@ -402,13 +412,8 @@ export default {
   .el-radio {
     width: 100%;
   }
-  .el-table-filter__content {
-    .el-date-editor--daterange.el-input__inner {
-      width: auto;
-    }
-  }
 }
-.topFilterActived {
+.selected {
   color: @primaryColor;
 }
 </style>

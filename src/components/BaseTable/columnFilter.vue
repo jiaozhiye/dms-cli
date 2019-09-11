@@ -176,10 +176,7 @@ export default {
 }
 .columns-tree {
   .is-leaf {
-    padding: 4px;
-  }
-  .el-tree-node__label {
-    margin-left: 0px;
+    padding: 0 !important;
   }
 }
 </style>

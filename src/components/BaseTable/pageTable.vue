@@ -234,7 +234,7 @@ export default {
     },
     columnKeysChange() {
       // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
-      this.$nextTick(this.resetRender);
+      this.$nextTick(() => this.resetRender());
     },
     defaultSelections(nextProps) {
       this.createRowSelection(nextProps);
