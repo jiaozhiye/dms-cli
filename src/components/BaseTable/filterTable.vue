@@ -121,7 +121,6 @@ export default {
     PageTable
   },
   data() {
-    this.tableBodyWrapper = null;
     this.isColumnsChange = false;
     return {
       visible: this.createVisibleData(this.columns),
@@ -258,7 +257,7 @@ export default {
             this.showCurrentPopover(e.target, property);
           }}
         >
-          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'selected'}>
+          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterSelected'}>
             {column.label} <i class="el-icon-arrow-down" />
           </span>
         </span>
@@ -285,7 +284,7 @@ export default {
         <el-popover
           ref={property}
           trigger="manual"
-          visibleArrow={true}
+          visibleArrow={false}
           popperClass="popper-wrap"
           placement="bottom-start"
           // value={this.visible[property]}
@@ -369,7 +368,6 @@ export default {
     }
   },
   mounted() {
-    this.tableBodyWrapper = this.$refs.pageTable.$el.querySelector('.el-table__body-wrapper');
     document.addEventListener('click', this.documentEventHandle, false);
   },
   beforeDestroy() {
@@ -401,11 +399,11 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 // @primaryColor: #bb0a30;
 
 .popper-wrap {
-  min-width: auto;
+  min-width: 100px !important;
   .el-checkbox {
     width: 100%;
   }
@@ -413,7 +411,7 @@ export default {
     width: 100%;
   }
 }
-.selected {
+.topFilterSelected {
   color: @primaryColor;
 }
 </style>
