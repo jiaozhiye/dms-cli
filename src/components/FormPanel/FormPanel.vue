@@ -94,11 +94,12 @@ export default {
   },
   computed: {
     fieldNames() {
-      return this.list.map(x => x.fieldName);
+      return this.list.map(x => x.fieldName).filter(x => !!x);
     },
     formOptions() {
       const res = [];
       this.list.forEach(x => {
+        if (x.type === 'BREAK_SPACE') return;
         if (x.labelOptions) {
           res.push(x.labelOptions);
         }
@@ -173,7 +174,7 @@ export default {
       }
       return initialValue;
     },
-    createFormData(list) {
+    createFormData() {
       const target = {};
       this.formOptions.forEach(x => {
         const val = this.getInitialValue(x);
@@ -187,6 +188,7 @@ export default {
     createFormRule(list) {
       const target = {};
       list.forEach(x => {
+        if (!x.fieldName) return;
         target[x.fieldName] = x.rules;
       });
       return target;
@@ -561,6 +563,14 @@ export default {
         </el-form-item>
       );
     },
+    BREAK_SPACE(option) {
+      const { label = '标题', style = {} } = option;
+      return (
+        <div class="form-title" style={{ ...style }}>
+          {label}
+        </div>
+      );
+    },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
       const { label, fieldName, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
@@ -721,7 +731,7 @@ export default {
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} offset={offsetLeft} span={spans} style={{ marginRight: offsetRight }}>
+          <el-col key={i} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );
@@ -879,6 +889,19 @@ export default {
         .el-range__close-icon {
           width: 20px;
         }
+      }
+    }
+    .form-title {
+      line-height: 32px;
+      font-size: @textSize;
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 24px;
+        background-color: @primaryColor;
+        margin-right: 8px;
+        vertical-align: middle;
       }
     }
   }

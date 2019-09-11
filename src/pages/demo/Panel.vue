@@ -172,6 +172,11 @@ export default {
           rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }]
         },
         {
+          type: 'BREAK_SPACE',
+          label: '标题标题',
+          style: {}
+        },
+        {
           type: 'TIME_SELECT',
           label: '时间',
           fieldName: 'time1',

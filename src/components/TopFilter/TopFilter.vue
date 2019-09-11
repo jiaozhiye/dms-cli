@@ -157,7 +157,7 @@ export default {
       }
       return initialValue;
     },
-    createFormData(list) {
+    createFormData() {
       const target = {};
       this.formOptions.forEach(x => {
         const val = this.getInitialValue(x);
@@ -171,6 +171,7 @@ export default {
     createFormRule(list) {
       const target = {};
       list.forEach(x => {
+        if (!x.fieldName) return;
         target[x.fieldName] = x.rules;
       });
       return target;

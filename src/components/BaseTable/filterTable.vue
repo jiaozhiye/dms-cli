@@ -403,7 +403,7 @@ export default {
 // @primaryColor: #bb0a30;
 
 .popper-wrap {
-  min-width: 100px !important;
+  min-width: 120px !important;
   .el-checkbox {
     width: 100%;
   }

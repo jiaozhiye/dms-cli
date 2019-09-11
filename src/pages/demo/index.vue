@@ -16,6 +16,7 @@
     </button-area>
     <FilterTable
       ref="table"
+      columnsRef="myTable"
       :columns="columns"
       :dataSource="list"
       :isMemoryPagination="true"
