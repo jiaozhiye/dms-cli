@@ -566,9 +566,11 @@ export default {
     BREAK_SPACE(option) {
       const { label = '标题', style = {} } = option;
       return (
-        <div class="form-title" style={{ ...style }}>
-          {label}
-        </div>
+        <el-divider contentPosition="left">
+          <span class="form-title" style={{ ...style }}>
+            {label}
+          </span>
+        </el-divider>
       );
     },
     createSelectHandle(option, multiple = false) {
@@ -891,17 +893,27 @@ export default {
         }
       }
     }
-    .form-title {
-      line-height: 32px;
-      font-size: @textSize;
-      &::before {
-        content: '';
-        display: inline-block;
-        width: 6px;
-        height: 24px;
-        background-color: @primaryColor;
-        margin-right: 8px;
-        vertical-align: middle;
+    .el-divider--horizontal {
+      margin: 15px 0;
+      .el-divider__text {
+        padding: 0 10px;
+        &.is-left {
+          left: -10px;
+        }
+        .form-title {
+          display: inline-block;
+          height: 20px;
+          font-size: @textSize;
+          &::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 100%;
+            background-color: @primaryColor;
+            margin-right: 8px;
+            vertical-align: middle;
+          }
+        }
       }
     }
   }
