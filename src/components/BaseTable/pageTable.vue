@@ -1570,7 +1570,10 @@ export default {
       this.list.forEach(row => {
         this.editableColumns.forEach(column => {
           if (column.editRequired) {
-            let val = _.get(row, column.dataIndex) || '';
+            let val = _.get(row, column.dataIndex);
+            if (val !== 0 && !val) {
+              val = '';
+            }
             this.validateRequired(column.dataIndex, row._uid, val);
           }
         });
