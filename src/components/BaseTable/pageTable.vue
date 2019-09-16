@@ -384,6 +384,7 @@ export default {
     // 单元格处于可编辑状态的渲染方法
     edittingScopedRender(column, props) {
       const { dataIndex, editType } = column;
+      const isDisabled = Boolean(props.row[`${dataIndex}Disabled`]);
       const prevValue = _.get(props.row, dataIndex);
       if (editType === 'select' || editType === 'select-multiple') {
         return (
@@ -393,7 +394,7 @@ export default {
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder="请选择"
-            disabled={column.disabled || props.row.isDisabled}
+            disabled={column.disabled || isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -409,7 +410,7 @@ export default {
           <el-checkbox
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
-            disabled={column.disabled || props.row.isDisabled}
+            disabled={column.disabled || isDisabled}
             trueLabel={trueValue}
             falseLabel={falseValue}
             onChange={value => {
@@ -433,7 +434,7 @@ export default {
             placeholder="选择日期"
             format={dateFormat}
             value-format={dateFormat}
-            disabled={column.disabled || props.row.isDisabled}
+            disabled={column.disabled || isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -450,7 +451,7 @@ export default {
           size="mini"
           maxlength={column.maxlength}
           value={prevValue}
-          disabled={column.disabled || props.row.isDisabled}
+          disabled={column.disabled || isDisabled}
           onInput={val => {
             // 单元格正则校验
             if (_.isRegExp(column.editPattern)) {
@@ -501,6 +502,7 @@ export default {
         dataIndex,
         searchHelper: { aliasKey, supportInput }
       } = column;
+      const isDisabled = Boolean(props.row[`${dataIndex}Disabled`]);
       const prevValue = _.get(props.row, dataIndex);
       return (
         <el-autocomplete
@@ -510,7 +512,7 @@ export default {
           maxlength={column.maxlength}
           style={{ width: '100%' }}
           value={prevValue}
-          disabled={column.disabled || props.row.isDisabled}
+          disabled={column.disabled || isDisabled}
           onInput={val => _.set(props.row, dataIndex, val)}
           onSelect={val => this.syncAllCellValue(val, props.row, column)}
           fetchSuggestions={(queryString, cb) => this.querySearchAsync(column, props.row, queryString, cb)}
@@ -1510,6 +1512,15 @@ export default {
       this.clearTHeadFilters();
       this.clearTHeadSort();
     },
+    // 切换单元的编辑状态
+    toggleCellEditableState(rows, callback = () => {}) {
+      rows = Array.isArray(rows) ? rows : [rows];
+      if (!rows.length) return;
+      rows.forEach(row => {
+        if (!row._uid) return;
+        callback(row);
+      });
+    },
     // 外部通过组件实例调用的方法
     EXECUTE_INSERT(rows) {
       this.addRowHandler(rows);
@@ -1538,11 +1549,15 @@ export default {
         this.onColumnsChange(this.columns);
       }
     },
+    SET_CELL_DISABLED(rows, dataIndex, state) {
+      if (!dataIndex) return;
+      this.toggleCellEditableState(rows, row => {
+        this.$set(row, `${dataIndex}Disabled`, Boolean(state));
+      });
+    },
     SET_CELL_UNEDITABLE(rows, dataIndex, state) {
-      rows = Array.isArray(rows) ? rows : [rows];
-      rows.forEach(row => {
-        if (!row._uid) return;
-        // 强制该单元格不可编辑
+      if (!dataIndex) return;
+      this.toggleCellEditableState(rows, row => {
         this.$set(row, `${dataIndex}DisableEdit`, Boolean(state));
       });
     },

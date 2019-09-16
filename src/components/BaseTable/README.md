@@ -160,7 +160,8 @@ http://localhost:8080/table
 - EXECUTE_DELETE{Function|执行移除列表选中行的操作，参数是行数据的数组(可选)，返回值是移除行组成的数组}
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}
 - SET_COLUMNS_EDITABLE{Function|动态设置 table 列的编辑状态，参数 1: dataIndex 或由 dataIndex 组成的数组，参数 2: 可编辑状态(true/false)}
-- SET_CELL_UNEDITABLE{Function|动态设置可编辑列单元格的禁止编辑状态，参数 1: row 或由 row 组成的数组，参数 2: dataIndex，参数 3: 是否禁止编辑(true/false)}
+- SET_CELL_DISABLED{Function|动态设置可编辑列单元格的禁用状态，参数 1: row 或由 row 组成的数组，参数 2: dataIndex，参数 3: 是否禁用(true/false)}
+- SET_CELL_UNEDITABLE{Function|强制设置单元格可编辑/不可编辑，参数 1: row 或由 row 组成的数组，参数 2: dataIndex，参数 3: 状态值(true/false)}
 - START_LOADING{Function|开启 table 组件 loading 动画}
 - STOP_LOADING{Function|关闭 table 组件 loading 动画}
 - CLEAR_EXECUTE_LOG{Function|清空之前对组件的 CURD 操作记录，没有参数}
