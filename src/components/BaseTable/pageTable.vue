@@ -301,7 +301,7 @@ export default {
         this.originData = [...this.list];
       }
       // 同步表格数据
-      this.syncTableList();
+      this.syncTableList(true);
       // 总记录数
       let totalRow = 0;
       if (Array.isArray(data)) {
@@ -353,11 +353,11 @@ export default {
       return dataList;
     },
     // 同步组件数据列表
-    syncTableList() {
+    syncTableList(isFirst) {
       const rows = this.isMemoryPagination ? this.originData : this.list;
       // 重置组件数据列表的索引
       rows.forEach((row, i) => (row.$index = i));
-      this.onSyncTableData(rows);
+      this.onSyncTableData(rows, Boolean(isFirst));
     },
     // 跳转到第一页
     toFirstPage() {
