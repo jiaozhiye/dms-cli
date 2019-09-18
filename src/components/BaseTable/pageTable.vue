@@ -614,15 +614,13 @@ export default {
     },
     // 创建单元格渲染节点
     createCellNode(JSXNode, msgs = [], isTooltip) {
-      const classNames = !msgs.length ? 'el-form-item' : 'el-form-item is-error';
+      const isError = msgs.length ? 'is-error' : '';
       const domStyle = isTooltip ? { whiteSpace: 'pre' } : null;
       return (
-        <div class={classNames} style={domStyle}>
+        <span class={`el-form-item ${isError}`} style={domStyle}>
           {JSXNode}
-          {msgs.map(msg => (
-            <div class="form-item-error">{msg}</div>
-          ))}
-        </div>
+          {isError && <div class="form-item-error">{msgs.join('|')}</div>}
+        </span>
       );
     },
     // 可选择列渲染方法

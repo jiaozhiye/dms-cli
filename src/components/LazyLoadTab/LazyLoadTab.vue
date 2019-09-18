@@ -38,24 +38,29 @@ export default {
       activeName: this.value
     };
   },
-  created() {
-    this.loadComponent();
+  watch: {
+    value(nextProps) {
+      this.activeName = nextProps;
+      this.loadComponent(nextProps);
+    }
   },
   methods: {
-    loadComponent(tab, ev) {
-      this.$emit('input', this.activeName);
-      const { path } = this.tabMenus.find(x => x.title === this.activeName);
-      // if (this.$options.components[this.activeName]) return;
+    loadComponent(activeName) {
+      const { path } = this.tabMenus.find(x => x.title === activeName) || {};
+      if (!path) return;
+      // if (this.$options.components[activeName]) return;
       // 动态加载组件
-      this.$options.components[this.activeName] = () => import(`@/${this.pathFix}/${path}.vue`);
-      if (tab) {
-        this.$emit('tab-click', tab);
-      }
+      this.$options.components[activeName] = () => import(`@/${this.pathFix}/${path}.vue`);
       this.$nextTick(() => {
+        // 触发自定义事件
+        this.$emit('tab-click', this.$refs[activeName]);
         if (!this.destroyOnClose) {
-          this.$refs[this.activeName].isLoaded = true;
+          this.$refs[activeName].isLoaded = true;
         }
       });
+    },
+    clickHandler() {
+      this.$emit('input', this.activeName);
     },
     createTabPanel(h) {
       return this.tabMenus.map(x => {
@@ -66,17 +71,20 @@ export default {
         });
         return (
           <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
-            {this.destroyOnClose && x.title === this.activeName ? component : null}
+            {this.destroyOnClose && x.title === this.value ? component : null}
             {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : null}
           </el-tab-pane>
         );
       });
     }
   },
+  created() {
+    this.loadComponent(this.value);
+  },
   render(h) {
-    const { type, position, loadComponent } = this;
+    const { type, position } = this;
     return (
-      <el-tabs class="topTabMenu" v-model={this.activeName} type={type} tab-position={position} on-tab-click={loadComponent}>
+      <el-tabs class="topTabMenu" v-model={this.activeName} type={type} tab-position={position} on-tab-click={this.clickHandler}>
         {this.createTabPanel(h)}
       </el-tabs>
     );

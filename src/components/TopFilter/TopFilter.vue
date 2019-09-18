@@ -536,12 +536,11 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.excuteFormData(this.form);
-          this.$emit('filterChange', this.form);
-        } else {
-          // 校验没通过，展开
-          this.expand = true;
-          return false;
+          return this.$emit('filterChange', this.form);
         }
+        // 校验没通过，展开
+        this.expand = true;
+        return false;
       });
     },
     resetForm() {

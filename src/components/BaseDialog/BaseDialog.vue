@@ -114,7 +114,8 @@ export default {
         showClose: closable,
         closeOnClickModal: maskClosable,
         fullscreen: this.fullscreen,
-        beforeClose: this.close
+        beforeClose: this.close,
+        destroyOnClose: false
       },
       attrs: { ...$attrs },
       on: { ...$listeners }

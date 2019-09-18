@@ -723,7 +723,6 @@ export default {
     resetForm() {
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
-      this.$emit('formChange', this.form);
     },
     createFormLayout() {
       const colSpan = 24 / this.cols;

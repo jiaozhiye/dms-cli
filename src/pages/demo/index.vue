@@ -349,7 +349,7 @@ export default {
         {
           title: '地址',
           dataIndex: 'address',
-          width: 300,
+          showOverflowTooltip: true,
           editable: true,
           editType: 'text',
           editPattern: /^[0-9a-zA-Z ]+$/
