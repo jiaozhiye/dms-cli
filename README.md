@@ -45,6 +45,7 @@ $ npm run build
 - 提供的组件
   - Anchor 锚点组件
   - ButtonArea 功能按钮区的容器组件
+  - BreakSpace 功能模块的分隔符组件
   - BaseDialog 模态框组件，支持子组件的销毁
   - BaseTable 表格组件
   - Drawer 抽屉组件，支持子组件的销毁

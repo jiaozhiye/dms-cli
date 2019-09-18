@@ -89,11 +89,11 @@ export default {
     },
     maskStyle: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     containerStyle: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {

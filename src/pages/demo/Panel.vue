@@ -7,6 +7,7 @@
         </div>
         <div class="line" id="row-02">
           <el-button @click="visible = true">三级交互</el-button>
+          <BreakSpace label="哈哈哈"></BreakSpace>
         </div>
         <div class="line" id="row-03">
           <tinymce v-model="content" :height="300" />
@@ -41,11 +42,13 @@
 
 <script>
 import Modal from './Modal';
+import BreakSpace from '@/components/BreakSpace/BreakSpace';
 
 export default {
   name: 'role',
   components: {
-    Modal
+    Modal,
+    BreakSpace
   },
   data() {
     return {

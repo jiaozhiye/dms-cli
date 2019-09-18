@@ -53,7 +53,7 @@ export default {
     },
     containerStyle: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {

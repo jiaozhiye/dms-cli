@@ -7,6 +7,7 @@
  **/
 import _ from 'lodash';
 import Cascader from './Cascader.vue';
+import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
 
 export default {
@@ -565,13 +566,7 @@ export default {
     },
     BREAK_SPACE(option) {
       const { label = '标题', style = {} } = option;
-      return (
-        <el-divider contentPosition="left">
-          <span class="form-title" style={{ ...style }}>
-            {label}
-          </span>
-        </el-divider>
-      );
+      return <BreakSpace label={label} labelStyle={style} />;
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
