@@ -107,6 +107,12 @@ const actions = {
       data: formateMenu(data)
     });
   },
+  clearNavList({ commit, state }, params) {
+    commit({
+      type: types.NAVLIST,
+      data: []
+    });
+  },
   async createStarMenuList({ commit, state }, params) {
     if (state.starMenuList.length) return;
     let data = [];

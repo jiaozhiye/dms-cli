@@ -62,6 +62,8 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
+    // 没有登录，清空菜单数据
+    store.dispatch('app/clearNavList');
     // 白名单，直接进入
     if (whiteList.includes(to.path)) {
       next();
