@@ -125,6 +125,7 @@ http://localhost:8080/table
 - dateFormat{String|指定日期格式，具体请参考 element-ui date-picker 组件}
 - numberFormat{Boolean|指定金融类数值格式，100,000,000}
 - summation{Boolean|字段合计}
+- summationDataIndex{String|服务端合计的字段名，通常和 dataIndex 一致，如果设置为服务端合计，那么在对应列单元格数据变化时，合计值不变}
 - summationUnit{String|合计字段的单位}
 - summationPrecision{Number|数值精度，保留几位小数，默认是两位}
 - sorter{Boolean|是否支持排序}

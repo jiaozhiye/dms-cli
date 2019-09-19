@@ -165,7 +165,9 @@ export default {
         remove: [],
         required: [],
         searchHelper: []
-      }
+      },
+      // 服务端合计
+      summaries: {}
     };
   },
   computed: {
@@ -303,15 +305,7 @@ export default {
       // 同步表格数据
       this.syncTableList(true);
       // 总记录数
-      let totalRow = 0;
-      if (Array.isArray(data)) {
-        totalRow = data.length;
-      } else if (keypath.lastIndexOf('.') !== -1) {
-        totalRow = _.get(data, keypath.slice(0, keypath.lastIndexOf('.')), {}).total || 0;
-      } else {
-        totalRow = data.total || 0;
-      }
-      this.pagination.total = totalRow;
+      this.pagination.total = this.createPageTotal(data, keypath);
       // 清空行选中状态
       this.clearSelectionHandle();
       // 清空table组件操作记录
@@ -351,6 +345,28 @@ export default {
         });
       });
       return dataList;
+    },
+    // 处理总记录数
+    createPageTotal(data, keypath) {
+      let res = 0;
+      const targetIndex = keypath.lastIndexOf('.');
+      if (Array.isArray(data)) {
+        res = data.length;
+      } else {
+        if (targetIndex !== -1) {
+          data = _.get(data, keypath.slice(0, targetIndex)) || {};
+        }
+        res = data.total || 0;
+      }
+      // 处理服务端合计
+      if (this.isShowSummary) {
+        this.columnFlatMap(this.columns)
+          .filter(x => x.summation && x.summationDataIndex)
+          .forEach(x => {
+            this.summaries[x.summationDataIndex] = data[`${x.summationDataIndex}Summary`];
+          });
+      }
+      return res;
     },
     // 同步组件数据列表
     syncTableList(isFirst) {
@@ -614,13 +630,15 @@ export default {
     },
     // 创建单元格渲染节点
     createCellNode(JSXNode, msgs = [], isTooltip) {
-      const isError = msgs.length ? 'is-error' : '';
+      const classNames = !msgs.length ? 'el-form-item' : 'el-form-item is-error';
       const domStyle = isTooltip ? { whiteSpace: 'pre' } : null;
       return (
-        <span class={`el-form-item ${isError}`} style={domStyle}>
+        <div class={classNames} style={domStyle}>
           {JSXNode}
-          {isError && <div class="form-item-error">{msgs.join('|')}</div>}
-        </span>
+          {msgs.map(msg => (
+            <div class="form-item-error">{msg}</div>
+          ))}
+        </div>
       );
     },
     // 可选择列渲染方法
@@ -1244,7 +1262,12 @@ export default {
         const unit = targetColumn.summationUnit ? targetColumn.summationUnit : '';
         // 精度
         const { summationPrecision = 2 } = targetColumn;
-        sums[index] = `${this.formatNumber(result.toFixed(summationPrecision))} ${unit}`;
+        // 服务端合计
+        if (Object.keys(this.summaries).includes(property) && typeof this.summaries[property] !== 'undefined') {
+          sums[index] = `${this.summaries[property]} ${unit}`;
+        } else {
+          sums[index] = `${this.formatNumber(result.toFixed(summationPrecision))} ${unit}`;
+        }
       });
       return sums;
     },
