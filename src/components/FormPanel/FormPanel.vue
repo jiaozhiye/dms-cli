@@ -209,12 +209,39 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, style = {}, placeholder, unitRender, readonly, disabled, change = () => {}, onFocus = () => {}, onEnter } = option;
+      const {
+        label,
+        fieldName,
+        labelOptions,
+        style = {},
+        placeholder,
+        unitRender,
+        minlength = 0,
+        maxlength = 999,
+        pattern,
+        readonly,
+        disabled,
+        change = () => {},
+        onFocus = () => {},
+        onEnter
+      } = option;
+      const prevValue = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input
-            v-model={form[fieldName]}
+            value={prevValue}
+            onInput={val => {
+              if (_.isRegExp(pattern)) {
+                // 是否为删除动作
+                const isRemoveHandle = val.length < (prevValue && prevValue.length);
+                // 单元格正则校验
+                if (!isRemoveHandle && !pattern.test(val)) return;
+              }
+              form[fieldName] = val;
+            }}
+            minlength={minlength}
+            maxlength={maxlength}
             placeholder={placeholder}
             readonly={readonly}
             disabled={disabled}

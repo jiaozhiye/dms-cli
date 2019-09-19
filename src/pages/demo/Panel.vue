@@ -70,6 +70,7 @@ export default {
           },
           fieldName: 'title',
           placeholder: '请输入标题名称...',
+          maxlength: 5,
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
         },
         {

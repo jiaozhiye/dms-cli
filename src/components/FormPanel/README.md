@@ -44,6 +44,9 @@ Vue.use(FormPanel);
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
+- minlength{Number|原生属性，最小输入长度，只针对 INPUT 生效}
+- maxlength{Number|原生属性，最大输入长度，只针对 INPUT 生效}
+- pattern{RegExp|表单控件格式校验/^[0-9a-zA-Z ]{0,11}\$/，只针对 INPUT 生效}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
 
 `list -> options 配置项`
