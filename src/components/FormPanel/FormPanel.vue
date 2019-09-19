@@ -887,29 +887,6 @@ export default {
         }
       }
     }
-    .el-divider--horizontal {
-      margin: 15px 0;
-      .el-divider__text {
-        padding: 0 10px;
-        &.is-left {
-          left: -10px;
-        }
-        .form-title {
-          display: inline-block;
-          height: 20px;
-          font-size: @textSize;
-          &::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 100%;
-            background-color: @primaryColor;
-            margin-right: 8px;
-            vertical-align: middle;
-          }
-        }
-      }
-    }
   }
 }
 </style>
