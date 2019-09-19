@@ -6,7 +6,7 @@
       @filterChange="changeHandle"
       @onCollapse="collapseHandle"
     ></TopFilter>
-    <button-area :style="{ paddingLeft: '80px' }">
+    <button-area :containerStyle="{ paddingLeft: '80px' }">
       <el-button size="small" type="primary">到货确认</el-button>
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>

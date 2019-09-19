@@ -1,12 +1,18 @@
 <template>
-  <div class="btn-area">
+  <div class="btn-area" :style="containerStyle">
     <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ButtonArea'
+  name: 'ButtonArea',
+  props: {
+    containerStyle: {
+      type: Object,
+      default: () => ({})
+    }
+  }
 };
 </script>
 

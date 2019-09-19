@@ -54,3 +54,6 @@ Vue.use(Tinymce);
 
 import AjaxButton from '@/components/AjaxButton';
 Vue.use(AjaxButton);
+
+import BreakSpace from '@/components/BreakSpace';
+Vue.use(BreakSpace);
