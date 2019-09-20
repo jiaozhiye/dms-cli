@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-15 16:28:04
  **/
 import _ from 'lodash';
+import moment from 'moment';
 import Cascader from '@/components/FormPanel/Cascader.vue';
 
 export default {
@@ -344,32 +345,102 @@ export default {
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+      const [startDate, endDate] = form[fieldName];
+      const createPicker = (picker, days) => {
+        const end = new Date();
+        const start = new Date();
+        const f = valueFormat.replace('yyyy-MM-dd', 'YYYY-MM-DD');
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
+        form[fieldName] = [moment(start).format(f), moment(end).format(f)];
+        picker.$emit('pick', start);
+      };
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-date-picker
-            type="daterange"
-            v-model={form[fieldName]}
-            value-format={valueFormat}
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            unlink-panels={true}
-            disabled={disabled}
-            style={{ ...style }}
-            pickerOptions={this.pickerOptions}
-            onChange={val => {
-              // 点击了清空按钮
-              if (val === null) {
-                form[fieldName] = [];
-                this.excuteFormData(form);
-              }
-            }}
-          />
+          <div class="range-date" style={{ ...style }}>
+            <el-date-picker
+              type="date"
+              value={form[fieldName][0]}
+              onInput={val => {
+                val = val === null ? undefined : val;
+                form[fieldName] = [val, form[fieldName][1]];
+              }}
+              pickerOptions={{
+                disabledDate(time) {
+                  if (!endDate) return;
+                  return time.getTime() > moment(endDate).toDate();
+                },
+                shortcuts: [
+                  {
+                    text: '最近一周',
+                    onClick(picker) {
+                      createPicker(picker, 7);
+                    }
+                  },
+                  {
+                    text: '最近一个月',
+                    onClick(picker) {
+                      createPicker(picker, 30);
+                    }
+                  }
+                ]
+              }}
+              value-format={valueFormat}
+              style={{ width: `calc(50% - 7px)` }}
+              placeholder="开始日期"
+              disabled={disabled}
+            />
+            <span class={disabled ? 'is-disabled' : ''} style="display: inline-block; line-height: 26px; text-align: center; width: 14px;">
+              -
+            </span>
+            <el-date-picker
+              type="date"
+              value={form[fieldName][1]}
+              onInput={val => {
+                val = val === null ? undefined : val;
+                form[fieldName] = [form[fieldName][0], val];
+              }}
+              pickerOptions={{
+                disabledDate(time) {
+                  if (!startDate) return;
+                  return time.getTime() < moment(startDate).toDate();
+                }
+              }}
+              value-format={valueFormat}
+              style={{ width: `calc(50% - 7px)` }}
+              placeholder="结束日期"
+              disabled={disabled}
+            />
+          </div>
         </el-form-item>
       );
     },
+    // RANGE_DATE(option) {
+    //   const { form } = this;
+    //   const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+    //   return (
+    //     <el-form-item key={fieldName} label={label} prop={fieldName}>
+    //       {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+    //       <el-date-picker
+    //         type="daterange"
+    //         value={form[fieldName]}
+    //         onInput={val => {
+    //           val = val === null ? [] : val;
+    //           form[fieldName] = val;
+    //         }}
+    //         value-format={valueFormat}
+    //         range-separator="-"
+    //         start-placeholder="开始日期"
+    //         end-placeholder="结束日期"
+    //         unlink-panels={true}
+    //         disabled={disabled}
+    //         style={{ ...style }}
+    //         pickerOptions={this.pickerOptions}
+    //       />
+    //     </el-form-item>
+    //   );
+    // },
     CHECKBOX(option) {
       const { form } = this;
       const { label, fieldName, labelOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
@@ -497,7 +568,7 @@ export default {
     },
     // 级联选择器值变化处理方法
     cascaderChangeHandle(fieldName, data) {
-      this.form[fieldName] = data.map(x => x.value).join(',') || undefined;
+      this.form[fieldName] = data.map(x => x.value).join(',');
       this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
       // 强制重新渲染组件
       this.$forceUpdate();
@@ -523,6 +594,22 @@ export default {
       this.submitForm(ev);
     },
     excuteFormData(form) {
+      this.formOptions
+        .filter(x => x.type === 'RANGE_DATE')
+        .map(x => x.fieldName)
+        .forEach(fieldName => {
+          if (form[fieldName].length > 0) {
+            // 处理可能出现的风险 bug
+            form[fieldName] = Object.assign([], [undefined, undefined], form[fieldName]);
+            if (form[fieldName].every(x => _.isUndefined(x))) {
+              form[fieldName] = [];
+            }
+            if (form[fieldName].some(x => _.isUndefined(x))) {
+              let val = form[fieldName].find(x => !_.isUndefined(x));
+              form[fieldName] = [val, val];
+            }
+          }
+        });
       for (let attr in form) {
         if (attr.includes('|') && Array.isArray(form[attr])) {
           let [startTime, endTime] = attr.split('|');
@@ -533,9 +620,9 @@ export default {
     },
     submitForm(ev) {
       ev && ev.preventDefault();
+      this.excuteFormData(this.form);
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.excuteFormData(this.form);
           return this.$emit('filterChange', this.form);
         }
         // 校验没通过，展开
@@ -674,6 +761,43 @@ export default {
       .el-date-editor {
         width: 100%;
       }
+      .range-date {
+        display: flex;
+        border: 1px solid @borderColor;
+        border-radius: @borderRadius;
+        .el-date-editor {
+          input {
+            border: none;
+            height: 30px;
+            line-height: 30px;
+            padding-right: 0;
+          }
+          &:nth-of-type(1) {
+            input {
+              padding-left: 30px;
+            }
+            .el-input__suffix {
+              right: -5px;
+            }
+          }
+          &:nth-of-type(2) {
+            input {
+              padding-left: 25px;
+            }
+            .el-input__prefix {
+              left: 0;
+            }
+            .el-input__suffix {
+              right: 0;
+            }
+          }
+        }
+        .is-disabled {
+          background-color: #f5f7fa;
+          color: #c0c4cc;
+          cursor: not-allowed;
+        }
+      }
       .el-textarea {
         .el-textarea__inner {
           font-family: inherit;
@@ -701,6 +825,11 @@ export default {
         }
         .el-range__close-icon {
           width: 20px;
+        }
+      }
+      &.is-error {
+        .range-date {
+          border-color: #f5222d;
         }
       }
     }

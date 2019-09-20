@@ -421,13 +421,17 @@ export default {
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type="daterange"
-            v-model={form[fieldName]}
+            value={form[fieldName]}
+            onInput={val => {
+              val = val === null ? [] : val;
+              form[fieldName] = val;
+            }}
             value-format={valueFormat}
             range-separator="-"
             start-placeholder="开始日期"
@@ -436,13 +440,6 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             pickerOptions={this.pickerOptions}
-            onChange={val => {
-              // 点击了清空按钮
-              if (val === null) {
-                form[fieldName] = [];
-                this.excuteFormData(form);
-              }
-            }}
           />
         </el-form-item>
       );
@@ -469,7 +466,7 @@ export default {
     },
     RANGE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, valueFormat = 'HH:mm:ss', style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -483,7 +480,6 @@ export default {
             range-separator="-"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
-            placeholder={placeholder}
             disabled={disabled}
             style={{ ...style }}
             onChange={change}

@@ -104,7 +104,8 @@ export default {
           type: 'RANGE_DATE',
           label: '日期区间',
           style: { minWidth: '200px' },
-          fieldName: 'startTime|endTime'
+          fieldName: 'startTime|endTime',
+          rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
           type: 'MULTIPLE_SELECT',
