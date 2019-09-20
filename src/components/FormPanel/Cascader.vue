@@ -41,12 +41,16 @@ export default {
   watch: {
     values: {
       handler(val) {
+        if (!val.length) return;
         this.$emit('change', val);
       },
       immediate: true
     },
     defaultValue(val) {
       this.values = this.createInitValue(val);
+    },
+    list() {
+      this.values = this.createInitValue(this.defaultValue);
     }
   },
   methods: {
