@@ -23,7 +23,7 @@ Vue.use(FormPanel);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO/TIME/RANGE_TIME/TIME_SELECT/INPUT_CASCADER/BREAK_SPACE(分隔符)}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/RANGE_INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO/TIME/RANGE_TIME/TIME_SELECT/INPUT_CASCADER/BREAK_SPACE(分隔符)}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - selfCols{Number|表单元素自身占据的列数}
@@ -39,13 +39,15 @@ Vue.use(FormPanel);
 - onFocus{Function|输入框获得焦点的事件}
 - onEnter{Function|输入框回车的事件}
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
-- maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
+- min{Number|最小值，只针对 INPUT_NUMBER|RANGE_INPUT_NUMBER 生效}
+- max{Number|最大值，只针对 INPUT_NUMBER|RANGE_INPUT_NUMBER 生效}
+- step{Number|步长，只针对 INPUT_NUMBER|RANGE_INPUT_NUMBER 生效}
 - minlength{Number|原生属性，最小输入长度，只针对 INPUT 生效}
-- maxlength{Number|原生属性，最大输入长度，只针对 INPUT 生效}
+- maxlength{Number|原生属性，最大输入长度，只针对 INPUT|TEXT_AREA 生效}
 - pattern{RegExp|表单控件格式校验/^[0-9a-zA-Z ]{0,11}\$/，只针对 INPUT 生效}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
 

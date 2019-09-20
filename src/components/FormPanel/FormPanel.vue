@@ -80,7 +80,7 @@ export default {
       label: 'text'
     };
     this.prevForm = null;
-    this.arrayTypes = ['RANGE_DATE', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
+    this.arrayTypes = ['RANGE_DATE', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       treeFilterText: '',
       popoverVisible: false,
@@ -276,6 +276,41 @@ export default {
             onChange={change}
             onFocus={onFocus}
           ></el-input-number>
+        </el-form-item>
+      );
+    },
+    RANGE_INPUT_NUMBER(option) {
+      const { form } = this;
+      const { label, fieldName, labelOptions, min = 0, max = 99999999, step = 1, pattern, readonly, disabled, change = () => {} } = option;
+      const [startVal, endVal] = form[fieldName];
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-input-number
+            v-model={form[fieldName][0]}
+            controls-position="right"
+            min={min}
+            max={endVal}
+            step={step}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={change}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-input-number
+            v-model={form[fieldName][1]}
+            controls-position="right"
+            min={startVal}
+            max={max}
+            step={step}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={change}
+          />
         </el-form-item>
       );
     },
@@ -724,19 +759,35 @@ export default {
       callback && callback(e.target.value);
     },
     excuteFormData(form) {
+      this.formOptions
+        .filter(x => x.type === 'RANGE_INPUT_NUMBER')
+        .map(x => x.fieldName)
+        .forEach(fieldName => {
+          if (form[fieldName].length > 0) {
+            // 处理可能出现的风险 bug
+            form[fieldName] = Object.assign([], [undefined, undefined], form[fieldName]);
+            if (form[fieldName].every(x => _.isUndefined(x))) {
+              form[fieldName] = [];
+            }
+            if (form[fieldName].some(x => _.isUndefined(x))) {
+              let val = form[fieldName].find(x => !_.isUndefined(x));
+              form[fieldName] = [val, val];
+            }
+          }
+        });
       for (let attr in form) {
         if (attr.includes('|') && Array.isArray(form[attr])) {
-          let [startTime, endTime] = attr.split('|');
-          form[startTime] = form[attr][0];
-          form[endTime] = form[attr][1];
+          let [start, end] = attr.split('|');
+          form[start] = form[attr][0];
+          form[end] = form[attr][1];
         }
       }
     },
     submitForm(ev) {
       ev && ev.preventDefault();
+      this.excuteFormData(this.form);
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.excuteFormData(this.form);
           return this.$emit('formChange', this.form);
         }
         return false;

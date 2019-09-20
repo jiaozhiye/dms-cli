@@ -16,6 +16,12 @@ export default {
     createFormList() {
       return [
         {
+          type: 'RANGE_INPUT_NUMBER',
+          label: '区间',
+          fieldName: 'bbb',
+          rules: [{ required: true, message: '请输入区间', trigger: 'blur' }]
+        },
+        {
           type: 'INPUT',
           label: '搜索',
           fieldName: 'title',
