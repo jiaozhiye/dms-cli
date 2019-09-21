@@ -347,6 +347,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
       const [startDate, endDate] = form[fieldName];
+      // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
         const start = new Date();
@@ -634,6 +635,7 @@ export default {
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
       this.$emit('filterChange', this.form);
+      this.$nextTick(() => this.$refs.form.clearValidate());
     },
     toggleHandler() {
       this.expand = !this.expand;
@@ -767,7 +769,7 @@ export default {
         border-radius: @borderRadius;
         .el-date-editor {
           input {
-            border: none;
+            border: 0 !important;
             height: 30px;
             line-height: 30px;
             padding-right: 0;
@@ -793,8 +795,8 @@ export default {
           }
         }
         .is-disabled {
-          background-color: #f5f7fa;
-          color: #c0c4cc;
+          background-color: @backgroundColor;
+          color: @disabledColor;
           cursor: not-allowed;
         }
       }
