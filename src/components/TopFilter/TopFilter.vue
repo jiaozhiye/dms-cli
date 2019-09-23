@@ -569,7 +569,7 @@ export default {
     },
     // 级联选择器值变化处理方法
     cascaderChangeHandle(fieldName, data) {
-      this.form[fieldName] = data.map(x => x.value).join(',');
+      this.form[fieldName] = data.map(x => x.value).join(',') || undefined;
       this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
       // 强制重新渲染组件
       this.$forceUpdate();

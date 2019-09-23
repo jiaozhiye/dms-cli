@@ -47,6 +47,10 @@ export default {
       console.log(val);
     }
   },
+  created() {
+    this.formList[1].initialValue = 'asdas';
+    this.formList[2].initialValue = '1,1-2,1-2-1';
+  },
   mounted() {
     setTimeout(() => {
       this.formList[2].itemList = [
@@ -96,9 +100,6 @@ export default {
         }
       ];
     }, 3000);
-    setTimeout(() => {
-      this.formList[2].initialValue = '1,1-2,1-2-1';
-    }, 2000);
   }
 };
 </script>

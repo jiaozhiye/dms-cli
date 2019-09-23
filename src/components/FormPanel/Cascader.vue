@@ -5,6 +5,8 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
+import _ from 'lodash';
+
 export default {
   name: 'Cascader',
   props: {
@@ -41,8 +43,9 @@ export default {
   watch: {
     values: {
       handler(val) {
-        if (!val.length) return;
-        this.$emit('change', val);
+        if (val.length || _.isUndefined(this.defaultValue)) {
+          this.$emit('change', val);
+        }
       },
       immediate: true
     },
