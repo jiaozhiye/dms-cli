@@ -21,6 +21,7 @@
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.24.0",
     "nprogress": "^0.2.0",
+    "pinyin": "^2.9.0",
     "screenfull": "^4.2.0",
     "vue": "2.6.10",
     "vue-router": "3.0.7",

@@ -90,6 +90,7 @@ export default {
           label: '所属分类',
           fieldName: 'cid',
           placeholder: '所属分类',
+          filterable: true,
           itemList: [{ text: '热点', value: '1' }, { text: '资讯', value: '2' }],
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
@@ -116,14 +117,11 @@ export default {
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
-          type: 'SEARCH_HELPER',
+          type: 'SEARCH_HELPER_WEB',
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          request: {
-            fetchApi: () => {},
-            fieldKey: 'name'
-          },
+          itemList: [{ text: '中国' }, { text: '美国' }],
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {

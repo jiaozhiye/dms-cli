@@ -24,12 +24,13 @@ Vue.use(TopFilter);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/TEXT_AREA/INPUT_CASCADER}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/SEARCH_HELPER_WEB/TEXT_AREA/INPUT_CASCADER}
 - label{String|标题，最好不超过 6 个字}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
+- filterable{Boolean|是否开启下拉框的拼音头快速检索功能，默认 false}
 - unitRender{Function|输入框的后置单位的渲染方法, 返回值是 JSX 节点，只对 INPUT 有效}
 - readonly{Boolean|是否只读}
 - disabled{Boolean|禁用}

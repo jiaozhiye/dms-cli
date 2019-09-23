@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-15 16:28:04
  **/
 import _ from 'lodash';
+import pinyin from 'pinyin';
 import moment from 'moment';
 import Cascader from '@/components/FormPanel/Cascader.vue';
 
@@ -317,6 +318,32 @@ export default {
         </el-form-item>
       );
     },
+    SEARCH_HELPER_WEB(option) {
+      const { form } = this;
+      const { label, fieldName, itemList, labelOptions, style = {}, placeholder, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-autocomplete
+            v-model={form[fieldName]}
+            valueKey="text"
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            clearable
+            onChange={change}
+            nativeOnKeydown={this.enterEventHandle}
+            fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, queryString, cb)}
+            scopedSlots={{
+              default: props => {
+                const { item } = props;
+                return <span>{item.text}</span>;
+              }
+            }}
+          />
+        </el-form-item>
+      );
+    },
     SELECT(option) {
       return this.createSelectHandle(option);
     },
@@ -483,11 +510,11 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!itemList && fetchApi) {
-        itemList = this[`${fieldName}Options`] || [];
+        itemList = this[`${fieldName}ItemList`] || [];
         if (!_.isEqual(this[`${fieldName}PrevParams`], params)) {
           this[`${fieldName}PrevParams`] = params;
           this.querySelectOptions(request, fieldName);
@@ -498,6 +525,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-select
             multiple={multiple}
+            filterable={filterable}
             v-model={form[fieldName]}
             placeholder={placeholder}
             disabled={disabled}
@@ -505,6 +533,11 @@ export default {
             clearable
             onChange={change}
             nativeOnKeydown={this.enterEventHandle}
+            filterMethod={queryString => this.filterMethodHandle(fieldName, queryString)}
+            on-visible-change={ev => {
+              if (!filterable && ev) return;
+              setTimeout(() => this.filterMethodHandle(fieldName, ''), 300);
+            }}
           >
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
@@ -513,16 +546,25 @@ export default {
         </el-form-item>
       );
     },
+    // 下拉框的筛选方法
+    filterMethodHandle(fieldName, queryString = '') {
+      const { itemList = [] } = this.formOptions.find(x => x.fieldName === fieldName) || {};
+      if (!this[`${fieldName}OriginItemList`] && !_.isEqual(this[`${fieldName}OriginItemList`], itemList)) {
+        this[`${fieldName}OriginItemList`] = itemList;
+      }
+      const res = queryString ? this[`${fieldName}OriginItemList`].filter(this.createSearchHelpFilter(queryString)) : this[`${fieldName}OriginItemList`];
+      this.formOptions.find(x => x.fieldName === fieldName).itemList = res;
+    },
     // 获取下拉框数据
     async querySelectOptions({ fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' }, fieldName) {
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/sHelperData').default;
-        this[`${fieldName}Options`] = res.data.map(x => ({ value: x[valueKey], text: x[textKey] }));
+        this[`${fieldName}ItemList`] = res.data.map(x => ({ value: x[valueKey], text: x[textKey] }));
       } else {
         const res = await fetchApi(params);
         if (res.resultCode === 200) {
           const dataList = !datakey ? res.data : _.get(res.data, datakey, []);
-          this[`${fieldName}Options`] = dataList.map(x => ({ value: x[valueKey], text: x[textKey] }));
+          this[`${fieldName}ItemList`] = dataList.map(x => ({ value: x[valueKey], text: x[textKey] }));
         }
       }
       this.$forceUpdate();
@@ -546,6 +588,20 @@ export default {
     // 创建搜索帮助数据列表
     createSerachHelperList(list, valueKey) {
       return list.map(x => ({ value: x[valueKey] }));
+    },
+    querySearchHandle(fieldName, queryString = '', cb) {
+      const { itemList = [] } = this.formOptions.find(x => x.fieldName === fieldName) || {};
+      const res = queryString ? itemList.filter(this.createSearchHelpFilter(queryString)) : itemList;
+      cb(res);
+    },
+    createSearchHelpFilter(queryString) {
+      return state => {
+        const pyt = pinyin(state.text, { style: pinyin.STYLE_FIRST_LETTER })
+          .flat()
+          .join('');
+        const str = `${state.text}|${pyt}`;
+        return str.toLowerCase().includes(queryString.toLowerCase());
+      };
     },
     // 创建树节点的值
     createInputTreeValue(fieldName, itemList) {
