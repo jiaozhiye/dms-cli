@@ -224,6 +224,7 @@ export default {
       this.formList.find(x => x.fieldName === 'number').initialValue = 20;
       this.formList[0].labelOptions.initialValue = '22';
       this.formList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
+      this.content = 'asd';
     }, 3000);
   }
 };

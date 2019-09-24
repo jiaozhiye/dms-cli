@@ -56,7 +56,7 @@ export default {
   watch: {
     value(val) {
       if (!this.hasChange && this.hasInit) {
-        this.$nextTick(() => window.tinymce.get(this.tinymceId).setContent(val || ''));
+        window.tinymce.get(this.tinymceId).setContent(val || '');
       }
     }
   },
@@ -93,14 +93,15 @@ export default {
         link_title: false,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
+          this.hasInit = true;
           if (this.value) {
             editor.setContent(this.value);
           }
-          this.hasInit = true;
           editor.on('NodeChange Change KeyUp SetContent', () => {
             this.hasChange = true;
             this.$emit('input', editor.getContent());
             this.$emit('change', editor.getContent());
+            this.$nextTick(() => (this.hasChange = false));
           });
         },
         setup(editor) {
@@ -127,7 +128,7 @@ export default {
     },
     imageSuccessCBK(arr) {
       arr.forEach(v => {
-        window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`);
+        window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" />`);
       });
     }
   }
