@@ -18,8 +18,8 @@ export default {
   render() {
     const { containerStyle, labelStyle, label } = this;
     return (
-      <div class="form-divider">
-        <el-divider contentPosition="left" style={{ ...containerStyle }}>
+      <div class="form-divider" style={{ ...containerStyle }}>
+        <el-divider contentPosition="left">
           <span class="title" style={{ ...labelStyle }}>
             {label}
           </span>

@@ -87,12 +87,11 @@ export default {
       popoverVisible: false,
       cascaderVisible: false,
       form: {},
-      rules: this.createFormRule(this.list)
+      rules: {}
     };
   },
   created() {
-    this.form = this.createFormData();
-    this.prevForm = { ...this.form };
+    this.initialHandle();
   },
   computed: {
     fieldNames() {
@@ -113,6 +112,10 @@ export default {
   watch: {
     formOptions: {
       handler(nextProps) {
+        // 动态 list 配置
+        if (!Object.keys(this.form).length && nextProps.length > 0) {
+          this.initialHandle();
+        }
         this.$nextTick(() => {
           nextProps.forEach(x => {
             if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
@@ -146,7 +149,7 @@ export default {
       deep: true
     },
     fieldNames() {
-      this.rules = this.createFormRule(this.list);
+      this.rules = this.createFormRule();
       this.$nextTick(() => this.$refs.form.clearValidate());
     },
     treeFilterText(val) {
@@ -159,6 +162,11 @@ export default {
     }
   },
   methods: {
+    initialHandle() {
+      this.form = this.createFormData();
+      this.rules = this.createFormRule();
+      this.prevForm = { ...this.form };
+    },
     getInitialValue(item) {
       let { initialValue, type = '', fieldName } = item;
       if (this.formType === 'show') {
@@ -187,9 +195,9 @@ export default {
       });
       return target;
     },
-    createFormRule(list) {
+    createFormRule() {
       const target = {};
-      list.forEach(x => {
+      this.list.forEach(x => {
         if (!x.fieldName) return;
         target[x.fieldName] = x.rules;
       });

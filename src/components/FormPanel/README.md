@@ -36,6 +36,7 @@ Vue.use(FormPanel);
 - unitRender{Function|输入框的后置单位的渲染方法, 返回值是 JSX 节点，只对 INPUT 有效}
 - readonly{Boolean|是否只读}
 - disabled{Boolean|禁用}
+- precision{Number|数值精度，之针对 INPUT_NUMBER 有效}
 - numberFormat{Boolean|指定金融类数值格式，100,000,000, 只对 INPUT 有效}
 - onFocus{Function|输入框获得焦点的事件}
 - onEnter{Function|输入框回车的事件}
