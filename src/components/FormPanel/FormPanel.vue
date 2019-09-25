@@ -208,12 +208,29 @@ export default {
         </div>
       );
     },
+    createFormItemDesc(option) {
+      if (!option) return null;
+      const { isTooltip, style = {}, content = '描述信息...' } = option;
+      if (isTooltip) {
+        return (
+          <el-tooltip effect="dark" content={content} placement="right">
+            <i class="desc-icon el-icon-info"></i>
+          </el-tooltip>
+        );
+      }
+      return (
+        <span class="desc-text" style={{ ...style }}>
+          {content}
+        </span>
+      );
+    },
     INPUT(option) {
       const { form } = this;
       const {
         label,
         fieldName,
         labelOptions,
+        descOptions,
         style = {},
         placeholder,
         unitRender,
@@ -254,12 +271,13 @@ export default {
           >
             {unitRender && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
           </el-input>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
+      const { label, fieldName, labelOptions, descOptions, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -277,6 +295,7 @@ export default {
             onChange={change}
             onFocus={onFocus}
           ></el-input-number>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
@@ -540,18 +559,19 @@ export default {
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, descOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -564,12 +584,13 @@ export default {
               );
             })}
           </el-checkbox-group>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
     RADIO(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -580,6 +601,7 @@ export default {
               </el-radio>
             ))}
           </el-radio-group>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
@@ -655,7 +677,7 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!itemList && fetchApi) {
@@ -687,6 +709,7 @@ export default {
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
           </el-select>
+          {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
@@ -972,6 +995,15 @@ export default {
             right: 0;
           }
         }
+      }
+      .desc-icon {
+        padding: 6px;
+        font-size: 18px;
+        vertical-align: middle;
+      }
+      .desc-text {
+        font-size: @textSizeSecondary;
+        padding-left: @modulePadding;
       }
       .el-form-item__content {
         line-height: 30px;

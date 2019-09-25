@@ -74,6 +74,15 @@ Vue.use(FormPanel);
   - &emsp;change: {Function|checkbox 或 select 值变化的回调}
 - }
 
+`list -> descOptions 配置项`
+
+- descOptions: {
+  - &emsp;isTooltip: {Boolean|是否以 Tooltip 形式显示描述信息}
+  - &emsp;style: {Object|描述信息容器的 style}
+  - &emsp;content: {String|描述信息内容}
+- }
+- 注意：描述信息会占据原有表单元素的部分空间，因此需要通过 list 配置项中的 style 来控制表单元素的宽度
+
 `SEARCH_HELPER|SELECT|MULTIPLE_SELECT 配置项`
 
 - request: {
