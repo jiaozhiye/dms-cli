@@ -979,7 +979,7 @@ export default {
     },
     createFormButton() {
       const colSpan = 24 / this.cols;
-      return this.isSubmitBtn && this.formType !== 'show' ? (
+      return this.list.length && this.isSubmitBtn && this.formType !== 'show' ? (
         <el-row gutter={10}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>

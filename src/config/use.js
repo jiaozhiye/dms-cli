@@ -57,3 +57,6 @@ Vue.use(AjaxButton);
 
 import BreakSpace from '@/components/BreakSpace';
 Vue.use(BreakSpace);
+
+import Spin from '@/components/Spin';
+Vue.use(Spin);
