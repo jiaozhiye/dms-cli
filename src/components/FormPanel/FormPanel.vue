@@ -567,11 +567,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-time-select
-            value={form[fieldName]}
-            onInput={val => {
-              val = val === null ? [] : val;
-              form[fieldName] = val;
-            }}
+            v-model={form[fieldName]}
             pickerOptions={{
               start: startTime,
               end: endTime,
@@ -590,6 +586,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, disabled, change = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
+      const stepMinute = moment(stepTime, valueFormat).minute();
       const [startVal, endVal] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -598,13 +595,17 @@ export default {
             value={form[fieldName][0]}
             onInput={val => {
               val = val === null ? undefined : val;
-              form[fieldName] = [val, form[fieldName][1]];
+              form[fieldName] = [val, endVal];
             }}
             pickerOptions={{
               start: startTime,
               end: endTime,
               step: stepTime,
-              maxTime: endVal
+              maxTime:
+                endVal &&
+                moment(endVal, valueFormat)
+                  .add(stepMinute, 'minutes')
+                  .format(valueFormat)
             }}
             value-format={valueFormat}
             placeholder={'开始时间'}
@@ -617,13 +618,17 @@ export default {
             value={form[fieldName][1]}
             onInput={val => {
               val = val === null ? undefined : val;
-              form[fieldName] = [form[fieldName][0], val];
+              form[fieldName] = [startVal, val];
             }}
             pickerOptions={{
               start: startTime,
               end: endTime,
               step: stepTime,
-              minTime: startVal
+              minTime:
+                startVal &&
+                moment(startVal, valueFormat)
+                  .subtract(stepMinute, 'minutes')
+                  .format(valueFormat)
             }}
             value-format={valueFormat}
             placeholder={'结束时间'}
