@@ -90,7 +90,7 @@ export default {
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
-          type: 'RANGE_DATE',
+          type: 'RANGE_TIME_SELECT',
           label: '日期区间',
           style: { minWidth: '200px' },
           fieldName: 'startTime|endTime'

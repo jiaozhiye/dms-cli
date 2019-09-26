@@ -25,6 +25,7 @@ Vue.use(FormPanel);
 
 - type{String|类型，支持 INPUT/INPUT_NUMBER/RANGE_INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/SEARCH_HELPER_WEB/TEXT_AREA/UPLOAD_IMG/UPLOAD_FILE/RADIO/TIME/RANGE_TIME/TIME_SELECT/INPUT_CASCADER/BREAK_SPACE(分隔符)}
 - label{String|标题，最好不超过 6 个字}
+- labelWidth{String|表单域标签的的宽度，字符串类型，需要加单位(px)}
 - fieldName{String|字段名称 key}
 - selfCols{Number|表单元素自身占据的列数}
 - offsetLeftCols{Number|表单元素左侧的间隔列数}

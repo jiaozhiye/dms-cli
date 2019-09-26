@@ -1,5 +1,5 @@
 <template>
-  <div class="btn-area" :style="containerStyle">
+  <div :class="['btn-area', align]" :style="containerStyle">
     <slot></slot>
   </div>
 </template>
@@ -8,6 +8,10 @@
 export default {
   name: 'ButtonArea',
   props: {
+    align: {
+      type: String,
+      default: 'left'
+    },
     containerStyle: {
       type: Object,
       default: () => ({})
@@ -21,9 +25,21 @@ export default {
   font-size: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
   & > * {
-    margin: 0 @moduleMargin @moduleMargin 0 !important;
+    margin: 0;
+    margin-bottom: @moduleMargin;
+  }
+  &.left {
+    justify-content: flex-start;
+    & > * {
+      margin-right: @moduleMargin !important;
+    }
+  }
+  &.right {
+    justify-content: flex-end;
+    & > * {
+      margin-left: @moduleMargin !important;
+    }
   }
 }
 </style>

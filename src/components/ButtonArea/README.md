@@ -15,6 +15,7 @@ Vue.use(ButtonArea);
 `组件参数API`
 
 - containerStyle{Object|承载按钮层容器的 css 样式}
+- align{String|按钮的对齐方式，默认是 left}
 
 `示例代码`
 

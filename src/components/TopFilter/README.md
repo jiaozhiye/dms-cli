@@ -26,6 +26,7 @@ Vue.use(TopFilter);
 
 - type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/SEARCH_HELPER_WEB/TEXT_AREA/INPUT_CASCADER}
 - label{String|标题，最好不超过 6 个字}
+- labelWidth{String|表单域标签的的宽度，字符串类型，需要加单位(px)}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}

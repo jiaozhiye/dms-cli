@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-18 12:02:51
  **/
 import _ from 'lodash';
+import moment from 'moment';
 import pinyin from 'pinyin';
 import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
@@ -81,7 +82,7 @@ export default {
       label: 'text'
     };
     this.prevForm = null;
-    this.arrayTypes = ['RANGE_DATE', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
+    this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       treeFilterText: '',
       popoverVisible: false,
@@ -207,8 +208,8 @@ export default {
       const { form } = this;
       const { fieldName, itemList, style = {}, disabled, change = () => {} } = option;
       return (
-        <div class="label-wrap">
-          <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} style={{ ...style }} onChange={change}>
+        <div class="label-wrap" style={{ ...style }}>
+          <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={change}>
             {itemList.map(x => (
               <el-option key={x.value} label={x.text} value={x.value} />
             ))}
@@ -237,6 +238,7 @@ export default {
       const {
         label,
         fieldName,
+        labelWidth,
         labelOptions,
         descOptions,
         style = {},
@@ -253,7 +255,7 @@ export default {
       } = option;
       const prevValue = form[fieldName];
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input
             value={prevValue}
@@ -285,9 +287,24 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, descOptions, style = {}, placeholder, disabled, min = 0, max = 99999999, step = 1, precision, change = () => {}, onFocus = () => {} } = option;
+      const {
+        label,
+        fieldName,
+        labelWidth,
+        labelOptions,
+        descOptions,
+        style = {},
+        placeholder,
+        disabled,
+        min = 0,
+        max = 99999999,
+        step = 1,
+        precision,
+        change = () => {},
+        onFocus = () => {}
+      } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input-number
             v-model={form[fieldName]}
@@ -309,10 +326,10 @@ export default {
     },
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, min = 0, max = 99999999, step = 1, pattern, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, pattern, readonly, disabled, change = () => {} } = option;
       const [startVal, endVal] = form[fieldName];
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input-number
             v-model={form[fieldName][0]}
@@ -344,9 +361,9 @@ export default {
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
@@ -379,10 +396,10 @@ export default {
     },
     INPUT_CASCADER(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, itemList = [], options = {}, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList = [], options = {}, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
       const { titles = [] } = options;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover v-model={this.cascaderVisible} visibleArrow={false} placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
@@ -405,9 +422,9 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-autocomplete
             v-model={form[fieldName]}
@@ -423,9 +440,9 @@ export default {
     },
     SEARCH_HELPER_WEB(option) {
       const { form } = this;
-      const { label, fieldName, itemList, labelOptions, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, itemList, labelOptions, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-autocomplete
             v-model={form[fieldName]}
@@ -455,9 +472,9 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
         </el-form-item>
@@ -465,9 +482,9 @@ export default {
     },
     DATE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
         </el-form-item>
@@ -475,9 +492,9 @@ export default {
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type="daterange"
@@ -500,9 +517,9 @@ export default {
     },
     TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-time-picker
             v-model={form[fieldName]}
@@ -520,15 +537,16 @@ export default {
     },
     RANGE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'HH:mm:ss', style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-time-picker
             isRange={true}
-            v-model={form[fieldName]}
-            pickerOptions={{
-              format: valueFormat
+            value={form[fieldName].length ? form[fieldName] : undefined}
+            onInput={val => {
+              val = val === null ? [] : val;
+              form[fieldName] = val;
             }}
             value-format={valueFormat}
             range-separator="-"
@@ -543,15 +561,18 @@ export default {
     },
     TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-time-select
-            v-model={form[fieldName]}
+            value={form[fieldName]}
+            onInput={val => {
+              val = val === null ? [] : val;
+              form[fieldName] = val;
+            }}
             pickerOptions={{
-              format: valueFormat,
               start: startTime,
               end: endTime,
               step: stepTime
@@ -565,12 +586,60 @@ export default {
         </el-form-item>
       );
     },
+    RANGE_TIME_SELECT(option) {
+      const { form } = this;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, disabled, change = () => {} } = option;
+      const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
+      const [startVal, endVal] = form[fieldName];
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-time-select
+            value={form[fieldName][0]}
+            onInput={val => {
+              val = val === null ? undefined : val;
+              form[fieldName] = [val, form[fieldName][1]];
+            }}
+            pickerOptions={{
+              start: startTime,
+              end: endTime,
+              step: stepTime,
+              maxTime: endVal
+            }}
+            value-format={valueFormat}
+            placeholder={'开始时间'}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            onChange={change}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-time-select
+            value={form[fieldName][1]}
+            onInput={val => {
+              val = val === null ? undefined : val;
+              form[fieldName] = [form[fieldName][0], val];
+            }}
+            pickerOptions={{
+              start: startTime,
+              end: endTime,
+              step: stepTime,
+              minTime: startVal
+            }}
+            value-format={valueFormat}
+            placeholder={'结束时间'}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            onChange={change}
+          />
+        </el-form-item>
+      );
+    },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, descOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
           {this.createFormItemDesc(descOptions)}
@@ -579,9 +648,9 @@ export default {
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
             {itemList.map(x => {
@@ -598,9 +667,9 @@ export default {
     },
     RADIO(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
             {itemList.map(x => (
@@ -615,9 +684,9 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
         </el-form-item>
@@ -625,9 +694,9 @@ export default {
     },
     UPLOAD_IMG(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <UploadCropper
             actionUrl={upload.actionUrl}
@@ -649,7 +718,7 @@ export default {
     },
     UPLOAD_FILE(option) {
       const { form } = this;
-      const { label, fieldName, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
       let { actionUrl, limit = 1, tipText } = upload;
       tipText = !tipText ? '' : `${tipText}，`;
       const uploadProps = {
@@ -666,7 +735,7 @@ export default {
         }
       };
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-upload ref="upload-file" {...uploadProps} style={{ ...style }}>
             <el-button size="small" type="primary">
@@ -685,7 +754,7 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!itemList && fetchApi) {
@@ -696,7 +765,7 @@ export default {
         }
       }
       return (
-        <el-form-item key={fieldName} label={label} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-select
             multiple={multiple}
@@ -851,7 +920,7 @@ export default {
     },
     excuteFormData(form) {
       this.formOptions
-        .filter(x => x.type === 'RANGE_INPUT_NUMBER')
+        .filter(x => ['RANGE_INPUT_NUMBER', 'RANGE_TIME_SELECT'].includes(x.type))
         .map(x => x.fieldName)
         .forEach(fieldName => {
           if (form[fieldName].length > 0) {
