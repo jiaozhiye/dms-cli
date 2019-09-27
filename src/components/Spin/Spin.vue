@@ -155,6 +155,7 @@ export default {
       font-size: @textSize;
       color: @primaryColor;
       line-height: 20px;
+      text-align: center;
       padding-top: 5px;
     }
   }

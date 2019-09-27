@@ -1,5 +1,5 @@
 <template>
-  <div :class="['btn-area', align]" :style="containerStyle">
+  <div :class="['btn-area', `btn-align-${align}`]" :style="containerStyle">
     <slot></slot>
   </div>
 </template>
@@ -29,13 +29,13 @@ export default {
     margin: 0;
     margin-bottom: @moduleMargin;
   }
-  &.left {
+  &.btn-align-left {
     justify-content: flex-start;
     & > * {
       margin-right: @moduleMargin !important;
     }
   }
-  &.right {
+  &.btn-align-right {
     justify-content: flex-end;
     & > * {
       margin-left: @moduleMargin !important;
