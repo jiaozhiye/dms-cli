@@ -14,12 +14,16 @@ Vue.use(Spin);
 
 `组件参数API`
 
+- spinning{Boolean|是否为加载中状态，必选参数}
+- tip{String|自定义描述文案}
+- containerStyle{Object|外层容器的 style 样式，此样式会再加载过后被移除}
+
 `示例代码`
 
 ```bash
 # template
 <template>
-  <Spin :containerStyle="{ height: 200px' }">
+  <Spin :spinning="loading" tip="Loading...">
     <div>需要 Loading 的元素</div>
   </Spin>
 </template>

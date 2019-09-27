@@ -1,6 +1,9 @@
 <template>
   <div class="text">
-    <FormPanel :list="formList" @formChange="asdasd" />
+    <Spin :spinning="loading" tip="Loading...">
+      <div>标题</div>
+      <FormPanel :list="formList" @formChange="asdasd" />
+    </Spin>
   </div>
 </template>
 
@@ -9,6 +12,7 @@ export default {
   name: 'Dashboard',
   data() {
     return {
+      loading: false,
       formList: this.createFormList()
     };
   },
@@ -52,6 +56,7 @@ export default {
     this.formList[2].initialValue = '1,1-2,1-2-1';
   },
   mounted() {
+    this.loading = true;
     setTimeout(() => {
       this.formList[2].itemList = [
         {
@@ -99,6 +104,7 @@ export default {
           ]
         }
       ];
+      this.loading = false;
     }, 3000);
   }
 };
