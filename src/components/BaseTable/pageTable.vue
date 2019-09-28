@@ -271,7 +271,7 @@ export default {
       if (this.selectionType === 'single') {
         selectedRows.length = 1;
       }
-      selectedRows.forEach(row => this.$refs.appTable.toggleRowSelection(row, true));
+      selectedRows.forEach(row => this.toggleSelectionHandle(row, true));
     },
     // 创建内存分页的列表数据
     createLimitRecords() {
@@ -970,14 +970,14 @@ export default {
       this.setEditPosIndex(rowIndex, editableColumnIndex);
     },
     // 切换行选中列选中状态
-    toggleSelectionHandle(row) {
+    toggleSelectionHandle(row, state) {
       // 单选
       if (this.selectionType === 'single' && !this.selectionRows.includes(row)) {
         this.handleSelectionChange([row]);
       }
       // 多选
       if (this.selectionType === 'multiple') {
-        this.$refs.appTable.toggleRowSelection(row);
+        this.$refs.appTable.toggleRowSelection(row, state);
       }
     },
     // 单元格双击时
