@@ -756,6 +756,9 @@ export default {
     },
     // 金融格式数字的格式化方法
     numberFormat(column, input) {
+      if (column.precision >= 0 && !isNaN(Number(input))) {
+        input = Number(input).toFixed(column.precision);
+      }
       if (column.numberFormat) {
         input = this.formatNumber(input);
       }

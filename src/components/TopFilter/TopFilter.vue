@@ -260,8 +260,8 @@ export default {
             min={min}
             max={max}
             step={step}
-            clearable
             precision={precision}
+            clearable
             onChange={change}
             onFocus={onFocus}
             nativeOnKeydown={this.enterEventHandle}

@@ -315,8 +315,8 @@ export default {
             min={min}
             max={max}
             step={step}
-            clearable
             precision={precision}
+            clearable
             onChange={change}
             onFocus={onFocus}
           ></el-input-number>
@@ -326,7 +326,7 @@ export default {
     },
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, pattern, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, precision, pattern, readonly, disabled, change = () => {} } = option;
       const [startVal, endVal] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -337,6 +337,7 @@ export default {
             min={min}
             max={endVal}
             step={step}
+            precision={precision}
             readonly={readonly}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
@@ -350,6 +351,7 @@ export default {
             min={startVal}
             max={max}
             step={step}
+            precision={precision}
             readonly={readonly}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
