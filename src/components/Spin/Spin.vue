@@ -35,10 +35,10 @@ export default {
   watch: {
     spinning: {
       handler(val) {
+        this.stopHandle();
         if (!val) {
           this.sSpinning = false;
         } else {
-          this.stopHandle();
           this.timer = setTimeout(() => (this.sSpinning = true), this.delay);
         }
       },
@@ -79,6 +79,7 @@ export default {
       'spin-container': true,
       'spin-blur': sSpinning
     };
+    // 外层容器 style 样式
     const wrapperStyle = sSpinning ? containerStyle : null;
     return (
       <div class="spin-nested-loading" style={wrapperStyle}>
