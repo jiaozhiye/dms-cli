@@ -329,22 +329,30 @@ export default {
       dataList.forEach((x, i) => {
         x.index = i; // 序号
         x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
-        // 处理数值类型的可编辑单元格，显示数据的精度
         this.editableColumns.forEach(column => {
-          let { dataIndex, precision = 2 } = column;
-          if (_.isUndefined(_.get(x, dataIndex))) {
-            _.set(x, dataIndex, '');
-          }
-          if (column.editType === 'number') {
-            if (!isNaN(Number(x[dataIndex]))) {
-              x[dataIndex] = Number(x[dataIndex]).toFixed(precision);
-            }
-          }
-          // 单元格默认为不可编辑状态
-          this.setCellEditState(x, dataIndex, false);
+          this.createTableCellData(column, x, false);
         });
       });
       return dataList;
+    },
+    // 初始化表格单元格数据
+    createTableCellData(column, data, state) {
+      const { dataIndex, precision = 2 } = column;
+      if (_.isUndefined(_.get(data, dataIndex))) {
+        _.set(data, dataIndex, '');
+      }
+      if (column.editType === 'number') {
+        if (!isNaN(Number(data[dataIndex]))) {
+          data[dataIndex] = Number(data[dataIndex]).toFixed(precision);
+        }
+      }
+      if (Object.keys(data).includes(`${dataIndex}IsEdit`)) {
+        delete data[`${dataIndex}IsEdit`];
+      }
+      if (column.editable || column.defaultEditable) {
+        // 单元格默认编辑状态
+        this.setCellEditState(data, dataIndex, !!state);
+      }
     },
     // 处理总记录数
     createPageTotal(data, keypath) {
@@ -438,7 +446,7 @@ export default {
         );
       }
       if (editType === 'date-picker') {
-        const { dateFormat = 'yyyy-MM-dd HH:mm:ss' } = column;
+        const { dateFormat = 'yyyy-MM-dd HH:mm:ss', minDateTime, maxDateTime } = column;
         const dateType = dateFormat === 'yyyy-MM-dd HH:mm:ss' ? 'datetime' : 'date';
         return (
           <el-date-picker
@@ -446,10 +454,23 @@ export default {
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             type={dateType}
-            clearable={false}
             placeholder="选择日期"
+            picker-options={{
+              disabledDate(time) {
+                if (minDateTime) {
+                  const target = !new Date(minDateTime).getTime() ? _.get(props.row, minDateTime) : minDateTime;
+                  return time.getTime() < new Date(target).getTime();
+                }
+                if (maxDateTime) {
+                  const target = !new Date(maxDateTime).getTime() ? _.get(props.row, maxDateTime) : maxDateTime;
+                  return time.getTime() > new Date(target).getTime();
+                }
+                return false;
+              }
+            }}
             format={dateFormat}
             value-format={dateFormat}
+            clearable={false}
             disabled={column.disabled || isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
@@ -1410,18 +1431,10 @@ export default {
     },
     // 设置新增行数据的默认值
     setDefaultValue(row) {
-      let res = {};
       this.columnFlatMap(this.columns).forEach(x => {
-        _.set(res, x.dataIndex, '');
-        if (Object.keys(row).includes(`${x.dataIndex}IsEdit`)) {
-          delete row[`${x.dataIndex}IsEdit`];
-        }
-        if (x.editable || x.editType) {
-          // 新增的行默认为可编辑
-          this.setCellEditState(res, x.dataIndex, true);
-        }
+        this.createTableCellData(x, row, true);
       });
-      return res;
+      return row;
     },
     // 新增行功能
     addRowHandler(rows) {
@@ -1432,7 +1445,7 @@ export default {
         // 获取最大 index
         const lastRow = this.originData[this.originData.length - 1];
         const maxIndex = _.isUndefined(lastRow) ? -1 : lastRow.index;
-        const newRow = Object.assign({}, target, row, {
+        const newRow = Object.assign({}, target, {
           index: maxIndex + 1,
           _uid: this.createUidKey('new'),
           isNewRow: true

@@ -123,6 +123,8 @@ http://localhost:8080/table
 - className{String|单元格追加的 class，用于修改某单元格列样式}
 - showOverflowTooltip{Boolean|内容过长被隐藏时显示 tooltip}
 - dateFormat{String|指定日期格式，具体请参考 element-ui date-picker 组件}
+- minDateTime{String/其它列的 dataIndex|最小日期，小于该时间的日期段将被禁用}
+- maxDateTime{String/其它列的 dataIndex|最大日期，大于该时间的日期段将被禁用}
 - numberFormat{Boolean|指定金融类数值格式，100,000,000}
 - summation{Boolean|字段合计}
 - summationDataIndex{String|服务端合计的字段名，通常和 dataIndex 一致，如果设置为服务端合计，那么在对应列单元格数据变化时，合计值不变}

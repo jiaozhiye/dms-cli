@@ -84,7 +84,7 @@ export default {
   render(h) {
     const { type, position } = this;
     return (
-      <el-tabs class="topTabMenu" v-model={this.activeName} type={type} tab-position={position} on-tab-click={this.clickHandler}>
+      <el-tabs class="lazyLoadTab" v-model={this.activeName} type={type} tab-position={position} on-tab-click={this.clickHandler}>
         {this.createTabPanel(h)}
       </el-tabs>
     );
@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style lang="less">
-.topTabMenu {
+.lazyLoadTab {
   .el-tabs__nav-wrap {
     .el-tabs__item {
       height: 32px;
@@ -105,6 +105,9 @@ export default {
     &.is-left::after {
       width: 1px;
     }
+  }
+  .el-tabs__content {
+    position: static !important;
   }
 }
 </style>
