@@ -117,8 +117,9 @@ Vue.use(FormPanel);
 
 `组件暴露的方法`
 
-- SUBMIT_FORM{Function|获取所有表单控件数据的集合}
+- SUBMIT_FORM{Function|获取所有表单控件数据的集合，返回值为表单数据}
 - RESET_FORM{Function|重置表单控件}
+- GET_FORM_DATA{Function|异步函数，获取表单数据，返回值为数组 [err, formData]}
 
 `示例代码`
 

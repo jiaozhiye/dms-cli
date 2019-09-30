@@ -46,12 +46,6 @@ Vue.use(BasePrint);
 import ButtonArea from '@/components/ButtonArea';
 Vue.use(ButtonArea);
 
-import Anchor from '@/components/Anchor';
-Vue.use(Anchor);
-
-import Tinymce from '@/components/Tinymce';
-Vue.use(Tinymce);
-
 import AjaxButton from '@/components/AjaxButton';
 Vue.use(AjaxButton);
 
@@ -60,3 +54,9 @@ Vue.use(BreakSpace);
 
 import Spin from '@/components/Spin';
 Vue.use(Spin);
+
+import Anchor from '@/components/Anchor';
+Vue.use(Anchor);
+
+import Tinymce from '@/components/Tinymce';
+Vue.use(Tinymce);

@@ -713,15 +713,17 @@ export default {
     },
     submitForm(ev) {
       ev && ev.preventDefault();
-      this.excuteFormData(this.form);
+      let isErr;
       this.$refs.form.validate(valid => {
+        isErr = !valid;
         if (valid) {
+          this.excuteFormData(this.form);
           return this.$emit('filterChange', this.form);
         }
         // 校验没通过，展开
         this.expand = true;
-        return false;
       });
+      return isErr;
     },
     resetForm() {
       this.$refs.form.resetFields();
@@ -795,11 +797,22 @@ export default {
       return res;
     },
     // 外部通过组件实例调用的方法
-    SUBMIT_FORM(ev) {
-      this.submitForm(ev);
+    SUBMIT_FORM() {
+      const err = this.submitForm();
+      return !err ? this.form : null;
     },
     RESET_FORM() {
       this.resetForm();
+    },
+    async GET_FORM_DATA() {
+      try {
+        await this.$refs.form.validate();
+        // 处理数据
+        this.excuteFormData(this.form);
+        return [false, this.form];
+      } catch (err) {
+        return [true, null];
+      }
     }
   },
   render() {

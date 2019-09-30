@@ -329,30 +329,22 @@ export default {
       dataList.forEach((x, i) => {
         x.index = i; // 序号
         x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
-        this.editableColumns.forEach(column => {
-          this.createTableCellData(column, x, false);
+        this.columnFlatMap(this.columns).forEach(column => {
+          const { dataIndex, precision, editable, editType } = column;
+          if (_.isUndefined(_.get(x, dataIndex))) {
+            _.set(x, dataIndex, '');
+          }
+          const val = _.get(x, dataIndex);
+          if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
+            _.set(x, dataIndex, Number(val).toFixed(precision));
+          }
+          if (editable) {
+            // 单元格默认编辑状态
+            this.setCellEditState(x, dataIndex, false);
+          }
         });
       });
       return dataList;
-    },
-    // 初始化表格单元格数据
-    createTableCellData(column, data, state) {
-      const { dataIndex, precision = 2 } = column;
-      if (_.isUndefined(_.get(data, dataIndex))) {
-        _.set(data, dataIndex, '');
-      }
-      if (column.editType === 'number') {
-        if (!isNaN(Number(data[dataIndex]))) {
-          data[dataIndex] = Number(data[dataIndex]).toFixed(precision);
-        }
-      }
-      if (Object.keys(data).includes(`${dataIndex}IsEdit`)) {
-        delete data[`${dataIndex}IsEdit`];
-      }
-      if (column.editable || column.defaultEditable) {
-        // 单元格默认编辑状态
-        this.setCellEditState(data, dataIndex, !!state);
-      }
     },
     // 处理总记录数
     createPageTotal(data, keypath) {
@@ -481,7 +473,7 @@ export default {
       // 校验数字的正则
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       // 默认精度是两位
-      const { precision = 2 } = column;
+      const { precision } = column;
       return (
         <el-input
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
@@ -773,12 +765,16 @@ export default {
       if (value.charAt(value.length - 1) === '.' || value === '-') {
         value = value.slice(0, -1);
       }
-      return value !== '' ? Number(value).toFixed(n) : '';
+      if (value !== '' && n >= 0 && !isNaN(Number(value))) {
+        value = Number(value).toFixed(n);
+      }
+      return value;
     },
     // 金融格式数字的格式化方法
     numberFormat(column, input) {
-      if (column.precision >= 0 && !isNaN(Number(input))) {
-        input = Number(input).toFixed(column.precision);
+      const { precision } = column;
+      if (precision >= 0 && !isNaN(Number(input))) {
+        input = Number(input).toFixed(precision);
       }
       if (column.numberFormat) {
         input = this.formatNumber(input);
@@ -801,14 +797,11 @@ export default {
         const item = {};
         for (let attr in x) {
           if (Object.keys(aliasKey).includes(attr)) {
-            let { dataIndex } = aliasKey[attr];
-            let column = allColumns.find(x => x.dataIndex === dataIndex);
+            const { dataIndex } = aliasKey[attr];
+            const { editType, precision } = allColumns.find(x => x.dataIndex === dataIndex);
             // 处理数值类型的可编辑单元格，显示数据的精度
-            if (column.editType === 'number') {
-              let { precision = 2 } = column;
-              if (!isNaN(Number(x[attr]))) {
-                item[dataIndex] = Number(x[attr]).toFixed(precision);
-              }
+            if (editType === 'number' && precision >= 0 && !isNaN(Number(x[attr]))) {
+              item[dataIndex] = Number(x[attr]).toFixed(precision);
             } else {
               item[dataIndex] = x[attr];
             }
@@ -1274,7 +1267,7 @@ export default {
           return Number(_.get(x, property, 0));
         });
         // 累加求和
-        const result = values.reduce((prev, curr) => {
+        let result = values.reduce((prev, curr) => {
           const value = Number(curr);
           if (!isNaN(value)) {
             return prev + curr;
@@ -1285,12 +1278,13 @@ export default {
         // 单位
         const unit = targetColumn.summationUnit ? targetColumn.summationUnit : '';
         // 精度
-        const { summationPrecision = 2 } = targetColumn;
+        const { precision } = targetColumn;
         // 服务端合计
         if (Object.keys(this.summaries).includes(property) && typeof this.summaries[property] !== 'undefined') {
           sums[index] = `${this.summaries[property]} ${unit}`;
         } else {
-          sums[index] = `${this.formatNumber(result.toFixed(summationPrecision))} ${unit}`;
+          result = precision >= 0 ? result.toFixed(precision) : result;
+          sums[index] = `${this.formatNumber(result)} ${unit}`;
         }
       });
       return sums;
@@ -1431,10 +1425,21 @@ export default {
     },
     // 设置新增行数据的默认值
     setDefaultValue(row) {
-      this.columnFlatMap(this.columns).forEach(x => {
-        this.createTableCellData(x, row, true);
+      const res = {};
+      this.columnFlatMap(this.columns).forEach(column => {
+        const { dataIndex, precision, editType } = column;
+        if (_.isUndefined(_.get(row, dataIndex))) {
+          _.set(res, dataIndex, '');
+        }
+        const val = _.get(res, dataIndex);
+        if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
+          _.set(res, dataIndex, Number(val).toFixed(precision));
+        }
+        if (column.editable || column.defaultEditable) {
+          this.setCellEditState(res, dataIndex, true);
+        }
       });
-      return row;
+      return res;
     },
     // 新增行功能
     addRowHandler(rows) {
