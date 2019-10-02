@@ -37,58 +37,14 @@ export default {
     }
   },
   data() {
-    const createPicker = (picker, days) => {
-      const end = new Date();
-      const start = new Date();
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
-      picker.$emit('pick', [start, end]);
-    };
-    this.pickerOptions = {
-      shortcuts: [
-        {
-          text: '最近一周',
-          onClick(picker) {
-            createPicker(picker, 7);
-          }
-        },
-        {
-          text: '最近一个月',
-          onClick(picker) {
-            createPicker(picker, 30);
-          }
-        },
-        {
-          text: '最近三个月',
-          onClick(picker) {
-            createPicker(picker, 90);
-          }
-        },
-        {
-          text: '最近半年',
-          onClick(picker) {
-            createPicker(picker, 180);
-          }
-        },
-        {
-          text: '最近一年',
-          onClick(picker) {
-            createPicker(picker, 365);
-          }
-        }
-      ]
-    };
-    this.treeProps = {
-      children: 'children',
-      label: 'text'
-    };
+    this.treeProps = { children: 'children', label: 'text' };
     this.prevForm = null;
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
+      form: {},
       treeFilterText: '',
       popoverVisible: false,
-      cascaderVisible: false,
-      form: {},
-      rules: {}
+      cascaderVisible: false
     };
   },
   created() {
@@ -96,25 +52,39 @@ export default {
   },
   computed: {
     fieldNames() {
-      return this.list.map(x => x.fieldName).filter(x => !!x);
+      return this.list
+        .filter(x => !x.hidden)
+        .map(x => x.fieldName)
+        .filter(x => !!x);
     },
-    formOptions() {
+    formItemList() {
       const res = [];
-      this.list.forEach(x => {
-        if (x.type === 'BREAK_SPACE') return;
-        if (x.labelOptions) {
-          res.push(x.labelOptions);
-        }
-        res.push(x);
-      });
+      this.list
+        .filter(x => !x.hidden)
+        .forEach(x => {
+          if (x.type === 'BREAK_SPACE') return;
+          if (_.isObject(x.labelOptions)) {
+            res.push(x.labelOptions);
+          }
+          res.push(x);
+        });
       return res;
+    },
+    rules() {
+      const target = {};
+      this.list
+        .filter(x => !x.hidden)
+        .forEach(x => {
+          if (!(x.fieldName && x.rules)) return;
+          target[x.fieldName] = x.rules;
+        });
+      return target;
     }
   },
   watch: {
-    formOptions: {
-      handler(nextProps) {
-        // 动态 list 配置
-        if (!Object.keys(this.form).length && nextProps.length > 0) {
+    formItemList: {
+      handler(nextProps, prevProps) {
+        if (nextProps.length !== prevProps.length) {
           this.initialHandle();
         }
         this.$nextTick(() => {
@@ -141,7 +111,7 @@ export default {
         const res = this.difference(nextProps, this.prevForm);
         if (!Object.keys(res).length) return;
         for (let key in res) {
-          let target = this.formOptions.find(x => x.fieldName === key);
+          let target = this.formItemList.find(x => x.fieldName === key);
           if (!target) continue;
           target.initialValue = res[key];
         }
@@ -150,7 +120,6 @@ export default {
       deep: true
     },
     fieldNames() {
-      this.rules = this.createFormRule();
       this.$nextTick(() => this.$refs.form.clearValidate());
     },
     treeFilterText(val) {
@@ -165,7 +134,6 @@ export default {
   methods: {
     initialHandle() {
       this.form = this.createFormData();
-      this.rules = this.createFormRule();
       this.prevForm = { ...this.form };
     },
     getInitialValue(item) {
@@ -187,20 +155,12 @@ export default {
     },
     createFormData() {
       const target = {};
-      this.formOptions.forEach(x => {
+      this.formItemList.forEach(x => {
         const val = this.getInitialValue(x);
         // 设置 initialValue 为响应式数据
         this.$set(x, 'initialValue', val);
         // 初始值
         target[x.fieldName] = val;
-      });
-      return target;
-    },
-    createFormRule() {
-      const target = {};
-      this.list.forEach(x => {
-        if (!x.fieldName) return;
-        target[x.fieldName] = x.rules;
       });
       return target;
     },
@@ -242,7 +202,7 @@ export default {
         labelOptions,
         descOptions,
         style = {},
-        placeholder,
+        placeholder = '请输入...',
         unitRender,
         minlength = 0,
         maxlength = 999,
@@ -294,7 +254,7 @@ export default {
         labelOptions,
         descOptions,
         style = {},
-        placeholder,
+        placeholder = '请输入...',
         disabled,
         min = 0,
         max = 99999999,
@@ -363,7 +323,7 @@ export default {
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -398,7 +358,7 @@ export default {
     },
     INPUT_CASCADER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, itemList = [], options = {}, style = {}, placeholder, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList = [], options = {}, style = {}, placeholder = '请选择...', readonly, disabled, change = () => {} } = option;
       const { titles = [] } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -424,7 +384,7 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder = '请输入...', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -442,7 +402,7 @@ export default {
     },
     SEARCH_HELPER_WEB(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, itemList, labelOptions, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, itemList, labelOptions, style = {}, placeholder = '请输入...', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -474,7 +434,7 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder = '选择日期', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -484,7 +444,7 @@ export default {
     },
     DATE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder = '选择日期', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -495,6 +455,13 @@ export default {
     RANGE_DATE(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+      // 日期区间快捷键方法
+      const createPicker = (picker, days) => {
+        const end = new Date();
+        const start = new Date();
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
+        picker.$emit('pick', [start, end]);
+      };
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -512,14 +479,35 @@ export default {
             unlink-panels={true}
             disabled={disabled}
             style={{ ...style }}
-            pickerOptions={this.pickerOptions}
+            pickerOptions={{
+              shortcuts: [
+                {
+                  text: '最近一周',
+                  onClick(picker) {
+                    createPicker(picker, 7);
+                  }
+                },
+                {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    createPicker(picker, 30);
+                  }
+                },
+                {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    createPicker(picker, 90);
+                  }
+                }
+              ]
+            }}
           />
         </el-form-item>
       );
     },
     TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -563,7 +551,7 @@ export default {
     },
     TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -643,7 +631,7 @@ export default {
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -655,7 +643,7 @@ export default {
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -674,7 +662,7 @@ export default {
     },
     RADIO(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -691,7 +679,7 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder, disabled, rows = 2, maxlength = 100 } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 100 } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -701,7 +689,7 @@ export default {
     },
     UPLOAD_IMG(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -725,7 +713,7 @@ export default {
     },
     UPLOAD_FILE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, placeholder, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled } = option;
       let { actionUrl, limit = 1, tipText } = upload;
       tipText = !tipText ? '' : `${tipText}，`;
       const uploadProps = {
@@ -761,7 +749,7 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder = '请选择...', disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!itemList && fetchApi) {
@@ -799,12 +787,12 @@ export default {
     },
     // 下拉框的筛选方法
     filterMethodHandle(fieldName, queryString = '') {
-      const { itemList = [] } = this.formOptions.find(x => x.fieldName === fieldName) || {};
+      const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
       if (!this[`${fieldName}OriginItemList`] && !_.isEqual(this[`${fieldName}OriginItemList`], itemList)) {
         this[`${fieldName}OriginItemList`] = itemList;
       }
       const res = queryString ? this[`${fieldName}OriginItemList`].filter(this.createSearchHelpFilter(queryString)) : this[`${fieldName}OriginItemList`];
-      this.formOptions.find(x => x.fieldName === fieldName).itemList = res;
+      this.formItemList.find(x => x.fieldName === fieldName).itemList = res;
     },
     // 获取下拉框数据
     async querySelectOptions({ fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' }, fieldName) {
@@ -837,7 +825,7 @@ export default {
       }
     },
     querySearchHandle(fieldName, queryString = '', cb) {
-      const { itemList = [] } = this.formOptions.find(x => x.fieldName === fieldName) || {};
+      const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
       const res = queryString ? itemList.filter(this.createSearchHelpFilter(queryString)) : itemList;
       cb(res);
     },
@@ -912,21 +900,23 @@ export default {
       this.cascaderVisible = val;
     },
     createFormItem() {
-      return this.list.map(item => {
-        const VNode = !this[item.type] ? null : this[item.type](item);
-        VNode['type'] = item.type;
-        VNode['cols'] = item.selfCols;
-        VNode['offsetLeft'] = item.offsetLeftCols;
-        VNode['offsetRight'] = item.offsetRightCols;
-        return VNode;
-      });
+      return this.list
+        .filter(x => !x.hidden)
+        .map(item => {
+          const VNode = !this[item.type] ? null : this[item.type](item);
+          VNode['type'] = item.type;
+          VNode['cols'] = item.selfCols;
+          VNode['offsetLeft'] = item.offsetLeftCols;
+          VNode['offsetRight'] = item.offsetRightCols;
+          return VNode;
+        });
     },
     keydownHandle(e, callback) {
       if (e.keyCode !== 13) return;
       callback && callback(e.target.value);
     },
     excuteFormData(form) {
-      this.formOptions
+      this.formItemList
         .filter(x => ['RANGE_INPUT_NUMBER', 'RANGE_TIME_SELECT'].includes(x.type))
         .map(x => x.fieldName)
         .forEach(fieldName => {
@@ -1052,7 +1042,6 @@ export default {
     async GET_FORM_DATA() {
       try {
         await this.$refs.form.validate();
-        // 处理数据
         this.excuteFormData(this.form);
         return [false, this.form];
       } catch (err) {

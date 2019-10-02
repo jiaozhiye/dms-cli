@@ -74,6 +74,7 @@ export default {
           type: 'INPUT',
           label: '搜索',
           fieldName: 'title',
+          hidden: true,
           placeholder: '请输入标题名称...',
           labelOptions: {
             fieldName: 'qwe',
@@ -268,10 +269,11 @@ export default {
           title: '价格',
           dataIndex: 'price',
           width: 120,
+          precision: 2,
           numberFormat: true,
           sorter: true,
           filter: true,
-          filterType: 'input',
+          filterType: 'number',
           summation: true,
           summationUnit: '元',
           editable: true,
@@ -378,6 +380,7 @@ export default {
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
       this.list = [...res.data.items];
+      this.topFilterList[0].hidden = false;
       this.topFilterList[0].initialValue = 'asdf';
       this.topFilterList[0].labelOptions.initialValue = '22';
       this.topFilterList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];

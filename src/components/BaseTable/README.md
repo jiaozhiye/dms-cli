@@ -131,7 +131,7 @@ http://localhost:8080/table
 - summationUnit{String|合计字段的单位}
 - sorter{Boolean|是否支持排序}
 - filter{Boolean|是否支持表头过滤}
-- filterType{String|表头过滤类型，支持 input/checkbox/radio/date-range}
+- filterType{String|表头过滤类型，支持 input/number/checkbox/radio/date-range}
 - filterItems{Array|checkbox 过滤类型的列表数据，[{text: '', value: ''}]}
 - editable{Boolean|该列单元格是否可编辑}
 - defaultEditable{Boolean|该列单元格是否处于可编辑状态}

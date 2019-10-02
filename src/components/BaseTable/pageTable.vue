@@ -410,6 +410,7 @@ export default {
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder="请选择"
+            clearable={true}
             disabled={column.disabled || isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
@@ -1085,6 +1086,10 @@ export default {
             } else {
               return target.includes(this.filters[attr]);
             }
+          }
+          if (type === 'number' && this.filters[attr].length) {
+            const [ minVal = -Infinity, maxVal = Infinity ] = this.filters[attr];
+            return target >= Number(minVal) && target <= Number(maxVal);
           }
           if (type === 'radio' && this.filters[attr] !== '') {
             return target === this.filters[attr];

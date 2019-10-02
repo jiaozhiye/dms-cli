@@ -5,6 +5,7 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
+import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
 import PageTable from './pageTable.vue';
 
@@ -122,6 +123,7 @@ export default {
   },
   data() {
     this.isColumnsChange = false;
+    this.arrayTypes = ['checkbox', 'number', 'date-range'];
     return {
       visible: this.createVisibleData(this.columns),
       search: this.createSearchData(this.columns),
@@ -161,7 +163,7 @@ export default {
         if (Array.isArray(x.children)) {
           Object.assign(target, this.createSearchData(x.children));
         }
-        if (filter && (filterType === 'checkbox' || filterType === 'date-range')) {
+        if (filter && this.arrayTypes.includes(filterType)) {
           target[`${x.dataIndex}Val`] = [];
         }
       });
@@ -238,15 +240,8 @@ export default {
       }
       $el.style.left = `${iLeft}px`;
     },
-    // 参数值是否是假，假 -> 返回 ture
-    isValueFalse(val) {
-      if (Array.isArray(val)) {
-        return !val.length;
-      }
-      return !val;
-    },
     // 创建头部筛选节点
-    createToperNode(column, property) {
+    createToperNode(label = '', property) {
       return (
         <span
           slot="reference"
@@ -258,7 +253,7 @@ export default {
           }}
         >
           <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterSelected'}>
-            {column.label} <i class="el-icon-arrow-down" />
+            {label} <i class="el-icon-arrow-down" />
           </span>
         </span>
       );
@@ -279,8 +274,9 @@ export default {
     // 表格头部渲染
     renderHeaderHandle({ column, $index }, type) {
       const { property, label } = column;
-      const target = this.deepFind(this.columns, property);
-      return target && target.filterType === type ? (
+      // 查找对应的表头列
+      const originColumn = this.deepFind(this.columns, property);
+      return originColumn && originColumn.filterType === type ? (
         <el-popover
           ref={property}
           trigger="manual"
@@ -289,57 +285,130 @@ export default {
           placement="bottom-start"
           // value={this.visible[property]}
         >
-          {this.createToperNode(column, property)}
-          <div class="el-table-filter__content">
-            {type === 'input' && (
-              <el-input
-                size="small"
-                v-model={this.search[`${property}Val`]}
-                placeholder={`搜索${label}`}
-                nativeOnKeydown={e => {
-                  e.stopPropagation();
-                  if (e.keyCode === 13) {
-                    this.filterHandler(property, type);
-                  }
-                }}
-              />
-            )}
-            {type === 'checkbox' && (
-              <el-checkbox-group v-model={this.search[`${property}Val`]}>
-                {target.filterItems.map(x => (
-                  <li key={x.value} style={{ marginBottom: '7px' }}>
-                    <el-checkbox label={x.value}>{x.text}</el-checkbox>
-                  </li>
-                ))}
-              </el-checkbox-group>
-            )}
-            {type === 'radio' && (
-              <el-radio-group v-model={this.search[`${property}Val`]} style={{ display: 'block' }}>
-                {target.filterItems.map(x => (
-                  <li key={x.value} style={{ marginBottom: '8px' }}>
-                    <el-radio label={x.value}>{x.text}</el-radio>
-                  </li>
-                ))}
-              </el-radio-group>
-            )}
-            {type === 'date-range' && (
-              <el-date-picker
-                size="small"
-                type="daterange"
-                v-model={this.search[`${property}Val`]}
-                unlink-panels={true}
-                style={{ width: '240px' }}
-                format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              />
-            )}
-          </div>
-          {this.createButtonNode(type, property, ['input', 'radio'].includes(type) ? '' : [])}
+          {this.createToperNode(label, property)}
+          <div class="el-table-filter__content">{this[`${type}Handle`](originColumn)}</div>
+          {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
         </el-popover>
       ) : null;
+    },
+    inputHandle(column) {
+      const { dataIndex, title, filterType } = column;
+      return (
+        <el-input
+          v-model={this.search[`${dataIndex}Val`]}
+          placeholder={`搜索${title}`}
+          nativeOnKeydown={e => {
+            e.stopPropagation();
+            if (e.keyCode === 13) {
+              this.filterHandler(dataIndex, filterType);
+            }
+          }}
+        />
+      );
+    },
+    numberHandle(column) {
+      const { dataIndex, precision, filterType } = column;
+      const [startVal, endVal] = this.search[`${dataIndex}Val`];
+      const setValue = arr => {
+        this.search[`${dataIndex}Val`] = arr.map(x => (x !== '' ? x : undefined));
+      };
+      return (
+        <div>
+          <el-input
+            value={this.search[`${dataIndex}Val`][0]}
+            onInput={val => {
+              if (!this.validateNumber(val)) return;
+              setValue([val, this.search[`${dataIndex}Val`][1]]);
+            }}
+            style={{ width: '100px' }}
+            placeholder="开始值"
+            onChange={val => {
+              if (val !== '' && val > endVal) {
+                setValue([endVal, this.search[`${dataIndex}Val`][1]]);
+              }
+            }}
+            nativeOnKeydown={e => {
+              e.stopPropagation();
+              if (e.keyCode === 13) {
+                this.filterHandler(dataIndex, filterType);
+              }
+            }}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-input
+            value={this.search[`${dataIndex}Val`][1]}
+            onInput={val => {
+              if (!this.validateNumber(val)) return;
+              setValue([this.search[`${dataIndex}Val`][0], val]);
+            }}
+            min={startVal}
+            style={{ width: '100px' }}
+            placeholder="结束值"
+            onChange={val => {
+              if (val !== '' && val < startVal) {
+                setValue([this.search[`${dataIndex}Val`][0], startVal]);
+              }
+            }}
+            nativeOnKeydown={e => {
+              e.stopPropagation();
+              if (e.keyCode === 13) {
+                this.filterHandler(dataIndex, filterType);
+              }
+            }}
+          />
+        </div>
+      );
+    },
+    checkboxHandle(column) {
+      const { dataIndex, filterItems = [] } = column;
+      return (
+        <el-checkbox-group v-model={this.search[`${dataIndex}Val`]}>
+          {filterItems.map(x => (
+            <li key={x.value} style={{ marginBottom: '7px' }}>
+              <el-checkbox label={x.value}>{x.text}</el-checkbox>
+            </li>
+          ))}
+        </el-checkbox-group>
+      );
+    },
+    radioHandle(column) {
+      const { dataIndex, filterItems = [] } = column;
+      return (
+        <el-radio-group v-model={this.search[`${dataIndex}Val`]} style={{ display: 'block' }}>
+          {filterItems.map(x => (
+            <li key={x.value} style={{ marginBottom: '8px' }}>
+              <el-radio label={x.value}>{x.text}</el-radio>
+            </li>
+          ))}
+        </el-radio-group>
+      );
+    },
+    ['date-rangeHandle'](column) {
+      const { dataIndex } = column;
+      return (
+        <el-date-picker
+          size="small"
+          type="daterange"
+          v-model={this.search[`${dataIndex}Val`]}
+          unlink-panels={true}
+          style={{ width: '210px' }}
+          value-format="yyyy-MM-dd HH:mm:ss"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+      );
+    },
+    // 参数值是否是假，假 -> 返回 ture
+    isValueFalse(val) {
+      if (Array.isArray(val)) {
+        return !val.filter(x => !_.isUndefined(x)).length;
+      }
+      return !val;
+    },
+    validateNumber(val) {
+      const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+      return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -404,6 +473,9 @@ export default {
 
 .popper-wrap {
   min-width: 120px !important;
+  .el-input__inner {
+    text-align: left !important;
+  }
   .el-checkbox {
     width: 100%;
   }

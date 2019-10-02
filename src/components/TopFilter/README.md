@@ -31,6 +31,7 @@ Vue.use(TopFilter);
 - placeholder{String|提示文字}
 - initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
+- hidden{Boolean|是否隐藏该表单项}
 - filterable{Boolean|是否开启下拉框的拼音头快速检索功能，默认 false}
 - unitRender{Function|输入框的后置单位的渲染方法, 返回值是 JSX 节点，只对 INPUT 有效}
 - readonly{Boolean|是否只读}
