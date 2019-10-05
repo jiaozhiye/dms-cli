@@ -451,11 +451,11 @@ export default {
             picker-options={{
               disabledDate(time) {
                 if (minDateTime) {
-                  const target = !new Date(minDateTime).getTime() ? _.get(props.row, minDateTime) : minDateTime;
+                  const target = !new Date(minDateTime).getTime() ? _.get(props.row, minDateTime) || '' : minDateTime;
                   return time.getTime() < new Date(target).getTime();
                 }
                 if (maxDateTime) {
-                  const target = !new Date(maxDateTime).getTime() ? _.get(props.row, maxDateTime) : maxDateTime;
+                  const target = !new Date(maxDateTime).getTime() ? _.get(props.row, maxDateTime) || '' : maxDateTime;
                   return time.getTime() > new Date(target).getTime();
                 }
                 return false;
@@ -1088,7 +1088,7 @@ export default {
             }
           }
           if (type === 'number' && this.filters[attr].length) {
-            const [ minVal = -Infinity, maxVal = Infinity ] = this.filters[attr];
+            const [minVal = -Infinity, maxVal = Infinity] = this.filters[attr];
             return target >= Number(minVal) && target <= Number(maxVal);
           }
           if (type === 'radio' && this.filters[attr] !== '') {
@@ -1433,9 +1433,7 @@ export default {
       const res = {};
       this.columnFlatMap(this.columns).forEach(column => {
         const { dataIndex, precision, editType } = column;
-        if (_.isUndefined(_.get(row, dataIndex))) {
-          _.set(res, dataIndex, '');
-        }
+        _.set(res, dataIndex, _.get(row, dataIndex, ''));
         const val = _.get(res, dataIndex);
         if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
           _.set(res, dataIndex, Number(val).toFixed(precision));

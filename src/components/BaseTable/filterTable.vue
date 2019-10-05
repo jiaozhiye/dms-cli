@@ -286,7 +286,7 @@ export default {
           // value={this.visible[property]}
         >
           {this.createToperNode(label, property)}
-          <div class="el-table-filter__content">{this[`${type}Handle`](originColumn)}</div>
+          <div class="el-table-filter__content">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
           {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
         </el-popover>
       ) : null;
