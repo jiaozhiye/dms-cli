@@ -117,7 +117,7 @@ http://localhost:8080/table
 - maxlength{Number|最大输入长度}
 - max{Number|最大值}
 - min{Number|最小值}
-- precision{Number|数值精度，保留几位小数}
+- precision{Number|单元格或合计的数值精度，保留几位小数}
 - fixed{String|列固定，值为 left/right}
 - align{String|单元格文字对齐方式，left(默认)/center/right}
 - className{String|单元格追加的 class，用于修改某单元格列样式}

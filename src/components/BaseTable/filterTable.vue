@@ -274,7 +274,7 @@ export default {
     // 表格头部渲染
     renderHeaderHandle({ column, $index }, type) {
       const { property, label } = column;
-      // 查找对应的表头列
+      // 查找对应的表头列 column
       const originColumn = this.deepFind(this.columns, property);
       return originColumn && originColumn.filterType === type ? (
         <el-popover
@@ -399,6 +399,9 @@ export default {
         />
       );
     },
+    documentEventHandle(e) {
+      this.closeAllPopover();
+    },
     // 参数值是否是假，假 -> 返回 ture
     isValueFalse(val) {
       if (Array.isArray(val)) {
@@ -406,6 +409,7 @@ export default {
       }
       return !val;
     },
+    // 数值类型值得校验
     validateNumber(val) {
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
@@ -426,9 +430,6 @@ export default {
         }
       }
       return res;
-    },
-    documentEventHandle(e) {
-      this.closeAllPopover();
     },
     // 外部通过组件实例调用的方法
     CLEAR_SEARCH_PARAMS() {

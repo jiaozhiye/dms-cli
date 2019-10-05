@@ -87,22 +87,7 @@ export default {
         if (nextProps.length !== prevProps.length) {
           this.initialHandle();
         }
-        this.$nextTick(() => {
-          nextProps.forEach(x => {
-            if (!_.isEqual(x.initialValue, this.form[x.fieldName])) {
-              let { initialValue, type = '', fieldName } = x;
-              if (this.arrayTypes.includes(type)) {
-                initialValue = initialValue || [];
-              }
-              if (type === 'INPUT' && x.numberFormat) {
-                initialValue = this.formatNumber(initialValue);
-              }
-              this.form[fieldName] = initialValue;
-              // 对组件外 js 动态赋值的表单元素进行校验
-              this.$refs.form.validateField(fieldName);
-            }
-          });
-        });
+        this.debounce(this.resetFormData, 10)(nextProps);
       },
       deep: true
     },
@@ -113,6 +98,7 @@ export default {
         for (let key in res) {
           let target = this.formItemList.find(x => x.fieldName === key);
           if (!target) continue;
+          // 同步 initialValue 的值
           target.initialValue = res[key];
         }
         this.prevForm = { ...nextProps };
@@ -148,8 +134,8 @@ export default {
         initialValue = this.formatNumber(initialValue);
       }
       // 级联选择器
-      if (type === 'INPUT_CASCADER') {
-        this[`${fieldName}CascaderTexts`] = ''; // 默认值
+      if (type === 'INPUT_CASCADER' && _.isUndefined(this[`${fieldName}CascaderTexts`])) {
+        this[`${fieldName}CascaderTexts`] = '';
       }
       return initialValue;
     },
@@ -163,6 +149,14 @@ export default {
         target[x.fieldName] = val;
       });
       return target;
+    },
+    resetFormData(list) {
+      list.forEach(x => {
+        if (_.isEqual(x.initialValue, this.form[x.fieldName])) return;
+        this.form[x.fieldName] = this.getInitialValue(x);
+        // 对组件外 js 动态赋值的表单元素进行校验
+        this.$refs.form.validateField(x.fieldName);
+      });
     },
     createFormItemLabel(option) {
       const { form } = this;
@@ -1002,6 +996,13 @@ export default {
         result = num + result;
       }
       return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+    },
+    // 函数防抖
+    debounce(fn, delay) {
+      return function(...args) {
+        fn.timer && clearTimeout(fn.timer);
+        fn.timer = setTimeout(() => fn.apply(this, args), delay);
+      };
     },
     toPercent(num) {
       return Number(num * 100).toFixed(5) + '%';
