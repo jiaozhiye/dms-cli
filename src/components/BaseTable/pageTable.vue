@@ -1610,9 +1610,10 @@ export default {
       this.clearTableHandleLog();
     },
     START_LOADING() {
-      this.loading = true;
+      this.loadingTimer = setTimeout(() => (this.loading = true), 200);
     },
     STOP_LOADING() {
+      this.loadingTimer && clearTimeout(this.loadingTimer);
       this.loading = false;
     },
     GET_UPDATE_ROWS() {
@@ -1738,7 +1739,7 @@ export default {
             {isColumnFilter && <ColumnFilter {...columnFilterProps} style={{ marginRight: '10px' }} />}
           </section>
         </div>
-        <el-table ref="appTable" v-loading={loading} {...tableParams}>
+        <el-table ref="appTable" v-loading={loading} element-loading-background={`rgba(255, 255, 255, 0.65)`} {...tableParams}>
           {this.createColumns(columns)}
         </el-table>
         {isShowPagination && <Pagination {...paginationProps} />}
