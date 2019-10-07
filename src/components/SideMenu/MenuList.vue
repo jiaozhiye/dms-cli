@@ -41,6 +41,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+
 export default {
   name: 'MenuList',
   props: {
@@ -150,21 +151,42 @@ export default {
         position: absolute;
         right: 0;
         top: 0;
+        .el-tabs__nav-wrap {
+          padding: 0;
+          .el-tabs__nav-scroll {
+            overflow-y: auto;
+          }
+          .el-tabs__item {
+            padding: 0 0 0 15px;
+            height: 34px;
+            line-height: 34px;
+            color: @menuText;
+            &.is-active {
+              font-weight: 700;
+              color: #fff;
+            }
+          }
+          &.is-right {
+            width: 151px;
+          }
+          &::after {
+            display: none;
+          }
+        }
       }
       .el-tabs__content {
         margin-right: 170px;
         .column-wrap {
           column-count: 2;
           .box {
-            margin-left: 20px;
-            margin-bottom: 20px;
+            padding-left: 20px;
+            padding-bottom: 10px;
             -webkit-column-break-inside: avoid;
             break-inside: avoid;
             h4 {
-              padding: 10px 0;
               color: @menuText;
               font-weight: 700;
-              line-height: 20px;
+              line-height: 34px;
               border-bottom: 1px solid #626466;
             }
             ul {
@@ -182,7 +204,7 @@ export default {
                   color: @menuText;
                 }
                 a {
-                  font-size: 12px;
+                  font-size: @textSizeSecondary;
                   color: @menuText;
                   transition: all 0.3s ease;
                   &:hover {
@@ -193,21 +215,6 @@ export default {
             }
           }
         }
-      }
-    }
-  }
-  .is-right {
-    width: 151px;
-  }
-  .el-tabs__nav-wrap {
-    &::after {
-      display: none;
-    }
-    .el-tabs__item {
-      color: @menuText;
-      &.is-active {
-        font-weight: 700;
-        color: #fff;
       }
     }
   }

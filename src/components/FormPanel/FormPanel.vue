@@ -7,7 +7,7 @@
  **/
 import _ from 'lodash';
 import moment from 'moment';
-import pinyin from 'pinyin';
+import pinyin from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';

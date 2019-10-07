@@ -879,7 +879,8 @@ export default {
         searchHelper: { fetchApi, params = {}, datakey = '', aliasKey }
       } = column;
       // 搜索帮助数据的 key
-      const key = Object.entries(aliasKey).find(x => x[1].dataIndex === dataIndex)[0];
+      const [key] = Object.entries(aliasKey).find(x => x[1].dataIndex === dataIndex) || [];
+      if (_.isUndefined(key)) return;
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/sHelperData').default;
         setTimeout(() => {

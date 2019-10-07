@@ -6,8 +6,8 @@
  * @Last Modified time: 2019-08-15 16:28:04
  **/
 import _ from 'lodash';
-import pinyin from 'pinyin';
 import moment from 'moment';
+import pinyin from '@/components/Pinyin/index';
 import Cascader from '@/components/FormPanel/Cascader.vue';
 
 export default {
