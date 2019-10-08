@@ -54,6 +54,7 @@ Vue.use(FormPanel);
 - maxlength{Number|原生属性，最大输入长度，只针对 INPUT|TEXT_AREA 生效}
 - pattern{RegExp|表单控件格式校验/^[0-9a-zA-Z ]{0,11}\$/，只针对 INPUT 生效}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
+- render{Function|表单元素的渲染函数，返回值是 JSX 类型节点}
 
 `list -> options 配置项`
 

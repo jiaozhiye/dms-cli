@@ -44,6 +44,7 @@ Vue.use(TopFilter);
 - change{Function|checkbox 或 select 值变化的回调}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
+- render{Function|表单元素的渲染函数，返回值是 JSX 类型节点}
 
 `list -> options 配置项`
 

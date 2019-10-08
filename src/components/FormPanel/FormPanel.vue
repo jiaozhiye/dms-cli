@@ -187,6 +187,15 @@ export default {
         </span>
       );
     },
+    RENDER_FORM_ITEM(option) {
+      const { label, fieldName, labelWidth, labelOptions, render = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <div>{render()}</div>
+        </el-form-item>
+      );
+    },
     INPUT(option) {
       const { form } = this;
       const {
@@ -746,7 +755,7 @@ export default {
       const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder = '请选择...', disabled, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
-      if (!itemList && fetchApi) {
+      if (!option.itemList && fetchApi) {
         itemList = this[`${fieldName}ItemList`] || [];
         if (!_.isEqual(this[`${fieldName}PrevParams`], params)) {
           this[`${fieldName}PrevParams`] = params;
@@ -765,10 +774,14 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            filterMethod={queryString => this.filterMethodHandle(fieldName, queryString)}
-            on-visible-change={ev => {
-              if (!filterable && ev) return;
-              setTimeout(() => this.filterMethodHandle(fieldName, ''), 300);
+            filterMethod={queryString => {
+              if (!filterable) return;
+              this.filterMethodHandle(fieldName, queryString);
+            }}
+            on-visible-change={val => {
+              if (filterable && !val) {
+                setTimeout(() => this.filterMethodHandle(fieldName, ''), 300);
+              }
             }}
           >
             {itemList.map(x => (
@@ -897,7 +910,7 @@ export default {
       return this.list
         .filter(x => !x.hidden)
         .map(item => {
-          const VNode = !this[item.type] ? null : this[item.type](item);
+          const VNode = !this[item.type] ? null : item.render ? this.RENDER_FORM_ITEM(item) : this[item.type](item);
           VNode['type'] = item.type;
           VNode['cols'] = item.selfCols;
           VNode['offsetLeft'] = item.offsetLeftCols;
