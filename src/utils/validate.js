@@ -6,10 +6,13 @@
  */
 import { isFormEmpty } from './index';
 
+// 注意：表单控件如果使用了自定义校验规则，
+// rules 配置中不能加 message 属性，required 的非空校验也需要在自定义的校验方法中实现
+
 // 手机号校验
 export const phone = (rule, value, callback) => {
-  if (rule.required && isFormEmpty('手机号不能为空')) {
-    return callback(new Error(message));
+  if (rule.required && isFormEmpty(value)) {
+    return callback(new Error('手机号不能为空'));
   }
   let regExp = /^1[2-9]\d{9}$/;
   if (isFormEmpty(value) || regExp.test(value)) {

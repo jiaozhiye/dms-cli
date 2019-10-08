@@ -758,7 +758,7 @@ export default {
       let l = text.length || 1;
       let f = 14;
       // 每个字大小，其实是每个字的比例值，大概会比字体大小差不多大一点
-      return f * l + 70;
+      return f * l + 60;
     },
     // 格式化数值类型
     parseNumber(value, n) {
