@@ -138,6 +138,7 @@ export default {
       list: [], // 列表数据
       tableHeight: Number(this.height) || this.minHeight, // 高度
       selectionRows: [], // table 选中行
+      disabledRows: [], // table 禁用行
       filterParams: {}, // 表头筛选参数
       sorterParams: {}, // 表头排序参数
       columnInfo: {}, // table column 信息
@@ -673,6 +674,7 @@ export default {
                     this.selectionRows = [this.list.find(x => x._uid === val)];
                   }}
                   label={props.row._uid}
+                  disabled={this.canRowSelected(props.row)}
                   onChange={val => {
                     this.handleSelectionChange(this.list.find(x => x._uid === val));
                   }}
@@ -683,7 +685,7 @@ export default {
           }}
         />
       ) : (
-        <el-table-column key="-" prop="-" type="selection" reserveSelection={true} fixed="left" width="50" />
+        <el-table-column key="-" prop="-" type="selection" reserveSelection={true} fixed="left" width="50" selectable={row => !this.canRowSelected(row)} />
       );
     },
     // 创建表格列字段
@@ -758,7 +760,12 @@ export default {
       let l = text.length || 1;
       let f = 14;
       // 每个字大小，其实是每个字的比例值，大概会比字体大小差不多大一点
-      return f * l + 60;
+      return f * l + 65;
+    },
+    // 判断 table 行是否可以被选中
+    canRowSelected(row) {
+      const uids = this.disabledRows.map(x => x._uid);
+      return uids.includes(row._uid);
     },
     // 格式化数值类型
     parseNumber(value, n) {
@@ -990,6 +997,7 @@ export default {
     },
     // 切换行选中列选中状态
     toggleSelectionHandle(row, state) {
+      if (this.disabledRows.includes(row)) return;
       // 单选
       if (this.selectionType === 'single' && !this.selectionRows.includes(row)) {
         this.handleSelectionChange([row]);
@@ -1298,8 +1306,10 @@ export default {
     // table 头被拖拽改变列宽度
     headerDragendHandler(newWidth, oldWidth, column) {
       const { property } = column;
-      if (!this.columnsRef) return;
-      this.columnInfo = { [property]: newWidth };
+      if (!!this.columnsRef) {
+        this.columnInfo = { [property]: newWidth };
+      }
+      this.$nextTick(() => this.resetRender());
     },
     // 垂直滚动到指定位置
     scrollTopToPosition(t) {
@@ -1431,7 +1441,7 @@ export default {
     },
     // 设置新增行数据的默认值
     setDefaultValue(row) {
-      const res = {};
+      const res = { ...row };
       this.columnFlatMap(this.columns).forEach(column => {
         const { dataIndex, precision, editType } = column;
         _.set(res, dataIndex, _.get(row, dataIndex, ''));
@@ -1567,6 +1577,11 @@ export default {
         callback(row);
       });
     },
+    // 设置 table 的禁用行
+    createDisabledRows(rows) {
+      rows = Array.isArray(rows) ? rows : [rows];
+      this.disabledRows = rows.filter(x => _.isObject(x));
+    },
     // 外部通过组件实例调用的方法
     EXECUTE_INSERT(rows) {
       this.addRowHandler(rows);
@@ -1606,6 +1621,9 @@ export default {
       this.toggleCellEditableState(rows, row => {
         this.$set(row, `${dataIndex}DisableEdit`, Boolean(state));
       });
+    },
+    SET_DISABLE_SELECT(rows) {
+      this.createDisabledRows(rows);
     },
     CLEAR_EXECUTE_LOG() {
       this.clearTableHandleLog();
@@ -1839,9 +1857,9 @@ export default {
     thead > tr > th {
       padding: 2px 0;
       background: none;
-      // &.gutter {
-      //   display: table-cell !important;
-      // }
+      &.gutter {
+        display: table-cell !important;
+      }
     }
   }
   .el-table__body {

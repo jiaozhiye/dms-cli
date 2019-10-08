@@ -9,7 +9,8 @@ import config from '@/assets/js/config';
 import ElementUI from 'element-ui';
 
 if (config.env === 'development') {
-  require('element-ui/lib/theme-chalk/index.css');
+  // require('element-ui/lib/theme-chalk/index.css');
+  require('@/assets/css/element-variables.scss');
 } else {
   // 自定义主题
   require('@/assets/css/element-variables.scss');

@@ -380,6 +380,7 @@ export default {
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
       this.list = [...res.data.items];
+      this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
       this.topFilterList[0].hidden = false;
       this.topFilterList[0].initialValue = 'asdf';
       this.topFilterList[0].labelOptions.initialValue = '22';
