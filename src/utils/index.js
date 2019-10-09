@@ -33,7 +33,7 @@ export const confirmAction = async (msg = '确认进行此操作?', type = 'warn
 };
 
 // Notification 通知提示
-export const notifyAction = (msg = '暂无...', type = 'info') => {
+export const notifyAction = (msg = '暂无...', type = 'success') => {
   Notification({
     title: '提示信息',
     message: msg,
