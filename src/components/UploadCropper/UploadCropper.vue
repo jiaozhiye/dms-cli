@@ -28,6 +28,11 @@
           <span class="el-upload-list__item-dot">
             <i class="el-icon-delete" @click="handleRemove(index)"></i>
           </span>
+          <span class="el-upload-list__item-dot">
+            <a :href="imgUrl" :download="imgUrl.slice(imgUrl.lastIndexOf('/') + 1)">
+              <i class="el-icon-download"></i>
+            </a>
+          </span>
         </span>
       </div>
       <div
