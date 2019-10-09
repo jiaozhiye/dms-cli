@@ -39,12 +39,12 @@ export default {
   data() {
     this.treeProps = { children: 'children', label: 'text' };
     this.prevForm = null;
+    this.defaultFileTypes = ['jpg', 'png', 'pdf', 'doc'];
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
-      treeFilterText: '',
-      popoverVisible: false,
-      cascaderVisible: false
+      treeFilterText: {},
+      visible: {}
     };
   },
   created() {
@@ -108,13 +108,13 @@ export default {
     fieldNames() {
       this.$nextTick(() => this.$refs.form.clearValidate());
     },
-    treeFilterText(val) {
-      this.$refs.tree.filter(val);
-    },
-    popoverVisible(val) {
-      if (!val) {
-        this.treeFilterText = '';
-      }
+    treeFilterText: {
+      handler(data) {
+        Object.keys(data).forEach(fieldName => {
+          this.$refs[`tree-${fieldName}`].filter(data[fieldName]);
+        });
+      },
+      deep: true
     }
   },
   methods: {
@@ -330,11 +330,19 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+          <el-popover
+            v-model={this.visible[fieldName]}
+            visibleArrow={false}
+            placement="bottom-start"
+            trigger="click"
+            on-after-leave={() => {
+              this.treeFilterText[fieldName] = '';
+            }}
+          >
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
-              <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
+              <input v-model={this.treeFilterText[fieldName]} class="el-input__inner" placeholder="树节点过滤"></input>
               <el-tree
-                ref="tree"
+                ref={`tree-${fieldName}`}
                 style={{ marginTop: '4px' }}
                 data={itemList}
                 props={this.treeProps}
@@ -342,7 +350,7 @@ export default {
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}
                 on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
-              ></el-tree>
+              />
             </div>
             <el-input
               slot="reference"
@@ -366,9 +374,18 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-popover v-model={this.cascaderVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+          <el-popover v-model={this.visible[fieldName]} visibleArrow={false} placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
-              <Cascader defaultValue={form[fieldName]} list={itemList} labels={titles} style={style} onChange={data => this.cascaderChangeHandle(fieldName, data)} onClose={this.closeCascaderHandle} />
+              <Cascader
+                defaultValue={form[fieldName]}
+                list={itemList}
+                labels={titles}
+                style={style}
+                onChange={data => this.cascaderChangeHandle(fieldName, data)}
+                onClose={() => {
+                  this.visible[fieldName] = false;
+                }}
+              />
             </div>
             <el-input
               slot="reference"
@@ -717,8 +734,7 @@ export default {
     UPLOAD_FILE(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled } = option;
-      let { actionUrl, limit = 1, tipText } = upload;
-      tipText = !tipText ? '' : `${tipText}，`;
+      let { actionUrl, limit = 1, fileTypes = this.defaultFileTypes } = upload;
       const uploadProps = {
         props: {
           action: actionUrl,
@@ -727,7 +743,7 @@ export default {
           multiple: false,
           withCredentials: true,
           disabled,
-          beforeUpload: this.beforeUploadHandle,
+          beforeUpload: file => this.beforeUploadHandle(file, fileTypes),
           onRemove: (file, fileList) => this.handleRemove(fieldName, file, fileList),
           onSuccess: (res, file, fileList) => this.successHandle(fieldName, res, file, fileList)
         }
@@ -740,7 +756,7 @@ export default {
               点击上传
             </el-button>
             <div slot="tip" class="el-upload__tip">
-              {`${tipText}文件大小不超过5M`}
+              {`只能上传 ${fileTypes.join(',')} 格式，文件大小不超过5M`}
             </div>
           </el-upload>
         </el-form-item>
@@ -850,12 +866,16 @@ export default {
       return list.map(x => ({ value: x[valueKey] }));
     },
     // 文件上传之前的校验
-    beforeUploadHandle(file) {
+    beforeUploadHandle(file, types) {
+      const isType = types.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase());
       const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isType) {
+        this.$notify({ title: '警告信息', message: `上传头像图片只能是 ${types.join(',')} 格式!`, type: 'warning' });
+      }
       if (!isLt5M) {
         this.$notify({ title: '警告信息', message: '上传附件大小不能超过 5MB!', type: 'warning' });
       }
-      return isLt5M;
+      return isType && isLt5M;
     },
     // 创建上传文件列表
     createFileList(fieldName, name, url = '') {
@@ -888,7 +908,7 @@ export default {
     // 树节点单机事件
     treeNodeClickHandle(fieldName, { value }) {
       this.form[fieldName] = value;
-      this.popoverVisible = false;
+      this.visible[fieldName] = false;
     },
     // 级联选择器值变化处理方法
     cascaderChangeHandle(fieldName, data) {
@@ -901,10 +921,6 @@ export default {
     inputCascaderClearHandle(fieldName) {
       this.form[fieldName] = undefined;
       this[`${fieldName}CascaderTexts`] = '';
-    },
-    // 关闭级联选择器下拉面板方法
-    closeCascaderHandle(val) {
-      this.cascaderVisible = val;
     },
     createFormItem() {
       return this.list

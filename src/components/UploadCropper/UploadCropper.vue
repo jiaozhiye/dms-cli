@@ -232,6 +232,7 @@ export default {
     background: none;
     border: none;
     border-radius: 0;
+    pointer-events: none;
     .el-upload-list__item {
       position: relative;
       width: 148px;
@@ -241,6 +242,7 @@ export default {
       border-radius: 6px;
       background-color: #fff;
       border: 1px dashed #c0ccda;
+      pointer-events: auto !important;
       overflow: hidden;
       .title {
         position: absolute;

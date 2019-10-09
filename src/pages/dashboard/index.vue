@@ -44,6 +44,42 @@ export default {
           },
           itemList: [],
           rules: [{ required: true, message: '请输入联机', trigger: 'change' }]
+        },
+        {
+          type: 'INPUT_CASCADER',
+          label: '联机2',
+          fieldName: 'ccc',
+          placeholder: '请输入标题名称...',
+          style: { minWidth: '300px' },
+          options: {
+            titles: ['品牌', '车型', '车系']
+          },
+          itemList: [],
+          rules: [{ required: true, message: '请输入联机', trigger: 'change' }]
+        },
+        {
+          type: 'UPLOAD_IMG',
+          label: '上传身份证',
+          fieldName: 'wayPicture',
+          placeholder: '上传身份证...',
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            fixedSize: [5, 3],
+            limit: 2,
+            isCalcHeight: true
+          }
+        },
+        {
+          type: 'UPLOAD_FILE',
+          label: '上传文件',
+          fieldName: 'wayFiles',
+          placeholder: '上传文件...',
+          rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
+          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            limit: 2
+          }
         }
       ];
     },
@@ -104,6 +140,52 @@ export default {
           ]
         }
       ];
+      this.formList[3].itemList = [
+        {
+          text: '一级分类1',
+          value: '1',
+          children: [
+            {
+              text: '二级分类一级1',
+              value: '1-1',
+              children: [
+                {
+                  text: '三级分类1-1',
+                  value: '1-1-1'
+                },
+                {
+                  text: '三级分类1-2',
+                  value: '1-1-2'
+                }
+              ]
+            },
+            {
+              text: '二级分类1-2',
+              value: '1-2',
+              children: [
+                {
+                  text: '三级分类2-1',
+                  value: '1-2-1'
+                },
+                {
+                  text: '三级分类2-2',
+                  value: '1-2-2'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          text: '一级分类2',
+          value: '2',
+          children: [
+            {
+              text: '二级分类2-1',
+              value: '2-1'
+            }
+          ]
+        }
+      ];
       this.loading = false;
     }, 3000);
   }
@@ -112,7 +194,6 @@ export default {
 
 <style scoped lang="less">
 .text {
-  text-align: center;
   font-size: 26px;
   padding-top: 30vh;
 }

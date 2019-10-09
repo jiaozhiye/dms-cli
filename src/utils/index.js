@@ -13,6 +13,16 @@ export const sleep = async timeLen => {
   });
 };
 
+// 捕获基于 Promise 操作的异常
+export const errorCapture = async promise => {
+  try {
+    const res = await promise;
+    return [null, res];
+  } catch (e) {
+    return [e, null];
+  }
+};
+
 // 需要确认的操作提示
 export const confirmAction = async (msg = '确认进行此操作?', type = 'warning') => {
   return MessageBox.confirm(msg, '提示信息', {

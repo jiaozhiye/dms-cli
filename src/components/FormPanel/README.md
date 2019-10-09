@@ -112,8 +112,8 @@ Vue.use(FormPanel);
 
 - upload: {
   - &emsp;actionUrl: {String|必选参数，上传的地址}
-  - &emsp;limit: {Number|支持上传图片的数量，默认是 1}
-  - &emsp;tipText: {String|上传图片格式的提示文字}
+  - &emsp;limit: {Number|支持上传文件的数量，默认是 1}
+  - &emsp;fileTypes: {Array|允许上传文件的格式数组 ['jpg', 'jpeg', 'png', 'pdf']}
 - }
 - 注意：关于附件上传前后端数据交互的格式为 {name: 'xxx', url: 'xxx'}，因此服务端返回的数据格式要满足 name, url 两个字段的格式，name 用于回显文件名
 
@@ -190,7 +190,7 @@ export default {
           upload: {
             actionUrl: '/api/file/oss/upload',
             limit: 2,
-            tipText: '只能上传pdf格式'
+            fileTypes: ['jpg', 'png']
           }
         }
       ];

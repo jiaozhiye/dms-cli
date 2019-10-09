@@ -40,10 +40,9 @@ export default {
     this.arrayTypes = ['RANGE_DATE', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
     return {
       form: {},
-      treeFilterText: '',
       expand: false, // 展开收起状态
-      popoverVisible: false,
-      cascaderVisible: false
+      treeFilterText: {},
+      visible: {}
     };
   },
   created() {
@@ -110,13 +109,13 @@ export default {
       if (!this.collapse) return;
       this.$emit('onCollapse', val);
     },
-    treeFilterText(val) {
-      this.$refs.tree.filter(val);
-    },
-    popoverVisible(val) {
-      if (!val) {
-        this.treeFilterText = '';
-      }
+    treeFilterText: {
+      handler(data) {
+        Object.keys(data).forEach(fieldName => {
+          this.$refs[`tree-${fieldName}`].filter(data[fieldName]);
+        });
+      },
+      deep: true
     }
   },
   methods: {
@@ -261,11 +260,19 @@ export default {
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-popover v-model={this.popoverVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+          <el-popover
+            v-model={this.visible[fieldName]}
+            visibleArrow={false}
+            placement="bottom-start"
+            trigger="click"
+            on-after-leave={() => {
+              this.treeFilterText[fieldName] = '';
+            }}
+          >
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
-              <input v-model={this.treeFilterText} class="el-input__inner" placeholder="树节点过滤"></input>
+              <input v-model={this.treeFilterText[fieldName]} class="el-input__inner" placeholder="树节点过滤"></input>
               <el-tree
-                ref="tree"
+                ref={`tree-${fieldName}`}
                 style={{ marginTop: '4px' }}
                 data={itemList}
                 props={this.treeProps}
@@ -273,7 +280,7 @@ export default {
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}
                 on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
-              ></el-tree>
+              />
             </div>
             <el-input
               slot="reference"
@@ -298,9 +305,18 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-popover v-model={this.cascaderVisible} visibleArrow={false} placement="bottom-start" trigger="click">
+          <el-popover v-model={this.visible[fieldName]} visibleArrow={false} placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
-              <Cascader defaultValue={form[fieldName]} list={itemList} labels={titles} style={style} onChange={data => this.cascaderChangeHandle(fieldName, data)} onClose={this.closeCascaderHandle} />
+              <Cascader
+                defaultValue={form[fieldName]}
+                list={itemList}
+                labels={titles}
+                style={style}
+                onChange={data => this.cascaderChangeHandle(fieldName, data)}
+                onClose={() => {
+                  this.visible[fieldName] = false;
+                }}
+              />
             </div>
             <el-input
               slot="reference"
@@ -680,7 +696,7 @@ export default {
     // 树节点单机事件
     treeNodeClickHandle(fieldName, { value }) {
       this.form[fieldName] = value;
-      this.popoverVisible = false;
+      this.visible[fieldName] = false;
     },
     // 级联选择器值变化处理方法
     cascaderChangeHandle(fieldName, data) {
@@ -693,10 +709,6 @@ export default {
     inputCascaderClearHandle(fieldName) {
       this.form[fieldName] = undefined;
       this[`${fieldName}CascaderTexts`] = '';
-    },
-    // 关闭级联选择器下拉面板方法
-    closeCascaderHandle(val) {
-      this.cascaderVisible = val;
     },
     createFormItem() {
       return this.list
