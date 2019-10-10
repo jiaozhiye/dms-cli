@@ -141,7 +141,6 @@ export default {
       disabledRows: [], // table 禁用行
       filterParams: {}, // 表头筛选参数
       sorterParams: {}, // 表头排序参数
-      columnInfo: {}, // table column 信息
       // 分页
       pagination: {
         current: config.table.pageNum || 1,
@@ -1306,10 +1305,10 @@ export default {
     // table 头被拖拽改变列宽度
     headerDragendHandler(newWidth, oldWidth, column) {
       const { property } = column;
-      if (!!this.columnsRef) {
-        this.columnInfo = { [property]: newWidth };
+      if (this.columnsRef) {
+        this.$refs.appFilter.SET_COLUMN_INFO({ [property]: newWidth });
       }
-      this.$nextTick(() => this.resetRender());
+      this.resetRender();
     },
     // 垂直滚动到指定位置
     scrollTopToPosition(t) {
@@ -1681,28 +1680,12 @@ export default {
     document.removeEventListener('click', this.documentEventHandle);
   },
   render() {
-    const {
-      columns,
-      columnsRef,
-      columnInfo,
-      loading,
-      list,
-      tableHeight,
-      selectionRows,
-      isSelectColumn,
-      isShowSummary,
-      isToperInfo,
-      isColumnFilter,
-      isShowPagination,
-      pagination,
-      $slots,
-      $scopedSlots
-    } = this;
+    const { columns, columnsRef, loading, list, tableHeight, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
     const toperInfoProps = {
       props: { total: pagination.total, selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
     };
     const columnFilterProps = {
-      props: { columns, columnsRef, columnInfo, onColumnsChange: this.onColumnsChange }
+      props: { columns, columnsRef, onColumnsChange: this.onColumnsChange }
     };
     const paginationProps = {
       props: { pagination, onPageChange: this.onPageChange }
@@ -1755,7 +1738,7 @@ export default {
                   methods: { addRecordFunc: this.addRowHandler, delRecordFunc: this.deleteHandler }
                 })}
             </div>
-            {isColumnFilter && <ColumnFilter {...columnFilterProps} style={{ marginRight: '10px' }} />}
+            {isColumnFilter && <ColumnFilter ref="appFilter" {...columnFilterProps} />}
           </section>
         </div>
         <el-table ref="appTable" v-loading={loading} element-loading-background={`rgba(255, 255, 255, 0.65)`} {...tableParams}>

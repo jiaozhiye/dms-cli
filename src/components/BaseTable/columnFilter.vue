@@ -21,9 +21,6 @@ export default {
       type: String,
       default: ''
     },
-    columnInfo: {
-      type: Object
-    },
     onColumnsChange: {
       type: Function,
       required: true
@@ -43,16 +40,6 @@ export default {
       this.checkedKeys = this.createCheckedKeys(nextProps);
       this.treeList = this.createTreeList(nextProps);
       this.setLocalColumns(nextProps);
-    },
-    columnInfo(nextProps) {
-      const result = this.columns.map(column => {
-        let [key] = Object.keys(nextProps);
-        if (column.dataIndex === key) {
-          column.width = nextProps[key];
-        }
-        return column;
-      });
-      this.setLocalColumns(result);
     }
   },
   methods: {
@@ -129,6 +116,17 @@ export default {
       this.checkedKeys = this.createCheckedKeys(localColumns);
       this.treeList = this.createTreeList(localColumns);
       this.onColumnsChange(localColumns);
+    },
+    // 公开到外部的方法
+    SET_COLUMN_INFO(obj) {
+      const result = this.columns.map(column => {
+        const [key] = Object.keys(obj);
+        if (column.dataIndex === key) {
+          column.width = obj[key];
+        }
+        return column;
+      });
+      this.setLocalColumns(result);
     }
   },
   created() {
