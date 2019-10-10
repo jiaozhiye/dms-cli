@@ -44,7 +44,6 @@ export default {
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
-      treeFilterText: {},
       visible: {}
     };
   },
@@ -108,14 +107,6 @@ export default {
     },
     fieldNames() {
       this.$nextTick(() => this.$refs.form.clearValidate());
-    },
-    treeFilterText: {
-      handler(data) {
-        Object.keys(data).forEach(fieldName => {
-          this.$refs[`tree-${fieldName}`].filter(data[fieldName]);
-        });
-      },
-      deep: true
     }
   },
   methods: {
@@ -133,6 +124,10 @@ export default {
       }
       if (type === 'INPUT' && item.numberFormat) {
         initialValue = this.formatNumber(initialValue);
+      }
+      // 树选择器
+      if (type === 'INPUT_TREE' && _.isUndefined(this[`${fieldName}TreeFilterTexts`])) {
+        this[`${fieldName}TreeFilterTexts`] = '';
       }
       // 级联选择器
       if (type === 'INPUT_CASCADER' && _.isUndefined(this[`${fieldName}CascaderTexts`])) {
@@ -337,11 +332,20 @@ export default {
             placement="bottom-start"
             trigger="click"
             on-after-leave={() => {
-              this.treeFilterText[fieldName] = '';
+              this[`${fieldName}TreeFilterTexts`] = '';
+              this.treeFilterTextHandle(fieldName);
             }}
           >
             <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
-              <input v-model={this.treeFilterText[fieldName]} class="el-input__inner" placeholder="树节点过滤"></input>
+              <input
+                value={this[`${fieldName}TreeFilterTexts`]}
+                class="el-input__inner"
+                placeholder="树节点过滤"
+                onInput={ev => {
+                  this[`${fieldName}TreeFilterTexts`] = ev.target.value;
+                  this.treeFilterTextHandle(fieldName);
+                }}
+              />
               <el-tree
                 ref={`tree-${fieldName}`}
                 style={{ marginTop: '4px' }}
@@ -902,6 +906,9 @@ export default {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
       return text;
     },
+    treeFilterTextHandle(key) {
+      this.$refs[`tree-${key}`].filter(this[`${key}TreeFilterTexts`]);
+    },
     // 清空树节点选择器
     treeInputClearHandle(fieldName) {
       this.form[fieldName] = undefined;
@@ -1138,27 +1145,22 @@ export default {
           }
         }
       }
-      .desc-icon {
-        padding: 6px;
-        font-size: 18px;
-        vertical-align: middle;
-      }
-      .desc-text {
+      .el-form-item__label {
+        height: 32px;
         font-size: @textSizeSecondary;
-        padding-left: @modulePadding;
+        padding-right: @modulePadding;
       }
       .el-form-item__content {
         line-height: 30px;
+        .el-input__inner {
+          line-height: inherit;
+        }
         .el-form-item__error {
           margin-top: -2px;
           transform-origin: 0 50%;
           -webkit-transform: scale(0.9);
           transform: scale(0.9);
         }
-      }
-      .el-form-item__label {
-        font-size: @textSizeSecondary;
-        padding-right: @modulePadding;
       }
       .el-select {
         width: 100%;
@@ -1172,6 +1174,7 @@ export default {
       .el-textarea {
         .el-textarea__inner {
           font-family: inherit;
+          overflow-y: auto;
         }
         .el-input__count {
           line-height: 12px;
@@ -1197,6 +1200,15 @@ export default {
         .el-range__close-icon {
           width: 20px;
         }
+      }
+      .desc-icon {
+        padding: 6px;
+        font-size: 18px;
+        vertical-align: middle;
+      }
+      .desc-text {
+        font-size: @textSizeSecondary;
+        padding-left: @modulePadding;
       }
     }
   }
