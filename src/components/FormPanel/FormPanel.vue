@@ -6,6 +6,7 @@
  * @Last Modified time: 2019-08-18 12:02:51
  **/
 import _ from 'lodash';
+import axios from 'axios';
 import moment from 'moment';
 import pinyin from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
@@ -743,6 +744,7 @@ export default {
           multiple: false,
           withCredentials: true,
           disabled,
+          onPreview: this.previewFileHandle,
           beforeUpload: file => this.beforeUploadHandle(file, fileTypes),
           onRemove: (file, fileList) => this.handleRemove(fieldName, file, fileList),
           onSuccess: (res, file, fileList) => this.successHandle(fieldName, res, file, fileList)
@@ -886,6 +888,10 @@ export default {
       if (res.resultCode === 200) {
         this.createFileList(fieldName, file.name, res.data);
       }
+    },
+    // 点击文件列表的事件
+    async previewFileHandle(file) {
+      this.downloadFile(file.url);
     },
     // 文件被移除
     handleRemove(fieldName, file, fileList) {
@@ -1044,6 +1050,27 @@ export default {
         }
       }
       return res;
+    },
+    // 获取服务端文件 to blob
+    async downLoadByUrl(url) {
+      const { data } = await axios({ url, responseType: 'blob' });
+      return data;
+    },
+    // 执行下载动作
+    async downloadFile(url) {
+      const blob = await this.downLoadByUrl(url);
+      const fileName = url.slice(url.lastIndexOf('/') + 1);
+      // ie10+
+      if (navigator.msSaveBlob) {
+        navigator.msSaveBlob(blob, fileName);
+      } else {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = fileName;
+        a.click();
+        a = null;
+      }
     },
     deepFind(arr, mark) {
       let res = null;

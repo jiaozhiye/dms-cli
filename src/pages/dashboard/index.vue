@@ -75,7 +75,7 @@ export default {
           fieldName: 'wayFiles',
           placeholder: '上传文件...',
           rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
-          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg' }],
           upload: {
             actionUrl: '/api/file/oss/upload',
             limit: 2

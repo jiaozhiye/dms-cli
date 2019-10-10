@@ -207,6 +207,27 @@ export default {
         ia[i] = byteString.charCodeAt(i);
       }
       return new Blob([ia], { type: mimeString });
+    },
+    // 获取服务端文件 to blob
+    async downLoadByUrl(url) {
+      const { data } = await axios({ url, responseType: 'blob' });
+      return data;
+    },
+    // 执行下载动作
+    async downloadFile(url) {
+      const blob = await this.downLoadByUrl(url);
+      const fileName = url.slice(url.lastIndexOf('/') + 1);
+      // ie10+
+      if (navigator.msSaveBlob) {
+        navigator.msSaveBlob(blob, fileName);
+      } else {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = fileName;
+        a.click();
+        a = null;
+      }
     }
   },
   mounted() {
