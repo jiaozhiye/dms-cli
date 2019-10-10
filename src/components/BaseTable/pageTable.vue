@@ -1084,10 +1084,7 @@ export default {
         const [type, property] = attr.split('|');
         const rows = this.isMemoryPagination ? this.backUpData : this.originData;
         const tmpList = rows.filter(row => {
-          const target = _.get(row, property, '');
-          if (_.isNull(target)) {
-            return false;
-          }
+          const target = _.isNull(_.get(row, property, '')) ? '' : _.get(row, property, '');
           if (type === 'input' && this.filters[attr] !== '') {
             if (typeof target === 'number') {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;

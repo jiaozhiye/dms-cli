@@ -22,18 +22,35 @@ export const dictionary = {
     }
   },
   methods: {
+    // code -> 数据字典的 code 码
     createDictList(code) {
       let res = [];
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        res = this.dict[code].map(x => ({ text: x.code_cn_desc, value: x.code_id }));
+        res = this.dict[code].map(x => ({ text: x.codeCnDesc, value: x.codeId }));
       }
       return res;
     },
+    // val -> 数据的值    code -> 数据字典的 code 码
     createDictText(val, code) {
       let res = '';
       if (!val) return res;
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        res = this.dict[code].find(x => x.code_id === val).code_cn_desc;
+        res = this.dict[code].find(x => x.codeId == val).codeCnDesc;
+      }
+      return res;
+    },
+    createDictRegion() {
+      return this.deepFunc(this.region);
+    },
+    // 递归构建省市区数据
+    deepFunc(data) {
+      const res = [];
+      for (let key in data) {
+        const target = { value: data[key]['regionType'], text: data[key]['regionName'] };
+        if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
+          target.children = this.deepFunc(data[key].children);
+        }
+        res.push(target);
       }
       return res;
     }
