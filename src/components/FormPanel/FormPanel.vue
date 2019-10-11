@@ -1153,7 +1153,8 @@ export default {
       .el-form-item__content {
         line-height: 30px;
         .el-input__inner {
-          line-height: inherit;
+          line-height: 32px;
+          line-height: 30px\0;
         }
         .el-form-item__error {
           margin-top: -2px;

@@ -191,7 +191,7 @@ export default {
     border: 1px solid @borderColorSecondary;
     border-radius: @borderRadius;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    z-index: 1001;
+    z-index: 9999;
   }
 }
 </style>
