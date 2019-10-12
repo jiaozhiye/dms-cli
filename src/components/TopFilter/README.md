@@ -24,7 +24,7 @@ Vue.use(TopFilter);
 
 `list 字段配置项`
 
-- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/SEARCH_HELPER_WEB/TEXT_AREA/INPUT_CASCADER}
+- type{String|类型，支持 INPUT/INPUT_NUMBER/INPUT_TREE/SELECT/MULTIPLE_SELECT/CHECKBOX/MULTIPLE_CHECKBOX/DATE/DATE_TIME/RANGE_DATE/SEARCH_HELPER/SEARCH_HELPER_WEB/TEXT_AREA/INPUT_CASCADER/RADIO}
 - label{String|标题，最好不超过 6 个字}
 - labelWidth{String|表单域标签的的宽度，字符串类型，需要加单位(px)}
 - fieldName{String|字段名称 key}
@@ -42,6 +42,7 @@ Vue.use(TopFilter);
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
+- onInput{Function|INPUT 类型的对应的 input 事件}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
 - render{Function|表单元素的渲染函数，返回值是 JSX 类型节点}

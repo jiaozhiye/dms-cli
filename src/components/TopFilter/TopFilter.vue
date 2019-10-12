@@ -7,7 +7,7 @@
  **/
 import _ from 'lodash';
 import moment from 'moment';
-import pinyin from '@/components/Pinyin/index';
+import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from '@/components/FormPanel/Cascader.vue';
 
 export default {
@@ -188,7 +188,21 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', unitRender, readonly, disabled, change = () => {}, onFocus = () => {} } = option;
+      const {
+        label,
+        fieldName,
+        labelWidth,
+        labelOptions,
+        descOptions,
+        style = {},
+        placeholder = '请输入...',
+        unitRender,
+        readonly,
+        disabled,
+        change = () => {},
+        onInput = () => {},
+        onFocus = () => {}
+      } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -200,6 +214,7 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
+            onInput={onInput}
             onFocus={onFocus}
             nativeOnKeydown={this.enterEventHandle}
           >
@@ -211,22 +226,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const {
-        label,
-        fieldName,
-        labelWidth,
-        labelOptions,
-        descOptions,
-        style = {},
-        placeholder = '请输入...',
-        disabled,
-        min = 0,
-        max = 99999999,
-        step = 1,
-        precision,
-        change = () => {},
-        onFocus = () => {}
-      } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max = 99999999, step = 1, precision, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -242,7 +242,6 @@ export default {
             precision={precision}
             clearable
             onChange={change}
-            onFocus={onFocus}
             nativeOnKeydown={this.enterEventHandle}
           ></el-input-number>
           {this.createFormItemDesc(descOptions)}
@@ -572,6 +571,23 @@ export default {
         </el-form-item>
       );
     },
+    RADIO(option) {
+      const { form } = this;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
+            {itemList.map(x => (
+              <el-radio key={x.value} label={x.value} disabled={disabled}>
+                {x.text}
+              </el-radio>
+            ))}
+          </el-radio-group>
+          {this.createFormItemDesc(descOptions)}
+        </el-form-item>
+      );
+    },
     TEXT_AREA(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 100 } = option;
@@ -675,7 +691,7 @@ export default {
     },
     createSearchHelpFilter(queryString) {
       return state => {
-        const pyt = pinyin(state.text, { style: pinyin.STYLE_FIRST_LETTER })
+        const pyt = pinyin(state.text, { style: STYLE_FIRST_LETTER })
           .flat()
           .join('');
         const str = `${state.text}|${pyt}`;

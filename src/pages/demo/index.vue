@@ -51,6 +51,8 @@ import res from '@/mock/tableData';
 import printData from '@/mock/printData';
 import Panel from './Panel';
 
+import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
+
 export default {
   name: 'Demo',
   mixins: [authority],
@@ -80,11 +82,20 @@ export default {
             fieldName: 'qwe',
             itemList: []
           },
-          focus: () => {
-            // this.topFilterList[0].initialValue = '刘德华';
-            // this.topFilterList = [...this.topFilterList];
+          onInput: val => {
+            let res = pinyin(val, { style: STYLE_FIRST_LETTER })
+              .flat()
+              .join('')
+              .toUpperCase();
+            this.topFilterList.find(x => x.fieldName === 'zxczxc').initialValue = res;
           },
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
+        },
+        {
+          type: 'INPUT',
+          label: '搜索2',
+          fieldName: 'zxczxc',
+          readonly: true
         },
         {
           type: 'SELECT',

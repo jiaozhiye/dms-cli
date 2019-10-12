@@ -46,6 +46,7 @@ Vue.use(FormPanel);
 - valueFormat{String|指定日期组件值的格式，参考 Element UI}
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
+- onInput{Function|INPUT 类型的对应的 input 事件}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - min{Number|最小值，只针对 INPUT_NUMBER|RANGE_INPUT_NUMBER 生效}
 - max{Number|最大值，只针对 INPUT_NUMBER|RANGE_INPUT_NUMBER 生效}

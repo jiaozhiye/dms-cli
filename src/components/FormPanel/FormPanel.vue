@@ -8,7 +8,7 @@
 import _ from 'lodash';
 import axios from 'axios';
 import moment from 'moment';
-import pinyin from '@/components/Pinyin/index';
+import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
@@ -209,8 +209,9 @@ export default {
         readonly,
         disabled,
         change = () => {},
+        onInput = () => {},
         onFocus = () => {},
-        onEnter
+        onEnter = () => {}
       } = option;
       const prevValue = form[fieldName];
       return (
@@ -235,8 +236,12 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
+            onInput={onInput}
             onFocus={onFocus}
-            nativeOnKeydown={e => this.keydownHandle(e, onEnter)}
+            nativeOnKeydown={e => {
+              if (e.keyCode !== 13) return;
+              onEnter(e.target.value);
+            }}
           >
             {unitRender && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
           </el-input>
@@ -246,22 +251,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const {
-        label,
-        fieldName,
-        labelWidth,
-        labelOptions,
-        descOptions,
-        style = {},
-        placeholder = '请输入...',
-        disabled,
-        min = 0,
-        max = 99999999,
-        step = 1,
-        precision,
-        change = () => {},
-        onFocus = () => {}
-      } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max = 99999999, step = 1, precision, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -277,7 +267,6 @@ export default {
             precision={precision}
             clearable
             onChange={change}
-            onFocus={onFocus}
           ></el-input-number>
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
@@ -860,7 +849,7 @@ export default {
     },
     createSearchHelpFilter(queryString) {
       return state => {
-        const pyt = pinyin(state.text, { style: pinyin.STYLE_FIRST_LETTER })
+        const pyt = pinyin(state.text, { style: STYLE_FIRST_LETTER })
           .flat()
           .join('');
         const str = `${state.text}|${pyt}`;
@@ -946,10 +935,6 @@ export default {
           VNode['offsetRight'] = item.offsetRightCols;
           return VNode;
         });
-    },
-    keydownHandle(e, callback) {
-      if (e.keyCode !== 13) return;
-      callback && callback(e.target.value);
     },
     excuteFormData(form) {
       this.formItemList
