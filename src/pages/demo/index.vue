@@ -12,7 +12,7 @@
       <el-button size="small">发货单</el-button>
       <el-button size="small">销售发票</el-button>
       <el-button size="small">欠货单</el-button>
-      <el-button size="small">出库</el-button>
+      <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
     <FilterTable
       ref="table"
@@ -193,9 +193,9 @@ export default {
           render: (props, h) => {
             return (
               <div>
-                <el-button size="mini" type="text">
+                <multiuse-button size="mini" type="text" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
                   编辑
-                </el-button>
+                </multiuse-button>
                 <el-divider direction="vertical" />
                 <el-button size="mini" type="text">
                   查看

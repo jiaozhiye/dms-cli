@@ -57,6 +57,7 @@ $ npm run build
   - FormPanel 表单操作的功能组件
   - Tinymce 富文本编辑器组件
   - AjaxButton ajax 防止重复提交组件
+  - MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
 ```
 
 ## 目录结构

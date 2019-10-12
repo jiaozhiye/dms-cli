@@ -5,14 +5,15 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
+import _ from 'lodash';
+
 export default {
-  name: 'AjaxButton',
+  name: 'MultiuseButton',
   props: {
-    // 点击执行的方法 必传
+    // ajax 防止重复提交，对应的执行方法通过 click 参数传进来
     click: {
       type: Function,
-      default: null,
-      required: true
+      default: null
     },
     size: {
       type: String,
@@ -20,10 +21,6 @@ export default {
     },
     type: {
       type: String
-    },
-    disabled: {
-      type: Boolean,
-      default: false
     },
     plain: {
       type: Boolean,
@@ -34,6 +31,14 @@ export default {
       default: false
     },
     circle: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     },
@@ -74,11 +79,9 @@ export default {
   },
   methods: {
     async sleep(timeLen) {
-      return new Promise(resolve => {
-        setTimeout(resolve, timeLen);
-      });
+      return new Promise(resolve => setTimeout(resolve, timeLen));
     },
-    async clickHandle() {
+    async clickHandler() {
       this.ajaxing = true;
       try {
         await this.click();
@@ -88,19 +91,21 @@ export default {
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $slots, ajaxing, isDisabled, isVisible } = this;
+    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible } = this;
+    const ajaxClick = _.isFunction(this.click) ? { click: this.clickHandler } : null;
     const wrapProps = {
-      key: 'ajax-btn',
+      key: 'multiuse-btn',
       props: {
         ...$props,
         loading: ajaxing,
         disabled: isDisabled
       },
-      attrs: { ...$attrs },
       on: {
         ...$listeners,
-        click: this.clickHandle
-      }
+        ...ajaxClick
+      },
+      attrs: $attrs,
+      scopedSlots: $scopedSlots
     };
     return isVisible ? <el-button {...wrapProps}>{$slots['default']}</el-button> : null;
   }

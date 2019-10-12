@@ -13,7 +13,7 @@ export default [
             title: '备件采购订单',
             key: '/bjgl/cggl/dd',
             pyt: 'bjcgdd',
-            permission: ['save', 'update']
+            permission: ['/api/aaa', '/api/bbb/*']
           },
           {
             title: '备件采购入库',

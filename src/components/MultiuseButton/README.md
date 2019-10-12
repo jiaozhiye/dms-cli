@@ -1,20 +1,20 @@
 <h1 align="center">
-  A Vue AjaxButton Component by jzy
+  A Vue MultiuseButton Component by jzy
 </h1>
 
-#### AjaxButton 组件调用
+#### MultiuseButton 组件调用
 
 `组件的引用`
 
 ```bash
 # main.js
-import AjaxButton from '@/components/AjaxButton';
-Vue.use(AjaxButton);
+import MultiuseButton from '@/components/MultiuseButton';
+Vue.use(MultiuseButton);
 ```
 
 `组件参数API`
 
-- click{Function|点击按钮触发的事件，是参数而不是事件}
+- click{Function|点击按钮触发的事件方法，用于实现 ajax 的防止重复提交，注意：是参数而不是事件}
 - auth-list{Array|权限数组，通过 authority 的混入，使用 this.auths 即可}
 - auth-mark{String|控制该按钮权限的标识符，业务的 ajax 接口地址}
 - 其他参数同 el-button 组件
@@ -28,8 +28,9 @@ Vue.use(AjaxButton);
 ```bash
 # template
 <template>
-  <AjaxButton size="small" :click="saveHandle" :auth-list="auths" auth-mark="/api/aaa">保存</AjaxButton>
-  <AjaxButton type="warning" :click="saveHandle.bind(this, 1)">保存</AjaxButton>
+  <multiuse-button size="small" @click="closeHandle">关闭</multiuse-button>
+  <multiuse-button size="small" :click="saveHandle" :auth-list="auths" auth-mark="/api/aaa">保存<multiuse-button>
+  <multiuse-button type="warning" :click="saveHandle.bind(this, 1)">保存</multiuse-button>
 </template>
 
 # js
@@ -49,7 +50,8 @@ export default {
       //   业务逻辑判断
       // }
       const res = await saveApi(this.formData);
-    }
+    },
+    closeHandle() {}
   }
 };
 ```

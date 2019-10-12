@@ -23,7 +23,7 @@
             title: '备件采购订单',           // 标题
             key: '/bjgl/cggl/dd',           // 路由路径
             pyt: 'bjcgdd',                  // 拼音头
-            permission: ['save', 'update']  // 不具备的操作权限
+            permission: ['save', 'update']  // 按钮操作权限
           },
         ]
       },
@@ -33,4 +33,5 @@
 ```
 
 1. 服务端的菜单数据项中的 permission 为页面组件中元素的操作权限，在组件里通过 mixin 导入。
-   - 示例：permission: ['save', 'update'] -> 说明该用户没有点击保存和编辑按钮的权限。
+   - 示例：permission: ['save', 'update'] -> 说明该用户拥有点击保存和编辑按钮的权限。
+2. 具体需要权限控制的按钮，可以使用 MultiuseButton 组件，使用方式请参考对应的 README 文档。

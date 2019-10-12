@@ -47,6 +47,9 @@ Vue.use(BasePrint);
 import ButtonArea from '@/components/ButtonArea';
 Vue.use(ButtonArea);
 
+import MultiuseButton from '@/components/MultiuseButton';
+Vue.use(MultiuseButton);
+
 import AjaxButton from '@/components/AjaxButton';
 Vue.use(AjaxButton);
 

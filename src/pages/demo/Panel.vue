@@ -3,7 +3,7 @@
     <div class="wrapper">
       <Anchor :labelList="labels">
         <div class="line" id="row-01">
-          <FormPanel :list="formList" labelWidth="100" formType="add" @formChange="asdasd" />
+          <FormPanel :list="formList" labelWidth="100" formType="add" />
         </div>
         <div class="line" id="row-02">
           <el-button @click="visible = true">三级交互</el-button>
@@ -28,7 +28,13 @@
       }"
     >
       <el-button @click="closeDrawer">取 消</el-button>
-      <el-button @click="closeDrawer" type="primary">提 交</el-button>
+      <ajax-button
+        size="small"
+        type="primary"
+        :auth-list="auths"
+        auth-mark="/api/aaa"
+        :click="closeDrawer"
+      >提 交</ajax-button>
     </div>
     <BaseDialog
       :visible.sync="visible"
@@ -41,11 +47,14 @@
 </template>
 
 <script>
+import { authority } from '@/utils/authMixin';
+
 import Modal from './Modal';
 import BreakSpace from '@/components/BreakSpace/BreakSpace';
 
 export default {
   name: 'role',
+  mixins: [authority],
   components: {
     Modal,
     BreakSpace
@@ -214,9 +223,6 @@ export default {
     },
     closeHandler(val) {
       this.visible = val;
-    },
-    asdasd(val) {
-      console.log(val);
     }
   },
   mounted() {
