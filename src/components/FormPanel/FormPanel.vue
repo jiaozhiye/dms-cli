@@ -227,6 +227,7 @@ export default {
                 if (!isRemoveHandle && !pattern.test(val)) return;
               }
               form[fieldName] = val;
+              onInput(val);
             }}
             minlength={minlength}
             maxlength={maxlength}
@@ -236,7 +237,6 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            onInput={onInput}
             onFocus={onFocus}
             nativeOnKeydown={e => {
               if (e.keyCode !== 13) return;
