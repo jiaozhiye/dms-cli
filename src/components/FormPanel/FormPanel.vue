@@ -448,27 +448,57 @@ export default {
     },
     DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder = '选择日期', disabled, change = () => {} } = option;
+      const conf = {
+        date: {
+          placeholder: '选择日期',
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        datetime: {
+          placeholder: '选择时间',
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        month: {
+          placeholder: '选择月份',
+          valueFormat: 'yyyy-MM'
+        }
+      };
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-date-picker type="date" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
+          <el-date-picker
+            type={dateType}
+            v-model={form[fieldName]}
+            value-format={conf[dateType].valueFormat}
+            placeholder={conf[dateType].placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            onChange={change}
+          />
         </el-form-item>
       );
     },
+    // DATE_TIME -> 为了兼容旧版控件类型参数
     DATE_TIME(option) {
-      const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, placeholder = '选择日期', disabled, change = () => {} } = option;
-      return (
-        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
-          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-date-picker type="datetime" v-model={form[fieldName]} value-format={valueFormat} placeholder={placeholder} disabled={disabled} style={{ ...style }} onChange={change} />
-        </el-form-item>
-      );
+      return this.DATE({ ...option, dateType: 'datetime' });
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+      const conf = {
+        daterange: {
+          placeholder: ['开始日期', '结束日期'],
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        datetimerange: {
+          placeholder: ['开始时间', '结束时间'],
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        monthrange: {
+          placeholder: ['开始月份', '结束月份'],
+          valueFormat: 'yyyy-MM'
+        }
+      };
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
@@ -480,16 +510,16 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
-            type="daterange"
+            type={dateType}
             value={form[fieldName]}
             onInput={val => {
               val = val === null ? [] : val;
               form[fieldName] = val;
             }}
-            value-format={valueFormat}
+            value-format={conf[dateType].valueFormat}
             range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            start-placeholder={conf[dateType].placeholder[0]}
+            end-placeholder={conf[dateType].placeholder[1]}
             unlink-panels={true}
             disabled={disabled}
             style={{ ...style }}

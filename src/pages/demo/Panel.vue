@@ -93,13 +93,14 @@ export default {
         },
         {
           type: 'DATE',
+          dateType: 'month',
           label: '日期',
           fieldName: 'date',
-          placeholder: '选择日期',
+          placeholder: '选择月份',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
-          type: 'RANGE_TIME_SELECT',
+          type: 'RANGE_DATE', // DATE_TIME
           label: '日期区间',
           style: { minWidth: '200px' },
           fieldName: 'startTime|endTime'
