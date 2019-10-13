@@ -10,9 +10,7 @@ export default {
   props: {
     labelList: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     activeId: {
       type: String,

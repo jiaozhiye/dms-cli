@@ -14,9 +14,7 @@ export default {
     },
     tabMenus: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     type: {
       type: String,

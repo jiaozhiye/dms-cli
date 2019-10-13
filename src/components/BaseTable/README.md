@@ -157,7 +157,6 @@ http://localhost:8080/table
 
 `FilterTable 组件暴露的方法`
 
-- FilterTable 组件对象的获取方式，FilterTable 加 ref 属性 myTable（可自定义） -> this.$refs.myTable.$refs.pageTable
 - EXECUTE_INSERT{Function|执行插入列表行操作，参数是新增行的对象或数组}
 - EXECUTE_DELETE{Function|执行移除列表选中行的操作，参数是行数据的数组(可选)，返回值是移除行组成的数组}
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}

@@ -387,7 +387,7 @@ export default {
     }
   },
   mounted() {
-    this.BaseTable = this.$refs.table.$refs.pageTable;
+    this.BaseTable = this.$refs.table;
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
       this.list = [...res.data.items];

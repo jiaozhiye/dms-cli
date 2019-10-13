@@ -18,9 +18,7 @@ export default {
     columns: {
       type: Array,
       required: true,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     columnsRef: {
       type: String,
@@ -28,16 +26,12 @@ export default {
     },
     dataSource: {
       type: [Array, Object],
-      default() {
-        return [];
-      }
+      default: () => []
     },
     fetchapi: Function,
     params: {
       type: Object,
-      default() {
-        return {};
-      }
+      default: () => ({})
     },
     uidkey: {
       type: String,
@@ -53,15 +47,11 @@ export default {
     },
     rowstyles: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     cellstyles: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     selectionType: {
       type: String,
@@ -73,9 +63,7 @@ export default {
     },
     defaultSelections: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     isToperInfo: {
       type: Boolean,
@@ -118,10 +106,8 @@ export default {
       default: () => {}
     }
   },
-  components: {
-    PageTable
-  },
   data() {
+    this.$pageTable = null;
     this.isColumnsChange = false;
     this.arrayTypes = ['checkbox', 'number', 'date-range'];
     return {
@@ -391,7 +377,7 @@ export default {
           type="daterange"
           v-model={this.search[`${dataIndex}Val`]}
           unlink-panels={true}
-          style={{ width: '210px' }}
+          style={{ width: '215px' }}
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="-"
           start-placeholder="开始日期"
@@ -431,13 +417,59 @@ export default {
       }
       return res;
     },
-    // 外部通过组件实例调用的方法
     CLEAR_SEARCH_PARAMS() {
       this.filters = {};
       this.search = this.createSearchData(this.columns);
+    },
+    // PageTable 组件对外公开的方法
+    EXECUTE_INSERT(...rest) {
+      this.$pageTable.EXECUTE_INSERT(...rest);
+    },
+    EXECUTE_DELETE(...rest) {
+      return this.$pageTable.EXECUTE_DELETE(...rest);
+    },
+    EXECUTE_RESET_HEIGHT() {
+      this.$pageTable.EXECUTE_RESET_HEIGHT();
+    },
+    SET_COLUMNS_EDITABLE(...rest) {
+      this.$pageTable.SET_COLUMNS_EDITABLE(...rest);
+    },
+    SET_CELL_DISABLED(...rest) {
+      this.$pageTable.SET_CELL_DISABLED(...rest);
+    },
+    SET_CELL_UNEDITABLE(...rest) {
+      this.$pageTable.SET_CELL_UNEDITABLE(...rest);
+    },
+    SET_DISABLE_SELECT(...rest) {
+      this.$pageTable.SET_DISABLE_SELECT(...rest);
+    },
+    CLEAR_EXECUTE_LOG() {
+      this.$pageTable.CLEAR_EXECUTE_LOG();
+    },
+    START_LOADING() {
+      this.$pageTable.START_LOADING();
+    },
+    STOP_LOADING() {
+      this.$pageTable.STOP_LOADING();
+    },
+    GET_UPDATE_ROWS() {
+      return this.$pageTable.GET_UPDATE_ROWS();
+    },
+    GET_INSERT_ROWS() {
+      return this.$pageTable.GET_INSERT_ROWS();
+    },
+    GET_DELETE_ROWS() {
+      return this.$pageTable.GET_DELETE_ROWS();
+    },
+    GET_REQUIRED_ERROR() {
+      return this.$pageTable.GET_REQUIRED_ERROR();
+    },
+    GET_SEARCH_HELPER_ERROR() {
+      return this.$pageTable.GET_SEARCH_HELPER_ERROR();
     }
   },
   mounted() {
+    this.$pageTable = this.$refs.pageTable;
     document.addEventListener('click', this.documentEventHandle, false);
   },
   beforeDestroy() {

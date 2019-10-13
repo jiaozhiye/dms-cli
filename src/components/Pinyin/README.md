@@ -7,10 +7,8 @@
 
 ## 用法
 
-开发者：
-
 ```js
-var pinyin = require('pinyin');
+import pinyin, { STYLE_INITIALS, STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
 console.log(pinyin('中心')); // [ [ 'zhōng' ], [ 'xīn' ] ]
 console.log(
@@ -26,10 +24,15 @@ console.log(
 ); // [ [ 'zhōng' ], [ 'xīn' ] ]
 console.log(
   pinyin('中心', {
-    style: pinyin.STYLE_INITIALS, // 设置拼音风格
+    style: STYLE_INITIALS, // 设置拼音风格
     heteronym: true
   })
 ); // [ [ 'zh' ], [ 'x' ] ]
+console.log(
+  pinyin('中心', {
+    style: STYLE_FIRST_LETTER // 设置拼音风格
+  })
+); // [ [ 'z' ], [ 'x' ] ]
 ```
 
 ## API
@@ -68,13 +71,13 @@ options 是可选的，可以设定拼音风格，或打开多音字选项。
 
 ## 静态属性
 
-### `.STYLE_NORMAL`
+### `STYLE_NORMAL`
 
 普通风格，即不带声调。
 
 如：`pin yin`
 
-### `.STYLE_TONE`
+### `STYLE_TONE`
 
 声调风格，拼音声调在韵母第一个字母上。
 
@@ -82,19 +85,19 @@ options 是可选的，可以设定拼音风格，或打开多音字选项。
 
 如：`pīn yīn`
 
-### `.STYLE_TONE2`
+### `STYLE_TONE2`
 
 声调风格 2，即拼音声调以数字形式在各个拼音之后，用数字 [0-4] 进行表示。
 
 如：`pin1 yin1`
 
-### `.STYLE_TO3NE`
+### `STYLE_TO3NE`
 
 声调风格 3，即拼音声调以数字形式在注音字符之后，用数字 [0-4] 进行表示。
 
 如：`pi1n yi1n`
 
-### `.STYLE_INITIALS`
+### `STYLE_INITIALS`
 
 声母风格，只返回各个拼音的声母部分。对于没有声母的汉字，返回空白字符串。
 
@@ -106,7 +109,7 @@ options 是可选的，可以设定拼音风格，或打开多音字选项。
 这些汉字的拼音声母风格会返回 `""`。请仔细考虑你的需求是否应该使用首字母风格。
 详情请参考 [为什么没有 y, w, yu 几个声母](#为什么没有 -y-w-yu- 几个声母)
 
-### `.STYLE_FIRST_LETTER`
+### `STYLE_FIRST_LETTER`
 
 首字母风格，只返回拼音的首字母部分。
 

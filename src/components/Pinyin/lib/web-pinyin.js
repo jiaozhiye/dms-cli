@@ -35,6 +35,7 @@ const STYLE_FIRST_LETTER = Pinyin.STYLE_FIRST_LETTER;
 
 export { STYLE_NORMAL, STYLE_TONE, STYLE_TONE2, STYLE_TO3NE, STYLE_INITIALS, STYLE_FIRST_LETTER };
 export default pinyin.convert.bind(pinyin);
+
 // module.exports.compare = pinyin.compare.bind(pinyin);
 // module.exports.STYLE_NORMAL = Pinyin.STYLE_NORMAL;
 // module.exports.STYLE_TONE = Pinyin.STYLE_TONE;

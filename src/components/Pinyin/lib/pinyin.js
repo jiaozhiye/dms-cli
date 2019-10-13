@@ -111,7 +111,6 @@ export default class Pinyin {
         continue;
       }
       py_cached[py] = py;
-
       pinyins.push(py);
     }
     return pinyins;

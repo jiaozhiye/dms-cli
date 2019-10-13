@@ -21,9 +21,7 @@ export default {
     columns: {
       type: Array,
       required: true,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     columnsRef: {
       type: String,
@@ -31,16 +29,12 @@ export default {
     },
     dataSource: {
       type: [Array, Object],
-      default() {
-        return [];
-      }
+      default: () => []
     },
     fetchapi: Function,
     params: {
       type: Object,
-      default() {
-        return {};
-      }
+      default: () => ({})
     },
     uidkey: {
       type: String,
@@ -56,15 +50,11 @@ export default {
     },
     rowstyles: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     cellstyles: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     selectionType: {
       type: String,
@@ -72,15 +62,11 @@ export default {
     },
     defaultSelections: {
       type: Array,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     filters: {
       type: Object,
-      default() {
-        return {};
-      }
+      default: () => ({})
     },
     isSelectColumn: {
       type: Boolean,
