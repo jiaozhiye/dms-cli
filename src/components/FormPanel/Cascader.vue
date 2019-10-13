@@ -122,6 +122,7 @@ export default {
     tr {
       th {
         padding: 5px;
+        text-align: left;
       }
       td {
         padding: 5px;
