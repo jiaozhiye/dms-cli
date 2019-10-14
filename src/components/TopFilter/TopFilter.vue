@@ -413,14 +413,27 @@ export default {
     },
     RANGE_DATE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, style = {}, disabled } = option;
-      const valueFormat = 'yyyy-MM-dd HH:mm:ss';
+      const conf = {
+        daterange: {
+          placeholder: ['开始日期', '结束日期'],
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        datetimerange: {
+          placeholder: ['开始时间', '结束时间'],
+          valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        monthrange: {
+          placeholder: ['开始月份', '结束月份'],
+          valueFormat: 'yyyy-MM'
+        }
+      };
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
       const [startDate, endDate] = form[fieldName];
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
         const start = new Date();
-        const f = valueFormat.replace('yyyy-MM-dd', 'YYYY-MM-DD');
+        const f = conf[dateType].valueFormat.replace('yyyy', 'YYYY').replace('dd', 'DD');
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
         form[fieldName] = [moment(start).format(f), moment(end).format(f)];
         picker.$emit('pick', start);
@@ -430,7 +443,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <div class="range-date" style={{ ...style }}>
             <el-date-picker
-              type="date"
+              type={dateType.slice(0, -5)}
               value={form[fieldName][0]}
               onInput={val => {
                 val = val === null ? undefined : val;
@@ -462,16 +475,16 @@ export default {
                   }
                 ]
               }}
-              value-format={valueFormat}
+              value-format={conf[dateType].valueFormat}
               style={{ width: `calc(50% - 7px)` }}
-              placeholder="开始日期"
+              placeholder={conf[dateType].placeholder[0]}
               disabled={disabled}
             />
             <span class={disabled ? 'is-disabled' : ''} style="display: inline-block; line-height: 26px; text-align: center; width: 14px;">
               -
             </span>
             <el-date-picker
-              type="date"
+              type={dateType.slice(0, -5)}
               value={form[fieldName][1]}
               onInput={val => {
                 val = val === null ? undefined : val;
@@ -483,9 +496,9 @@ export default {
                   return time.getTime() < moment(startDate).toDate();
                 }
               }}
-              value-format={valueFormat}
+              value-format={conf[dateType].valueFormat}
               style={{ width: `calc(50% - 7px)` }}
-              placeholder="结束日期"
+              placeholder={conf[dateType].placeholder[1]}
               disabled={disabled}
             />
           </div>
@@ -494,7 +507,21 @@ export default {
     },
     // RANGE_DATE(option) {
     //   const { form } = this;
-    //   const { label, fieldName, labelWidth, labelOptions, valueFormat = 'yyyy-MM-dd HH:mm:ss', style = {}, disabled } = option;
+    //   const conf = {
+    //     daterange: {
+    //       placeholder: ['开始日期', '结束日期'],
+    //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
+    //     },
+    //     datetimerange: {
+    //       placeholder: ['开始时间', '结束时间'],
+    //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
+    //     },
+    //     monthrange: {
+    //       placeholder: ['开始月份', '结束月份'],
+    //       valueFormat: 'yyyy-MM'
+    //     }
+    //   };
+    //   const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
     //   // 日期区间快捷键方法
     //   const createPicker = (picker, days) => {
     //     const end = new Date();
@@ -506,16 +533,16 @@ export default {
     //     <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
     //       {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
     //       <el-date-picker
-    //         type="daterange"
+    //         type={dateType}
     //         value={form[fieldName]}
     //         onInput={val => {
     //           val = val === null ? [] : val;
     //           form[fieldName] = val;
     //         }}
-    //         value-format={valueFormat}
+    //         value-format={conf[dateType].valueFormat}
     //         range-separator="-"
-    //         start-placeholder="开始日期"
-    //         end-placeholder="结束日期"
+    //         start-placeholder={conf[dateType].placeholder[0]}
+    //         end-placeholder={conf[dateType].placeholder[1]}
     //         unlink-panels={true}
     //         disabled={disabled}
     //         style={{ ...style }}
