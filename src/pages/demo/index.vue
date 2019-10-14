@@ -228,7 +228,6 @@ export default {
           title: '日期',
           dataIndex: 'date',
           width: 150,
-          dateFormat: 'yyyy-MM-dd',
           sorter: true,
           filter: true,
           filterType: 'date-range',

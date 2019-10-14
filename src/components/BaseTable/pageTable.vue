@@ -425,15 +425,21 @@ export default {
         );
       }
       if (editType === 'date-picker') {
-        const { dateFormat = 'yyyy-MM-dd HH:mm:ss', minDateTime, maxDateTime } = column;
+        // 日期控件配置项
+        const conf = { date: { placeholder: '选择日期', format: 'yyyy-MM-dd' }, datetime: { placeholder: '选择时间', format: 'yyyy-MM-dd HH:mm:ss' } };
+        const { dateFormat, minDateTime, maxDateTime } = column;
         const dateType = dateFormat === 'yyyy-MM-dd HH:mm:ss' ? 'datetime' : 'date';
         return (
           <el-date-picker
+            type={dateType}
             size="mini"
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
-            type={dateType}
-            placeholder="选择日期"
+            placeholder={conf[dateType].placeholder}
+            format={conf[dateType].format}
+            value-format="yyyy-MM-dd HH:mm:ss"
+            clearable={false}
+            disabled={column.disabled || isDisabled}
             picker-options={{
               disabledDate(time) {
                 if (minDateTime) {
@@ -447,10 +453,6 @@ export default {
                 return false;
               }
             }}
-            format={dateFormat}
-            value-format={dateFormat}
-            clearable={false}
-            disabled={column.disabled || isDisabled}
             onChange={value => {
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
@@ -777,7 +779,7 @@ export default {
     // 日期的格式化方法
     dateFormat(column, input) {
       if (column.dateFormat) {
-        const dateFormat = column.dateFormat.replace('yyyy-MM-dd', 'YYYY-MM-DD');
+        const dateFormat = column.dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD');
         const dateVal = moment(input).format(dateFormat);
         input = dateVal === 'Invalid date' ? input : dateVal;
       }
