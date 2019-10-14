@@ -74,6 +74,8 @@ export default {
       return this.ajaxing || this.disabled;
     },
     isVisible() {
+      // 没有按钮权限控制，默认该按钮显示状态
+      if (!this.authList.length) return true;
       return this.authList.includes(this.authMark);
     }
   },

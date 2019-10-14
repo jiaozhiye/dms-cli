@@ -14,6 +14,9 @@ import { Notification } from 'element-ui';
 
 console.info(config.envText);
 
+// 通知组件的标记
+let notifiyInstance = null;
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -68,8 +71,8 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(({ data }) => {
   store.dispatch('app/clearBtnLoading');
   // 错误数据提示
-  if (data.resultCode !== 200) {
-    Notification.error({
+  if (data.resultCode !== 200 && !notifiyInstance) {
+    notifiyInstance = Notification.error({
       title: '请求提示信息',
       message: data.errMsg
     });

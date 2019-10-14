@@ -24,6 +24,7 @@ export default {
     }
   },
   data() {
+    this.prevValue = null;
     return {
       values: this.createInitValue(this.defaultValue)
     };
@@ -44,7 +45,9 @@ export default {
     values: {
       handler(val) {
         if (val.length || _.isUndefined(this.defaultValue)) {
+          if (_.isEqual(val, this.prevValue)) return;
           this.$emit('change', val);
+          this.prevValue = [...val];
         }
       },
       immediate: true

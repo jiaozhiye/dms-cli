@@ -375,10 +375,11 @@ export default {
                 list={itemList}
                 labels={titles}
                 style={style}
-                onChange={data => this.cascaderChangeHandle(fieldName, data)}
-                onClose={() => {
-                  this.visible[fieldName] = false;
+                onChange={data => {
+                  this.cascaderChangeHandle(fieldName, data);
+                  change(form[fieldName] || '');
                 }}
+                onClose={() => (this.visible[fieldName] = false)}
               />
             </div>
             <el-input
@@ -390,7 +391,6 @@ export default {
               clearable
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => this.inputCascaderClearHandle(fieldName)}
-              onChange={change}
             ></el-input>
           </el-popover>
         </el-form-item>
