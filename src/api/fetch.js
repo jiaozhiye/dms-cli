@@ -10,12 +10,9 @@ import config from '@/assets/js/config';
 import store from '@/store';
 import { getToken, removeToken, removeUser } from '@/assets/js/auth';
 import router from '@/routes';
-import { Notification } from 'element-ui';
+import { notifyAction } from '@/utils';
 
 console.info(config.envText);
-
-// 通知组件的标记
-let notifiyInstance = null;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -49,10 +46,7 @@ const instance = axios.create({
 const errorHandler = error => {
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText;
-  Notification.error({
-    title: `请求错误 ${response.status}`,
-    message: errortext
-  });
+  notifyAction(errortext, 'error', `请求错误 ${response.status}`);
   store.dispatch('app/clearBtnLoading');
   return Promise.reject(error);
 };
@@ -71,11 +65,8 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(({ data }) => {
   store.dispatch('app/clearBtnLoading');
   // 错误数据提示
-  if (data.resultCode !== 200 && !notifiyInstance) {
-    notifiyInstance = Notification.error({
-      title: '请求提示信息',
-      message: data.errMsg
-    });
+  if (data.resultCode !== 200) {
+    notifyAction(data.errMsg, 'error');
   }
   // token 过期，需要重新登录
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {

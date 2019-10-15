@@ -66,7 +66,8 @@ const state = {
   tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
   btnLoading: {}, // 按钮状态
-  keepAliveNames: [] // 路由组件缓存列表
+  keepAliveNames: [], // 路由组件缓存列表
+  isNotifyMark: false // 页面中是否已存在消息通知组件
 };
 
 // actions
@@ -213,6 +214,12 @@ const actions = {
       data: params
     });
     router.replace({ path: `/redirect${params}` });
+  },
+  createNotifyState({ commit, state }, params) {
+    commit({
+      type: types.NOTIFY_STATE,
+      data: params
+    });
   }
 };
 
@@ -256,6 +263,9 @@ const mutations = {
   },
   [types.DEL_STAR_MENU](state, { data }) {
     state.starMenuList.splice(state.starMenuList.findIndex(x => x.key === data), 1);
+  },
+  [types.NOTIFY_STATE](state, { data }) {
+    state.isNotifyMark = data;
   }
 };
 

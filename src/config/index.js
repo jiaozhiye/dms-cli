@@ -12,5 +12,6 @@ export default {
     pageSize: 10, // 10, 20, 30, 40
     serverSort: false,
     serverFilter: false
-  }
+  },
+  notifyDuration: 3000 // 通知消息组件显示时间
 };

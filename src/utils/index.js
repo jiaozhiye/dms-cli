@@ -5,12 +5,12 @@
  * @Last Modified time: 2019-06-20 15:45:00
  */
 import { MessageBox, Notification, Message } from 'element-ui';
+import config from '@/config';
+import store from '@/store';
 
 // 等待
 export const sleep = async timeLen => {
-  return new Promise(resolve => {
-    setTimeout(resolve, timeLen);
-  });
+  return new Promise(resolve => setTimeout(resolve, timeLen));
 };
 
 // 捕获基于 Promise 操作的异常
@@ -25,29 +25,25 @@ export const errorCapture = async promise => {
 
 // 需要确认的操作提示
 export const confirmAction = async (msg = '确认进行此操作?', type = 'warning') => {
-  return MessageBox.confirm(msg, '提示信息', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type
-  });
+  return MessageBox.confirm(msg, '提示信息', { confirmButtonText: '确定', cancelButtonText: '取消', type });
 };
 
 // Notification 通知提示
-export const notifyAction = (msg = '暂无...', type = 'success') => {
-  Notification({
-    title: '提示信息',
-    message: msg,
-    type
-  });
+export const notifyAction = async (msg = '暂无...', type = 'success', title = '提示信息') => {
+  if (store.state.app.isNotifyMark) return;
+  store.dispatch('app/createNotifyState', true);
+  Notification({ title, message: msg, type, duration: config.notifyDuration });
+  await sleep(config.notifyDuration);
+  store.dispatch('app/createNotifyState', false);
 };
 
 // Message 消息提示
-export const messageAction = (msg = '暂无...', type = 'info') => {
-  Message({
-    message: msg,
-    showClose: true,
-    type
-  });
+export const messageAction = async (msg = '暂无...', type = 'info') => {
+  if (store.state.app.isNotifyMark) return;
+  store.dispatch('app/createNotifyState', true);
+  Message({ message: msg, showClose: true, type, duration: config.notifyDuration });
+  await sleep(config.notifyDuration);
+  store.dispatch('app/createNotifyState', false);
 };
 
 // 判断表单控件的值是否为空

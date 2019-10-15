@@ -68,11 +68,6 @@ export default {
         });
         await sleep(100);
         this.$router.push({ path: '/' });
-      } else {
-        this.$notify.error({
-          title: '提示信息',
-          message: res.message
-        });
       }
     }
   }

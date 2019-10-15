@@ -18,3 +18,4 @@ export const ADD_CNAME = 'ADD_CNAME';
 export const DEL_CNAME = 'DEL_CNAME';
 export const ADD_STAR_MENU = 'ADD_STAR_MENU';
 export const DEL_STAR_MENU = 'DEL_STAR_MENU';
+export const NOTIFY_STATE = 'NOTIFY_STATE';
