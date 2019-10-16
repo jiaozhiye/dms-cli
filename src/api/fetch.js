@@ -8,7 +8,7 @@ import axios from 'axios';
 import qs from 'qs';
 import config from '@/assets/js/config';
 import store from '@/store';
-import { getToken, removeToken, removeUser } from '@/assets/js/auth';
+import { getToken } from '@/assets/js/auth';
 import router from '@/routes';
 import { notifyAction } from '@/utils';
 
@@ -70,8 +70,7 @@ instance.interceptors.response.use(({ data }) => {
   }
   // token 过期，需要重新登录
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
-    removeToken();
-    removeUser();
+    store.dispatch('app/createLogout');
     setTimeout(() => router.push({ path: '/' }), 100);
   }
   return data;

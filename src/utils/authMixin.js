@@ -10,7 +10,7 @@ export const authority = {
   computed: {
     ...mapState('app', ['navList']),
     auths() {
-      const target = this.deepFind(this.navList, this.$route.path);
+      const target = this.deepFind(this.navList, this.$route.path) || {};
       return target.permission || [];
     }
   },

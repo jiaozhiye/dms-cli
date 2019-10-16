@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { getUser, removeToken, removeUser } from '@/assets/js/auth';
+import { mapActions } from 'vuex';
+import { getUser } from '@/assets/js/auth';
 
 export default {
   name: 'PersonalCenter',
@@ -30,11 +31,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions('app', ['createLogout']),
     logoutHandle() {
       // 需要走后台推出接口
-      // ...
-      removeToken();
-      removeUser();
+      this.createLogout();
       this.$router.push({ path: '/login' });
     }
   }

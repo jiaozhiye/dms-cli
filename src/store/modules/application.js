@@ -84,6 +84,10 @@ const actions = {
     removeToken();
     removeUser();
     commit({
+      type: types.TAB_MENU,
+      data: []
+    });
+    commit({
       type: types.LOGOUT,
       data: null
     });
