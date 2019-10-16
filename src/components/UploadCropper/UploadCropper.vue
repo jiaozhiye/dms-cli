@@ -170,8 +170,6 @@ export default {
         const { data } = await axios.post(this.actionUrl, formData);
         if (data.resultCode === 200) {
           this.imgUrlArr.push(data.data);
-        } else {
-          this.$message.error(data.message);
         }
       } catch (err) {
         this.clearFiles();
@@ -209,13 +207,13 @@ export default {
       return new Blob([ia], { type: mimeString });
     },
     // 获取服务端文件 to blob
-    async downLoadByUrl(url) {
-      const { data } = await axios({ url, responseType: 'blob' });
+    async downLoadByUrl(url, params = {}) {
+      const { data } = await axios({ url, params, responseType: 'blob' });
       return data;
     },
     // 执行下载动作
-    async downloadFile(url) {
-      const blob = await this.downLoadByUrl(url);
+    async downloadFile(url, params) {
+      const blob = await this.downLoadByUrl(url, params);
       const fileName = url.slice(url.lastIndexOf('/') + 1);
       // ie10+
       if (navigator.msSaveBlob) {

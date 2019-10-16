@@ -11,6 +11,7 @@ import moment from 'moment';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
+import UploadFile from '@/components/UploadFile/UploadFile.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
 
 export default {
@@ -40,7 +41,6 @@ export default {
   data() {
     this.treeProps = { children: 'children', label: 'text' };
     this.prevForm = null;
-    this.defaultFileTypes = ['jpg', 'png', 'pdf', 'doc'];
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
@@ -733,7 +733,7 @@ export default {
     },
     UPLOAD_IMG(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -748,8 +748,8 @@ export default {
             tipText={upload.tipText}
             disabled={disabled}
             onSuccess={val => {
-              this.form[fieldName] = val;
-              this.$refs.form.validateField(fieldName);
+              this.fileChangeHandle(fieldName, val);
+              change(val);
             }}
           />
         </el-form-item>
@@ -757,33 +757,22 @@ export default {
     },
     UPLOAD_FILE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled } = option;
-      let { actionUrl, limit = 1, fileTypes = this.defaultFileTypes } = upload;
-      const uploadProps = {
-        props: {
-          action: actionUrl,
-          fileList: form[fieldName],
-          limit,
-          multiple: false,
-          withCredentials: true,
-          disabled,
-          onPreview: this.previewFileHandle,
-          beforeUpload: file => this.beforeUploadHandle(file, fileTypes),
-          onRemove: (file, fileList) => this.handleRemove(fieldName, file, fileList),
-          onSuccess: (res, file, fileList) => this.successHandle(fieldName, res, file, fileList)
-        }
-      };
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-upload ref="upload-file" {...uploadProps} style={{ ...style }}>
-            <el-button size="small" type="primary">
-              点击上传
-            </el-button>
-            <div slot="tip" class="el-upload__tip">
-              {`只能上传 ${fileTypes.join(',')} 格式，文件大小不超过5M`}
-            </div>
-          </el-upload>
+          <UploadFile
+            actionUrl={upload.actionUrl}
+            initialValue={form[fieldName]}
+            fileTypes={upload.fileTypes}
+            limit={upload.limit || 1}
+            disabled={disabled}
+            style={{ ...style }}
+            onChange={val => {
+              this.fileChangeHandle(fieldName, val);
+              change(val);
+            }}
+          />
         </el-form-item>
       );
     },
@@ -890,41 +879,12 @@ export default {
     createSerachHelperList(list, valueKey) {
       return list.map(x => ({ value: x[valueKey] }));
     },
-    // 文件上传之前的校验
-    beforeUploadHandle(file, types) {
-      const isType = types.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase());
-      const isLt5M = file.size / 1024 / 1024 < 5;
-      if (!isType) {
-        this.$notify({ title: '警告信息', message: `上传头像图片只能是 ${types.join(',')} 格式!`, type: 'warning' });
-      }
-      if (!isLt5M) {
-        this.$notify({ title: '警告信息', message: '上传附件大小不能超过 5MB!', type: 'warning' });
-      }
-      return isType && isLt5M;
-    },
-    // 创建上传文件列表
-    createFileList(fieldName, name, url = '') {
-      this.form[fieldName].push({ name, url });
-    },
-    // 文件上传成功
-    successHandle(fieldName, res, file, fileList) {
-      if (res.resultCode === 200) {
-        this.createFileList(fieldName, file.name, res.data);
-      }
-    },
-    // 点击文件列表的事件
-    async previewFileHandle(file) {
-      this.downloadFile(file.url);
-    },
-    // 文件被移除
-    handleRemove(fieldName, file, fileList) {
-      this.form[fieldName] = fileList;
-    },
     // 创建树节点的值
     createInputTreeValue(fieldName, itemList) {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
       return text;
     },
+    // 树控件顶部文本帅选方法
     treeFilterTextHandle(key) {
       this.$refs[`tree-${key}`].filter(this[`${key}TreeFilterTexts`]);
     },
@@ -953,6 +913,11 @@ export default {
     inputCascaderClearHandle(fieldName) {
       this.form[fieldName] = undefined;
       this[`${fieldName}CascaderTexts`] = '';
+    },
+    // 文件上传的 change 事件
+    fileChangeHandle(fieldName, val) {
+      this.form[fieldName] = val;
+      this.$refs.form.validateField(fieldName);
     },
     createFormItem() {
       return this.list
@@ -1072,27 +1037,6 @@ export default {
         }
       }
       return res;
-    },
-    // 获取服务端文件 to blob
-    async downLoadByUrl(url) {
-      const { data } = await axios({ url, responseType: 'blob' });
-      return data;
-    },
-    // 执行下载动作
-    async downloadFile(url) {
-      const blob = await this.downLoadByUrl(url);
-      const fileName = url.slice(url.lastIndexOf('/') + 1);
-      // ie10+
-      if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, fileName);
-      } else {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        let a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = fileName;
-        a.click();
-        a = null;
-      }
     },
     deepFind(arr, mark) {
       let res = null;
