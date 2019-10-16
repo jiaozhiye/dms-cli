@@ -274,7 +274,7 @@ export default {
     },
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, precision, pattern, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, precision, readonly, disabled, change = () => {} } = option;
       const [startVal, endVal] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -457,6 +457,10 @@ export default {
           placeholder: '选择时间',
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
+        exactdate: {
+          placeholder: '选择日期',
+          valueFormat: 'yyyy-MM-dd'
+        },
         month: {
           placeholder: '选择月份',
           valueFormat: 'yyyy-MM'
@@ -492,6 +496,10 @@ export default {
         datetimerange: {
           placeholder: ['开始时间', '结束时间'],
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        exactdaterange: {
+          placeholder: ['开始日期', '结束日期'],
+          valueFormat: 'yyyy-MM-dd'
         },
         monthrange: {
           placeholder: ['开始月份', '结束月份'],

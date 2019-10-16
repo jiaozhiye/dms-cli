@@ -43,7 +43,7 @@ Vue.use(FormPanel);
 - onFocus{Function|输入框获得焦点的事件}
 - onEnter{Function|输入框回车的事件}
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
-- dateType{String|日期控件的类型，只对 DATE 和 RANGE_DATE 生效，可选值为 date/datetime/month/daterange/datetimerange/monthrange}
+- dateType{String|日期控件的类型，只对 DATE 和 RANGE_DATE 生效，可选值为 date/datetime/exactdate/month/daterange/datetimerange/exactdaterange/monthrange}
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - onInput{Function|INPUT 类型的对应的 input 事件}

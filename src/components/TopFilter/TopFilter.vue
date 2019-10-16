@@ -37,7 +37,7 @@ export default {
   data() {
     this.treeProps = { children: 'children', label: 'text' };
     this.prevForm = null;
-    this.arrayTypes = ['RANGE_DATE', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
+    this.arrayTypes = ['RANGE_DATE', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
     return {
       form: {},
       expand: false, // 展开收起状态
@@ -248,6 +248,43 @@ export default {
         </el-form-item>
       );
     },
+    RANGE_INPUT_NUMBER(option) {
+      const { form } = this;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, precision, readonly, disabled, change = () => {} } = option;
+      const [startVal, endVal] = form[fieldName];
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-input-number
+            v-model={form[fieldName][0]}
+            controls-position="right"
+            min={min}
+            max={endVal}
+            step={step}
+            precision={precision}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={change}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-input-number
+            v-model={form[fieldName][1]}
+            controls-position="right"
+            min={startVal}
+            max={max}
+            step={step}
+            precision={precision}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={change}
+          />
+        </el-form-item>
+      );
+    },
     INPUT_TREE(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, change = () => {} } = option;
@@ -398,6 +435,10 @@ export default {
           placeholder: '选择时间',
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
+        exactdate: {
+          placeholder: '选择日期',
+          valueFormat: 'yyyy-MM-dd'
+        },
         month: {
           placeholder: '选择月份',
           valueFormat: 'yyyy-MM'
@@ -425,6 +466,10 @@ export default {
         datetimerange: {
           placeholder: ['开始时间', '结束时间'],
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
+        },
+        exactdaterange: {
+          placeholder: ['开始日期', '结束日期'],
+          valueFormat: 'yyyy-MM-dd'
         },
         monthrange: {
           placeholder: ['开始月份', '结束月份'],
@@ -520,6 +565,10 @@ export default {
     //       placeholder: ['开始时间', '结束时间'],
     //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
     //     },
+    //      exactdaterange: {
+    //        placeholder: ['开始日期', '结束日期'],
+    //        valueFormat: 'yyyy-MM-dd'
+    //      },
     //     monthrange: {
     //       placeholder: ['开始月份', '结束月份'],
     //       valueFormat: 'yyyy-MM'
@@ -784,7 +833,7 @@ export default {
     },
     excuteFormData(form) {
       this.formItemList
-        .filter(x => x.type === 'RANGE_DATE')
+        .filter(x => ['RANGE_DATE', 'RANGE_INPUT_NUMBER'].includes(x.type))
         .map(x => x.fieldName)
         .forEach(fieldName => {
           if (form[fieldName].length > 0) {
