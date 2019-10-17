@@ -5,7 +5,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
-import axios, { configHeaders } from '@/api/fetch';
+import axios, { getConfigHeaders } from '@/api/fetch';
 
 export default {
   name: 'UploadFile',
@@ -111,7 +111,7 @@ export default {
     const wrapProps = {
       props: {
         action: $props.actionUrl,
-        headers: configHeaders,
+        headers: getConfigHeaders(),
         data: $props.params,
         fileList,
         limit: $props.limit,
