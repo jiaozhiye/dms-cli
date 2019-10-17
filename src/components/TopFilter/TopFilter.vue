@@ -266,7 +266,7 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input-number
@@ -280,7 +280,7 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -444,7 +444,7 @@ export default {
           valueFormat: 'yyyy-MM'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', style = {}, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -455,6 +455,7 @@ export default {
             placeholder={conf[dateType].placeholder}
             disabled={disabled}
             style={{ ...style }}
+            onChange={change}
           />
         </el-form-item>
       );
@@ -483,7 +484,7 @@ export default {
           valueFormat: 'yyyy-MM'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled, change = () => {} } = option;
       const [startDate, endDate] = form[fieldName];
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
@@ -535,6 +536,7 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[0]}
               disabled={disabled}
+              onChange={() => change(form[fieldName])}
             />
             <span class={disabled ? 'is-disabled' : ''} style="display: inline-block; line-height: 26px; text-align: center; width: 14px;">
               -
@@ -556,6 +558,7 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[1]}
               disabled={disabled}
+              onChange={() => change(form[fieldName])}
             />
           </div>
         </el-form-item>
@@ -581,7 +584,7 @@ export default {
     //       valueFormat: 'yyyy-MM'
     //     }
     //   };
-    //   const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
+    //   const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled, change = () => {} } = option;
     //   // 日期区间快捷键方法
     //   const createPicker = (picker, days) => {
     //     const end = new Date();
@@ -606,6 +609,7 @@ export default {
     //         unlink-panels={true}
     //         disabled={disabled}
     //         style={{ ...style }}
+    //         onChange={() => change(form[fieldName])}
     //         pickerOptions={{
     //           shortcuts: [
     //             {

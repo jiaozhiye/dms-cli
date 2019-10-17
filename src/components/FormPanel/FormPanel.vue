@@ -289,7 +289,7 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input-number
@@ -303,7 +303,7 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -505,7 +505,7 @@ export default {
           valueFormat: 'yyyy-MM'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled, change = () => {} } = option;
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
@@ -530,6 +530,7 @@ export default {
             unlink-panels={true}
             disabled={disabled}
             style={{ ...style }}
+            onChange={() => change(form[fieldName])}
             pickerOptions={{
               shortcuts: [
                 {
@@ -595,7 +596,7 @@ export default {
             end-placeholder="结束时间"
             disabled={disabled}
             style={{ ...style }}
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -652,7 +653,7 @@ export default {
             placeholder={'开始时间'}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-time-select
@@ -675,7 +676,7 @@ export default {
             placeholder={'结束时间'}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );

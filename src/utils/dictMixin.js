@@ -35,7 +35,8 @@ export const dictionary = {
       let res = '';
       if (!val) return res;
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        res = this.dict[code].find(x => x.codeId == val).codeCnDesc || val;
+        const target = this.dict[code].find(x => x.codeId == val);
+        res = target ? target.codeCnDesc : val;
       }
       return res;
     },
