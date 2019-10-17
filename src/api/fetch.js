@@ -50,7 +50,7 @@ const instance = axios.create({
 const errorHandler = error => {
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText;
-  response.status && notifyAction(errortext, 'error', `请求错误 ${response.status}`);
+  notifyAction(errortext, 'error', `请求错误 ${response.status}`);
   store.dispatch('app/clearBtnLoading');
   return Promise.reject(error);
 };
