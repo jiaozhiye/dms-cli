@@ -448,7 +448,14 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-date-picker type={dateType} v-model={form[fieldName]} value-format={conf[dateType].valueFormat} placeholder={conf[dateType].placeholder} disabled={disabled} style={{ ...style }} />
+          <el-date-picker
+            type={dateType.replace('exact', '')}
+            v-model={form[fieldName]}
+            value-format={conf[dateType].valueFormat}
+            placeholder={conf[dateType].placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+          />
         </el-form-item>
       );
     },
@@ -492,7 +499,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <div class="range-date" style={{ ...style }}>
             <el-date-picker
-              type={dateType.slice(0, -5)}
+              type={dateType.replace('exact', '').slice(0, -5)}
               value={form[fieldName][0]}
               onInput={val => {
                 val = val === null ? undefined : val;
@@ -533,7 +540,7 @@ export default {
               -
             </span>
             <el-date-picker
-              type={dateType.slice(0, -5)}
+              type={dateType.replace('exact', '').slice(0, -5)}
               value={form[fieldName][1]}
               onInput={val => {
                 val = val === null ? undefined : val;
@@ -565,10 +572,10 @@ export default {
     //       placeholder: ['开始时间', '结束时间'],
     //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
     //     },
-    //      exactdaterange: {
-    //        placeholder: ['开始日期', '结束日期'],
-    //        valueFormat: 'yyyy-MM-dd'
-    //      },
+    //     exactdaterange: {
+    //       placeholder: ['开始日期', '结束日期'],
+    //       valueFormat: 'yyyy-MM-dd'
+    //     },
     //     monthrange: {
     //       placeholder: ['开始月份', '结束月份'],
     //       valueFormat: 'yyyy-MM'
@@ -586,7 +593,7 @@ export default {
     //     <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
     //       {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
     //       <el-date-picker
-    //         type={dateType}
+    //         type={dateType.replace('exact', '')}
     //         value={form[fieldName]}
     //         onInput={val => {
     //           val = val === null ? [] : val;

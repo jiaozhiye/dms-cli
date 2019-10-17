@@ -6,7 +6,6 @@
  * @Last Modified time: 2019-08-18 12:02:51
  **/
 import _ from 'lodash';
-import axios from 'axios';
 import moment from 'moment';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
@@ -471,7 +470,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
-            type={dateType}
+            type={dateType.replace('exact', '')}
             v-model={form[fieldName]}
             value-format={conf[dateType].valueFormat}
             placeholder={conf[dateType].placeholder}
@@ -518,7 +517,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
-            type={dateType}
+            type={dateType.replace('exact', '')}
             value={form[fieldName]}
             onInput={val => {
               val = val === null ? [] : val;

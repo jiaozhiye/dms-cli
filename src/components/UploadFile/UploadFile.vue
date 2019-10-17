@@ -5,6 +5,8 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
+import axios from 'axios';
+
 export default {
   name: 'UploadFile',
   props: {
@@ -71,7 +73,7 @@ export default {
       this.$emit('error', err);
       this.$message.error('上传文件失败！');
     },
-    async previewFileHandle() {
+    async previewFileHandle(file) {
       this.downloadFile(file.url);
     },
     // 获取服务端文件 to blob

@@ -5,6 +5,8 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
+import axios from 'axios';
+
 export default {
   name: 'DownloadFile',
   props: {
