@@ -15,7 +15,7 @@ Vue.use(UploadFile);
 `组件参数API`
 
 - actionUrl{String|必选参数，上传的地址}
-- initialValue{Array|默认显示图片的地址}
+- initialValue{Array|默认显示附件项，值的格式为 { name: '文件名', url: '地址' }}
 - fileTypes{Array|限制上传附件的类型}
 - isOnlyButton{Boolean|是否仅显示上传按钮}
 - limit{Number|支持上传附件的数量，默认是 1}

@@ -13,13 +13,8 @@
       :on-change="changeHandler"
       :http-request="upload"
     >
-      <div
-        class="el-upload-list__item"
-        v-for="(imgUrl, index) in imgUrlArr"
-        :key="index"
-        @click.stop
-      >
-        <img class="img" :src="imgUrl" alt />
+      <div class="el-upload-list__item" v-for="(item, index) in imgUrlArr" :key="index" @click.stop>
+        <img class="img" :src="item.url" alt />
         <h5 class="title" v-if="!!titles[index]">{{ titles[index] }}</h5>
         <span class="el-upload-list__item-actions">
           <span class="el-upload-list__item-dot">
@@ -29,9 +24,7 @@
             <i class="el-icon-delete" @click="handleRemove(index)"></i>
           </span>
           <span class="el-upload-list__item-dot">
-            <a :href="imgUrl" :download="imgUrl.slice(imgUrl.lastIndexOf('/') + 1)">
-              <i class="el-icon-download"></i>
-            </a>
+            <i class="el-icon-download" @click="downloadHandle(index)"></i>
           </span>
         </span>
       </div>
@@ -65,7 +58,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/api/fetch';
 import canvasCompress from './compress';
 import CropperPanel from './CropperPanel';
 
@@ -137,7 +130,7 @@ export default {
   },
   methods: {
     handlePreview(index) {
-      this.dialogImageUrl = this.imgUrlArr[index];
+      this.dialogImageUrl = this.imgUrlArr[index].url;
       this.dialogVisible = true;
     },
     handleRemove(index) {
@@ -167,9 +160,9 @@ export default {
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);
       try {
-        const { data } = await axios.post(this.actionUrl, formData);
-        if (data.resultCode === 200) {
-          this.imgUrlArr.push(data.data);
+        const res = await axios.post(this.actionUrl, formData);
+        if (res.resultCode === 200) {
+          this.imgUrlArr.push({ name: this.file.name, url: res.data });
         }
       } catch (err) {
         this.clearFiles();
@@ -206,23 +199,30 @@ export default {
       }
       return new Blob([ia], { type: mimeString });
     },
+    async downloadHandle(index) {
+      try {
+        await this.downloadFile(this.imgUrlArr[index]);
+      } catch (err) {
+        this.$message.error('文件下载失败！');
+      }
+    },
     // 获取服务端文件 to blob
     async downLoadByUrl(url, params = {}) {
       const { data } = await axios({ url, params, responseType: 'blob' });
       return data;
     },
     // 执行下载动作
-    async downloadFile(url, params) {
+    async downloadFile({ url, name }, params) {
       const blob = await this.downLoadByUrl(url, params);
-      const fileName = url.slice(url.lastIndexOf('/') + 1);
+      const fileName = !name ? url.slice(url.lastIndexOf('/') + 1) : name;
       // ie10+
       if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, fileName);
+        navigator.msSaveBlob(blob, decodeURI(fileName));
       } else {
         const downloadUrl = window.URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = downloadUrl;
-        a.download = fileName;
+        a.download = decodeURI(fileName);
         a.click();
         a = null;
       }

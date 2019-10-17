@@ -5,7 +5,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
-import axios from 'axios';
+import axios from '@/api/fetch';
 
 export default {
   name: 'UploadFile',
@@ -74,7 +74,11 @@ export default {
       this.$message.error('上传文件失败！');
     },
     async previewFileHandle(file) {
-      this.downloadFile(file.url);
+      try {
+        await this.downloadFile(file);
+      } catch (err) {
+        this.$message.error('文件下载失败！');
+      }
     },
     // 获取服务端文件 to blob
     async downLoadByUrl(url, params = {}) {
@@ -82,17 +86,17 @@ export default {
       return data;
     },
     // 执行下载动作
-    async downloadFile(url, params) {
+    async downloadFile({ url, name }, params) {
       const blob = await this.downLoadByUrl(url, params);
-      const fileName = url.slice(url.lastIndexOf('/') + 1);
+      const fileName = !name ? url.slice(url.lastIndexOf('/') + 1) : name;
       // ie10+
       if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, fileName);
+        navigator.msSaveBlob(blob, decodeURI(fileName));
       } else {
         const downloadUrl = window.URL.createObjectURL(blob);
         let a = document.createElement('a');
         a.href = downloadUrl;
-        a.download = fileName;
+        a.download = decodeURI(fileName);
         a.click();
         a = null;
       }

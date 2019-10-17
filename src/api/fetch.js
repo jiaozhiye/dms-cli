@@ -62,7 +62,8 @@ instance.interceptors.request.use(config => {
 }, errorHandler);
 
 // 响应拦截
-instance.interceptors.response.use(({ data }) => {
+instance.interceptors.response.use(response => {
+  let { config, headers, data } = response;
   store.dispatch('app/clearBtnLoading');
   // 错误数据提示
   if (data.resultCode !== 200) {
@@ -72,6 +73,10 @@ instance.interceptors.response.use(({ data }) => {
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
     store.dispatch('app/createLogout');
     setTimeout(() => router.push({ path: '/' }), 100);
+  }
+  // 判断是否为导出/下载
+  if (config.responseType === 'blob') {
+    return { headers, data };
   }
   return data;
 }, errorHandler);

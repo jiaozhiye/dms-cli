@@ -15,6 +15,7 @@ Vue.use(DownloadFile);
 `组件参数API`
 
 - actionUrl{String|必选参数，下载的地址}
+- fileName{String|下载后的文件名}
 - params{Object|ajax 下载接口附带的额外参数}
 - disabled{Boolean|是否禁用}
 - error{Function|下载失败的回调事件，参数是错误对象}

@@ -62,11 +62,15 @@ export default {
           label: '上传身份证',
           fieldName: 'wayPicture',
           placeholder: '上传身份证...',
+          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg' }],
           upload: {
             actionUrl: '/api/file/oss/upload',
             fixedSize: [5, 3],
             limit: 2,
             isCalcHeight: true
+          },
+          change: val => {
+            console.log(111, val);
           }
         },
         {

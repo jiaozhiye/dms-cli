@@ -5,7 +5,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
-import axios from 'axios';
+import axios from '@/api/fetch';
 
 export default {
   name: 'DownloadFile',
@@ -13,6 +13,10 @@ export default {
     actionUrl: {
       type: String,
       required: true
+    },
+    fileName: {
+      type: String,
+      default: ''
     },
     params: {
       type: Object,
@@ -42,33 +46,43 @@ export default {
     },
     // 获取服务端文件 to blob
     async downLoadByUrl(url, params = {}) {
-      const { data } = await axios({ url, params, responseType: 'blob' });
-      return data;
+      return await axios({ url, params, responseType: 'blob' });
     },
     // 执行下载动作
     async downloadFile(url, params) {
-      const blob = await this.downLoadByUrl(url, params);
-      const fileName = url.slice(url.lastIndexOf('/') + 1);
+      const { headers, data } = await this.downLoadByUrl(url, params);
+      const contentDisposition = headers['content-disposition'];
+      // 获取文件名
+      const fileName = contentDisposition ? contentDisposition.split(';')[1].split('filename=')[1] : !this.fileName ? url.slice(url.lastIndexOf('/') + 1) : this.fileName;
       // ie10+
       if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, fileName);
+        navigator.msSaveBlob(data, decodeURI(fileName));
       } else {
-        const downloadUrl = window.URL.createObjectURL(blob);
+        const downloadUrl = window.URL.createObjectURL(data);
         let a = document.createElement('a');
         a.href = downloadUrl;
-        a.download = fileName;
+        a.download = decodeURI(fileName);
         a.click();
         a = null;
       }
     }
   },
   render() {
-    const { $slots, loading, disabled } = this;
-    return (
-      <el-button type="primary" icon="el-icon-download" loading={loading} disabled={disabled} onClick={this.clickHandle}>
-        {$slots['default']}
-      </el-button>
-    );
+    const { $attrs, $slots, loading, disabled } = this;
+    const wrapProps = {
+      props: {
+        loading,
+        disabled
+      },
+      attrs: {
+        type: 'primary',
+        ...$attrs
+      },
+      on: {
+        click: this.clickHandle
+      }
+    };
+    return <el-button {...wrapProps}>{$slots['default']}</el-button>;
   }
 };
 </script>

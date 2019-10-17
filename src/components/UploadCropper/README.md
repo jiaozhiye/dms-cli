@@ -15,7 +15,7 @@ Vue.use(UploadCropper);
 `组件参数API`
 
 - actionUrl{String|必选参数，上传的地址}
-- initialValue{Array|默认显示图片的地址}
+- initialValue{Array|默认显示的图片项，值的格式为 { name: '文件名', url: '地址' }}
 - fixedSize{Array|裁剪框的宽高比，[w, h]}
 - isCalcHeight{Boolean|是否根据裁剪图片宽高比自动计算上传组件容器高度，默认值 false}
 - limit{Number|支持上传图片的数量，默认是 1}
