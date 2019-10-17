@@ -50,7 +50,7 @@ const instance = axios.create({
 const errorHandler = error => {
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText;
-  notifyAction(errortext, 'error', `请求错误 ${response.status}`);
+  response.status && notifyAction(errortext, 'error', `请求错误 ${response.status}`);
   store.dispatch('app/clearBtnLoading');
   return Promise.reject(error);
 };
@@ -71,7 +71,7 @@ instance.interceptors.response.use(response => {
   store.dispatch('app/clearBtnLoading');
   // 错误数据提示
   if (data.resultCode !== 200) {
-    notifyAction(data.errMsg, 'error');
+    data.errMsg && notifyAction(data.errMsg, 'error');
   }
   // token 过期，需要重新登录
   if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {

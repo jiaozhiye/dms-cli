@@ -779,7 +779,9 @@ export default {
               this.fileChangeHandle(fieldName, val);
               change(val);
             }}
-          />
+          >
+            文件上传
+          </UploadFile>
         </el-form-item>
       );
     },
