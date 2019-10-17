@@ -5,7 +5,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2019-08-18 12:02:51
  **/
-import axios from '@/api/fetch';
+import axios, { configHeaders } from '@/api/fetch';
 
 export default {
   name: 'UploadFile',
@@ -20,7 +20,7 @@ export default {
     },
     fileTypes: {
       type: Array,
-      default: () => ['jpg', 'png', 'pdf', 'doc']
+      default: () => ['jpg', 'png', 'pdf', 'xls']
     },
     isOnlyButton: {
       type: Boolean,
@@ -37,6 +37,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    containerStyle: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -103,10 +107,11 @@ export default {
     }
   },
   render() {
-    const { $props, $listeners, fileList, fileTypes } = this;
+    const { $props, $attrs, $slots, $listeners, fileList, fileTypes, containerStyle } = this;
     const wrapProps = {
       props: {
         action: $props.actionUrl,
+        headers: configHeaders,
         data: $props.params,
         fileList,
         limit: $props.limit,
@@ -121,12 +126,16 @@ export default {
       },
       on: $listeners
     };
+    const btnProps = {
+      attrs: {
+        type: 'primary',
+        ...$attrs
+      }
+    };
     return (
-      <div>
+      <div class="upload-btn" style={containerStyle}>
         <el-upload ref="upload" {...wrapProps}>
-          <el-button size="small" type="primary">
-            点击上传
-          </el-button>
+          <el-button {...btnProps}>{$slots['default']}</el-button>
           {!$props.isOnlyButton ? (
             <div slot="tip" class="el-upload__tip">
               {`只能上传 ${fileTypes.join(',')} 格式，文件大小不超过5M`}
@@ -138,3 +147,9 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+.upload-btn {
+  display: inline-block;
+}
+</style>

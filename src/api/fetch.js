@@ -32,6 +32,10 @@ const codeMessage = {
   504: '网关超时。'
 };
 
+const configHeaders = {
+  'x-access-token': getToken() || ''
+};
+
 const instance = axios.create({
   baseURL: config.serverUrl,
   timeout: 5000,
@@ -54,7 +58,7 @@ const errorHandler = error => {
 // 请求拦截
 instance.interceptors.request.use(config => {
   // 请求头信息，token 验证
-  config.headers = { 'x-access-token': getToken() || '' };
+  config.headers = configHeaders;
   if (config.mark) {
     store.dispatch('app/createBtnLoading', { [config.mark]: true });
   }
@@ -81,4 +85,5 @@ instance.interceptors.response.use(response => {
   return data;
 }, errorHandler);
 
+export { configHeaders };
 export default instance;
