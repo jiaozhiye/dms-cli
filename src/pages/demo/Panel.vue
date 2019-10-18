@@ -89,6 +89,7 @@ export default {
           placeholder: '所属分类',
           filterable: true,
           itemList: [{ text: '热点', value: '1' }, { text: '资讯', value: '2' }],
+          initialValue: '2',
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
         {

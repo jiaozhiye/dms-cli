@@ -1,204 +1,180 @@
-<template>
-  <div class="text">
-    <Spin :spinning="loading" tip="Loading...">
-      <div>标题</div>
-      <FormPanel :list="formList" @formChange="asdasd" />
-    </Spin>
-  </div>
-</template>
-
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019/6/20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 15:45:00
+ */
+import _ from 'lodash';
+import DragElement from './drag';
+
 export default {
   name: 'Dashboard',
   data() {
+    this.tHeadsList = ['序号', '销售1', '销售2', '销售3', '销售4', '销售5'];
     return {
-      loading: false,
-      formList: this.createFormList()
+      workers: [
+        {
+          id: '1',
+          name: '张三',
+          imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          num: 10
+        },
+        {
+          id: '2',
+          name: '李四',
+          imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          num: 20
+        }
+      ],
+      list: this.createTableList()
     };
   },
   methods: {
-    createFormList() {
-      return [
-        {
-          type: 'RANGE_INPUT_NUMBER',
-          label: '区间',
-          fieldName: 'bbb',
-          rules: [{ required: true, message: '请输入区间', trigger: 'blur' }]
-        },
-        {
-          type: 'INPUT',
-          label: '搜索',
-          fieldName: 'title',
-          placeholder: '请输入标题名称...',
-          initialValue: '',
-          rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
-        },
-        {
-          type: 'INPUT_CASCADER',
-          label: '联机',
-          fieldName: 'aaa',
-          placeholder: '请输入标题名称...',
-          style: { minWidth: '300px' },
-          options: {
-            titles: ['品牌', '车型', '车系']
-          },
-          itemList: [],
-          rules: [{ required: true, message: '请输入联机', trigger: 'change' }]
-        },
-        {
-          type: 'INPUT_CASCADER',
-          label: '联机2',
-          fieldName: 'ccc',
-          placeholder: '请输入标题名称...',
-          style: { minWidth: '300px' },
-          options: {
-            titles: ['品牌', '车型', '车系']
-          },
-          itemList: [],
-          rules: [{ required: true, message: '请输入联机', trigger: 'change' }]
-        },
-        {
-          type: 'UPLOAD_IMG',
-          label: '上传身份证',
-          fieldName: 'wayPicture',
-          placeholder: '上传身份证...',
-          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg' }],
-          upload: {
-            actionUrl: '/api/file/oss/upload',
-            fixedSize: [5, 3],
-            limit: 2,
-            isCalcHeight: true
-          },
-          change: val => {
-            console.log(111, val);
-          }
-        },
-        {
-          type: 'UPLOAD_FILE',
-          label: '上传文件',
-          fieldName: 'wayFiles',
-          placeholder: '上传文件...',
-          rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
-          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg' }],
-          upload: {
-            actionUrl: '/api/file/oss/upload',
-            limit: 2
-          }
-        }
-      ];
+    createTableList() {
+      let res = [];
+      for (let i = 0; i < 10; i++) {
+        let tmp = [];
+        this.tHeadsList.forEach(x => {
+          tmp.push({});
+        });
+        res.push(tmp);
+      }
+      return res;
     },
-    asdasd(val) {
-      console.log(val);
+    createWorkerNode(item) {
+      return (
+        <div class="worker">
+          <div class="info">
+            <span class="img">
+              <img src={item.imgUrl} />
+            </span>
+            <span class="name">{item.name}</span>
+          </div>
+          <div class="box">数量：{item.num}</div>
+        </div>
+      );
+    },
+    createCellNode(item) {
+      if (!Object.keys(item).length) return null;
+      return <div>asdasd</div>;
+    },
+    bindDragEvent() {
+      const nodes = Array.from(this.$refs.workerList.querySelectorAll('.worker'));
+      nodes.forEach(x => {
+        new DragElement({ $dragNode: x, targetNodes: [] });
+      });
     }
   },
-  created() {
-    this.formList[1].initialValue = 'asdas';
-    this.formList[2].initialValue = '1,1-2,1-2-1';
-  },
   mounted() {
-    this.loading = true;
-    setTimeout(() => {
-      this.formList[2].itemList = [
-        {
-          text: '一级分类1',
-          value: '1',
-          children: [
-            {
-              text: '二级分类一级分类1一级分类1一级分类11-1',
-              value: '1-1',
-              children: [
-                {
-                  text: '三级分类1-1',
-                  value: '1-1-1'
-                },
-                {
-                  text: '三级分类1-2',
-                  value: '1-1-2'
-                }
-              ]
-            },
-            {
-              text: '二级分类1-2',
-              value: '1-2',
-              children: [
-                {
-                  text: '三级分类2-1',
-                  value: '1-2-1'
-                },
-                {
-                  text: '三级分类2-2',
-                  value: '1-2-2'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          text: '一级分类2',
-          value: '2',
-          children: [
-            {
-              text: '二级分类2-1',
-              value: '2-1'
-            }
-          ]
-        }
-      ];
-      this.formList[3].itemList = [
-        {
-          text: '一级分类1',
-          value: '1',
-          children: [
-            {
-              text: '二级分类一级1',
-              value: '1-1',
-              children: [
-                {
-                  text: '三级分类1-1',
-                  value: '1-1-1'
-                },
-                {
-                  text: '三级分类1-2',
-                  value: '1-1-2'
-                }
-              ]
-            },
-            {
-              text: '二级分类1-2',
-              value: '1-2',
-              children: [
-                {
-                  text: '三级分类2-1',
-                  value: '1-2-1'
-                },
-                {
-                  text: '三级分类2-2',
-                  value: '1-2-2'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          text: '一级分类2',
-          value: '2',
-          children: [
-            {
-              text: '二级分类2-1',
-              value: '2-1'
-            }
-          ]
-        }
-      ];
-      this.loading = false;
-    }, 3000);
+    this.bindDragEvent();
+  },
+  render() {
+    return (
+      <div>
+        <div ref="workerList" class="worker-list">
+          {this.workers.map(x => this.createWorkerNode(x))}
+        </div>
+        <div class="plan-container">
+          <table cellspacing="0" cellpadding="0" border="0" class="table-wrap">
+            <thead>
+              <tr>
+                {this.tHeadsList.map((x, index) => (
+                  <th key={x} width={index === 0 ? 40 : null}>
+                    {x}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {this.list.map((arr, index) => (
+                <tr key={`row-${index}`}>
+                  {arr.map((x, i) => {
+                    if (i === 0) {
+                      return <td disabled>{index + 1}</td>;
+                    }
+                    return (
+                      <td x={index} y={i}>
+                        {this.createCellNode(x)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   }
 };
 </script>
 
 <style scoped lang="less">
-.text {
-  font-size: 26px;
-  padding-top: 30vh;
+.worker {
+  border: 1px solid @borderColorSecondary;
+  border-radius: @borderRadius;
+  padding: @modulePadding;
+  box-shadow: @boxShadow;
+  background-color: #fff;
+  position: relative;
+  .info {
+    .img {
+      display: inline-block;
+      overflow: hidden;
+      width: 24px;
+      height: 24px;
+      border-radius: @borderRadius;
+      vertical-align: middle;
+      img {
+        object-fit: cover;
+        display: block;
+        height: 100%;
+      }
+    }
+    .name {
+      display: inline-block;
+      margin-left: 5px;
+      line-height: 24px;
+      vertical-align: middle;
+    }
+  }
+  .box {
+    margin-top: 7px;
+    padding-top: 5px;
+    border-top: 1px solid @borderColorSecondary;
+  }
+}
+.worker-list {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+  .worker {
+    min-width: 80px;
+    margin-right: @moduleMargin;
+    cursor: move;
+  }
+}
+.plan-container {
+  margin-top: 10px;
+  .table-wrap {
+    width: 100%;
+    border: 1px solid @borderColorSecondary;
+    thead tr th {
+      text-align: left;
+      font-weight: 700;
+      padding: 10px 5px;
+      border: 1px solid @borderColorSecondary;
+      background-color: @backgroundColor;
+      vertical-align: middle;
+    }
+    tbody tr td {
+      padding: 5px;
+      height: 30px;
+      border: 1px solid @borderColorSecondary;
+      vertical-align: middle;
+    }
+  }
 }
 </style>
