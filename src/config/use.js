@@ -44,14 +44,17 @@ Vue.use(LazyLoadTab);
 import BasePrint from '@/components/BasePrint';
 Vue.use(BasePrint);
 
-import ButtonArea from '@/components/ButtonArea';
-Vue.use(ButtonArea);
-
 import MultiuseButton from '@/components/MultiuseButton';
 Vue.use(MultiuseButton);
 
 import AjaxButton from '@/components/AjaxButton';
 Vue.use(AjaxButton);
+
+import ButtonArea from '@/components/ButtonArea';
+Vue.use(ButtonArea);
+
+import Anchor from '@/components/Anchor';
+Vue.use(Anchor);
 
 import BreakSpace from '@/components/BreakSpace';
 Vue.use(BreakSpace);
@@ -59,8 +62,11 @@ Vue.use(BreakSpace);
 import Spin from '@/components/Spin';
 Vue.use(Spin);
 
-import Anchor from '@/components/Anchor';
-Vue.use(Anchor);
-
 import Tinymce from '@/components/Tinymce';
 Vue.use(Tinymce);
+
+import UploadFile from '@/components/UploadFile';
+Vue.use(UploadFile);
+
+import DownloadFile from '@/components/DownloadFile';
+Vue.use(DownloadFile);
