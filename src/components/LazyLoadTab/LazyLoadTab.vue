@@ -5,6 +5,8 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
+import _ from 'lodash';
+
 export default {
   name: 'LazyLoadTab',
   props: {
@@ -63,9 +65,10 @@ export default {
     createTabPanel(h) {
       return this.tabMenus.map(x => {
         // JSX 中的动态组件不能用 <component /> 标签，必须这样实现
-        let component = h(this.$options.components[x.title], {
-          props: x.params,
-          on: x.on
+        const component = h(this.$options.components[x.title], {
+          // 解决 LazyLoadTab 调用时，传入的参数改变，不触发子组件重新渲染的问题
+          props: _.cloneDeep(x.params),
+          on: { ...x.on }
         });
         return (
           <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
