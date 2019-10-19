@@ -6,41 +6,63 @@
  * @Last Modified time: 2019-06-20 15:45:00
  */
 import _ from 'lodash';
+import moment from 'moment';
 import DragElement from './drag';
+
+// 模拟数据
+const dataList = [
+  {
+    id: '1',
+    name: '张三',
+    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+    num: 10,
+    time: '00:00:00'
+  },
+  {
+    id: '2',
+    name: '李四',
+    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+    num: 20,
+    time: '00:00:00'
+  },
+  {
+    id: '3',
+    name: '刘德华',
+    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+    num: 50,
+    time: '00:00:00'
+  },
+  {
+    id: '4',
+    name: '周润发',
+    imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+    num: 60,
+    time: '00:00:00'
+  }
+];
 
 export default {
   name: 'Dashboard',
   data() {
-    this.tHeadsList = ['序号', '销售1', '销售2', '销售3', '销售4', '销售5'];
-    this.dataList = [
-      {
-        id: '1',
-        name: '张三',
-        imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        num: 10,
-        time: '12:12:12'
-      },
-      {
-        id: '2',
-        name: '李四',
-        imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        num: 20,
-        time: '15:15:15'
-      },
-      {
-        id: '3',
-        name: '刘德华',
-        imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        num: 50,
-        time: '05:05:05'
-      }
-    ];
+    // 表头，固定不变
+    this.tHeadsList = ['序号', '接待中', '交车中', '就餐', '内部事务', '休假'];
+    // 实例化的拖拽对象集合
+    this.instances = {};
+    // 定时器
+    this.timer = {};
     return {
-      workers: [...this.dataList],
+      workers: [...dataList],
       list: this.createTableList()
     };
   },
+  watch: {
+    workers() {
+      this.removeDragEvent();
+      setTimeout(() => this.bindDragEvent(), 0);
+    }
+  },
   methods: {
+    // 创建 Table 列表数据
     createTableList() {
       let res = [];
       for (let i = 0; i < 10; i++) {
@@ -52,56 +74,95 @@ export default {
       }
       return res;
     },
-    createWorkerNode(item, pos = []) {
+    stopRunningTime(id) {
+      this.timer[id] && clearInterval(this.timer[id]);
+    },
+    runningTime(id, data, key) {
+      this.stopRunningTime(id);
+      // 恢复时间
+      data[key] = '00:00:00';
+      // 定时器
+      this.timer[id] = setInterval(() => {
+        data[key] = moment(`1970-01-01 ${data[key]}`)
+          .add(1, 's')
+          .format('HH:mm:ss');
+      }, 1000);
+    },
+    // 创建员工节点(JSX)
+    createWorkerNode(item, coor = []) {
       return (
-        <div class="worker" data-id={item.id}>
+        <div key={item.id} class="worker" data-id={item.id}>
           <span class="img">
             <img src={item.imgUrl} />
           </span>
           <span class="name">{item.name}</span>
-          {pos.length ? <span class="time-len">{item.time}</span> : null}
-          {pos.length ? (
-            <span class="del-btn" onClick={() => this.removeHandle(item.id, pos)}>
+          {coor.length ? <span class="time-len">{item.time}</span> : null}
+          {coor.length ? (
+            <span class="del-btn" onClick={() => this.removeHandle(item.id, coor)}>
               <i class="el-icon-delete"></i>
             </span>
           ) : null}
         </div>
       );
     },
-    removeHandle(id, [x, y]) {
-      this.list[x][y] = null;
-      this.workers.push(this.dataList.find(x => x.id == id));
-      this.list = [...this.list];
-      this.$nextTick(() => {
-        // this.bindDragEvent();
-      });
-    },
-    createTableCellNode(item, pos) {
+    // 创建 Table 单元格节点
+    createTableCellNode(item, coor) {
       if (!item) return null;
-      return this.createWorkerNode(item, pos);
+      return this.createWorkerNode(item, coor);
     },
+    // 获取 Table td 单元格集合
     getTableTdsHandle() {
       const tableTds = Array.from(document.querySelectorAll('.table-wrap > tbody tr td'));
       return tableTds.filter(x => !x.getAttribute('disabled'));
     },
+    // 从 Table 移除员工
+    removeHandle(id, [x, y]) {
+      this.list[x][y] = null;
+      this.workers.push(dataList.find(x => x.id == id));
+      this.list = [...this.list];
+      this.stopRunningTime(id);
+    },
+    // 获取 worker 节点的 data-id
+    getNodeDataId(el) {
+      return el.getAttribute('data-id') || '';
+    },
+    // 给员工节点绑定事件
     bindDragEvent() {
-      const targets = Array.from(this.$refs.workerList.querySelectorAll('.worker'));
-      targets.forEach(x => {
-        new DragElement({
+      const workerNodes = Array.from(this.$refs.workerList.querySelectorAll('.worker'));
+      workerNodes.forEach(x => {
+        this.instances[this.getNodeDataId(x)] = new DragElement({
           $dragNode: x,
           targetNodes: this.getTableTdsHandle(),
-          callback: (el, target) => {
-            const index = this.workers.findIndex(x => x.id === el.getAttribute('data-id'));
-            this.list[target.getAttribute('x')][target.getAttribute('y')] = this.workers[index];
-            this.workers.splice(index, 1);
+          callback: (currentEl, targetEl) => {
+            const curId = this.getNodeDataId(currentEl);
+            const index = this.workers.findIndex(x => x.id === curId);
+            if (index === -1) return;
+            const worker = this.workers[index];
+            this.runningTime(curId, worker, 'time');
+            // Table 插入记录
+            this.list[targetEl.getAttribute('x')][targetEl.getAttribute('y')] = worker;
             this.list = [...this.list];
+            // workerList 移除记录
+            this.workers.splice(index, 1);
           }
         });
       });
+    },
+    // 移除事件，释放内存
+    removeDragEvent() {
+      for (let key in this.instances) {
+        if (this.instances[key]) {
+          this.instances[key].destroye();
+        }
+      }
+      this.instances = {};
     }
   },
   mounted() {
     this.bindDragEvent();
+  },
+  beforeDestroy() {
+    this.removeDragEvent();
   },
   render() {
     return (
@@ -158,7 +219,7 @@ export default {
     overflow: hidden;
     width: 24px;
     height: 24px;
-    border-radius: @borderRadius;
+    border-radius: 50%;
     img {
       object-fit: cover;
       display: block;
