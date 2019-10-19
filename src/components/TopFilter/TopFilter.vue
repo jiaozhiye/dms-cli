@@ -32,6 +32,10 @@ export default {
     isSubmitBtn: {
       type: Boolean,
       default: true
+    },
+    rows: {
+      type: Number,
+      default: 1
     }
   },
   data() {
@@ -915,10 +919,11 @@ export default {
       ) : null;
     },
     createFormLayout() {
-      const { cols, expand, collapse } = this;
+      const { cols, rows, expand, collapse } = this;
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const count = expand ? formItems.length : cols - 1;
+      const maxRows = Math.ceil(formItems.length / cols) - 1;
+      const count = expand ? formItems.length : cols * (rows > maxRows ? maxRows : rows) - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
           <el-col key={i} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>

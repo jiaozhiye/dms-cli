@@ -16,6 +16,7 @@ Vue.use(TopFilter);
 
 - list{Array|头部筛选条件数组，支持动态赋值(数据数组必须是新的引用)}
 - cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
+- rows{Number|收起状态显示行数，默认是 1}
 - labelWidth{Number|label 标签的宽度，默认是 80}
 - filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
 - collapse{Boolean|是否显示展开/收起按钮，默认是 true}
