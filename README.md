@@ -45,6 +45,7 @@ $ npm run build
 - 提供的组件
   - Anchor 锚点组件
   - Spin 加载中组件
+  - SvgIcon svg格式的图标组件
   - ButtonArea 功能按钮区的容器组件
   - BreakSpace 功能模块的分隔符组件
   - BaseDialog 模态框组件，支持子组件的销毁
@@ -53,6 +54,9 @@ $ npm run build
   - LazyLoadTab 选项卡的按需/动态加载
   - TopFilter 页面头部筛选组件
   - UploadCropper 图片上传组件，支持图片的裁剪和压缩
+  - UploadFile 附件上传组件
+  - DownloadFile 文件导出及下载组件
+  - Pinyin 中文字符转换成拼音插件
   - BasePrint 基于 Lodop 插件的打印组件
   - FormPanel 表单操作的功能组件
   - Tinymce 富文本编辑器组件
