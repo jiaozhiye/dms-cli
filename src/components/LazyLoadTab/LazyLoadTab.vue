@@ -67,8 +67,8 @@ export default {
         // JSX 中的动态组件不能用 <component /> 标签，必须这样实现
         const component = h(this.$options.components[x.title], {
           // 解决 LazyLoadTab 调用时，传入的参数改变，不触发子组件重新渲染的问题
-          props: _.cloneDeep(x.params),
-          on: { ...x.on }
+          props: x.params,
+          on: x.on
         });
         return (
           <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
