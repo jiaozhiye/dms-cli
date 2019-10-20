@@ -55,12 +55,6 @@ export default {
       list: this.createTableList()
     };
   },
-  watch: {
-    workers() {
-      this.removeDragEvent();
-      setTimeout(() => this.bindDragEvent(), 0);
-    }
-  },
   methods: {
     // 创建 Table 列表数据
     createTableList() {
@@ -88,6 +82,11 @@ export default {
           .format('HH:mm:ss');
       }, 1000);
     },
+    // 创建 Table 单元格节点
+    createTableCellNode(item, coor) {
+      if (!item) return null;
+      return this.createWorkerNode(item, coor);
+    },
     // 创建员工节点(JSX)
     createWorkerNode(item, coor = []) {
       return (
@@ -105,47 +104,58 @@ export default {
         </div>
       );
     },
-    // 创建 Table 单元格节点
-    createTableCellNode(item, coor) {
-      if (!item) return null;
-      return this.createWorkerNode(item, coor);
-    },
-    // 获取 Table td 单元格集合
-    getTableTdsHandle() {
-      const tableTds = Array.from(document.querySelectorAll('.table-wrap > tbody tr td'));
-      return tableTds.filter(x => !x.getAttribute('disabled'));
-    },
     // 从 Table 移除员工
     removeHandle(id, [x, y]) {
       this.list[x][y] = null;
       this.workers.push(dataList.find(x => x.id == id));
       this.list = [...this.list];
       this.stopRunningTime(id);
+      // 绑定拖拽事件
+      this.$nextTick(() => {
+        const workers = this.getWorkerNodes();
+        // 添加到员工列表中的目标节点
+        const target = workers[workers.length - 1];
+        if (this.getNodeDataId(target) !== id) return;
+        // 绑定事件
+        this.createDragInstance(target);
+      });
     },
     // 获取 worker 节点的 data-id
     getNodeDataId(el) {
       return el.getAttribute('data-id') || '';
     },
+    // 获取 worker 节点列表
+    getWorkerNodes() {
+      return Array.from(this.$refs.workerList.querySelectorAll('.worker'));
+    },
+    // 获取 Table td 单元格集合
+    getTableTdsHandle() {
+      const tableTds = Array.from(document.querySelectorAll('.table-wrap > tbody tr td'));
+      return tableTds.filter(x => !x.getAttribute('disabled'));
+    },
+    // 创建拖拽实例
+    createDragInstance(node) {
+      this.instances[this.getNodeDataId(node)] = new DragElement({
+        $dragNode: node,
+        targetNodes: this.getTableTdsHandle(),
+        callback: (currentEl, targetEl) => {
+          const curId = this.getNodeDataId(currentEl);
+          const index = this.workers.findIndex(x => x.id === curId);
+          if (index === -1) return;
+          const worker = this.workers[index];
+          this.runningTime(curId, worker, 'time');
+          // Table 插入记录
+          this.list[targetEl.getAttribute('x')][targetEl.getAttribute('y')] = worker;
+          this.list = [...this.list];
+          // workerList 移除记录
+          this.workers.splice(index, 1);
+        }
+      });
+    },
     // 给员工节点绑定事件
     bindDragEvent() {
-      const workerNodes = Array.from(this.$refs.workerList.querySelectorAll('.worker'));
-      workerNodes.forEach(x => {
-        this.instances[this.getNodeDataId(x)] = new DragElement({
-          $dragNode: x,
-          targetNodes: this.getTableTdsHandle(),
-          callback: (currentEl, targetEl) => {
-            const curId = this.getNodeDataId(currentEl);
-            const index = this.workers.findIndex(x => x.id === curId);
-            if (index === -1) return;
-            const worker = this.workers[index];
-            this.runningTime(curId, worker, 'time');
-            // Table 插入记录
-            this.list[targetEl.getAttribute('x')][targetEl.getAttribute('y')] = worker;
-            this.list = [...this.list];
-            // workerList 移除记录
-            this.workers.splice(index, 1);
-          }
-        });
+      this.getWorkerNodes().forEach(x => {
+        this.createDragInstance(x);
       });
     },
     // 移除事件，释放内存
