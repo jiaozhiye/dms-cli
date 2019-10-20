@@ -15,16 +15,14 @@ export default {
     serverFilter: false
   },
   charts: {
-    fontsize: {
-      // 图例
-      chartLegendSize: 14,
-      // 饼状图显示文字
-      chartSeriesSize: 14,
-      // 柱状图x的
-      chartXAxisSize: 14,
-      chartYAxisSize: 14,
-      // tooltip
-      chartTooltipSize: 14
-    }
+    // 图例文字
+    chartLegendSize: 14,
+    // 饼状图文字
+    chartSeriesSize: 14,
+    // 柱状图 x/y 轴的文字
+    chartXAxisSize: 14,
+    chartYAxisSize: 14,
+    // tooltip 的文字
+    chartTooltipSize: 14
   }
 };

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Spin :spinning="loading" tip="Loading...">
-      <div ref="chart" :style="containerStyle" />
+      <div ref="chart" class="chartWrap" :style="containerStyle" />
     </Spin>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import echarts from 'echarts';
 import config from '@/config';
 // eharts  配置
-const chartsConfig = config.charts.fontsize;
+const chartConf = config.charts;
 
 export default {
   name: '',
@@ -41,21 +41,23 @@ export default {
   methods: {
     async initial() {
       this.loading = true;
-      try {
-        const res = await this.fetchapi(this.params);
-        if (res.resultCode === 200) {
-          // 构建表格数据
-          const xNames = res.data.map(item => item.name);
-          const xValue = res.data.map(item => item.value);
-          this.draw(xNames, xValue);
-        }
-      } catch (e) {}
+      if (process.env.MOCK_DATA === 'true') {
+        const { chart1 } = require('@/mock/chartData').default;
+        this.draw(chart1);
+      } else {
+        try {
+          const res = await this.fetchapi(this.params);
+          if (res.resultCode === 200) {
+            this.draw(res.data);
+          }
+        } catch (e) {}
+      }
       this.loading = false;
     },
-    draw(xNames, xValue) {
+    draw({ names, values }) {
       const myChart = echarts.init(this.$refs.chart);
       const option = {
-        color: ['#f68862'],
+        color: ['#97bfff'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -71,47 +73,48 @@ export default {
         },
         xAxis: [
           {
+            // name: '月份',
             type: 'category',
-            data: xNames,
+            data: names,
             axisTick: {
               alignWithLabel: true
             },
             axisLabel: {
               show: true,
               textStyle: {
-                fontSize: config.chartXAxisSize
+                fontSize: chartConf.chartXAxisSize
               }
             }
           }
         ],
         yAxis: [
           {
-            name: '次数',
+            name: 'kW·h/100km',
             type: 'value',
             nameTextStyle: {
-              fontSize: config.chartYAxisSize
+              fontSize: chartConf.chartYAxisSize
             },
             axisLabel: {
               formatter: '{value}',
               textStyle: {
-                fontSize: config.chartYAxisSize
+                fontSize: chartConf.chartYAxisSize
               }
             }
           }
         ],
         series: [
           {
-            name: '次数',
+            name: '电耗',
             type: 'bar',
             barWidth: '30%',
-            data: xValue,
+            data: values,
             itemStyle: {
               normal: {
                 label: {
                   show: true,
                   position: 'top',
                   textStyle: {
-                    fontSize: config.chartSeriesSize
+                    fontSize: chartConf.chartSeriesSize
                   }
                 }
               }
@@ -132,4 +135,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.chartWrap {
+  width: 100%;
+  min-height: 400px;
+}
 </style>
