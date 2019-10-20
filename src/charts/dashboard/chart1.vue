@@ -29,6 +29,8 @@ export default {
     }
   },
   data() {
+    // echart 实例
+    this.myChart = null;
     return {
       loading: false
     };
@@ -55,7 +57,7 @@ export default {
       this.loading = false;
     },
     draw({ names, values }) {
-      const myChart = echarts.init(this.$refs.chart);
+      this.myChart = echarts.init(this.$refs.chart);
       const option = {
         color: ['#97bfff'],
         tooltip: {
@@ -122,14 +124,20 @@ export default {
           }
         ]
       };
-      if (option && typeof option === 'object') {
-        myChart.clear();
-        myChart.setOption(option, true);
+      if (option && this.myChart) {
+        this.myChart.clear();
+        this.myChart.setOption(option, true);
       }
     }
   },
   mounted() {
     this.initial();
+  },
+  beforeDestroy() {
+    if (this.myChart) {
+      this.myChart.dispose();
+    }
+    this.myChart = null;
   }
 };
 </script>
