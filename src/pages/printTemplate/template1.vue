@@ -2,13 +2,6 @@
   <div ref="print" style="width:100%; margin: 0 auto;" v-show="isPreview">
     <table>
       <tr>
-        <td align="right">
-          <img src="@/assets/img/print-logo.jpg" />
-        </td>
-      </tr>
-    </table>
-    <table>
-      <tr>
         <td colspan="7" align="center" height="24" style="font-size: 24px;">出库单</td>
       </tr>
       <tr>

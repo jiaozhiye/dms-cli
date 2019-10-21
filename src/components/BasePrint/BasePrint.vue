@@ -43,6 +43,7 @@ export default {
       // 加载全局 style 样式
       _html_ = this.createGlobalStyle(_html_);
       // 处理分页符
+      _html_ = this.createPrintLogo(_html_);
       _html_ = this.createPageBreak(_html_);
       // 执行打印
       this.createPrintPage(_html_);
@@ -74,6 +75,21 @@ export default {
     },
     createGlobalStyle(_html_) {
       return css.style + _html_;
+    },
+    createPrintLogo(_html_) {
+      const logoHtml = `
+        <table>
+          <tr>
+            <td width="50%" align="left" style="padding-top: 20px; padding-bottom: 20px;">
+              <img src="/static/img/logo_l.png" width="150" style="margin-left: 20px;" />
+            </td>
+            <td width="50%" align="right" style="padding-top: 20px; padding-bottom: 20px;">
+              <img src="/static/img/logo_r.png" width="300" style="margin-right: 20px;" />
+            </td>
+          </tr>
+        </table>
+      `;
+      return logoHtml + _html_;
     },
     createPageBreak(_html_) {
       // 正则处理分页符，vue 的 template 把 page-break-after 改成了 break-after，

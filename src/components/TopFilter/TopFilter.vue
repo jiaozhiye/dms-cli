@@ -895,15 +895,17 @@ export default {
     toggleHandler() {
       this.expand = !this.expand;
     },
-    createButton(n, total) {
+    createButton(rows, total) {
       const { cols, expand, collapse } = this;
       const colSpan = 24 / cols;
-      let offset = ((cols - (n % cols)) % cols) * colSpan;
-      if (!expand && total < cols) {
-        offset = (cols - total - 1) * colSpan;
+      // 默认收起
+      let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
+      // 展开
+      if (expand) {
+        offset = cols - (total % cols) - 1;
       }
       return this.isSubmitBtn ? (
-        <el-col key="-" span={colSpan} offset={offset} style={{ textAlign: 'right' }}>
+        <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
           <el-button size="small" type="primary" onClick={this.submitForm}>
             搜 索
           </el-button>
@@ -922,8 +924,8 @@ export default {
       const { cols, rows, expand, collapse } = this;
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const maxRows = Math.ceil(formItems.length / cols) - 1;
-      const count = expand ? formItems.length : cols * (rows > maxRows ? maxRows : rows) - 1;
+      const defaultPlayRows = rows > Math.ceil(formItems.length / cols) ? Math.ceil(formItems.length / cols) : rows;
+      const count = expand ? formItems.length : defaultPlayRows * cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
           <el-col key={i} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
@@ -931,7 +933,7 @@ export default {
           </el-col>
         );
       });
-      return [...colFormItems, this.createButton(count + 1, formItems.length)];
+      return [...colFormItems, this.createButton(defaultPlayRows, formItems.length)];
     },
     // 函数防抖
     debounce(fn, delay) {
