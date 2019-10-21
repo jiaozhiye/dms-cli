@@ -165,7 +165,7 @@ export default {
           this.instances[key].destroye();
         }
       }
-      this.instances = {};
+      this.instances = null;
     }
   },
   mounted() {

@@ -1,89 +1,80 @@
 <template>
-  <div ref="print" style="width: 800px; margin: 0 auto;" v-show="isPreview">
-    <table cellspacing="0" width="100%" style="border-collapse: collapse; border-spacing: 0;">
+  <div ref="print" style="width:100%; margin: 0 auto;" v-show="isPreview">
+    <table>
       <tr>
         <td align="right">
           <img src="@/assets/img/print-logo.jpg" />
         </td>
       </tr>
     </table>
-    <table cellspacing="0" width="100%" style="border-collapse: collapse; border-spacing: 0;">
+    <table>
       <tr>
         <td colspan="7" align="center" height="24" style="font-size: 24px;">出库单</td>
       </tr>
       <tr>
-        <td colspan="7" align="right" height="26" style="font-size: 14px;">打印时间：{{ nowTime }}&nbsp;</td>
+        <td colspan="7" align="right" height="26">打印时间：{{ nowTime }}&nbsp;</td>
       </tr>
       <tr>
-        <td
-          align="right"
-          width="10%"
-          height="26"
-          style="border-top: 1px solid #000; font-size: 14px;"
-        >出库单号：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.ckdh }}</td>
-        <td align="right" width="10%" style="border-top: 1px solid #000; font-size: 14px;">对应单号：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.dydh }}</td>
-        <td align="right" width="10%" style="border-top: 1px solid #000; font-size: 14px;">车型：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.cx }}</td>
-        <td width="8%" style="border-top: 1px solid #000; font-size: 14px;">领料出库</td>
+        <td align="right" width="10%" height="26">出库单号：</td>
+        <td>{{ data.ckdh }}</td>
+        <td align="right" width="10%">对应单号：</td>
+        <td>{{ data.dydh }}</td>
+        <td align="right" width="10%">车型：</td>
+        <td>{{ data.cx }}</td>
+        <td width="8%">领料出库</td>
       </tr>
       <tr>
-        <td align="right" height="26" style="border-top: 1px solid #000; font-size: 14px;">客户名称：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.khmc }}</td>
-        <td align="right" style="border-top: 1px solid #000; font-size: 14px;">车牌号：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.cph }}</td>
-        <td align="right" style="border-top: 1px solid #000; font-size: 14px;">仓库库号：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ data.ckkh }}</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">一般领料</td>
+        <td align="right" height="26">客户名称：</td>
+        <td>{{ data.khmc }}</td>
+        <td align="right">车牌号：</td>
+        <td>{{ data.cph }}</td>
+        <td align="right">仓库库号：</td>
+        <td>{{ data.ckkh }}</td>
+        <td>一般领料</td>
       </tr>
     </table>
-    <table cellspacing="0" width="100%" style="border-collapse: collapse; border-spacing: 0;">
+    <table class="bor">
       <tr>
-        <td width="5%" height="26" style="border: 1px solid #000; font-size: 14px;">序号</td>
-        <td width="20%" style="border: 1px solid #000; font-size: 14px;">备件代码</td>
-        <td style="border: 1px solid #000; font-size: 14px;">备件名称</td>
-        <td width="6%" style="border: 1px solid #000; font-size: 14px;">单位</td>
-        <td width="10%" style="border: 1px solid #000; font-size: 14px;">出库单价</td>
-        <td width="10%" style="border: 1px solid #000; font-size: 14px;">出库数量</td>
-        <td width="10%" style="border: 1px solid #000; font-size: 14px;">结存数量</td>
-        <td width="6%" style="border: 1px solid #000; font-size: 14px;">库区</td>
-        <td width="6%" style="border: 1px solid #000; font-size: 14px;">库位</td>
-        <td width="7%" style="border: 1px solid #000; font-size: 14px;">性质</td>
+        <td width="5%" height="26">序号</td>
+        <td width="20%">备件代码</td>
+        <td>备件名称</td>
+        <td width="6%">单位</td>
+        <td width="10%">出库单价</td>
+        <td width="10%">出库数量</td>
+        <td width="10%">结存数量</td>
+        <td width="6%">库区</td>
+        <td width="6%">库位</td>
+        <td width="7%">性质</td>
       </tr>
       <tr v-for="x in data.items" :key="x.id">
-        <td height="24" style="border: 1px solid #000; font-size: 14px;">{{ x.id }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.bjdm }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.bjmc }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.dw }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.ckdj }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.cksl }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.jcsl }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.kq }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.kw }}</td>
-        <td style="border: 1px solid #000; font-size: 14px;">{{ x.xz }}</td>
+        <td height="24">{{ x.id }}</td>
+        <td>{{ x.bjdm }}</td>
+        <td>{{ x.bjmc }}</td>
+        <td>{{ x.dw }}</td>
+        <td>{{ x.ckdj }}</td>
+        <td>{{ x.cksl }}</td>
+        <td>{{ x.jcsl }}</td>
+        <td>{{ x.kq }}</td>
+        <td>{{ x.kw }}</td>
+        <td>{{ x.xz }}</td>
       </tr>
     </table>
-    <table cellspacing="0" width="100%" style="border-collapse: collapse; border-spacing: 0;">
+    <table class="bor-through">
       <tr>
-        <td align="right" width="8%" height="26" style="font-size: 14px;">总金额：</td>
-        <td style="font-size: 14px;">{{ totalPrice }} 元</td>
-        <td align="right" width="8%" style="font-size: 14px;">发料人：</td>
-        <td style="font-size: 14px;">{{ data.flr }}</td>
-        <td align="right" width="8%" style="font-size: 14px;">库管员：</td>
-        <td style="font-size: 14px;">{{ data.kgy }}</td>
-        <td align="right" width="10%" style="font-size: 14px;">领料人：</td>
-        <td width="17%" style="font-size: 14px;">{{ data.llr }}</td>
+        <td align="right" width="8%" height="26">总金额：</td>
+        <td>{{ totalPrice }} 元</td>
+        <td align="right" width="8%">发料人：</td>
+        <td>{{ data.flr }}</td>
+        <td align="right" width="8%">库管员：</td>
+        <td>{{ data.kgy }}</td>
+        <td align="right" width="10%">领料人：</td>
+        <td width="17%">{{ data.llr }}</td>
       </tr>
       <tr>
-        <td
-          align="right"
-          height="26"
-          style="border-top: 1px solid #000; font-size: 14px;"
-        >备&nbsp;&nbsp;&nbsp;&nbsp;注：</td>
-        <td colspan="5" style="border-top: 1px solid #000; font-size: 14px;">{{ data.desc }}</td>
-        <td align="right" style="border-top: 1px solid #000; font-size: 14px;">打印时间：</td>
-        <td style="border-top: 1px solid #000; font-size: 14px;">{{ nowTime }}</td>
+        <td align="right" height="26">备&nbsp;&nbsp;&nbsp;&nbsp;注：</td>
+        <td colspan="5">{{ data.desc }}</td>
+        <td align="right">打印时间：</td>
+        <td>{{ nowTime }}</td>
       </tr>
     </table>
   </div>
