@@ -118,6 +118,7 @@ export default {
         showFileList: !$props.isOnlyButton,
         multiple: false,
         withCredentials: true,
+        disabled: $props.disabled,
         onPreview: this.previewFileHandle,
         beforeUpload: this.beforeUploadHandle,
         onRemove: this.removeFileHandle,
