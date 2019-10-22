@@ -1,13 +1,15 @@
 <template>
   <div class="logo">
     <router-link to="/" :title="title">
-      <img src="@/assets/img/logo.png" alt="logo" :style="{ width: collapsed ? '35px' : '70px' }" />
-      <h1 v-if="!collapsed">{{ title }}</h1>
+      <img :class="imgClassName" :src="imgUrl" />
     </router-link>
   </div>
 </template>
 
 <script>
+const logoEp = require('@/assets/img/logo_ep.png');
+const logo = require('@/assets/img/logo.png');
+
 export default {
   name: 'Logo',
   props: {
@@ -19,6 +21,25 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    imgUrl() {
+      return !this.collapsed ? logoEp : logo;
+    },
+    imgClassName() {
+      const res = !this.collapsed ? `img1` : `img2`;
+      return this.isInitial ? `${res} none` : res;
+    }
+  },
+  data() {
+    return {
+      isInitial: true
+    };
+  },
+  watch: {
+    collapsed(val) {
+      this.isInitial = false;
+    }
   }
 };
 </script>
@@ -26,23 +47,48 @@ export default {
 <style lang="less" scoped>
 .logo {
   height: 60px;
-  line-height: 60px;
-  padding-left: 15px;
-  transition: all 0.3s ease;
+  line-height: 58px;
   background-color: @logoBgColor;
   overflow: hidden;
-  img {
-    display: inline-block;
-    vertical-align: middle;
-    margin: -2px 5px 0 0;
-    transition: all 0.3s ease;
+  .router-link-active {
+    display: block;
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .img1 {
+      width: 140px;
+      margin-left: 24px;
+      animation: show 0.3s ease both;
+    }
+    .img2 {
+      width: 140px;
+      margin-left: 12px;
+      animation: hide 0.3s ease both;
+    }
+    .none {
+      animation: none;
+    }
   }
-  h1 {
-    display: inline-block;
-    color: #fff;
-    font-size: 16px;
-    font-weight: normal;
-    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+}
+@keyframes show {
+  0% {
+    opacity: 0;
+    width: 40px;
+  }
+  100% {
+    opacity: 1;
+    width: 140px;
+  }
+}
+@keyframes hide {
+  0% {
+    opacity: 0;
+    width: 80px;
+  }
+  100% {
+    opacity: 1;
+    width: 40px;
   }
 }
 </style>

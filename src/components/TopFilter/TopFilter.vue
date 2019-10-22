@@ -846,6 +846,18 @@ export default {
       if (ev.keyCode !== 13) return;
       this.submitForm(ev);
     },
+    isValidateValue(val) {
+      return Array.isArray(val) ? val.length : !!val;
+    },
+    // 表单数据通过非空校验，返回 true，否则返回 false
+    isNotEmptyValidate(form) {
+      for (let key in this.rules) {
+        if (this.rules[key].some(x => x.required) && !this.isValidateValue(form[key])) {
+          return false;
+        }
+      }
+      return true;
+    },
     excuteFormData(form) {
       this.formItemList
         .filter(x => ['RANGE_DATE', 'RANGE_INPUT_NUMBER'].includes(x.type))
@@ -888,8 +900,8 @@ export default {
     resetForm() {
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
-      this.$emit('filterChange', this.form);
-      // 解决如期区间(拆分后)重复校验的 bug
+      this.isNotEmptyValidate(this.form) && this.$emit('filterChange', this.form);
+      // 解决日期区间(拆分后)重复校验的 bug
       this.$nextTick(() => this.$refs.form.clearValidate());
     },
     toggleHandler() {
