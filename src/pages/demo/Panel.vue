@@ -10,7 +10,7 @@
           <BreakSpace label="哈哈哈"></BreakSpace>
         </div>
         <div class="line" id="row-03">
-          <tinymce v-model="content" :height="300" />
+          <tinymce v-model="content" actionUrl="/api/file/oss/upload" :height="300" />
         </div>
       </Anchor>
     </div>

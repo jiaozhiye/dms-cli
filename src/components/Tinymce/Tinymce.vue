@@ -2,7 +2,12 @@
   <div :class="{fullscreen: fullscreen}" class="tinymce-container editor-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
-      <UploadImg class="editor-upload-btn" :actionUrl="actionUrl" @successCBK="imageSuccessCBK" />
+      <UploadImg
+        class="editor-upload-btn"
+        :actionUrl="actionUrl"
+        :fixedSize="fixedSize"
+        @success="imageSuccessHandle"
+      />
     </div>
   </div>
 </template>
@@ -32,7 +37,14 @@ export default {
     },
     actionUrl: {
       type: String,
+      required: true,
       default: ''
+    },
+    fixedSize: {
+      type: Array,
+      default() {
+        return [5, 4];
+      }
     },
     toolbar: {
       type: Array,
@@ -126,7 +138,7 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent();
     },
-    imageSuccessCBK(arr) {
+    imageSuccessHandle(arr) {
       arr.forEach(v => {
         window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" />`);
       });

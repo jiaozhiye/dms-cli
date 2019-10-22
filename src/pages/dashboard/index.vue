@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Dashboard',
   data() {
@@ -31,8 +33,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions('app', ['refreshView']),
     clickHandle() {
       this.menus[1].params.users = { ...this.users, c: 3 };
+      // 刷新
+      this.refreshView('/bjgl/cggl/dd');
+      this.refreshView('/home');
     }
   }
 };

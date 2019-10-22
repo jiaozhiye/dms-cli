@@ -6,7 +6,7 @@
  */
 export default class DragElement {
   state = {
-    targetNode: null
+    targetNode: null // 满足放置条件的目标节点
   };
 
   constructor(props) {
@@ -54,7 +54,7 @@ export default class DragElement {
   };
 
   // 获取节点元素的位移偏移量，返回值是数组
-  getTranslateValue = el => {
+  getTranslateOffset = el => {
     const val = el.style.transform;
     if (!val) return [0, 0];
     const res = val
@@ -74,7 +74,7 @@ export default class DragElement {
   };
 
   // 移动到指定位置
-  moveToPosition = (el, pos = [0, 0]) => {
+  moveToTargetPos = (el, pos = [0, 0]) => {
     el.style.transition = 'all 0.2s ease';
     // 运动
     this.moveHandle(el, pos);
@@ -160,7 +160,7 @@ export default class DragElement {
       el.style.zIndex = 1;
 
       const { left: rl, top: rt } = el.getBoundingClientRect();
-      const [x, y] = this.getTranslateValue(el);
+      const [x, y] = this.getTranslateOffset(el);
       const disX = ev.clientX - x;
       const disY = ev.clientY - y;
 
@@ -180,7 +180,7 @@ export default class DragElement {
           pos = [x - rl, y - rt];
         }
         // 移动到目标位置
-        this.moveToPosition(el, pos);
+        this.moveToTargetPos(el, pos);
         // 解绑事件
         document.onmousemove = null;
         document.onmouseup = null;
