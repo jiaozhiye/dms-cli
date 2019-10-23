@@ -13,6 +13,38 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-bangzhu:before {
+  content: '\e62c';
+}
+
+.icon-xiazai:before {
+  content: '\e60b';
+}
+
+.icon-delete:before {
+  content: '\e63e';
+}
+
+.icon-search:before {
+  content: '\e601';
+}
+
+.icon-icon--:before {
+  content: '\e71e';
+}
+
+.icon-daochu:before {
+  content: '\e600';
+}
+
+.icon-daoru:before {
+  content: '\e602';
+}
+
+.icon-yulan:before {
+  content: '\e603';
+}
+
 .icon-yingyongguanli:before {
   content: '\eb67';
 }
@@ -25,6 +57,26 @@
   content: '\ec0a';
 }
 
+.icon-guolvqi:before {
+  content: '\e70e';
+}
+
+.icon-appxiazai:before {
+  content: '\e615';
+}
+
+.icon-weixin:before {
+  content: '\e614';
+}
+
 .icon-shaixuan:before {
   content: '\e671';
+}
+
+.icon-xinzeng:before {
+  content: '\e690';
+}
+
+.icon-dayin:before {
+  content: '\e60f';
 }
