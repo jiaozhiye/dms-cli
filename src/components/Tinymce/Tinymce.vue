@@ -33,7 +33,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 360
+      default: 450
     },
     actionUrl: {
       type: String,
@@ -45,6 +45,10 @@ export default {
       default() {
         return [5, 4];
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     toolbar: {
       type: Array,
@@ -103,6 +107,7 @@ export default {
         advlist_number_styles: 'default',
         default_link_target: '_blank',
         link_title: false,
+        readonly: this.disabled,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
           this.hasInit = true;

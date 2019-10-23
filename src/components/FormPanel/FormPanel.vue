@@ -12,6 +12,7 @@ import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
 import UploadFile from '@/components/UploadFile/UploadFile.vue';
 import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
+import Tinymce from '@/components/Tinymce/Tinymce.vue';
 
 export default {
   name: 'FormPanel',
@@ -783,6 +784,16 @@ export default {
           >
             文件上传
           </UploadFile>
+        </el-form-item>
+      );
+    },
+    TINYMCE(option) {
+      const { form } = this;
+      const { label, fieldName, labelWidth, labelOptions, height, upload = {}, disabled, change = () => {} } = option;
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <Tinymce v-model={form[fieldName]} actionUrl={upload.actionUrl} height={height} fixedSize={upload.fixedSize} disabled={disabled} onChange={change} />
         </el-form-item>
       );
     },
