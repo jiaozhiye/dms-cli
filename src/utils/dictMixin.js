@@ -47,7 +47,7 @@ export const dictionary = {
     deepFunc(data) {
       const res = [];
       for (let key in data) {
-        const target = { value: data[key]['regionType'], text: data[key]['regionName'] };
+        const target = { value: data[key]['regionCode'], text: data[key]['regionName'] };
         if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
           target.children = this.deepFunc(data[key].children);
         }
