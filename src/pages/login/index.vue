@@ -252,7 +252,6 @@ export default {
 <style lang="less" scoped>
 .login {
   display: flex;
-  width: 100vw;
   height: 100vh;
   background: #fff url(../../assets/img/login_bg.svg) no-repeat 50%;
   background-size: 100%;
@@ -298,7 +297,8 @@ export default {
     }
   }
   .right {
-    width: 34vw;
+    width: 34%;
+    overflow-y: auto;
     .wrap {
       padding: 15vh 40px 0;
       .main {
