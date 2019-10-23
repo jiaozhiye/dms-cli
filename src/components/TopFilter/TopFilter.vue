@@ -446,6 +446,10 @@ export default {
         month: {
           placeholder: '选择月份',
           valueFormat: 'yyyy-MM'
+        },
+        year: {
+          placeholder: '选择年份',
+          valueFormat: 'yyyy'
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'date', style = {}, disabled, change = () => {} } = option;
