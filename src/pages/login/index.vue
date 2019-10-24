@@ -241,7 +241,6 @@ export default {
           name: res.data.name,
           token: res.data.token
         });
-        await sleep(100);
         this.$router.push({ path: '/' });
       }
     }
