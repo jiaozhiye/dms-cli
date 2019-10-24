@@ -897,10 +897,11 @@ export default {
         // 构建表格数据
         this.createTableList(res.data);
       } else {
-        this.loading = true;
         const params = { ...this.fetchParams };
         // 移除 xhrAbort 属性
         delete params.xhrAbort;
+        // 开启 loading
+        this.START_LOADING();
         try {
           const res = await this.fetchapi(params);
           if (res.resultCode === 200) {
@@ -910,7 +911,8 @@ export default {
         } catch (e) {
           this.createTableList({});
         }
-        this.loading = false;
+        // 关闭 loading
+        this.STOP_LOADING();
       }
     },
     // 移除数组中的记录
@@ -1293,7 +1295,9 @@ export default {
       if (this.columnsRef) {
         this.$refs.appFilter.SET_COLUMN_INFO({ [property]: newWidth });
       }
-      this.resetRender();
+      this.$nextTick(() => {
+        this.resetRender();
+      });
     },
     // 垂直滚动到指定位置
     scrollTopToPosition(t) {

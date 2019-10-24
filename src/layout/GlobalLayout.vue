@@ -23,20 +23,22 @@ export default {
     }
   },
   render() {
-    const { $slots = {}, collapsed, asideWidth } = this;
+    const { $slots = {}, $route, collapsed, asideWidth } = this;
+    const bgColor = $route.meta.bgColor ? 'bg-color' : '';
     return (
       <el-container class="layout">
         <el-aside class="sidebar" style={{ width: asideWidth }}>
           <SideMenu collapsed={collapsed} />
         </el-aside>
-        <el-container style="width: 0;">
+        {/* width: 0 -> 解决 IE bug */}
+        <el-container style={{ width: 0 }}>
           <el-header>
             <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
               <MultiTab slot="menu" />
               <HeadNavBar slot="action" />
             </GlobalHeader>
           </el-header>
-          <el-main class="container">
+          <el-main class={`container ${bgColor}`}>
             <Breadcrumb />
             <section>{$slots.default}</section>
           </el-main>
@@ -56,6 +58,9 @@ export default {
   }
   .container {
     padding: 0 10px;
+  }
+  .bg-color {
+    background-color: @backgroundColor;
   }
 }
 </style>

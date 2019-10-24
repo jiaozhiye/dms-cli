@@ -42,7 +42,7 @@ export const constantRouterMap = [
             children: [
               {
                 path: '',
-                meta: { title: '概览', keepAlive: true },
+                meta: { title: '概览', bgColor: true, keepAlive: true },
                 component: Dashboard
               }
             ]
