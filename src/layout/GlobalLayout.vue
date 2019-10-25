@@ -60,7 +60,7 @@ export default {
     padding: 0 10px;
   }
   .bg-color {
-    background-color: @backgroundColor;
+    background-color: #f0f2f5;
   }
 }
 </style>
