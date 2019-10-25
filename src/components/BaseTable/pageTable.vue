@@ -168,7 +168,7 @@ export default {
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
-      const pagination = this.isShowPagination ? { pageNum: current, currentPage: current, pageSize, limit: pageSize } : {};
+      const pagination = this.isShowPagination ? { currentPage: current, pageSize, pageNum: current, limit: pageSize, current, size: pageSize } : {};
       const queries = {
         ...this.sorterParams,
         ...this.filterParams,
@@ -425,19 +425,17 @@ export default {
         );
       }
       if (editType === 'date-picker') {
-        // 日期控件配置项
-        const conf = { date: { placeholder: '选择日期', format: 'yyyy-MM-dd' }, datetime: { placeholder: '选择时间', format: 'yyyy-MM-dd HH:mm:ss' } };
         const { dateFormat, minDateTime, maxDateTime } = column;
-        const dateType = dateFormat === 'yyyy-MM-dd HH:mm:ss' ? 'datetime' : 'date';
+        const conf = this.createDateType(dateFormat);
         return (
           <el-date-picker
-            type={dateType}
+            type={conf.dateType}
             size="mini"
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
-            placeholder={conf[dateType].placeholder}
-            format={conf[dateType].format}
-            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder={conf.placeholder}
+            format={conf.format}
+            value-format={conf.format}
             clearable={false}
             disabled={column.disabled || isDisabled}
             picker-options={{
@@ -784,6 +782,22 @@ export default {
         input = dateVal === 'Invalid date' ? input : dateVal;
       }
       return input;
+    },
+    // 匹配日期控件的 dateType
+    createDateType(format = 'yyyy-MM-dd HH:mm:ss') {
+      // 配置项
+      const config = {
+        date: { placeholder: '选择日期', format: 'yyyy-MM-dd' },
+        datetime: { placeholder: '选择时间', format: 'yyyy-MM-dd HH:mm:ss' }
+      };
+      let res = {};
+      for (let key in config) {
+        if (config[key].format === format) {
+          res = Object.assign({}, config[key], { dateType: key });
+          break;
+        }
+      }
+      return res;
     },
     // 组装搜索帮助数据列表
     createSerachHelperList(arr, aliasKey) {
