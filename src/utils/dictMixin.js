@@ -23,10 +23,13 @@ export const dictionary = {
   },
   methods: {
     // code -> 数据字典的 code 码
-    createDictList(code) {
+    // vals -> 需要过滤数据字典项的值
+    createDictList(code, vals = []) {
+      vals = Array.isArray(vals) ? vals : [vals];
       let res = [];
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
         res = this.dict[code].map(x => ({ text: x.codeCnDesc, value: x.codeId }));
+        res = res.filter(x => !vals.includes(x.value));
       }
       return res;
     },

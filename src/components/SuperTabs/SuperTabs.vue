@@ -135,8 +135,7 @@ export default {
         position: relative;
         .tabs-tab {
           display: inline-block;
-          margin-right: @moduleMargin;
-          padding: 16px @modulePadding;
+          padding: 16px 15px;
           transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
           cursor: pointer;
           &.tab-active,
@@ -145,11 +144,11 @@ export default {
           }
         }
         .tabs-ink-bar {
-          z-index: 1;
           position: absolute;
           left: 0;
           bottom: 0;
           height: 2px;
+          z-index: 1;
           background-color: @primaryColor;
           transform-origin: 0 50%;
           transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -169,7 +168,7 @@ export default {
       box-sizing: border-box;
       height: 0;
       opacity: 0;
-      transition: opacity 0.45s;
+      transition: opacity 0.45s ease;
       &.tabs-tabpane-active {
         height: auto;
         opacity: 1;

@@ -1,32 +1,14 @@
 <template>
   <div class="wrapper">
     <div class="topper">
-      <span class="title">用户通知</span>
-    </div>
-    <div>
-      <Chart
-        :fetchapi="fetchApi"
-        :params="fetchParams"
-        :containerStyle="{ minHeight: 'auto', height: '210px' }"
-      />
+      <span class="title">备件统计</span>
     </div>
   </div>
 </template>
 
 <script>
-import Chart from '@/charts/dashboard/chart3';
-
 export default {
-  name: '',
-  components: {
-    Chart
-  },
-  data() {
-    return {
-      fetchApi: () => {},
-      fetchParams: {}
-    };
-  }
+  name: ''
 };
 </script>
 

@@ -67,7 +67,7 @@ export default {
   props: {
     actionUrl: {
       type: String,
-      default: '/api/upload'
+      required: true
     },
     initialValue: {
       type: Array,

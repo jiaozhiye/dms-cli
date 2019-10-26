@@ -1,29 +1,35 @@
 <template>
   <div class="dashboard">
     <div class="left">
-      <EmployeInfo />
-      <MainTabChart />
+      <employePanel />
+      <TabChartPanel />
+      <StatisPanel />
     </div>
     <div class="right">
       <NoticePanel />
       <ChartPanel1 />
+      <ChartPanel2 />
     </div>
   </div>
 </template>
 
 <script>
-import EmployeInfo from './employeInfo.vue';
-import MainTabChart from './mainTabChart.vue';
-import NoticePanel from './noticePanel.vue';
-import ChartPanel1 from './chartPanel1.vue';
+import employePanel from './employePanel';
+import TabChartPanel from './tabChartPanel';
+import NoticePanel from './noticePanel';
+import ChartPanel1 from './chartPanel1';
+import ChartPanel2 from './chartPanel2';
+import StatisPanel from './statisPanel';
 
 export default {
   name: 'Dashboard',
   components: {
-    EmployeInfo,
-    MainTabChart,
+    employePanel,
+    TabChartPanel,
     NoticePanel,
-    ChartPanel1
+    ChartPanel1,
+    ChartPanel2,
+    StatisPanel
   },
   data() {
     return {};
@@ -35,13 +41,13 @@ export default {
 <style scoped lang="less">
 .dashboard {
   display: flex;
-  height: calc(100vh - 100px);
+  padding: 5px 0 15px;
   .left {
-    width: 65%;
+    width: 67%;
     margin-right: 15px;
   }
   .right {
-    width: 35%;
+    flex: 1;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="topper">
-      <span class="title">用户通知</span>
+      <span class="title">销售漏斗</span>
     </div>
     <div>
       <Chart
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Chart from '@/charts/dashboard/chart3';
+import Chart from '@/charts/dashboard/chart4';
 
 export default {
   name: '',

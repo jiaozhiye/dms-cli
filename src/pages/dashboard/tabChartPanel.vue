@@ -2,11 +2,11 @@
   <div class="wrapper">
     <SuperTabs :initialValue="defaultTab" :tabMenus="tabMenus">
       <div slot="extraContent">
-        <el-radio-group v-model="radioValue" size="small">
-          <el-radio-button label="今日"></el-radio-button>
-          <el-radio-button label="本周"></el-radio-button>
-          <el-radio-button label="本月"></el-radio-button>
-          <el-radio-button label="本年"></el-radio-button>
+        <el-radio-group v-model="radioValue" size="small" @change="changeHandle">
+          <el-radio-button label="1">今日</el-radio-button>
+          <el-radio-button label="2">本周</el-radio-button>
+          <el-radio-button label="3">本月</el-radio-button>
+          <el-radio-button label="4">本年</el-radio-button>
         </el-radio-group>
       </div>
     </SuperTabs>
@@ -21,7 +21,7 @@ export default {
   name: '',
   data() {
     return {
-      radioValue: '今日',
+      radioValue: '1',
       defaultTab: '备件出库成本',
       tabMenus: [
         {
@@ -46,6 +46,11 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    changeHandle(val) {
+      console.log(val);
+    }
   }
 };
 </script>

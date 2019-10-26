@@ -61,82 +61,40 @@ export default {
     draw({ names, values }) {
       this.myChart = echarts.init(this.$refs.chart);
       const option = {
-        color: ['#2b9df7'],
+        color: ['#2fa1fb', '#9c61e2', '#42cb78', '#ffd559', '#fc667e'],
         tooltip: {
-          trigger: 'axis',
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c}%',
           axisPointer: {
-            type: 'shadow',
-            shadowStyle: {
-              color: chartConf.barBgColor
-            }
+            type: 'shadow'
           },
-          backgroundColor: chartConf.bgColor,
-          extraCssText: `box-shadow: ${chartConf.boxShadow}`,
+          backgroundColor: 'rgba(255, 255, 255, .85)',
+          extraCssText: 'box-shadow: 0 0 4px rgba(0, 0, 0, 0.35)',
           textStyle: {
             color: chartConf.textColor,
-            fontSize: chartConf.textSize
+            fontSize: chartConf.chartXAxisSize
           }
         },
-        grid: {
-          top: '10%',
-          left: '2%',
-          right: '2%',
-          bottom: '2%',
-          containLabel: true // 刻度标签
+        legend: {
+          orient: 'vertical',
+          x: 'right',
+          y: 'center',
+          padding: [0, 10, 0, 0],
+          data: ['邮件营销', '联盟广告', '视频广告', '其他'],
+          textStyle: {
+            color: chartConf.textColor,
+            fontSize: chartConf.chartXAxisSize
+          }
         },
-        xAxis: [
-          {
-            type: 'category',
-            data: names,
-            axisTick: {
-              alignWithLabel: true // 坐标轴刻度
-            },
-            nameTextStyle: {
-              color: chartConf.textColor,
-              fontSize: chartConf.textSize
-            },
-            axisLabel: {
-              color: chartConf.textColor,
-              fontSize: chartConf.textSize
-            },
-            axisLine: {
-              lineStyle: {
-                color: chartConf.lineColor
-              }
-            }
-          }
-        ],
-        yAxis: [
-          {
-            name: 'kW·h/100km',
-            type: 'value',
-            splitLine: {
-              lineStyle: {
-                type: 'dotted'
-              }
-            },
-            nameTextStyle: {
-              color: chartConf.textColor,
-              fontSize: chartConf.textSize
-            },
-            axisLabel: {
-              formatter: '{value}',
-              color: chartConf.textColor,
-              fontSize: chartConf.textSize
-            },
-            axisLine: {
-              lineStyle: {
-                color: chartConf.lineColor
-              }
-            }
-          }
-        ],
         series: [
           {
-            name: '电耗',
-            type: 'bar',
-            barWidth: '30%',
-            data: values
+            name: '漏斗图',
+            type: 'funnel',
+            left: '5%',
+            top: '10%',
+            bottom: '10%',
+            width: '60%',
+            data: [{ value: 20, name: '邮件营销' }, { value: 40, name: '联盟广告' }, { value: 60, name: '视频广告' }, { value: 80, name: '其他' }]
           }
         ]
       };

@@ -8,6 +8,7 @@
 
 <script>
 import echarts from 'echarts';
+import { sleep } from '@/utils';
 import config from '@/config';
 // eharts  配置
 const chartConf = config.charts;
@@ -44,6 +45,7 @@ export default {
     async initial() {
       this.loading = true;
       if (process.env.MOCK_DATA === 'true') {
+        await sleep(500);
         const { chart1 } = require('@/mock/chartData').default;
         this.draw(chart1);
       } else {
@@ -69,7 +71,7 @@ export default {
           backgroundColor: 'rgba(255, 255, 255, .85)',
           extraCssText: 'box-shadow: 0 0 4px rgba(0, 0, 0, 0.35)',
           textStyle: {
-            color: 'rgba(0, 0, 0, 0.65)',
+            color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
           }
         },
@@ -80,7 +82,7 @@ export default {
           padding: [0, 10, 0, 0],
           data: ['邮件营销', '联盟广告', '视频广告', '其他'],
           textStyle: {
-            color: 'rgba(0, 0, 0, 0.65)',
+            color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
           }
         },
@@ -88,11 +90,8 @@ export default {
           {
             name: '访问来源',
             type: 'pie',
-            center: ['36%', '52%'],
+            center: ['36%', '52%'], // 改变饼状图位置
             radius: ['30%', '60%'],
-            label: {
-              fontSize: chartConf.chartYAxisSize
-            },
             data: [{ value: 135, name: '邮件营销' }, { value: 1048, name: '联盟广告' }, { value: 251, name: '视频广告' }, { value: 102, name: '其他' }]
           }
         ]

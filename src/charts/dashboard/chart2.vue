@@ -8,6 +8,7 @@
 
 <script>
 import echarts from 'echarts';
+import { sleep } from '@/utils';
 import config from '@/config';
 // eharts  配置
 const chartConf = config.charts;
@@ -44,6 +45,7 @@ export default {
     async initial() {
       this.loading = true;
       if (process.env.MOCK_DATA === 'true') {
+        await sleep(500);
         const { chart1 } = require('@/mock/chartData').default;
         this.draw(chart1);
       } else {
@@ -80,7 +82,7 @@ export default {
           y: 'bottom',
           data: ['邮件营销', '联盟广告'],
           textStyle: {
-            color: 'rgba(0, 0, 0, 0.65)',
+            color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
           }
         },

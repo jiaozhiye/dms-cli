@@ -9,21 +9,21 @@
     </div>
     <div class="box bg1">
       <h4>
-        147
+        <CountUp :endVal="1147" />
         <i>项</i>
       </h4>
       <h5>待办事项</h5>
     </div>
     <div class="box bg2">
       <h4>
-        225
+        <CountUp :endVal="215" />
         <i>项</i>
       </h4>
       <h5>维修项目</h5>
     </div>
     <div class="box bg3">
       <h4>
-        25
+        <CountUp :endVal="28" />
         <i>人</i>
       </h4>
       <h5>接待人数</h5>
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'EmployeInfo',
+  name: '',
   data() {
     return {};
   }
@@ -44,7 +44,6 @@ export default {
 .worker {
   display: flex;
   height: 90px;
-  margin-top: 5px;
   background-color: #fff;
   border-left: 3px solid @primaryColor;
   border-radius: @borderRadius;

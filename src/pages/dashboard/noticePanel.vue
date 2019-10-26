@@ -6,7 +6,7 @@
     <div class="list">
       <li>
         <i class="active">1</i>
-        <span>白鹭岛 1 号店</span>
+        <span class="text_overflow_cut">白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店</span>
         <em class="fr">2012-12-12</em>
       </li>
       <li>
@@ -15,7 +15,7 @@
         <em class="fr">2012-12-12</em>
       </li>
       <li>
-        <i>3</i>
+        <i class="active">3</i>
         <span>白鹭岛 1 号店</span>
         <em class="fr">2012-12-12</em>
       </li>
@@ -43,7 +43,6 @@ export default {
 .wrapper {
   width: 100%;
   height: 240px;
-  margin-top: 5px;
   background-color: #fff;
   border-radius: @borderRadius;
   box-shadow: @boxShadow;
@@ -59,11 +58,14 @@ export default {
   }
   .list {
     padding: 5px 15px;
+    overflow: hidden;
     li {
+      height: 36px;
+      display: flex;
+      justify-content: space-between;
       list-style: none;
-      line-height: 36px;
+      align-items: center;
       i {
-        display: inline-block;
         margin-right: 10px;
         background-color: #f5f5f5;
         color: @textColorSecondary;
@@ -78,6 +80,15 @@ export default {
           background-color: #314659;
           color: #fff;
         }
+      }
+      span {
+        flex: 1;
+        /* 防止父元素宽度被撑开 */
+        width: 0;
+      }
+      em {
+        width: 80px;
+        text-align: right;
       }
     }
   }
