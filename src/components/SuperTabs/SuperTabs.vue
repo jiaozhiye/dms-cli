@@ -5,17 +5,14 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-05-07 11:00:00
  **/
+import { filterEmpty } from '@/utils/props-util';
+
 export default {
   name: 'SuperTabs',
   props: {
     initialValue: {
       type: String,
       required: true
-    },
-    tabMenus: {
-      type: Array,
-      required: true,
-      default: () => []
     },
     destroyOnClose: {
       type: Boolean,
@@ -25,13 +22,15 @@ export default {
   data() {
     this.tabNavNodes = [];
     this.tabInkBar = null;
+    // tab menu 数组
+    this.menus = [];
     return {
-      currentValue: this.initialValue
+      currentValue: this.initialValue // 桥接线索
     };
   },
   computed: {
     curIndex() {
-      return this.tabMenus.findIndex(x => x.title === this.currentValue);
+      return this.menus.findIndex(x => x.label === this.currentValue);
     }
   },
   methods: {
@@ -55,62 +54,75 @@ export default {
       if (this.curIndex < 0) return;
       this.tabContainer.style.marginLeft = `${-1 * this.curIndex * 100}%`;
     },
-    tabNavClickHandle(ev, title) {
+    tabNavClickHandle(ev, { label, disabled }) {
+      if (!!disabled) {
+        return false;
+      }
       ev.stopPropagation();
-      this.currentValue = title;
+      // 同步 label 的值
+      this.currentValue = label;
+      // 执行 nav 和 tab 切换
       this.createTabInkBar();
       this.createTabContentMove();
       // 触发事件
-      this.$emit('change', title);
+      this.$emit('change', label);
     },
-    createTabsNav() {
-      return this.tabMenus.map(x => {
+    createTabsNav(arr) {
+      return arr.map(x => {
         const cls = {
           [`tabs-tab`]: true,
-          [`tab-active`]: x.title === this.currentValue
+          [`tab-active`]: x.label === this.currentValue,
+          [`no-events`]: !!x.disabled
         };
         return (
-          <div class={cls} key={x.title} onClick={ev => this.tabNavClickHandle(ev, x.title)}>
-            {x.title}
+          <div class={cls} key={x.label} onClick={ev => this.tabNavClickHandle(ev, x)}>
+            {x.label}
           </div>
         );
       });
     },
-    createTabsContent(h) {
-      return this.tabMenus.map(x => {
-        const component = h(x.component, {
-          props: x.params,
-          on: x.on
-        });
+    createTabsContent(h, arr) {
+      return arr.map(x => {
         const cls = {
           [`tabs-tabpane`]: true,
-          [`tabs-tabpane-active`]: x.title === this.currentValue
+          [`tabs-tabpane-active`]: x.label === this.currentValue
         };
         return (
           <div class={cls}>
-            <keep-alive>{component}</keep-alive>
+            <keep-alive>{x.children}</keep-alive>
           </div>
         );
       });
+    },
+    createTabMenus(vNodes) {
+      return vNodes.map(x => ({
+        label: x.data.attrs.label,
+        disabled: x.data.attrs.disabled,
+        children: x.children || []
+      }));
     }
   },
   mounted() {
     this.initial();
   },
   render(h) {
+    const { $slots } = this;
+    const children = filterEmpty($slots.default).filter(x => x.tag === 'tab-panel');
+    // 创建 tabs 数据
+    this.menus = this.createTabMenus(children);
     return (
       <div class="tab-wrapper">
         <div class="tab-top-bar">
           <div class="tabs-nav-container">
             <div class="tabs-nav-animated">
-              <div ref="navWrap">{this.createTabsNav()}</div>
+              <div ref="navWrap">{this.createTabsNav(this.menus)}</div>
               <div class="tabs-ink-bar" ref="tabInkBar"></div>
             </div>
           </div>
-          <div class="tabs-extra-content">{this.$slots['extraContent']}</div>
+          <div class="tabs-extra-content">{$slots['extraContent']}</div>
         </div>
         <div ref="tabContainer" class="tabs-content tabs-content-animated">
-          {this.createTabsContent(h)}
+          {this.createTabsContent(h, this.menus)}
         </div>
       </div>
     );
@@ -141,6 +153,11 @@ export default {
           &.tab-active,
           &:hover {
             color: @primaryColor;
+          }
+          &.no-events,
+          &.no-events:hover {
+            color: @disabledColor;
+            cursor: not-allowed;
           }
         }
         .tabs-ink-bar {

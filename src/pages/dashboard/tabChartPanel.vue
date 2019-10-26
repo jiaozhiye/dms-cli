@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SuperTabs :initialValue="defaultTab" :tabMenus="tabMenus">
+    <SuperTabs :initialValue="defaultTabLabel">
       <div slot="extraContent">
         <el-radio-group v-model="fetchParams.radioValue" size="small" @change="changeHandle">
           <el-radio-button label="1001">今日</el-radio-button>
@@ -9,6 +9,12 @@
           <el-radio-button label="1004">本年</el-radio-button>
         </el-radio-group>
       </div>
+      <tab-panel label="备件出库成本">
+        <Chart1 :fetchapi="() => {}" :params="fetchParams" :containerStyle="{ height: '345px' }" />
+      </tab-panel>
+      <tab-panel label="出库成本结构">
+        <Chart2 :fetchapi="() => {}" :params="fetchParams" :containerStyle="{ height: '345px' }" />
+      </tab-panel>
     </SuperTabs>
   </div>
 </template>
@@ -19,45 +25,21 @@ import Chart2 from '@/charts/dashboard/chart2';
 
 export default {
   name: '',
+  components: {
+    Chart1,
+    Chart2
+  },
   data() {
     return {
       fetchParams: {
         radioValue: '1001'
       },
-      defaultTab: '备件出库成本',
-      tabMenus: []
+      defaultTabLabel: '备件出库成本'
     };
   },
-  created() {
-    this.tabMenus = this.createTabMenus();
-  },
   methods: {
-    createTabMenus() {
-      return [
-        {
-          title: '备件出库成本',
-          component: Chart1,
-          params: {
-            fetchapi: () => {},
-            params: this.fetchParams,
-            containerStyle: { height: '345px' }
-          }
-        },
-        {
-          title: '出库成本结构',
-          component: Chart2,
-          params: {
-            fetchapi: () => {},
-            params: this.fetchParams,
-            containerStyle: { height: '345px' }
-          }
-        }
-      ];
-    },
     changeHandle(val) {
-      this.tabMenus.forEach(x => {
-        x.params.params = { ...this.fetchParams };
-      });
+      this.fetchParams = { ...this.fetchParams };
     }
   }
 };

@@ -9,7 +9,7 @@
     </div>
     <div class="box bg1">
       <h4>
-        <CountUp :endVal="1147" />
+        <CountUp :endVal="2147" />
         <i>项</i>
       </h4>
       <h5>待办事项</h5>

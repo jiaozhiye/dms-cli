@@ -4,30 +4,10 @@
       <span class="title">用户通知</span>
     </div>
     <div class="list">
-      <li>
-        <i class="active">1</i>
-        <span class="text_overflow_cut">白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店</span>
-        <em class="fr">2012-12-12</em>
-      </li>
-      <li>
-        <i class="active">2</i>
-        <span>白鹭岛 1 号店</span>
-        <em class="fr">2012-12-12</em>
-      </li>
-      <li>
-        <i class="active">3</i>
-        <span>白鹭岛 1 号店</span>
-        <em class="fr">2012-12-12</em>
-      </li>
-      <li>
-        <i>4</i>
-        <span>白鹭岛 1 号店</span>
-        <em class="fr">2012-12-12</em>
-      </li>
-      <li>
-        <i>5</i>
-        <span>白鹭岛 1 号店</span>
-        <em class="fr">2012-12-12</em>
+      <li v-for="(item, index) in dataList" :key="item.id">
+        <i :class="{ active: index < 3 }">{{ index + 1 }}</i>
+        <span class="text_overflow_cut">{{ item.title }}</span>
+        <em class="fr">{{ item.dateTime }}</em>
       </li>
     </div>
   </div>
@@ -35,7 +15,18 @@
 
 <script>
 export default {
-  name: ''
+  name: '',
+  data() {
+    return {
+      dataList: [
+        { id: 1, title: '白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店', dateTime: '2012-12-12' },
+        { id: 2, title: '白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店', dateTime: '2012-12-12' },
+        { id: 3, title: '白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店', dateTime: '2012-12-12' },
+        { id: 4, title: '白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店', dateTime: '2012-12-12' },
+        { id: 5, title: '白鹭岛号店白鹭岛店白鹭岛号店白鹭岛号店', dateTime: '2012-12-12' }
+      ]
+    };
+  }
 };
 </script>
 
@@ -66,16 +57,16 @@ export default {
       list-style: none;
       align-items: center;
       i {
-        margin-right: 10px;
-        background-color: #f5f5f5;
+        margin-right: @moduleMargin;
+        background-color: @backgroundColorSecondary;
         color: @textColorSecondary;
-        font-size: 12px;
+        font-size: @textSizeSecondary;
         font-weight: 600;
         text-align: center;
         width: 20px;
         height: 20px;
         line-height: 20px;
-        border-radius: 20px;
+        border-radius: 50%;
         &.active {
           background-color: #314659;
           color: #fff;
