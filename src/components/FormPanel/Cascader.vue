@@ -15,7 +15,7 @@ export default {
       required: true,
       default: () => []
     },
-    defaultValue: {
+    initialValue: {
       type: String
     },
     labels: {
@@ -26,7 +26,7 @@ export default {
   data() {
     this.prevValue = null;
     return {
-      values: this.createInitValue(this.defaultValue)
+      values: this.createInitValue(this.initialValue)
     };
   },
   computed: {
@@ -44,7 +44,7 @@ export default {
   watch: {
     values: {
       handler(val) {
-        if (val.length || _.isUndefined(this.defaultValue)) {
+        if (val.length || _.isUndefined(this.initialValue)) {
           if (_.isEqual(val, this.prevValue)) return;
           this.$emit('change', val);
           this.prevValue = [...val];
@@ -52,11 +52,11 @@ export default {
       },
       immediate: true
     },
-    defaultValue(val) {
+    initialValue(val) {
       this.values = this.createInitValue(val);
     },
     list() {
-      this.values = this.createInitValue(this.defaultValue);
+      this.values = this.createInitValue(this.initialValue);
     }
   },
   methods: {

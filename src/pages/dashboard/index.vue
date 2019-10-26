@@ -2,18 +2,28 @@
   <div class="dashboard">
     <div class="left">
       <EmployeInfo />
+      <MainTabChart />
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <NoticePanel />
+      <ChartPanel1 />
+    </div>
   </div>
 </template>
 
 <script>
 import EmployeInfo from './employeInfo.vue';
+import MainTabChart from './mainTabChart.vue';
+import NoticePanel from './noticePanel.vue';
+import ChartPanel1 from './chartPanel1.vue';
 
 export default {
   name: 'Dashboard',
   components: {
-    EmployeInfo
+    EmployeInfo,
+    MainTabChart,
+    NoticePanel,
+    ChartPanel1
   },
   data() {
     return {};
@@ -27,11 +37,11 @@ export default {
   display: flex;
   height: calc(100vh - 100px);
   .left {
-    flex: 1;
-    margin-right: @moduleMargin;
+    width: 65%;
+    margin-right: 15px;
   }
   .right {
-    width: 40%;
+    width: 35%;
   }
 }
 </style>

@@ -1,0 +1,123 @@
+<template>
+  <div>
+    <Spin :spinning="loading" tip="Loading...">
+      <div ref="chart" class="chartWrap" :style="containerStyle" />
+    </Spin>
+  </div>
+</template>
+
+<script>
+import echarts from 'echarts';
+import config from '@/config';
+// eharts  配置
+const chartConf = config.charts;
+
+export default {
+  name: '',
+  props: {
+    fetchapi: {
+      type: Function,
+      required: true
+    },
+    params: {
+      type: Object,
+      default: () => ({})
+    },
+    containerStyle: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    // echart 实例
+    this.myChart = null;
+    return {
+      loading: false
+    };
+  },
+  watch: {
+    params() {
+      this.initial();
+    }
+  },
+  methods: {
+    async initial() {
+      this.loading = true;
+      if (process.env.MOCK_DATA === 'true') {
+        const { chart1 } = require('@/mock/chartData').default;
+        this.draw(chart1);
+      } else {
+        try {
+          const res = await this.fetchapi(this.params);
+          if (res.resultCode === 200) {
+            this.draw(res.data);
+          }
+        } catch (e) {}
+      }
+      this.loading = false;
+    },
+    draw({ names, values }) {
+      this.myChart = echarts.init(this.$refs.chart);
+      const option = {
+        color: ['#2fa1fb', '#9c61e2', '#42cb78', '#ffd559', '#fc667e'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          axisPointer: {
+            type: 'shadow'
+          },
+          backgroundColor: 'rgba(255, 255, 255, .85)',
+          extraCssText: 'box-shadow: 0 0 4px rgba(0, 0, 0, 0.35)',
+          textStyle: {
+            color: 'rgba(0, 0, 0, 0.65)',
+            fontSize: chartConf.chartXAxisSize
+          }
+        },
+        legend: {
+          orient: 'vertical',
+          x: 'right',
+          y: 'center',
+          padding: [0, 10, 0, 0],
+          data: ['邮件营销', '联盟广告', '视频广告', '其他'],
+          textStyle: {
+            color: 'rgba(0, 0, 0, 0.65)',
+            fontSize: chartConf.chartXAxisSize
+          }
+        },
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            center: ['36%', '52%'],
+            radius: ['30%', '60%'],
+            label: {
+              fontSize: chartConf.chartYAxisSize
+            },
+            data: [{ value: 135, name: '邮件营销' }, { value: 1048, name: '联盟广告' }, { value: 251, name: '视频广告' }, { value: 102, name: '其他' }]
+          }
+        ]
+      };
+      if (option && this.myChart) {
+        this.myChart.clear();
+        this.myChart.setOption(option, true);
+      }
+    }
+  },
+  mounted() {
+    this.initial();
+  },
+  beforeDestroy() {
+    if (this.myChart) {
+      this.myChart.dispose();
+    }
+    this.myChart = null;
+  }
+};
+</script>
+
+<style lang="less" scoped>
+.chartWrap {
+  width: 100%;
+  min-height: 300px;
+}
+</style>

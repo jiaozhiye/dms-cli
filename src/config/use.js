@@ -65,6 +65,9 @@ Vue.use(Spin);
 import Tinymce from '@/components/Tinymce';
 Vue.use(Tinymce);
 
+import SuperTabs from '@/components/SuperTabs';
+Vue.use(SuperTabs);
+
 import UploadFile from '@/components/UploadFile';
 Vue.use(UploadFile);
 

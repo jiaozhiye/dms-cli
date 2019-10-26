@@ -16,17 +16,17 @@
     </div>
     <div class="box bg2">
       <h4>
-        247
+        225
         <i>项</i>
       </h4>
       <h5>维修项目</h5>
     </div>
     <div class="box bg3">
       <h4>
-        223
-        <i>项</i>
+        25
+        <i>人</i>
       </h4>
-      <h5>维修项目</h5>
+      <h5>接待人数</h5>
     </div>
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
 .worker {
   display: flex;
   height: 90px;
+  margin-top: 5px;
   background-color: #fff;
   border-left: 3px solid @primaryColor;
   border-radius: @borderRadius;

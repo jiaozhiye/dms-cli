@@ -59,7 +59,7 @@ export default {
     draw({ names, values }) {
       this.myChart = echarts.init(this.$refs.chart);
       const option = {
-        color: ['#2b9df7'],
+        color: ['#2b9df7', '#42cb78'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -75,11 +75,20 @@ export default {
             fontSize: chartConf.textSize
           }
         },
+        legend: {
+          orient: 'horizontal',
+          y: 'bottom',
+          data: ['邮件营销', '联盟广告'],
+          textStyle: {
+            color: 'rgba(0, 0, 0, 0.65)',
+            fontSize: chartConf.chartXAxisSize
+          }
+        },
         grid: {
           top: '10%',
           left: '2%',
           right: '2%',
-          bottom: '2%',
+          bottom: '8%',
           containLabel: true // 刻度标签
         },
         xAxis: [
@@ -131,10 +140,14 @@ export default {
         ],
         series: [
           {
-            name: '电耗',
-            type: 'bar',
-            barWidth: '30%',
-            data: values
+            name: '邮件营销',
+            type: 'line',
+            data: [120, 132, 101, 134, 90, 230]
+          },
+          {
+            name: '联盟广告',
+            type: 'line',
+            data: [220, 182, 191, 234, 290, 330]
           }
         ]
       };

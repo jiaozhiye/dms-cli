@@ -352,7 +352,7 @@ export default {
           <el-popover v-model={this.visible[fieldName]} visibleArrow={false} placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <Cascader
-                defaultValue={form[fieldName]}
+                initialValue={form[fieldName]}
                 list={itemList}
                 labels={titles}
                 style={style}
