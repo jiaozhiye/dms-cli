@@ -48,6 +48,7 @@ export default {
   }
   .right {
     flex: 1;
+    width: 0;
   }
 }
 </style>
