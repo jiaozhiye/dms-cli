@@ -1,15 +1,20 @@
 <template>
   <div class="dashboard">
-    <div class="left">
-      <employePanel />
-      <TabChartPanel />
-      <StatisPanel />
-    </div>
-    <div class="right">
-      <NoticePanel />
-      <ChartPanel1 />
-      <ChartPanel2 />
-    </div>
+    <section class="main">
+      <div class="left">
+        <employePanel />
+        <TabChartPanel />
+        <StatisPanel />
+      </div>
+      <div class="right">
+        <NoticePanel />
+        <ChartPanel1 />
+        <ChartPanel2 />
+      </div>
+    </section>
+    <footer class="footer tc">
+      <FooterPanel />
+    </footer>
   </div>
 </template>
 
@@ -20,6 +25,7 @@ import NoticePanel from './noticePanel';
 import ChartPanel1 from './chartPanel1';
 import ChartPanel2 from './chartPanel2';
 import StatisPanel from './statisPanel';
+import FooterPanel from './footerPanel';
 
 export default {
   name: 'Dashboard',
@@ -29,7 +35,8 @@ export default {
     NoticePanel,
     ChartPanel1,
     ChartPanel2,
-    StatisPanel
+    StatisPanel,
+    FooterPanel
   },
   data() {
     return {};
@@ -37,17 +44,24 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .dashboard {
-  display: flex;
-  padding: 5px 0 15px;
-  .left {
-    width: 67%;
-    margin-right: 15px;
+  padding: 5px 0 0;
+  .main {
+    display: flex;
+    .left {
+      width: 67%;
+      margin-right: 15px;
+    }
+    .right {
+      flex: 1;
+      width: 0;
+    }
   }
-  .right {
-    flex: 1;
-    width: 0;
+  .footer {
+    height: 30px;
+    line-height: 30px;
+    padding: 15px 0;
   }
 }
 </style>
