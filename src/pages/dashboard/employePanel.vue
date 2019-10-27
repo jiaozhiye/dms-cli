@@ -1,5 +1,5 @@
 <template>
-  <div class="worker">
+  <div class="wrapper">
     <div class="welcome">
       <h3>
         Welcome Back,
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.worker {
+.wrapper {
   display: flex;
   height: 90px;
   background-color: #fff;

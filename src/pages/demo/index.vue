@@ -382,7 +382,7 @@ export default {
       this.$refs.print.EXCUTE_PRINT();
     },
     tableDateChange(list) {
-      console.log(list);
+      // console.log(list);
     }
   },
   mounted() {

@@ -62,7 +62,7 @@ $ npm run build
   - Tinymce 富文本编辑器组件
   - AjaxButton ajax 防止重复提交组件
   - MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
-  - SuperTabs 选项卡组件，支持动画切换及顶部槽口功能
+  - SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
   - CountUp 数字计数动画组件
 ```
 

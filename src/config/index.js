@@ -21,9 +21,9 @@ export default {
     textColor: 'rgba(0, 0, 0, 0.65)',
     // 悬浮框背景颜色
     bgColor: 'rgba(255, 255, 255, 0.85)',
-    // 柱状图鼠标经过的背景反馈颜色
+    // 柱状图/折线图鼠标经过的背景颜色
     barBgColor: 'rgba(0, 0, 0, 0.05)',
-    // 盒子 shadow
+    // 盒子外发光效果
     boxShadow: '0 0 4px rgba(0, 0, 0, 0.35)',
     // 坐标轴颜色
     lineColor: 'rgba(0, 0, 0, 0.35)'

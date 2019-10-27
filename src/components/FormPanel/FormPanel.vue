@@ -267,7 +267,7 @@ export default {
             precision={precision}
             clearable
             onChange={change}
-          ></el-input-number>
+          />
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
@@ -356,7 +356,7 @@ export default {
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => this.treeInputClearHandle(fieldName)}
               onChange={change}
-            ></el-input>
+            />
           </el-popover>
         </el-form-item>
       );
@@ -377,7 +377,7 @@ export default {
                 style={style}
                 onChange={data => {
                   this.cascaderChangeHandle(fieldName, data);
-                  change(form[fieldName] || '');
+                  change(form[fieldName], this[`${fieldName}CascaderTexts`]);
                 }}
                 onClose={() => (this.visible[fieldName] = false)}
               />
@@ -390,8 +390,8 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.inputCascaderClearHandle(fieldName)}
-            ></el-input>
+              onClear={() => this.cascaderChangeHandle(fieldName, [])}
+            />
           </el-popover>
         </el-form-item>
       );
@@ -933,11 +933,6 @@ export default {
       this[`${fieldName}CascaderTexts`] = data.map(x => x.text).join('/');
       // 强制重新渲染组件
       this.$forceUpdate();
-    },
-    // 清空级联选择器
-    inputCascaderClearHandle(fieldName) {
-      this.form[fieldName] = undefined;
-      this[`${fieldName}CascaderTexts`] = '';
     },
     // 文件上传的 change 事件
     fileChangeHandle(fieldName, val) {

@@ -68,8 +68,8 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          backgroundColor: 'rgba(255, 255, 255, .85)',
-          extraCssText: 'box-shadow: 0 0 4px rgba(0, 0, 0, 0.35)',
+          backgroundColor: chartConf.bgColor,
+          extraCssText: `box-shadow: ${chartConf.boxShadow}`,
           textStyle: {
             color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
@@ -90,7 +90,7 @@ export default {
           {
             name: '漏斗图',
             type: 'funnel',
-            left: '5%',
+            left: '5%', // 绘制位置
             top: '10%',
             bottom: '10%',
             width: '60%',

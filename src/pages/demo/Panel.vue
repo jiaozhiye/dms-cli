@@ -125,6 +125,7 @@ export default {
           type: 'INPUT_NUMBER',
           label: '数量',
           fieldName: 'number',
+          precision: 2,
           offsetRightCols: 1,
           placeholder: '请输入数量...',
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]

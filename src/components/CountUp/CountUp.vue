@@ -25,9 +25,8 @@ export default {
     }
   },
   data() {
-    return {
-      instance: null
-    };
+    this.instance = null;
+    return {};
   },
   watch: {
     endVal(value) {
@@ -38,18 +37,12 @@ export default {
   },
   methods: {
     create() {
-      if (this.instance) return;
-      const dom = this.$refs.countup;
-      const instance = new CountUp(dom, this.endVal, this.options);
-      if (instance.error) return;
-      this.instance = instance;
+      this.instance = new CountUp(this.$refs.countup, this.endVal, this.options) || { error: true };
+      if (this.instance.error) return;
       if (this.delay < 0) {
-        return this.$emit('ready', instance, CountUp);
+        return this.$emit('ready', this.instance, CountUp);
       }
-      setTimeout(() => instance.start(() => this.$emit('ready', instance, CountUp)), this.delay);
-    },
-    destroy() {
-      this.instance = null;
+      setTimeout(() => this.instance.start(() => this.$emit('ready', this.instance, CountUp)), this.delay);
     },
     printValue(value) {
       if (this.instance && _.isFunction(this.instance.printValue)) {
@@ -75,6 +68,9 @@ export default {
       if (this.instance && _.isFunction(this.instance.update)) {
         return this.instance.update(newEndVal);
       }
+    },
+    destroy() {
+      this.instance = null;
     }
   },
   mounted() {
