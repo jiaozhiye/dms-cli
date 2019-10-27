@@ -1,9 +1,9 @@
 <script>
 /**
  * @Author: 焦质晔
- * @Date: 2019-05-06 10:00:00
+ * @Date: 2019-06-20 10:00:00
  * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified time: 2019-06-20 10:00:00
  **/
 export default {
   name: 'Anchor',
@@ -133,15 +133,15 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .anchor-wrap {
   height: 100%;
   display: flex;
   flex-direction: row;
-  .labels {
+  /deep/ .labels {
     width: 80px;
     height: 100%;
-    margin-right: 10px;
+    margin-right: @moduleMargin;
     border-right: 1px solid @borderColor;
     li {
       list-style: none;
@@ -167,8 +167,8 @@ export default {
   }
   .scroll-wrapper {
     flex: 1;
-    margin-right: -10px;
-    padding-right: 10px;
+    margin-right: -@moduleMargin;
+    padding-right: @modulePadding;
     height: 100%;
     position: relative;
     overflow-x: hidden !important;

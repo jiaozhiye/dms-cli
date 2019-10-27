@@ -1,9 +1,9 @@
 <script>
 /**
  * @Author: 焦质晔
- * @Date: 2019-05-06 10:00:00
+ * @Date: 2019-06-20 10:00:00
  * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified time: 2019-06-20 10:00:00
  **/
 export default {
   name: 'BaseDialog',
@@ -121,7 +121,7 @@ export default {
       on: { ...$listeners }
     };
     return this.isShowDialog ? (
-      <el-dialog class="dialog" {...wrapProps}>
+      <el-dialog class="base-dialog" {...wrapProps}>
         <span key="fullscreen" class="fullscreen-btn" onClick={this.handleClick}>
           <i class="el-icon-full-screen" />
         </span>
@@ -138,9 +138,9 @@ export default {
 };
 </script>
 
-<style lang="less">
-.dialog {
-  .el-dialog {
+<style lang="less" scoped>
+.base-dialog {
+  /deep/ .el-dialog {
     margin: 0 auto;
     .el-dialog__header {
       height: 56px;

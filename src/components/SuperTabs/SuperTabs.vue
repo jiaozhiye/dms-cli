@@ -1,9 +1,9 @@
 <script>
 /**
  * @Author: 焦质晔
- * @Date: 2019-05-06 10:00:00
+ * @Date: 2019-06-20 10:00:00
  * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified time: 2019-06-20 10:00:00
  **/
 import { filterEmpty } from '@/utils/props-util';
 
@@ -69,9 +69,10 @@ export default {
     },
     createTabsNav(arr) {
       return arr.map(x => {
+        const isActive = x.label === this.currentValue;
         const cls = {
           [`tabs-tab`]: true,
-          [`tab-active`]: x.label === this.currentValue,
+          [`tab-active`]: isActive,
           [`no-events`]: !!x.disabled
         };
         return (
@@ -83,15 +84,12 @@ export default {
     },
     createTabsContent(h, arr) {
       return arr.map(x => {
+        const isActive = x.label === this.currentValue;
         const cls = {
           [`tabs-tabpane`]: true,
-          [`tabs-tabpane-active`]: x.label === this.currentValue
+          [`tabs-tabpane-active`]: isActive
         };
-        return (
-          <div class={cls}>
-            <keep-alive>{x.children}</keep-alive>
-          </div>
-        );
+        return <div class={cls}>{!this.destroyOnClose ? <keep-alive>{x.children}</keep-alive> : isActive ? x.children : null}</div>;
       });
     },
     createTabMenus(vNodes) {

@@ -10,6 +10,12 @@
 </template>
 
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 import Notice from '@/pages/notice/index';
 
 export default {
@@ -23,10 +29,10 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .notice-panel {
   .badge {
-    .el-badge__content {
+    /deep/ .el-badge__content {
       right: 15px;
       top: 5px;
       transform: translateY(-50%) translateX(100%) scale(0.9);

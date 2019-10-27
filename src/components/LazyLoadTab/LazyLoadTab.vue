@@ -1,9 +1,9 @@
 <script>
 /**
  * @Author: 焦质晔
- * @Date: 2019-05-06 10:00:00
+ * @Date: 2019-06-20 10:00:00
  * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-05-07 11:00:00
+ * @Last Modified time: 2019-06-20 10:00:00
  **/
 import _ from 'lodash';
 
@@ -64,6 +64,7 @@ export default {
     },
     createTabPanel(h) {
       return this.tabMenus.map(x => {
+        const isCurrent = x.title === this.value;
         // JSX 中的动态组件不能用 <component /> 标签，必须这样实现
         const component = h(this.$options.components[x.title], {
           // 解决 LazyLoadTab 调用时，传入的参数改变，不触发子组件重新渲染的问题
@@ -72,8 +73,7 @@ export default {
         });
         return (
           <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
-            {this.destroyOnClose && x.title === this.value ? component : null}
-            {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : null}
+            {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : isCurrent ? component : null}
           </el-tab-pane>
         );
       });
@@ -93,9 +93,9 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .lazyLoadTab {
-  .el-tabs__nav-wrap {
+  /deep/ .el-tabs__nav-wrap {
     .el-tabs__item {
       height: 32px;
       line-height: 32px;
@@ -107,7 +107,7 @@ export default {
       width: 1px;
     }
   }
-  .el-tabs__content {
+  /deep/ .el-tabs__content {
     position: static !important;
   }
 }

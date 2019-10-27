@@ -1,4 +1,10 @@
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 export default {
   name: 'Breadcrumb',
   computed: {
@@ -36,11 +42,11 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .breadcrumb-wrap {
   display: flex;
   padding: @modulePadding 0;
-  .el-breadcrumb__item {
+  /deep/ .el-breadcrumb__item {
     .is-link {
       color: @textColor;
       font-weight: 400;

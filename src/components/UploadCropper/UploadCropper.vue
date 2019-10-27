@@ -58,6 +58,12 @@
 </template>
 
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 import axios from '@/api/fetch';
 import canvasCompress from './compress';
 import CropperPanel from './CropperPanel';
@@ -242,14 +248,14 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .upload-wrap {
   width: 100%;
   float: left;
   & > div {
     display: inline-block;
   }
-  .el-upload--picture-card {
+  /deep/ .el-upload--picture-card {
     display: flex;
     width: 100% !important;
     height: 148px;

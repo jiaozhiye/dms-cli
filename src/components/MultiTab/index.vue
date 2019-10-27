@@ -1,4 +1,10 @@
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
 
@@ -162,25 +168,25 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .multi-wrap {
-  .multi-tab {
+  /deep/ .multi-tab {
     position: relative;
     .el-tabs__header {
       margin: 0;
-      border-bottom-color: @borderColor !important;
+      border-bottom-color: @borderColor;
       .el-tabs__nav {
-        border-color: @borderColor !important;
+        border-color: @borderColor;
         .el-tabs__item {
-          border-left-color: @borderColor !important;
+          border-left-color: @borderColor;
         }
       }
     }
     .el-tabs__content {
-      display: none;
+      display: none !important;
     }
   }
-  .contextmenu {
+  /deep/ .contextmenu {
     list-style: none;
     min-width: 90px;
     position: fixed;

@@ -1,4 +1,10 @@
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 export default {
   name: 'BreakSpace',
   props: {
@@ -30,17 +36,17 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form-divider {
   width: 100%;
   height: 32px;
   overflow: hidden;
-  .el-divider--horizontal {
+  /deep/ .el-divider--horizontal {
     margin: 15px 0;
     .el-divider__text {
-      padding: 0 10px;
+      padding: 0 @modulePadding;
       &.is-left {
-        left: -10px;
+        left: -@moduleMargin;
       }
       .title {
         display: inline-block;

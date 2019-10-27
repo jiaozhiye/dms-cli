@@ -40,6 +40,12 @@
 </template>
 
 <script>
+/**
+ * @Author: 焦质晔
+ * @Date: 2019-06-20 10:00:00
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2019-06-20 10:00:00
+ **/
 import { mapState, mapActions } from 'vuex';
 
 export default {
@@ -109,7 +115,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .menu-list {
   height: 100%;
   &::after {
@@ -121,7 +127,7 @@ export default {
     top: 0;
     background: @menuBg;
   }
-  .search {
+  /deep/ .search {
     height: 120px;
     .top {
       padding: 60px 0 0 100px;
@@ -138,7 +144,7 @@ export default {
       }
     }
   }
-  .main {
+  /deep/ .main {
     position: relative;
     height: calc(100% - 120px);
     .el-tabs {
