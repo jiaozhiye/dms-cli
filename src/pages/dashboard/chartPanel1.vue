@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="topper">
-      <span class="title">用户通知</span>
+      <span class="title">收入概览</span>
     </div>
     <div>
       <Chart

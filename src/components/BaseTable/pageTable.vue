@@ -267,7 +267,7 @@ export default {
     // 是否仅有分页参数产生变化
     isOnlyPageChange(nextProps, prevProps) {
       const diff = Object.keys(this.difference(nextProps, prevProps)).join('|');
-      return diff === 'pageNum|currentPage' || diff === 'pageSize|limit';
+      return diff.includes('current') || diff.includes('pageSize');
     },
     // 创建表格数据
     createTableList(data) {
@@ -312,8 +312,9 @@ export default {
     },
     // 处理列表数据
     createTableDataKey(dataList, uidkey) {
+      const { current, pageSize } = this.pagination;
       dataList.forEach((x, i) => {
-        x.index = i; // 序号
+        x.index = (current - 1) * pageSize + i; // 序号
         x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
         this.columnFlatMap(this.columns).forEach(column => {
           const { dataIndex, precision, editable, editType } = column;
