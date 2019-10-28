@@ -52,8 +52,8 @@ export default {
       this.loading = true;
       if (process.env.MOCK_DATA === 'true') {
         await sleep(500);
-        const { chart1 } = require('@/mock/chartData').default;
-        this.draw(chart1);
+        const { chart4 } = require('@/mock/chartData').default;
+        this.draw(chart4);
       } else {
         try {
           const res = await this.fetchapi(this.params);
@@ -86,7 +86,7 @@ export default {
           x: 'right',
           y: 'center',
           padding: [0, 10, 0, 0],
-          data: ['邮件营销', '联盟广告', '视频广告', '其他'],
+          data: values.map(x => x.name),
           textStyle: {
             color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
@@ -100,7 +100,7 @@ export default {
             top: '10%',
             bottom: '10%',
             width: '60%',
-            data: [{ value: 20, name: '邮件营销' }, { value: 40, name: '联盟广告' }, { value: 60, name: '视频广告' }, { value: 80, name: '其他' }]
+            data: values
           }
         ]
       };

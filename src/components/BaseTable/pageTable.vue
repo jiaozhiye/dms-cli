@@ -168,7 +168,16 @@ export default {
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
-      const pagination = this.isShowPagination ? { currentPage: current, pageSize, pageNum: current, limit: pageSize, current, size: pageSize } : {};
+      const pagination = this.isShowPagination
+        ? {
+            currentPage: current,
+            pageSize, // 必须
+            pageNum: current,
+            limit: pageSize,
+            current, // 必须
+            size: pageSize
+          }
+        : {};
       const queries = {
         ...this.sorterParams,
         ...this.filterParams,

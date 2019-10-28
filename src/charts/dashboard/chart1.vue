@@ -114,7 +114,7 @@ export default {
         ],
         yAxis: [
           {
-            name: 'kW·h/100km',
+            name: '单位：辆',
             type: 'value',
             splitLine: {
               lineStyle: {
@@ -141,7 +141,7 @@ export default {
           {
             name: '电耗',
             type: 'bar',
-            barWidth: '30%',
+            barWidth: '40%',
             data: values
           }
         ]

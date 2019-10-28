@@ -51,7 +51,7 @@ export default {
   display: flex;
   height: 90px;
   background-color: #fff;
-  border-left: 3px solid @primaryColor;
+  border-left: 4px solid @primaryColor;
   border-radius: @borderRadius;
   box-shadow: @boxShadow;
   align-items: center;

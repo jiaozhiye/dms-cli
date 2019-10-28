@@ -52,8 +52,8 @@ export default {
       this.loading = true;
       if (process.env.MOCK_DATA === 'true') {
         await sleep(500);
-        const { chart1 } = require('@/mock/chartData').default;
-        this.draw(chart1);
+        const { chart2 } = require('@/mock/chartData').default;
+        this.draw(chart2);
       } else {
         try {
           const res = await this.fetchapi(this.params);
@@ -86,7 +86,7 @@ export default {
         legend: {
           orient: 'horizontal',
           y: 'bottom',
-          data: ['邮件营销', '联盟广告'],
+          data: values.map(x => x.name),
           textStyle: {
             color: chartConf.textColor,
             fontSize: chartConf.chartXAxisSize
@@ -123,7 +123,7 @@ export default {
         ],
         yAxis: [
           {
-            name: 'kW·h/100km',
+            name: '单位：辆',
             type: 'value',
             splitLine: {
               lineStyle: {
@@ -146,18 +146,7 @@ export default {
             }
           }
         ],
-        series: [
-          {
-            name: '邮件营销',
-            type: 'line',
-            data: [120, 132, 101, 134, 90, 230]
-          },
-          {
-            name: '联盟广告',
-            type: 'line',
-            data: [220, 182, 191, 234, 290, 330]
-          }
-        ]
+        series: values
       };
       if (option && this.myChart) {
         this.myChart.clear();
