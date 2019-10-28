@@ -57,7 +57,7 @@ export default {
   align-items: center;
   .welcome {
     flex: 1;
-    margin: 0 15px;
+    margin-left: 15px;
     display: flex;
     align-items: center;
     .avatar {

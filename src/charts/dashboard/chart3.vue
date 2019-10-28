@@ -96,7 +96,7 @@ export default {
           {
             name: '访问来源',
             type: 'pie',
-            center: ['36%', '52%'], // 改变饼状图位置
+            center: ['38%', '52%'], // 改变饼状图位置
             radius: ['30%', '60%'],
             data: [{ value: 135, name: '邮件营销' }, { value: 1048, name: '联盟广告' }, { value: 251, name: '视频广告' }, { value: 102, name: '其他' }]
           }
