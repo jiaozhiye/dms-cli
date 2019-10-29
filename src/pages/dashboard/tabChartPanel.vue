@@ -9,10 +9,10 @@
           <el-radio-button label="1004">本年</el-radio-button>
         </el-radio-group>
       </div>
-      <tab-panel label="备件出库成本">
+      <tab-panel label="成交量">
         <Chart1 :fetchapi="() => {}" :params="fetchParams" :containerStyle="{ height: '345px' }" />
       </tab-panel>
-      <tab-panel label="出库成本结构">
+      <tab-panel label="同比增长">
         <Chart2 :fetchapi="() => {}" :params="fetchParams" :containerStyle="{ height: '345px' }" />
       </tab-panel>
     </SuperTabs>
@@ -34,7 +34,7 @@ export default {
       fetchParams: {
         radioValue: '1001'
       },
-      defaultTabLabel: '备件出库成本'
+      defaultTabLabel: '成交量'
     };
   },
   methods: {

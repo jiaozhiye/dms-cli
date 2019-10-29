@@ -63,7 +63,7 @@ export default {
         .filter(x => !x.hidden)
         .forEach(x => {
           if (x.type === 'BREAK_SPACE') return;
-          if (_.isObject(x.labelOptions)) {
+          if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
             res.push(x.labelOptions);
           }
           res.push(x);

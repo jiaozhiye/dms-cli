@@ -63,7 +63,7 @@ export default {
       this.list
         .filter(x => !x.hidden)
         .forEach(x => {
-          if (_.isObject(x.labelOptions)) {
+          if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
             res.push(x.labelOptions);
           }
           res.push(x);

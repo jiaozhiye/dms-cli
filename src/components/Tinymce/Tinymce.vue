@@ -131,11 +131,13 @@ export default {
           editor.on('KeyUp', e => {
             const val = editor.getContent();
             if (this.tinymceVal === val) return;
+            // 过滤 html 标签
             const regExp = /<[^<>]+>/g;
             if (val.replace(regExp, '').length > this.wordsLimit) {
               this.isWordsLimit = true;
               return messageAction('文本字符已达上限！', 'warning');
             }
+            // 重点
             this.tinymceVal = val;
             this.$emit('input', this.tinymceVal);
             this.$emit('change', this.tinymceVal);
