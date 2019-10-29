@@ -23,13 +23,15 @@ import plugins from './plugins';
 import toolbar from './toolbar';
 import UploadImg from './UploadImg';
 
+import { messageAction } from '@/utils';
+
 export default {
   name: 'Tinymce',
   components: { UploadImg },
   props: {
     id: {
       type: String,
-      default: function() {
+      default() {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '');
       }
     },
@@ -52,6 +54,10 @@ export default {
         return [5, 4];
       }
     },
+    wordsLimit: {
+      type: Number,
+      default: 10
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -68,35 +74,31 @@ export default {
     }
   },
   data() {
+    this.tinymce = null;
+    this.tinymceVal;
     return {
-      hasChange: false,
-      hasInit: false,
       tinymceId: this.id,
       fullscreen: false
     };
   },
   watch: {
-    value(val) {
-      if (!this.hasChange && this.hasInit) {
-        window.tinymce.get(this.tinymceId).setContent(val || '');
-      }
+    value: {
+      handler(val = '') {
+        if (val === this.tinymceVal || !this.tinymce) return;
+        this.tinymce.setContent(val);
+      },
+      immediate: true
     }
   },
   mounted() {
-    this.initTinymce();
+    this.tinymce = this.initTinymce();
   },
   activated() {
-    this.initTinymce();
-  },
-  deactivated() {
-    this.destroyTinymce();
-  },
-  destroyed() {
-    this.destroyTinymce();
+    this.tinymce = this.initTinymce();
   },
   methods: {
     initTinymce() {
-      tinymce.init({
+      window.tinymce.init({
         language: 'zh_CN',
         selector: `#${this.tinymceId}`,
         height: this.height,
@@ -116,15 +118,27 @@ export default {
         readonly: this.disabled,
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
         init_instance_callback: editor => {
-          this.hasInit = true;
-          if (this.value) {
-            editor.setContent(this.value);
-          }
-          editor.on('NodeChange Change KeyUp SetContent', () => {
-            this.hasChange = true;
-            this.$emit('input', editor.getContent());
-            this.$emit('change', editor.getContent());
-            this.$nextTick(() => (this.hasChange = false));
+          // 初始化内容
+          this.value && editor.setContent(this.value);
+          // change 事件
+          editor.on('Change', e => {
+            if (this.isWordsLimit) {
+              this.setContent(e.lastLevel.content);
+            }
+            this.isWordsLimit = false;
+          });
+          // keyup 事件
+          editor.on('KeyUp', e => {
+            const val = editor.getContent();
+            if (this.tinymceVal === val) return;
+            const regExp = /<[^<>]+>/g;
+            if (val.replace(regExp, '').length > this.wordsLimit) {
+              this.isWordsLimit = true;
+              return messageAction('文本字符已达上限！', 'warning');
+            }
+            this.tinymceVal = val;
+            this.$emit('input', this.tinymceVal);
+            this.$emit('change', this.tinymceVal);
           });
         },
         setup(editor) {
@@ -133,27 +147,32 @@ export default {
           });
         }
       });
+      return window.tinymce.get(this.tinymceId);
     },
     destroyTinymce() {
-      const tinymce = window.tinymce.get(this.tinymceId);
       if (this.fullscreen) {
-        tinymce.execCommand('mceFullScreen');
+        this.tinymce.execCommand('mceFullScreen');
       }
-      if (tinymce) {
-        tinymce.destroy();
-      }
+      this.tinymce.destroy();
     },
     setContent(value) {
-      window.tinymce.get(this.tinymceId).setContent(value);
+      this.tinymceVal = value;
+      this.tinymce.setContent(value);
     },
     getContent() {
-      window.tinymce.get(this.tinymceId).getContent();
+      this.tinymce.getContent();
     },
     imageSuccessHandle(arr) {
       arr.forEach(v => {
-        window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" />`);
+        this.tinymce.insertContent(`<img class="wscnph" src="${v.url}" />`);
       });
     }
+  },
+  deactivated() {
+    this.destroyTinymce();
+  },
+  destroyed() {
+    this.destroyTinymce();
   }
 };
 </script>

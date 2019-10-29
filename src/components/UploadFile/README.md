@@ -19,9 +19,10 @@ Vue.use(UploadFile);
 - fileTypes{Array|限制上传附件的类型}
 - isOnlyButton{Boolean|是否仅显示上传按钮}
 - limit{Number|支持上传附件的数量，默认是 1}
+- fileSize{Number|限制上传文件的大小，单位是 M，默认是 5M}
 - params{Object|ajax 上传时附带的额外参数}
 - disabled{Boolean|是否禁用}
-- - containerStyle{Object|承载按钮层容器的 css 样式}
+- containerStyle{Object|承载按钮层容器的 css 样式}
 - change{Function|上传服务端成功的回调事件，参数是上传附件的列表}
 - error{Function|上传服务端失败的回调事件，参数是错误对象}
 

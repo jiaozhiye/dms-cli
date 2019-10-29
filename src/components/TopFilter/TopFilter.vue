@@ -217,7 +217,10 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             clearable
-            onChange={change}
+            onChange={val => {
+              form[fieldName] = val.trim();
+              change(form[fieldName]);
+            }}
             onInput={onInput}
             onFocus={onFocus}
             nativeOnKeydown={this.enterEventHandle}
@@ -694,7 +697,7 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 100 } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 200 } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -704,7 +707,7 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder = '请选择...', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder = '请选择...', disabled, clearable = !0, change = () => {} } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!option.itemList && fetchApi) {
@@ -724,7 +727,7 @@ export default {
             placeholder={placeholder}
             disabled={disabled}
             style={{ ...style }}
-            clearable
+            clearable={clearable}
             onChange={change}
             nativeOnKeydown={this.enterEventHandle}
             filterMethod={queryString => {

@@ -30,6 +30,10 @@ export default {
       type: Number,
       default: 1
     },
+    fileSize: {
+      type: Number,
+      default: 5
+    },
     params: {
       type: Object,
       default: () => ({})
@@ -56,7 +60,7 @@ export default {
   methods: {
     beforeUploadHandle(file) {
       const isType = this.fileTypes.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase());
-      const isLt5M = file.size / 1024 / 1024 < 5;
+      const isLt5M = file.size / 1024 / 1024 < this.fileSize;
       if (!isType) {
         this.$notify({ title: '警告信息', message: `上传头像图片只能是 ${this.fileTypes.join(',')} 格式!`, type: 'warning' });
       }
