@@ -36,7 +36,7 @@
         <i class="el-icon-plus"></i>
         <span>{{ titles[imgUrlArr.length] }}</span>
       </div>
-      <div slot="tip" class="el-upload__tip">{{ tipText }}</div>
+      <div slot="tip" class="el-upload__tip">{{ `只能上传 ${fileTypes.join(',')} 格式的图片` }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
     <BaseDialog :visible.sync="dialogVisible" title="图片预览">
@@ -70,6 +70,9 @@ import CropperPanel from './CropperPanel';
 
 export default {
   name: 'UploadCropper',
+  components: {
+    CropperPanel
+  },
   props: {
     actionUrl: {
       type: String,
@@ -85,21 +88,19 @@ export default {
     },
     fixedSize: {
       type: Array,
-      default() {
-        return [5, 4];
-      }
-    },
-    limit: {
-      type: Number,
-      default: 1
+      default: () => [5, 4]
     },
     titles: {
       type: Array,
       default: () => []
     },
-    tipText: {
-      type: String,
-      default: '只能上传 jpg/png/bmp 文件'
+    limit: {
+      type: Number,
+      default: 1
+    },
+    fileTypes: {
+      type: Array,
+      default: () => ['jpg', 'png', 'bmp']
     },
     disabled: {
       type: Boolean,
@@ -173,7 +174,7 @@ export default {
       } catch (err) {
         this.clearFiles();
         this.$emit('error', err);
-        this.$message.error('上传文件失败！');
+        this.$message.error('图片上传失败！');
       }
       this.cropperModel = false;
       this.isLoading = false;
@@ -209,7 +210,7 @@ export default {
       try {
         await this.downloadFile(this.imgUrlArr[index]);
       } catch (err) {
-        this.$message.error('文件下载失败！');
+        this.$message.error('图片下载失败！');
       }
     },
     // 获取服务端文件 to blob
@@ -241,9 +242,6 @@ export default {
   updated() {
     const { uploadCropper } = this.$refs;
     uploadCropper && uploadCropper.Update();
-  },
-  components: {
-    CropperPanel
   }
 };
 </script>

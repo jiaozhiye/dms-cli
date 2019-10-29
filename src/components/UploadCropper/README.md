@@ -20,7 +20,6 @@ Vue.use(UploadCropper);
 - isCalcHeight{Boolean|是否根据裁剪图片宽高比自动计算上传组件容器高度，默认值 false}
 - limit{Number|支持上传图片的数量，默认是 1}
 - titles: {Array|图片对应的标题，元素的个数与 limit 一致}
-- tipText{String|上传图片格式的提示文字}
 - disabled{Boolean|是否禁用}
 - success{Function|上传服务端成功的回调事件，参数是图片地址}
 - error{Function|上传服务端失败的回调事件，参数是错误对象}

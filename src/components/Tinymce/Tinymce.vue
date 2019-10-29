@@ -27,7 +27,9 @@ import { messageAction } from '@/utils';
 
 export default {
   name: 'Tinymce',
-  components: { UploadImg },
+  components: {
+    UploadImg
+  },
   props: {
     id: {
       type: String,
@@ -135,7 +137,7 @@ export default {
             const regExp = /<[^<>]+>/g;
             if (val.replace(regExp, '').length > this.wordsLimit) {
               this.isWordsLimit = true;
-              return messageAction('文本字符已达上限！', 'warning');
+              return messageAction('文字数量已达上限！', 'warning');
             }
             // 重点
             this.tinymceVal = val;
