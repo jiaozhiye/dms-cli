@@ -26,13 +26,13 @@ export const basic = {
     },
     /**
      * 表单项数据比对方法
-     * @param formData {Object|表单数据}
-     * @param originData {Object|原始数据}
-     * @return Boolean 与原始数据一致，返回 true；否则，返回 false
+     * @param {Object} formData 表单数据
+     * @param {Object} originData 原始数据
+     * @return {Boolean} 与原始数据一致，返回 true；否则，返回 false
      */
     formDataCompare(formData, originData = {}) {
       const keys = Object.keys(formData).filter(x => !x.includes('|'));
-      // 假设相等
+      // 假设数据一致
       let res = true;
       for (let i = 0; i < keys.length; i++) {
         if (!isValueEqual(formData[keys[i]], originData[keys[i]])) {
