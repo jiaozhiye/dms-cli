@@ -640,15 +640,18 @@ export default {
     },
     // 创建单元格渲染节点
     createCellNode(JSXNode, msgs = [], isTooltip) {
-      const classNames = !msgs.length ? 'el-form-item' : 'el-form-item is-error';
+      const cls = {
+        [`el-form-item`]: true,
+        [`is-error`]: !!msgs.length
+      };
       const domStyle = isTooltip ? { whiteSpace: 'pre' } : null;
       return (
-        <div class={classNames} style={domStyle}>
+        <span class={cls} style={domStyle}>
           {JSXNode}
           {msgs.map(msg => (
             <div class="form-item-error">{msg}</div>
           ))}
-        </div>
+        </span>
       );
     },
     // 可选择列渲染方法
@@ -1882,12 +1885,17 @@ export default {
       white-space: pre-wrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    .is-error {
-      .form-item-error {
-        line-height: 1;
-        color: @dangerColor;
-        text-align: left;
+      &.is-error {
+        .form-item-error {
+          line-height: 1;
+          color: @dangerColor;
+          text-align: left;
+        }
+      }
+      &::before,
+      &::after {
+        font-size: 0;
+        line-height: 0;
       }
     }
   }

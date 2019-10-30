@@ -746,7 +746,7 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable rows={rows} maxlength={maxlength} showWordLimit />
+          <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable autosize={{ minRows: rows }} maxlength={maxlength} showWordLimit />
         </el-form-item>
       );
     },
@@ -1158,12 +1158,13 @@ export default {
         width: 100%;
       }
       .el-textarea {
+        display: block;
         .el-textarea__inner {
           font-family: inherit;
           overflow-y: auto;
         }
         .el-input__count {
-          line-height: 12px;
+          line-height: 1;
           right: 6px;
         }
       }
