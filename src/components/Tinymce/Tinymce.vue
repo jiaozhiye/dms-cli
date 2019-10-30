@@ -58,7 +58,7 @@ export default {
     },
     wordsLimit: {
       type: Number,
-      default: 10
+      default: 50000
     },
     disabled: {
       type: Boolean,
@@ -126,6 +126,7 @@ export default {
           editor.on('Change', e => {
             if (this.isWordsLimit) {
               this.setContent(e.lastLevel.content);
+              this.syncTinymceVal(e.lastLevel.content);
             }
             this.isWordsLimit = false;
           });
@@ -140,9 +141,7 @@ export default {
               return messageAction('文字数量已达上限！', 'warning');
             }
             // 重点
-            this.tinymceVal = val;
-            this.$emit('input', this.tinymceVal);
-            this.$emit('change', this.tinymceVal);
+            this.syncTinymceVal(val);
           });
         },
         setup(editor) {
@@ -153,15 +152,20 @@ export default {
       });
       return window.tinymce.get(this.tinymceId);
     },
+    syncTinymceVal(val) {
+      this.tinymceVal = val;
+      this.$emit('input', val);
+      this.$emit('change', val);
+    },
     destroyTinymce() {
       if (this.fullscreen) {
         this.tinymce.execCommand('mceFullScreen');
       }
       this.tinymce.destroy();
     },
-    setContent(value) {
-      this.tinymceVal = value;
-      this.tinymce.setContent(value);
+    setContent(val) {
+      this.tinymceVal = val;
+      this.tinymce.setContent(val);
     },
     getContent() {
       this.tinymce.getContent();

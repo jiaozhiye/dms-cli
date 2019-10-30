@@ -1007,7 +1007,7 @@ export default {
     const { form, rules, labelWidth } = this;
     return (
       <div class="top-filter">
-        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`}>
+        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`} nativeOnSubmit={ev => ev.preventDefault()}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
         </el-form>
       </div>

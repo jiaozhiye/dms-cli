@@ -435,7 +435,6 @@ export default {
             style={{ ...style }}
             clearable
             onChange={change}
-            nativeOnKeydown={this.enterEventHandle}
             fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, queryString, cb)}
             scopedSlots={{
               default: props => {
@@ -1103,7 +1102,7 @@ export default {
     const { form, rules, labelWidth } = this;
     return (
       <div class="form-panel">
-        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`}>
+        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`} nativeOnSubmit={ev => ev.preventDefault()}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
           {this.createFormButton()}
         </el-form>
