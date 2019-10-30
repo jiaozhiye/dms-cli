@@ -47,6 +47,7 @@
  * @Last Modified time: 2019-06-20 10:00:00
  **/
 import { mapState, mapActions } from 'vuex';
+import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
 export default {
   name: 'MenuList',
@@ -85,7 +86,10 @@ export default {
     },
     createFilter(queryString) {
       return state => {
-        const str = `${state.title}|${state.pyt}`;
+        const pyt = pinyin(state.title, { style: STYLE_FIRST_LETTER })
+          .flat()
+          .join('');
+        const str = `${state.title}|${pyt}`;
         return str.toLowerCase().includes(queryString.toLowerCase());
       };
     },

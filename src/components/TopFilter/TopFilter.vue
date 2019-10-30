@@ -61,7 +61,7 @@ export default {
     formItemList() {
       const res = [];
       this.list
-        .filter(x => !x.hidden)
+        .filter(x => !x.hidden && x.fieldName)
         .forEach(x => {
           if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
             res.push(x.labelOptions);
@@ -154,14 +154,18 @@ export default {
     },
     createFormItemLabel(option) {
       const { form } = this;
-      const { fieldName, itemList, style = {}, disabled, change = () => {} } = option;
+      const { type = 'SELECT', fieldName, itemList, options = {}, style = {}, disabled, change = () => {} } = option;
+      const { trueValue = '1', falseValue = '0' } = options;
       return (
         <div class="label-wrap" style={{ ...style }}>
-          <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={change}>
-            {itemList.map(x => (
-              <el-option key={x.value} label={x.text} value={x.value} />
-            ))}
-          </el-select>
+          {type === 'SELECT' && (
+            <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={change}>
+              {itemList.map(x => (
+                <el-option key={x.value} label={x.text} value={x.value} />
+              ))}
+            </el-select>
+          )}
+          {type === 'CHECKBOX' && <el-checkbox v-model={form[fieldName]} disabled={disabled} trueLabel={trueValue} falseLabel={falseValue} onChange={change} />}
         </div>
       );
     },
@@ -654,7 +658,7 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change}></el-checkbox>
+          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change} />
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );

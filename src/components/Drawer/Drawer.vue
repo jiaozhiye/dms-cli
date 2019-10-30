@@ -15,26 +15,26 @@
           <div class="drawer-title">
             <slot name="title">{{ title }}</slot>
           </div>
+          <button v-if="closable" class="drawer-close" @click.stop="close()">
+            <span class="drawer-close-x">
+              <i class="anticon anticon-close">
+                <svg
+                  viewBox="64 64 896 896"
+                  data-icon="close"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class
+                >
+                  <path
+                    d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
+                  />
+                </svg>
+              </i>
+            </span>
+          </button>
         </div>
-        <button v-if="closable" class="drawer-close" @click.stop="close()">
-          <span class="drawer-close-x">
-            <i class="anticon anticon-close">
-              <svg
-                viewBox="64 64 896 896"
-                data-icon="close"
-                width="1em"
-                height="1em"
-                fill="currentColor"
-                aria-hidden="true"
-                class
-              >
-                <path
-                  d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                />
-              </svg>
-            </i>
-          </span>
-        </button>
         <div class="drawer-body">
           <slot v-if="isShowSlot"></slot>
         </div>
@@ -232,6 +232,7 @@ export default {
       height: 100%;
       overflow-y: auto;
       .drawer-header {
+        position: relative;
         padding: 16px 20px;
         border-radius: 4px 4px 0 0;
         background: #fff;
@@ -244,38 +245,39 @@ export default {
           font-weight: 500;
           color: rgba(0, 0, 0, 0.65);
         }
-      }
-      .drawer-close {
-        cursor: pointer;
-        border: 0;
-        background: transparent;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 10;
-        font-weight: 700;
-        line-height: 1;
-        text-decoration: none;
-        transition: color 0.3s;
-        color: rgba(0, 0, 0, 0.45);
-        outline: 0;
-        padding: 0;
-        &:hover {
-          color: @primaryColor;
+        .drawer-close {
+          cursor: pointer;
+          border: 0;
+          background: transparent;
+          position: absolute;
+          right: 0;
+          top: 0;
+          z-index: 10;
+          font-weight: 700;
+          line-height: 1;
           text-decoration: none;
-        }
-        .drawer-close-x {
-          display: block;
-          font-style: normal;
-          text-align: center;
-          text-transform: none;
-          text-rendering: auto;
-          width: 55px;
-          height: 55px;
-          line-height: 55px;
-          font-size: 16px;
+          transition: color 0.3s;
+          color: rgba(0, 0, 0, 0.45);
+          outline: 0;
+          padding: 0;
+          &:hover {
+            color: @primaryColor;
+            text-decoration: none;
+          }
+          .drawer-close-x {
+            display: block;
+            font-style: normal;
+            text-align: center;
+            text-transform: none;
+            text-rendering: auto;
+            width: 55px;
+            height: 55px;
+            line-height: 55px;
+            font-size: 16px;
+          }
         }
       }
+
       .drawer-body {
         padding: 10px 20px;
         word-wrap: break-word;
