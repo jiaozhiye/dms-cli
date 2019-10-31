@@ -54,10 +54,15 @@ export default {
       type: String,
       default: 'button'
     },
+    // 分割线
+    divider: {
+      type: String,
+      default: ''
+    },
     // 权限校验参数
     authList: {
       type: Array,
-      default: () => []
+      default: null
     },
     authMark: {
       type: String,
@@ -74,8 +79,8 @@ export default {
       return this.ajaxing || this.disabled;
     },
     isVisible() {
-      // 没有按钮权限控制，默认该按钮显示状态
-      if (!this.authList.length) return true;
+      // 没有权限控制，默认该按钮显示状态
+      if (!this.authList) return true;
       return this.authList.includes(this.authMark);
     }
   },
@@ -93,7 +98,7 @@ export default {
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible } = this;
+    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible, divider } = this;
     const ajaxClick = _.isFunction(this.click) ? { click: this.clickHandler } : null;
     const wrapProps = {
       key: 'multiuse-btn',
@@ -109,7 +114,17 @@ export default {
       attrs: $attrs,
       scopedSlots: $scopedSlots
     };
-    return isVisible ? <el-button {...wrapProps}>{$slots['default']}</el-button> : null;
+    const Button = <el-button {...wrapProps}>{$slots['default']}</el-button>;
+    const vNode = !divider ? (
+      Button
+    ) : (
+      <span>
+        {divider === 'before' && <el-divider direction="vertical" />}
+        {Button}
+        {divider === 'after' && <el-divider direction="vertical" />}
+      </span>
+    );
+    return isVisible ? vNode : null;
   }
 };
 </script>

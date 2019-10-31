@@ -52,7 +52,7 @@ export default {
     // 权限校验参数
     authList: {
       type: Array,
-      default: () => []
+      default: null
     },
     authMark: {
       type: String,
@@ -69,8 +69,8 @@ export default {
       return this.ajaxing || this.disabled;
     },
     isVisible() {
-      // 没有按钮权限控制，默认该按钮显示状态
-      if (!this.authList.length) return true;
+      // 没有权限控制，默认该按钮显示状态
+      if (!this.authList) return true;
       return this.authList.includes(this.authMark);
     }
   },

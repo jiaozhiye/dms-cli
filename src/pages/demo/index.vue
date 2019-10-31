@@ -204,10 +204,9 @@ export default {
           render: (props, h) => {
             return (
               <div>
-                <multiuse-button size="mini" type="text" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
+                <multiuse-button size="mini" type="text" divider="after" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
                   编辑
                 </multiuse-button>
-                <el-divider direction="vertical" />
                 <el-button size="mini" type="text">
                   查看
                 </el-button>
