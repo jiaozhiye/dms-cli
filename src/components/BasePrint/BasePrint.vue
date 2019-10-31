@@ -20,6 +20,10 @@ export default {
       type: String,
       default: 'vertical'
     },
+    printCopies: {
+      type: Number,
+      default: 1
+    },
     alwaysPrint: {
       type: Boolean,
       default: false
@@ -56,10 +60,11 @@ export default {
       this.LODOP.PRINT_INIT('打印表格');
       // 纵向
       if (this.direction === 'vertical') {
+        // 按内容走纸，连续打印
         if (this.alwaysPrint) {
-          // 10mm -> 打印的下边距
-          this.LODOP.SET_PRINT_PAGESIZE(3, '210mm', '10mm', '');
+          this.LODOP.SET_PRINT_PAGESIZE(3, '210mm', '10mm', ''); // 10mm -> 打印的下边距
         } else {
+          // 整张打印
           this.LODOP.SET_PRINT_PAGESIZE(1, '210mm', '297mm', '');
         }
       }
@@ -70,6 +75,7 @@ export default {
       }
       this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'width: 100%'); // 设置打印内容的自动缩放
       this.LODOP.SET_PRINT_MODE('AUTO_CLOSE_PREWINDOW', 1); // 设置设置完打印后 是否关闭预览窗口;
+      this.LODOP.SET_PRINT_COPIES(this.printCopies); // 指定打印份数
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
       this.LODOP.PREVIEW();
     },

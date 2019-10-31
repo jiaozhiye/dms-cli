@@ -188,10 +188,12 @@ export default {
         margin-right: 170px;
         .column-wrap {
           column-count: 2;
+          column-gap: 0;
           .box {
             padding-left: 20px;
             padding-bottom: 10px;
             -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
             break-inside: avoid;
             h4 {
               color: @menuText;

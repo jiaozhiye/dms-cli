@@ -1885,6 +1885,8 @@ export default {
       white-space: pre-wrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      /* IE11 */
+      display: block\0;
       &.is-error {
         .form-item-error {
           line-height: 1;
