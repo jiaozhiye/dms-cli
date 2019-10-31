@@ -20,7 +20,7 @@ export default {
     },
     fileTypes: {
       type: Array,
-      default: () => ['jpg', 'png', 'pdf', 'xls']
+      default: () => ['jpg', 'png', 'pdf', 'xls', 'xlsx']
     },
     isOnlyButton: {
       type: Boolean,

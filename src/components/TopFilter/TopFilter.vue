@@ -190,7 +190,7 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <div>{render()}</div>
+          <div style="line-height: 32px">{render()}</div>
         </el-form-item>
       );
     },
@@ -705,7 +705,17 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-input type="textarea" v-model={form[fieldName]} placeholder={placeholder} disabled={disabled} style={{ ...style }} clearable autosize={{ minRows: rows }} maxlength={maxlength} showWordLimit />
+          <el-input
+            type="textarea"
+            v-model={form[fieldName]}
+            placeholder={placeholder}
+            disabled={disabled}
+            style={{ ...style }}
+            clearable
+            autosize={{ minRows: rows }}
+            maxlength={maxlength}
+            showWordLimit
+          />
         </el-form-item>
       );
     },
@@ -1135,6 +1145,7 @@ export default {
         vertical-align: middle;
       }
       .desc-text {
+        line-height: 32px;
         font-size: @textSizeSecondary;
         padding-left: @modulePadding;
       }
