@@ -483,12 +483,16 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type={dateType.replace('exact', '')}
-            v-model={form[fieldName]}
+            value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
+            onInput={val => {
+              val = val === null ? undefined : val;
+              form[fieldName] = val;
+            }}
             value-format={conf[dateType].valueFormat}
             placeholder={conf[dateType].placeholder}
             disabled={disabled}
             style={{ ...style }}
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -525,12 +529,38 @@ export default {
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
         picker.$emit('pick', [start, end]);
       };
+      const pickers = [
+        {
+          text: '最近一周',
+          onClick(picker) {
+            createPicker(picker, 7);
+          }
+        },
+        {
+          text: '最近一个月',
+          onClick(picker) {
+            createPicker(picker, 30);
+          }
+        },
+        {
+          text: '最近三个月',
+          onClick(picker) {
+            createPicker(picker, 90);
+          }
+        },
+        {
+          text: '最近六个月',
+          onClick(picker) {
+            createPicker(picker, 180);
+          }
+        }
+      ];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type={dateType.replace('exact', '')}
-            value={form[fieldName]}
+            value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
             onInput={val => {
               val = val === null ? [] : val;
               form[fieldName] = val;
@@ -544,26 +574,7 @@ export default {
             style={{ ...style }}
             onChange={() => change(form[fieldName])}
             pickerOptions={{
-              shortcuts: [
-                {
-                  text: '最近一周',
-                  onClick(picker) {
-                    createPicker(picker, 7);
-                  }
-                },
-                {
-                  text: '最近一个月',
-                  onClick(picker) {
-                    createPicker(picker, 30);
-                  }
-                },
-                {
-                  text: '最近三个月',
-                  onClick(picker) {
-                    createPicker(picker, 90);
-                  }
-                }
-              ]
+              shortcuts: dateType.includes('date') ? pickers : pickers.slice(1)
             }}
           />
         </el-form-item>
@@ -1045,6 +1056,14 @@ export default {
         </el-row>
       ) : null;
     },
+    // 日期格式化
+    formatDate(val, vf) {
+      const arr = Array.isArray(val) ? val : [val];
+      const res = arr.map(x => {
+        return !x ? x : moment(x).format(vf.replace('yyyy', 'YYYY').replace('dd', 'DD'));
+      });
+      return Array.isArray(val) ? res : res[0];
+    },
     // 数字格式化
     formatNumber(value = '') {
       value += '';
@@ -1068,6 +1087,7 @@ export default {
         fn.timer = setTimeout(() => fn.apply(this, args), delay);
       };
     },
+    // 转百分比
     toPercent(num) {
       return Number(num * 100).toFixed(5) + '%';
     },

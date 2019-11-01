@@ -204,7 +204,7 @@ export default {
           render: (props, h) => {
             return (
               <div>
-                <multiuse-button size="mini" type="text" divider="after" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
+                <multiuse-button size="mini" type="text" divider="after" style="color: red" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
                   编辑
                 </multiuse-button>
                 <el-button size="mini" type="text">
@@ -389,6 +389,7 @@ export default {
     console.log('页面不具备的权限：', this.auths);
     setTimeout(() => {
       this.list = [...res.data.items];
+      this.topFilterList.find(x => x.fieldName === 'startTime|endTime').initialValue = ['2019-10-12', '2019-10-28'];
       this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
       this.topFilterList[0].hidden = false;
       this.topFilterList[0].initialValue = 'asdf';

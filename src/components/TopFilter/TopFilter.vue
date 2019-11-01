@@ -465,12 +465,16 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
             type={dateType.replace('exact', '')}
-            v-model={form[fieldName]}
+            value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
+            onInput={val => {
+              val = val === null ? undefined : val;
+              form[fieldName] = val;
+            }}
             value-format={conf[dateType].valueFormat}
             placeholder={conf[dateType].placeholder}
             disabled={disabled}
             style={{ ...style }}
-            onChange={change}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -505,18 +509,43 @@ export default {
       const createPicker = (picker, days) => {
         const end = new Date();
         const start = new Date();
-        const f = conf[dateType].valueFormat.replace('yyyy', 'YYYY').replace('dd', 'DD');
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
-        form[fieldName] = [moment(start).format(f), moment(end).format(f)];
+        form[fieldName] = this.formatDate([start, end], conf[dateType].valueFormat);
         picker.$emit('pick', start);
       };
+      const pickers = [
+        {
+          text: '最近一周',
+          onClick(picker) {
+            createPicker(picker, 7);
+          }
+        },
+        {
+          text: '最近一个月',
+          onClick(picker) {
+            createPicker(picker, 30);
+          }
+        },
+        {
+          text: '最近三个月',
+          onClick(picker) {
+            createPicker(picker, 90);
+          }
+        },
+        {
+          text: '最近六个月',
+          onClick(picker) {
+            createPicker(picker, 180);
+          }
+        }
+      ];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <div class="range-date" style={{ ...style }}>
             <el-date-picker
               type={dateType.replace('exact', '').slice(0, -5)}
-              value={form[fieldName][0]}
+              value={this.formatDate(form[fieldName][0], conf[dateType].valueFormat)}
               onInput={val => {
                 val = val === null ? undefined : val;
                 form[fieldName] = [val, form[fieldName][1]];
@@ -526,26 +555,7 @@ export default {
                   if (!endDate) return;
                   return time.getTime() > moment(endDate).toDate();
                 },
-                shortcuts: [
-                  {
-                    text: '最近一周',
-                    onClick(picker) {
-                      createPicker(picker, 7);
-                    }
-                  },
-                  {
-                    text: '最近一个月',
-                    onClick(picker) {
-                      createPicker(picker, 30);
-                    }
-                  },
-                  {
-                    text: '最近三个月',
-                    onClick(picker) {
-                      createPicker(picker, 90);
-                    }
-                  }
-                ]
+                shortcuts: dateType.includes('date') ? pickers : pickers.slice(1)
               }}
               value-format={conf[dateType].valueFormat}
               style={{ width: `calc(50% - 7px)` }}
@@ -558,7 +568,7 @@ export default {
             </span>
             <el-date-picker
               type={dateType.replace('exact', '').slice(0, -5)}
-              value={form[fieldName][1]}
+              value={this.formatDate(form[fieldName][1], conf[dateType].valueFormat)}
               onInput={val => {
                 val = val === null ? undefined : val;
                 form[fieldName] = [form[fieldName][0], val];
@@ -579,78 +589,6 @@ export default {
         </el-form-item>
       );
     },
-    // RANGE_DATE(option) {
-    //   const { form } = this;
-    //   const conf = {
-    //     daterange: {
-    //       placeholder: ['开始日期', '结束日期'],
-    //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
-    //     },
-    //     datetimerange: {
-    //       placeholder: ['开始时间', '结束时间'],
-    //       valueFormat: 'yyyy-MM-dd HH:mm:ss'
-    //     },
-    //     exactdaterange: {
-    //       placeholder: ['开始日期', '结束日期'],
-    //       valueFormat: 'yyyy-MM-dd'
-    //     },
-    //     monthrange: {
-    //       placeholder: ['开始月份', '结束月份'],
-    //       valueFormat: 'yyyy-MM'
-    //     }
-    //   };
-    //   const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', style = {}, disabled, change = () => {} } = option;
-    //   // 日期区间快捷键方法
-    //   const createPicker = (picker, days) => {
-    //     const end = new Date();
-    //     const start = new Date();
-    //     start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
-    //     picker.$emit('pick', [start, end]);
-    //   };
-    //   return (
-    //     <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
-    //       {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-    //       <el-date-picker
-    //         type={dateType.replace('exact', '')}
-    //         value={form[fieldName]}
-    //         onInput={val => {
-    //           val = val === null ? [] : val;
-    //           form[fieldName] = val;
-    //         }}
-    //         value-format={conf[dateType].valueFormat}
-    //         range-separator="-"
-    //         start-placeholder={conf[dateType].placeholder[0]}
-    //         end-placeholder={conf[dateType].placeholder[1]}
-    //         unlink-panels={true}
-    //         disabled={disabled}
-    //         style={{ ...style }}
-    //         onChange={() => change(form[fieldName])}
-    //         pickerOptions={{
-    //           shortcuts: [
-    //             {
-    //               text: '最近一周',
-    //               onClick(picker) {
-    //                 createPicker(picker, 7);
-    //               }
-    //             },
-    //             {
-    //               text: '最近一个月',
-    //               onClick(picker) {
-    //                 createPicker(picker, 30);
-    //               }
-    //             },
-    //             {
-    //               text: '最近三个月',
-    //               onClick(picker) {
-    //                 createPicker(picker, 90);
-    //               }
-    //             }
-    //           ]
-    //         }}
-    //       />
-    //     </el-form-item>
-    //   );
-    // },
     CHECKBOX(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, change = () => {} } = option;
@@ -966,6 +904,14 @@ export default {
         );
       });
       return [...colFormItems, this.createButton(defaultPlayRows, formItems.length)];
+    },
+    // 日期格式化
+    formatDate(val, vf) {
+      const arr = Array.isArray(val) ? val : [val];
+      const res = arr.map(x => {
+        return !x ? x : moment(x).format(vf.replace('yyyy', 'YYYY').replace('dd', 'DD'));
+      });
+      return Array.isArray(val) ? res : res[0];
     },
     // 函数防抖
     debounce(fn, delay) {
