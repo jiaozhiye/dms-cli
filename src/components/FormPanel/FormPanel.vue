@@ -839,6 +839,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-select
             multiple={multiple}
+            collapseTags={multiple}
             filterable={filterable}
             v-model={form[fieldName]}
             placeholder={placeholder}
