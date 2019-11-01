@@ -151,7 +151,7 @@ export default {
         if (_.isEqual(x.initialValue, this.form[x.fieldName])) return;
         this.form[x.fieldName] = this.getInitialValue(x);
         // 对组件外 js 动态赋值的表单元素进行校验
-        this.$refs.form.validateField(x.fieldName);
+        this.doFormItemValidate(x.fieldName);
       });
     },
     createFormItemLabel(option) {
@@ -248,6 +248,7 @@ export default {
             nativeOnKeydown={e => {
               if (e.keyCode !== 13) return;
               onEnter(e.target.value);
+              this.doFormItemValidate(fieldName);
             }}
           >
             {unitRender && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
@@ -953,7 +954,7 @@ export default {
     // 文件上传的 change 事件
     fileChangeHandle(fieldName, val) {
       this.form[fieldName] = val;
-      this.$refs.form.validateField(fieldName);
+      this.doFormItemValidate(fieldName);
     },
     createFormItem() {
       return this.list
@@ -966,6 +967,9 @@ export default {
           VNode['offsetRight'] = item.offsetRightCols;
           return VNode;
         });
+    },
+    doFormItemValidate(fieldName) {
+      this.$refs.form.validateField(fieldName);
     },
     excuteFormData(form) {
       this.formItemList

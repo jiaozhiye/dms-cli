@@ -149,7 +149,7 @@ export default {
         if (_.isEqual(x.initialValue, this.form[x.fieldName])) return;
         this.form[x.fieldName] = this.getInitialValue(x);
         // 对组件外 js 动态赋值的表单元素进行校验
-        this.$refs.form.validateField(x.fieldName);
+        this.doFormItemValidate(x.fieldName);
       });
     },
     createFormItemLabel(option) {
@@ -865,14 +865,17 @@ export default {
     isValidateValue(val) {
       return Array.isArray(val) ? val.length : !!val;
     },
-    // 表单数据通过非空校验，返回 true，否则返回 false
-    isNotEmptyValidate(form) {
+    // 表单数据是否通过非空校验
+    isPassValidate(form) {
       for (let key in this.rules) {
         if (this.rules[key].some(x => x.required) && !this.isValidateValue(form[key])) {
           return false;
         }
       }
       return true;
+    },
+    doFormItemValidate(fieldName) {
+      this.$refs.form.validateField(fieldName);
     },
     excuteFormData(form) {
       this.formItemList
@@ -916,7 +919,7 @@ export default {
     resetForm() {
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
-      this.isNotEmptyValidate(this.form) && this.$emit('filterChange', this.form);
+      this.isPassValidate(this.form) && this.$emit('filterChange', this.form);
       // 解决日期区间(拆分后)重复校验的 bug
       this.$nextTick(() => this.$refs.form.clearValidate());
     },

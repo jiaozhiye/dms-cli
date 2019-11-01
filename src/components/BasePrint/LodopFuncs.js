@@ -151,6 +151,8 @@ export function getLodop(oOBJECT, oEMBED) {
       }
     }
     //===如下空白位置适合调用统一功能(如注册语句、语言选择等):==
+    LODOP.SET_LICENSES('用友汽车信息科技（上海）股份有限公司', 'FA9A697F2551BCE81BD852A4EB520525347', '用友汽車信息科技（上海）股份有限公司', 'C66313BD8413BD0174C2CADD29F5380CD92');
+    LODOP.SET_LICENSES('THIRD LICENSE', '', 'Yonyou Auto Information Technology (Shanghai) Co., Ltd.', '941DF3639D9F5679867946141A31424B4E6');
 
     //=======================================================
     return LODOP;

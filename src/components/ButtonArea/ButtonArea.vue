@@ -31,7 +31,7 @@ export default {
   font-size: 0;
   display: flex;
   flex-wrap: wrap;
-  .el-button {
+  /deep/ .el-button {
     margin: 0;
     margin-bottom: @moduleMargin;
   }
