@@ -795,6 +795,7 @@ export default {
             actionUrl={upload.actionUrl}
             initialValue={form[fieldName]}
             fileTypes={upload.fileTypes}
+            fileSize={upload.fileSize}
             limit={upload.limit || 1}
             disabled={disabled}
             style={{ ...style }}

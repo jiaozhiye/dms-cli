@@ -114,6 +114,7 @@ Vue.use(FormPanel);
 
 - upload: {
   - &emsp;actionUrl: {String|必选参数，上传的地址}
+  - &emsp;fileSize: {Number|上传文件大小的限制，默认是 5M}
   - &emsp;limit: {Number|支持上传文件的数量，默认是 1}
   - &emsp;fileTypes: {Array|允许上传文件的格式数组 ['jpg', 'jpeg', 'png', 'pdf']}
 - }
