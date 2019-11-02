@@ -1,5 +1,5 @@
 <template>
-  <div :class="{fullscreen: fullscreen}" class="tinymce-container editor-container">
+  <div :class="{fullscreen: fullscreen}" class="tinymce-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
       <UploadImg
@@ -189,10 +189,14 @@ export default {
 .tinymce-container {
   position: relative;
   line-height: normal;
-}
-.tinymce-container {
-  /deep/.mce-fullscreen {
-    z-index: 10000;
+  /deep/ .mce-fullscreen {
+    z-index: 9999;
+  }
+  /deep/ .tox-statusbar__wordcount {
+    display: none;
+  }
+  /deep/ .tox-statusbar__branding {
+    display: none;
   }
 }
 .tinymce-textarea {
@@ -201,14 +205,14 @@ export default {
 }
 .editor-custom-btn-container {
   position: absolute;
-  right: 4px;
-  top: 4px;
+  right: 6px;
+  top: 6px;
+  .editor-upload-btn {
+    display: inline-block;
+  }
 }
 .fullscreen .editor-custom-btn-container {
-  z-index: 10000;
   position: fixed;
-}
-.editor-upload-btn {
-  display: inline-block;
+  z-index: 9999;
 }
 </style>

@@ -1076,6 +1076,11 @@ export default {
       if (row.isNewRow && !state) return;
       this.$set(row, `${dataIndex}IsEdit`, state);
     },
+    // 获取格式化后的表格数据
+    getFormatData(row, dataIndex) {
+      const val = _.get(row, dataIndex, '');
+      return _.isNull(val) ? '' : val;
+    },
     // 表头的过滤筛选
     filterHandler() {
       if (config.table.serverFilter) {
@@ -1101,7 +1106,7 @@ export default {
         const [type, property] = attr.split('|');
         const rows = this.isMemoryPagination ? this.backUpData : this.originData;
         const tmpList = rows.filter(row => {
-          const target = _.isNull(_.get(row, property, '')) ? '' : _.get(row, property, '');
+          const target = this.getFormatData(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
             if (typeof target === 'number') {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
@@ -1202,8 +1207,8 @@ export default {
     // 升序算法
     ascSortHandle(arr, prop) {
       arr.sort((a, b) => {
-        a = _.get(a, prop, '');
-        b = _.get(b, prop, '');
+        a = this.getFormatData(a, prop);
+        b = this.getFormatData(b, prop);
         if (!isNaN(Number(a)) && !isNaN(Number(b))) {
           return a - b;
         } else {
@@ -1214,8 +1219,8 @@ export default {
     // 降序算法
     descSortHandle(arr, prop) {
       arr.sort((a, b) => {
-        a = _.get(a, prop, '');
-        b = _.get(b, prop, '');
+        a = this.getFormatData(a, prop);
+        b = this.getFormatData(b, prop);
         if (!isNaN(Number(a)) && !isNaN(Number(b))) {
           return b - a;
         } else {
@@ -1459,7 +1464,7 @@ export default {
       const res = { ...row };
       this.columnFlatMap(this.columns).forEach(column => {
         const { dataIndex, precision, editType } = column;
-        _.set(res, dataIndex, _.get(row, dataIndex, ''));
+        _.set(res, dataIndex, this.getFormatData(row, dataIndex));
         const val = _.get(res, dataIndex);
         if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
           _.set(res, dataIndex, Number(val).toFixed(precision));
@@ -1665,10 +1670,7 @@ export default {
       this.list.forEach(row => {
         this.editableColumns.forEach(column => {
           if (column.editRequired) {
-            let val = _.get(row, column.dataIndex);
-            if (val !== 0 && !val) {
-              val = '';
-            }
+            const val = this.getFormatData(row, column.dataIndex);
             this.validateRequired(column.dataIndex, row._uid, val);
           }
         });
