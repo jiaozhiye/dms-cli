@@ -156,7 +156,7 @@ export default {
     },
     createFormItemLabel(option) {
       const { form } = this;
-      const { type = 'SELECT', fieldName, itemList, options = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, type = 'SELECT', fieldName, itemList, options = {}, style = {}, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
         <div class="label-wrap" style={{ ...style }}>
@@ -167,7 +167,14 @@ export default {
               ))}
             </el-select>
           )}
-          {type === 'CHECKBOX' && <el-checkbox v-model={form[fieldName]} disabled={disabled} trueLabel={trueValue} falseLabel={falseValue} onChange={change} />}
+          {type === 'CHECKBOX' && (
+            <span style="vertical-align: middle">
+              <span class="desc-text" style={{ paddingRight: '10px' }}>
+                {label}
+              </span>
+              <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={change} />
+            </span>
+          )}
         </div>
       );
     },
@@ -182,17 +189,19 @@ export default {
         );
       }
       return (
-        <span class="desc-text" style={{ ...style }}>
+        <span class="desc-text" style={{ paddingLeft: '10px', ...style }}>
           {content}
         </span>
       );
     },
     RENDER_FORM_ITEM(option) {
-      const { label, fieldName, labelWidth, labelOptions, render = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, render = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <div style="line-height: 32px">{render()}</div>
+          <div class="desc-text" style={{ ...style }}>
+            {render()}
+          </div>
         </el-form-item>
       );
     },
@@ -1155,21 +1164,21 @@ export default {
     margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
-      .label-wrap {
-        display: inline-block;
-        width: calc(100% - 10px);
-        .el-input__inner {
-          border-color: @borderColor;
-          padding: 0 8px;
-          & + span.el-input__suffix {
-            right: 0;
-          }
-        }
-      }
       .el-form-item__label {
         height: 32px;
         font-size: @textSizeSecondary;
         padding-right: @modulePadding;
+        .label-wrap {
+          display: inline-block;
+          width: calc(100% - 10px);
+          .el-input__inner {
+            border-color: @borderColor;
+            padding: 0 8px;
+            & + span.el-input__suffix {
+              right: 0;
+            }
+          }
+        }
       }
       .el-form-item__content {
         line-height: 30px;
@@ -1232,7 +1241,6 @@ export default {
       .desc-text {
         line-height: 32px;
         font-size: @textSizeSecondary;
-        padding-left: @modulePadding;
       }
     }
   }

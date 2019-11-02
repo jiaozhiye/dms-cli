@@ -67,6 +67,10 @@ export default {
     authMark: {
       type: String,
       default: ''
+    },
+    containerStyle: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -98,7 +102,7 @@ export default {
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible, divider } = this;
+    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible, containerStyle, divider } = this;
     const ajaxClick = _.isFunction(this.click) ? { click: this.clickHandler } : null;
     const wrapProps = {
       key: 'multiuse-btn',
@@ -106,6 +110,9 @@ export default {
         ...$props,
         loading: ajaxing,
         disabled: isDisabled
+      },
+      style: {
+        ...containerStyle
       },
       on: {
         ...$listeners,

@@ -18,6 +18,7 @@ Vue.use(MultiuseButton);
 - divider{String|按钮前/后的分隔符，值为 before/after}
 - auth-list{Array|权限数组，通过 authority 的混入，使用 this.auths 即可}
 - auth-mark{String|控制该按钮权限的标识符，业务的 ajax 接口地址}
+- containerStyle{Object|按钮自定义的 css 样式}
 - 其他参数同 el-button 组件
 
 `组件插槽`

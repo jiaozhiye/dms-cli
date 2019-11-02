@@ -204,7 +204,7 @@ export default {
           render: (props, h) => {
             return (
               <div>
-                <multiuse-button size="mini" type="text" divider="after" style="color: red" auth-list={this.auths} auth-mark={'/api/bbb/*'}>
+                <multiuse-button size="mini" type="text" divider="after" containerStyle={{ color: 'red' }} auth-list={this.auths} auth-mark={'/api/bbb/*'}>
                   编辑
                 </multiuse-button>
                 <el-button size="mini" type="text">

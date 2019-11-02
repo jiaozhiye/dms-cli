@@ -72,14 +72,14 @@ export default {
       return [
         {
           type: 'INPUT',
-          label: '搜索',
           labelOptions: {
+            type: 'CHECKBOX',
             fieldName: 'qwe',
+            label: '大海',
             itemList: []
           },
           fieldName: 'title',
-          placeholder: '请输入标题名称...',
-          maxlength: 5
+          placeholder: '请输入标题名称...'
         },
         {
           type: 'SELECT',
