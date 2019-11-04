@@ -841,7 +841,7 @@ export default {
     },
     BREAK_SPACE(option) {
       const { label = '标题', style = {} } = option;
-      return <BreakSpace label={label} labelStyle={style} />;
+      return <BreakSpace label={label} id={label} labelStyle={style} />;
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
