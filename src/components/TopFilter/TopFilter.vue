@@ -1003,7 +1003,7 @@ export default {
         padding-right: @modulePadding;
         .label-wrap {
           display: inline-block;
-          width: calc(100% - 10px);
+          max-width: calc(100% - 10px);
           .el-input__inner {
             border-color: @borderColor;
             padding: 0 8px;
@@ -1043,7 +1043,6 @@ export default {
           input {
             border: 0 !important;
             height: 30px;
-            line-height: 30px;
             padding-right: 0;
           }
           &:nth-of-type(1) {
@@ -1110,7 +1109,6 @@ export default {
       }
       .desc-text {
         font-size: @textSizeSecondary;
-        padding-left: @modulePadding;
       }
       &.is-error {
         .range-date {

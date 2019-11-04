@@ -1169,7 +1169,7 @@ export default {
         padding-right: @modulePadding;
         .label-wrap {
           display: inline-block;
-          width: calc(100% - 10px);
+          max-width: calc(100% - 10px);
           .el-input__inner {
             border-color: @borderColor;
             padding: 0 8px;
@@ -1238,7 +1238,6 @@ export default {
         vertical-align: middle;
       }
       .desc-text {
-        line-height: 32px;
         font-size: @textSizeSecondary;
       }
     }

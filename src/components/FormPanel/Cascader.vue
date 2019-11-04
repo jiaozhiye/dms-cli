@@ -44,7 +44,7 @@ export default {
   watch: {
     values: {
       handler(val) {
-        if (val.length || _.isUndefined(this.initialValue)) {
+        if (val.length || !this.initialValue) {
           if (_.isEqual(val, this.prevValue)) return;
           this.$emit('change', val);
           this.prevValue = [...val];

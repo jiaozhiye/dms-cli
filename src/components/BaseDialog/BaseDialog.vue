@@ -152,6 +152,9 @@ export default {
         font-size: 16px;
         line-height: inherit;
       }
+      .el-dialog__headerbtn {
+        line-height: normal;
+      }
     }
     .el-dialog__body {
       padding: 10px 0;
