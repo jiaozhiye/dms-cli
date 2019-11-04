@@ -11,6 +11,7 @@ import config from '@/config';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
 import ColumnFilter from './columnFilter';
 import Pagination from './pagination';
+import Spin from '@/components/Spin/Spin.vue';
 
 export default {
   name: 'page-table',
@@ -927,7 +928,6 @@ export default {
         const params = { ...this.fetchParams };
         // 移除 xhrAbort 属性
         delete params.xhrAbort;
-        // 开启 loading
         this.START_LOADING();
         try {
           const res = await this.fetchapi(params);
@@ -938,7 +938,6 @@ export default {
         } catch (e) {
           this.createTableList({});
         }
-        // 关闭 loading
         this.STOP_LOADING();
       }
     },
@@ -1649,10 +1648,9 @@ export default {
       this.clearTableHandleLog();
     },
     START_LOADING() {
-      this.loadingTimer = setTimeout(() => (this.loading = true), 200);
+      this.loading = true;
     },
     STOP_LOADING() {
-      this.loadingTimer && clearTimeout(this.loadingTimer);
       this.loading = false;
     },
     GET_UPDATE_ROWS() {
@@ -1710,6 +1708,7 @@ export default {
     };
     const tHeight = this.height !== 'auto' ? { height: tableHeight } : {};
     const tableParams = {
+      ref: 'appTable',
       props: {
         size: 'mini',
         border: true,
@@ -1759,9 +1758,9 @@ export default {
             {isColumnFilter && <ColumnFilter ref="appFilter" {...columnFilterProps} />}
           </section>
         </div>
-        <el-table ref="appTable" v-loading={loading} element-loading-background={`rgba(255, 255, 255, 0.65)`} {...tableParams}>
-          {this.createColumns(columns)}
-        </el-table>
+        <Spin spinning={loading} tip="Loading...">
+          <el-table {...tableParams}>{this.createColumns(columns)}</el-table>
+        </Spin>
         {isShowPagination && <Pagination {...paginationProps} />}
       </div>
     );

@@ -106,7 +106,7 @@ export default {
       deep: true
     },
     fieldNames() {
-      this.$nextTick(() => this.$refs.form.clearValidate());
+      this.$nextTick(() => this.doClearValidate(this.$refs.form));
     },
     expand(val) {
       if (!this.collapse) return;
@@ -309,7 +309,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover
             v-model={this.visible[fieldName]}
@@ -350,7 +350,7 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.treeInputClearHandle(fieldName)}
+              onClear={() => this.treeNodeClickHandle(fieldName, {})}
               onChange={change}
               nativeOnKeydown={this.enterEventHandle}
             />
@@ -549,7 +549,7 @@ export default {
         }
       ];
       return (
-        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+        <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <div class="range-date" style={{ ...style }}>
             <el-date-picker
@@ -775,11 +775,6 @@ export default {
     treeFilterTextHandle(key) {
       this.$refs[`tree-${key}`].filter(this[`${key}TreeFilterTexts`]);
     },
-    // 清空树节点选择器
-    treeInputClearHandle(fieldName) {
-      this.form[fieldName] = undefined;
-      this.$nextTick(() => this.$refs[fieldName].clearValidate());
-    },
     // 树结构的筛选方法
     filterNodeHandle(value, data) {
       if (!value) return true;
@@ -822,6 +817,9 @@ export default {
       }
       return true;
     },
+    doClearValidate($compRef) {
+      $compRef && $compRef.clearValidate();
+    },
     doFormItemValidate(fieldName) {
       this.$refs.form.validateField(fieldName);
     },
@@ -853,10 +851,10 @@ export default {
     submitForm(ev) {
       ev && ev.preventDefault();
       let isErr;
+      this.excuteFormData(this.form);
       this.$refs.form.validate(valid => {
         isErr = !valid;
         if (valid) {
-          this.excuteFormData(this.form);
           return this.$emit('filterChange', this.form);
         }
         // 校验没通过，展开
@@ -865,11 +863,18 @@ export default {
       return isErr;
     },
     resetForm() {
+      // 重置表单项
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
       this.isPassValidate(this.form) && this.$emit('filterChange', this.form);
       // 解决日期区间(拆分后)重复校验的 bug
-      this.$nextTick(() => this.$refs.form.clearValidate());
+      this.$nextTick(() => {
+        this.formItemList.forEach(x => {
+          if (x.type === 'RANGE_DATE') {
+            this.doClearValidate(this.$refs[x.fieldName]);
+          }
+        });
+      });
     },
     toggleHandler() {
       this.expand = !this.expand;
@@ -964,8 +969,8 @@ export default {
     },
     async GET_FORM_DATA() {
       try {
-        await this.$refs.form.validate();
         this.excuteFormData(this.form);
+        await this.$refs.form.validate();
         return [false, this.form];
       } catch (err) {
         return [true, null];

@@ -74,12 +74,14 @@ export default {
           type: 'INPUT',
           labelOptions: {
             type: 'CHECKBOX',
-            fieldName: 'qwe',
-            label: '大海',
-            itemList: []
+            fieldName: '复选框的数据名称',
+            label: '交强险',
+            options: {
+              trueValue: '1001',
+              falseValue: '1002'
+            }
           },
-          fieldName: 'title',
-          placeholder: '请输入标题名称...'
+          fieldName: '输入框的数据名称'
         },
         {
           type: 'SELECT',

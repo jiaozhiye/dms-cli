@@ -106,7 +106,7 @@ export default {
       deep: true
     },
     fieldNames() {
-      this.$nextTick(() => this.$refs.form.clearValidate());
+      this.$nextTick(() => this.doClearValidate(this.$refs.form));
     }
   },
   methods: {
@@ -371,7 +371,7 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.treeInputClearHandle(fieldName)}
+              onClear={() => this.treeNodeClickHandle(fieldName, {})}
               onChange={change}
             />
           </el-popover>
@@ -952,10 +952,6 @@ export default {
     treeFilterTextHandle(key) {
       this.$refs[`tree-${key}`].filter(this[`${key}TreeFilterTexts`]);
     },
-    // 清空树节点选择器
-    treeInputClearHandle(fieldName) {
-      this.form[fieldName] = undefined;
-    },
     // 树结构的筛选方法
     filterNodeHandle(value, data) {
       if (!value) return true;
@@ -990,6 +986,9 @@ export default {
           return VNode;
         });
     },
+    doClearValidate($compRef) {
+      $compRef && $compRef.clearValidate();
+    },
     doFormItemValidate(fieldName) {
       this.$refs.form.validateField(fieldName);
     },
@@ -1021,10 +1020,10 @@ export default {
     submitForm(ev) {
       ev && ev.preventDefault();
       let isErr;
+      this.excuteFormData(this.form);
       this.$refs.form.validate(valid => {
         isErr = !valid;
         if (!valid) return;
-        this.excuteFormData(this.form);
         this.$emit('formChange', this.form);
       });
       return isErr;
@@ -1135,8 +1134,8 @@ export default {
     },
     async GET_FORM_DATA() {
       try {
-        await this.$refs.form.validate();
         this.excuteFormData(this.form);
+        await this.$refs.form.validate();
         return [false, this.form];
       } catch (err) {
         return [true, null];

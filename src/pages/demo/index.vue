@@ -387,7 +387,9 @@ export default {
   mounted() {
     this.BaseTable = this.$refs.table;
     console.log('页面不具备的权限：', this.auths);
+    this.BaseTable.START_LOADING();
     setTimeout(() => {
+      this.BaseTable.STOP_LOADING();
       this.list = [...res.data.items];
       this.topFilterList.find(x => x.fieldName === 'startTime|endTime').initialValue = ['2019-10-12', '2019-10-28'];
       this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
