@@ -103,7 +103,7 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    max-height: 400px;
+    max-height: 600px;
     z-index: 9;
     .spin-dot {
       position: absolute;
@@ -173,7 +173,7 @@ export default {
       pointer-events: none;
       user-select: none;
       overflow: hidden;
-      opacity: 0.5;
+      opacity: 0.35;
     }
   }
 }

@@ -14,6 +14,10 @@ export default {
       type: String,
       required: true
     },
+    tabBarGutter: {
+      type: Number,
+      default: 0
+    },
     destroyOnClose: {
       type: Boolean,
       default: false
@@ -75,8 +79,12 @@ export default {
           [`tab-active`]: isActive,
           [`no-events`]: !!x.disabled
         };
+        const tabBarStyle = {
+          marginLeft: `${this.tabBarGutter}px`,
+          marginRight: `${this.tabBarGutter}px`
+        };
         return (
-          <div class={cls} key={x.label} onClick={ev => this.tabNavClickHandle(ev, x)}>
+          <div class={cls} key={x.label} style={tabBarStyle} onClick={ev => this.tabNavClickHandle(ev, x)}>
             {x.label}
           </div>
         );

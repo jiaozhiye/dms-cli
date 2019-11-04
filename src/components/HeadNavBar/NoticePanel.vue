@@ -1,10 +1,12 @@
 <template>
   <div class="notice-panel">
-    <el-popover trigger="click" placement="bottom-end">
+    <el-popover v-model="visible" trigger="click" placement="bottom-end">
       <el-badge slot="reference" :value="3" class="badge">
         <i class="icon el-icon-message-solid"></i>
       </el-badge>
-      <Notice />
+      <keep-alive>
+        <Notice v-if="visible" />
+      </keep-alive>
     </el-popover>
   </div>
 </template>
@@ -21,7 +23,9 @@ import Notice from '@/pages/notice/index';
 export default {
   name: 'NoticePanel',
   data() {
-    return {};
+    return {
+      visible: false
+    };
   },
   components: {
     Notice

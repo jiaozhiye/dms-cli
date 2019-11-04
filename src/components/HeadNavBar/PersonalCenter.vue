@@ -12,8 +12,8 @@
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>个人中心</el-dropdown-item>
-        <el-dropdown-item @click.native="logoutHandle">退出登录</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-setting" divided @click.native="logoutHandle">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -52,7 +52,8 @@ export default {
   margin-left: 15px;
   .el-dropdown {
     .el-dropdown-link {
-      padding: 6px 0;
+      display: inline-block;
+      padding: 5px 0;
       font-size: @textSize;
       cursor: pointer;
       .avatar {
@@ -60,7 +61,7 @@ export default {
         overflow: hidden;
         width: 24px;
         height: 24px;
-        border-radius: @borderRadius;
+        border-radius: 50%;
         vertical-align: middle;
         .img {
           object-fit: cover;

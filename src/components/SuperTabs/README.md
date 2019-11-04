@@ -15,6 +15,7 @@ Vue.use(SuperTabs);
 `组件参数API`
 
 - initialValue{String|当前选中卡的标题}
+- tabBarGutter{Number|tabs 之间的间隙，单位是 px}
 - destroyOnClose{Boolean|切换选项卡并处于隐藏状态时，是否销毁子组件，默认是 false}
 - change{Function|自定义事件，tab 切换选中时触发，参数是选中标签的标题}
 

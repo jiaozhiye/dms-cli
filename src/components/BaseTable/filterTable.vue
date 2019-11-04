@@ -479,6 +479,7 @@ export default {
     const { $listeners, $slots, $attrs, $scopedSlots } = this;
     const props = getOptionProps(this);
     const wrapProps = mergeProps({
+      ref: 'pageTable',
       props: {
         ...props,
         filters: this.filters,
@@ -489,7 +490,7 @@ export default {
       scopedSlots: $scopedSlots
     });
     return (
-      <PageTable ref="pageTable" {...wrapProps}>
+      <PageTable {...wrapProps}>
         {Object.keys($slots).map(name => (
           <template key={name} slot={name}>
             {$slots[name]}
