@@ -104,6 +104,7 @@ export default {
     width: 100%;
     height: 100%;
     max-height: 600px;
+    background-color: rgba(255, 255, 255, 0.25);
     z-index: 9;
     .spin-dot {
       position: absolute;
@@ -122,8 +123,8 @@ export default {
         display: block;
         position: absolute;
         opacity: 0.3;
-        animation: antSpinMove 1s infinite linear alternate;
         transform-origin: 50% 50%;
+        animation: antSpinMove 1s infinite linear alternate;
         &:nth-child(1) {
           left: 0;
           top: 0;
@@ -173,7 +174,7 @@ export default {
       pointer-events: none;
       user-select: none;
       overflow: hidden;
-      opacity: 0.35;
+      opacity: 0.5;
     }
   }
 }

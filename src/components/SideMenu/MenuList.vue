@@ -165,6 +165,9 @@ export default {
           padding: 0;
           .el-tabs__nav-scroll {
             overflow-y: auto;
+            .el-tabs__nav {
+              padding-bottom: @modulePadding;
+            }
           }
           .el-tabs__item {
             padding: 0 0 0 15px;
