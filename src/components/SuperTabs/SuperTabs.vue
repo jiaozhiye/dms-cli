@@ -5,6 +5,7 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2019-06-20 10:00:00
  **/
+import _ from 'lodash';
 import { filterEmpty } from '@/utils/props-util';
 
 export default {
@@ -26,15 +27,23 @@ export default {
   data() {
     this.tabNavNodes = [];
     this.tabInkBar = null;
-    // tab menu 数组
+    // tabs menu 数组
     this.menus = [];
     return {
-      currentValue: this.initialValue // 桥接线索
+      currentValue: this.initialValue, // 桥接线索
+      labels: [] // label 标题数组
     };
   },
   computed: {
     curIndex() {
       return this.menus.findIndex(x => x.label === this.currentValue);
+    }
+  },
+  watch: {
+    labels(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
+      this.currentValue = nextProps[this.curIndex];
+      this.initial();
     }
   },
   methods: {
@@ -84,20 +93,24 @@ export default {
           marginRight: `${this.tabBarGutter}px`
         };
         return (
-          <div class={cls} key={x.label} style={tabBarStyle} onClick={ev => this.tabNavClickHandle(ev, x)}>
+          <div key={x.label} class={cls} style={tabBarStyle} onClick={ev => this.tabNavClickHandle(ev, x)}>
             {x.label}
           </div>
         );
       });
     },
-    createTabsContent(h, arr) {
+    createTabsContent(arr) {
       return arr.map(x => {
         const isActive = x.label === this.currentValue;
         const cls = {
           [`tabs-tabpane`]: true,
           [`tabs-tabpane-active`]: isActive
         };
-        return <div class={cls}>{!this.destroyOnClose ? <keep-alive>{x.children}</keep-alive> : isActive ? x.children : null}</div>;
+        return (
+          <div key={x.label} class={cls}>
+            {!this.destroyOnClose ? <keep-alive>{x.children}</keep-alive> : isActive ? x.children : null}
+          </div>
+        );
       });
     },
     createTabMenus(vNodes) {
@@ -111,11 +124,12 @@ export default {
   mounted() {
     this.initial();
   },
-  render(h) {
+  render() {
     const { $slots } = this;
     const children = filterEmpty($slots.default).filter(x => x.tag === 'tab-panel');
     // 创建 tabs 数据
     this.menus = this.createTabMenus(children);
+    this.labels = this.menus.map(x => x.label);
     return (
       <div class="tab-wrapper">
         <div class="tab-top-bar">
@@ -128,7 +142,7 @@ export default {
           <div class="tabs-extra-content">{$slots['extraContent']}</div>
         </div>
         <div ref="tabContainer" class="tabs-content tabs-content-animated">
-          {this.createTabsContent(h, this.menus)}
+          {this.createTabsContent(this.menus)}
         </div>
       </div>
     );
