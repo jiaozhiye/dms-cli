@@ -42,6 +42,8 @@ Vue.use(TopFilter);
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
 - maxlength{Number|最大输入长度，默认是 100，只对 TEXT_AREA 有效}
 - dateType{String|日期控件的类型，只对 DATE 和 RANGE_DATE 生效，可选值为 date/datetime/exactdate/month/daterange/datetimerange/exactdaterange/monthrange}
+- minDateTime{String|最小日期，小于该时间的日期段将被禁用}
+- maxDateTime{String|最大日期，大于该时间的日期段将被禁用}
 - options{Object|有些表单控件所需要的配置}
 - change{Function|checkbox 或 select 值变化的回调}
 - onInput{Function|INPUT 类型的对应的 input 事件}

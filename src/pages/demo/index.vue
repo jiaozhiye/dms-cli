@@ -111,6 +111,7 @@ export default {
           label: '日期',
           fieldName: 'date',
           placeholder: '选择日期',
+          maxDateTime: '2019-11-15',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {

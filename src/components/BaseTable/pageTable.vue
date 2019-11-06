@@ -325,7 +325,7 @@ export default {
       const { current, pageSize } = this.pagination;
       dataList.forEach((x, i) => {
         x.index = (current - 1) * pageSize + i; // 序号
-        x._uid = x[uidkey] || this.createUidKey(); // 字段值唯一不重复的 key
+        x._uid = x[uidkey] || x._uid || this.createUidKey(); // 字段值唯一不重复的 key
         this.columnFlatMap(this.columns).forEach(column => {
           const { dataIndex, precision, editable, editType } = column;
           if (_.isUndefined(_.get(x, dataIndex))) {
@@ -1485,7 +1485,7 @@ export default {
         const maxIndex = _.isUndefined(lastRow) ? -1 : lastRow.index;
         const newRow = Object.assign({}, target, {
           index: maxIndex + 1,
-          _uid: this.createUidKey('new'),
+          _uid: this.createUidKey(),
           isNewRow: true
         });
         this.list.push(newRow);

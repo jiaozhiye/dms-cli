@@ -486,7 +486,7 @@ export default {
           valueFormat: 'yyyy'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -501,6 +501,22 @@ export default {
             placeholder={conf[dateType].placeholder}
             disabled={disabled}
             style={{ ...style }}
+            picker-options={{
+              disabledDate(time) {
+                const min = new Date(minDateTime).getTime();
+                const max = new Date(maxDateTime).getTime();
+                if (min && max) {
+                  return !(time.getTime() > min && time.getTime() < max);
+                }
+                if (!!min) {
+                  return time.getTime() < min;
+                }
+                if (!!max) {
+                  return time.getTime() > max;
+                }
+                return false;
+              }
+            }}
             onChange={() => change(form[fieldName])}
           />
         </el-form-item>
