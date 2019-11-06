@@ -452,11 +452,11 @@ export default {
             picker-options={{
               disabledDate(time) {
                 if (minDateTime) {
-                  const target = !new Date(minDateTime).getTime() ? _.get(props.row, minDateTime) || '' : minDateTime;
+                  const target = !new Date(minDateTime).getTime() ? this.getFormatData(props.row, minDateTime) : minDateTime;
                   return time.getTime() < new Date(target).getTime();
                 }
                 if (maxDateTime) {
-                  const target = !new Date(maxDateTime).getTime() ? _.get(props.row, maxDateTime) || '' : maxDateTime;
+                  const target = !new Date(maxDateTime).getTime() ? this.getFormatData(props.row, maxDateTime) : maxDateTime;
                   return time.getTime() > new Date(target).getTime();
                 }
                 return false;
@@ -989,13 +989,12 @@ export default {
       return res;
     },
     // 单元格单击时
-    cellClickHandler(row, column, cell, e) {
-      const { property } = column;
-      if (this.isSelectColumn && property !== 'column-action') {
+    cellClickHandler(row, { property }, cell, e) {
+      const column = this.columnFlatMap(this.columns).find(x => x.dataIndex === property) || {};
+      // 有可选择列 - 不是操作列 - 没有阻止行选中
+      if (this.isSelectColumn && property !== 'column-action' && !column.stopRowSelection) {
         // 单击可选择列 或 表格不可编辑
         if (property === '-' || !this.isEditable) {
-          this.toggleSelectionHandle(row);
-        } else if (this.selectionType === 'single') {
           this.toggleSelectionHandle(row);
         }
       }

@@ -129,6 +129,7 @@ http://localhost:8080/table
 - summation{Boolean|字段合计}
 - summationDataIndex{String|服务端合计的字段名，通常和 dataIndex 一致，如果设置为服务端合计，那么在对应列单元格数据变化时，合计值不变}
 - summationUnit{String|合计字段的单位}
+- stopRowSelection{Boolean|该列在单击时，是否阻止行选中行为}
 - sorter{Boolean|是否支持排序}
 - filter{Boolean|是否支持表头过滤}
 - filterType{String|表头过滤类型，支持 input/number/checkbox/radio/date-range}
