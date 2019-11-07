@@ -231,7 +231,7 @@ export default {
       return (
         <span
           slot="reference"
-          style={{ padding: '5px 2px 2px 10px', marginLeft: '-10px' }}
+          style={{ padding: '10px 2px 10px 10px', marginLeft: '-10px' }}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
@@ -506,6 +506,7 @@ export default {
 // @primaryColor: #bb0a30;
 
 .popper-wrap {
+  margin-top: 4px !important;
   min-width: 120px !important;
   .el-input__inner {
     text-align: left !important;
