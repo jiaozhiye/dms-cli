@@ -8,6 +8,7 @@
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
 import PageTable from './pageTable.vue';
+import DropDown from './dropDown.vue';
 
 export default {
   name: 'filter-table',
@@ -108,26 +109,12 @@ export default {
   },
   data() {
     this.$pageTable = null;
-    this.isColumnsChange = false;
     this.arrayTypes = ['checkbox', 'number', 'date-range'];
     return {
       visible: this.createVisibleData(this.columns),
       search: this.createSearchData(this.columns),
       filters: {}
     };
-  },
-  computed: {
-    columnKeysChange() {
-      return this.columns
-        .filter(x => !x.hidden)
-        .map(x => x.dataIndex)
-        .join('|');
-    }
-  },
-  watch: {
-    columnKeysChange() {
-      this.isColumnsChange = true;
-    }
   },
   methods: {
     createVisibleData(columns) {
@@ -194,48 +181,24 @@ export default {
     },
     // 关闭所有筛选面板
     closeAllPopover(property) {
-      for (let attr in this.$refs) {
-        if (attr === property) continue;
-        if (this.$refs[attr] && this.$refs[attr].doClose) {
-          this.visible[attr] = false;
-          this.$refs[attr].doClose();
-        }
+      for (let key in this.visible) {
+        if (key === property) continue;
+        this.visible[key] = false;
       }
     },
     // 打开当前的筛选面板
-    showCurrentPopover(target, property) {
-      if (this.visible[property]) return;
+    showCurrentPopover(property) {
       this.visible[property] = true;
-      this.$refs[property].doShow();
-      setTimeout(() => {
-        // 诡异的问题，还是因为固定列，克隆节点的问题
-        if (this.isColumnsChange) {
-          this.resetPopoverPos(this.$refs[property].$el.querySelector('.el-popover__reference').getAttribute('aria-describedby'), target);
-        }
-      }, 0);
-    },
-    // 重置筛选面板的位置
-    resetPopoverPos(id, target) {
-      const $el = document.getElementById(id);
-      let iLeft = target.getBoundingClientRect().left;
-      if (iLeft < 0) {
-        iLeft = 0;
-      }
-      if (iLeft > window.innerWidth - $el.offsetWidth) {
-        iLeft = window.innerWidth - $el.offsetWidth - 4;
-      }
-      $el.style.left = `${iLeft}px`;
     },
     // 创建头部筛选节点
     createToperNode(label = '', property) {
       return (
         <span
-          slot="reference"
-          style={{ padding: '10px 2px 10px 10px', marginLeft: '-10px' }}
+          style={{ display: 'block', padding: '10px 0 10px 10px' }}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
-            this.showCurrentPopover(e.target, property);
+            this.showCurrentPopover(property);
           }}
         >
           <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterSelected'}>
@@ -247,7 +210,7 @@ export default {
     // 创建底部按钮节点
     createButtonNode(type, property, val) {
       return (
-        <div style={{ paddingBottom: 0, marginTop: '10px' }}>
+        <div class="popper-bottom">
           <el-button type="primary" size="mini" disabled={this.isValueFalse(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
             搜索
           </el-button>
@@ -263,18 +226,21 @@ export default {
       // 查找对应的表头列 column
       const originColumn = this.deepFind(this.columns, property);
       return originColumn && originColumn.filterType === type ? (
-        <el-popover
-          ref={property}
-          trigger="manual"
-          visibleArrow={false}
-          popperClass="popper-wrap"
-          placement="bottom-start"
-          // value={this.visible[property]}
+        <DropDown
+          visible={this.visible[property]}
+          placement="left"
+          style={{ marginLeft: '-10px' }}
+          containerStyle={{
+            marginTop: '4px',
+            padding: '10px'
+          }}
         >
           {this.createToperNode(label, property)}
-          <div class="el-table-filter__content">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
-          {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
-        </el-popover>
+          <template slot="content">
+            <div class="popper-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
+            {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
+          </template>
+        </DropDown>
       ) : null;
     },
     inputHandle(column) {
@@ -283,6 +249,7 @@ export default {
         <el-input
           v-model={this.search[`${dataIndex}Val`]}
           placeholder={`搜索${title}`}
+          style={{ width: '180px' }}
           nativeOnKeydown={e => {
             e.stopPropagation();
             if (e.keyCode === 13) {
@@ -299,7 +266,7 @@ export default {
         this.search[`${dataIndex}Val`] = arr.map(x => (x !== '' ? x : undefined));
       };
       return (
-        <div>
+        <div class="range-number">
           <el-input
             value={this.search[`${dataIndex}Val`][0]}
             onInput={val => {
@@ -350,7 +317,7 @@ export default {
       return (
         <el-checkbox-group v-model={this.search[`${dataIndex}Val`]}>
           {filterItems.map(x => (
-            <li key={x.value} style={{ marginBottom: '7px' }}>
+            <li key={x.value}>
               <el-checkbox label={x.value}>{x.text}</el-checkbox>
             </li>
           ))}
@@ -362,7 +329,7 @@ export default {
       return (
         <el-radio-group v-model={this.search[`${dataIndex}Val`]} style={{ display: 'block' }}>
           {filterItems.map(x => (
-            <li key={x.value} style={{ marginBottom: '8px' }}>
+            <li key={x.value}>
               <el-radio label={x.value}>{x.text}</el-radio>
             </li>
           ))}
@@ -385,6 +352,12 @@ export default {
         />
       );
     },
+    doMove(el, val = 0) {
+      el && (el.style.transform = `translate3d(${-1 * val}px, 0, 0)`);
+    },
+    scrollEventHandle(e) {
+      this.throttle(this.doMove, 10)(this.$$tableHeader, e.target.scrollLeft);
+    },
     documentEventHandle(e) {
       this.closeAllPopover();
     },
@@ -399,6 +372,16 @@ export default {
     validateNumber(val) {
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
+    },
+    // 函数截流
+    throttle(fn, delay) {
+      return function(...args) {
+        let nowTime = +new Date();
+        if (!fn.lastTime || nowTime - fn.lastTime > delay) {
+          fn.apply(this, args);
+          fn.lastTime = nowTime;
+        }
+      };
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -469,11 +452,19 @@ export default {
     }
   },
   mounted() {
+    // 获取 DOM 节点
     this.$pageTable = this.$refs.pageTable;
+    this.$$tablebody = this.$pageTable.$el.querySelector('.el-table__body-wrapper');
+    this.$$tableHeader = this.$pageTable.$el.querySelector('.el-table__header-wrapper > .el-table__header');
+    // 事件绑定
+    this.$$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
     document.addEventListener('click', this.documentEventHandle, false);
   },
   beforeDestroy() {
+    this.$$tablebody.removeEventListener('scroll', this.scrollEventHandle);
     document.removeEventListener('click', this.documentEventHandle);
+    this.$$tablebody = null;
+    this.$$tableHeader = null;
   },
   render() {
     const { $listeners, $slots, $attrs, $scopedSlots } = this;
@@ -502,21 +493,46 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 // @primaryColor: #bb0a30;
 
 .popper-wrap {
-  margin-top: 4px !important;
-  min-width: 120px !important;
-  .el-input__inner {
+  display: block;
+  padding: 0;
+  min-width: 120px;
+  & > * {
+    display: block;
+    width: 100%;
+    padding: 0;
+  }
+  li:not(:last-child) {
+    margin-bottom: 7px;
+  }
+  /deep/ .range-number {
+    display: block;
+    .el-input {
+      padding: 0;
+      vertical-align: middle;
+    }
+    span {
+      vertical-align: middle;
+    }
+  }
+  /deep/ .el-input__inner {
     text-align: left !important;
   }
-  .el-checkbox {
+  /deep/ .el-checkbox {
     width: 100%;
   }
-  .el-radio {
+  /deep/ .el-radio {
     width: 100%;
+    text-align: left;
   }
+}
+.popper-bottom {
+  display: block;
+  padding: 0;
+  margin-top: 10px;
 }
 .topFilterSelected {
   color: @primaryColor;

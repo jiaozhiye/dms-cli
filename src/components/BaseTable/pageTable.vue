@@ -1806,7 +1806,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 // @primaryColor: #bb0a30;
 // @borderColor: #d9d9d9;
 @tableBgColor: #f2f2f2;
@@ -1814,12 +1814,11 @@ export default {
 @dangerColor: #f5222d;
 
 .table-wrapper {
-  .toper-card {
-    font-size: 0;
+  /deep/ .toper-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: @moduleMargin;
     overflow: hidden;
     .info {
       display: flex;
@@ -1849,10 +1848,15 @@ export default {
     }
     .slot-wrapper {
       display: inline-block;
-      margin-right: 10px;
+      margin-right: @moduleMargin;
     }
   }
-  .el-table__header {
+  /deep/ .el-table__header-wrapper {
+    position: relative;
+    z-index: 2;
+    overflow: visible;
+  }
+  /deep/ .el-table__header {
     thead > tr > th {
       padding: 2px 0;
       background: none;
@@ -1861,7 +1865,7 @@ export default {
       }
     }
   }
-  .el-table__body {
+  /deep/ .el-table__body {
     tbody > tr > td {
       padding: 2px 0;
     }
@@ -1901,20 +1905,29 @@ export default {
       }
     }
   }
-  .el-table__footer {
+  /deep/ .el-table__footer {
     tbody > tr > td {
       padding: 2px 0;
       background-color: @tableBgColor !important;
     }
   }
-  .table-header {
+  /deep/ .el-table__fixed {
+    z-index: 2;
+  }
+  /* 自定义 */
+  /deep/ .table-header {
     th {
       background-color: @tableBgColor !important;
+      overflow: visible;
       .cell {
+        overflow: inherit;
         &.is-required::before {
           content: '*';
           color: @dangerColor;
           margin-right: 4px;
+        }
+        div {
+          line-height: normal;
         }
       }
     }
@@ -1923,7 +1936,7 @@ export default {
 .autocomplete {
   min-width: 200px;
   width: auto !important;
-  .el-autocomplete-suggestion__wrap {
+  /deep/ .el-autocomplete-suggestion__wrap {
     ul {
       width: 100%;
       display: table;
