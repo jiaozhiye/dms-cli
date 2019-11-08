@@ -1819,6 +1819,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: @moduleMargin;
+    font-size: 0;
     overflow: hidden;
     .info {
       display: flex;
@@ -1853,8 +1854,8 @@ export default {
   }
   /deep/ .el-table__header-wrapper {
     position: relative;
-    z-index: 2;
     overflow: visible;
+    z-index: 2;
   }
   /deep/ .el-table__header {
     thead > tr > th {
@@ -1933,10 +1934,13 @@ export default {
     }
   }
 }
+</style>
+
+<style lang="less">
 .autocomplete {
   min-width: 200px;
   width: auto !important;
-  /deep/ .el-autocomplete-suggestion__wrap {
+  .el-autocomplete-suggestion__wrap {
     ul {
       width: 100%;
       display: table;
@@ -1957,13 +1961,14 @@ export default {
         }
         &.highlighted,
         &:hover {
-          background-color: @tableHoverColor;
+          background-color: #f5f5f5;
         }
       }
     }
   }
 }
 .dropdown-list {
+  min-width: 96px;
   li > span {
     display: block;
     margin: 0 -15px;

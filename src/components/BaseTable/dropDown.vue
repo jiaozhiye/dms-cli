@@ -16,25 +16,57 @@ export default {
       type: String,
       default: 'right'
     },
+    boundaries: {
+      type: Number
+    },
+    offsetLeft: {
+      type: Number,
+      default: 0
+    },
+    boundariesElement: {
+      type: null
+    },
     containerStyle: {
       type: Object,
       default: () => ({})
     }
   },
   data() {
-    return {};
+    return {
+      offsetX: 0
+    };
+  },
+  watch: {
+    visible(val) {
+      if (!val) return;
+      this.$nextTick(() => this.calcPanelOffset());
+    }
+  },
+  methods: {
+    getElementWidth(el) {
+      return el ? el.offsetWidth : 0;
+    },
+    calcPanelOffset() {
+      const res = this.offsetLeft + this.getElementWidth(this.$refs['panel']) - this.getElementWidth(this.boundariesElement);
+      if (res > 0) {
+        this.offsetX = res + 2;
+      } else {
+        this.offsetX = 0;
+      }
+    }
   },
   render() {
-    const { $slots, visible, placement, containerStyle } = this;
+    const { $slots, visible, offsetX, placement, containerStyle } = this;
     const boxStyle = {
       ...containerStyle,
-      [placement]: 0
+      [placement]: 0,
+      marginLeft: `${-1 * offsetX}px`
     };
     return (
       <div class="wrapper">
         {$slots['default']}
         <transition name="el-zoom-in-top">
-          <div v-show={visible} class="content" style={boxStyle} onClick={ev => ev.stopPropagation()} onMousedown={ev => ev.stopPropagation()}>
+          <div ref="panel" v-show={visible} class="content" style={boxStyle} onClick={ev => ev.stopPropagation()} onMousedown={ev => ev.stopPropagation()}>
             {$slots['content']}
           </div>
         </transition>

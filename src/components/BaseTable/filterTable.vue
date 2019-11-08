@@ -109,10 +109,12 @@ export default {
   },
   data() {
     this.$pageTable = null;
+    this.scrollLeft = 0;
     this.arrayTypes = ['checkbox', 'number', 'date-range'];
     return {
       visible: this.createVisibleData(this.columns),
       search: this.createSearchData(this.columns),
+      offset: this.createPanelOffset(this.columns),
       filters: {}
     };
   },
@@ -138,6 +140,18 @@ export default {
         }
         if (filter && this.arrayTypes.includes(filterType)) {
           target[`${x.dataIndex}Val`] = [];
+        }
+      });
+      return target;
+    },
+    createPanelOffset(columns) {
+      let target = {};
+      columns.forEach(x => {
+        if (Array.isArray(x.children)) {
+          Object.assign(target, this.createVisibleData(x.children));
+        }
+        if (x.filter) {
+          target[x.dataIndex] = 0;
         }
       });
       return target;
@@ -184,11 +198,13 @@ export default {
       for (let key in this.visible) {
         if (key === property) continue;
         this.visible[key] = false;
+        this.offset[key] = 0;
       }
     },
     // 打开当前的筛选面板
-    showCurrentPopover(property) {
+    openCurPopover(el, property) {
       this.visible[property] = true;
+      this.offset[property] = this.getOffsetLeft(el, this.$$tableHeader.parentNode) - this.scrollLeft;
     },
     // 创建头部筛选节点
     createToperNode(label = '', property) {
@@ -198,7 +214,7 @@ export default {
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
-            this.showCurrentPopover(property);
+            this.openCurPopover(e.target, property);
           }}
         >
           <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterSelected'}>
@@ -210,7 +226,7 @@ export default {
     // 创建底部按钮节点
     createButtonNode(type, property, val) {
       return (
-        <div class="popper-bottom">
+        <div class="popover-bottom">
           <el-button type="primary" size="mini" disabled={this.isValueFalse(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
             搜索
           </el-button>
@@ -230,14 +246,13 @@ export default {
           visible={this.visible[property]}
           placement="left"
           style={{ marginLeft: '-10px' }}
-          containerStyle={{
-            marginTop: '4px',
-            padding: '10px'
-          }}
+          offsetLeft={this.offset[property]}
+          boundariesElement={this.$pageTable.$el}
+          containerStyle={{ marginTop: '5px', padding: '10px' }}
         >
           {this.createToperNode(label, property)}
           <template slot="content">
-            <div class="popper-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
+            <div class="popover-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
             {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
           </template>
         </DropDown>
@@ -317,7 +332,7 @@ export default {
       return (
         <el-checkbox-group v-model={this.search[`${dataIndex}Val`]}>
           {filterItems.map(x => (
-            <li key={x.value}>
+            <li key={x.value} class="item">
               <el-checkbox label={x.value}>{x.text}</el-checkbox>
             </li>
           ))}
@@ -329,7 +344,7 @@ export default {
       return (
         <el-radio-group v-model={this.search[`${dataIndex}Val`]} style={{ display: 'block' }}>
           {filterItems.map(x => (
-            <li key={x.value}>
+            <li key={x.value} class="item">
               <el-radio label={x.value}>{x.text}</el-radio>
             </li>
           ))}
@@ -339,27 +354,40 @@ export default {
     ['date-rangeHandle'](column) {
       const { dataIndex } = column;
       return (
-        <el-date-picker
-          size="small"
-          type="daterange"
-          v-model={this.search[`${dataIndex}Val`]}
-          unlink-panels={true}
-          style={{ width: '215px' }}
-          value-format="yyyy-MM-dd HH:mm:ss"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
+        <div>
+          <el-date-picker
+            size="small"
+            type="daterange"
+            v-model={this.search[`${dataIndex}Val`]}
+            unlink-panels={true}
+            style={{ width: '215px' }}
+            value-format="yyyy-MM-dd HH:mm:ss"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
+        </div>
       );
     },
-    doMove(el, val = 0) {
+    doMove(el, val) {
       el && (el.style.transform = `translate3d(${-1 * val}px, 0, 0)`);
     },
     scrollEventHandle(e) {
-      this.throttle(this.doMove, 10)(this.$$tableHeader, e.target.scrollLeft);
+      const l = e.target.scrollLeft;
+      this.scrollLeft = l;
+      this.throttle(this.doMove, 10)(this.$$tableHeader, l);
     },
     documentEventHandle(e) {
       this.closeAllPopover();
+    },
+    getOffsetLeft(el, target) {
+      let sl = el.offsetLeft;
+      let currentEl = el.offsetParent;
+      while (currentEl !== null && currentEl !== target) {
+        sl += currentEl.offsetLeft;
+        currentEl = currentEl.offsetParent;
+      }
+      return sl;
     },
     // 参数值是否是假，假 -> 返回 ture
     isValueFalse(val) {
@@ -496,16 +524,16 @@ export default {
 <style lang="less" scoped>
 // @primaryColor: #bb0a30;
 
-.popper-wrap {
+.popover-wrap {
   display: block;
   padding: 0;
   min-width: 120px;
-  & > * {
+  & > div {
     display: block;
     width: 100%;
     padding: 0;
   }
-  li:not(:last-child) {
+  li.item:not(:last-child) {
     margin-bottom: 7px;
   }
   /deep/ .range-number {
@@ -529,7 +557,7 @@ export default {
     text-align: left;
   }
 }
-.popper-bottom {
+.popover-bottom {
   display: block;
   padding: 0;
   margin-top: 10px;
