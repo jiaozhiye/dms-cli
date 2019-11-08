@@ -1714,7 +1714,6 @@ export default {
         ...tHeight,
         data: list,
         rowKey: record => record._uid,
-        headerRowClassName: 'table-header',
         rowStyle: this.tableRowStyle,
         rowClassName: this.tableRowClassName,
         cellStyle: this.tableCellStyle,
@@ -1806,7 +1805,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 // @primaryColor: #bb0a30;
 // @borderColor: #d9d9d9;
 @tableBgColor: #f2f2f2;
@@ -1814,7 +1813,7 @@ export default {
 @dangerColor: #f5222d;
 
 .table-wrapper {
-  /deep/ .toper-card {
+  .toper-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1852,21 +1851,38 @@ export default {
       margin-right: @moduleMargin;
     }
   }
-  /deep/ .el-table__header-wrapper {
-    position: relative;
+  .el-table__header-wrapper {
     overflow: visible;
-    z-index: 2;
+    position: relative;
+    z-index: 1;
   }
-  /deep/ .el-table__header {
+  .el-table__header {
+    overflow: visible;
     thead > tr > th {
-      padding: 2px 0;
-      background: none;
+      overflow: visible;
+      height: 40px;
+      padding: 0;
+      background-color: @tableBgColor !important;
+      .cell {
+        overflow: visible;
+        &.is-required::before {
+          content: '*';
+          color: @dangerColor;
+          margin-right: 4px;
+        }
+        div {
+          line-height: normal;
+        }
+      }
       &.gutter {
         display: table-cell !important;
       }
     }
   }
-  /deep/ .el-table__body {
+  .el-table__body-wrapper {
+    z-index: 0;
+  }
+  .el-table__body {
     tbody > tr > td {
       padding: 2px 0;
     }
@@ -1906,37 +1922,20 @@ export default {
       }
     }
   }
-  /deep/ .el-table__footer {
+  .el-table__footer {
     tbody > tr > td {
-      padding: 2px 0;
+      height: 32px;
+      padding: 0;
       background-color: @tableBgColor !important;
     }
   }
-  /deep/ .el-table__fixed {
-    z-index: 2;
-  }
-  /* 自定义 */
-  /deep/ .table-header {
-    th {
-      background-color: @tableBgColor !important;
-      overflow: visible;
-      .cell {
-        overflow: inherit;
-        &.is-required::before {
-          content: '*';
-          color: @dangerColor;
-          margin-right: 4px;
-        }
-        div {
-          line-height: normal;
-        }
-      }
+  .el-table__fixed {
+    z-index: 1;
+    &::before {
+      background-color: @borderColor;
     }
   }
 }
-</style>
-
-<style lang="less">
 .autocomplete {
   min-width: 200px;
   width: auto !important;

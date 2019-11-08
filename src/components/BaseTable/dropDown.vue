@@ -82,13 +82,13 @@ export default {
   padding: 0;
   position: relative;
   overflow: visible;
+  z-index: 9;
   .content {
     position: absolute;
     background-color: #fff;
     border-radius: @borderRadius;
     box-shadow: @boxShadow;
     cursor: default;
-    z-index: 9;
   }
 }
 </style>
