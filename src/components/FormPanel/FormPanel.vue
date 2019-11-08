@@ -334,7 +334,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover
             v-model={this.visible[fieldName]}
-            visibleArrow={false}
+            transition="el-zoom-in-top"
             placement="bottom-start"
             trigger="click"
             on-after-leave={() => {
@@ -385,7 +385,7 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-popover v-model={this.visible[fieldName]} visibleArrow={false} placement="bottom-start" trigger="click">
+          <el-popover v-model={this.visible[fieldName]} transition="el-zoom-in-top" placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <Cascader
                 initialValue={form[fieldName]}

@@ -1,6 +1,11 @@
 <template>
   <div class="notice-panel">
-    <el-popover v-model="visible" trigger="click" placement="bottom-end">
+    <el-popover
+      v-model="visible"
+      trigger="click"
+      placement="bottom-end"
+      transition="el-zoom-in-top"
+    >
       <el-badge slot="reference" :value="3" class="badge">
         <i class="icon el-icon-message-solid"></i>
       </el-badge>

@@ -354,7 +354,7 @@ export default {
     ['date-rangeHandle'](column) {
       const { dataIndex } = column;
       return (
-        <div>
+        <div onClick={e => e.stopPropagation()}>
           <el-date-picker
             size="small"
             type="daterange"
