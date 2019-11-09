@@ -53,6 +53,9 @@ export default {
     };
   },
   watch: {
+    initialValue(val) {
+      this.fileList = this.initialValue;
+    },
     fileList(val) {
       this.$emit('change', val);
     }
