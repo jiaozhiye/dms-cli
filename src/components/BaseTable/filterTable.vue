@@ -16,6 +16,9 @@ export default {
     height: {
       type: [Number, String]
     },
+    maxHeight: {
+      type: [Number, String]
+    },
     columns: {
       type: Array,
       required: true,
@@ -248,7 +251,7 @@ export default {
           style={{ marginLeft: '-10px' }}
           offsetLeft={this.offset[property]}
           boundariesElement={this.$pageTable.$el}
-          containerStyle={{ marginTop: '5px', padding: '10px' }}
+          containerStyle={{ marginTop: '2px', padding: '10px' }}
         >
           {this.createToperNode(label, property)}
           <template slot="content">
@@ -380,6 +383,7 @@ export default {
     documentEventHandle(e) {
       this.closeAllPopover();
     },
+    // 获取元素相对目标节点的左边距
     getOffsetLeft(el, target) {
       let sl = el.offsetLeft;
       let currentEl = el.offsetParent;

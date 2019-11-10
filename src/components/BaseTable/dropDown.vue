@@ -33,7 +33,8 @@ export default {
   },
   data() {
     return {
-      offsetX: 0
+      offsetX: 0,
+      minHeight: 90
     };
   },
   watch: {
@@ -53,14 +54,23 @@ export default {
       } else {
         this.offsetX = 0;
       }
+    },
+    calcPanelMaxHeight() {
+      if (!this.boundariesElement) {
+        return this.minHeight;
+      }
+      const res = this.boundariesElement.querySelector('.el-table').offsetHeight - 42;
+      return res > this.minHeight ? res : this.minHeight;
     }
   },
   render() {
-    const { $slots, visible, offsetX, placement, containerStyle } = this;
+    const { $slots, visible, minHeight, offsetX, placement, containerStyle } = this;
     const boxStyle = {
       ...containerStyle,
       [placement]: 0,
-      marginLeft: `${-1 * offsetX}px`
+      marginLeft: `${-1 * offsetX}px`,
+      minHeight: `${minHeight}px`,
+      maxHeight: `${this.calcPanelMaxHeight()}px`
     };
     return (
       <div class="wrapper">
@@ -79,15 +89,17 @@ export default {
 <style lang="less" scoped>
 .wrapper {
   display: inline-block;
-  padding: 0;
+  vertical-align: middle;
   position: relative;
+  padding: 0;
   overflow: visible;
   z-index: 9;
   .content {
     position: absolute;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
     border-radius: @borderRadius;
     box-shadow: @boxShadow;
+    overflow-y: auto;
     cursor: default;
   }
 }

@@ -19,6 +19,9 @@ export default {
     height: {
       type: [Number, String]
     },
+    maxHeight: {
+      type: [Number, String]
+    },
     columns: {
       type: Array,
       required: true,
@@ -123,7 +126,7 @@ export default {
     return {
       loading: false,
       list: [], // 列表数据
-      tableHeight: Number(this.height) || this.minHeight, // 高度
+      tableHeight: this.height || this.minHeight, // 高度
       selectionRows: [], // table 选中行
       disabledRows: [], // table 禁用行
       filterParams: {}, // 表头筛选参数
@@ -215,7 +218,7 @@ export default {
       this.createTableList(nextProps);
     },
     height(nextProps) {
-      this.tableHeight = Number(nextProps);
+      this.tableHeight = nextProps || this.minHeight;
     },
     params(nextProps) {
       // 不返回到第一页
@@ -1106,7 +1109,7 @@ export default {
         const tmpList = rows.filter(row => {
           const target = this.getFormatData(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
-            if (typeof target === 'number') {
+            if (_.isNumber(target)) {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
             } else {
               return target.includes(this.filters[attr]);
@@ -1695,7 +1698,7 @@ export default {
     document.removeEventListener('click', this.documentEventHandle);
   },
   render() {
-    const { columns, columnsRef, loading, list, tableHeight, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
+    const { columns, columnsRef, loading, list, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
     const toperInfoProps = {
       props: { total: pagination.total, selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
     };
@@ -1705,13 +1708,15 @@ export default {
     const paginationProps = {
       props: { pagination, onPageChange: this.onPageChange }
     };
-    const tHeight = this.height !== 'auto' ? { height: tableHeight } : {};
+    const height = this.height !== 'auto' ? { height: this.tableHeight } : null;
+    const maxHeight = this.maxHeight ? { maxHeight: this.maxHeight } : null;
     const tableParams = {
       ref: 'appTable',
       props: {
         size: 'mini',
         border: true,
-        ...tHeight,
+        ...height,
+        ...maxHeight,
         data: list,
         rowKey: record => record._uid,
         rowStyle: this.tableRowStyle,
