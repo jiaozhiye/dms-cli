@@ -3,13 +3,10 @@
     <el-dropdown trigger="click" class="el-dropdown">
       <span class="el-dropdown-link">
         <span class="avatar">
-          <img
-            class="img"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          />
+          <img class="img" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" />
         </span>
         <span>{{ username }}</span>
-        <i class="el-icon-arrow-down el-icon--right"></i>
+        <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>

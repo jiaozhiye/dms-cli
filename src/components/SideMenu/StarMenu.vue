@@ -1,11 +1,5 @@
 <template>
-  <menu-tree
-    ref="starMenu"
-    class="star-menu"
-    :menu="navList"
-    :syncActive="false"
-    :collapsed="collapsed"
-  />
+  <menu-tree ref="starMenu" class="star-menu" :menu="navList" :sync-active="false" :collapsed="collapsed" />
 </template>
 
 <script>

@@ -42,6 +42,9 @@ export default {
       this.setLocalColumns(nextProps);
     }
   },
+  created() {
+    this.initial();
+  },
   methods: {
     // 创建树结构列表数据
     createTreeList(columns) {
@@ -128,9 +131,6 @@ export default {
       });
       this.setLocalColumns(result);
     }
-  },
-  created() {
-    this.initial();
   },
   render() {
     const { treeList, checkedKeys } = this;

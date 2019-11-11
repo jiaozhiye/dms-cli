@@ -71,6 +71,11 @@ export default {
       isVisible: this.visible
     };
   },
+  computed: {
+    extraParams() {
+      return { visible: this.isVisible };
+    }
+  },
   watch: {
     visible(val) {
       if (val && !this.$refs._component) {
@@ -79,11 +84,6 @@ export default {
       } else {
         this.isVisible = val;
       }
-    }
-  },
-  computed: {
-    extraParams() {
-      return { visible: this.isVisible };
     }
   },
   beforeDestroy() {

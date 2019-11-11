@@ -1,113 +1,54 @@
 <template>
-  <div class="vue-cropper" ref="cropper" @mouseover="scaleImg" @mouseout="cancelScale">
+  <div ref="cropper" class="vue-cropper" @mouseover="scaleImg" @mouseout="cancelScale">
     <div class="cropper-box">
       <div
-        class="cropper-box-canvas"
         v-show="!loading"
+        class="cropper-box-canvas"
         :style="{
-					'width': trueWidth + 'px',
-					'height': trueHeight + 'px',
-					'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ x / scale + 'px,' + y / scale + 'px,' + '0)'
-					+ 'rotateZ('+ rotate * 90 +'deg)'
-					}"
+          width: trueWidth + 'px',
+          height: trueHeight + 'px',
+          transform: 'scale(' + scale + ',' + scale + ') ' + 'translate3d(' + x / scale + 'px,' + y / scale + 'px,' + '0)' + 'rotateZ(' + rotate * 90 + 'deg)'
+        }"
       >
-        <img :src="imgs" alt="cropper-img" ref="cropperImg" />
+        <img ref="cropperImg" :src="imgs" alt="cropper-img" />
       </div>
     </div>
-    <div
-      class="cropper-drag-box"
-      :class="{'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping}"
-      @mousedown="startMove"
-      @touchstart="startMove"
-    ></div>
+    <div class="cropper-drag-box" :class="{ 'cropper-move': move && !crop, 'cropper-crop': crop, 'cropper-modal': cropping }" @mousedown="startMove" @touchstart="startMove" />
     <div
       v-show="cropping"
       class="cropper-crop-box"
       :style="{
-					'width': cropW + 'px',
-					'height': cropH + 'px',
-					'transform': 'translate3d('+ cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
-				}"
+        width: cropW + 'px',
+        height: cropH + 'px',
+        transform: 'translate3d(' + cropOffsertX + 'px,' + cropOffsertY + 'px,' + '0)'
+      }"
     >
       <span class="cropper-view-box">
         <img
           :style="{
-						'width': trueWidth + 'px',
-						'height': trueHeight + 'px',
-						'transform': 'scale(' + scale + ',' + scale + ') ' + 'translate3d('+ (x - cropOffsertX) / scale  + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)'
-						+ 'rotateZ('+ rotate * 90 +'deg)'
-						}"
+            width: trueWidth + 'px',
+            height: trueHeight + 'px',
+            transform: 'scale(' + scale + ',' + scale + ') ' + 'translate3d(' + (x - cropOffsertX) / scale + 'px,' + (y - cropOffsertY) / scale + 'px,' + '0)' + 'rotateZ(' + rotate * 90 + 'deg)'
+          }"
           :src="imgs"
           alt="cropper-img"
         />
       </span>
-      <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove"></span>
-      <span
-        class="crop-info"
-        v-if="info"
-        :style="{'top': cropInfo.top}"
-      >{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
+      <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove" />
+      <span v-if="info" class="crop-info" :style="{ top: cropInfo.top }">{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
       <span v-if="!fixedBox">
-        <span
-          class="crop-line line-w"
-          @mousedown="changeCropSize($event, false, true, 0, 1)"
-          @touchstart="changeCropSize($event, false, true, 0, 1)"
-        ></span>
-        <span
-          class="crop-line line-a"
-          @mousedown="changeCropSize($event, true, false, 1, 0)"
-          @touchstart="changeCropSize($event, true, false, 1, 0)"
-        ></span>
-        <span
-          class="crop-line line-s"
-          @mousedown="changeCropSize($event, false, true, 0, 2)"
-          @touchstart="changeCropSize($event, false, true, 0, 2)"
-        ></span>
-        <span
-          class="crop-line line-d"
-          @mousedown="changeCropSize($event, true, false, 2, 0)"
-          @touchstart="changeCropSize($event, true, false, 2, 0)"
-        ></span>
-        <span
-          class="crop-point point1"
-          @mousedown="changeCropSize($event, true, true, 1, 1)"
-          @touchstart="changeCropSize($event, true, true, 1, 1)"
-        ></span>
-        <span
-          class="crop-point point2"
-          @mousedown="changeCropSize($event, false, true, 0, 1)"
-          @touchstart="changeCropSize($event, false, true, 0, 1)"
-        ></span>
-        <span
-          class="crop-point point3"
-          @mousedown="changeCropSize($event, true, true, 2, 1)"
-          @touchstart="changeCropSize($event, true, true, 2, 1)"
-        ></span>
-        <span
-          class="crop-point point4"
-          @mousedown="changeCropSize($event, true, false, 1, 0)"
-          @touchstart="changeCropSize($event, true, false, 1, 0)"
-        ></span>
-        <span
-          class="crop-point point5"
-          @mousedown="changeCropSize($event, true, false, 2, 0)"
-          @touchstart="changeCropSize($event, true, false, 2, 0)"
-        ></span>
-        <span
-          class="crop-point point6"
-          @mousedown="changeCropSize($event, true, true, 1, 2)"
-          @touchstart="changeCropSize($event, true, true, 1, 2)"
-        ></span>
-        <span
-          class="crop-point point7"
-          @mousedown="changeCropSize($event, false, true, 0, 2)"
-          @touchstart="changeCropSize($event, false, true, 0, 2)"
-        ></span>
-        <span
-          class="crop-point point8"
-          @mousedown="changeCropSize($event, true, true, 2, 2)"
-          @touchstart="changeCropSize($event, true, true, 2, 2)"
-        ></span>
+        <span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)" />
+        <span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)" />
+        <span class="crop-line line-s" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)" />
+        <span class="crop-line line-d" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)" />
+        <span class="crop-point point1" @mousedown="changeCropSize($event, true, true, 1, 1)" @touchstart="changeCropSize($event, true, true, 1, 1)" />
+        <span class="crop-point point2" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)" />
+        <span class="crop-point point3" @mousedown="changeCropSize($event, true, true, 2, 1)" @touchstart="changeCropSize($event, true, true, 2, 1)" />
+        <span class="crop-point point4" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)" />
+        <span class="crop-point point5" @mousedown="changeCropSize($event, true, false, 2, 0)" @touchstart="changeCropSize($event, true, false, 2, 0)" />
+        <span class="crop-point point6" @mousedown="changeCropSize($event, true, true, 1, 2)" @touchstart="changeCropSize($event, true, true, 1, 2)" />
+        <span class="crop-point point7" @mousedown="changeCropSize($event, false, true, 0, 2)" @touchstart="changeCropSize($event, false, true, 0, 2)" />
+        <span class="crop-point point8" @mousedown="changeCropSize($event, true, true, 2, 2)" @touchstart="changeCropSize($event, true, true, 2, 2)" />
       </span>
     </div>
   </div>
@@ -118,70 +59,6 @@ import exifjs from './exif-js';
 
 export default {
   name: 'Cropper',
-  data: function() {
-    return {
-      // 容器高宽
-      w: 0,
-      h: 0,
-      // 图片缩放比例
-      scale: 1,
-      // 图片偏移x轴
-      x: 0,
-      // 图片偏移y轴
-      y: 0,
-      // 图片加载
-      loading: true,
-      // 图片真实宽度
-      trueWidth: 0,
-      // 图片真实高度
-      trueHeight: 0,
-      move: true,
-      // 移动的x
-      moveX: 0,
-      // 移动的y
-      moveY: 0,
-      // 开启截图
-      crop: false,
-      // 正在截图
-      cropping: false,
-      // 裁剪框大小
-      cropW: 0,
-      cropH: 0,
-      cropOldW: 0,
-      cropOldH: 0,
-      // 判断是否能够改变
-      canChangeX: false,
-      canChangeY: false,
-      // 改变的基准点
-      changeCropTypeX: 1,
-      changeCropTypeY: 1,
-      // 裁剪框的坐标轴
-      cropX: 0,
-      cropY: 0,
-      cropChangeX: 0,
-      cropChangeY: 0,
-      cropOffsertX: 0,
-      cropOffsertY: 0,
-      // 支持的滚动事件
-      support: '',
-      // 移动端手指缩放
-      touches: [],
-      touchNow: false,
-      // 图片旋转
-      rotate: 0,
-      isIos: false,
-      orientation: 0,
-      imgs: '',
-      // 图片缩放系数
-      coe: 0.2,
-      // 是否正在多次缩放
-      scaling: false,
-      scalingSet: '',
-      coeStatus: '',
-      // 控制emit触发频率
-      isCanShow: true
-    };
-  },
   props: {
     img: {
       type: [String, Blob, null, File],
@@ -297,6 +174,70 @@ export default {
       default: 'contain'
     }
   },
+  data: function() {
+    return {
+      // 容器高宽
+      w: 0,
+      h: 0,
+      // 图片缩放比例
+      scale: 1,
+      // 图片偏移x轴
+      x: 0,
+      // 图片偏移y轴
+      y: 0,
+      // 图片加载
+      loading: true,
+      // 图片真实宽度
+      trueWidth: 0,
+      // 图片真实高度
+      trueHeight: 0,
+      move: true,
+      // 移动的x
+      moveX: 0,
+      // 移动的y
+      moveY: 0,
+      // 开启截图
+      crop: false,
+      // 正在截图
+      cropping: false,
+      // 裁剪框大小
+      cropW: 0,
+      cropH: 0,
+      cropOldW: 0,
+      cropOldH: 0,
+      // 判断是否能够改变
+      canChangeX: false,
+      canChangeY: false,
+      // 改变的基准点
+      changeCropTypeX: 1,
+      changeCropTypeY: 1,
+      // 裁剪框的坐标轴
+      cropX: 0,
+      cropY: 0,
+      cropChangeX: 0,
+      cropChangeY: 0,
+      cropOffsertX: 0,
+      cropOffsertY: 0,
+      // 支持的滚动事件
+      support: '',
+      // 移动端手指缩放
+      touches: [],
+      touchNow: false,
+      // 图片旋转
+      rotate: 0,
+      isIos: false,
+      orientation: 0,
+      imgs: '',
+      // 图片缩放系数
+      coe: 0.2,
+      // 是否正在多次缩放
+      scaling: false,
+      scalingSet: '',
+      coeStatus: '',
+      // 控制emit触发频率
+      isCanShow: true
+    };
+  },
   computed: {
     cropInfo() {
       let obj = {};
@@ -390,6 +331,34 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.support = 'onwheel' in document.createElement('div') ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll';
+    let that = this;
+    var u = navigator.userAgent;
+    this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    // 兼容blob
+    if (!HTMLCanvasElement.prototype.toBlob) {
+      Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+        value: function(callback, type, quality) {
+          var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
+            len = binStr.length,
+            arr = new Uint8Array(len);
+          for (var i = 0; i < len; i++) {
+            arr[i] = binStr.charCodeAt(i);
+          }
+          callback(new Blob([arr], { type: that.type || 'image/png' }));
+        }
+      });
+    }
+    this.showPreview();
+    this.checkedImg();
+  },
+  destroyed() {
+    window.removeEventListener('mousemove', this.moveCrop);
+    window.removeEventListener('mouseup', this.leaveCrop);
+    window.removeEventListener('touchmove', this.moveCrop);
+    window.removeEventListener('touchend', this.leaveCrop);
   },
   methods: {
     checkOrientationImage(img, orientation, width, height) {
@@ -1538,34 +1507,6 @@ export default {
       }
       return canGo;
     }
-  },
-  mounted() {
-    this.support = 'onwheel' in document.createElement('div') ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll';
-    let that = this;
-    var u = navigator.userAgent;
-    this.isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    // 兼容blob
-    if (!HTMLCanvasElement.prototype.toBlob) {
-      Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
-        value: function(callback, type, quality) {
-          var binStr = atob(this.toDataURL(type, quality).split(',')[1]),
-            len = binStr.length,
-            arr = new Uint8Array(len);
-          for (var i = 0; i < len; i++) {
-            arr[i] = binStr.charCodeAt(i);
-          }
-          callback(new Blob([arr], { type: that.type || 'image/png' }));
-        }
-      });
-    }
-    this.showPreview();
-    this.checkedImg();
-  },
-  destroyed() {
-    window.removeEventListener('mousemove', this.moveCrop);
-    window.removeEventListener('mouseup', this.leaveCrop);
-    window.removeEventListener('touchmove', this.moveCrop);
-    window.removeEventListener('touchend', this.leaveCrop);
   }
 };
 </script>

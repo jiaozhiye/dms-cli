@@ -260,13 +260,19 @@ const mutations = {
     state.keepAliveNames = [...state.keepAliveNames, data];
   },
   [types.DEL_CNAME](state, { data }) {
-    state.keepAliveNames.splice(state.keepAliveNames.findIndex(x => x.key === data), 1);
+    state.keepAliveNames.splice(
+      state.keepAliveNames.findIndex(x => x.key === data),
+      1
+    );
   },
   [types.ADD_STAR_MENU](state, { data }) {
     state.starMenuList = _.uniqWith([...state.starMenuList, data], _.isEqual);
   },
   [types.DEL_STAR_MENU](state, { data }) {
-    state.starMenuList.splice(state.starMenuList.findIndex(x => x.key === data), 1);
+    state.starMenuList.splice(
+      state.starMenuList.findIndex(x => x.key === data),
+      1
+    );
   },
   [types.NOTIFY_STATE](state, { data }) {
     state.isNotifyMark = data;

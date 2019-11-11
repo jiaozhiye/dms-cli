@@ -29,6 +29,15 @@ export default {
       activeKey: this.createActiveKey()
     };
   },
+  mounted() {
+    this.createScrollDom();
+    this.setPositionArr();
+    this.bindScrollEvent();
+  },
+  beforeDestroy() {
+    // 移除事件监听
+    this.scroll.removeEventListener('scroll', this.scrollEventHandle);
+  },
   methods: {
     createActiveKey() {
       let key = this.activeId;
@@ -110,15 +119,6 @@ export default {
     REFRESH() {
       this.setPositionArr();
     }
-  },
-  mounted() {
-    this.createScrollDom();
-    this.setPositionArr();
-    this.bindScrollEvent();
-  },
-  beforeDestroy() {
-    // 移除事件监听
-    this.scroll.removeEventListener('scroll', this.scrollEventHandle);
   },
   render() {
     return (

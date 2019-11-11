@@ -1,19 +1,9 @@
 <template>
   <div class="upload-container">
     <el-button icon="el-icon-upload" size="mini" type="primary" @click="dialogVisible = true">上传图片</el-button>
-    <BaseDialog
-      :visible.sync="dialogVisible"
-      destroyOnClose
-      :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
-    >
+    <BaseDialog :visible.sync="dialogVisible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <div>
-        <UploadCropper
-          :actionUrl="actionUrl"
-          :fixedSize="fixedSize"
-          :limit="20"
-          :isCalcHeight="true"
-          @success="handleSuccess"
-        />
+        <UploadCropper :action-url="actionUrl" :fixed-size="fixedSize" :limit="20" :is-calc-height="true" @success="handleSuccess" />
       </div>
       <div
         :style="{
@@ -40,10 +30,10 @@ import UploadCropper from '@/components/UploadCropper/UploadCropper.vue';
 
 export default {
   name: 'UploadImg',
-  props: ['actionUrl', 'fixedSize'],
   components: {
     UploadCropper
   },
+  props: ['actionUrl', 'fixedSize'],
   data() {
     return {
       dialogVisible: false,

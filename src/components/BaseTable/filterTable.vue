@@ -121,6 +121,21 @@ export default {
       filters: {}
     };
   },
+  mounted() {
+    // 获取 DOM 节点
+    this.$pageTable = this.$refs.pageTable;
+    this.$$tablebody = this.$pageTable.$el.querySelector('.el-table__body-wrapper');
+    this.$$tableHeader = this.$pageTable.$el.querySelector('.el-table__header-wrapper > .el-table__header');
+    // 事件绑定
+    this.$$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
+    document.addEventListener('click', this.documentEventHandle, false);
+  },
+  beforeDestroy() {
+    this.$$tablebody.removeEventListener('scroll', this.scrollEventHandle);
+    document.removeEventListener('click', this.documentEventHandle);
+    this.$$tablebody = null;
+    this.$$tableHeader = null;
+  },
   methods: {
     createVisibleData(columns) {
       let target = {};
@@ -482,21 +497,6 @@ export default {
     GET_SEARCH_HELPER_ERROR() {
       return this.$pageTable.GET_SEARCH_HELPER_ERROR();
     }
-  },
-  mounted() {
-    // 获取 DOM 节点
-    this.$pageTable = this.$refs.pageTable;
-    this.$$tablebody = this.$pageTable.$el.querySelector('.el-table__body-wrapper');
-    this.$$tableHeader = this.$pageTable.$el.querySelector('.el-table__header-wrapper > .el-table__header');
-    // 事件绑定
-    this.$$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
-    document.addEventListener('click', this.documentEventHandle, false);
-  },
-  beforeDestroy() {
-    this.$$tablebody.removeEventListener('scroll', this.scrollEventHandle);
-    document.removeEventListener('click', this.documentEventHandle);
-    this.$$tablebody = null;
-    this.$$tableHeader = null;
   },
   render() {
     const { $listeners, $slots, $attrs, $scopedSlots } = this;

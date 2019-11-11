@@ -4,11 +4,7 @@
       <span class="title">收入概览</span>
     </div>
     <div>
-      <Chart
-        :fetchapi="fetchApi"
-        :params="fetchParams"
-        :containerStyle="{ minHeight: 'auto', height: '210px' }"
-      />
+      <Chart :fetchapi="fetchApi" :params="fetchParams" :container-style="{ minHeight: 'auto', height: '210px' }" />
     </div>
   </div>
 </template>

@@ -1,13 +1,8 @@
 <template>
-  <div :class="{fullscreen: fullscreen}" class="tinymce-container">
+  <div :class="{ fullscreen: fullscreen }" class="tinymce-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div v-if="isUploadImage" class="editor-custom-btn-container">
-      <UploadImg
-        class="editor-upload-btn"
-        :actionUrl="actionUrl"
-        :fixedSize="fixedSize"
-        @success="imageSuccessHandle"
-      />
+      <UploadImg class="editor-upload-btn" :action-url="actionUrl" :fixed-size="fixedSize" @success="imageSuccessHandle" />
     </div>
   </div>
 </template>
@@ -102,6 +97,12 @@ export default {
   activated() {
     this.tinymce = this.initTinymce();
   },
+  deactivated() {
+    this.destroyTinymce();
+  },
+  destroyed() {
+    this.destroyTinymce();
+  },
   methods: {
     initTinymce() {
       window.tinymce.init({
@@ -179,12 +180,6 @@ export default {
         this.tinymce.insertContent(`<img class="wscnph" src="${v.url}" />`);
       });
     }
-  },
-  deactivated() {
-    this.destroyTinymce();
-  },
-  destroyed() {
-    this.destroyTinymce();
   }
 };
 </script>

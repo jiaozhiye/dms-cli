@@ -1,13 +1,13 @@
 <template>
   <div class="all-menu">
-    <div class="title" :class="{ selected: visible ? true: false }" @click.stop="clickHandle">
-      <i class="el-icon-menu"></i>
-      <span class="text" v-if="!collapsed">全部导航</span>
+    <div class="title" :class="{ selected: visible ? true : false }" @click.stop="clickHandle">
+      <i class="el-icon-menu" />
+      <span v-if="!collapsed" class="text">全部导航</span>
     </div>
-    <div :class="['mask', poperShow]" :style="{left: asideWidth}"></div>
-    <div :style="{left: asideWidth}" :class="['poper', poperShow]" @click.stop>
+    <div :class="['mask', poperShow]" :style="{ left: asideWidth }" />
+    <div :style="{ left: asideWidth }" :class="['poper', poperShow]" @click.stop>
       <div class="box">
-        <slot :visible="visible"></slot>
+        <slot :visible="visible" />
       </div>
     </div>
   </div>
@@ -44,6 +44,12 @@ export default {
       return !this.collapsed ? '200px' : '64px';
     }
   },
+  mounted() {
+    this.bindEvent();
+  },
+  beforeDestroy() {
+    this.evHandler.remove();
+  },
   methods: {
     clickHandle() {
       this.visible = !this.visible;
@@ -56,12 +62,6 @@ export default {
     close() {
       this.visible = false;
     }
-  },
-  mounted() {
-    this.bindEvent();
-  },
-  beforeDestroy() {
-    this.evHandler.remove();
   }
 };
 </script>

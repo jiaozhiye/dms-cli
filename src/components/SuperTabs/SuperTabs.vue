@@ -46,6 +46,9 @@ export default {
       this.initial();
     }
   },
+  mounted() {
+    this.initial();
+  },
   methods: {
     initial() {
       // 获取必要的 dom 节点
@@ -120,9 +123,6 @@ export default {
         children: x.children || []
       }));
     }
-  },
-  mounted() {
-    this.initial();
   },
   render() {
     const { $slots } = this;

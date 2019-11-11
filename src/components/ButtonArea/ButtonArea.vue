@@ -1,6 +1,6 @@
 <template>
   <div :class="['btn-area', `btn-align-${align}`]" :style="containerStyle">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

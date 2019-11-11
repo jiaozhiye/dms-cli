@@ -7,14 +7,7 @@
             <el-input v-model="form.phone" prefix-icon="el-icon-mobile-phone" placeholder="请输入手机号" />
           </el-form-item>
           <el-form-item>
-            <el-input
-              type="password"
-              class="fl"
-              v-model="form.vcode"
-              placeholder="验证码"
-              style="width: 50%"
-              prefix-icon="el-icon-message"
-            />
+            <el-input v-model="form.vcode" type="password" class="fl" placeholder="验证码" style="width: 50%" prefix-icon="el-icon-message" />
             <el-button class="fr" style="width: 38%">获取验证码</el-button>
           </el-form-item>
         </el-form>

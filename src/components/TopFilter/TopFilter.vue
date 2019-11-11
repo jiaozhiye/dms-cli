@@ -48,9 +48,6 @@ export default {
       visible: {}
     };
   },
-  created() {
-    this.initialHandle();
-  },
   computed: {
     fieldNames() {
       return this.list
@@ -112,6 +109,9 @@ export default {
       if (!this.collapse) return;
       this.$emit('onCollapse', val);
     }
+  },
+  created() {
+    this.initialHandle();
   },
   methods: {
     initialHandle() {

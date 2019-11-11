@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="clickHandle">按钮</el-button>
-    <LazyLoadTab v-model="activeName" :tabMenus="menus" />
+    <LazyLoadTab v-model="activeName" :tab-menus="menus" />
   </div>
 </template>
 
@@ -44,5 +44,4 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

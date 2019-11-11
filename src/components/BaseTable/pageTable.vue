@@ -15,6 +15,45 @@ import Spin from '@/components/Spin/Spin.vue';
 
 export default {
   name: 'page-table',
+  components: {
+    ToperInfo: {
+      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler'],
+      render() {
+        return (
+          <div class="info">
+            <el-alert class="alert" closable={false} type="info" show-icon>
+              <span class="text" slot="title">
+                总共 <i>{this.total}</i> 条数据
+                {this.isSelectColumn ? (
+                  <span>
+                    ，已选择 <i>{this.selectionRows.length}</i> 项
+                    <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearTableHandler}>
+                      清空
+                    </el-button>
+                  </span>
+                ) : null}
+              </span>
+            </el-alert>
+            {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
+              <el-dropdown size="small" style={{ marginLeft: '10px' }} placement="bottom-start">
+                <el-button size="small">
+                  更多操作
+                  <i class="el-icon-arrow-down el-icon--right" />
+                </el-button>
+                <el-dropdown-menu slot="dropdown" class="dropdown-list">
+                  {this.$slots.moreActions
+                    .filter(x => x.tag)
+                    .map((x, i) => (
+                      <el-dropdown-item key={i}>{x}</el-dropdown-item>
+                    ))}
+                </el-dropdown-menu>
+              </el-dropdown>
+            ) : null}
+          </div>
+        );
+      }
+    }
+  },
   props: {
     height: {
       type: [Number, String]
@@ -252,6 +291,22 @@ export default {
       if (_.isEqual(nextProps, prevProps)) return;
       this.syncTableList();
     }
+  },
+  mounted() {
+    this.createTableList(this.dataSource);
+    this.createRowSelection(this.defaultSelections);
+    this.getTableData();
+    this.createTableBody();
+    this.calcTableHeight();
+    this.bindWindowResizeEvent();
+    this.bindkeyboardEvent();
+    this.bindDocumentEvent();
+  },
+  beforeDestroy() {
+    // 解绑事件，防止内存泄漏
+    window.removeEventListener('resize', this.calcTableHeight);
+    document.removeEventListener('keydown', this.keyboardEventHandle);
+    document.removeEventListener('click', this.documentEventHandle);
   },
   methods: {
     // 可编辑单元格的 dataIndex，支持对隐藏列的过滤
@@ -875,7 +930,11 @@ export default {
     // 单元格校验处理方法
     validateHandler(key, dataIndex, uid, type) {
       if (type === 'add') {
-        this.setCellEditState(this.list.find(x => x._uid === uid), dataIndex, true);
+        this.setCellEditState(
+          this.list.find(x => x._uid === uid),
+          dataIndex,
+          true
+        );
         this.actionsLog[key] = [...new Set([...this.actionsLog[key], { xUid: uid, yDataIndex: dataIndex }])];
       }
       if (type === 'remove') {
@@ -895,7 +954,10 @@ export default {
         // 去重
         this.actionsLog.update = [...new Set([...this.actionsLog.update, target])];
       }
-      this.onCellChange({ [`${uid}|${key}`]: val }, this.list.find(x => x._uid === uid));
+      this.onCellChange(
+        { [`${uid}|${key}`]: val },
+        this.list.find(x => x._uid === uid)
+      );
     },
     // ajax 获取搜索帮助服务端数据
     async querySearchAsync(column, row, queryString = '', cb) {
@@ -946,7 +1008,10 @@ export default {
     },
     // 移除数组中的记录
     removeItemHandle(arr, item) {
-      arr.splice(arr.findIndex(x => x === item), 1);
+      arr.splice(
+        arr.findIndex(x => x === item),
+        1
+      );
     },
     // 删除列表记录方法
     deleteHandler(rows = []) {
@@ -1681,22 +1746,6 @@ export default {
       return this.actionsLog.searchHelper.length ? { message: '搜索帮助单元格的值仅支持选择！' } : null;
     }
   },
-  mounted() {
-    this.createTableList(this.dataSource);
-    this.createRowSelection(this.defaultSelections);
-    this.getTableData();
-    this.createTableBody();
-    this.calcTableHeight();
-    this.bindWindowResizeEvent();
-    this.bindkeyboardEvent();
-    this.bindDocumentEvent();
-  },
-  beforeDestroy() {
-    // 解绑事件，防止内存泄漏
-    window.removeEventListener('resize', this.calcTableHeight);
-    document.removeEventListener('keydown', this.keyboardEventHandle);
-    document.removeEventListener('click', this.documentEventHandle);
-  },
   render() {
     const { columns, columnsRef, loading, list, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
     const toperInfoProps = {
@@ -1767,45 +1816,6 @@ export default {
         {isShowPagination && <Pagination {...paginationProps} />}
       </div>
     );
-  },
-  components: {
-    ToperInfo: {
-      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler'],
-      render() {
-        return (
-          <div class="info">
-            <el-alert class="alert" closable={false} type="info" show-icon>
-              <span class="text" slot="title">
-                总共 <i>{this.total}</i> 条数据
-                {this.isSelectColumn ? (
-                  <span>
-                    ，已选择 <i>{this.selectionRows.length}</i> 项
-                    <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearTableHandler}>
-                      清空
-                    </el-button>
-                  </span>
-                ) : null}
-              </span>
-            </el-alert>
-            {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
-              <el-dropdown size="small" style={{ marginLeft: '10px' }} placement="bottom-start">
-                <el-button size="small">
-                  更多操作
-                  <i class="el-icon-arrow-down el-icon--right" />
-                </el-button>
-                <el-dropdown-menu slot="dropdown" class="dropdown-list">
-                  {this.$slots.moreActions
-                    .filter(x => x.tag)
-                    .map((x, i) => (
-                      <el-dropdown-item key={i}>{x}</el-dropdown-item>
-                    ))}
-                </el-dropdown-menu>
-              </el-dropdown>
-            ) : null}
-          </div>
-        );
-      }
-    }
   }
 };
 </script>

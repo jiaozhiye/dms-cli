@@ -5,7 +5,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --open --progress --config build/webpack.dev.conf.js",
-    "build": "cross-env NODE_ENV=production node build/prod.js --progress"
+    "build": "cross-env NODE_ENV=production node build/prod.js --progress",
+    "lint": "eslint --fix --ext .js,.vue ./src",
+    "format": "prettier --write \"./src/**/*.{js,vue,jsx,css,less}\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue}": "eslint"
   },
   "peerDependencies": {
     "vue": ">=2.6.0",
@@ -31,6 +41,7 @@
   "devDependencies": {
     "autoprefixer": "^9.6.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^10.0.3",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-component": "^1.1.1",
@@ -49,16 +60,23 @@
     "cross-env": "^5.2.0",
     "css-loader": "^3.0.0",
     "dotenv-webpack": "^1.7.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^6.0.0",
     "file-loader": "^4.0.0",
     "happypack": "^5.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.0.9",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "lint-staged": "^9.4.2",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^5.0.2",
     "ora": "^2.1.0",
     "postcss-loader": "^3.0.0",
+    "prettier": "^1.19.1",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.1.0",
     "script-ext-html-webpack-plugin": "^2.0.1",

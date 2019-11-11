@@ -25,9 +25,6 @@ export default {
       return this.pages.map(x => x.path);
     }
   },
-  created() {
-    this.addKeepAlive(this.$route);
-  },
   watch: {
     $route(val) {
       if (this.isRedirect(val.path)) return;
@@ -50,6 +47,9 @@ export default {
         document.body.removeEventListener('click', this.closeContextMenu);
       }
     }
+  },
+  created() {
+    this.addKeepAlive(this.$route);
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),

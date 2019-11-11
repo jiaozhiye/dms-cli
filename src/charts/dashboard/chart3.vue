@@ -47,6 +47,15 @@ export default {
       this.initial();
     }
   },
+  mounted() {
+    this.initial();
+  },
+  beforeDestroy() {
+    if (this.myChart) {
+      this.myChart.dispose();
+    }
+    this.myChart = null;
+  },
   methods: {
     async initial() {
       this.loading = true;
@@ -107,15 +116,6 @@ export default {
         this.myChart.setOption(option, true);
       }
     }
-  },
-  mounted() {
-    this.initial();
-  },
-  beforeDestroy() {
-    if (this.myChart) {
-      this.myChart.dispose();
-    }
-    this.myChart = null;
   }
 };
 </script>

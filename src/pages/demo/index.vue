@@ -1,12 +1,7 @@
 <template>
   <div>
-    <TopFilter
-      :list="topFilterList"
-      :cols="4"
-      @filterChange="changeHandle"
-      @onCollapse="collapseHandle"
-    ></TopFilter>
-    <button-area :containerStyle="{ paddingLeft: '80px' }">
+    <TopFilter :list="topFilterList" :cols="4" @filterChange="changeHandle" @onCollapse="collapseHandle" />
+    <button-area :container-style="{ paddingLeft: '80px' }">
       <el-button size="small" type="primary">到货确认</el-button>
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
@@ -16,29 +11,23 @@
     </button-area>
     <FilterTable
       ref="table"
-      columnsRef="myTable"
+      columns-ref="myTable"
       :columns="columns"
-      :dataSource="list"
-      :isMemoryPagination="true"
-      :onColumnsChange="columns => this.columns = columns"
-      :onSyncTableData="tableDateChange"
+      :data-source="list"
+      :is-memory-pagination="true"
+      :on-columns-change="columns => (this.columns = columns)"
+      :on-sync-table-data="tableDateChange"
     >
       <template slot="moreActions">
         <span>批量删除</span>
         <span>任务分配</span>
       </template>
-      <template slot="controls" slot-scope="props">
+      <template slot="controls">
         <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
         <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>
     </FilterTable>
-    <Drawer
-      :visible.sync="visible"
-      title="标题名称"
-      :width="960"
-      destroyOnClose
-      :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
-    >
+    <Drawer :visible.sync="visible" title="标题名称" :width="960" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <Panel @close="closeHandler" />
     </Drawer>
     <BasePrint ref="print" :data="printList" template="template1" />
@@ -55,10 +44,10 @@ import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
 export default {
   name: 'Demo',
-  mixins: [authority],
   components: {
     Panel
   },
+  mixins: [authority],
   data() {
     this.BaseTable = null;
     return {
@@ -69,6 +58,25 @@ export default {
       printList: printData.data
     };
   },
+  mounted() {
+    this.BaseTable = this.$refs.table;
+    console.log('页面不具备的权限：', this.auths);
+    this.BaseTable.START_LOADING();
+    setTimeout(() => {
+      this.BaseTable.STOP_LOADING();
+      this.list = [...res.data.items];
+      this.topFilterList.find(x => x.fieldName === 'startTime|endTime').initialValue = ['2019-10-12', '2019-10-28'];
+      this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
+      this.topFilterList[0].hidden = false;
+      this.topFilterList[0].initialValue = 'asdf';
+      this.topFilterList[0].labelOptions.initialValue = '22';
+      this.topFilterList[0].labelOptions.itemList = [
+        { text: '搜索1', value: '11' },
+        { text: '搜索2', value: '22' }
+      ];
+    }, 3000);
+  },
+
   methods: {
     createTopFilters() {
       return [
@@ -89,7 +97,10 @@ export default {
               .toUpperCase();
             this.topFilterList.find(x => x.fieldName === 'zxczxc').initialValue = res;
           },
-          rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
+          rules: [
+            { required: true, message: '请输入标题名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ]
         },
         {
           type: 'INPUT',
@@ -103,7 +114,10 @@ export default {
           fieldName: 'cid',
           placeholder: '所属分类',
           filterable: true,
-          itemList: [{ text: '热点', value: '1' }, { text: '资讯', value: '2' }],
+          itemList: [
+            { text: '热点', value: '1' },
+            { text: '资讯', value: '2' }
+          ],
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
         {
@@ -126,7 +140,11 @@ export default {
           label: '兴趣爱好',
           fieldName: 'hobby',
           placeholder: '兴趣爱好',
-          itemList: [{ text: '篮球', value: '1' }, { text: '足球', value: '2' }, { text: '乒乓球', value: '3' }],
+          itemList: [
+            { text: '篮球', value: '1' },
+            { text: '足球', value: '2' },
+            { text: '乒乓球', value: '3' }
+          ],
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
@@ -270,7 +288,10 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'checkbox',
-          filterItems: [{ text: '男', value: 1 }, { text: '女', value: 0 }],
+          filterItems: [
+            { text: '男', value: 1 },
+            { text: '女', value: 0 }
+          ],
           render: props => {
             return <span>{props.row.person.sex === 1 ? '男' : '女'}</span>;
           }
@@ -327,11 +348,17 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'radio',
-          filterItems: [{ text: '未选择', value: '0' }, { text: '已选择', value: '1' }],
+          filterItems: [
+            { text: '未选择', value: '0' },
+            { text: '已选择', value: '1' }
+          ],
           editable: true,
           defaultEditable: true,
           editType: 'checkbox',
-          editItems: [{ text: '', falseValue: '0' }, { text: '', trueValue: '1' }]
+          editItems: [
+            { text: '', falseValue: '0' },
+            { text: '', trueValue: '1' }
+          ]
         },
         {
           title: '状态',
@@ -340,10 +367,18 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'checkbox',
-          filterItems: [{ text: '已完成', value: 1 }, { text: '进行中', value: 2 }, { text: '未完成', value: 3 }],
+          filterItems: [
+            { text: '已完成', value: 1 },
+            { text: '进行中', value: 2 },
+            { text: '未完成', value: 3 }
+          ],
           editable: true,
           editType: 'select',
-          editItems: [{ text: '已完成', value: 1 }, { text: '进行中', value: 2 }, { text: '未完成', value: 3 }]
+          editItems: [
+            { text: '已完成', value: 1 },
+            { text: '进行中', value: 2 },
+            { text: '未完成', value: 3 }
+          ]
         },
         {
           title: '业余爱好',
@@ -352,10 +387,20 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'checkbox',
-          filterItems: [{ text: '篮球', value: 1 }, { text: '足球', value: 2 }, { text: '乒乓球', value: 3 }, { text: '游泳', value: 4 }],
+          filterItems: [
+            { text: '篮球', value: 1 },
+            { text: '足球', value: 2 },
+            { text: '乒乓球', value: 3 },
+            { text: '游泳', value: 4 }
+          ],
           editable: true,
           editType: 'select-multiple',
-          editItems: [{ text: '篮球', value: 1 }, { text: '足球', value: 2 }, { text: '乒乓球', value: 3 }, { text: '游泳', value: 4 }]
+          editItems: [
+            { text: '篮球', value: 1 },
+            { text: '足球', value: 2 },
+            { text: '乒乓球', value: 3 },
+            { text: '游泳', value: 4 }
+          ]
         },
         {
           title: '地址',
@@ -384,24 +429,8 @@ export default {
     tableDateChange(list) {
       // console.log(list);
     }
-  },
-  mounted() {
-    this.BaseTable = this.$refs.table;
-    console.log('页面不具备的权限：', this.auths);
-    this.BaseTable.START_LOADING();
-    setTimeout(() => {
-      this.BaseTable.STOP_LOADING();
-      this.list = [...res.data.items];
-      this.topFilterList.find(x => x.fieldName === 'startTime|endTime').initialValue = ['2019-10-12', '2019-10-28'];
-      this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
-      this.topFilterList[0].hidden = false;
-      this.topFilterList[0].initialValue = 'asdf';
-      this.topFilterList[0].labelOptions.initialValue = '22';
-      this.topFilterList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
-    }, 3000);
   }
 };
 </script>
 
-<style lang="less">
-</style>
+<style lang="less"></style>

@@ -13,27 +13,23 @@
       :on-change="changeHandler"
       :http-request="upload"
     >
-      <div class="el-upload-list__item" v-for="(item, index) in imgUrlArr" :key="index" @click.stop>
+      <div v-for="(item, index) in imgUrlArr" :key="index" class="el-upload-list__item" @click.stop>
         <img class="img" :src="item.url" alt />
-        <h5 class="title" v-if="!!titles[index]">{{ titles[index] }}</h5>
+        <h5 v-if="!!titles[index]" class="title">{{ titles[index] }}</h5>
         <span class="el-upload-list__item-actions">
           <span class="el-upload-list__item-dot">
-            <i class="el-icon-zoom-in" @click="handlePreview(index)"></i>
+            <i class="el-icon-zoom-in" @click="handlePreview(index)" />
           </span>
           <span class="el-upload-list__item-dot">
-            <i class="el-icon-delete" @click="handleRemove(index)"></i>
+            <i class="el-icon-delete" @click="handleRemove(index)" />
           </span>
           <span class="el-upload-list__item-dot">
-            <i class="el-icon-download" @click="downloadHandle(index)"></i>
+            <i class="el-icon-download" @click="downloadHandle(index)" />
           </span>
         </span>
       </div>
-      <div
-        v-if="imgUrlArr.length !== limit"
-        slot="default"
-        class="upload-icon-plus el-upload-list__item"
-      >
-        <i class="el-icon-plus"></i>
+      <div v-if="imgUrlArr.length !== limit" slot="default" class="upload-icon-plus el-upload-list__item">
+        <i class="el-icon-plus" />
         <span>{{ titles[imgUrlArr.length] }}</span>
       </div>
       <div slot="tip" class="el-upload__tip">{{ `只能上传 ${fileTypes.join(',')} 格式的图片` }}</div>
@@ -46,13 +42,7 @@
     </BaseDialog>
     <!-- 剪裁组件弹窗 -->
     <BaseDialog :visible.sync="cropperModel" title="图片裁剪" width="800" @close="beforeClose">
-      <CropperPanel
-        ref="uploadCropper"
-        :img-file="file"
-        :fixed-number="fixedSize"
-        :loading.sync="isLoading"
-        @upload="uploadHandler"
-      ></CropperPanel>
+      <CropperPanel ref="uploadCropper" :img-file="file" :fixed-number="fixedSize" :loading.sync="isLoading" @upload="uploadHandler" />
     </BaseDialog>
   </div>
 </template>
@@ -134,6 +124,14 @@ export default {
         this.$parent.clearValidate();
       }
     }
+  },
+  mounted() {
+    this.uploadWrap = this.$refs.upload.$el.querySelector('.el-upload');
+    this.setUploadWrapHeight();
+  },
+  updated() {
+    const { uploadCropper } = this.$refs;
+    uploadCropper && uploadCropper.Update();
   },
   methods: {
     handlePreview(index) {
@@ -234,14 +232,6 @@ export default {
         a = null;
       }
     }
-  },
-  mounted() {
-    this.uploadWrap = this.$refs.upload.$el.querySelector('.el-upload');
-    this.setUploadWrapHeight();
-  },
-  updated() {
-    const { uploadCropper } = this.$refs;
-    uploadCropper && uploadCropper.Update();
   }
 };
 </script>

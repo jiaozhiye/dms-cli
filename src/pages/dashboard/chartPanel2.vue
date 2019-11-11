@@ -4,11 +4,7 @@
       <span class="title">销售漏斗</span>
     </div>
     <div>
-      <Chart
-        :fetchapi="fetchApi"
-        :params="fetchParams"
-        :containerStyle="{ minHeight: 'auto', height: '210px' }"
-      />
+      <Chart :fetchapi="fetchApi" :params="fetchParams" :container-style="{ minHeight: 'auto', height: '210px' }" />
     </div>
   </div>
 </template>

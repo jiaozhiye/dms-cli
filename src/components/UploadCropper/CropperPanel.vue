@@ -6,27 +6,24 @@
         <Cropper
           ref="cropper"
           :img="option.img"
-          :outputSize="option.size"
-          :outputType="option.outputType"
+          :output-size="option.size"
+          :output-type="option.outputType"
           :info="true"
           :full="option.full"
-          :canMove="option.canMove"
-          :canMoveBox="option.canMoveBox"
+          :can-move="option.canMove"
+          :can-move-box="option.canMoveBox"
           :original="option.original"
-          :autoCrop="option.autoCrop"
-          :autoCropWidth="option.autoCropWidth"
-          :autoCropHeight="option.autoCropHeight"
-          :fixedBox="option.fixedBox"
+          :auto-crop="option.autoCrop"
+          :auto-crop-width="option.autoCropWidth"
+          :auto-crop-height="option.autoCropHeight"
+          :fixed-box="option.fixedBox"
           :fixed="option.fixed"
-          :fixedNumber="fixedNumber"
+          :fixed-number="fixedNumber"
           @realTime="realTime"
         />
       </div>
       <!-- 预览框 -->
-      <div
-        class="show-preview"
-        :style="{'width': '300px', 'height': '300px',  'overflow': 'hidden', 'display':'flex', 'align-items' : 'center'}"
-      >
+      <div class="show-preview" :style="{ width: '300px', height: '300px', overflow: 'hidden', display: 'flex', 'align-items': 'center' }">
         <div :style="previews.div" class="preview">
           <img :src="previews.url" :style="previews.img" />
         </div>
@@ -53,6 +50,10 @@ import Cropper from './Cropper.vue';
 
 export default {
   name: 'CropperPanel',
+  components: {
+    Cropper
+  },
+  props: ['imgFile', 'fixedNumber', 'loading'],
   data() {
     return {
       previews: {}, // 预览数据
@@ -74,7 +75,6 @@ export default {
       }
     };
   },
-  props: ['imgFile', 'fixedNumber', 'loading'],
   methods: {
     changeScale(num = 1) {
       // 图片缩放
@@ -106,9 +106,6 @@ export default {
         this.$refs.cropper.getCropData(data => this.$emit('upload', data));
       }
     }
-  },
-  components: {
-    Cropper
   }
 };
 </script>

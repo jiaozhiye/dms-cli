@@ -1,15 +1,7 @@
 <template>
   <div class="drawer">
-    <div
-      :class="['cover-mask', maskShow]"
-      :style="[maskzIndex, maskStyle]"
-      @click.stop="close('mask')"
-    ></div>
-    <div
-      ref="panel"
-      :class="['cover-container']"
-      :style="[containerPosition, containerShow, containerzIndex, containerStyle]"
-    >
+    <div :class="['cover-mask', maskShow]" :style="[maskzIndex, maskStyle]" @click.stop="close('mask')" />
+    <div ref="panel" :class="['cover-container']" :style="[containerPosition, containerShow, containerzIndex, containerStyle]">
       <div class="drawer-content">
         <div class="drawer-header">
           <div class="drawer-title">
@@ -18,15 +10,7 @@
           <button v-if="closable" class="drawer-close" @click.stop="close()">
             <span class="drawer-close-x">
               <i class="anticon anticon-close">
-                <svg
-                  viewBox="64 64 896 896"
-                  data-icon="close"
-                  width="1em"
-                  height="1em"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  class
-                >
+                <svg viewBox="64 64 896 896" data-icon="close" width="1em" height="1em" fill="currentColor" aria-hidden="true" class>
                   <path
                     d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
                   />
@@ -36,7 +20,7 @@
           </button>
         </div>
         <div class="drawer-body">
-          <slot v-if="isShowSlot"></slot>
+          <slot v-if="isShowSlot" />
         </div>
       </div>
     </div>
@@ -175,6 +159,13 @@ export default {
       }
     }
   },
+  mounted() {
+    this.drawerDom = this.$refs.panel;
+    this.drawerDom.addEventListener('transitionend', this.transitionendHandle, false);
+  },
+  beforeDestroy() {
+    this.drawerDom.removeEventListener('transitionend', this.transitionendHandle);
+  },
   methods: {
     open() {
       this.$emit('update:visible', true);
@@ -192,13 +183,6 @@ export default {
       }
       this.$emit('afterVisibleChange', this.visible);
     }
-  },
-  mounted() {
-    this.drawerDom = this.$refs.panel;
-    this.drawerDom.addEventListener('transitionend', this.transitionendHandle, false);
-  },
-  beforeDestroy() {
-    this.drawerDom.removeEventListener('transitionend', this.transitionendHandle);
   }
 };
 </script>

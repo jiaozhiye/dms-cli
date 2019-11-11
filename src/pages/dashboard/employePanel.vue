@@ -15,21 +15,21 @@
     </div>
     <div class="box bg1">
       <h4>
-        <CountUp :endVal="2147" />
+        <CountUp :end-val="2147" />
         <i>项</i>
       </h4>
       <h5>待办事项</h5>
     </div>
     <div class="box bg2">
       <h4>
-        <CountUp :endVal="215" />
+        <CountUp :end-val="215" />
         <i>项</i>
       </h4>
       <h5>维修项目</h5>
     </div>
     <div class="box bg3">
       <h4>
-        <CountUp :endVal="28" />
+        <CountUp :end-val="28" />
         <i>人</i>
       </h4>
       <h5>接待人数</h5>

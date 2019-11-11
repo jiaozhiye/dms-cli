@@ -19,13 +19,13 @@ import PersonalCenter from './PersonalCenter';
 
 export default {
   name: 'HeadNavBar',
-  data() {
-    return {};
-  },
   components: {
     ScreenFull,
     NoticePanel,
     PersonalCenter
+  },
+  data() {
+    return {};
   }
 };
 </script>

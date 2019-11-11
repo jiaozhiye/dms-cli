@@ -45,6 +45,9 @@ export default {
       immediate: true
     }
   },
+  beforeDestroy() {
+    this.stopHandle();
+  },
   methods: {
     stopHandle() {
       this.timer && clearTimeout(this.timer);
@@ -59,9 +62,6 @@ export default {
         </span>
       );
     }
-  },
-  beforeDestroy() {
-    this.stopHandle();
   },
   render() {
     const { sSpinning, tip, containerStyle, $slots } = this;

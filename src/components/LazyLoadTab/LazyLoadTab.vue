@@ -44,6 +44,9 @@ export default {
       this.loadComponent(nextProps);
     }
   },
+  created() {
+    this.loadComponent(this.value);
+  },
   methods: {
     loadComponent(activeName) {
       const { path } = this.tabMenus.find(x => x.title === activeName) || {};
@@ -78,9 +81,6 @@ export default {
         );
       });
     }
-  },
-  created() {
-    this.loadComponent(this.value);
   },
   render(h) {
     const { type, position } = this;

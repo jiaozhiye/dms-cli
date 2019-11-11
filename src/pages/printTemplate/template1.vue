@@ -1,5 +1,5 @@
 <template>
-  <div ref="print" style="width:100%; margin: 0 auto;" v-show="isPreview">
+  <div v-show="isPreview" ref="print" style="width:100%; margin: 0 auto;">
     <table>
       <tr>
         <td colspan="7" align="center" height="24" style="font-size: 24px;">出库单</td>
@@ -26,6 +26,7 @@
         <td>一般领料</td>
       </tr>
     </table>
+
     <table class="bor">
       <tr>
         <td width="5%" height="26">序号</td>
@@ -52,6 +53,7 @@
         <td>{{ x.xz }}</td>
       </tr>
     </table>
+
     <table class="bor-through">
       <tr>
         <td align="right" width="8%" height="26">总金额：</td>

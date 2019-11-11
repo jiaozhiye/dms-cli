@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="wrapper">
-      <Anchor :labelList="labels">
-        <div class="line" id="row-01">
-          <FormPanel :list="formList" labelWidth="100" formType="add" />
+      <Anchor :label-list="labels">
+        <div id="row-01" class="line">
+          <FormPanel :list="formList" label-width="100" form-type="add" />
         </div>
-        <div class="line" id="row-02">
+        <div id="row-02" class="line">
           <el-button @click="visible = true">三级交互</el-button>
-          <BreakSpace label="哈哈哈"></BreakSpace>
+          <BreakSpace label="哈哈哈" />
         </div>
-        <div class="line" id="row-03">
-          <tinymce v-model="content" actionUrl="/api/file/oss/upload" :height="300" />
+        <div id="row-03" class="line">
+          <tinymce v-model="content" action-url="/api/file/oss/upload" :height="300" />
         </div>
       </Anchor>
     </div>
@@ -28,19 +28,9 @@
       }"
     >
       <el-button @click="closeDrawer">取 消</el-button>
-      <ajax-button
-        size="small"
-        type="primary"
-        :auth-list="auths"
-        auth-mark="/api/aaa"
-        :click="closeDrawer"
-      >提 交</ajax-button>
+      <ajax-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</ajax-button>
     </div>
-    <BaseDialog
-      :visible.sync="visible"
-      destroyOnClose
-      :containerStyle="{height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px'}"
-    >
+    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <Modal @close="closeHandler" />
     </BaseDialog>
   </div>
@@ -54,18 +44,38 @@ import BreakSpace from '@/components/BreakSpace/BreakSpace';
 
 export default {
   name: 'role',
-  mixins: [authority],
   components: {
     Modal,
     BreakSpace
   },
+  mixins: [authority],
   data() {
     return {
       visible: false,
-      labels: [{ title: '选项卡1', id: 'row-01' }, { title: '选项卡2', id: 'row-02' }, { title: '选项卡3', id: 'row-03' }],
+      labels: [
+        { title: '选项卡1', id: 'row-01' },
+        { title: '选项卡2', id: 'row-02' },
+        { title: '选项卡3', id: 'row-03' }
+      ],
       formList: this.createFormList(),
       content: 'qwe'
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.formList.find(x => x.fieldName === 'number').initialValue = 20;
+      this.formList[0].labelOptions.initialValue = '22';
+      this.formList[0].labelOptions.itemList = [
+        { text: '搜索1', value: '11' },
+        { text: '搜索2', value: '22' }
+      ];
+      this.formList[0].rules = [
+        { required: true, message: '请输入标题名称', trigger: 'blur' },
+        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+      ];
+      this.content = 'asd';
+      this.formList = [...this.formList];
+    }, 3000);
   },
   methods: {
     createFormList() {
@@ -89,7 +99,10 @@ export default {
           fieldName: 'cid',
           placeholder: '所属分类',
           filterable: true,
-          itemList: [{ text: '热点', value: '1' }, { text: '资讯', value: '2' }],
+          itemList: [
+            { text: '热点', value: '1' },
+            { text: '资讯', value: '2' }
+          ],
           initialValue: '2',
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
@@ -112,7 +125,11 @@ export default {
           label: '兴趣爱好',
           fieldName: 'hobby',
           placeholder: '兴趣爱好',
-          itemList: [{ text: '篮球', value: '1' }, { text: '足球', value: '2' }, { text: '乒乓球', value: '3' }],
+          itemList: [
+            { text: '篮球', value: '1' },
+            { text: '足球', value: '2' },
+            { text: '乒乓球', value: '3' }
+          ],
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
@@ -120,7 +137,11 @@ export default {
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          itemList: [{ text: '篮球', value: '1' }, { text: '足球', value: '2' }, { text: '乒乓球', value: '3' }],
+          itemList: [
+            { text: '篮球', value: '1' },
+            { text: '足球', value: '2' },
+            { text: '乒乓球', value: '3' }
+          ],
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {
@@ -228,16 +249,6 @@ export default {
     closeHandler(val) {
       this.visible = val;
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.formList.find(x => x.fieldName === 'number').initialValue = 20;
-      this.formList[0].labelOptions.initialValue = '22';
-      this.formList[0].labelOptions.itemList = [{ text: '搜索1', value: '11' }, { text: '搜索2', value: '22' }];
-      this.formList[0].rules = [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }];
-      this.content = 'asd';
-      this.formList = [...this.formList];
-    }, 3000);
   }
 };
 </script>

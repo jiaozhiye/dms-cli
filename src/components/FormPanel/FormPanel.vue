@@ -47,9 +47,6 @@ export default {
       visible: {}
     };
   },
-  created() {
-    this.initialHandle();
-  },
   computed: {
     fieldNames() {
       return this.list
@@ -108,6 +105,9 @@ export default {
     fieldNames() {
       this.$nextTick(() => this.doClearValidate(this.$refs.form));
     }
+  },
+  created() {
+    this.initialHandle();
   },
   methods: {
     initialHandle() {

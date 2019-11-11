@@ -28,6 +28,11 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      isInitial: true
+    };
+  },
   computed: {
     imgUrl() {
       return !this.collapsed ? logoEp : logo;
@@ -36,11 +41,6 @@ export default {
       const res = !this.collapsed ? `img1` : `img2`;
       return this.isInitial ? `${res} none` : res;
     }
-  },
-  data() {
-    return {
-      isInitial: true
-    };
   },
   watch: {
     collapsed(val) {

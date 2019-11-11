@@ -35,6 +35,12 @@ export default {
       }
     }
   },
+  mounted() {
+    this.create();
+  },
+  beforeDestroy() {
+    this.destroy();
+  },
   methods: {
     create() {
       this.instance = new CountUp(this.$refs.countup, this.endVal, this.options) || { error: true };
@@ -72,12 +78,6 @@ export default {
     destroy() {
       this.instance = null;
     }
-  },
-  mounted() {
-    this.create();
-  },
-  beforeDestroy() {
-    this.destroy();
   },
   render() {
     return <span ref="countup" />;

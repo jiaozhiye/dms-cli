@@ -1,13 +1,13 @@
 <template>
   <div class="header">
     <span class="trigger fl" @click="clickHandler">
-      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
+      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']" />
     </span>
     <div class="action fr">
-      <slot name="action"></slot>
+      <slot name="action" />
     </div>
     <div class="menus">
-      <slot name="menu"></slot>
+      <slot name="menu" />
     </div>
   </div>
 </template>

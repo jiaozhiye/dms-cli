@@ -25,9 +25,20 @@ export default {
     ]
   },
   chart3: {
-    values: [{ value: 135, name: '邮件营销' }, { value: 148, name: '联盟广告' }, { value: 251, name: '视频广告' }, { value: 151, name: '媒体广告' }, { value: 102, name: '其他' }]
+    values: [
+      { value: 135, name: '邮件营销' },
+      { value: 148, name: '联盟广告' },
+      { value: 251, name: '视频广告' },
+      { value: 151, name: '媒体广告' },
+      { value: 102, name: '其他' }
+    ]
   },
   chart4: {
-    values: [{ value: 20, name: '邮件营销' }, { value: 40, name: '联盟广告' }, { value: 60, name: '视频广告' }, { value: 80, name: '其他' }]
+    values: [
+      { value: 20, name: '邮件营销' },
+      { value: 40, name: '联盟广告' },
+      { value: 60, name: '视频广告' },
+      { value: 80, name: '其他' }
+    ]
   }
 };

@@ -2,14 +2,8 @@
   <div class="menu-list">
     <div class="search">
       <div class="top">
-        <el-autocomplete
-          v-model="menuPath"
-          value-key="title"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入菜单名称/拼音头"
-          @select="handleSelect"
-        >
-          <i class="el-icon-search el-input__icon" slot="prefix"></i>
+        <el-autocomplete v-model="menuPath" value-key="title" :fetch-suggestions="querySearch" placeholder="请输入菜单名称/拼音头" @select="handleSelect">
+          <i slot="prefix" class="el-icon-search el-input__icon" />
           <template slot-scope="{ item }">
             <span class="name">{{ item.title }}</span>
           </template>
@@ -24,10 +18,7 @@
               <h4>{{ sub.title }}</h4>
               <ul>
                 <li v-for="x in sub.children" :key="x.key">
-                  <i
-                    :class="[x.star ? 'el-icon-star-on' : 'el-icon-star-off']"
-                    @click.stop="starClickHandle(x.star, x.key, x.title)"
-                  ></i>
+                  <i :class="[x.star ? 'el-icon-star-on' : 'el-icon-star-off']" @click.stop="starClickHandle(x.star, x.key, x.title)" />
                   <router-link :to="x.key" @click.native="clickHandle">{{ x.title }}</router-link>
                 </li>
               </ul>

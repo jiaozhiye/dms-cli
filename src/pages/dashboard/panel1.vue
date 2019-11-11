@@ -55,6 +55,12 @@ export default {
       list: this.createTableList()
     };
   },
+  mounted() {
+    this.bindDragEvent();
+  },
+  beforeDestroy() {
+    this.removeDragEvent();
+  },
   methods: {
     // 创建 Table 列表数据
     createTableList() {
@@ -167,12 +173,6 @@ export default {
       }
       this.instances = null;
     }
-  },
-  mounted() {
-    this.bindDragEvent();
-  },
-  beforeDestroy() {
-    this.removeDragEvent();
   },
   render() {
     return (

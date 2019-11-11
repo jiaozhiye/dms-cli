@@ -2,56 +2,106 @@
   <div>
     <div>
       内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容
-      <br />内容1
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容
+      <br />
+      内容1
     </div>
     <div
       :style="{
@@ -67,7 +117,7 @@
       }"
     >
       <el-button @click="closeDialog">取 消</el-button>
-      <el-button @click="closeDialog" type="primary">提 交</el-button>
+      <el-button type="primary" @click="closeDialog">提 交</el-button>
     </div>
   </div>
 </template>
@@ -86,5 +136,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

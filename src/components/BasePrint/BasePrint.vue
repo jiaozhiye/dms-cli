@@ -42,6 +42,14 @@ export default {
       state: 'stop'
     };
   },
+  created() {
+    // 动态加载组件
+    this.$options.component = () => import(`@/pages/printTemplate/${this.template}.vue`);
+  },
+  beforeDestroy() {
+    // 释放内存
+    this.LODOP = null;
+  },
   methods: {
     getPrintTable(_html_) {
       // 添加打印单头部 logo
@@ -120,14 +128,6 @@ export default {
       this.state = 'start';
       setTimeout(() => (this.state = 'stop'), 500);
     }
-  },
-  created() {
-    // 动态加载组件
-    this.$options.component = () => import(`@/pages/printTemplate/${this.template}.vue`);
-  },
-  beforeDestroy() {
-    // 释放内存
-    this.LODOP = null;
   },
   render(h) {
     const vNode = this.state === 'start' ? this.createPrintComponent(h) : null;

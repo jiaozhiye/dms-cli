@@ -8,12 +8,12 @@
         ref="table"
         :height="214"
         :columns="columns"
-        :dataSource="list"
-        :isSelectColumn="false"
-        :isPagination="false"
-        :isToperInfo="false"
-        :isColumnFilter="false"
-        :onColumnsChange="columns => this.columns = columns"
+        :data-source="list"
+        :is-select-column="false"
+        :is-pagination="false"
+        :is-toper-info="false"
+        :is-column-filter="false"
+        :on-columns-change="columns => (this.columns = columns)"
       />
     </div>
   </div>

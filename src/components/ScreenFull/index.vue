@@ -1,10 +1,6 @@
 <template>
   <div class="screen-full">
-    <SvgIcon
-      class="screenfull-svg"
-      :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'"
-      @click="clickHandle"
-    />
+    <SvgIcon class="screenfull-svg" :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="clickHandle" />
   </div>
 </template>
 
@@ -23,6 +19,12 @@ export default {
     return {
       isFullscreen: false
     };
+  },
+  mounted() {
+    this.init();
+  },
+  beforeDestroy() {
+    this.destroy();
   },
   methods: {
     clickHandle() {
@@ -44,12 +46,6 @@ export default {
         screenfull.off('change', this.change);
       }
     }
-  },
-  mounted() {
-    this.init();
-  },
-  beforeDestroy() {
-    this.destroy();
   }
 };
 </script>
