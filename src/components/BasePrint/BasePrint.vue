@@ -44,11 +44,12 @@ export default {
   },
   methods: {
     getPrintTable(_html_) {
+      // 添加打印单头部 logo
+      _html_ = this.createPrintLogo(_html_);
+      // 处理分页符
+      _html_ = this.createPageBreak(_html_);
       // 加载全局 style 样式
       _html_ = this.createGlobalStyle(_html_);
-      // 处理分页符
-      _html_ = this.createPrintLogo(_html_);
-      _html_ = this.createPageBreak(_html_);
       // 执行打印
       this.createPrintPage(_html_);
     },

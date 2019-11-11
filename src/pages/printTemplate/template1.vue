@@ -109,16 +109,8 @@ export default {
       }, 0);
     }
   },
-  methods: {
-    fillInToDom() {
-      this.isPreview = true;
-    }
-  },
   mounted() {
     this.$emit('onPrintTable', this.$refs.print.innerHTML);
-    if (this.isPreview) {
-      this.fillInToDom();
-    }
   }
 };
 </script>
