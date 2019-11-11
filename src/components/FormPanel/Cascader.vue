@@ -120,7 +120,6 @@ export default {
 
 <style lang="less" scoped>
 .casc-wrap {
-  min-width: 300px;
   .table {
     tr {
       th {
@@ -137,6 +136,7 @@ export default {
           margin: 0 -5px;
           padding: 0 5px;
           padding-right: 20px;
+          white-space: nowrap;
           i {
             position: absolute;
             right: 5px;

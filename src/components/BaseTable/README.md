@@ -69,6 +69,7 @@ http://localhost:8080/table
 `FilterTable 组件参数API`
 
 - height{Number/String|设置 table 组件的高度，如果不设置，为自适应屏幕高度，如果值是 auto，高度随着内容递增}
+- maxHeight{Number/String|设置 table 最大高度}
 - columns{Array|table 列配置数组}
 - columnsRef{String|定义表头列字段的引用，用户保存列筛选排序的操作记录，不能重复}
 - dataSource{Array|table 数据数据，对象或数组}

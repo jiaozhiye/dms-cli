@@ -213,7 +213,7 @@ export default {
     createToperNode(label = '', property) {
       return (
         <span
-          style={{ display: 'block', padding: '10px 0 10px 10px' }}
+          style={{ paddingLeft: '10px', lineHeight: '34px' }}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(property);
@@ -251,7 +251,7 @@ export default {
           style={{ marginLeft: '-10px' }}
           offsetLeft={this.offset[property]}
           boundariesElement={this.$pageTable.$el}
-          containerStyle={{ marginTop: '2px', padding: '10px' }}
+          containerStyle={{ marginTop: '4px', padding: '10px' }}
         >
           {this.createToperNode(label, property)}
           <template slot="content">
