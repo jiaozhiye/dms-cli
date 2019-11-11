@@ -19,6 +19,7 @@ Vue.use(Tinymce);
 - actionUrl{String|上传图片的路径，必选参数}
 - fixedSize{Array|上传图片裁剪框的宽高比 [w, h]，默认是 5:4}
 - wordsLimit{Number|富文本编辑器的字数限制，默认是 50000}
+- isUploadImage{Boolean|是否显示上传图片按钮}
 - disabled{Boolean|富文本编辑器是否禁用}
 - change{Function|文本变化的回掉事件，参数是当前内容文本}
 

@@ -1,7 +1,7 @@
 <template>
   <div :class="{fullscreen: fullscreen}" class="tinymce-container">
     <textarea :id="tinymceId" class="tinymce-textarea" />
-    <div class="editor-custom-btn-container">
+    <div v-if="isUploadImage" class="editor-custom-btn-container">
       <UploadImg
         class="editor-upload-btn"
         :actionUrl="actionUrl"
@@ -59,6 +59,10 @@ export default {
     wordsLimit: {
       type: Number,
       default: 50000
+    },
+    isUploadImage: {
+      type: Boolean,
+      default: true
     },
     disabled: {
       type: Boolean,
