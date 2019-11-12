@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 09:46:23
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -11,7 +11,7 @@ import PageTable from './pageTable.vue';
 import DropDown from './dropDown.vue';
 
 export default {
-  name: 'filter-table',
+  name: 'FilterTable',
   props: {
     height: {
       type: [Number, String]
@@ -526,8 +526,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// @primaryColor: #bb0a30;
-
 .popover-wrap {
   display: block;
   padding: 0;

@@ -32,10 +32,12 @@ module.exports = {
         }
       }
     ],
-    'vue/no-use-v-if-with-v-for': ['off'],
+    'vue/eqeqeq': ['off'],
+    'vue/this-in-template': ['off'],
+    'vue/attribute-hyphenation': ['off'],
+    'vue/require-default-prop': ['off'],
+    'vue/require-prop-types': ['off'],
     'vue/component-name-in-template-casing': ['off'],
-    'vue/name-property-casing': ['off'],
-    'vue/no-unused-components': ['off'],
-    'no-new': ['off']
+    'vue/name-property-casing': ['off']
   }
 };

@@ -2,11 +2,11 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 09:45:50
  **/
 export default {
-  name: 'pagination',
+  name: 'Pagination',
   props: {
     pagination: {
       type: Object,
@@ -55,7 +55,7 @@ export default {
 
 <style lang="less" scoped>
 .pagination {
-  padding: 10px 0;
+  padding: @modulePadding 0;
   text-align: right;
   /deep/ .el-pagination__jump {
     margin-left: 0;

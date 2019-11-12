@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 09:46:26
  **/
 export default {
   name: 'DropDown',
@@ -15,9 +15,6 @@ export default {
     placement: {
       type: String,
       default: 'right'
-    },
-    boundaries: {
-      type: Number
     },
     offsetLeft: {
       type: Number,

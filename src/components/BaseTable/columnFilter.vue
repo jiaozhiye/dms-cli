@@ -2,13 +2,13 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 09:46:40
  **/
 import _ from 'lodash';
 
 export default {
-  name: 'column-filter',
+  name: 'ColumnFilter',
   props: {
     columns: {
       type: Array,
@@ -162,8 +162,6 @@ export default {
 </script>
 
 <style lang="less">
-// @primaryColor: #bb0a30;
-
 .columns-dropdown {
   cursor: pointer;
   color: @primaryColor;

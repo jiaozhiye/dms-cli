@@ -2,58 +2,20 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 09:46:15
  **/
 import _ from 'lodash';
 import moment from 'moment';
 import config from '@/config';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
+import TopInfo from './topInfo';
 import ColumnFilter from './columnFilter';
 import Pagination from './pagination';
-import Spin from '@/components/Spin/Spin.vue';
+import Spin from '@/components/Spin/Spin';
 
 export default {
-  name: 'page-table',
-  components: {
-    ToperInfo: {
-      props: ['total', 'selectionRows', 'isSelectColumn', 'clearTableHandler'],
-      render() {
-        return (
-          <div class="info">
-            <el-alert class="alert" closable={false} type="info" show-icon>
-              <span class="text" slot="title">
-                总共 <i>{this.total}</i> 条数据
-                {this.isSelectColumn ? (
-                  <span>
-                    ，已选择 <i>{this.selectionRows.length}</i> 项
-                    <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearTableHandler}>
-                      清空
-                    </el-button>
-                  </span>
-                ) : null}
-              </span>
-            </el-alert>
-            {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
-              <el-dropdown size="small" style={{ marginLeft: '10px' }} placement="bottom-start">
-                <el-button size="small">
-                  更多操作
-                  <i class="el-icon-arrow-down el-icon--right" />
-                </el-button>
-                <el-dropdown-menu slot="dropdown" class="dropdown-list">
-                  {this.$slots.moreActions
-                    .filter(x => x.tag)
-                    .map((x, i) => (
-                      <el-dropdown-item key={i}>{x}</el-dropdown-item>
-                    ))}
-                </el-dropdown-menu>
-              </el-dropdown>
-            ) : null}
-          </div>
-        );
-      }
-    }
-  },
+  name: 'PageTable',
   props: {
     height: {
       type: [Number, String]
@@ -1790,13 +1752,13 @@ export default {
         <div class="toper-card">
           <section>
             {isToperInfo && (
-              <toper-info {...toperInfoProps}>
+              <TopInfo {...toperInfoProps}>
                 {Object.keys($slots).map(name => (
                   <template key={name} slot={name}>
                     {$slots[name]}
                   </template>
                 ))}
-              </toper-info>
+              </TopInfo>
             )}
           </section>
           <section>
@@ -1821,8 +1783,6 @@ export default {
 </script>
 
 <style lang="less">
-// @primaryColor: #bb0a30;
-// @borderColor: #d9d9d9;
 @tableBgColor: #f2f2f2;
 @tableHoverColor: #f5f5f5;
 @dangerColor: #f5222d;
@@ -1835,32 +1795,6 @@ export default {
     margin-bottom: @moduleMargin;
     font-size: 0;
     overflow: hidden;
-    .info {
-      display: flex;
-    }
-    .alert {
-      height: 32px;
-      padding: 0 12px 0 10px;
-      background-color: @tableBgColor;
-      border: 1px solid @borderColor;
-      .el-icon-info {
-        color: @primaryColor;
-      }
-      .el-alert__content {
-        display: flex;
-        padding-left: 6px;
-        padding-right: 0;
-        .text {
-          font-size: 12px;
-          i {
-            font-size: 13px;
-            font-weight: 600;
-            color: @primaryColor;
-            font-style: normal;
-          }
-        }
-      }
-    }
     .slot-wrapper {
       display: inline-block;
       margin-right: @moduleMargin;
