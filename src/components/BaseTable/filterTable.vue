@@ -494,6 +494,9 @@ export default {
     GET_REQUIRED_ERROR() {
       return this.$pageTable.GET_REQUIRED_ERROR();
     },
+    GET_FORMAT_ERROR() {
+      return this.$pageTable.GET_REQUIRED_ERROR();
+    },
     GET_SEARCH_HELPER_ERROR() {
       return this.$pageTable.GET_SEARCH_HELPER_ERROR();
     }

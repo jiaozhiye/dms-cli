@@ -155,6 +155,7 @@ export default {
         insert: [],
         remove: [],
         required: [],
+        format: [],
         searchHelper: []
       },
       // 服务端合计
@@ -500,13 +501,6 @@ export default {
           value={prevValue}
           disabled={column.disabled || isDisabled}
           onInput={val => {
-            // 单元格正则校验
-            if (_.isRegExp(column.editPattern)) {
-              // 是否为删除动作
-              let isRemoveHandle = val.length < (prevValue && prevValue.length);
-              // 单元格正则校验
-              if (!isRemoveHandle && !column.editPattern.test(val)) return;
-            }
             // 数值类型的校验
             if (editType === 'number') {
               let isPassCheck = (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
@@ -535,9 +529,19 @@ export default {
             if (editType === 'number') {
               _.set(props.row, dataIndex, this.parseNumber(value, precision));
             }
+            // 当前值
+            const val = this.getFormatData(props.row, dataIndex);
             // 单元格非空校验
             if (column.editRequired) {
-              this.validateRequired(dataIndex, props.row._uid, _.get(props.row, dataIndex));
+              this.validateRequired(dataIndex, props.row._uid, val);
+            }
+            // 单元格正则校验
+            if (_.isRegExp(column.editPattern)) {
+              if (val) {
+                this.validateFormat(dataIndex, props.row._uid, column.editPattern.test(val));
+              } else {
+                this.validateFormat(dataIndex, props.row._uid, true);
+              }
             }
           }}
         />
@@ -626,7 +630,7 @@ export default {
     editColumnScopedRender(h, column) {
       const { dataIndex } = column;
       // 这种写法没法获取到变化的数据，vue react 都是这种情况
-      // const { required, searchHelper } = this.actionsLog;
+      // const { required, format, searchHelper } = this.actionsLog;
       const editScopedSlots = {};
       if (column.editable) {
         editScopedSlots.scopedSlots = {
@@ -638,6 +642,10 @@ export default {
               // 单元格非空校验
               if (this.actionsLog.required.some(x => x.xUid === props.row._uid && x.yDataIndex === dataIndex)) {
                 errMessages.push(`${column.title}不能为空`);
+              }
+              // 单元格格式校验
+              if (this.actionsLog.format.some(x => x.xUid === props.row._uid && x.yDataIndex === dataIndex)) {
+                errMessages.push(`${column.title}格式不正确`);
               }
               // 搜索帮助校验
               if (this.actionsLog.searchHelper.some(x => x.xUid === props.row._uid && x.yDataIndex === dataIndex)) {
@@ -885,6 +893,11 @@ export default {
       const type = value === '' ? 'add' : 'remove';
       this.validateHandler('required', dataIndex, uid, type);
     },
+    // 单元格格式校验
+    validateFormat(dataIndex, uid, bool) {
+      const type = bool ? 'remove' : 'add';
+      this.validateHandler('format', dataIndex, uid, type);
+    },
     // 搜索帮助校验
     validateSearchHelper(dataIndex, uid, type) {
       this.validateHandler('searchHelper', dataIndex, uid, type);
@@ -993,9 +1006,10 @@ export default {
       this.actionsLog.remove.push(...removedRows);
       // 修改 total 数量
       this.pagination.total -= removedRows.length;
-      // 删除记录中是否包含 非空校验 和 搜索帮助 的非法数据
+      // 删除记录中非法数据
       removedRows.forEach(row => {
         this.actionsLog.required.some(x => x.xUid === row._uid) && this.validateRequired('', row._uid, 'remove');
+        this.actionsLog.format.some(x => x.xUid === row._uid) && this.validateFormat('', row._uid, 'remove');
         this.actionsLog.searchHelper.some(x => x.xUid === row._uid) && this.validateSearchHelper('', row._uid, 'remove');
       });
       // 清空行选中状态
@@ -1086,10 +1100,12 @@ export default {
     // 取消上一个单元格的编辑状态
     cancelPrevCellEditState() {
       const { row, key } = this.prevHandle;
-      const { required, searchHelper } = this.actionsLog;
+      const { required, format, searchHelper } = this.actionsLog;
       if (row === null || key === '') return;
       // 不允许为空 非法
       if (required.some(x => x.xUid === row._uid && x.yDataIndex === key)) return;
+      // 格式不正确 非法
+      if (format.some(x => x.xUid === row._uid && x.yDataIndex === key)) return;
       // 搜索帮助的值 非法
       if (searchHelper.some(x => x.xUid === row._uid && x.yDataIndex === key)) return;
       // 取消编辑状态
@@ -1703,6 +1719,9 @@ export default {
         });
       });
       return this.actionsLog.required.length ? { message: '红色标记单元格的值不允许为空！' } : null;
+    },
+    GET_FORMAT_ERROR() {
+      return this.actionsLog.format.length ? { message: '红色标记单元格的值格式不正确！' } : null;
     },
     GET_SEARCH_HELPER_ERROR() {
       return this.actionsLog.searchHelper.length ? { message: '搜索帮助单元格的值仅支持选择！' } : null;

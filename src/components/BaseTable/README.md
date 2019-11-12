@@ -173,4 +173,5 @@ http://localhost:8080/table
 - GET_INSERT_ROWS{Function|记录新增的行，没有参数，返回值是数据行组成的数组}
 - GET_DELETE_ROWS{Function|记录移除的行，没有参数，返回值是被移除数据行组成的数组}
 - GET_REQUIRED_ERROR{Function|记录可编辑单元格的非空校验，用于保存提示}
+- GET_FORMAT_ERROR{Function|记录可编辑单元格的格式校验，用于保存提示}
 - GET_SEARCH_HELPER_ERROR{Function|记录搜索帮助的非法操作，用于保存提示}
