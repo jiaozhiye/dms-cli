@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 10:43:17
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -50,6 +50,13 @@ export default {
   },
   created() {
     this.addKeepAlive(this.$route);
+  },
+  mounted() {
+    this.$multiTab = this.$refs.multiTab.$el;
+    this.bindContextmenuEvent();
+  },
+  beforeDestroy() {
+    this.eventHandler.remove();
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),
@@ -157,13 +164,6 @@ export default {
         ) : null}
       </div>
     );
-  },
-  mounted() {
-    this.$multiTab = this.$refs.multiTab.$el;
-    this.bindContextmenuEvent();
-  },
-  beforeDestroy() {
-    this.eventHandler.remove();
   }
 };
 </script>

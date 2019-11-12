@@ -13,7 +13,7 @@ module.exports = {
     node: true
   },
   extends: ['plugin:vue/recommended', 'prettier', 'prettier/vue'],
-  plugins: ['prettier', 'vue'],
+  plugins: ['vue', 'prettier'],
   rules: {
     'prettier/prettier': [
       'error',

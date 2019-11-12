@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-12 10:45:20
  */
 import { mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -11,9 +11,6 @@ import RouteView from './RouteView';
 
 export default {
   name: 'BasicLayout',
-  methods: {
-    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList'])
-  },
   mounted() {
     // 登录后，获取所有的数据字典值
     this.createDictData();
@@ -21,6 +18,9 @@ export default {
     this.createStarMenuList();
     // 获取常用导航
     this.createCommonMenuList();
+  },
+  methods: {
+    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList'])
   },
   render() {
     return (
