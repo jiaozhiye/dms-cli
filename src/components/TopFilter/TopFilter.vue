@@ -903,7 +903,7 @@ export default {
       // 默认收起
       let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
       // 展开
-      if (expand) {
+      if (!collapse || expand) {
         offset = cols - (total % cols) - 1;
       }
       return this.isSubmitBtn ? (
