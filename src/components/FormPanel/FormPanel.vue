@@ -502,19 +502,8 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             picker-options={{
-              disabledDate(time) {
-                const min = new Date(minDateTime).getTime();
-                const max = new Date(maxDateTime).getTime();
-                if (min && max) {
-                  return !(time.getTime() > min && time.getTime() < max);
-                }
-                if (!!min) {
-                  return time.getTime() < min;
-                }
-                if (!!max) {
-                  return time.getTime() > max;
-                }
-                return false;
+              disabledDate: time => {
+                return this.setDisabledDate(time, [minDateTime, maxDateTime]);
               }
             }}
             onChange={() => change(form[fieldName])}
@@ -901,6 +890,21 @@ export default {
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
+    },
+    // 设置日期控件的禁用状态
+    setDisabledDate(time, [minDateTime, maxDateTime]) {
+      const min = new Date(minDateTime).getTime();
+      const max = new Date(maxDateTime).getTime();
+      if (min && max) {
+        return !(time.getTime() > min && time.getTime() < max);
+      }
+      if (!!min) {
+        return time.getTime() < min;
+      }
+      if (!!max) {
+        return time.getTime() > max;
+      }
+      return false;
     },
     // 下拉框的筛选方法
     filterMethodHandle(fieldName, queryString = '') {
