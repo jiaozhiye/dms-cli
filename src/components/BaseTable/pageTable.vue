@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 09:46:15
+ * @Last Modified time: 2019-11-14 09:10:51
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1807,13 +1807,12 @@ export default {
 @dangerColor: #f5222d;
 
 .table-wrapper {
+  overflow-x: hidden;
   .toper-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: @moduleMargin;
-    font-size: 0;
-    overflow: hidden;
     .slot-wrapper {
       display: inline-block;
       margin-right: @moduleMargin;
@@ -1849,6 +1848,9 @@ export default {
   }
   .el-table__body-wrapper {
     z-index: 0;
+    .el-table__empty-block {
+      min-height: 100px;
+    }
   }
   .el-table__body {
     tbody > tr > td {

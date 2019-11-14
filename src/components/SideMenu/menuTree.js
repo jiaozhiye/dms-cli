@@ -1,8 +1,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-14 08:02:16
  */
 import variables from '@/assets/css/variables.less';
 
@@ -53,7 +53,9 @@ export default {
         }
         return (
           <el-menu-item key={item.key} index={item.key}>
-            {item.title}
+            <span title={item.title} style="display: block;" class="text_overflow_cut">
+              {item.title}
+            </span>
           </el-menu-item>
         );
       });
