@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-14 09:10:51
+ * @Last Modified time: 2019-11-14 10:04:09
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -471,7 +471,7 @@ export default {
             clearable={false}
             disabled={column.disabled || isDisabled}
             picker-options={{
-              disabledDate(time) {
+              disabledDate: time => {
                 if (minDateTime) {
                   const target = !new Date(minDateTime).getTime() ? this.getFormatData(props.row, minDateTime) : minDateTime;
                   return time.getTime() < new Date(target).getTime();
@@ -698,13 +698,12 @@ export default {
                 <el-radio
                   value={_.get(this.selectionRows[0], '_uid')}
                   onInput={val => {
-                    this.selectionRows = [this.list.find(x => x._uid === val)];
+                    const row = this.list.find(x => x._uid === val);
+                    if (!row) return;
+                    this.handleSelectionChange(row);
                   }}
                   label={props.row._uid}
                   disabled={this.canRowSelected(props.row)}
-                  onChange={val => {
-                    this.handleSelectionChange(this.list.find(x => x._uid === val));
-                  }}
                   nativeOnClick={e => e.stopPropagation()}
                 />
               );
@@ -1274,11 +1273,9 @@ export default {
     },
     // table row 选中状态变化时
     handleSelectionChange(rows) {
-      if (Array.isArray(rows)) {
-        this.selectionRows = rows;
-      } else {
-        rows = [rows];
-      }
+      rows = Array.isArray(rows) ? rows : [rows];
+      if (_.isEqual(rows, this.selectionRows)) return;
+      this.selectionRows = rows;
       this.debounce(this.onRowSelectChange, 0)(rows);
     },
     // 清空 table row 的选中
