@@ -169,7 +169,8 @@ export default {
                   children: [
                     {
                       value: 9,
-                      text: '三级 1-1-1'
+                      text: '三级 1-1-1',
+                      disabled: true
                     },
                     {
                       value: 10,

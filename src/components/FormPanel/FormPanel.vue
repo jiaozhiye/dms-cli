@@ -361,6 +361,14 @@ export default {
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}
                 on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
+                scopedSlots={{
+                  default: props => {
+                    const cls = {
+                      [`is-disabled`]: props.data.disabled
+                    };
+                    return <span class={cls}>{props.node.label}</span>;
+                  }
+                }}
               />
             </div>
             <el-input

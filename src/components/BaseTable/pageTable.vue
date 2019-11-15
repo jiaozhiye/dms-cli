@@ -1544,6 +1544,7 @@ export default {
       if (rows.length && this.list.length) {
         this.$nextTick(() => {
           this.scrollTopToPosition(10000);
+          this.resetRender();
         });
       }
     },
@@ -1810,6 +1811,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: @moduleMargin;
+    font-size: 0;
     .slot-wrapper {
       display: inline-block;
       margin-right: @moduleMargin;
