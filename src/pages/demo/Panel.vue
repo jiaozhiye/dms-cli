@@ -166,6 +166,7 @@ export default {
                 {
                   value: 4,
                   text: '二级 1-1',
+                  disabled: true,
                   children: [
                     {
                       value: 9,

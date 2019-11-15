@@ -313,6 +313,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-popover
             v-model={this.visible[fieldName]}
+            popper-class="input-tree"
             transition="el-zoom-in-top"
             placement="bottom-start"
             trigger="click"
@@ -799,7 +800,8 @@ export default {
       return data.text.indexOf(value) !== -1;
     },
     // 树节点单机事件
-    treeNodeClickHandle(fieldName, { value }) {
+    treeNodeClickHandle(fieldName, { value, disabled }) {
+      if (disabled) return;
       this.form[fieldName] = value;
       this.visible[fieldName] = false;
     },
@@ -1132,6 +1134,18 @@ export default {
         .range-date {
           border-color: #f5222d;
         }
+      }
+    }
+  }
+}
+.input-tree {
+  .el-tree {
+    .el-tree-node[aria-disabled='true'] > .el-tree-node__content {
+      color: @disabledColor;
+      background: none;
+      cursor: not-allowed;
+      .is-leaf {
+        pointer-events: none;
       }
     }
   }
