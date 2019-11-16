@@ -71,7 +71,7 @@ export default {
     };
     return (
       <div class="wrapper">
-        {$slots['default']}
+        {$slots['reference']}
         <transition name="el-zoom-in-top">
           <div ref="panel" v-show={visible} class="content" style={boxStyle} onClick={ev => ev.stopPropagation()} onMousedown={ev => ev.stopPropagation()}>
             {$slots['content']}
@@ -97,6 +97,7 @@ export default {
     top: 34px;
     position: absolute;
     background-color: rgba(255, 255, 255, 1);
+    border: 1px solid @borderColorSecondary;
     border-radius: @borderRadius;
     box-shadow: @boxShadow;
     overflow-y: auto;

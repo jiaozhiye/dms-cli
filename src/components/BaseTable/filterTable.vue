@@ -228,6 +228,7 @@ export default {
     createToperNode(label = '', property) {
       return (
         <span
+          slot="reference"
           style={{ paddingLeft: '10px', lineHeight: '34px' }}
           onClick={e => {
             e.stopPropagation();
@@ -259,7 +260,7 @@ export default {
       const { property, label } = column;
       // 查找对应的表头列 column
       const originColumn = this.deepFind(this.columns, property);
-      return originColumn && originColumn.filterType === type ? (
+      const DropDownNode = (
         <DropDown
           visible={this.visible[property]}
           placement="left"
@@ -274,7 +275,25 @@ export default {
             {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
           </template>
         </DropDown>
-      ) : null;
+      );
+      const PopoverNode = (
+        <el-popover
+          popper-class="thead-popper"
+          value={this.visible[property]}
+          trigger="manual"
+          style={{ marginLeft: '-10px' }}
+          visibleArrow={false}
+          transition="el-zoom-in-top"
+          placement="bottom-start"
+        >
+          {this.createToperNode(label, property)}
+          <template slot="default">
+            <div class="popover-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
+            {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
+          </template>
+        </el-popover>
+      );
+      return originColumn && originColumn.filterType === type ? (originColumn.fixed ? PopoverNode : DropDownNode) : null;
     },
     inputHandle(column) {
       const { dataIndex, title, filterType } = column;
