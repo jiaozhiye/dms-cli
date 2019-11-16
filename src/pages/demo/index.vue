@@ -245,6 +245,7 @@ export default {
         {
           title: '日期',
           dataIndex: 'date',
+          fixed: 'left',
           width: 150,
           sorter: true,
           filter: true,

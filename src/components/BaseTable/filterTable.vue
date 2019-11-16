@@ -223,6 +223,15 @@ export default {
     openCurPopover(el, property) {
       this.visible[property] = true;
       this.offset[property] = this.getOffsetLeft(el, this.$$tableHeader.parentNode) - this.scrollLeft;
+      this.$nextTick(() => {
+        this.removePopperHandle();
+      });
+    },
+    removePopperHandle() {
+      const nodes = document.querySelectorAll('.thead-popper');
+      if (!nodes.length) return;
+      const target = nodes[nodes.length - 1];
+      target.parentNode.removeChild(target);
     },
     // 创建头部筛选节点
     createToperNode(label = '', property) {
