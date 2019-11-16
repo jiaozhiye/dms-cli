@@ -97,6 +97,10 @@ export default {
       type: Function,
       default: () => {}
     },
+    onSummationChange: {
+      type: Function,
+      default: () => {}
+    },
     onPageChange: {
       type: Function,
       default: () => {}
@@ -223,15 +227,17 @@ export default {
     openCurPopover(el, property) {
       this.visible[property] = true;
       this.offset[property] = this.getOffsetLeft(el, this.$$tableHeader.parentNode) - this.scrollLeft;
-      this.$nextTick(() => {
-        this.removePopperHandle();
-      });
+      this.$nextTick(() => this.removePopperHandle(el));
     },
-    removePopperHandle() {
-      const nodes = document.querySelectorAll('.thead-popper');
-      if (!nodes.length) return;
-      const target = nodes[nodes.length - 1];
-      target.parentNode.removeChild(target);
+    // 移除由于固定列，element-ui 克隆 table 节点带来的多余 popper 节点
+    removePopperHandle(el) {
+      const $nodes = Array.from(document.querySelectorAll('.thead-popper'));
+      if (!$nodes.length) return;
+      const $id = el.getAttribute('aria-describedby');
+      $nodes.forEach(x => {
+        if (x.getAttribute('id') === $id) return;
+        x.parentNode.removeChild(x);
+      });
     },
     // 创建头部筛选节点
     createToperNode(label = '', property) {
@@ -290,7 +296,7 @@ export default {
           popper-class="thead-popper"
           value={this.visible[property]}
           trigger="manual"
-          style={{ marginLeft: '-10px' }}
+          style={{ display: 'inline-flex', marginLeft: '-10px' }}
           visibleArrow={false}
           transition="el-zoom-in-top"
           placement="bottom-start"
@@ -597,5 +603,14 @@ export default {
 }
 .topFilterSelected {
   color: @primaryColor;
+}
+</style>
+
+<style lang="less">
+.thead-popper {
+  margin-top: 4px !important;
+  border: 1px solid @borderColorSecondary;
+  border-radius: @borderRadius;
+  box-shadow: @boxShadow;
 }
 </style>

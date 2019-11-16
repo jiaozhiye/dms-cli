@@ -93,6 +93,7 @@ http://localhost:8080/table
 - onEnterEvent{Function|单元格在有焦点状态下的回车事件和行双击事件的监听函数，参数是当前单元格对应的行数据}
 - onRowSelectChange{Function|table 行选中状态变化时的回调，参数是选中行记录的数组]}
 - onCellChange{Function|table 单元格数据变化时的回调，参数 1 -> 被改变单元的的对象{`uid|dataIndex`: val}，参数 2 -> 被改变单元格所对应行的对象}
+- onSummationChange{Function|表格合计变化时的回调，参数是合计字段对应的数组数据}
 - onPageChange{Function|分页变化时的回调，参数是分页信息对象}
 - onSyncTableData{Function|同步 table 组件列表数据，参数 1 -> 组件的数据列表，参数 2 -> 是否为首次同步的新数据，通常用来处理和数据相关的始化工作；数据的传递为单向数据流，如页面需要列表数据，必须通过此方式实现}
 

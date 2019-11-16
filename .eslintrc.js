@@ -15,23 +15,28 @@ module.exports = {
   extends: ['plugin:vue/recommended', 'prettier', 'prettier/vue'],
   plugins: ['vue', 'prettier'],
   rules: {
-    'prettier/prettier': [
+    // 缩进为2个空格
+    'vue/html-indent': [
       'error',
+      2,
       {
-        htmlWhitespaceSensitivity: 'ignore',
-        semi: true,
-        singleQuote: true,
-        printWidth: 200
+        attribute: 1,
+        alignAttributesVertically: true,
+        ignores: []
       }
     ],
-    'vue/html-self-closing': [
-      'error',
+    'vue/max-attributes-per-line': [
+      2,
       {
-        html: {
-          void: 'any'
+        singleline: 10,
+        multiline: {
+          max: 1,
+          allowFirstLine: false
         }
       }
     ],
+    'prettier/prettier': ['off'],
+    'vue/html-self-closing': ['off'],
     'vue/eqeqeq': ['off'],
     'vue/this-in-template': ['off'],
     'vue/attribute-hyphenation': ['off'],

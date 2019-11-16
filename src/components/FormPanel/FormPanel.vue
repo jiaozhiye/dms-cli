@@ -343,7 +343,7 @@ export default {
               this.treeFilterTextHandle(fieldName);
             }}
           >
-            <div class="el-input--small" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
+            <div class="el-input--small input-tree-wrap" style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <input
                 value={this[`${fieldName}TreeFilterTexts`]}
                 class="el-input__inner"
@@ -1266,6 +1266,10 @@ export default {
   }
 }
 .input-tree {
+  .input-tree-wrap {
+    padding-right: 10px;
+    margin-right: -10px;
+  }
   .el-tree {
     .el-tree-node[aria-disabled='true'] > .el-tree-node__content {
       color: @disabledColor;

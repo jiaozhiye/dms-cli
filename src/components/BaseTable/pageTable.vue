@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-14 10:04:09
+ * @Last Modified time: 2019-11-16 20:37:33
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -102,6 +102,10 @@ export default {
       default: () => {}
     },
     onCellChange: {
+      type: Function,
+      default: () => {}
+    },
+    onSummationChange: {
       type: Function,
       default: () => {}
     },
@@ -381,7 +385,7 @@ export default {
         this.columnFlatMap(this.columns)
           .filter(x => x.summation && x.summationDataIndex)
           .forEach(x => {
-            this.summaries[x.summationDataIndex] = data[`${x.summationDataIndex}Summary`];
+            this.summaries[x.dataIndex] = Number(data[x.summationDataIndex]) || 0;
           });
       }
       return res;
@@ -1322,6 +1326,7 @@ export default {
     getSummaries(param) {
       const { columns } = param;
       const data = this.isMemoryPagination ? this.originData : this.list;
+      const res = [];
       const sums = [];
       columns.forEach((column, index) => {
         const { property } = column;
@@ -1353,13 +1358,16 @@ export default {
         // 精度
         const { precision } = targetColumn;
         // 服务端合计
-        if (Object.keys(this.summaries).includes(property) && typeof this.summaries[property] !== 'undefined') {
-          sums[index] = `${this.summaries[property]} ${unit}`;
+        if (Object.keys(this.summaries).includes(property)) {
+          result = precision >= 0 ? this.summaries[property].toFixed(precision) : this.summaries[property];
         } else {
           result = precision >= 0 ? result.toFixed(precision) : result;
-          sums[index] = `${this.formatNumber(result)} ${unit}`;
         }
+        sums[index] = `${this.formatNumber(result)} ${unit}`;
+        res.push({ dataIndex: property, value: result.toString() });
       });
+      // 触发合计 change 事件
+      this.debounce(this.onSummationChange, 0)(res);
       return sums;
     },
     // table 头被拖拽改变列宽度
@@ -1898,10 +1906,10 @@ export default {
       background-color: @tableBgColor !important;
     }
   }
-  .el-table__fixed {
+  .el-table__fixed, .el-table__fixed-right {
     z-index: 1;
     &::before {
-      background-color: @borderColor;
+      content: none;
     }
   }
 }
