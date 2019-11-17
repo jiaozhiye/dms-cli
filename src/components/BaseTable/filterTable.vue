@@ -231,7 +231,7 @@ export default {
     },
     // 移除由于固定列，element-ui 克隆 table 节点带来的多余 popper 节点
     removePopperHandle(el) {
-      const $nodes = Array.from(document.querySelectorAll('.thead-popper'));
+      const $nodes = Array.from(document.body.querySelectorAll('.thead-popper'));
       if (!$nodes.length) return;
       const $id = el.getAttribute('aria-describedby');
       $nodes.forEach(x => {
