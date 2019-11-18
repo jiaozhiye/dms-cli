@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-18 08:44:01
+ * @Last Modified time: 2019-11-18 14:06:49
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1096,8 +1096,12 @@ export default {
         // 因此通过 refs 获取到的其实是 el-table__fixed 下的 input，这个节点并不是我们想要的
         // const el = this.$refs[`${rowIndex}|${marks[editableColumnIndex]}`];
         const inputDom = this.tableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
-        if (!inputDom) return;
-        inputDom.select();
+        inputDom && inputDom.select();
+        const targetColumn = this.editableColumns.find(x => x.dataIndex === marks[editableColumnIndex]);
+        if (!targetColumn.fixed) return;
+        const fixedTableBody = this.$refs.appTable.$el.querySelector('.el-table__fixed > .el-table__fixed-body-wrapper > .el-table__body');
+        const fixedInputDom = fixedTableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
+        fixedInputDom && fixedInputDom.select();
       });
     },
     // 取消上一个单元格的编辑状态

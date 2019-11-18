@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 09:46:23
+ * @Last Modified time: 2019-11-18 10:38:22
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -529,7 +529,7 @@ export default {
       return this.$pageTable.GET_REQUIRED_ERROR();
     },
     GET_FORMAT_ERROR() {
-      return this.$pageTable.GET_REQUIRED_ERROR();
+      return this.$pageTable.GET_FORMAT_ERROR();
     },
     GET_SEARCH_HELPER_ERROR() {
       return this.$pageTable.GET_SEARCH_HELPER_ERROR();
