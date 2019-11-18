@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-16 20:37:33
+ * @Last Modified time: 2019-11-18 08:44:01
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1092,7 +1092,7 @@ export default {
       };
       // 获得焦点及选中
       this.$nextTick(() => {
-        // 因为 el-table 在列固定的特性下，多了 el-table__fixed 节点，里面的 table 节点完全克隆于 el-table__body-wrapper 中的table 节点，
+        // 因为 el-table 在列固定的特性下，多了 el-table__fixed 节点，里面的 table 节点完全克隆于 el-table__body-wrapper 中的 table 节点，
         // 因此通过 refs 获取到的其实是 el-table__fixed 下的 input，这个节点并不是我们想要的
         // const el = this.$refs[`${rowIndex}|${marks[editableColumnIndex]}`];
         const inputDom = this.tableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
@@ -1468,7 +1468,7 @@ export default {
       // 没有可编辑列
       if (!this.editPos.marks.length) return;
       // DOM 判断
-      if (target.tagName === 'BODY' || this.findParents(target, this.tableBody)) return;
+      if (this.findParents(target, 'el-table__body')) return;
       // 取消单元格编辑状态
       this.cancelPrevCellEditState();
     },
@@ -1477,10 +1477,11 @@ export default {
       document.addEventListener('click', this.documentEventHandle, false);
     },
     // 查找祖先节点
-    findParents(el, parent) {
+    findParents(el, cn) {
       let bool = false;
-      while (el && el.tagName !== 'BODY') {
-        if (el === parent) {
+      while (el !== null) {
+        const cls = Array.from(el.classList || []);
+        if (cls.includes(cn)) {
           bool = true;
           break;
         }
@@ -1906,7 +1907,8 @@ export default {
       background-color: @tableBgColor !important;
     }
   }
-  .el-table__fixed, .el-table__fixed-right {
+  .el-table__fixed,
+  .el-table__fixed-right {
     z-index: 1;
     &::before {
       content: none;
