@@ -264,8 +264,8 @@ export default {
       return obj;
     },
     isIE() {
-      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-      var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1; //判断是否IE浏览器
+      var userAgent = navigator.userAgent; // 取得浏览器的userAgent字符串
+      var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1; // 判断是否IE浏览器
       return isIE;
     }
   },
@@ -376,7 +376,7 @@ export default {
         case 3:
           canvas.width = width;
           canvas.height = height;
-          //180 graus
+          // 180 graus
           ctx.translate(width / 2, height / 2);
           ctx.rotate((180 * Math.PI) / 180);
           ctx.translate(-width / 2, -height / 2);
@@ -398,7 +398,7 @@ export default {
         case 6:
           canvas.width = height;
           canvas.height = width;
-          //90 graus
+          // 90 graus
           ctx.translate(height / 2, width / 2);
           ctx.rotate((90 * Math.PI) / 180);
           ctx.translate(-width / 2, -height / 2);
@@ -414,7 +414,7 @@ export default {
         case 8:
           canvas.height = width;
           canvas.width = height;
-          //-90 graus
+          // -90 graus
           ctx.translate(height / 2, width / 2);
           ctx.rotate((-90 * Math.PI) / 180);
           ctx.translate(-width / 2, -height / 2);
@@ -1117,7 +1117,7 @@ export default {
           let dx = (this.x - cropOffsertX + (this.trueWidth * (1 - this.scale)) / 2) * dpr;
           // 图片y轴偏移
           let dy = (this.y - cropOffsertY + (this.trueHeight * (1 - this.scale)) / 2) * dpr;
-          //保存状态
+          // 保存状态
           setCanvasSize(width, height);
           ctx.save();
           switch (rotate) {
@@ -1240,7 +1240,7 @@ export default {
         cb(data.toDataURL('image/' + this.outputType, this.outputSize));
       });
     },
-    //canvas获取为 blob 对象
+    // canvas获取为 blob 对象
     getCropBlob(cb) {
       this.getCropChecked(data => {
         data.toBlob(blob => cb(blob), 'image/' + this.outputType, this.outputSize);

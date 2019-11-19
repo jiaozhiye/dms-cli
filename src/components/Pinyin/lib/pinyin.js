@@ -18,7 +18,7 @@ const DEFAULT_OPTIONS = {
 // 声母表。
 const INITIALS = 'b,p,m,f,d,t,n,l,g,k,h,j,q,x,r,zh,ch,sh,z,c,s'.split(',');
 // 韵母表。
-//const FINALS = "ang,eng,ing,ong,an,en,in,un,er,ai,ei,ui,ao,ou,iu,ie,ve,a,o,e,i,u,v".split(",");
+// const FINALS = "ang,eng,ing,ong,an,en,in,un,er,ai,ei,ui,ao,ou,iu,ie,ve,a,o,e,i,u,v".split(",");
 // 带声调字符。
 const RE_PHONETIC_SYMBOL = new RegExp('([' + Object.keys(PHONETIC_SYMBOL).join('') + '])', 'g');
 const RE_TONE2 = /([aeoiuvnm])([0-4])$/;

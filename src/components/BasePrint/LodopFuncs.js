@@ -3,8 +3,8 @@
 var CreatedOKLodop7766 = null,
   CLodopIsLocal;
 
-//====判断是否需要 Web打印服务CLodop:===
-//===(不支持插件的浏览器版本需要用它)===
+// ====判断是否需要 Web打印服务CLodop:===
+// ===(不支持插件的浏览器版本需要用它)===
 function needCLodop() {
   try {
     var ua = navigator.userAgent;
@@ -38,7 +38,7 @@ function needCLodop() {
   }
 }
 
-//====页面引用CLodop云打印必须的JS文件,用双端口(8000和18000）避免其中某个被占用：====
+// ====页面引用CLodop云打印必须的JS文件,用双端口(8000和18000）避免其中某个被占用：====
 if (needCLodop()) {
   var src1 = 'http://localhost:8000/CLodopfuncs.js?priority=1';
   var src2 = 'http://localhost:18000/CLodopfuncs.js?priority=0';
@@ -53,7 +53,7 @@ if (needCLodop()) {
   CLodopIsLocal = !!(src1 + src2).match(/\/\/localho|\/\/127.0.0./i);
 }
 
-//====获取LODOP对象的主过程：====
+// ====获取LODOP对象的主过程：====
 export function getLodop(oOBJECT, oEMBED) {
   var strHtmInstall = "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
   var strHtmUpdate = "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。";
@@ -99,7 +99,7 @@ export function getLodop(oOBJECT, oEMBED) {
       }
     } else {
       var is64IE = isIE && !!ua.match(/x64/i);
-      //=====如果页面有Lodop就直接使用，没有则新建:==========
+      // =====如果页面有Lodop就直接使用，没有则新建:==========
       if (oOBJECT || oEMBED) {
         if (isIE) LODOP = oOBJECT;
         else LODOP = oEMBED;
@@ -113,7 +113,7 @@ export function getLodop(oOBJECT, oEMBED) {
         document.documentElement.appendChild(LODOP);
         CreatedOKLodop7766 = LODOP;
       } else LODOP = CreatedOKLodop7766;
-      //=====Lodop插件未安装时提示下载地址:==========
+      // =====Lodop插件未安装时提示下载地址:==========
       if (!LODOP || !LODOP.VERSION) {
         if (ua.indexOf('Chrome') >= 0) {
           Notification({
@@ -150,11 +150,11 @@ export function getLodop(oOBJECT, oEMBED) {
         });
       }
     }
-    //===如下空白位置适合调用统一功能(如注册语句、语言选择等):==
+    // ===如下空白位置适合调用统一功能(如注册语句、语言选择等):==
     LODOP.SET_LICENSES('用友汽车信息科技（上海）股份有限公司', 'FA9A697F2551BCE81BD852A4EB520525347', '用友汽車信息科技（上海）股份有限公司', 'C66313BD8413BD0174C2CADD29F5380CD92');
     LODOP.SET_LICENSES('THIRD LICENSE', '', 'Yonyou Auto Information Technology (Shanghai) Co., Ltd.', '941DF3639D9F5679867946141A31424B4E6');
 
-    //=======================================================
+    // =======================================================
     return LODOP;
   } catch (err) {
     Message.error('getLodop 出错:' + err);
