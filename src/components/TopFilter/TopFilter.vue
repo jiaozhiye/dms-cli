@@ -17,6 +17,10 @@ export default {
       type: Array,
       required: true
     },
+    rows: {
+      type: Number,
+      default: 1
+    },
     cols: {
       type: Number,
       default: 3
@@ -25,6 +29,10 @@ export default {
       type: [Number, String],
       default: 80
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     collapse: {
       type: Boolean,
       default: true
@@ -32,10 +40,6 @@ export default {
     isSubmitBtn: {
       type: Boolean,
       default: true
-    },
-    rows: {
-      type: Number,
-      default: 1
     }
   },
   data() {
@@ -887,6 +891,7 @@ export default {
       this.$refs.form.resetFields();
       this.excuteFormData(this.form);
       this.isPassValidate(this.form) && this.$emit('filterChange', this.form);
+      this.$emit('resetChange', this.form);
       // 解决日期区间(拆分后)重复校验的 bug
       this.$nextTick(() => {
         this.formItemList.forEach(x => {
@@ -900,7 +905,7 @@ export default {
       this.expand = !this.expand;
     },
     createButton(rows, total) {
-      const { cols, expand, collapse } = this;
+      const { cols, expand, collapse, disabled } = this;
       const colSpan = 24 / cols;
       // 默认收起
       let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
@@ -910,14 +915,14 @@ export default {
       }
       return this.isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button size="small" type="primary" onClick={this.submitForm}>
+          <el-button size="small" type="primary" disabled={disabled} onClick={this.submitForm}>
             搜 索
           </el-button>
-          <el-button size="small" onClick={this.resetForm}>
+          <el-button size="small" disabled={disabled} onClick={this.resetForm}>
             重 置
           </el-button>
           {collapse ? (
-            <el-button size="small" type="text" onClick={this.toggleHandler}>
+            <el-button size="small" type="text" disabled={disabled} onClick={this.toggleHandler}>
               {expand ? '收起' : '展开'} <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
           ) : null}

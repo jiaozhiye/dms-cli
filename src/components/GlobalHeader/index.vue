@@ -52,7 +52,7 @@ export default {
   background-color: #fff;
   border-bottom: 1px solid @borderColor;
   position: relative;
-  z-index: 1;
+  z-index: 3;
   .trigger {
     display: inline-block;
     font-size: 24px;

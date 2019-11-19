@@ -18,9 +18,11 @@ Vue.use(TopFilter);
 - cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
 - rows{Number|收起状态显示行数，默认是 1}
 - labelWidth{Number|label 标签的宽度，默认是 80}
-- filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
+- disabled{Boolean|是否禁用搜索按钮}
 - collapse{Boolean|是否显示展开/收起按钮，默认是 true}
 - isSubmitBtn{Boolean|是否显示搜索/重置按钮，默认是 true}
+- filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
+- resetChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
 - onCollapse{Function|展开-收起时的回调函数，状态变化时处罚，参数是当前状态}
 
 `list 字段配置项`
