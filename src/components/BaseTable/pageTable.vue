@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-18 14:06:49
+ * @Last Modified time: 2019-11-20 20:44:54
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1732,6 +1732,16 @@ export default {
       return this.actionsLog.required.length ? { message: '红色标记单元格的值不允许为空！' } : null;
     },
     GET_FORMAT_ERROR() {
+      this.list.forEach(row => {
+        this.editableColumns.forEach(column => {
+          if (_.isRegExp(column.editPattern)) {
+            const val = this.getFormatData(row, column.dataIndex);
+            if (val) {
+              this.validateFormat(column.dataIndex, row._uid, column.editPattern.test(val));
+            }
+          }
+        });
+      });
       return this.actionsLog.format.length ? { message: '红色标记单元格的值格式不正确！' } : null;
     },
     GET_SEARCH_HELPER_ERROR() {
