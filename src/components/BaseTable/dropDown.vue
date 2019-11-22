@@ -94,13 +94,14 @@ export default {
   overflow: visible;
   z-index: 9;
   .content {
-    top: 34px;
+    display: flex;
+    flex-direction: column;
     position: absolute;
+    top: 34px;
     background-color: rgba(255, 255, 255, 1);
     border: 1px solid @borderColorSecondary;
     border-radius: @borderRadius;
     box-shadow: @boxShadow;
-    overflow-y: auto;
     cursor: default;
   }
 }

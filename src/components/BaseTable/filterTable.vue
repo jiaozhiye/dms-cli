@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-18 10:38:22
+ * @Last Modified time: 2019-11-22 09:30:37
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -124,6 +124,10 @@ export default {
       offset: this.createPanelOffset(this.columns),
       filters: {}
     };
+  },
+  // keepalive 生命周期钩子，解决在 keep-alive 组件切换时 table 滚动条回到初始位置，表头与表格列对不齐的 bug
+  activated() {
+    this.doMove(this.$$tableHeader, 0);
   },
   mounted() {
     // 获取 DOM 节点
@@ -567,6 +571,7 @@ export default {
   display: block;
   padding: 0;
   min-width: 120px;
+  overflow-y: auto;
   & > div {
     display: block;
     width: 100%;
@@ -597,9 +602,9 @@ export default {
   }
 }
 .popover-bottom {
-  display: block;
   padding: 0;
   margin-top: 10px;
+  overflow: visible;
 }
 .topFilterSelected {
   color: @primaryColor;
@@ -608,9 +613,10 @@ export default {
 
 <style lang="less">
 .thead-popper {
+  min-width: 120px !important;
   margin-top: 4px !important;
-  border: 1px solid @borderColorSecondary;
-  border-radius: @borderRadius;
-  box-shadow: @boxShadow;
+  border-color: @borderColorSecondary !important;
+  border-radius: @borderRadius !important;
+  box-shadow: @boxShadow !important;
 }
 </style>
