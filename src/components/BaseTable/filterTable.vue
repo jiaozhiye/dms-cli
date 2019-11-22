@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-22 09:30:37
+ * @Last Modified time: 2019-11-22 09:49:36
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -603,7 +603,7 @@ export default {
 }
 .popover-bottom {
   padding: 0;
-  margin-top: 10px;
+  margin-top: @moduleMargin;
   overflow: visible;
 }
 .topFilterSelected {
@@ -613,10 +613,13 @@ export default {
 
 <style lang="less">
 .thead-popper {
+  display: flex;
+  flex-direction: column;
   min-width: 120px !important;
+  max-height: calc(100vh - 30px);
+  padding: @modulePadding !important;
   margin-top: 4px !important;
-  border-color: @borderColorSecondary !important;
-  border-radius: @borderRadius !important;
   box-shadow: @boxShadow !important;
+  overflow-y: auto;
 }
 </style>

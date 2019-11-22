@@ -14,6 +14,7 @@
       columns-ref="myTable"
       :columns="columns"
       :data-source="list"
+      :isSelectColumn="false"
       :is-memory-pagination="true"
       :on-columns-change="columns => (this.columns = columns)"
       :on-sync-table-data="tableDateChange"
@@ -369,7 +370,13 @@ export default {
           filterItems: [
             { text: '已完成', value: 1 },
             { text: '进行中', value: 2 },
-            { text: '未完成', value: 3 }
+            { text: '未完成', value: 3 },
+            { text: '已完成', value: 11 },
+            { text: '进行中', value: 21 },
+            { text: '未完成', value: 31 },
+            { text: '已完成', value: 111 },
+            { text: '进行中', value: 211 },
+            { text: '未完成', value: 311 }
           ],
           editable: true,
           editType: 'select',

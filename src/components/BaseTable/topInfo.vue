@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-12 08:07:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 09:45:48
+ * @Last Modified time: 2019-11-22 09:58:17
  */
 export default {
   name: 'TopInfo',
@@ -13,15 +13,17 @@ export default {
       <div class="top-info">
         <el-alert class="alert" closable={false} type="info" show-icon>
           <span class="text" slot="title">
-            总共 <i>{this.total}</i> 条数据
-            {this.isSelectColumn ? (
+            <span>
+              总共 <i>{this.total}</i> 条数据
+            </span>
+            {this.isSelectColumn && (
               <span>
                 ，已选择 <i>{this.selectionRows.length}</i> 项
-                <el-button size="small" type="text" style={{ marginLeft: '10px' }} onClick={this.clearTableHandler}>
-                  清空
-                </el-button>
               </span>
-            ) : null}
+            )}
+            <el-button size="small" type="text" style={{ marginLeft: '8px' }} onClick={this.clearTableHandler}>
+              清空
+            </el-button>
           </span>
         </el-alert>
         {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
