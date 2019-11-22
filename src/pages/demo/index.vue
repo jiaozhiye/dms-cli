@@ -14,7 +14,6 @@
       columns-ref="myTable"
       :columns="columns"
       :data-source="list"
-      :isSelectColumn="false"
       :is-memory-pagination="true"
       :on-columns-change="columns => (this.columns = columns)"
       :on-sync-table-data="tableDateChange"

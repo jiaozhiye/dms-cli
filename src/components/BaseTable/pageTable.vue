@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-22 09:27:22
+ * @Last Modified time: 2019-11-22 15:30:10
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1182,7 +1182,7 @@ export default {
           }
           if (type === 'date-range' && this.filters[attr].length) {
             // 是否在时间范围内
-            return moment(target).isBetween(this.filters[attr][0], this.filters[attr][1]);
+            return moment(target).isBetween(this.filters[attr][0], this.filters[attr][1], null, '[]');
           }
           return true;
         });
