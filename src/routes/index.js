@@ -1,12 +1,12 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-25 22:32:55
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import menuRoutes from './menu';
+import menuRoutes from './modules/menu';
 Vue.use(VueRouter);
 
 const BasicLayout = () => import('@/layout/BasicLayout');

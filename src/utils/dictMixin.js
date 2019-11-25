@@ -1,10 +1,11 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-11-25 22:22:41
  */
 import _ from 'lodash';
+import { notifyAction } from '@/utils';
 
 const getLocalDict = () => {
   return JSON.parse(localStorage.getItem('dict')) || {};
@@ -14,11 +15,7 @@ export const dictionary = {
   beforeCreate() {
     this.dict = getLocalDict();
     if (!Object.keys(this.dict).length) {
-      return this.$notify({
-        title: '提示信息',
-        message: '本地数据字典被清空，请刷新当前页面',
-        type: 'warning'
-      });
+      notifyAction('本地数据字典被清空，请刷新当前页面!', 'warning');
     }
   },
   methods: {

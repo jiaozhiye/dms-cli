@@ -36,6 +36,7 @@
 
 <script>
 import { authority } from '@/utils/authMixin';
+import { dictionary } from '@/utils/dictMixin';
 import res from '@/mock/tableData';
 import printData from '@/mock/printData';
 import Panel from './Panel';
@@ -47,7 +48,7 @@ export default {
   components: {
     Panel
   },
-  mixins: [authority],
+  mixins: [authority, dictionary],
   data() {
     this.BaseTable = null;
     return {

@@ -6,6 +6,7 @@
  */
 .sidebar,
 .el-menu--vertical {
+  /* 侧栏菜单导航 */
   .el-menu {
     border: none;
     height: 100%;
@@ -14,43 +15,48 @@
       height: 40px;
       line-height: 40px;
     }
-    .is-active {
+    .el-submenu {
+      & [class^='el-icon-'],
+      & [class^='iconfont icon-'] {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 24px;
+        text-align: center;
+        font-size: 18px;
+      }
       .el-submenu__title {
-        color: @subMenuActiveText !important;
-        i {
+        height: 40px;
+        line-height: 40px;
+        &:hover {
+          background-color: @menuHover !important;
+        }
+      }
+      .el-menu-item {
+        padding-right: @modulePadding !important;
+        background-color: @subMenuBg !important;
+        &:hover {
+          background-color: @subMenuHover !important;
+        }
+        &.is-active {
           color: @subMenuActiveText !important;
+          background-color: @primaryColor !important;
         }
       }
     }
   }
-
-  .el-submenu {
-    & [class^='el-icon-'],
-    & [class^='iconfont icon-'] {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 24px;
-      text-align: center;
-      font-size: 18px;
-    }
-    .el-submenu__title {
-      height: 40px;
-      line-height: 40px;
-      &:hover {
-        background-color: @menuHover !important;
-      }
-    }
-    .el-menu-item {
-      padding-right: @modulePadding;
-      background-color: @subMenuBg !important;
-      &:hover {
-        background-color: @subMenuHover !important;
-      }
-      &.is-active {
-        color: @subMenuActiveText !important;
-        background-color: @primaryColor !important;
+  /* 不包含 我的收藏/常用导航 */
+  .side-menu {
+    .el-menu {
+      .is-active {
+        .el-submenu__title {
+          color: @subMenuActiveText !important;
+          i {
+            color: @subMenuActiveText !important;
+          }
+        }
       }
     }
   }
+  /* 侧栏菜单导航 end */
 }

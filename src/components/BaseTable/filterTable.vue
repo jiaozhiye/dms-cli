@@ -244,25 +244,29 @@ export default {
       });
     },
     // 创建头部筛选节点
-    createToperNode(label = '', property) {
+    createToperNode(column) {
+      const { title = '', dataIndex } = column;
       return (
         <span
           slot="reference"
           style={{ paddingLeft: '10px', lineHeight: '34px' }}
           onClick={e => {
             e.stopPropagation();
-            this.closeAllPopover(property);
-            this.openCurPopover(e.target, property);
+            this.closeAllPopover(dataIndex);
+            this.openCurPopover(e.target, dataIndex);
           }}
         >
-          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${property}Val`]) ? '' : 'topFilterSelected'}>
-            {label} <i class="el-icon-arrow-down" />
+          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${dataIndex}Val`]) ? '' : 'topFilterSelected'}>
+            {title} <i class="el-icon-arrow-down" />
           </span>
         </span>
       );
     },
+    createMainNode(column, type) {
+      return <div class="popover-wrap">{this[`${type}Handle`] && this[`${type}Handle`](column)}</div>;
+    },
     // 创建底部按钮节点
-    createButtonNode(type, property, val) {
+    createButtonNode(property, type, val) {
       return (
         <div class="popover-bottom">
           <el-button type="primary" size="mini" disabled={this.isValueFalse(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
@@ -274,45 +278,54 @@ export default {
         </div>
       );
     },
-    // 表格头部渲染
-    renderHeaderHandle({ column, $index }, type) {
-      const { property, label } = column;
-      // 查找对应的表头列 column
-      const originColumn = this.deepFind(this.columns, property);
-      const DropDownNode = (
+    createDropDownNode(column, type) {
+      const { dataIndex } = column;
+      return (
         <DropDown
-          visible={this.visible[property]}
+          visible={this.visible[dataIndex]}
           placement="left"
           style={{ marginLeft: '-10px' }}
-          offsetLeft={this.offset[property]}
+          offsetLeft={this.offset[dataIndex]}
           boundariesElement={this.$pageTable.$el}
           containerStyle={{ marginTop: '4px', padding: '10px' }}
         >
-          {this.createToperNode(label, property)}
+          {this.createToperNode(column)}
           <template slot="content">
-            <div class="popover-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
-            {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
+            {this.createMainNode(column, type)}
+            {this.createButtonNode(dataIndex, type, this.arrayTypes.includes(type) ? [] : '')}
           </template>
         </DropDown>
       );
-      const PopoverNode = (
+    },
+    createPopoverNode(column, type) {
+      const { dataIndex } = column;
+      return (
         <el-popover
           popper-class="thead-popper"
-          value={this.visible[property]}
+          value={this.visible[dataIndex]}
           trigger="manual"
           style={{ display: 'inline-flex', marginLeft: '-10px' }}
           visibleArrow={false}
           transition="el-zoom-in-top"
           placement="bottom-start"
         >
-          {this.createToperNode(label, property)}
+          {this.createToperNode(column)}
           <template slot="default">
-            <div class="popover-wrap">{this[`${type}Handle`] && this[`${type}Handle`](originColumn)}</div>
-            {this.createButtonNode(type, property, this.arrayTypes.includes(type) ? [] : '')}
+            {this.createMainNode(column, type)}
+            {this.createButtonNode(dataIndex, type, this.arrayTypes.includes(type) ? [] : '')}
           </template>
         </el-popover>
       );
-      return originColumn && originColumn.filterType === type ? (originColumn.fixed ? PopoverNode : DropDownNode) : null;
+    },
+    // 表格头部渲染
+    renderHeaderHandle({ column, $index }, type) {
+      const { property } = column;
+      // 查找对应的表头列 column
+      const originColumn = this.deepFind(this.columns, property);
+      if (originColumn && originColumn.filterType === type) {
+        return originColumn.fixed ? this.createPopoverNode(originColumn, type) : this.createDropDownNode(originColumn, type);
+      }
+      return null;
     },
     inputHandle(column) {
       const { dataIndex, title, filterType } = column;
@@ -410,7 +423,7 @@ export default {
     ['date-rangeHandle'](column) {
       const { dataIndex } = column;
       return (
-        <div onClick={e => e.stopPropagation()}>
+        <div>
           <el-date-picker
             size="small"
             type="daterange"
