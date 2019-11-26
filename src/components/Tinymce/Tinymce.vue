@@ -12,7 +12,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-25 17:49:32
+ * @Last Modified time: 2019-11-26 08:54:03
  **/
 import plugins from './plugins';
 import toolbar from './toolbar';
@@ -135,8 +135,9 @@ export default {
             }
             this.isWordsLimit = false;
           });
-          // keyup/SetContent 事件
-          editor.on('KeyUp SetContent', e => {
+          // NodeChange/keyup/SetContent 事件
+          editor.on('NodeChange KeyUp SetContent', e => {
+            console.log(12345);
             const val = editor.getContent();
             if (this.tinymceVal === val) return;
             // 过滤 html 标签

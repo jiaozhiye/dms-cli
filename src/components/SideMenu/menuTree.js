@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-14 08:02:16
+ * @Last Modified time: 2019-11-26 08:49:03
  */
+import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
 
 export default {
@@ -40,22 +41,24 @@ export default {
   methods: {
     createMenuTree(arr) {
       return arr.map(item => {
-        if (Array.isArray(item.children) && item.children.length) {
+        const { key, title, icon } = item;
+        const menuItemNode = (
+          <template slot="title">
+            {icon && <i class={icon} />}
+            <span title={title}>{title}</span>
+          </template>
+        );
+        if (Array.isArray(item.children)) {
           return (
-            <el-submenu key={item.key} index={item.key}>
-              <template slot="title">
-                {item.icon ? <i class={item.icon} /> : null}
-                <span slot="title">{item.title}</span>
-              </template>
+            <el-submenu key={key || title} index={key || title}>
+              {menuItemNode}
               {this.createMenuTree(item.children)}
             </el-submenu>
           );
         }
         return (
-          <el-menu-item key={item.key} index={item.key}>
-            <span title={item.title} style="display: block;" class="text_overflow_cut">
-              {item.title}
-            </span>
+          <el-menu-item key={key} index={key}>
+            {menuItemNode}
           </el-menu-item>
         );
       });

@@ -7,7 +7,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 10:41:42
+ * @Last Modified time: 2019-11-26 08:32:17
  **/
 import { mapState, mapActions } from 'vuex';
 import MenuTree from './menuTree';
@@ -33,13 +33,13 @@ export default {
       return [
         {
           title: '常用导航',
-          key: '/common',
+          key: null,
           icon: 'el-icon-s-order',
           children: this.commonMenuList
         },
         {
           title: '我的收藏',
-          key: '/star',
+          key: null,
           icon: 'el-icon-star-on',
           children: this.starMenuList
         }
