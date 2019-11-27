@@ -106,8 +106,10 @@ export default {
       },
       deep: true
     },
-    fieldNames() {
-      this.$nextTick(() => this.doClearValidate(this.$refs.form));
+    fieldNames(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
+      this.initialHandle();
+      this.doClearValidate(this.$refs.form);
     },
     expand(val) {
       if (!this.collapse) return;
