@@ -125,13 +125,12 @@ export default {
   data() {
     this.originData = []; // 原始数据, 用于客户端表头过滤筛选
     this.backUpData = []; // 备份数据
-    this.minHeight = 200; // table 最小高度
     this.cellValChange = false; // 单元格数据是否改变
     this.tableBody = null;
     return {
       loading: false,
+      tableHeight: this.createTableHeight(this.height),
       list: [], // 列表数据
-      tableHeight: this.height || this.minHeight, // 高度
       selectionRows: [], // table 选中行
       disabledRows: [], // table 禁用行
       filterParams: {}, // 表头筛选参数
@@ -220,11 +219,11 @@ export default {
     }
   },
   watch: {
+    height(nextProps) {
+      this.tableHeight = this.createTableHeight(nextProps);
+    },
     dataSource(nextProps) {
       this.createTableList(nextProps);
-    },
-    height(nextProps) {
-      this.tableHeight = nextProps || this.minHeight;
     },
     params(nextProps) {
       // 不返回到第一页
@@ -276,6 +275,10 @@ export default {
     document.removeEventListener('click', this.documentEventHandle);
   },
   methods: {
+    // 处理 table 组件的高度
+    createTableHeight(val) {
+      return _.isNumber(val) ? `${val}px` : val;
+    },
     // 可编辑单元格的 dataIndex，支持对隐藏列的过滤
     createEditableKeys(columns) {
       columns = Array.isArray(columns) ? columns : this.columns;
@@ -1457,9 +1460,10 @@ export default {
       // 不需要自适应
       if (typeof this.height !== 'undefined') return;
       const disY = this.isShowPagination ? 50 : 10;
-      const iHeight = window.innerHeight - this.$refs.appTable.$el.getBoundingClientRect().top - disY;
+      const height = window.innerHeight - this.$refs.appTable.$el.getBoundingClientRect().top - disY;
+      // 设置 tableHeight
       this.$nextTick(() => {
-        this.tableHeight = iHeight < this.minHeight ? this.minHeight : iHeight;
+        this.tableHeight = height > 100 ? `${height}px` : `100px`;
       });
     },
     // 窗口大小变化事件
