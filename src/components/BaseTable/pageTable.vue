@@ -1869,10 +1869,8 @@ export default {
     }
   }
   .el-table__body-wrapper {
+    min-height: 100px;
     z-index: 0;
-    .el-table__empty-block {
-      min-height: 100px;
-    }
   }
   .el-table__body {
     tbody > tr > td {
