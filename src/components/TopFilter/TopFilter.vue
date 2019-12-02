@@ -107,9 +107,10 @@ export default {
       deep: true
     },
     fieldNames(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
-      this.initialHandle();
-      this.doClearValidate(this.$refs.form);
+      if (!_.isEqual(nextProps, prevProps)) {
+        this.initialHandle();
+      }
+      this.$nextTick(() => this.doClearValidate(this.$refs.form));
     },
     expand(val) {
       if (!this.collapse) return;
@@ -346,7 +347,10 @@ export default {
                 defaultExpandAll={true}
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}
-                on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
+                on-node-click={data => {
+                  this.treeNodeClickHandle(fieldName, data);
+                  change(this.form[fieldName]);
+                }}
               />
             </div>
             <el-input
@@ -357,8 +361,10 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.treeNodeClickHandle(fieldName, {})}
-              onChange={change}
+              onClear={() => {
+                this.treeNodeClickHandle(fieldName, {});
+                change(this.form[fieldName]);
+              }}
               nativeOnKeydown={this.enterEventHandle}
             />
           </el-popover>
@@ -797,6 +803,7 @@ export default {
       let { text = '' } = this.deepFind(itemList, this.form[fieldName]) || {};
       return text;
     },
+    // 树控件顶部文本帅选方法
     treeFilterTextHandle(key) {
       this.$refs[`tree-${key}`].filter(this[`${key}TreeFilterTexts`]);
     },
@@ -868,9 +875,9 @@ export default {
         });
       for (let attr in form) {
         if (attr.includes('|') && Array.isArray(form[attr])) {
-          let [startTime, endTime] = attr.split('|');
-          form[startTime] = form[attr][0];
-          form[endTime] = form[attr][1];
+          let [start, end] = attr.split('|');
+          form[start] = form[attr][0];
+          form[end] = form[attr][1];
         }
       }
     },

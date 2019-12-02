@@ -103,9 +103,10 @@ export default {
       deep: true
     },
     fieldNames(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
-      this.initialHandle();
-      this.doClearValidate(this.$refs.form);
+      if (!_.isEqual(nextProps, prevProps)) {
+        this.initialHandle();
+      }
+      this.$nextTick(() => this.doClearValidate(this.$refs.form));
     }
   },
   created() {
@@ -363,7 +364,10 @@ export default {
                 defaultExpandAll={true}
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}
-                on-node-click={data => this.treeNodeClickHandle(fieldName, data)}
+                on-node-click={data => {
+                  this.treeNodeClickHandle(fieldName, data);
+                  change(this.form[fieldName]);
+                }}
               />
             </div>
             <el-input
@@ -374,8 +378,10 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.treeNodeClickHandle(fieldName, {})}
-              onChange={change}
+              onClear={() => {
+                this.treeNodeClickHandle(fieldName, {});
+                change(this.form[fieldName]);
+              }}
             />
           </el-popover>
         </el-form-item>
@@ -948,6 +954,10 @@ export default {
         }
       }
     },
+    // 创建搜索帮助数据列表
+    createSerachHelperList(list, valueKey) {
+      return list.map(x => ({ value: x[valueKey] }));
+    },
     querySearchHandle(fieldName, queryString = '', cb) {
       const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
       const res = queryString ? itemList.filter(this.createSearchHelpFilter(queryString)) : itemList;
@@ -961,10 +971,6 @@ export default {
         const str = `${state.text}|${pyt}`;
         return str.toLowerCase().includes(queryString.toLowerCase());
       };
-    },
-    // 创建搜索帮助数据列表
-    createSerachHelperList(list, valueKey) {
-      return list.map(x => ({ value: x[valueKey] }));
     },
     // 创建树节点的值
     createInputTreeValue(fieldName, itemList) {

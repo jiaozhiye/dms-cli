@@ -137,7 +137,6 @@ export default {
           });
           // NodeChange/keyup/SetContent 事件
           editor.on('NodeChange KeyUp SetContent', e => {
-            console.log(12345);
             const val = editor.getContent();
             if (this.tinymceVal === val) return;
             // 过滤 html 标签
