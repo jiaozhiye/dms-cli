@@ -16,7 +16,10 @@
     }
   },
   "lint-staged": {
-    "*.{js,vue}": "eslint"
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "peerDependencies": {
     "vue": ">=2.6.0",

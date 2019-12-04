@@ -5,6 +5,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 selenium-debug.log
+.history/
 
 # Editor directories and files
 .idea
@@ -13,3 +14,7 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+package.json.rej
+*.json
+package-lock.json
+yarn.lock
