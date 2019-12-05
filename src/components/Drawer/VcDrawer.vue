@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-05 18:14:49
  **/
 import Drawer from './Drawer';
 import ContainerRender from '@/utils/ContainerRender';
@@ -45,7 +45,7 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: '500'
+      default: '72%'
     },
     height: {
       type: [Number, String],

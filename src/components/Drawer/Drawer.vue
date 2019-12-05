@@ -31,8 +31,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-05 19:15:37
  **/
 export default {
   name: 'Drawer',
@@ -67,7 +67,7 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: '500'
+      default: '72%'
     },
     height: {
       type: [Number, String],
@@ -92,13 +92,13 @@ export default {
         bottom: 0,
         left: 0,
         width: '100%',
-        minHeight: `${this.height}px`,
+        minHeight: this.calcPanelSize(this.height),
         transform: 'translate3d(0, 100%, 0)'
       },
       left: {
         bottom: 0,
         left: 0,
-        width: `${this.width}px`,
+        width: this.calcPanelSize(this.width),
         height: '100vh',
         transform: 'translate3d(-100%, 0, 0)'
       },
@@ -106,13 +106,13 @@ export default {
         top: 0,
         right: 0,
         width: '100%',
-        minHeight: `${this.height}px`,
+        minHeight: this.calcPanelSize(this.height),
         transform: 'translate3d(0, -100%, 0)'
       },
       right: {
         top: 0,
         right: 0,
-        width: `${this.width}px`,
+        width: this.calcPanelSize(this.width),
         height: '100vh',
         transform: 'translate3d(100%, 0, 0)'
       }
@@ -173,6 +173,9 @@ export default {
     close(from) {
       if (from === 'mask' && !this.maskClosable) return;
       this.$emit('update:visible', false);
+    },
+    calcPanelSize(val) {
+      return Number(val) > 0 ? `${val}px` : val;
     },
     transitionendHandle(ev) {
       // 防止多次触发

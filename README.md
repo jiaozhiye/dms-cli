@@ -90,11 +90,13 @@ $ npm run build
 ├── .babelrc                   # babel-loader 配置
 ├── .editorconfig              # EditorConfig 配置
 ├── .env                       # 开发环境环境常量
+├── .eslintignore              # Eslint 忽略清单
+├── .eslintrc.js               # Eslint 校验规则
 ├── .gitignore                 # git 忽略清单
+├── .prettierrc                # Prettier 配置
 ├── favicon.ico                # favicon 图标
 ├── index.html                 # html 模板
 ├── postcss.config.js          # postcss 配置
-├── prettier.config.js         # Prettier 配置
 ├── README.md                  # README.md
 └── package.json               # package.json
 ```
