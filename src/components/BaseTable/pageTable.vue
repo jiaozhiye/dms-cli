@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-22 15:30:10
+ * @Last Modified time: 2019-12-06 09:14:46
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -254,7 +254,7 @@ export default {
       this.filterHandler();
     },
     listChange(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
+      if (_.isEqual(nextProps, prevProps) || !prevProps.length) return;
       this.syncTableList();
     }
   },
@@ -356,15 +356,18 @@ export default {
         x._uid = x[uidkey] || x._uid || this.createUidKey(); // 字段值唯一不重复的 key
         this.columnFlatMap(this.columns).forEach(column => {
           const { dataIndex, precision, editable, editType } = column;
+          // 操作列
+          if (dataIndex === 'column-action') return;
+          // 设置数据默认值
           if (_.isUndefined(_.get(x, dataIndex))) {
-            _.set(x, dataIndex, '');
+            this.createProxyData(x, _.set({}, dataIndex, ''));
           }
           const val = _.get(x, dataIndex);
           if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
             _.set(x, dataIndex, Number(val).toFixed(precision));
           }
+          // 设置单元格默认编辑状态
           if (editable) {
-            // 单元格默认编辑状态
             this.setCellEditState(x, dataIndex, false);
           }
         });
@@ -393,10 +396,16 @@ export default {
       }
       return res;
     },
+    // 构建 Vue 响应式数据
+    createProxyData(target, refData) {
+      for (let key in refData) {
+        this.$set(target, key, refData[key]);
+      }
+    },
     // 同步组件数据列表
     syncTableList(isFirst) {
       const rows = this.isMemoryPagination ? this.originData : this.list;
-      // 重置组件数据列表的索引
+      // 重置数据列表的动态索引
       rows.forEach((row, i) => (row.$index = i));
       this.onSyncTableData(rows, Boolean(isFirst));
     },
