@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-06 09:14:46
+ * @Last Modified time: 2019-12-07 14:58:35
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -167,7 +167,7 @@ export default {
   },
   computed: {
     isEditable() {
-      return Boolean(this.createEditableKeys().length);
+      return Boolean(this.editableColumns.length);
     },
     isShowSummary() {
       return this.columnFlatMap(this.columns).some(x => x.summation);
@@ -198,14 +198,14 @@ export default {
       // console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
+    editableColumns() {
+      return this.columnFlatMap(this.columns).filter(x => x.editable);
+    },
     columnKeysChange() {
       return this.columns
         .filter(x => !x.hidden)
         .map(x => x.dataIndex)
         .join('|');
-    },
-    editableColumns() {
-      return this.columnFlatMap(this.columns).filter(x => x.editable);
     },
     listChange() {
       const editableKeys = this.createEditableKeys();
@@ -360,7 +360,7 @@ export default {
           if (dataIndex === 'column-action') return;
           // 设置数据默认值
           if (_.isUndefined(_.get(x, dataIndex))) {
-            this.createProxyData(x, _.set({}, dataIndex, ''));
+            _.set(x, dataIndex, '');
           }
           const val = _.get(x, dataIndex);
           if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
@@ -371,6 +371,7 @@ export default {
             this.setCellEditState(x, dataIndex, false);
           }
         });
+        this.isEditable && this.createProxyData(x);
       });
       return dataList;
     },
@@ -397,9 +398,14 @@ export default {
       return res;
     },
     // 构建 Vue 响应式数据
-    createProxyData(target, refData) {
-      for (let key in refData) {
-        this.$set(target, key, refData[key]);
+    createProxyData(vdata) {
+      for (let key in vdata) {
+        if (['_uid', 'index'].includes(key)) continue;
+        let res = vdata[key];
+        // 1. 移除属性 key
+        delete vdata[key];
+        // 2. 把该属性设置成响应式数据
+        this.$set(vdata, key, res);
       }
     },
     // 同步组件数据列表
