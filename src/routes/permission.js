@@ -1,8 +1,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-07 20:36:00
  */
 import router from '@/routes';
 import store from '@/store';
@@ -41,8 +41,12 @@ router.beforeEach(async (to, from, next) => {
     } else {
       if (!store.state.app.navList.length) {
         // 通过 vuex 管理导航数据
-        await store.dispatch('app/createNavList');
-        next({ ...to, replace: true });
+        const res = await store.dispatch('app/createNavList');
+        if (res) {
+          next({ ...to, replace: true });
+        } else {
+          return noJump(next);
+        }
       } else {
         let { tabMenuList } = store.state.app;
         if (tabMenuList.length >= config.maxCacheNum && !tabMenuList.some(x => x.key === to.path)) {

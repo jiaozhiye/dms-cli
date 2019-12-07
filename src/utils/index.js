@@ -5,6 +5,7 @@
  * @Last Modified time: 2019-11-11 23:05:10
  */
 import { MessageBox, Notification, Message } from 'element-ui';
+import Cookies from 'js-cookie';
 import config from '@/config';
 import store from '@/store';
 
@@ -44,6 +45,14 @@ export const messageAction = async (msg = '暂无...', type = 'info') => {
   Message({ message: msg, showClose: true, type, duration: config.notifyDuration });
   await sleep(config.notifyDuration);
   store.dispatch('app/createNotifyState', false);
+};
+
+// 清空所有 cookie
+export const clearAllCookie = () => {
+  const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+  keys.forEach(x => {
+    Cookies.remove(x);
+  });
 };
 
 // 判断表单控件的值是否为空

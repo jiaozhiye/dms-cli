@@ -9,8 +9,8 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-user">个人中心</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-setting" divided @click.native="logoutHandle">退出登录</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-setting">个人中心</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-switch-button" divided @click.native="logoutHandle">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -20,8 +20,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-07 20:29:52
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/assets/js/auth';

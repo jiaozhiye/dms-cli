@@ -1,13 +1,14 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-07 20:35:38
  */
 import _ from 'lodash';
 import * as types from '../types';
 import router from '@/routes';
-import { setToken, removeToken, setUser, removeUser } from '@/assets/js/auth';
+import { messageAction, clearAllCookie } from '@/utils';
+import { setToken, setUser } from '@/assets/js/auth';
 import dictData from '@/mock/dictData';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
 
@@ -39,7 +40,7 @@ const formateNavList = list => {
       formateNavList(x.children);
     }
     let { meta } = deepFind(routesMap, x.key) || {};
-    x.icon = meta ? meta.icon : '';
+    x.icon = meta ? meta.icon : undefined;
   });
 };
 
@@ -80,19 +81,15 @@ const actions = {
       data: params
     });
   },
-  createLogout({ commit, state }, params) {
-    removeToken();
-    removeUser();
-    commit({
-      type: types.TAB_MENU,
-      data: []
-    });
+  createLogout({ dispatch, commit, state }, params) {
+    clearAllCookie();
     commit({
       type: types.LOGOUT,
-      data: null
+      data: {}
     });
+    dispatch('clearNavList');
   },
-  async createNavList({ commit, state }, params) {
+  async createNavList({ dispatch, commit, state }, params) {
     if (state.navList.length) return;
     let data = [];
     if (process.env.MOCK_DATA === 'true') {
@@ -102,6 +99,10 @@ const actions = {
       const res = await getNavList();
       if (res.resultCode === 200) {
         data = res.data;
+      } else {
+        messageAction('系统菜单获取失败！', 'error');
+        dispatch('createLogout');
+        return router.push({ path: '/' });
       }
     }
     // 处理图标
@@ -111,12 +112,14 @@ const actions = {
       type: types.MENULIST,
       data: formateMenu(data)
     });
+    return true;
   },
-  clearNavList({ commit, state }, params) {
+  clearNavList({ dispatch, commit, state }, params) {
     commit({
       type: types.NAVLIST,
       data: []
     });
+    dispatch('clearTabMenuList');
   },
   async createStarMenuList({ commit, state }, params) {
     if (state.starMenuList.length) return;
@@ -150,6 +153,12 @@ const actions = {
     commit({
       type: types.TAB_MENU,
       data: params
+    });
+  },
+  clearTabMenuList({ commit, state }, params) {
+    commit({
+      type: types.TAB_MENU,
+      data: []
     });
   },
   checkAuthority({ commit, state }, params) {
