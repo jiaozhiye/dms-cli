@@ -460,11 +460,11 @@ export default {
       return sl;
     },
     // 参数值是否是假，假 -> 返回 ture
-    isValueFalse(val) {
+    isValueFalse(val = '') {
       if (Array.isArray(val)) {
         return !val.filter(x => !_.isUndefined(x)).length;
       }
-      return !val;
+      return !val.toString();
     },
     // 数值类型值得校验
     validateNumber(val) {
