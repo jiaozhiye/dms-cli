@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-07 14:58:35
+ * @Last Modified time: 2019-12-09 15:21:32
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -329,18 +329,13 @@ export default {
       // 同步表格数据
       this.syncTableList(true);
       // 总记录数
-      this.pagination.total = this.createPageTotal(data, keypath);
-      // 清空行选中状态
-      this.clearSelectionHandle();
-      // 清空table组件操作记录
-      this.clearTableHandleLog();
-      // 清空表头筛选条件
-      this.clearTHeadFilters();
-      // 清空表头排序条件
-      this.clearTHeadSort();
+      this.setPaginationTotal(this.createPageTotal(data, keypath));
+      // 清空操作
+      this.clearTableHandler();
+      // 清空 table 组件操作记录
+      this.clearHandleLogs();
       // 重置可编辑单元格坐标
-      this.editPos.rowIndex = -1;
-      this.editPos.editableColumnIndex = -1;
+      this.setEditPosIndex(-1, -1);
       // 重置滚动条位置
       this.$nextTick(() => {
         this.scrollTopToPosition(0);
@@ -377,15 +372,11 @@ export default {
     },
     // 处理总记录数
     createPageTotal(data, keypath) {
-      let res = 0;
-      const targetIndex = keypath.lastIndexOf('.');
+      let total = 0;
       if (Array.isArray(data)) {
-        res = data.length;
+        total = data.length;
       } else {
-        if (targetIndex !== -1) {
-          data = _.get(data, keypath.slice(0, targetIndex)) || {};
-        }
-        res = data.total || 0;
+        total = _.get(data, keypath.replace(/[^\.]+$/, 'total')) || 0;
       }
       // 处理服务端合计
       if (this.isShowSummary) {
@@ -395,7 +386,7 @@ export default {
             this.summaries[x.dataIndex] = Number(data[x.summationDataIndex]) || 0;
           });
       }
-      return res;
+      return total;
     },
     // 构建 Vue 响应式数据
     createProxyData(vdata) {
@@ -418,6 +409,10 @@ export default {
     // 跳转到第一页
     toFirstPage() {
       this.pagination.current = 1;
+    },
+    // 设置分页总数
+    setPaginationTotal(val) {
+      this.pagination.total = Number(val);
     },
     // 单元格编辑后的渲染方法
     editedScopedRender(column, props) {
@@ -1026,7 +1021,7 @@ export default {
       // 记录删除操作
       this.actionsLog.remove.push(...removedRows);
       // 修改 total 数量
-      this.pagination.total -= removedRows.length;
+      this.setPaginationTotal(this.pagination.total - removedRows.length);
       // 删除记录中非法数据
       removedRows.forEach(row => {
         this.actionsLog.required.some(x => x.xUid === row._uid) && this.validateRequired('', row._uid, 'remove');
@@ -1094,8 +1089,8 @@ export default {
     },
     // 设置可编辑单元格索引
     setEditPosIndex(xIndex, yIndex) {
-      this.editPos.rowIndex = xIndex < 0 ? 0 : xIndex;
-      this.editPos.editableColumnIndex = yIndex < 0 ? 0 : yIndex;
+      this.editPos.rowIndex = Number(xIndex);
+      this.editPos.editableColumnIndex = Number(yIndex);
       const { rowIndex, editableColumnIndex, marks } = this.editPos;
       // 如果有上一个处于可编辑状态的，取消
       this.cancelPrevCellEditState();
@@ -1215,7 +1210,7 @@ export default {
       if (this.isMemoryPagination) {
         this.originData = [...interList];
         this.toFirstPage();
-        this.pagination.total = this.originData.length;
+        this.setPaginationTotal(this.originData.length);
         // 处理分页数据
         this.createLimitRecords();
       } else {
@@ -1343,6 +1338,28 @@ export default {
     // 创建标签类名
     createClassName(dataIndex) {
       return dataIndex.replace(/\./g, '-');
+    },
+    // 切换单元的编辑状态
+    toggleCellEditableState(rows, callback = () => {}) {
+      rows = Array.isArray(rows) ? rows : [rows];
+      if (!rows.length) return;
+      rows.forEach(row => {
+        if (!row._uid) return;
+        callback(row);
+      });
+    },
+    // 设置 table 的禁用行
+    createDisabledRows(rows) {
+      rows = Array.isArray(rows) ? rows : [rows];
+      this.disabledRows = rows.filter(x => _.isObject(x));
+    },
+    // 重新设置记录表格操作的动作
+    resetExecuteLog() {
+      const { insert, remove } = this.actionsLog;
+      // 求 insert, remove 的交集
+      const intersections = _.intersection(insert, remove);
+      this.actionsLog.insert = insert.filter(x => !intersections.includes(x));
+      this.actionsLog.remove = remove.filter(x => !intersections.includes(x));
     },
     // 合计功能
     getSummaries(param) {
@@ -1489,7 +1506,7 @@ export default {
     documentEventHandle(e) {
       const { target } = e;
       // 没有可编辑列
-      if (!this.editPos.marks.length) return;
+      if (!this.isEditable) return;
       // DOM 判断
       if (this.findParents(target, 'el-table__body')) return;
       // 取消单元格编辑状态
@@ -1571,7 +1588,7 @@ export default {
         // 记录新增行操作
         this.actionsLog.insert.push(newRow);
         // 修改 total 数量
-        this.pagination.total += 1;
+        this.setPaginationTotal(this.pagination.total + 1);
       });
       if (rows.length && this.list.length) {
         this.$nextTick(() => {
@@ -1631,16 +1648,8 @@ export default {
         fn.timer = setTimeout(() => fn.apply(this, args), delay);
       };
     },
-    // 重新设置记录表格操作的动作
-    resetExecuteLog() {
-      const { insert, remove } = this.actionsLog;
-      // 求 insert, remove 的交集
-      const intersections = _.intersection(insert, remove);
-      this.actionsLog.insert = insert.filter(x => !intersections.includes(x));
-      this.actionsLog.remove = remove.filter(x => !intersections.includes(x));
-    },
     // 清除组件的操作记录
-    clearTableHandleLog() {
+    clearHandleLogs() {
       for (let key in this.actionsLog) {
         this.actionsLog[key] = [];
       }
@@ -1662,21 +1671,18 @@ export default {
       this.clearTHeadFilters();
       this.clearTHeadSort();
     },
-    // 切换单元的编辑状态
-    toggleCellEditableState(rows, callback = () => {}) {
-      rows = Array.isArray(rows) ? rows : [rows];
-      if (!rows.length) return;
-      rows.forEach(row => {
-        if (!row._uid) return;
-        callback(row);
-      });
-    },
-    // 设置 table 的禁用行
-    createDisabledRows(rows) {
-      rows = Array.isArray(rows) ? rows : [rows];
-      this.disabledRows = rows.filter(x => _.isObject(x));
-    },
     // 外部通过组件实例调用的方法
+    SET_TABLE_DATA(rows = [], total) {
+      const keypath = this.datakey;
+      if (!keypath) {
+        this.createTableList([...rows]);
+      } else {
+        const data = {};
+        _.set(data, keypath, [...rows]);
+        _.set(data, keypath.replace(/[^\.]+$/, 'total'), _.isUndefined(total) ? rows.length : total);
+        this.createTableList(data);
+      }
+    },
     EXECUTE_INSERT(rows) {
       this.addRowHandler(rows);
     },
@@ -1720,7 +1726,7 @@ export default {
       this.createDisabledRows(rows);
     },
     CLEAR_EXECUTE_LOG() {
-      this.clearTableHandleLog();
+      this.clearHandleLogs();
     },
     START_LOADING() {
       this.loading = true;

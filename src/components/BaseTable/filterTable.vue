@@ -503,6 +503,9 @@ export default {
       this.search = this.createSearchData(this.columns);
     },
     // PageTable 组件对外公开的方法
+    SET_TABLE_DATA(...rest) {
+      this.$pageTable.SET_TABLE_DATA(...rest);
+    },
     EXECUTE_INSERT(...rest) {
       this.$pageTable.EXECUTE_INSERT(...rest);
     },

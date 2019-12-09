@@ -9,15 +9,7 @@
       <el-button size="small">欠货单</el-button>
       <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
-    <FilterTable
-      ref="table"
-      columns-ref="myTable"
-      :columns="columns"
-      :data-source="list"
-      :is-memory-pagination="true"
-      :on-columns-change="columns => (this.columns = columns)"
-      :on-sync-table-data="tableDateChange"
-    >
+    <FilterTable ref="table" columns-ref="myTable" :columns="columns" :data-source="list" :on-columns-change="columns => (this.columns = columns)" :on-sync-table-data="tableDateChange">
       <template slot="moreActions">
         <span>批量删除</span>
         <span>任务分配</span>
