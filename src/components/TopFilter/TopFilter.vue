@@ -628,11 +628,11 @@ export default {
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, limit, style = {}, disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
+          <el-checkbox-group v-model={form[fieldName]} max={limit} style={{ ...style }} onChange={change}>
             {itemList.map(x => {
               return (
                 <el-checkbox key={x.value} label={x.value} disabled={disabled}>
@@ -684,7 +684,21 @@ export default {
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, filterable, request = {}, style = {}, placeholder = '请选择...', disabled, clearable = !0, change = () => {} } = option;
+      const {
+        label,
+        fieldName,
+        labelWidth,
+        labelOptions,
+        descOptions,
+        filterable,
+        request = {},
+        style = {},
+        placeholder = '请选择...',
+        disabled,
+        limit = 0,
+        clearable = !0,
+        change = () => {}
+      } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
       if (!option.itemList && fetchApi) {
@@ -699,6 +713,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-select
             multiple={multiple}
+            multipleLimit={limit}
             collapseTags={multiple}
             filterable={filterable}
             v-model={form[fieldName]}

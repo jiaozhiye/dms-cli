@@ -39,6 +39,7 @@ Vue.use(TopFilter);
 - unitRender{Function|输入框的后置单位的渲染方法, 返回值是 JSX 节点，只对 INPUT 有效}
 - readonly{Boolean|是否只读}
 - disabled{Boolean|禁用}
+- limit{Number|最多可以选择的项目数，只对 MULTIPLE_SELECT/MULTIPLE_CHECKBOX 有效}
 - clearable{Boolean|是否启用右侧清除按钮，只对 SELECT/MULTIPLE_SELECT 有效，默认开启}
 - onFocus{Function|输入框获得焦点的事件}
 - rows{Number|输入框行数，默认是 2，只对 TEXT_AREA 有效}
