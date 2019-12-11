@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-07 20:37:06
+ * @Last Modified time: 2019-12-11 21:01:55
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -76,7 +76,7 @@ instance.interceptors.response.use(response => {
     data.errMsg && notifyAction(data.errMsg, 'error');
   }
   // token 过期，需要重新登录
-  if (data.code === 'JWT_ERROR' || data.resultCode === 40105) {
+  if (data.resultCode === 40105) {
     store.dispatch('app/createLogout');
     router.push({ path: '/' });
   }
