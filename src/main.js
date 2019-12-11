@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-07 13:45:58
+ * @Last Modified time: 2019-12-11 11:40:04
  */
 import Vue from 'vue';
 import App from './App.vue';
@@ -21,7 +21,3 @@ new Vue({
   store,
   render: h => h(App)
 });
-
-if (module.hot) {
-  module.hot.accept();
-}

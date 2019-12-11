@@ -1,8 +1,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-11 10:31:03
  */
 'use strict';
 const path = require('path');
@@ -25,9 +25,12 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '127.0.0.1',
+    host: 'localhost',
     port: 8081,
     autoOpenBrowser: true,
+
+    // use eslint
+    useEslint: true,
 
     // Source Maps
     devtool: 'cheap-source-map',

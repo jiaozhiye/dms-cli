@@ -1,10 +1,11 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-11 13:24:27
  */
 'use strict';
+
 const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
@@ -27,35 +28,24 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devtool: config.dev.devtool,
   devServer: {
     clientLogLevel: 'warning',
-    historyApiFallback: {
-      rewrites: [
-        {
-          from: /^\/static\/*/,
-          to: '/static/*'
-        },
-        {
-          from: /.*/,
-          to: path.posix.join(config.dev.assetsPublicPath, 'index.html')
-        }
-      ]
-    },
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    hot: true,
+    historyApiFallback: true,
+    publicPath: config.dev.assetsPublicPath,
+    hot: true, // 热加载
     compress: true,
     overlay: {
       warnings: false,
       errors: true // webpack 在编译的时候如果出现了错误，可以在网页上显示
     },
+    open: config.dev.autoOpenBrowser,
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
-    open: config.dev.autoOpenBrowser,
-    publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable
+    proxy: config.dev.proxyTable,
+    watchOptions: { poll: false }
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NamedModulesPlugin(),
-    // new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new Dotenv(),
     new HtmlWebpackPlugin({
       filename: 'index.html',

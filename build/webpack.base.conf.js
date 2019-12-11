@@ -1,20 +1,33 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-11 11:04:26
  */
 'use strict';
+
 const path = require('path');
 const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
 const { VueLoaderPlugin } = require('vue-loader');
 
-// 多进程处理loader
+// 多进程处理 Loader
 const HappyPack = require('happypack');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+
+// Eslint 校验
+const createLintingRule = () => ({
+  test: /\.(js|vue)$/,
+  loader: 'eslint-loader',
+  enforce: 'pre',
+  include: [utils.resolve('src')],
+  options: {
+    formatter: require('eslint-friendly-formatter'),
+    emitWarning: true
+  }
+});
 
 module.exports = {
   context: utils.resolve('/'),
@@ -36,6 +49,7 @@ module.exports = {
   },
   module: {
     rules: [
+      ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
         loader: 'vue-loader',
