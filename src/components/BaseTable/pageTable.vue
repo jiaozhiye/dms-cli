@@ -1053,8 +1053,8 @@ export default {
       const column = this.columnFlatMap(this.columns).find(x => x.dataIndex === property) || {};
       // 有可选择列 - 不是操作列 - 没有阻止行选中
       if (this.isSelectColumn && property !== 'column-action' && !column.stopRowSelection) {
-        // 单击可选择列 或 表格不可编辑
-        if (property === '-' || !this.isEditable) {
+        // 单击可选择列 或 列不可编辑
+        if (property === '-' || !column.editable) {
           this.toggleSelectionHandle(row);
         }
       }
