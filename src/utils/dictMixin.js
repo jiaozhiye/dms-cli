@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-25 22:22:41
+ * @Last Modified time: 2019-12-12 18:29:30
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -40,16 +40,19 @@ export const dictionary = {
       }
       return res;
     },
-    createDictRegion() {
-      return this.deepFunc(this.region);
+    // deep -> 数据的级数，默认全部递归
+    createDictRegion(deep) {
+      return this.deepMapCity(this.region, deep);
     },
     // 递归构建省市区数据
-    deepFunc(data) {
+    deepMapCity(data, deep = 3, step = 1) {
       const res = [];
       for (let key in data) {
         const target = { value: data[key]['regionCode'], text: data[key]['regionName'] };
         if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
-          target.children = this.deepFunc(data[key].children);
+          if (step < deep) {
+            target.children = this.deepMapCity(data[key].children, deep, ++step);
+          }
         }
         res.push(target);
       }
