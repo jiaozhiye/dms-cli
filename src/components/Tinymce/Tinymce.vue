@@ -92,10 +92,10 @@ export default {
     }
   },
   mounted() {
-    this.tinymce = this.initTinymce();
+    this.initial();
   },
   activated() {
-    this.tinymce = this.initTinymce();
+    this.initial();
   },
   deactivated() {
     this.destroyTinymce();
@@ -104,6 +104,12 @@ export default {
     this.destroyTinymce();
   },
   methods: {
+    initial() {
+      this.lazyLoadScript('/static/tinymce/tinymce.min.js', () => {
+        this.initTinymce();
+        this.tinymce = window.tinymce.get(this.tinymceId);
+      });
+    },
     initTinymce() {
       window.tinymce.init({
         language: 'zh_CN',
@@ -155,7 +161,6 @@ export default {
           });
         }
       });
-      return window.tinymce.get(this.tinymceId);
     },
     syncTinymceVal(val) {
       this.tinymceVal = val;
@@ -179,6 +184,18 @@ export default {
       arr.forEach(v => {
         this.tinymce.insertContent(`<img class="wscnph" src="${v.url}" />`);
       });
+    },
+    // 动态加载 js 文件
+    lazyLoadScript(url, cb) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.onload = function() {
+        this.onload = null;
+        cb && cb();
+        this.parentNode.removeChild(this);
+      };
+      script.src = url;
+      document.head.appendChild(script);
     }
   }
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-11 10:53:16
+ * @Last Modified time: 2019-12-16 10:15:43
  */
 'use strict';
 
@@ -59,21 +59,21 @@ const webpackConfig = merge(baseWebpackConfig, {
       cacheGroups: {
         libs: {
           name: 'app-libs',
-          test: /[\\/]node_modules[\\/]/,
-          priority: 10,
-          chunks: 'initial' // 只打包初始时依赖的第三方
+          test: /node_modules/,
+          priority: -10,
+          chunks: 'initial' // 只打包初始时的第三方依赖包
         },
         elementUI: {
-          name: 'app-elementUI', // 单独将 elementUI 拆包
-          priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
-          test: /[\\/]node_modules[\\/]element-ui[\\/]/
+          name: 'app-elementUI',
+          priority: 100, // 权重要大于 libs 和 commons 不然会被打包进 libs 或者 commons
+          test: module => /element-ui/.test(module.context)
         },
         commons: {
-          name: 'app-commons',
-          test: utils.resolve('src/components'), // 可自定义拓展你的规则
-          minChunks: 3, // 最小公用次数
-          priority: 5,
-          reuseExistingChunk: true
+          name: 'app-commons', // 抽取出来文件的名字
+          test: utils.resolve('src/components'), // 精确的匹配被抽离的模块
+          minChunks: 3, // 最小被引用的次数
+          priority: 10, // 优先级，多个分组冲突时决定把代码放在哪块
+          reuseExistingChunk: true // 是否重用已经存在的模块
         }
       }
     }

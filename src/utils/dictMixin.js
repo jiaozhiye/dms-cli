@@ -51,7 +51,7 @@ export const dictionary = {
         const target = { value: data[key]['regionCode'], text: data[key]['regionName'] };
         if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
           if (step < deep) {
-            target.children = this.deepMapCity(data[key].children, deep, ++step);
+            target.children = this.deepMapCity(data[key].children, deep, step + 1);
           }
         }
         res.push(target);

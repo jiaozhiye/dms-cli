@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-26 08:49:03
+ * @Last Modified time: 2019-12-16 11:58:58
  */
 import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
@@ -40,28 +40,30 @@ export default {
   },
   methods: {
     createMenuTree(arr) {
-      return arr.map(item => {
-        const { key, title, icon } = item;
-        const menuItemNode = (
-          <template slot="title">
-            {icon && <i class={icon} />}
-            <span title={title}>{title}</span>
-          </template>
-        );
-        if (Array.isArray(item.children)) {
-          return (
-            <el-submenu key={key || title} index={key || title}>
-              {menuItemNode}
-              {this.createMenuTree(item.children)}
-            </el-submenu>
+      return arr
+        .filter(x => !x.hideInMenu)
+        .map(item => {
+          const { key, title, icon } = item;
+          const menuItemNode = (
+            <template slot="title">
+              {icon && <i class={icon} />}
+              <span title={title}>{title}</span>
+            </template>
           );
-        }
-        return (
-          <el-menu-item key={key} index={key}>
-            {menuItemNode}
-          </el-menu-item>
-        );
-      });
+          if (Array.isArray(item.children)) {
+            return (
+              <el-submenu key={key || title} index={key || title}>
+                {menuItemNode}
+                {this.createMenuTree(item.children)}
+              </el-submenu>
+            );
+          }
+          return (
+            <el-menu-item key={key} index={key}>
+              {menuItemNode}
+            </el-menu-item>
+          );
+        });
     }
   },
   created() {

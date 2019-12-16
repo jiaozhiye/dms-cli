@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-07 20:35:38
+ * @Last Modified time: 2019-12-16 11:59:54
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -39,8 +39,11 @@ const formateNavList = list => {
     if (Array.isArray(x.children)) {
       formateNavList(x.children);
     }
-    let { meta } = deepFind(routesMap, x.key) || {};
-    x.icon = meta ? meta.icon : undefined;
+    let target = deepFind(routesMap, x.key) || {};
+    // 图标
+    target.meta && (x.icon = target.meta.icon);
+    // 隐藏菜单
+    target.hideInMenu && (x.hideInMenu = true);
   });
 };
 
