@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-11 13:24:27
+ * @Last Modified time: 2019-12-17 14:37:35
  */
 'use strict';
 
@@ -17,8 +17,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 process.env.NODE_ENV = 'development';
-const HOST = process.env.HOST;
-const PORT = process.env.PORT && Number(process.env.PORT);
+
+const HOST = process.env.HOST || config.dev.host;
+const PORT = process.env.PORT || config.dev.port;
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
@@ -28,17 +29,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devtool: config.dev.devtool,
   devServer: {
     clientLogLevel: 'warning',
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true
+    },
     publicPath: config.dev.assetsPublicPath,
+    contentBase: false, // since we use CopyWebpackPlugin.
+    inline: true,
     hot: true, // 热加载
-    compress: true,
+    compress: true, // 开启资源的 gzip 压缩
     overlay: {
       warnings: false,
       errors: true // webpack 在编译的时候如果出现了错误，可以在网页上显示
     },
+    host: HOST,
+    port: PORT,
     open: config.dev.autoOpenBrowser,
-    host: HOST || config.dev.host,
-    port: PORT || config.dev.port,
     proxy: config.dev.proxyTable,
     watchOptions: { poll: false }
   },

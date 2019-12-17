@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-09 15:21:32
+ * @Last Modified time: 2019-12-17 18:47:47
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -476,6 +476,7 @@ export default {
       if (editType === 'date-picker') {
         const { dateFormat, minDateTime, maxDateTime } = column;
         const conf = this.createDateType(dateFormat);
+        const momentFormat = conf.format.replace('yyyy', 'YYYY').replace('dd', 'DD');
         return (
           <el-date-picker
             type={conf.dateType}
@@ -491,11 +492,21 @@ export default {
               disabledDate: time => {
                 if (minDateTime) {
                   const target = !new Date(minDateTime).getTime() ? this.getFormatData(props.row, minDateTime) : minDateTime;
-                  return time.getTime() < new Date(target).getTime();
+                  return (
+                    time.getTime() <
+                    moment(target, momentFormat)
+                      .toDate()
+                      .getTime()
+                  );
                 }
                 if (maxDateTime) {
                   const target = !new Date(maxDateTime).getTime() ? this.getFormatData(props.row, maxDateTime) : maxDateTime;
-                  return time.getTime() > new Date(target).getTime();
+                  return (
+                    time.getTime() >
+                    moment(target, momentFormat)
+                      .toDate()
+                      .getTime()
+                  );
                 }
                 return false;
               }

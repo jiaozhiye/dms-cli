@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-11 10:31:03
+ * @Last Modified time: 2019-12-17 19:02:22
  */
 'use strict';
 const path = require('path');
@@ -29,7 +29,7 @@ module.exports = {
     port: 8081,
     autoOpenBrowser: true,
 
-    // use eslint
+    // Use Eslint
     useEslint: true,
 
     // Source Maps
