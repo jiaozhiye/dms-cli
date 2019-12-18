@@ -3,10 +3,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified time: 2019-12-18 08:41:36
  **/
 import _ from 'lodash';
 import moment from 'moment';
+import { sleep } from '@/utils';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from '@/components/FormPanel/Cascader.vue';
 
@@ -49,6 +50,7 @@ export default {
     return {
       form: {},
       expand: false, // 展开收起状态
+      loading: false,
       visible: {}
     };
   },
@@ -853,6 +855,11 @@ export default {
       if (ev.keyCode !== 13) return;
       this.submitForm(ev);
     },
+    async loadingHandler() {
+      this.loading = true;
+      await sleep(300);
+      this.loading = false;
+    },
     isValidateValue(val) {
       return Array.isArray(val) ? val.length : !!val;
     },
@@ -903,6 +910,7 @@ export default {
       this.$refs.form.validate(valid => {
         isErr = !valid;
         if (valid) {
+          this.loadingHandler();
           return this.$emit('filterChange', this.form);
         }
         // 校验没通过，展开
@@ -929,7 +937,7 @@ export default {
       this.expand = !this.expand;
     },
     createButton(rows, total) {
-      const { cols, expand, collapse, disabled } = this;
+      const { cols, expand, collapse, loading, disabled } = this;
       const colSpan = 24 / cols;
       // 默认收起
       let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
@@ -939,7 +947,7 @@ export default {
       }
       return this.isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button size="small" type="primary" disabled={disabled} onClick={this.submitForm}>
+          <el-button size="small" type="primary" loading={loading} disabled={disabled} onClick={this.submitForm}>
             搜 索
           </el-button>
           <el-button size="small" disabled={disabled} onClick={this.resetForm}>

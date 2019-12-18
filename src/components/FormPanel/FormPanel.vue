@@ -3,10 +3,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified time: 2019-12-18 08:58:16
  **/
 import _ from 'lodash';
 import moment from 'moment';
+import { sleep } from '@/utils';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 import Cascader from './Cascader.vue';
 import BreakSpace from '@/components/BreakSpace/BreakSpace.vue';
@@ -33,6 +34,10 @@ export default {
       type: [Number, String],
       default: 80
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     isSubmitBtn: {
       type: Boolean,
       default: true
@@ -44,7 +49,8 @@ export default {
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
-      visible: {}
+      visible: {},
+      loading: false
     };
   },
   computed: {
@@ -1019,6 +1025,11 @@ export default {
       this.form[fieldName] = val;
       this.doFormItemValidate(fieldName);
     },
+    async loadingHandler() {
+      this.loading = true;
+      await sleep(300);
+      this.loading = false;
+    },
     createFormItem() {
       return this.list
         .filter(x => !x.hidden)
@@ -1069,6 +1080,7 @@ export default {
       this.$refs.form.validate(valid => {
         isErr = !valid;
         if (!valid) return;
+        this.loadingHandler();
         this.$emit('formChange', this.form);
       });
       return isErr;
@@ -1093,15 +1105,16 @@ export default {
       return colFormItems;
     },
     createFormButton() {
+      const { loading, disabled } = this;
       const colSpan = 24 / this.cols;
       return this.list.length && this.isSubmitBtn && this.formType !== 'show' ? (
         <el-row gutter={10}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
-              <el-button size="small" type="primary" onClick={this.submitForm}>
+              <el-button size="small" type="primary" loading={loading} disabled={disabled} onClick={this.submitForm}>
                 {this.formType === 'add' ? '保 存' : '修 改'}
               </el-button>
-              <el-button size="small" onClick={this.resetForm}>
+              <el-button size="small" disabled={disabled} onClick={this.resetForm}>
                 重 置
               </el-button>
             </el-form-item>
