@@ -919,11 +919,19 @@ export default {
       return isErr;
     },
     resetForm() {
+      let cloneForm = _.cloneDeep(this.form);
       // 重置表单项
       this.$refs.form.resetFields();
+      this.formItemList.forEach(x => {
+        if (x.noResetable) {
+          this.form[x.fieldName] = cloneForm[x.fieldName];
+        }
+      });
       this.excuteFormData(this.form);
       this.isPassValidate(this.form) && this.$emit('filterChange', this.form);
       this.$emit('resetChange', this.form);
+      // 清空变量，释放内存
+      cloneForm = null;
       // 解决日期区间(拆分后)重复校验的 bug
       this.$nextTick(() => {
         this.formItemList.forEach(x => {

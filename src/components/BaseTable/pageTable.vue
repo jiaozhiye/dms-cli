@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 18:47:47
+ * @Last Modified time: 2019-12-19 08:06:02
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1914,6 +1914,7 @@ export default {
   .el-table__body {
     tbody > tr > td {
       padding: 2px 0;
+      height: 33px;
     }
     .selection-row {
       background-color: @tableHoverColor;

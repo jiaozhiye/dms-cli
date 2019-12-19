@@ -1086,8 +1086,16 @@ export default {
       return isErr;
     },
     resetForm() {
+      let cloneForm = _.cloneDeep(this.form);
       this.$refs.form.resetFields();
+      this.formItemList.forEach(x => {
+        if (x.noResetable) {
+          this.form[x.fieldName] = cloneForm[x.fieldName];
+        }
+      });
       this.excuteFormData(this.form);
+      // 清空变量，释放内存
+      cloneForm = null;
     },
     createFormLayout() {
       const colSpan = 24 / this.cols;

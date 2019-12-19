@@ -40,6 +40,7 @@ Vue.use(FormPanel);
 - disabled{Boolean|禁用}
 - limit{Number|最多可以选择的项目数，只对 MULTIPLE_SELECT/MULTIPLE_CHECKBOX 有效}
 - clearable{Boolean|是否启用右侧清除按钮，只对 SELECT/MULTIPLE_SELECT 有效，默认开启}
+- noResetable{Boolean|表单项的值不会被重置，默认(false) -> 会被重置，true -> 不会被重置}
 - precision{Number|数值精度，之针对 INPUT_NUMBER 有效}
 - numberFormat{Boolean|指定金融类数值格式，100,000,000, 只对 INPUT 有效}
 - onFocus{Function|输入框获得焦点的事件}
