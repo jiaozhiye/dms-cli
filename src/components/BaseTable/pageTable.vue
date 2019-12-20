@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-19 08:06:02
+ * @Last Modified time: 2019-12-20 16:41:17
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -353,11 +353,12 @@ export default {
           const { dataIndex, precision, editable, editType } = column;
           // 操作列
           if (dataIndex === 'column-action') return;
+          let val = _.get(x, dataIndex);
           // 设置数据默认值
-          if (_.isUndefined(_.get(x, dataIndex))) {
-            _.set(x, dataIndex, '');
+          if (_.isUndefined(val) || _.isNull(val)) {
+            val = '';
+            _.set(x, dataIndex, val);
           }
-          const val = _.get(x, dataIndex);
           if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
             _.set(x, dataIndex, Number(val).toFixed(precision));
           }
@@ -428,8 +429,9 @@ export default {
             .join(', ');
         }
       }
-      res = this.numberFormat(column, res);
       res = this.dateFormat(column, res);
+      res = this.numberFormat(column, res);
+      res = this.secretFormat(column, res);
       return res;
     },
     // 单元格处于可编辑状态的渲染方法
@@ -832,7 +834,7 @@ export default {
       }
       return value;
     },
-    // 金融格式数字的格式化方法
+    // 数值的精度及金融数字格式化方法
     numberFormat(column, input) {
       const { precision } = column;
       if (precision >= 0 && !isNaN(Number(input))) {
@@ -849,6 +851,20 @@ export default {
         const dateFormat = column.dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD');
         const dateVal = moment(input).format(dateFormat);
         input = dateVal === 'Invalid date' ? input : dateVal;
+      }
+      return input;
+    },
+    // 保密字段格式化方法
+    secretFormat(column, input) {
+      input += '';
+      if (column.secretType === 'name') {
+        input = input.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
+      }
+      if (column.secretType === 'phone') {
+        input = input.replace(/^(\d{3}).+(\d{4})$/, '$1****$2');
+      }
+      if (column.secretType === 'IDnumber') {
+        input = input.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
       }
       return input;
     },

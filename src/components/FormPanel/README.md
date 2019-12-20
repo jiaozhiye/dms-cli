@@ -59,6 +59,7 @@ Vue.use(FormPanel);
 - minlength{Number|原生属性，最小输入长度，只针对 INPUT 生效}
 - maxlength{Number|原生属性，最大输入长度，只针对 INPUT|TEXT_AREA 生效}
 - pattern{RegExp|表单控件格式校验/^[0-9a-zA-Z ]{0,11}\$/，只针对 INPUT 生效}
+- secretType{String|字段值的保密类型，可选参数 name/phone/IDnumber，只针对 INPUT 生效，并切在只读或禁用的状态下}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
 - render{Function|表单元素的渲染函数，返回值是 JSX 类型节点}
 

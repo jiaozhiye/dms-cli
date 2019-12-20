@@ -242,6 +242,14 @@ export default {
           rows: 1,
           selfCols: 2,
           rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
+        },
+        {
+          type: 'INPUT',
+          label: '时间',
+          fieldName: 'xcv',
+          initialValue: '13012345678',
+          readonly: true,
+          secretType: 'phone'
         }
       ];
     },

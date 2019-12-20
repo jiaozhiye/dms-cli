@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-18 08:58:16
+ * @Last Modified time: 2019-12-20 16:41:20
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -124,15 +124,18 @@ export default {
       this.prevForm = { ...this.form };
     },
     getInitialValue(item) {
-      let { initialValue, type = '', fieldName } = item;
+      let { initialValue, type = '', fieldName, numberFormat, secretType, readonly } = item;
       if (this.formType === 'show') {
         item.disabled = true;
       }
       if (this.arrayTypes.includes(type)) {
         initialValue = initialValue || [];
       }
-      if (type === 'INPUT' && item.numberFormat) {
+      if (type === 'INPUT' && numberFormat && (readonly || item.disabled)) {
         initialValue = this.formatNumber(initialValue);
+      }
+      if (type === 'INPUT' && secretType && (readonly || item.disabled)) {
+        initialValue = this.secretFormat(initialValue, secretType);
       }
       // 树选择器
       if (type === 'INPUT_TREE' && _.isUndefined(this[`${fieldName}TreeFilterTexts`])) {
@@ -1153,6 +1156,20 @@ export default {
         result = num + result;
       }
       return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+    },
+    // 保密字段格式化方法
+    secretFormat(value, type) {
+      value += '';
+      if (type === 'name') {
+        value = value.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
+      }
+      if (type === 'phone') {
+        value = value.replace(/^(\d{3}).+(\d{4})$/, '$1****$2');
+      }
+      if (type === 'IDnumber') {
+        value = value.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
+      }
+      return value;
     },
     // 函数防抖
     debounce(fn, delay) {

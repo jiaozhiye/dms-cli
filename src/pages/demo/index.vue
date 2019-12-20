@@ -27,7 +27,7 @@
         <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>
     </FilterTable>
-    <Drawer :visible.sync="visible" title="标题名称" :width="960" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
+    <Drawer :visible.sync="visible" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <Panel @close="closeHandler" />
     </Drawer>
     <BasePrint ref="print" :data="printList" template="template1" />

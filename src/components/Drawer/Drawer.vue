@@ -99,6 +99,7 @@ export default {
         bottom: 0,
         left: 0,
         width: this.calcPanelSize(this.width),
+        minWidth: '800px',
         height: '100vh',
         transform: 'translate3d(-100%, 0, 0)'
       },
@@ -113,6 +114,7 @@ export default {
         top: 0,
         right: 0,
         width: this.calcPanelSize(this.width),
+        minWidth: '800px',
         height: '100vh',
         transform: 'translate3d(100%, 0, 0)'
       }
