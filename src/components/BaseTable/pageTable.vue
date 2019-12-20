@@ -254,7 +254,7 @@ export default {
       this.filterHandler();
     },
     listChange(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps) || !prevProps.length) return;
+      if (_.isEqual(nextProps, prevProps)) return;
       this.syncTableList();
     }
   },
