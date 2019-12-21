@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-11 21:01:55
+ * @Last Modified time: 2019-12-21 13:17:24
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -51,8 +51,8 @@ const instance = axios.create({
 // 异常处理程序
 const errorHandler = error => {
   const { response = {} } = error;
-  const errortext = codeMessage[response.status] || response.statusText;
-  notifyAction(errortext, 'error', `请求错误 ${response.status}`);
+  const errortext = codeMessage[response.status] || response.statusText || '网络连接错误，请检查网络。';
+  notifyAction(errortext, 'error', `请求错误 ${response.status || ''}`);
   store.dispatch('app/clearBtnLoading');
   return Promise.reject(error);
 };
@@ -70,15 +70,16 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => {
   let { config, headers, data } = response;
+  let { resultCode } = data;
   store.dispatch('app/clearBtnLoading');
   // 错误数据提示
-  if (data.resultCode !== 200) {
+  if (resultCode !== 200) {
+    // token 过期，需要重新登录
+    if (resultCode === 40105) {
+      store.dispatch('app/createLogout');
+      router.push({ path: '/' });
+    }
     data.errMsg && notifyAction(data.errMsg, 'error');
-  }
-  // token 过期，需要重新登录
-  if (data.resultCode === 40105) {
-    store.dispatch('app/createLogout');
-    router.push({ path: '/' });
   }
   // 判断是否为导出/下载
   if (config.responseType === 'blob') {

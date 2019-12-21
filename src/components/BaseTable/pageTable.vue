@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-20 16:41:17
+ * @Last Modified time: 2019-12-20 17:14:39
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -856,15 +856,19 @@ export default {
     },
     // 保密字段格式化方法
     secretFormat(column, input) {
+      const { editable, secretType } = column;
       input += '';
-      if (column.secretType === 'name') {
-        input = input.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
-      }
-      if (column.secretType === 'phone') {
-        input = input.replace(/^(\d{3}).+(\d{4})$/, '$1****$2');
-      }
-      if (column.secretType === 'IDnumber') {
-        input = input.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
+      // 前提是单元格不可编辑
+      if (!editable && secretType) {
+        if (secretType === 'name') {
+          input = input.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
+        }
+        if (secretType === 'phone') {
+          input = input.replace(/^(\d{3}).+(\d{4})$/, '$1****$2');
+        }
+        if (secretType === 'IDnumber') {
+          input = input.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
+        }
       }
       return input;
     },
