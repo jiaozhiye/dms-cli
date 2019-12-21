@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-11 23:05:10
+ * @Last Modified time: 2019-12-21 22:08:04
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
@@ -49,7 +49,7 @@ export const messageAction = async (msg = '暂无...', type = 'info') => {
 
 // 清空所有 cookie
 export const clearAllCookie = () => {
-  const keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+  const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];
   keys.forEach(x => {
     Cookies.remove(x);
   });

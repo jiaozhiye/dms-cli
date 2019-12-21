@@ -29,6 +29,8 @@ Vue.use(PortalPage);
   <PortalPage loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" @onSuccess="successHandle" />
 </template>
 
+import PortalPage from '@/components/PortalPage';
+
 export default {
   components: {
     PortalPage
