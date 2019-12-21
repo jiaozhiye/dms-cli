@@ -28,6 +28,7 @@ Vue.use(BaseDialog);
 - opened{Function|打开动画结束时的事件，没有参数}
 - close{Function|关闭事件，没有参数}
 - closed{Function|Dialog 关闭动画结束时的事件，参数是 visible}
+- heightChange{Function|组件内容容器高度变化时的事件，参数是内容容器的高度}
 
 `组件插槽`
 

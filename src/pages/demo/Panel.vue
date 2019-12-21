@@ -30,8 +30,8 @@
       <el-button @click="closeDrawer">取 消</el-button>
       <ajax-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</ajax-button>
     </div>
-    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
-      <Modal @close="closeHandler" />
+    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }" @heightChange="heightChangeHandle">
+      <Modal :height="height" @close="closeHandler" />
     </BaseDialog>
   </div>
 </template>
@@ -58,7 +58,8 @@ export default {
         { title: '选项卡3', id: 'row-03' }
       ],
       formList: this.createFormList(),
-      content: 'qwe'
+      content: 'qwe',
+      height: ''
     };
   },
   mounted() {
@@ -78,6 +79,9 @@ export default {
     }, 3000);
   },
   methods: {
+    heightChangeHandle(height) {
+      this.height = `${height.slice(0, -1)} - 60px)`;
+    },
     createFormList() {
       return [
         {

@@ -1,107 +1,7 @@
 <template>
   <div>
     <div>
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容
-      <br />
-      内容1
+      <PortalPage :height="height" loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" />
     </div>
     <div
       :style="{
@@ -123,10 +23,22 @@
 </template>
 
 <script>
+import PortalPage from '@/components/PortalPage';
+
 export default {
   name: 'Modal',
+  components: {
+    PortalPage
+  },
+  props: ['height'],
   data() {
-    return {};
+    return {
+      params: {
+        username: 'Liu00001',
+        password: 'b6agrdFb',
+        'login-form-type': 'pwd'
+      }
+    };
   },
   methods: {
     closeDialog() {

@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-21 20:04:57
  **/
 export default {
   name: 'BaseDialog',
@@ -88,15 +88,17 @@ export default {
       this.fullscreen = !this.fullscreen;
     },
     createStyles(slots) {
-      let hdHeight = '76px';
-      let ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
-      let dialogBodyHeight = this.fullscreen
+      const hdHeight = '76px';
+      const ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
+      const dialogBodyHeight = this.fullscreen
         ? {
             height: `calc(100vh - ${ftHeight} - ${hdHeight})`
           }
         : {
             maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${ftHeight} - ${hdHeight})`
           };
+      // 组件内容高度变化的事件
+      this.$emit('heightChange', dialogBodyHeight.maxHeight || dialogBodyHeight.height);
       return {
         overflowY: 'auto',
         minHeight: '150px',
