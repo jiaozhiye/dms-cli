@@ -13,7 +13,7 @@
       :on-change="changeHandler"
       :http-request="upload"
     >
-      <div v-for="(item, index) in imgUrlArr" :key="index" class="el-upload-list__item" @click.stop>
+      <div v-for="(item, index) in fileList" :key="index" class="el-upload-list__item" @click.stop>
         <img class="img" :src="item.url" alt />
         <h5 v-if="!!titles[index]" class="title">{{ titles[index] }}</h5>
         <span class="el-upload-list__item-actions">
@@ -28,9 +28,9 @@
           </span>
         </span>
       </div>
-      <div v-if="imgUrlArr.length !== limit" slot="default" class="upload-icon-plus el-upload-list__item">
+      <div v-if="fileList.length !== limit" slot="default" class="upload-icon-plus el-upload-list__item">
         <i class="el-icon-plus" />
-        <span>{{ titles[imgUrlArr.length] }}</span>
+        <span>{{ titles[fileList.length] }}</span>
       </div>
       <div slot="tip" class="el-upload__tip">{{ `只能上传 ${fileTypes.join(',')} 格式的图片` }}</div>
     </el-upload>
@@ -106,7 +106,7 @@ export default {
     this.dialogImageUrl = ''; // 预览图片地址
     return {
       file: null, // 当前被选择的图片文件
-      imgUrlArr: this.initialValue,
+      fileList: this.initialValue,
       dialogVisible: false,
       cropperModel: false,
       isLoading: false
@@ -114,11 +114,11 @@ export default {
   },
   watch: {
     initialValue(val) {
-      this.imgUrlArr = val;
+      this.fileList = val;
       !val.length && this.clearFiles();
     },
-    imgUrlArr(val) {
-      this.$emit('success', val);
+    fileList(val) {
+      this.$emit('change', val);
       // 取消表单校验
       if (val.length === this.limit && this.$parent.clearValidate) {
         this.$parent.clearValidate();
@@ -135,11 +135,11 @@ export default {
   },
   methods: {
     handlePreview(index) {
-      this.dialogImageUrl = this.imgUrlArr[index].url;
+      this.dialogImageUrl = this.fileList[index].url;
       this.dialogVisible = true;
     },
     handleRemove(index) {
-      this.imgUrlArr.splice(index, 1);
+      this.fileList.splice(index, 1);
     },
     clearFiles() {
       this.$refs.upload.clearFiles();
@@ -167,7 +167,7 @@ export default {
       try {
         const res = await axios.post(this.actionUrl, formData);
         if (res.resultCode === 200) {
-          this.imgUrlArr.push({ name: this.file.name, url: res.data });
+          this.fileList.push({ name: this.file.name, url: res.data || '' });
         }
       } catch (err) {
         this.clearFiles();
@@ -206,7 +206,7 @@ export default {
     },
     async downloadHandle(index) {
       try {
-        await this.downloadFile(this.imgUrlArr[index]);
+        await this.downloadFile(this.fileList[index]);
       } catch (err) {
         this.$message.error('图片下载失败！');
       }

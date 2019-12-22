@@ -16,6 +16,9 @@ Vue.use(SuperTabs);
 
 - initialValue{String|当前选中卡的标题}
 - tabBarGutter{Number|tabs 之间的间隙，单位是 px}
+- size{String|选项卡大小 small/large，默认是 samll}
+- animated{Boolean|是否开启选项卡切换时动画，默认 true}
+- lazyLoad{Boolean|是否延迟加载选项卡组件，默认 true}
 - destroyOnClose{Boolean|切换选项卡并处于隐藏状态时，是否销毁子组件，默认是 false}
 - change{Function|自定义事件，tab 切换选中时触发，参数是选中标签的标题}
 

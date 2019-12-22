@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SuperTabs :initial-value="defaultTabLabel">
+    <SuperTabs :initial-value="defaultTabLabel" size="large">
       <div slot="extraContent">
         <el-radio-group v-model="fetchParams.radioValue" size="small" @change="changeHandle">
           <el-radio-button label="1001">今日</el-radio-button>
@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     changeHandle(val) {
-      this.fetchParams = { ...this.fetchParams };
+      this.fetchParams = { radioValue: val };
     }
   }
 };

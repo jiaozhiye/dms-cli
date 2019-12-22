@@ -38,6 +38,7 @@ export default {
       try {
         this.loading = true;
         await this.downloadFile(this.actionUrl, this.params);
+        this.$emit('success');
       } catch (err) {
         this.$emit('error', err);
         this.$message.error('文件下载失败！');

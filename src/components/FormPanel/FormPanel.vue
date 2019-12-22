@@ -820,7 +820,7 @@ export default {
             titles={upload.titles}
             tipText={upload.tipText}
             disabled={disabled}
-            onSuccess={val => {
+            onChange={val => {
               this.fileChangeHandle(fieldName, val);
               change(val);
             }}

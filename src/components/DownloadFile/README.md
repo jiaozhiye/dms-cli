@@ -18,6 +18,7 @@ Vue.use(DownloadFile);
 - fileName{String|下载后的文件名}
 - params{Object|ajax 下载接口附带的额外参数}
 - disabled{Boolean|是否禁用}
+- success{Function|下载成功的回调事件}
 - error{Function|下载失败的回调事件，参数是错误对象}
 
 `示例代码`

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="clickHandle">按钮</el-button>
-    <LazyLoadTab v-model="activeName" :tab-menus="menus" />
+    <LazyLoadTab :initialValue="activeName" :tab-menus="menus" />
   </div>
 </template>
 

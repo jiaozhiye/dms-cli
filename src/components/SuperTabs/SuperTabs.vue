@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-22 19:06:37
  **/
 import _ from 'lodash';
 import { filterEmpty } from '@/utils/props-util';
@@ -19,6 +19,18 @@ export default {
       type: Number,
       default: 0
     },
+    size: {
+      type: String,
+      default: 'small'
+    },
+    animated: {
+      type: Boolean,
+      default: true
+    },
+    lazyLoad: {
+      type: Boolean,
+      default: true
+    },
     destroyOnClose: {
       type: Boolean,
       default: false
@@ -29,20 +41,24 @@ export default {
     this.tabInkBar = null;
     // tabs menu 数组
     this.menus = [];
+    this.loadMarks = {};
     return {
-      currentValue: this.initialValue, // 桥接线索
-      labels: [] // label 标题数组
+      labels: [],
+      currentValue: this.initialValue // 桥接线索
     };
   },
   computed: {
+    // 当前选项卡的索引
     curIndex() {
-      return this.menus.findIndex(x => x.label === this.currentValue);
+      return this.labels.findIndex(x => x === this.currentValue);
     }
   },
   watch: {
+    initialValue(val) {
+      this.currentValue = val;
+    },
     labels(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
-      this.currentValue = nextProps[this.curIndex];
       this.initial();
     }
   },
@@ -55,6 +71,7 @@ export default {
       this.tabNavNodes = Array.from(this.$refs['navWrap'].querySelectorAll('.tabs-tab'));
       this.tabInkBar = this.$refs['tabInkBar'];
       this.tabContainer = this.$refs['tabContainer'];
+      this.tabPanes = [...this.tabContainer.children];
       // 初始化
       this.createTabInkBar();
       this.createTabContentMove();
@@ -68,7 +85,14 @@ export default {
     },
     createTabContentMove() {
       if (this.curIndex < 0) return;
-      this.tabContainer.style.marginLeft = `${-1 * this.curIndex * 100}%`;
+      if (this.animated) {
+        this.tabContainer.style.marginLeft = `${-1 * this.curIndex * 100}%`;
+      } else {
+        this.tabPanes.forEach(x => {
+          x.style.display = 'none';
+        });
+        this.tabPanes[this.curIndex].style.display = 'block';
+      }
     },
     tabNavClickHandle(ev, { label, disabled }) {
       if (!!disabled) {
@@ -88,6 +112,7 @@ export default {
         const isActive = x.label === this.currentValue;
         const cls = {
           [`tabs-tab`]: true,
+          [`tab-${this.size}`]: true,
           [`tab-active`]: isActive,
           [`no-events`]: !!x.disabled
         };
@@ -105,13 +130,25 @@ export default {
     createTabsContent(arr) {
       return arr.map(x => {
         const isActive = x.label === this.currentValue;
+        let Component = <keep-alive>{x.children}</keep-alive>;
+        if (!this.destroyOnClose) {
+          if (this.lazyLoad) {
+            if (isActive) {
+              this.loadMarks[x.label] = true;
+            } else if (!this.loadMarks[x.label]) {
+              Component = null;
+            }
+          }
+        } else {
+          Component = isActive ? x.children : null;
+        }
         const cls = {
           [`tabs-tabpane`]: true,
           [`tabs-tabpane-active`]: isActive
         };
         return (
           <div key={x.label} class={cls}>
-            {!this.destroyOnClose ? <keep-alive>{x.children}</keep-alive> : isActive ? x.children : null}
+            {Component}
           </div>
         );
       });
@@ -128,21 +165,21 @@ export default {
     const { $slots } = this;
     const children = filterEmpty($slots.default).filter(x => x.tag === 'tab-panel');
     // 创建 tabs 数据
-    this.menus = this.createTabMenus(children);
-    this.labels = this.menus.map(x => x.label);
+    const menus = this.createTabMenus(children);
+    this.labels = menus.map(x => x.label);
     return (
       <div class="tab-wrapper">
         <div class="tab-top-bar">
           <div class="tabs-nav-container">
             <div class="tabs-nav-animated">
-              <div ref="navWrap">{this.createTabsNav(this.menus)}</div>
+              <div ref="navWrap">{this.createTabsNav(menus)}</div>
               <div class="tabs-ink-bar" ref="tabInkBar"></div>
             </div>
           </div>
           <div class="tabs-extra-content">{$slots['extraContent']}</div>
         </div>
         <div ref="tabContainer" class="tabs-content tabs-content-animated">
-          {this.createTabsContent(this.menus)}
+          {this.createTabsContent(menus)}
         </div>
       </div>
     );
@@ -159,6 +196,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid @borderColor;
+    margin-bottom: @moduleMargin;
     .tabs-nav-container {
       height: 100%;
       margin-bottom: -1px;
@@ -167,7 +205,7 @@ export default {
         position: relative;
         .tabs-tab {
           display: inline-block;
-          padding: 16px 15px;
+          padding: 15px 15px;
           transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
           cursor: pointer;
           &.tab-active,
@@ -178,6 +216,12 @@ export default {
           &.no-events:hover {
             color: @disabledColor;
             cursor: not-allowed;
+          }
+          &.tab-small {
+            padding: 10px 12px;
+          }
+          &.tab-large {
+            padding: 16px 16px;
           }
         }
         .tabs-ink-bar {
@@ -201,7 +245,6 @@ export default {
     .tabs-tabpane {
       flex-shrink: 0;
       width: 100%;
-      padding: @modulePadding;
       box-sizing: border-box;
       height: 0;
       opacity: 0;

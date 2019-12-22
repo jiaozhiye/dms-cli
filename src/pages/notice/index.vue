@@ -67,8 +67,10 @@ export default {
     };
   },
   mounted() {
+    const title = `通知(${dataList.length})`;
     this.noticeList.list = dataList;
-    this.noticeList.title = `通知(${dataList.length})`;
+    this.defaultTabLabel = title;
+    this.noticeList.title = title;
   }
 };
 </script>

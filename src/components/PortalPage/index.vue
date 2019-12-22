@@ -9,7 +9,7 @@ import addEventListener from 'add-dom-event-listener';
 import Spin from '@/components/Spin/Spin';
 
 export default {
-  name: 'AjaxButton',
+  name: 'PortalPage',
   props: {
     method: {
       type: String,
