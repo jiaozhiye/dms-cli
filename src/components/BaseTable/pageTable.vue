@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-20 17:14:39
+ * @Last Modified time: 2019-12-23 17:09:07
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -626,8 +626,17 @@ export default {
             this.cellValChange = false;
           }}
           scopedSlots={{
-            default: props => {
-              const { item } = props;
+            default: ({ item }) => {
+              if (item.__empty__) {
+                return (
+                  <td>
+                    <span class="is-empty">
+                      <i class="icon el-icon-warning-outline" />
+                      <em>{item.message}</em>
+                    </span>
+                  </td>
+                );
+              }
               const nodeList = [
                 <td key={dataIndex}>
                   <span>{`${column.title}：${item[dataIndex]}`}</span>
@@ -891,6 +900,10 @@ export default {
     // 组装搜索帮助数据列表
     createSerachHelperList(arr, aliasKey) {
       const allColumns = this.columnFlatMap(this.columns);
+      // 服务端未返回数据
+      if (!arr.length) {
+        return [{ __empty__: true, message: '暂无数据...' }];
+      }
       return arr.map(x => {
         const item = {};
         for (let attr in x) {
@@ -1996,11 +2009,24 @@ export default {
       display: table;
       li {
         display: table-row;
-        line-height: 30px;
-        font-size: 12px;
         td {
+          line-height: 26px;
           span {
             padding: 0 10px;
+            font-size: @textSizeSecondary;
+            &.is-empty {
+              display: block;
+              text-align: center;
+              color: @disabledColor;
+              .icon {
+                font-size: 16px;
+                vertical-align: middle;
+              }
+              em {
+                margin-left: 4px;
+                vertical-align: middle;
+              }
+            }
           }
           &:first-child span {
             padding-left: 20px;
