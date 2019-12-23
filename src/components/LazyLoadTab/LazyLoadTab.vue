@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-22 15:58:56
+ * @Last Modified time: 2019-12-23 10:58:26
  **/
 import _ from 'lodash';
 
@@ -68,7 +68,7 @@ export default {
           on: x.on
         });
         return (
-          <el-tab-pane ref={x.title} key={x.title} label={x.title} name={x.title} disabled={x.disabled} lazy>
+          <el-tab-pane ref={x.title} key={x.title} label={`　${x.title}　`} name={x.title} disabled={x.disabled} lazy>
             {!this.destroyOnClose ? <keep-alive>{component}</keep-alive> : isCurrent ? component : null}
           </el-tab-pane>
         );
@@ -100,8 +100,9 @@ export default {
     margin-bottom: @moduleMargin;
     .el-tabs__nav-wrap {
       .el-tabs__item {
-        height: 32px;
-        line-height: 32px;
+        padding: 0 5px;
+        height: 34px;
+        line-height: 34px;
       }
       &.is-top::after {
         height: 1px;

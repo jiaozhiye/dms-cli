@@ -21,7 +21,7 @@ Vue.use(UploadCropper);
 - limit{Number|支持上传图片的数量，默认是 1}
 - titles: {Array|图片对应的标题，元素的个数与 limit 一致}
 - disabled{Boolean|是否禁用}
-- success{Function|上传服务端成功的回调事件，参数是图片地址}
+- change{Function|上传服务端成功的回调事件，参数是图片列表}
 - error{Function|上传服务端失败的回调事件，参数是错误对象}
 
 `示例代码`
@@ -33,7 +33,7 @@ Vue.use(UploadCropper);
     action-url="/api/basedata/upload"
     :initial-value="form.imgPath"
     :fixed-size="[4, 5]"
-    @success="successHandler"
+    @change="successHandler"
   />
 </template>
 

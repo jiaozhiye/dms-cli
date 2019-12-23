@@ -80,7 +80,7 @@ export default {
   margin: -12px;
   width: 340px;
   .list {
-    margin: -10px;
+    margin-top: -10px;
     ul > li {
       padding: 10px 15px;
       line-height: 20px;

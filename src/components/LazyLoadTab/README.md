@@ -14,7 +14,7 @@ Vue.use(LazyLoadTab);
 
 `组件参数API`
 
-- v-model{String|当前选中卡的标题，双向数据绑定}
+- initialValue{String|当前选中卡的标题}
 - tabMenus{Array|选项卡的菜单}
   - 菜单数据的每一项：
   - {
@@ -27,14 +27,14 @@ Vue.use(LazyLoadTab);
 - type{String|选项卡风格类型，card/border-card，默认是基本类型}
 - position{String|选项卡所在位置，top/right/bottom/left，默认值是 top}
 - destroyOnClose{Boolean|切换选项卡并处于隐藏状态时，是否销毁子组件，默认是 false}
-- tab-click{Function|自定义事件，tab 被选中时触发，参数是选中的标签 tab 实例 和 包装后的事件对象}
+- change{Function|自定义事件，tab 切换时触发，参数是选中的标签标题}
 
 `示例代码`
 
 ```bash
 # template
 <template>
-  <LazyLoadTab v-model="activeName" :tabMenus="menus"></LazyLoadTab>
+  <LazyLoadTab :initial-value="activeName" :tabMenus="menus" />
 </template>
 
 # js
