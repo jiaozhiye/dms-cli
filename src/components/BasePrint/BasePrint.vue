@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-24 10:05:07
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -29,11 +29,12 @@ export default {
       default: false
     },
     data: {
-      type: Object,
-      required: true,
-      default() {
-        return {};
-      }
+      type: [Object, Array],
+      required: true
+    },
+    isPreview: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -58,6 +59,10 @@ export default {
       _html_ = this.createPageBreak(_html_);
       // 加载全局 style 样式
       _html_ = this.createGlobalStyle(_html_);
+      // 页面预览
+      if (this.isPreview) {
+        this.createPreviewNodes(_html_);
+      }
       // 执行打印
       this.createPrintPage(_html_);
     },
@@ -116,13 +121,24 @@ export default {
     createPrintComponent(h) {
       return h(this.$options.component, {
         props: {
-          data: this.data,
-          isPreview: false
+          data: this.data
         },
         on: {
           onPrintTable: this.getPrintTable
         }
       });
+    },
+    createPreviewNodes(_html_) {
+      const $target = document.body.querySelector('.preview-wrap');
+      if (!$target) {
+        let $wrapper = document.createElement('div');
+        $wrapper.className = 'preview-wrap';
+        $wrapper.innerHTML = _html_;
+        document.body.appendChild($wrapper);
+        $wrapper = null;
+      } else {
+        $target.innerHTML = _html_;
+      }
     },
     EXCUTE_PRINT() {
       this.state = 'start';
@@ -136,8 +152,15 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .print-wrap {
+  display: none;
   visibility: hidden;
+}
+.preview-wrap {
+  width: 960px;
+  padding: 10px;
+  border: 1px solid @borderColor;
+  margin: 0 auto;
 }
 </style>

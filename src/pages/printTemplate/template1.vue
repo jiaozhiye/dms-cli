@@ -1,6 +1,6 @@
 <template>
-  <div v-show="isPreview" ref="print" style="width:100%; margin: 0 auto;">
-    <table>
+  <div v-show="false" ref="print" style="width:100%; margin: 0 auto;">
+    <table class="fs14">
       <tr>
         <td colspan="7" align="center" height="24" style="font-size: 24px;">出库单</td>
       </tr>
@@ -27,7 +27,7 @@
       </tr>
     </table>
 
-    <table class="bor">
+    <table class="bor fs14">
       <tr>
         <td width="5%" height="26">序号</td>
         <td width="20%">备件代码</td>
@@ -54,7 +54,7 @@
       </tr>
     </table>
 
-    <table class="bor-through">
+    <table class="bor-through fs14">
       <tr>
         <td align="right" width="8%" height="26">总金额：</td>
         <td>{{ totalPrice }} 元</td>
@@ -79,26 +79,14 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-24 10:04:47
  **/
 import moment from 'moment';
 
 export default {
   name: 'template1',
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default() {
-        return {};
-      }
-    },
-    isPreview: {
-      type: Boolean,
-      default: true
-    }
-  },
+  props: ['data'],
   data() {
     return {
       nowTime: moment().format('YYYY-MM-DD HH:mm:ss')
