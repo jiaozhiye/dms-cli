@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 08:57:09
+ * @Last Modified time: 2019-12-25 14:53:55
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -919,7 +919,7 @@ export default {
             }}
           >
             {itemList.map(x => (
-              <el-option key={x.value} label={x.text} value={x.value} />
+              <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
             ))}
           </el-select>
           {this.createFormItemDesc(descOptions)}

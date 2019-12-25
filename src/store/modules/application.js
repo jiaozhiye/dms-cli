@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-16 11:59:54
+ * @Last Modified time: 2019-12-25 14:53:08
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -100,7 +100,7 @@ const actions = {
       data = res;
     } else {
       const res = await getNavList();
-      if (res.resultCode === 200) {
+      if (res.resultCode === 200 && res.data.length) {
         data = res.data;
       } else {
         messageAction('系统菜单获取失败！', 'error');
