@@ -19,6 +19,7 @@ Vue.use(UploadCropper);
 - fixedSize{Array|裁剪框的宽高比，[w, h]}
 - isCalcHeight{Boolean|是否根据裁剪图片宽高比自动计算上传组件容器高度，默认值 false}
 - limit{Number|支持上传图片的数量，默认是 1}
+- params{Object|ajax 上传时附带的额外参数}
 - titles: {Array|图片对应的标题，元素的个数与 limit 一致}
 - disabled{Boolean|是否禁用}
 - change{Function|上传服务端成功的回调事件，参数是图片列表}

@@ -10,8 +10,8 @@
       :auto-upload="false"
       :show-file-list="false"
       :disabled="disabled"
-      :on-change="changeHandler"
       :http-request="upload"
+      :on-change="changeHandler"
     >
       <div v-for="(item, index) in fileList" :key="index" class="el-upload-list__item" @click.stop>
         <img class="img" :src="item.url" alt />
@@ -51,10 +51,10 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2019-12-25 09:46:16
  **/
-import axios from '@/api/fetch';
+import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
 import CropperPanel from './CropperPanel';
 
@@ -88,6 +88,10 @@ export default {
       type: Number,
       default: 1
     },
+    params: {
+      type: Object,
+      default: () => ({})
+    },
     fileTypes: {
       type: Array,
       default: () => ['jpg', 'png', 'bmp']
@@ -115,13 +119,11 @@ export default {
   watch: {
     initialValue(val) {
       this.fileList = val;
-      !val.length && this.clearFiles();
     },
     fileList(val) {
       this.$emit('change', val);
-      // 取消表单校验
-      if (val.length === this.limit && this.$parent.clearValidate) {
-        this.$parent.clearValidate();
+      if (val.length === this.limit) {
+        this.$parent.clearValidate && this.$parent.clearValidate();
       }
     }
   },
@@ -141,9 +143,6 @@ export default {
     handleRemove(index) {
       this.fileList.splice(index, 1);
     },
-    clearFiles() {
-      this.$refs.upload.clearFiles();
-    },
     changeHandler(file, files) {
       if (this.uid === file.uid) return;
       this.uid = file.uid;
@@ -154,7 +153,8 @@ export default {
       this.fileData = data;
       this.$refs.upload.submit();
     },
-    async upload(params) {
+    async upload() {
+      const { params } = this.$props;
       const formData = new FormData();
       const base64 = await canvasCompress({
         img: this.fileData,
@@ -164,13 +164,16 @@ export default {
       });
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);
+      // 处理请求的额外参数
+      for (let key in params) {
+        formData.append(key, params[key]);
+      }
       try {
         const res = await axios.post(this.actionUrl, formData);
         if (res.resultCode === 200) {
           this.fileList.push({ name: this.file.name, url: res.data || '' });
         }
       } catch (err) {
-        this.clearFiles();
         this.$emit('error', err);
         this.$message.error('图片上传失败！');
       }
@@ -178,7 +181,6 @@ export default {
       this.isLoading = false;
     },
     beforeClose() {
-      this.clearFiles();
       this.cropperModel = false;
     },
     setUploadWrapHeight() {

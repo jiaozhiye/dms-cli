@@ -111,6 +111,7 @@ Vue.use(FormPanel);
   - &emsp;fixedSize: {Array|裁剪框的宽高比，[w, h]}
   - &emsp;isCalcHeight: {Boolean|是否根据裁剪图片宽高比自动计算上传组件容器高度，默认值 false}
   - &emsp;limit: {Number|支持上传图片的数量，默认是 1}
+  - &emsp;params: {Object|上传图片请求的额外参数}
   - &emsp;titles: {Array|图片对应的标题，元素的个数与 limit 一致}
   - &emsp;tipText: {String|上传图片格式的提示文字}
 - }
@@ -121,6 +122,7 @@ Vue.use(FormPanel);
   - &emsp;actionUrl: {String|必选参数，上传的地址}
   - &emsp;fileSize: {Number|上传文件大小的限制，默认是 5M}
   - &emsp;limit: {Number|支持上传文件的数量，默认是 1}
+  - &emsp;params: {Object|上传文件请求的额外参数}
   - &emsp;fileTypes: {Array|允许上传文件的格式数组 ['jpg', 'jpeg', 'png', 'pdf']}
 - }
 - 注意：关于附件上传前后端数据交互的格式为 {name: 'xxx', url: 'xxx'}，因此服务端返回的数据格式要满足 name, url 两个字段的格式，name 用于回显文件名

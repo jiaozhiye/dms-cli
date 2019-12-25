@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-20 16:41:20
+ * @Last Modified time: 2019-12-25 08:57:09
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -817,6 +817,7 @@ export default {
             fixedSize={upload.fixedSize}
             isCalcHeight={upload.isCalcHeight}
             limit={upload.limit || 1}
+            params={upload.params}
             titles={upload.titles}
             tipText={upload.tipText}
             disabled={disabled}
@@ -840,6 +841,7 @@ export default {
             fileTypes={upload.fileTypes}
             fileSize={upload.fileSize}
             limit={upload.limit || 1}
+            params={upload.params}
             disabled={disabled}
             style={{ ...style }}
             onChange={val => {
