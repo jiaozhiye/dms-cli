@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-16 11:58:58
+ * @Last Modified time: 2019-12-26 08:39:49
  */
 import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
@@ -44,11 +44,18 @@ export default {
         .filter(x => !x.hideInMenu)
         .map(item => {
           const { key, title, icon } = item;
-          const menuItemNode = (
+          // 判断是否为 http 链接
+          const isHttpLink = /^https?:\/\//.test(key);
+          const menuItemNode = !isHttpLink ? (
             <template slot="title">
               {icon && <i class={icon} />}
               <span title={title}>{title}</span>
             </template>
+          ) : (
+            <a href={key} title={title} target="_blank">
+              {item.icon && <Icon type={item.icon} />}
+              <span>{item.title}</span>
+            </a>
           );
           if (Array.isArray(item.children)) {
             return (
@@ -59,7 +66,7 @@ export default {
             );
           }
           return (
-            <el-menu-item key={key} index={key}>
+            <el-menu-item key={key} index={!isHttpLink ? key : null}>
               {menuItemNode}
             </el-menu-item>
           );

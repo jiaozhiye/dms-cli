@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-21 13:17:24
+ * @Last Modified time: 2019-12-26 14:27:50
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -60,7 +60,10 @@ const errorHandler = error => {
 // 请求拦截
 instance.interceptors.request.use(config => {
   // 请求头信息，token 验证
-  config.headers = getConfigHeaders();
+  config.headers = {
+    ...config.headers,
+    ...getConfigHeaders()
+  };
   if (config.mark) {
     store.dispatch('app/createBtnLoading', { [config.mark]: true });
   }
