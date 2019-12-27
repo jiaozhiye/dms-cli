@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-22 15:19:53
+ * @Last Modified time: 2019-12-27 18:03:46
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -249,7 +249,7 @@ export default {
       return (
         <span
           slot="reference"
-          style={{ paddingLeft: '10px', lineHeight: '34px' }}
+          style={{ paddingLeft: '10px', lineHeight: '34px', whiteSpace: 'normal' }}
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(dataIndex);
@@ -445,6 +445,8 @@ export default {
       const l = e.target.scrollLeft;
       this.scrollLeft = l;
       this.throttle(this.doMove, 10)(this.$$tableHeader, l);
+      // 处理滚动防抖，避免出现表格线框对不齐的 bug
+      this.debounce(this.RESET_RENDER, 300)();
     },
     documentEventHandle(e) {
       this.closeAllPopover();
@@ -481,6 +483,13 @@ export default {
         }
       };
     },
+    // 函数防抖
+    debounce(fn, delay) {
+      return function(...args) {
+        fn.timer && clearTimeout(fn.timer);
+        fn.timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    },
     // 数组的深度查找
     deepFind(arr, mark) {
       let res = null;
@@ -501,6 +510,9 @@ export default {
     CLEAR_SEARCH_PARAMS() {
       this.filters = {};
       this.search = this.createSearchData(this.columns);
+    },
+    RESET_RENDER() {
+      this.$pageTable.resetRender();
     },
     // PageTable 组件对外公开的方法
     SET_TABLE_DATA(...rest) {

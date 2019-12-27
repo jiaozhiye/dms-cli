@@ -89,7 +89,6 @@ export default {
   align-items: center;
   vertical-align: middle;
   position: relative;
-  height: 34px;
   padding: 0;
   overflow: visible;
   z-index: 9;
