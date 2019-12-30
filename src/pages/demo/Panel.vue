@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div id="wrapper" class="wrapper">
       <Anchor :label-list="labels">
         <div id="row-01" class="line">
-          <FormPanel :list="formList" label-width="100" form-type="add" />
+          <FormPanel ref="form" :scrollContainer="outerWrap" :list="formList" label-width="100" form-type="add" />
         </div>
         <div id="row-02" class="line">
           <el-button @click="visible = true">三级交互</el-button>
           <BreakSpace label="哈哈哈" />
+          <el-button @click="getFormData">获取数据</el-button>
         </div>
         <div id="row-03" class="line">
           <tinymce v-model="content" action-url="/api/file/oss/upload" :height="300" />
@@ -51,6 +52,7 @@ export default {
   mixins: [authority],
   data() {
     return {
+      outerWrap: null,
       visible: false,
       labels: [
         { title: '选项卡1', id: 'row-01' },
@@ -63,6 +65,7 @@ export default {
     };
   },
   mounted() {
+    this.outerWrap = document.querySelector('.scroll-wrapper');
     setTimeout(() => {
       this.formList.find(x => x.fieldName === 'number').initialValue = 20;
       this.formList[0].labelOptions.initialValue = '22';
@@ -79,6 +82,9 @@ export default {
     }, 3000);
   },
   methods: {
+    async getFormData() {
+      const res = await this.$refs.form.GET_FORM_DATA();
+    },
     heightChangeHandle(height) {
       this.height = `${height.slice(0, -1)} - 60px)`;
     },
@@ -88,14 +94,14 @@ export default {
           type: 'INPUT',
           labelOptions: {
             type: 'CHECKBOX',
-            fieldName: '复选框的数据名称',
+            fieldName: 'zxczxc',
             label: '交强险',
             options: {
               trueValue: '1001',
               falseValue: '1002'
             }
           },
-          fieldName: '输入框的数据名称'
+          fieldName: 'zxc'
         },
         {
           type: 'SELECT',
@@ -108,7 +114,10 @@ export default {
             { text: '资讯', value: '2' }
           ],
           initialValue: '2',
-          rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }],
+          change: val => {
+            console.log(222, val);
+          }
         },
         {
           type: 'DATE',

@@ -41,6 +41,9 @@ export default {
     isSubmitBtn: {
       type: Boolean,
       default: true
+    },
+    scrollContainer: {
+      default: null
     }
   },
   data() {
@@ -1041,6 +1044,7 @@ export default {
         .map(item => {
           const VNode = !this[item.type] ? null : item.render ? this.RENDER_FORM_ITEM(item) : this[item.type](item);
           VNode['type'] = item.type;
+          VNode['fieldName'] = item.fieldName;
           VNode['cols'] = item.selfCols;
           VNode['offsetLeft'] = item.offsetLeftCols;
           VNode['offsetRight'] = item.offsetRightCols;
@@ -1078,6 +1082,39 @@ export default {
         }
       }
     },
+    // 计算目标元素相对于滚动容器的上边距
+    calcOffsetTop(_id) {
+      let $target = document.getElementById(_id);
+      let top = $target.offsetTop;
+      let $parent = $target.offsetParent;
+      while ($parent !== null && $parent !== this.scrollContainer) {
+        top += $parent.offsetTop;
+        $parent = $parent.offsetParent;
+      }
+      return top;
+    },
+    // 锚点定位没有通过校验的表单项
+    createAnchorFixed(ids) {
+      const res = [];
+      for (let key in ids) {
+        res.push({ fieldName: key, disY: this.calcOffsetTop(key) });
+      }
+      res.sort((a, b) => a.disY - b.disY);
+      this.scrollContainer.scrollTop = res[0].disY || 0;
+    },
+    // 获取表单组件的值
+    getFormData() {
+      this.excuteFormData(this.form);
+      return new Promise((resolve, reject) => {
+        this.$refs.form.validate((valid, fieldNames) => {
+          if (!valid) {
+            reject(fieldNames);
+          } else {
+            resolve(this.form);
+          }
+        });
+      });
+    },
     submitForm(ev) {
       ev && ev.preventDefault();
       let isErr;
@@ -1110,7 +1147,7 @@ export default {
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
+          <el-col key={i} id={Node.fieldName} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );
@@ -1219,11 +1256,13 @@ export default {
     },
     async GET_FORM_DATA() {
       try {
-        this.excuteFormData(this.form);
-        await this.$refs.form.validate();
-        return [false, this.form];
+        const res = await this.getFormData();
+        return [false, res];
       } catch (err) {
-        return [true, null];
+        if (_.isElement(this.scrollContainer)) {
+          this.createAnchorFixed(err);
+        }
+        return [err, null];
       }
     }
   },
