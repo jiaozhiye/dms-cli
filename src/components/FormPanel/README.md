@@ -18,6 +18,7 @@ Vue.use(FormPanel);
 - formType{String|表单面板的类型 add/edit/show，默认值 add}
 - cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
 - labelWidth{Number|label 标签的宽度，默认是 80}
+- scrollContainer{HTMLNode|具有滚动条的容器，需要具有定位属性，用于表单校验信息的锚点定位}
 - isSubmitBtn{Boolean|是否显示保存/重置按钮，默认是 true}
 - formChange{Function|点击保存按钮触发的事件，参数是表单数据对象}
 

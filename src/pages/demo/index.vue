@@ -6,7 +6,7 @@
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
       <el-button size="small">销售发票</el-button>
-      <el-button size="small">欠货单</el-button>
+      <el-button size="small" @click="asdasd">欠货单</el-button>
       <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
     <FilterTable
@@ -78,6 +78,9 @@ export default {
     }, 3000);
   },
   methods: {
+    asdasd() {
+      console.log(this.BaseTable.GET_REQUIRED_ERROR());
+    },
     createTopFilters() {
       return [
         {
@@ -249,6 +252,7 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'date-range',
+          editRequired: true,
           editable: true,
           editType: 'date-picker'
         },
@@ -367,6 +371,7 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'checkbox',
+          editRequired: true,
           filterItems: [
             { text: '已完成', value: 1 },
             { text: '进行中', value: 2 },

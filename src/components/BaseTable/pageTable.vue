@@ -450,6 +450,10 @@ export default {
             clearable={true}
             disabled={column.disabled || isDisabled}
             onChange={value => {
+              // 单元格非空校验
+              if (column.editRequired) {
+                this.validateRequired(dataIndex, props.row._uid, value);
+              }
               this.editCellChangeHandle(value, props.row._uid, dataIndex);
             }}
           >

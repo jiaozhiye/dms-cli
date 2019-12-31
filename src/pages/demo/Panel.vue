@@ -84,6 +84,7 @@ export default {
   methods: {
     async getFormData() {
       const res = await this.$refs.form.GET_FORM_DATA();
+      console.log(111, res);
     },
     heightChangeHandle(height) {
       this.height = `${height.slice(0, -1)} - 60px)`;
@@ -269,10 +270,7 @@ export default {
           label: '上传文件',
           fieldName: 'wayFiles',
           placeholder: '上传文件...',
-          rules: [
-            { required: true, message: '请上传文件', trigger: 'change' },
-            { limit: 2, validator: this.validateFn, message: '请上传两张图片', trigger: 'change' }
-          ],
+          rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
           upload: {
             actionUrl: '/api/file/oss/upload',
             limit: 2,
@@ -288,10 +286,7 @@ export default {
           label: '上传身份证',
           fieldName: 'wayPicture',
           placeholder: '上传身份证...',
-          rules: [
-            { required: true, message: '请上传身份证', trigger: 'change' },
-            { limit: 2, validator: this.validateFn, message: '请上传两张图片', trigger: 'change' }
-          ],
+          rules: [{ required: true, message: '请上传身份证', trigger: 'change' }],
           upload: {
             actionUrl: '/api/file/oss/upload',
             fixedSize: [5, 3],

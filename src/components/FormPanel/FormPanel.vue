@@ -1084,7 +1084,7 @@ export default {
     },
     // 计算目标元素相对于滚动容器的上边距
     calcOffsetTop(_id) {
-      let $target = document.getElementById(_id);
+      let $target = document.getElementById(`fp-${_id}`);
       let top = $target.offsetTop;
       let $parent = $target.offsetParent;
       while ($parent !== null && $parent !== this.scrollContainer) {
@@ -1147,7 +1147,7 @@ export default {
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} id={Node.fieldName} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
+          <el-col key={i} id={`fp-${Node.fieldName}`} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );
