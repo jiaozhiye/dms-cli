@@ -1147,7 +1147,7 @@ export default {
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} id={`fp-${Node.fieldName}`} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
+          <el-col key={i} id={Node.type !== 'BREAK_SPACE' ? `fp-${Node.fieldName}` : null} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
             {Node}
           </el-col>
         );
