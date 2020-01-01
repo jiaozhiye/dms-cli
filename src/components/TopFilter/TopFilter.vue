@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 14:54:17
+ * @Last Modified time: 2020-01-01 15:34:48
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -977,7 +977,7 @@ export default {
       const count = expand ? formItems.length : defaultPlayRows * cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} type={Node.type} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );
@@ -1058,7 +1058,9 @@ export default {
 <style lang="less">
 .top-filter {
   .el-col {
-    height: 32px;
+    &:not([type='TEXT_AREA']) {
+      height: 32px;
+    }
     margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
@@ -1079,11 +1081,6 @@ export default {
         }
       }
       .el-form-item__content {
-        line-height: 30px;
-        .el-input__inner {
-          line-height: 32px;
-          line-height: 30px\0;
-        }
         .el-form-item__error {
           margin-top: -2px;
           transform-origin: 0 50%;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 14:53:55
+ * @Last Modified time: 2020-01-01 15:30:29
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1147,7 +1147,14 @@ export default {
         const offsetLeft = _.isUndefined(Node.offsetLeft) ? 0 : Node.offsetLeft * colSpan;
         const offsetRight = _.isUndefined(Node.offsetRight) ? 0 : this.toPercent(Node.offsetRight / this.cols);
         return (
-          <el-col key={i} id={Node.type !== 'BREAK_SPACE' ? `fp-${Node.fieldName}` : null} offset={offsetLeft} span={Node.type !== 'BREAK_SPACE' ? spans : 24} style={{ marginRight: offsetRight }}>
+          <el-col
+            key={i}
+            type={Node.type}
+            id={Node.type !== 'BREAK_SPACE' ? `fp-${Node.fieldName}` : null}
+            offset={offsetLeft}
+            span={Node.type !== 'BREAK_SPACE' ? spans : 24}
+            style={{ marginRight: offsetRight }}
+          >
             {Node}
           </el-col>
         );
@@ -1283,7 +1290,9 @@ export default {
 <style lang="less">
 .form-panel {
   .el-col {
-    min-height: 32px;
+    &:not([type='TEXT_AREA']) {
+      height: 32px;
+    }
     margin-bottom: 12px;
     .el-form-item {
       margin-bottom: 0;
@@ -1304,11 +1313,6 @@ export default {
         }
       }
       .el-form-item__content {
-        line-height: 30px;
-        .el-input__inner {
-          line-height: 32px;
-          line-height: 30px\0;
-        }
         .el-form-item__error {
           margin-top: -2px;
           transform-origin: 0 50%;
