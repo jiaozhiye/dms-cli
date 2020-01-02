@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-24 10:05:07
+ * @Last Modified time: 2020-01-02 19:47:32
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      LODOP: getLodop(),
+      LODOP: null,
       state: 'stop'
     };
   },

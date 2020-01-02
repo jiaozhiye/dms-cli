@@ -80,7 +80,6 @@ export function getLodop(oOBJECT, oEMBED) {
       if (!LODOP) {
         Notification({
           title: 'CLodop 信息',
-          duration: 0,
           dangerouslyUseHTMLString: true,
           message: strCLodopInstall_1 + (CLodopIsLocal ? strCLodopInstall_2 : '') + strCLodopInstall_3
         });
@@ -89,7 +88,6 @@ export function getLodop(oOBJECT, oEMBED) {
         if (CLODOP.CVERSION < '3.0.8.3') {
           Notification({
             title: 'CLodop 信息',
-            duration: 0,
             dangerouslyUseHTMLString: true,
             message: strCLodopUpdate
           });
@@ -118,7 +116,6 @@ export function getLodop(oOBJECT, oEMBED) {
         if (ua.indexOf('Chrome') >= 0) {
           Notification({
             title: 'CLodop 信息',
-            duration: 0,
             dangerouslyUseHTMLString: true,
             message: strHtmChrome
           });
@@ -126,14 +123,12 @@ export function getLodop(oOBJECT, oEMBED) {
         if (ua.indexOf('Firefox') >= 0) {
           Notification({
             title: 'CLodop 信息',
-            duration: 0,
             dangerouslyUseHTMLString: true,
             message: strHtmFireFox
           });
         }
         Notification({
           title: 'CLodop 信息',
-          duration: 0,
           dangerouslyUseHTMLString: true,
           message: is64IE ? strHtm64_Install : strHtmInstall
         });
@@ -144,7 +139,6 @@ export function getLodop(oOBJECT, oEMBED) {
       if (!needCLodop()) {
         Notification({
           title: 'CLodop 信息',
-          duration: 0,
           dangerouslyUseHTMLString: true,
           message: is64IE ? strHtm64_Update : strHtmUpdate
         });
