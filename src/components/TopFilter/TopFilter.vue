@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-01 15:34:48
+ * @Last Modified time: 2020-01-02 16:54:42
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1045,9 +1045,20 @@ export default {
   },
   render() {
     const { form, rules, labelWidth } = this;
+    const wrapProps = {
+      props: {
+        size: 'small',
+        model: form,
+        rules,
+        labelWidth: `${labelWidth}px`
+      },
+      nativeOn: {
+        submit: ev => ev.preventDefault()
+      }
+    };
     return (
       <div class="top-filter">
-        <el-form ref="form" size="small" model={form} rules={rules} label-width={`${labelWidth}px`} nativeOnSubmit={ev => ev.preventDefault()}>
+        <el-form ref="form" {...wrapProps}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
         </el-form>
       </div>

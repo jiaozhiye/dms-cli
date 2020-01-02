@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 10:36:00
+ * @Last Modified time: 2020-01-02 14:05:49
  */
 'use strict';
 
@@ -32,7 +32,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: utils.resolve('/'),
   entry: {
-    app: ['babel-polyfill', utils.resolve('src/main.js')]
+    app: [utils.resolve('src/main.js')]
   },
   output: {
     path: config.build.assetsRoot,

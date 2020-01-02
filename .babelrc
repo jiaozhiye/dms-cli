@@ -1,21 +1,10 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "modules": false,
-        "targets": {
-          "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
-        }
-      }
-    ],
-    "stage-2"
-  ],
+  "presets": [["@babel/preset-env", { "modules": false, "corejs": 3, "useBuiltIns": "usage" }], "@vue/babel-preset-jsx"],
   "plugins": [
-    "jsx-v-model",
-    "transform-vue-jsx",
-    "transform-runtime",
-    "syntax-dynamic-import"
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }]
     // [
     //   "component",
     //   {
