@@ -286,7 +286,10 @@ export default {
           label: '上传身份证',
           fieldName: 'wayPicture',
           placeholder: '上传身份证...',
-          rules: [{ required: true, message: '请上传身份证', trigger: 'change' }],
+          rules: [
+            { required: true, message: '请上传身份证', trigger: 'change' },
+            { limit: 2, validator: this.validateFn, message: '请上传两张图片', trigger: 'change' }
+          ],
           upload: {
             actionUrl: '/api/file/oss/upload',
             fixedSize: [5, 3],
@@ -295,10 +298,16 @@ export default {
             isCalcHeight: true
           },
           change: val => {
-            console.log(111, val);
+            // console.log(111, val);
           }
         }
       ];
+    },
+    validateFn(rule, value, callback) {
+      if (value.length < rule.limit) {
+        return callback(new Error(rule.message));
+      }
+      callback();
     },
     closeDrawer() {
       this.$emit('close', false);

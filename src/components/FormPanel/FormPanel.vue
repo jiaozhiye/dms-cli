@@ -811,7 +811,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+        <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <UploadCropper
             actionUrl={upload.actionUrl}
@@ -836,7 +836,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
       return (
-        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+        <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <UploadFile
             actionUrl={upload.actionUrl}
@@ -1138,6 +1138,14 @@ export default {
       this.excuteFormData(this.form);
       // 清空变量，释放内存
       cloneForm = null;
+      // 解决 附件/图片 重复校验的 bug
+      this.$nextTick(() => {
+        this.formItemList.forEach(x => {
+          if (['UPLOAD_FILE', 'UPLOAD_IMG'].includes(x.type)) {
+            this.doClearValidate(this.$refs[x.fieldName]);
+          }
+        });
+      });
     },
     createFormLayout() {
       const unfixTypes = ['MULTIPLE_CHECKBOX', 'TEXT_AREA', 'TINYMCE', 'UPLOAD_IMG', 'UPLOAD_FILE'];
