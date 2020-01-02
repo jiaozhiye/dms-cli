@@ -970,6 +970,7 @@ export default {
       ) : null;
     },
     createFormLayout() {
+      const unfixTypes = ['TEXT_AREA'];
       const { cols, rows, expand, collapse } = this;
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
@@ -977,7 +978,7 @@ export default {
       const count = expand ? formItems.length : defaultPlayRows * cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} type={Node.type} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} type={unfixTypes.includes(Node.type) ? 'UN_FIXED' : 'FIXED'} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );
@@ -1058,10 +1059,11 @@ export default {
 <style lang="less">
 .top-filter {
   .el-col {
-    &:not([type='TEXT_AREA']) {
-      height: 32px;
-    }
+    min-height: 32px;
     margin-bottom: 12px;
+    &[type='FIXED'] {
+      height: 32px !important;
+    }
     .el-form-item {
       margin-bottom: 0;
       .el-form-item__label {

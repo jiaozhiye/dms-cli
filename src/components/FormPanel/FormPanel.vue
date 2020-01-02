@@ -1140,6 +1140,7 @@ export default {
       cloneForm = null;
     },
     createFormLayout() {
+      const unfixTypes = ['MULTIPLE_CHECKBOX', 'TEXT_AREA', 'TINYMCE', 'UPLOAD_IMG', 'UPLOAD_FILE'];
       const colSpan = 24 / this.cols;
       const formItems = this.createFormItem().filter(item => item !== null);
       const colFormItems = formItems.map((Node, i) => {
@@ -1149,7 +1150,7 @@ export default {
         return (
           <el-col
             key={i}
-            type={Node.type}
+            type={unfixTypes.includes(Node.type) ? 'UN_FIXED' : 'FIXED'}
             id={Node.type !== 'BREAK_SPACE' ? `fp-${Node.fieldName}` : null}
             offset={offsetLeft}
             span={Node.type !== 'BREAK_SPACE' ? spans : 24}
@@ -1290,10 +1291,11 @@ export default {
 <style lang="less">
 .form-panel {
   .el-col {
-    &:not([type='TEXT_AREA']) {
-      height: 32px;
-    }
+    min-height: 32px;
     margin-bottom: 12px;
+    &[type='FIXED'] {
+      height: 32px !important;
+    }
     .el-form-item {
       margin-bottom: 0;
       .el-form-item__label {
