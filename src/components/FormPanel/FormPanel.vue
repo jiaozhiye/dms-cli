@@ -259,7 +259,7 @@ export default {
             }}
             minlength={minlength}
             maxlength={maxlength}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             readonly={readonly}
             disabled={disabled}
             style={{ ...style }}
@@ -289,7 +289,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-input-number
             v-model={form[fieldName]}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             controls-position="right"
@@ -385,7 +385,7 @@ export default {
             <el-input
               slot="reference"
               value={this.createInputTreeValue(fieldName, itemList)}
-              placeholder={placeholder}
+              placeholder={!disabled ? placeholder : ''}
               readonly={readonly}
               disabled={disabled}
               clearable
@@ -423,7 +423,7 @@ export default {
             <el-input
               slot="reference"
               value={this[`${fieldName}CascaderTexts`]}
-              placeholder={placeholder}
+              placeholder={!disabled ? placeholder : ''}
               readonly={readonly}
               disabled={disabled}
               clearable
@@ -442,7 +442,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-autocomplete
             v-model={form[fieldName]}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             clearable
@@ -461,7 +461,7 @@ export default {
           <el-autocomplete
             v-model={form[fieldName]}
             valueKey="text"
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             clearable
@@ -627,7 +627,7 @@ export default {
               format: valueFormat
             }}
             value-format={valueFormat}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             onChange={change}
@@ -650,8 +650,8 @@ export default {
             }}
             value-format={valueFormat}
             range-separator="-"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
+            start-placeholder={'开始时间'}
+            end-placeholder={'结束时间'}
             disabled={disabled}
             style={{ ...style }}
             onChange={() => change(form[fieldName])}
@@ -674,7 +674,7 @@ export default {
               step: stepTime
             }}
             value-format={valueFormat}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             onChange={change}
@@ -796,7 +796,7 @@ export default {
           <el-input
             type="textarea"
             v-model={form[fieldName]}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             clearable
@@ -906,7 +906,7 @@ export default {
             collapseTags={multiple}
             filterable={filterable}
             v-model={form[fieldName]}
-            placeholder={placeholder}
+            placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
             clearable={clearable}
