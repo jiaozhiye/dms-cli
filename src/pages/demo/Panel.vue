@@ -122,7 +122,7 @@ export default {
         },
         {
           type: 'DATE',
-          dateType: 'month',
+          dateType: 'date',
           label: '日期',
           fieldName: 'date',
           placeholder: '选择月份',

@@ -512,6 +512,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
+            ref={fieldName}
             type={dateType.replace('exact', '')}
             value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
             onInput={val => {
@@ -525,6 +526,12 @@ export default {
             picker-options={{
               disabledDate: time => {
                 return this.setDisabledDate(time, [minDateTime, maxDateTime]);
+              }
+            }}
+            nativeOnKeydown={ev => {
+              if (ev.keyCode === 13) {
+                form[fieldName] = this.dateToText(ev.target.value);
+                this.$refs[`${fieldName}`].hidePicker();
               }
             }}
             onChange={() => change(form[fieldName])}
@@ -594,6 +601,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
+            ref={fieldName}
             type={dateType.replace('exact', '')}
             value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
             onInput={val => {
@@ -607,10 +615,21 @@ export default {
             unlink-panels={true}
             disabled={disabled}
             style={{ ...style }}
-            onChange={() => change(form[fieldName])}
             pickerOptions={{
               shortcuts: dateType.includes('date') ? pickers : pickers.slice(1)
             }}
+            nativeOnKeydown={ev => {
+              if (ev.keyCode === 13) {
+                const $inputEls = [...this.$refs[fieldName].$el.querySelectorAll('.el-range-input')];
+                const v = $inputEls.findIndex(x => x === ev.target);
+                for (let i = 0; i < $inputEls.length; i++) {
+                  form[fieldName][i] = this.dateToText($inputEls[i].value) || '';
+                }
+                form[fieldName] = [...form[fieldName]];
+                v && this.$refs[`${fieldName}`].hidePicker();
+              }
+            }}
+            onChange={() => change(form[fieldName])}
           />
         </el-form-item>
       );
@@ -1187,6 +1206,10 @@ export default {
           </el-col>
         </el-row>
       ) : null;
+    },
+    dateToText(input = '') {
+      const res = moment(input, 'YYYYMMDD').format('YYYY-MM-DD');
+      return res !== 'Invalid date' ? res : '';
     },
     // 日期格式化
     formatDate(val, vf) {

@@ -488,6 +488,7 @@ export default {
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <el-date-picker
+            ref={fieldName}
             type={dateType.replace('exact', '')}
             value={this.formatDate(form[fieldName], conf[dateType].valueFormat)}
             onInput={val => {
@@ -501,6 +502,12 @@ export default {
             picker-options={{
               disabledDate: time => {
                 return this.setDisabledDate(time, [minDateTime, maxDateTime]);
+              }
+            }}
+            nativeOnKeydown={ev => {
+              if (ev.keyCode === 13) {
+                form[fieldName] = this.dateToText(ev.target.value);
+                this.$refs[fieldName].hidePicker();
               }
             }}
             onChange={() => change(form[fieldName])}
@@ -573,6 +580,7 @@ export default {
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
           <div class="range-date" style={{ ...style }}>
             <el-date-picker
+              ref={`${fieldName}-start`}
               type={dateType.replace('exact', '').slice(0, -5)}
               value={this.formatDate(form[fieldName][0], conf[dateType].valueFormat)}
               onInput={val => {
@@ -589,12 +597,19 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[0]}
               disabled={disabled}
+              nativeOnKeydown={ev => {
+                if (ev.keyCode === 13) {
+                  form[fieldName] = [this.dateToText(ev.target.value), form[fieldName][1]];
+                  this.$refs[`${fieldName}-start`].hidePicker();
+                }
+              }}
               onChange={() => change(form[fieldName])}
             />
             <span class={disabled ? 'is-disabled' : ''} style="display: inline-block; line-height: 26px; text-align: center; width: 14px;">
               -
             </span>
             <el-date-picker
+              ref={`${fieldName}-end`}
               type={dateType.replace('exact', '').slice(0, -5)}
               value={this.formatDate(form[fieldName][1], conf[dateType].valueFormat)}
               onInput={val => {
@@ -610,6 +625,12 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[1]}
               disabled={disabled}
+              nativeOnKeydown={ev => {
+                if (ev.keyCode === 13) {
+                  form[fieldName] = [form[fieldName][0], this.dateToText(ev.target.value)];
+                  this.$refs[`${fieldName}-end`].hidePicker();
+                }
+              }}
               onChange={() => change(form[fieldName])}
             />
           </div>
@@ -984,6 +1005,10 @@ export default {
         );
       });
       return [...colFormItems, this.createButton(defaultPlayRows, formItems.length)];
+    },
+    dateToText(input = '') {
+      const res = moment(input, 'YYYYMMDD').format('YYYY-MM-DD');
+      return res !== 'Invalid date' ? res : '';
     },
     // 日期格式化
     formatDate(val, vf) {
