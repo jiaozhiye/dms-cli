@@ -4,7 +4,7 @@
       ref="upload"
       action="#"
       list-type="picture-card"
-      accept="image/jpeg, image/png, image/bmp"
+      accept="image/jpg, image/jpeg, image/png, image/bmp"
       :limit="limit"
       :multiple="false"
       :auto-upload="false"
@@ -35,13 +35,13 @@
       <div slot="tip" class="el-upload__tip">{{ `只能上传 ${fileTypes.join(',')} 格式的图片` }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
-    <BaseDialog :visible.sync="dialogVisible" title="图片预览">
+    <BaseDialog :visible.sync="previewVisible" title="图片预览" destroy-on-close>
       <div class="preview-wrap">
         <img :src="dialogImageUrl" alt />
       </div>
     </BaseDialog>
     <!-- 剪裁组件弹窗 -->
-    <BaseDialog :visible.sync="cropperModel" title="图片裁剪" width="800" @close="beforeClose">
+    <BaseDialog :visible.sync="cropperVisible" title="图片裁剪" width="800" destroy-on-close>
       <CropperPanel ref="uploadCropper" :img-file="file" :fixed-number="fixedSize" :loading.sync="isLoading" @upload="uploadHandler" />
     </BaseDialog>
   </div>
@@ -111,8 +111,8 @@ export default {
     return {
       file: null, // 当前被选择的图片文件
       fileList: this.initialValue,
-      dialogVisible: false,
-      cropperModel: false,
+      previewVisible: false,
+      cropperVisible: false,
       isLoading: false
     };
   },
@@ -138,20 +138,24 @@ export default {
   methods: {
     handlePreview(index) {
       this.dialogImageUrl = this.fileList[index].url;
-      this.dialogVisible = true;
+      this.previewVisible = true;
     },
     handleRemove(index) {
       this.fileList.splice(index, 1);
+      this.clearFiles();
     },
     changeHandler(file, files) {
       if (this.uid === file.uid) return;
       this.uid = file.uid;
       this.file = file;
-      this.cropperModel = true;
+      this.cropperVisible = true;
     },
     uploadHandler(data) {
       this.fileData = data;
       this.$refs.upload.submit();
+    },
+    clearFiles() {
+      this.$refs.upload.clearFiles();
     },
     async upload() {
       const { params } = this.$props;
@@ -177,11 +181,8 @@ export default {
         this.$emit('error', err);
         this.$message.error('图片上传失败！');
       }
-      this.cropperModel = false;
+      this.cropperVisible = false;
       this.isLoading = false;
-    },
-    beforeClose() {
-      this.cropperModel = false;
     },
     setUploadWrapHeight() {
       const iHeight = !this.isCalcHeight ? this.height : Number.parseInt((this.width * this.fixedSize[1]) / this.fixedSize[0]);
