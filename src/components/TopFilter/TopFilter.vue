@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-02 16:54:42
+ * @Last Modified time: 2020-01-06 10:52:43
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -44,7 +44,6 @@ export default {
     }
   },
   data() {
-    this.treeProps = { children: 'children', label: 'text' };
     this.prevForm = null;
     this.arrayTypes = ['RANGE_DATE', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
     return {
@@ -317,6 +316,12 @@ export default {
     INPUT_TREE(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, change = () => {} } = option;
+      const treeWrapProps = {
+        props: {
+          props: { children: 'children', label: 'text' },
+          data: itemList
+        }
+      };
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -343,9 +348,8 @@ export default {
               />
               <el-tree
                 ref={`tree-${fieldName}`}
+                {...treeWrapProps}
                 style={{ marginTop: '4px' }}
-                data={itemList}
-                props={this.treeProps}
                 defaultExpandAll={true}
                 expandOnClickNode={false}
                 filterNodeMethod={this.filterNodeHandle}

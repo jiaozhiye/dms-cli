@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-23 17:09:07
+ * @Last Modified time: 2020-01-06 10:14:18
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -2005,8 +2005,9 @@ export default {
   }
 }
 .autocomplete {
-  min-width: 200px;
   width: auto !important;
+  min-width: 200px;
+  max-width: 84vw;
   .el-autocomplete-suggestion__wrap {
     ul {
       width: 100%;
