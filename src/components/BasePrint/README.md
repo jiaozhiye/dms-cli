@@ -16,6 +16,7 @@
 
 - data{Object/Array|打印的数据}
 - template{String|调用的打印模板路径，默认前缀为: @/pages/printTemplate/}
+- printerType{String|打印机类型，激光/针式，laser/stylus}
 - printCopies{Number|打印的份数，默认是 1}
 - direction{String|打印方向 vertical/horizontal，默认为纵向打印 vertical}
 - alwaysPrint{Boolean|是否按内容走纸(连续无分页打印)，默认是整张走纸 false}
