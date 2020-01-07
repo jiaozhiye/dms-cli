@@ -254,7 +254,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max = 99999999, step = 1, precision, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, step = 1, precision, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -278,7 +278,7 @@ export default {
     },
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, min = 0, max = 99999999, step = 1, precision, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max, step = 1, precision, readonly, disabled, change = () => {} } = option;
       const [startVal, endVal] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
