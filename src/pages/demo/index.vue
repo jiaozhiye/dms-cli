@@ -112,7 +112,7 @@ export default {
           readonly: true
         },
         {
-          type: 'SELECT',
+          type: 'MULTIPLE_SELECT',
           label: '所属分类',
           fieldName: 'cid',
           placeholder: '所属分类',

@@ -743,21 +743,27 @@ export default {
             multipleLimit={limit}
             collapseTags={multiple}
             filterable={filterable}
-            v-model={form[fieldName]}
+            value={form[fieldName]}
+            onInput={val => {
+              if (!(multiple && filterable)) {
+                form[fieldName] = val;
+              } else {
+                setTimeout(() => (form[fieldName] = val), 20);
+              }
+            }}
             placeholder={placeholder}
             disabled={disabled}
             style={{ ...style }}
             clearable={clearable}
-            onChange={change}
             nativeOnKeydown={this.enterEventHandle}
+            onChange={val => {
+              change(val);
+              if (!filterable) return;
+              this.filterMethodHandle(fieldName, '');
+            }}
             filterMethod={queryString => {
               if (!filterable) return;
               this.filterMethodHandle(fieldName, queryString);
-            }}
-            on-visible-change={val => {
-              if (filterable && !val) {
-                setTimeout(() => this.filterMethodHandle(fieldName, ''), 300);
-              }
             }}
           >
             {itemList.map(x => (
