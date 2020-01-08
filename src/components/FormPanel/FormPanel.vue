@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-06 10:52:45
+ * @Last Modified time: 2020-01-08 15:19:28
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -969,12 +969,18 @@ export default {
     },
     // 下拉框的筛选方法
     filterMethodHandle(fieldName, queryString = '') {
-      const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
-      if (!this[`${fieldName}OriginItemList`] && !_.isEqual(this[`${fieldName}OriginItemList`], itemList)) {
+      const target = this.formItemList.find(x => x.fieldName === fieldName);
+      const itemList = target.itemList || this[`${fieldName}ItemList`] || [];
+      if (!this[`${fieldName}OriginItemList`]) {
         this[`${fieldName}OriginItemList`] = itemList;
       }
       const res = queryString ? this[`${fieldName}OriginItemList`].filter(this.createSearchHelpFilter(queryString)) : this[`${fieldName}OriginItemList`];
-      this.formItemList.find(x => x.fieldName === fieldName).itemList = res;
+      if (!this[`${fieldName}ItemList`]) {
+        target.itemList = res;
+      } else {
+        this[`${fieldName}ItemList`] = res;
+        this.$forceUpdate();
+      }
     },
     // 获取下拉框数据
     async querySelectOptions({ fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' }, fieldName) {

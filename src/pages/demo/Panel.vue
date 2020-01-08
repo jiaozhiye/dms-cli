@@ -139,6 +139,7 @@ export default {
           label: '兴趣爱好',
           fieldName: 'hobby',
           placeholder: '兴趣爱好',
+          filterable: true,
           itemList: [
             { text: '篮球', value: '1' },
             { text: '足球', value: '2' },

@@ -179,6 +179,9 @@ export default {
         border-color: @borderColor;
         .el-tabs__item {
           border-left-color: @borderColor;
+          &.is-active {
+            font-weight: 700;
+          }
         }
       }
     }

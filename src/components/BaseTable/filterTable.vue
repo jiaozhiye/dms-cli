@@ -249,15 +249,16 @@ export default {
       return (
         <span
           slot="reference"
-          style={{ paddingLeft: '10px', lineHeight: '34px', whiteSpace: 'normal' }}
+          class="th-cell"
           onClick={e => {
             e.stopPropagation();
             this.closeAllPopover(dataIndex);
             this.openCurPopover(e.target, dataIndex);
           }}
         >
-          <span style="pointer-events: none" class={this.isValueFalse(this.search[`${dataIndex}Val`]) ? '' : 'topFilterSelected'}>
-            {title} <i class="el-icon-arrow-down" />
+          <span class={this.isValueFalse(this.search[`${dataIndex}Val`]) ? 'th-cell-text' : 'th-cell-text selected'}>
+            <span class="title">{title}</span>
+            <i class="icon el-icon-arrow-down" />
           </span>
         </span>
       );
@@ -634,8 +635,26 @@ export default {
   margin-top: @moduleMargin;
   overflow: visible;
 }
-.topFilterSelected {
-  color: @primaryColor;
+.th-cell {
+  padding-left: 10px;
+  line-height: 34px;
+  white-space: normal;
+  .th-cell-text {
+    pointer-events: none;
+    .title {
+      color: @textColor;
+      font-weight: 700;
+    }
+    .icon {
+      margin-left: 4px;
+    }
+    &.selected {
+      .title,
+      .icon {
+        color: @primaryColor !important;
+      }
+    }
+  }
 }
 </style>
 

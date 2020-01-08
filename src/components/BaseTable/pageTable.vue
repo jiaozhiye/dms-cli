@@ -1927,6 +1927,8 @@ export default {
       background-color: @tableBgColor !important;
       .cell {
         overflow: visible;
+        color: @textColor;
+        font-weight: 700;
         &.is-required::before {
           content: '*';
           color: @dangerColor;
