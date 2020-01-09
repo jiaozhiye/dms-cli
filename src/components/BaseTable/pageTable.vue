@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-06 10:14:18
+ * @Last Modified time: 2020-01-09 15:42:53
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -377,7 +377,7 @@ export default {
       if (Array.isArray(data)) {
         total = data.length;
       } else {
-        total = _.get(data, keypath.replace(/[^\.]+$/, 'total')) || 0;
+        total = _.get(data, keypath.replace(/[^\.]+$/, 'total')) || _.get(data, keypath, []).length || 0;
       }
       // 处理服务端合计
       if (this.isShowSummary) {

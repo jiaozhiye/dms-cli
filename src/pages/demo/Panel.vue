@@ -84,7 +84,6 @@ export default {
   methods: {
     async getFormData() {
       const res = await this.$refs.form.GET_FORM_DATA();
-      console.log(111, res);
     },
     heightChangeHandle(height) {
       this.height = `${height.slice(0, -1)} - 60px)`;
@@ -115,10 +114,7 @@ export default {
             { text: '资讯', value: '2' }
           ],
           initialValue: '2',
-          rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }],
-          change: val => {
-            console.log(222, val);
-          }
+          rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
         {
           type: 'DATE',
@@ -164,6 +160,7 @@ export default {
           label: '数量',
           fieldName: 'number',
           precision: 2,
+          maxlength: 3,
           offsetRightCols: 1,
           placeholder: '请输入数量...',
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]

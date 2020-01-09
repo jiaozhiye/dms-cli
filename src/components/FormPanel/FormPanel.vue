@@ -282,7 +282,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, step = 1, precision, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, maxlength, min = 0, max, step = 1, precision, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -297,7 +297,15 @@ export default {
             step={step}
             precision={precision}
             clearable
-            onChange={change}
+            onChange={val => {
+              if (maxlength > 0 && typeof val !== 'undefined') {
+                const res = Number.parseInt(val).toString();
+                if (res.length > maxlength) {
+                  form[fieldName] = Number(res.slice(0, maxlength));
+                }
+              }
+              change(form[fieldName]);
+            }}
           />
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
@@ -512,6 +520,7 @@ export default {
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
+      let tmpVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -531,6 +540,16 @@ export default {
               disabledDate: time => {
                 return this.setDisabledDate(time, [minDateTime, maxDateTime]);
               }
+            }}
+            nativeOnInput={ev => {
+              const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
+              tmpVal = val;
+              ev.target.value = val;
+            }}
+            onBlur={val => {
+              if (!tmpVal) return;
+              form[fieldName] = this.dateToText(tmpVal);
+              tmpVal = undefined;
             }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -574,6 +593,10 @@ export default {
         const start = new Date();
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
         picker.$emit('pick', [start, end]);
+      };
+      const getInputIndex = (fieldName, el) => {
+        const $inputEls = [...this.$refs[fieldName].$el.querySelectorAll('.el-range-input')];
+        return $inputEls.findIndex(x => x === el);
       };
       const pickers = [
         {
@@ -622,12 +645,22 @@ export default {
             pickerOptions={{
               shortcuts: dateType.includes('date') ? pickers : pickers.slice(1)
             }}
+            nativeOnInput={ev => {
+              const v = getInputIndex(fieldName, ev.target);
+              const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
+              form[fieldName][v] = val;
+            }}
+            onBlur={val => {
+              for (let i = 0; i < 2; i++) {
+                form[fieldName][i] = this.dateToText(form[fieldName][i]) || '';
+              }
+              form[fieldName] = [...form[fieldName]];
+            }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
-                const $inputEls = [...this.$refs[fieldName].$el.querySelectorAll('.el-range-input')];
-                const v = $inputEls.findIndex(x => x === ev.target);
-                for (let i = 0; i < $inputEls.length; i++) {
-                  form[fieldName][i] = this.dateToText($inputEls[i].value) || '';
+                const v = getInputIndex(fieldName, ev.target);
+                for (let i = 0; i < 2; i++) {
+                  form[fieldName][i] = this.dateToText(form[fieldName][i]) || '';
                 }
                 form[fieldName] = [...form[fieldName]];
                 v && this.$refs[`${fieldName}`].hidePicker();
@@ -926,7 +959,6 @@ export default {
           <el-select
             multiple={multiple}
             multipleLimit={limit}
-            collapseTags={multiple}
             filterable={filterable}
             value={form[fieldName]}
             onInput={val => {
@@ -1382,6 +1414,13 @@ export default {
       }
       .el-select {
         width: 100%;
+        .el-select__tags {
+          height: 24px;
+          overflow-y: auto;
+          .el-select__input {
+            height: inherit;
+          }
+        }
       }
       .el-autocomplete {
         width: 100%;

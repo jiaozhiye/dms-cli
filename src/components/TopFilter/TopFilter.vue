@@ -488,6 +488,7 @@ export default {
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
+      let tmpVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -507,6 +508,16 @@ export default {
               disabledDate: time => {
                 return this.setDisabledDate(time, [minDateTime, maxDateTime]);
               }
+            }}
+            nativeOnInput={ev => {
+              const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
+              tmpVal = val;
+              ev.target.value = val;
+            }}
+            onBlur={val => {
+              if (!tmpVal) return;
+              form[fieldName] = this.dateToText(tmpVal);
+              tmpVal = undefined;
             }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -579,6 +590,8 @@ export default {
           }
         }
       ];
+      let startVal;
+      let endVal;
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -601,6 +614,16 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[0]}
               disabled={disabled}
+              nativeOnInput={ev => {
+                const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
+                startVal = val;
+                ev.target.value = val;
+              }}
+              onBlur={val => {
+                if (!startVal) return;
+                form[fieldName] = [this.dateToText(startVal), form[fieldName][1]];
+                startVal = undefined;
+              }}
               nativeOnKeydown={ev => {
                 if (ev.keyCode === 13) {
                   form[fieldName] = [this.dateToText(ev.target.value), form[fieldName][1]];
@@ -629,6 +652,16 @@ export default {
               style={{ width: `calc(50% - 7px)` }}
               placeholder={conf[dateType].placeholder[1]}
               disabled={disabled}
+              nativeOnInput={ev => {
+                const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
+                endVal = val;
+                ev.target.value = val;
+              }}
+              onBlur={val => {
+                if (!endVal) return;
+                form[fieldName] = [form[fieldName][0], this.dateToText(endVal)];
+                endVal = undefined;
+              }}
               nativeOnKeydown={ev => {
                 if (ev.keyCode === 13) {
                   form[fieldName] = [form[fieldName][0], this.dateToText(ev.target.value)];
