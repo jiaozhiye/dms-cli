@@ -488,7 +488,7 @@ export default {
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
-      let tmpVal;
+      let currentVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -511,13 +511,14 @@ export default {
             }}
             nativeOnInput={ev => {
               const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
-              tmpVal = val;
+              currentVal = val;
               ev.target.value = val;
             }}
             onBlur={val => {
-              if (!tmpVal) return;
-              form[fieldName] = this.dateToText(tmpVal);
-              tmpVal = undefined;
+              if (!currentVal) return;
+              form[fieldName] = this.dateToText(currentVal);
+              change(form[fieldName]);
+              currentVal = undefined;
             }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {

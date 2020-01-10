@@ -520,7 +520,7 @@ export default {
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
-      let tmpVal;
+      let currentVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -543,13 +543,14 @@ export default {
             }}
             nativeOnInput={ev => {
               const val = ev.target.value.replace(/(\d{4})-?(\d{2})-?(\d{2})/, '$1-$2-$3');
-              tmpVal = val;
+              currentVal = val;
               ev.target.value = val;
             }}
             onBlur={val => {
-              if (!tmpVal) return;
-              form[fieldName] = this.dateToText(tmpVal);
-              tmpVal = undefined;
+              if (!currentVal) return;
+              form[fieldName] = this.dateToText(currentVal);
+              change(form[fieldName]);
+              currentVal = undefined;
             }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -594,9 +595,17 @@ export default {
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
         picker.$emit('pick', [start, end]);
       };
+      // 获取 input 节点的索引
       const getInputIndex = (fieldName, el) => {
         const $inputEls = [...this.$refs[fieldName].$el.querySelectorAll('.el-range-input')];
         return $inputEls.findIndex(x => x === el);
+      };
+      // 设置日期区间数据的值
+      const setDateRangeValue = () => {
+        for (let i = 0; i < 2; i++) {
+          form[fieldName][i] = this.dateToText(form[fieldName][i]) || '';
+        }
+        form[fieldName] = [...form[fieldName]];
       };
       const pickers = [
         {
@@ -651,19 +660,12 @@ export default {
               form[fieldName][v] = val;
             }}
             onBlur={val => {
-              for (let i = 0; i < 2; i++) {
-                form[fieldName][i] = this.dateToText(form[fieldName][i]) || '';
-              }
-              form[fieldName] = [...form[fieldName]];
+              setDateRangeValue();
             }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
-                const v = getInputIndex(fieldName, ev.target);
-                for (let i = 0; i < 2; i++) {
-                  form[fieldName][i] = this.dateToText(form[fieldName][i]) || '';
-                }
-                form[fieldName] = [...form[fieldName]];
-                v && this.$refs[`${fieldName}`].hidePicker();
+                setDateRangeValue();
+                getInputIndex(fieldName, ev.target) && this.$refs[`${fieldName}`].hidePicker();
               }
             }}
             onChange={() => change(form[fieldName])}

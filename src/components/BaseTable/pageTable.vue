@@ -792,7 +792,7 @@ export default {
               minWidth={x.minWidth || this.calcHeaderWidth(x.title)}
               fixed={x.fixed}
               align={x.align}
-              labelClassName={x.editRequired && 'is-required'}
+              labelClassName={x.editRequired ? 'is-required' : ''}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
               sortable={config.table.serverSort || x.sorter ? 'custom' : false}
