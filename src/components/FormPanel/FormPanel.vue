@@ -48,7 +48,7 @@ export default {
   },
   data() {
     this.prevForm = null;
-    this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
+    this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
       visible: {},
@@ -308,6 +308,33 @@ export default {
             }}
           />
           {this.createFormItemDesc(descOptions)}
+        </el-form-item>
+      );
+    },
+    RANGE_INPUT(option) {
+      const { form } = this;
+      const { label, fieldName, labelWidth, labelOptions, readonly, disabled, change = () => {} } = option;
+      const [startFieldName, endFieldName] = fieldName.split('|');
+      return (
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
+          <el-input
+            v-model={form[fieldName][0]}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={() => change({ [startFieldName]: form[fieldName][0] })}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-input
+            v-model={form[fieldName][1]}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            clearable
+            onChange={() => change({ [endFieldName]: form[fieldName][1] })}
+          />
         </el-form-item>
       );
     },
