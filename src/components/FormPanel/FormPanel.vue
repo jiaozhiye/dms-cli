@@ -1496,6 +1496,9 @@ export default {
       .desc-text {
         font-size: @textSizeSecondary;
       }
+      &.is-required .el-form-item__label {
+        color: #f5222d;
+      }
     }
   }
 }

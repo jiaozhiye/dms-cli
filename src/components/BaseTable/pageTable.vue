@@ -1130,7 +1130,7 @@ export default {
       }
     },
     // 单元格双击时
-    cellDbclickHandler(row, column, cell, e) {
+    rowDbclickHandler(row, column, e) {
       const { property } = column;
       if (property === '-' || property === 'column-action') return;
       this.onEnterEvent(row);
@@ -1855,7 +1855,7 @@ export default {
         'sort-change': this.sortChangeHandler,
         'selection-change': this.handleSelectionChange,
         'cell-click': this.cellClickHandler,
-        'cell-dblclick': this.cellDbclickHandler,
+        'row-dblclick': this.rowDbclickHandler,
         'header-dragend': this.headerDragendHandler
       },
       style: { width: '100%' }
