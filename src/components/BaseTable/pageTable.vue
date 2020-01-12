@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-09 15:42:53
+ * @Last Modified time: 2020-01-12 14:14:15
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -551,6 +551,9 @@ export default {
               if (_.isNumber(column.min) && Number(val) < column.min) return;
             }
             _.set(props.row, dataIndex, val);
+            // column 配置的 input 事件
+            let inputHandle = column.onInput;
+            inputHandle && inputHandle({ [`${props.row._uid}|${dataIndex}`]: val }, props.row);
           }}
           onChange={value => {
             if (editType === 'number') {
@@ -987,16 +990,17 @@ export default {
     },
     // 单元格数据变化时的处理方法
     editCellChangeHandle(val, uid, key) {
-      // 记录修改行操作
       const target = this.list.filter(x => !x.isNewRow).find(x => x._uid === uid);
       if (target) {
-        // 去重
+        // 记录修改行操作 去重
         this.actionsLog.update = [...new Set([...this.actionsLog.update, target])];
       }
-      this.onCellChange(
-        { [`${uid}|${key}`]: val },
-        this.list.find(x => x._uid === uid)
-      );
+      // column 配置的 change 事件
+      const changeHandle = this.editableColumns.find(x => x.dataIndex === key).onChange;
+      const row = this.list.find(x => x._uid === uid);
+      changeHandle && changeHandle({ [`${uid}|${key}`]: val }, row);
+      // table 的 cellChange 事件
+      this.onCellChange({ [`${uid}|${key}`]: val }, row);
     },
     // ajax 获取搜索帮助服务端数据
     async querySearchAsync(column, row, queryString = '', cb) {

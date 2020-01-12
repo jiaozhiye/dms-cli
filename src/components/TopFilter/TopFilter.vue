@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-08 15:20:38
+ * @Last Modified time: 2020-01-12 14:43:06
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -81,6 +81,10 @@ export default {
           target[x.fieldName] = x.rules;
         });
       return target;
+    },
+    isCollapse() {
+      const total = this.list.filter(x => !x.hidden).length;
+      return this.collapse && total >= this.cols;
     }
   },
   watch: {
@@ -114,7 +118,7 @@ export default {
       this.$nextTick(() => this.doClearValidate(this.$refs.form));
     },
     expand(val) {
-      if (!this.collapse) return;
+      if (!this.isCollapse) return;
       this.$emit('onCollapse', val);
     }
   },
@@ -1043,12 +1047,12 @@ export default {
       this.expand = !this.expand;
     },
     createButton(rows, total) {
-      const { cols, expand, collapse, loading, disabled } = this;
+      const { cols, expand, isCollapse, loading, disabled } = this;
       const colSpan = 24 / cols;
       // 默认收起
       let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
       // 展开
-      if (!collapse || expand) {
+      if (!isCollapse || expand) {
         offset = cols - (total % cols) - 1;
       }
       return this.isSubmitBtn ? (
@@ -1059,7 +1063,7 @@ export default {
           <el-button size="small" disabled={disabled} onClick={this.resetForm}>
             重 置
           </el-button>
-          {collapse ? (
+          {isCollapse ? (
             <el-button size="small" type="text" disabled={disabled} onClick={this.toggleHandler}>
               {expand ? '收起' : '展开'} <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
@@ -1069,14 +1073,14 @@ export default {
     },
     createFormLayout() {
       const unfixTypes = ['TEXT_AREA'];
-      const { cols, rows, expand, collapse } = this;
+      const { cols, rows, expand, isCollapse } = this;
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
       const defaultPlayRows = rows > Math.ceil(formItems.length / cols) ? Math.ceil(formItems.length / cols) : rows;
       const count = expand ? formItems.length : defaultPlayRows * cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
-          <el-col key={i} type={unfixTypes.includes(Node.type) ? 'UN_FIXED' : 'FIXED'} span={colSpan} style={{ display: !collapse || i < count ? 'block' : 'none' }}>
+          <el-col key={i} type={unfixTypes.includes(Node.type) ? 'UN_FIXED' : 'FIXED'} span={colSpan} style={{ display: !isCollapse || i < count ? 'block' : 'none' }}>
             {Node}
           </el-col>
         );

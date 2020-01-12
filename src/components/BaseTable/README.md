@@ -145,6 +145,8 @@ http://localhost:8080/table
 - editItems{Array|select 或 select-multiple 类型单元格编辑下拉框的数据 [{text: '', value: ''}]；checkbox 类型的单元格编辑的数据 [{text: '', trueValue: ''}, {text: '', falseValue: ''}]}
 - disabled{Boolean|指定可编辑单元格的禁用状态，默认是 false}
 - editDisableRender{Function|可编辑的单元格在强制指定不可编辑状态下的渲染函数，参数是当前单元格作用域对象，返回值是 JSX 类型节点}
+- onChange{Function|单元格的值变化的事件，针对所有可编辑类型都生效，参数 1 -> {`uid|dataIndex`: val}，参数 2 -> 行数据}
+- onInput{Function|输入框类型的单元格，输入变化的 input 事件，参数 1 -> {`uid|dataIndex`: val}，参数 2 -> 行数据}
 - searchHelper{Object|单元格搜索帮助}
   - 搜索帮助的配置：
   - {
