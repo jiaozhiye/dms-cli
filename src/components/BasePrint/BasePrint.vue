@@ -68,9 +68,10 @@ export default {
       // 页面预览
       if (this.isPreview) {
         this.createPreviewNodes(_html_);
+      } else {
+        // 执行打印
+        this.createPrintPage(_html_);
       }
-      // 执行打印
-      this.createPrintPage(_html_);
     },
     createPrintPage(printHTML) {
       if (!this.LODOP) {
