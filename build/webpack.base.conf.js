@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-02 14:05:49
+ * @Last Modified time: 2020-01-14 22:23:17
  */
 'use strict';
 
@@ -11,11 +11,6 @@ const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
 const { VueLoaderPlugin } = require('vue-loader');
-
-// 多进程处理 Loader
-const HappyPack = require('happypack');
-const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 // Eslint 校验
 const createLintingRule = () => ({
@@ -54,18 +49,15 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-            ...utils.cssLoaders({
-              sourceMap: process.env.NODE_ENV === 'production' ? config.build.productionSourceMap : config.dev.cssSourceMap,
-              extract: process.env.NODE_ENV === 'production'
-            }),
-            js: 'happypack/loader?id=babel'
-          }
+          loaders: utils.cssLoaders({
+            sourceMap: process.env.NODE_ENV === 'production' ? config.build.productionSourceMap : config.dev.cssSourceMap,
+            extract: process.env.NODE_ENV === 'production'
+          })
         }
       },
       {
         test: /\.(js|jsx)$/,
-        use: 'happypack/loader?id=babel',
+        use: 'babel-loader?cacheDirectory',
         include: [utils.resolve('src')],
         exclude: /node_modules/
       },
@@ -104,13 +96,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new HappyPack({
-      id: 'babel',
-      loaders: ['babel-loader?cacheDirectory=true'],
-      threadPool: happyThreadPool,
-      verbose: true
-    })
-  ]
+  plugins: [new VueLoaderPlugin()]
 };
