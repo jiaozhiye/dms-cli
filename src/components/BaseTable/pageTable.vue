@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-12 14:14:15
+ * @Last Modified time: 2020-01-16 11:14:09
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -311,7 +311,7 @@ export default {
     createTableList(data) {
       const keypath = this.datakey;
       const uidkey = this.uidkey;
-      const dataList = Array.isArray(data) ? data : _.get(data, keypath, []);
+      const dataList = Array.isArray(data) ? data : _.get(data, keypath, []) || [];
       // 说明不是外部对 dataSource 重新赋值，不重新处理数据
       if (dataList.dataMark) return;
       // 设置数据标识符，状态变量

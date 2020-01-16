@@ -68,17 +68,17 @@ export default {
     this.outerWrap = document.querySelector('.scroll-wrapper');
     setTimeout(() => {
       this.formList.find(x => x.fieldName === 'number').initialValue = 20;
-      this.formList[0].labelOptions.initialValue = '22';
-      this.formList[0].labelOptions.itemList = [
-        { text: '搜索1', value: '11' },
-        { text: '搜索2', value: '22' }
-      ];
+      // this.formList[0].labelOptions.initialValue = '22';
+      // this.formList[0].labelOptions.itemList = [
+      //   { text: '搜索1', value: '11' },
+      //   { text: '搜索2', value: '22' }
+      // ];
       this.formList[0].rules = [
         { required: true, message: '请输入标题名称', trigger: 'blur' },
         { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
       ];
       this.content = 'asd';
-      this.formList = [...this.formList];
+      // this.formList = [...this.formList];
     }, 3000);
   },
   methods: {
@@ -122,7 +122,10 @@ export default {
           label: '日期',
           fieldName: 'date',
           placeholder: '选择月份',
-          rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择日期', trigger: 'change' }],
+          change: val => {
+            this.formList.find(x => x.fieldName === 'number').initialValue = 200;
+          }
         },
         {
           type: 'RANGE_DATE', // DATE_TIME

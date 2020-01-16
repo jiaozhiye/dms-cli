@@ -154,6 +154,7 @@ export default {
       this.formItemList.forEach(x => {
         const val = this.getInitialValue(x);
         // 设置 initialValue 为响应式数据
+        delete x['initialValue'];
         this.$set(x, 'initialValue', val);
         // 初始值
         target[x.fieldName] = val;
