@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-16 11:14:09
+ * @Last Modified time: 2020-01-20 19:09:09
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -487,7 +487,7 @@ export default {
           <el-date-picker
             type={conf.dateType}
             size="mini"
-            value={prevValue}
+            value={prevValue ? moment(prevValue).format(momentFormat) : prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder={conf.placeholder}
             format={conf.format}
@@ -996,7 +996,7 @@ export default {
         this.actionsLog.update = [...new Set([...this.actionsLog.update, target])];
       }
       // column 配置的 change 事件
-      const changeHandle = this.editableColumns.find(x => x.dataIndex === key).onChange;
+      const { onChange: changeHandle } = this.editableColumns.find(x => x.dataIndex === key) || {};
       const row = this.list.find(x => x._uid === uid);
       changeHandle && changeHandle({ [`${uid}|${key}`]: val }, row);
       // table 的 cellChange 事件
