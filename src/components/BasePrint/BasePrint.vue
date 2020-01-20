@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-07 19:58:58
+ * @Last Modified time: 2020-01-20 17:41:05
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -86,12 +86,12 @@ export default {
           this.LODOP.SET_PRINT_PAGESIZE(3, this.pageSize[0], 90, ''); // 9mm -> 打印的下边距
         } else {
           // 整张打印
-          this.LODOP.SET_PRINT_PAGESIZE(1, ...this.pageSize, '');
+          this.LODOP.SET_PRINT_PAGESIZE(1, this.pageSize[0], this.pageSize[1], '');
         }
       }
       // 横向
       if (this.direction === 'horizontal') {
-        this.LODOP.SET_PRINT_PAGESIZE(2, ...this.pageSize, '');
+        this.LODOP.SET_PRINT_PAGESIZE(2, this.pageSize[0], this.pageSize[1], '');
         this.LODOP.SET_SHOW_MODE('LANDSCAPE_DEFROTATED', 1);
       }
       this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'width: 100%'); // 设置打印内容的自动缩放

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-07 20:36:00
+ * @Last Modified time: 2020-01-17 10:47:14
  */
 import router from '@/routes';
 import store from '@/store';
@@ -78,8 +78,9 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(to => {
-  if (to.meta && typeof to.meta.title !== 'undefined') {
-    document.title = `${config.systemName}-${to.meta.title}`;
+  const title = to.meta && to.meta.title ? to.meta.title : '';
+  if (title) {
+    document.title = `${config.systemName}-${title}`;
   }
   NProgress.done();
 });
