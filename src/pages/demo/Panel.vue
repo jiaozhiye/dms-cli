@@ -3,7 +3,7 @@
     <div id="wrapper" class="wrapper">
       <Anchor :label-list="labels">
         <div id="row-01" class="line">
-          <FormPanel ref="form" :scrollContainer="outerWrap" :list="formList" label-width="100" form-type="add" />
+          <FormPanel ref="form" :scrollContainer="outerWrap" :initial-value="val" :list="formList" label-width="100" form-type="add" />
         </div>
         <div id="row-02" class="line">
           <el-button @click="visible = true">三级交互</el-button>
@@ -61,24 +61,20 @@ export default {
       ],
       formList: this.createFormList(),
       content: 'qwe',
-      height: ''
+      height: '',
+      val: { zxc: 'aaa' }
     };
   },
   mounted() {
     this.outerWrap = document.querySelector('.scroll-wrapper');
     setTimeout(() => {
-      this.formList.find(x => x.fieldName === 'number').initialValue = 20;
-      // this.formList[0].labelOptions.initialValue = '22';
-      // this.formList[0].labelOptions.itemList = [
-      //   { text: '搜索1', value: '11' },
-      //   { text: '搜索2', value: '22' }
-      // ];
       this.formList[0].rules = [
         { required: true, message: '请输入标题名称', trigger: 'blur' },
         { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
       ];
       this.content = 'asd';
-      // this.formList = [...this.formList];
+      this.$refs.form.SET_FIELDS_VALUE({ zxczxc: '1001', date: '2012-12-12' });
+      this.formList = [...this.formList];
     }, 3000);
   },
   methods: {
@@ -113,7 +109,6 @@ export default {
             { text: '热点', value: '1' },
             { text: '资讯', value: '2' }
           ],
-          initialValue: '2',
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
         {
@@ -124,7 +119,7 @@ export default {
           placeholder: '选择月份',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }],
           change: val => {
-            this.formList.find(x => x.fieldName === 'number').initialValue = 200;
+            this.$refs.form.SET_FIELDS_VALUE({ number: 200 });
           }
         },
         {
@@ -262,7 +257,6 @@ export default {
           type: 'INPUT',
           label: '时间',
           fieldName: 'xcv',
-          initialValue: '13012345678',
           readonly: true,
           secretType: 'phone'
         },

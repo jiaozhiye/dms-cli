@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TopFilter :list="topFilterList" :cols="4" @filterChange="changeHandle" @onCollapse="collapseHandle" />
+    <TopFilter ref="filter" :list="topFilterList" :initial-value="filterValue" :cols="4" @filterChange="changeHandle" @onCollapse="collapseHandle" />
     <button-area :container-style="{ paddingLeft: '80px' }">
       <el-button size="small" type="primary">到货确认</el-button>
       <el-button size="small">明细</el-button>
@@ -56,7 +56,8 @@ export default {
       topFilterList: this.createTopFilters(),
       columns: this.createTableColumns(),
       list: [],
-      printList: printData.data
+      printList: printData.data,
+      filterValue: { qwe: '22', hello: '1,1-2,1-2-1' }
     };
   },
   mounted() {
@@ -66,15 +67,13 @@ export default {
     setTimeout(() => {
       this.BaseTable.STOP_LOADING();
       this.list = [...res.data.items];
-      this.topFilterList.find(x => x.fieldName === 'startTime|endTime').initialValue = ['2019-10-12', '2019-10-28'];
       this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
       this.topFilterList[0].hidden = false;
-      this.topFilterList[0].initialValue = 'asdf';
-      this.topFilterList[0].labelOptions.initialValue = '22';
       this.topFilterList[0].labelOptions.itemList = [
         { text: '搜索1', value: '11' },
         { text: '搜索2', value: '22' }
       ];
+      this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
     }, 3000);
   },
   methods: {
@@ -98,7 +97,7 @@ export default {
               .flat()
               .join('')
               .toUpperCase();
-            this.topFilterList.find(x => x.fieldName === 'zxczxc').initialValue = res;
+            this.$refs.filter.SET_FIELDS_VALUE({ zxczxc: res });
           },
           rules: [
             { required: true, message: '请输入标题名称', trigger: 'blur' },
@@ -170,7 +169,6 @@ export default {
           options: {
             titles: ['品牌', '车型', '车系']
           },
-          initialValue: '1,1-2,1-2-1',
           itemList: [
             {
               text: '一级分类1',

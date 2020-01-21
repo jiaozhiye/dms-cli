@@ -15,6 +15,7 @@ Vue.use(FormPanel);
 `组件参数API`
 
 - list{Array|表单面板组件数据数组，支持动态赋值(数据数组必须是新的引用)}
+- initialValue{Object|表单组件的初始值，只在组件首次加载时生效}
 - formType{String|表单面板的类型 add/edit/show，默认值 add}
 - cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
 - labelWidth{Number|label 标签的宽度，默认是 80}
@@ -32,7 +33,6 @@ Vue.use(FormPanel);
 - offsetLeftCols{Number|表单元素左侧的间隔列数}
 - offsetRightCols{Number|表单元素右侧的间隔列数}
 - placeholder{String|提示文字}
-- initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
 - hidden{Boolean|是否隐藏该表单项}
 - filterable{Boolean|是否开启下拉框的拼音头快速检索功能，默认 false}
@@ -79,7 +79,6 @@ Vue.use(FormPanel);
 
 - labelOptions: {
   - &emsp;fieldName: {String|字段名称 key}
-  - &emsp;initialValue: initialValue{String/Array|默认值}
   - &emsp;itemList: {Array|下拉框(SELECT)的数据，[{text: '', value: ''}]}
   - &emsp;style: {Object|表单元素的 style}
   - &emsp;disabled: {Boolean|禁用}
@@ -132,6 +131,7 @@ Vue.use(FormPanel);
 
 - SUBMIT_FORM{Function|获取所有表单控件数据的集合，返回值为表单数据}
 - RESET_FORM{Function|重置表单控件}
+- SET_FIELDS_VALUE{Function|设置表单字段的值，参数是表单值得集合 { fieldName: val, ... }}
 - GET_FORM_DATA{Function|异步函数，获取表单数据，返回值为数组 [err, formData]}
 
 `示例代码`
@@ -139,14 +139,15 @@ Vue.use(FormPanel);
 ```bash
 # template
 <template>
-  <FormPanel :list="formList" formType="add" @formChange="changeHandle" />
+  <FormPanel :list="formList" :initialValue="formValue" formType="add" @formChange="changeHandle" />
 </template>
 
 # js
 export default {
   data() {
     return {
-      formList: this.createFormList()
+      formList: this.createFormList(),
+      formValue: { title: '1234' }
     };
   },
   methods: {
@@ -163,7 +164,6 @@ export default {
           label: '搜索',
           fieldName: 'title',
           placeholder: '请输入标题名称...',
-          initialValue: '',
           style: { width: '200px' },
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
         },
@@ -197,7 +197,6 @@ export default {
           fieldName: 'wayFiles',
           placeholder: '上传文件...',
           rules: [{ required: true, message: '请上传文件', trigger: 'change' }],
-          initialValue: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
           upload: {
             actionUrl: '/api/file/oss/upload',
             limit: 2,

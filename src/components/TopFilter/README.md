@@ -15,14 +15,15 @@ Vue.use(TopFilter);
 `组件参数API`
 
 - list{Array|头部筛选条件数组，支持动态赋值(数据数组必须是新的引用)}
+- initialValue{Object|表单组件的初始值，只在组件首次加载时生效}
 - cols{Number|每行显示多小列，默认是 3，注意：只能是被 24 整除的值}
-- rows{Number|收起状态显示行数，默认是 1}
+- defaultRows{Number|收起状态显示行数，默认是 1}
 - labelWidth{Number|label 标签的宽度，默认是 80}
-- disabled{Boolean|是否禁用搜索按钮}
+- isBtnDisabled{Boolean|是否禁用搜索按钮}
 - collapse{Boolean|是否显示展开/收起按钮，默认是 true}
 - isSubmitBtn{Boolean|是否显示搜索/重置按钮，默认是 true}
 - filterChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
-- resetChange{Function|点击搜索按钮触发的事件，参数是搜索条件对象}
+- resetChange{Function|点击重置按钮触发的事件，参数是搜索条件对象的初始值}
 - onCollapse{Function|展开-收起时的回调函数，状态变化时处罚，参数是当前状态}
 
 `list 字段配置项`
@@ -32,7 +33,6 @@ Vue.use(TopFilter);
 - labelWidth{String|表单域标签的的宽度，字符串类型，需要加单位(px)}
 - fieldName{String|字段名称 key}
 - placeholder{String|提示文字}
-- initialValue{String/Array|默认值}
 - style{Object|表单元素的 style}
 - hidden{Boolean|是否隐藏该表单项}
 - filterable{Boolean|是否开启下拉框的拼音头快速检索功能，默认 false}
@@ -67,7 +67,6 @@ Vue.use(TopFilter);
 
 - labelOptions: {
   - &emsp;fieldName: {String|字段名称 key}
-  - &emsp;initialValue: initialValue{String/Array|默认值}
   - &emsp;itemList: {Array|下拉框(SELECT)的数据，[{text: '', value: ''}]}
   - &emsp;style: {Object|表单元素的 style}
   - &emsp;disabled: {Boolean|禁用}
@@ -97,6 +96,7 @@ Vue.use(TopFilter);
 
 - SUBMIT_FORM{Function|获取所有表单控件数据的集合，返回值为表单数据}
 - RESET_FORM{Function|重置表单控件}
+- SET_FIELDS_VALUE{Function|设置表单字段的值，参数是表单值得集合 { fieldName: val, ... }}
 - GET_FORM_DATA{Function|异步函数，获取表单数据，返回值为数组 [err, formData]}
 
 `示例代码`
@@ -104,14 +104,15 @@ Vue.use(TopFilter);
 ```bash
 # template
 <template>
-  <TopFilter :list="topFilterList" :cols="3" @filterChange="changeHandle"></TopFilter>
+  <TopFilter :list="topFilterList" :initialValue="filterValue" :cols="3" @filterChange="changeHandle"></TopFilter>
 </template>
 
 # js
 export default {
   data() {
     return {
-      topFilterList: this.createTopFilters()
+      topFilterList: this.createTopFilters(),
+      filterValue: { title: 'asdf' }
     };
   },
   methods: {
@@ -122,7 +123,6 @@ export default {
           label: '搜索',
           fieldName: 'title',
           placeholder: '请输入标题名称...',
-          initialValue: '',
           style: { width: '200px' },
           rules: [{ required: true, message: '请输入标题名称', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }]
         },

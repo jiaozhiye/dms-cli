@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-08 15:19:28
+ * @Last Modified time: 2020-01-21 17:09:04
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -22,6 +22,10 @@ export default {
       type: Array,
       required: true
     },
+    initialValue: {
+      type: Object,
+      default: () => ({})
+    },
     formType: {
       type: String,
       default: 'add'
@@ -34,10 +38,6 @@ export default {
       type: [Number, String],
       default: 80
     },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
     isSubmitBtn: {
       type: Boolean,
       default: true
@@ -47,7 +47,6 @@ export default {
     }
   },
   data() {
-    this.prevForm = null;
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
       form: {},
@@ -56,63 +55,41 @@ export default {
     };
   },
   computed: {
-    fieldNames() {
-      return this.list
-        .filter(x => !x.hidden)
-        .map(x => x.fieldName)
-        .filter(x => !!x);
-    },
     formItemList() {
       const res = [];
       this.list
         .filter(x => !x.hidden && x.fieldName)
         .forEach(x => {
-          if (x.type === 'BREAK_SPACE') return;
-          if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
-            res.push(x.labelOptions);
+          const target = { ...x };
+          if (target.type === 'BREAK_SPACE') return;
+          if (_.isObject(target.labelOptions) && target.labelOptions.fieldName) {
+            res.push(target.labelOptions);
+            delete target.labelOptions;
           }
-          res.push(x);
+          res.push(target);
         });
       return res;
     },
+    fieldNames() {
+      return this.formItemList.map(x => x.fieldName);
+    },
     rules() {
-      const target = {};
-      this.list
-        .filter(x => !x.hidden)
-        .forEach(x => {
-          if (!(x.fieldName && x.rules)) return;
-          target[x.fieldName] = x.rules;
-        });
-      return target;
+      const res = {};
+      this.formItemList.forEach(x => {
+        if (!x.rules) return;
+        res[x.fieldName] = x.rules;
+      });
+      return res;
     }
   },
   watch: {
-    formItemList: {
-      handler(nextProps, prevProps) {
-        if (nextProps.length !== prevProps.length) {
-          this.initialHandle();
-        }
-        this.debounce(this.resetFormData, 10)(nextProps);
-      },
-      deep: true
-    },
-    form: {
-      handler(nextProps) {
-        const res = this.difference(nextProps, this.prevForm);
-        if (!Object.keys(res).length) return;
-        for (let key in res) {
-          let target = this.formItemList.find(x => x.fieldName === key);
-          if (!target) continue;
-          // 同步 initialValue 的值
-          target.initialValue = res[key];
-        }
-        this.prevForm = { ...nextProps };
-      },
-      deep: true
-    },
     fieldNames(nextProps, prevProps) {
-      if (!_.isEqual(nextProps, prevProps)) {
-        this.initialHandle();
+      const diffRes = _.difference(nextProps, prevProps);
+      if (diffRes.length) {
+        diffRes.forEach(x => {
+          const target = this.formItemList.find(x => x.fieldName === x);
+          target && this.$set(this.form, x, this.getInitialValue(target));
+        });
       }
       this.$nextTick(() => this.doClearValidate(this.$refs.form));
     }
@@ -122,52 +99,38 @@ export default {
   },
   methods: {
     initialHandle() {
-      this.form = this.createFormData();
-      this.prevForm = { ...this.form };
+      this.form = this.createFormValue();
     },
     getInitialValue(item) {
-      let { initialValue, type = '', fieldName, numberFormat, secretType, readonly } = item;
+      const { type = '', fieldName, numberFormat, secretType, readonly } = item;
+      // 初始值
+      let val = this.initialValue[fieldName];
       if (this.formType === 'show') {
         item.disabled = true;
       }
       if (this.arrayTypes.includes(type)) {
-        initialValue = initialValue || [];
+        val = val || [];
       }
       if (type === 'INPUT' && numberFormat && (readonly || item.disabled)) {
-        initialValue = this.formatNumber(initialValue);
+        val = this.formatNumber(val);
       }
       if (type === 'INPUT' && secretType && (readonly || item.disabled)) {
-        initialValue = this.secretFormat(initialValue, secretType);
+        val = this.secretFormat(val, secretType);
       }
-      // 树选择器
       if (type === 'INPUT_TREE' && _.isUndefined(this[`${fieldName}TreeFilterTexts`])) {
         this[`${fieldName}TreeFilterTexts`] = '';
       }
-      // 级联选择器
       if (type === 'INPUT_CASCADER' && _.isUndefined(this[`${fieldName}CascaderTexts`])) {
         this[`${fieldName}CascaderTexts`] = '';
       }
-      return initialValue;
+      return val;
     },
-    createFormData() {
+    createFormValue() {
       const target = {};
       this.formItemList.forEach(x => {
-        const val = this.getInitialValue(x);
-        // 设置 initialValue 为响应式数据
-        delete x['initialValue'];
-        this.$set(x, 'initialValue', val);
-        // 初始值
-        target[x.fieldName] = val;
+        target[x.fieldName] = this.getInitialValue(x);
       });
-      return target;
-    },
-    resetFormData(list) {
-      list.forEach(x => {
-        if (_.isEqual(x.initialValue, this.form[x.fieldName])) return;
-        this.form[x.fieldName] = this.getInitialValue(x);
-        // 对组件外 js 动态赋值的表单元素进行校验
-        this.doFormItemValidate(x.fieldName);
-      });
+      return Object.assign({}, this.initialValue, target);
     },
     createFormItemLabel(option) {
       const { form } = this;
@@ -1148,8 +1111,8 @@ export default {
           return VNode;
         });
     },
-    doClearValidate($compRef) {
-      $compRef && $compRef.clearValidate();
+    doClearValidate($ref) {
+      $ref && $ref.clearValidate();
     },
     doFormItemValidate(fieldName) {
       this.$refs.form.validateField(fieldName);
@@ -1268,16 +1231,16 @@ export default {
       return colFormItems;
     },
     createFormButton() {
-      const { loading, disabled } = this;
+      const { loading } = this;
       const colSpan = 24 / this.cols;
-      return this.list.length && this.isSubmitBtn && this.formType !== 'show' ? (
+      return this.isSubmitBtn && this.formType !== 'show' ? (
         <el-row gutter={10}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
-              <el-button size="small" type="primary" loading={loading} disabled={disabled} onClick={this.submitForm}>
+              <el-button size="small" type="primary" loading={loading} onClick={this.submitForm}>
                 {this.formType === 'add' ? '保 存' : '修 改'}
               </el-button>
-              <el-button size="small" disabled={disabled} onClick={this.resetForm}>
+              <el-button size="small" onClick={this.resetForm}>
                 重 置
               </el-button>
             </el-form-item>
@@ -1314,7 +1277,7 @@ export default {
       return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
     },
     // 保密字段格式化方法
-    secretFormat(value, type) {
+    secretFormat(value = '', type) {
       value += '';
       if (type === 'name') {
         value = value.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
@@ -1327,25 +1290,9 @@ export default {
       }
       return value;
     },
-    // 函数防抖
-    debounce(fn, delay) {
-      return function(...args) {
-        fn.timer && clearTimeout(fn.timer);
-        fn.timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    },
     // 转百分比
     toPercent(num) {
       return Number(num * 100).toFixed(5) + '%';
-    },
-    difference(newVal, oldVal) {
-      const res = {};
-      for (let key in newVal) {
-        if (!_.isEqual(newVal[key], oldVal[key])) {
-          res[key] = newVal[key];
-        }
-      }
-      return res;
     },
     deepFind(arr, mark) {
       let res = null;
@@ -1370,6 +1317,14 @@ export default {
     },
     RESET_FORM() {
       this.resetForm();
+    },
+    // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }
+    SET_FIELDS_VALUE(values = {}) {
+      for (let key in values) {
+        if (this.fieldNames.includes(key)) {
+          this.form[key] = values[key];
+        }
+      }
     },
     async GET_FORM_DATA() {
       try {
@@ -1496,9 +1451,6 @@ export default {
       }
       .desc-text {
         font-size: @textSizeSecondary;
-      }
-      &.is-required .el-form-item__label {
-        color: #f5222d;
       }
     }
   }

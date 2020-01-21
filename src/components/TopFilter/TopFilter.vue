@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-12 14:43:06
+ * @Last Modified time: 2020-01-21 16:46:56
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -18,7 +18,11 @@ export default {
       type: Array,
       required: true
     },
-    rows: {
+    initialValue: {
+      type: Object,
+      default: () => ({})
+    },
+    defaultRows: {
       type: Number,
       default: 1
     },
@@ -30,7 +34,7 @@ export default {
       type: [Number, String],
       default: 80
     },
-    disabled: {
+    isBtnDisabled: {
       type: Boolean,
       default: false
     },
@@ -44,7 +48,6 @@ export default {
     }
   },
   data() {
-    this.prevForm = null;
     this.arrayTypes = ['RANGE_DATE', 'RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX'];
     return {
       form: {},
@@ -54,33 +57,31 @@ export default {
     };
   },
   computed: {
-    fieldNames() {
-      return this.list
-        .filter(x => !x.hidden)
-        .map(x => x.fieldName)
-        .filter(x => !!x);
-    },
     formItemList() {
       const res = [];
       this.list
         .filter(x => !x.hidden && x.fieldName)
         .forEach(x => {
-          if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
-            res.push(x.labelOptions);
+          const target = { ...x };
+          if (target.type === 'BREAK_SPACE') return;
+          if (_.isObject(target.labelOptions) && target.labelOptions.fieldName) {
+            res.push(target.labelOptions);
+            delete target.labelOptions;
           }
-          res.push(x);
+          res.push(target);
         });
       return res;
     },
+    fieldNames() {
+      return this.formItemList.map(x => x.fieldName);
+    },
     rules() {
-      const target = {};
-      this.list
-        .filter(x => !x.hidden)
-        .forEach(x => {
-          if (!(x.fieldName && x.rules)) return;
-          target[x.fieldName] = x.rules;
-        });
-      return target;
+      const res = {};
+      this.formItemList.forEach(x => {
+        if (!x.rules) return;
+        res[x.fieldName] = x.rules;
+      });
+      return res;
     },
     isCollapse() {
       const total = this.list.filter(x => !x.hidden).length;
@@ -88,32 +89,13 @@ export default {
     }
   },
   watch: {
-    formItemList: {
-      handler(nextProps, prevProps) {
-        if (nextProps.length !== prevProps.length) {
-          this.initialHandle();
-        }
-        this.debounce(this.resetFormData, 10)(nextProps);
-      },
-      deep: true
-    },
-    form: {
-      handler(nextProps) {
-        const res = this.difference(nextProps, this.prevForm);
-        if (!Object.keys(res).length) return;
-        for (let key in res) {
-          let target = this.formItemList.find(x => x.fieldName === key);
-          if (!target) continue;
-          // 同步 initialValue 的值
-          target.initialValue = res[key];
-        }
-        this.prevForm = { ...nextProps };
-      },
-      deep: true
-    },
     fieldNames(nextProps, prevProps) {
-      if (!_.isEqual(nextProps, prevProps)) {
-        this.initialHandle();
+      const diffRes = _.difference(nextProps, prevProps);
+      if (diffRes.length) {
+        diffRes.forEach(x => {
+          const target = this.formItemList.find(x => x.fieldName === x);
+          target && this.$set(this.form, x, this.getInitialValue(target));
+        });
       }
       this.$nextTick(() => this.doClearValidate(this.$refs.form));
     },
@@ -127,43 +109,29 @@ export default {
   },
   methods: {
     initialHandle() {
-      this.form = this.createFormData();
-      this.prevForm = { ...this.form };
+      this.form = this.createFormValue();
     },
     getInitialValue(item) {
-      let { initialValue, type = '', fieldName } = item;
+      const { type = '', fieldName } = item;
+      // 初始值
+      let val = this.initialValue[fieldName];
       if (this.arrayTypes.includes(type)) {
-        initialValue = initialValue || [];
+        val = val || [];
       }
-      // 树选择器
       if (type === 'INPUT_TREE' && _.isUndefined(this[`${fieldName}TreeFilterTexts`])) {
         this[`${fieldName}TreeFilterTexts`] = '';
       }
-      // 级联选择器
       if (type === 'INPUT_CASCADER' && _.isUndefined(this[`${fieldName}CascaderTexts`])) {
         this[`${fieldName}CascaderTexts`] = '';
       }
-      return initialValue;
+      return val;
     },
-    createFormData() {
+    createFormValue() {
       const target = {};
       this.formItemList.forEach(x => {
-        const val = this.getInitialValue(x);
-        // 设置 initialValue 为响应式数据
-        delete x['initialValue'];
-        this.$set(x, 'initialValue', val);
-        // 初始值
-        target[x.fieldName] = val;
+        target[x.fieldName] = this.getInitialValue(x);
       });
-      return target;
-    },
-    resetFormData(list) {
-      list.forEach(x => {
-        if (_.isEqual(x.initialValue, this.form[x.fieldName])) return;
-        this.form[x.fieldName] = this.getInitialValue(x);
-        // 对组件外 js 动态赋值的表单元素进行校验
-        this.doFormItemValidate(x.fieldName);
-      });
+      return Object.assign({}, this.initialValue, target);
     },
     createFormItemLabel(option) {
       const { form } = this;
@@ -975,8 +943,8 @@ export default {
       }
       return true;
     },
-    doClearValidate($compRef) {
-      $compRef && $compRef.clearValidate();
+    doClearValidate($ref) {
+      $ref && $ref.clearValidate();
     },
     doFormItemValidate(fieldName) {
       this.$refs.form.validateField(fieldName);
@@ -1048,7 +1016,7 @@ export default {
       this.expand = !this.expand;
     },
     createButton(rows, total) {
-      const { cols, expand, isCollapse, loading, disabled } = this;
+      const { cols, expand, isCollapse, loading, isBtnDisabled } = this;
       const colSpan = 24 / cols;
       // 默认收起
       let offset = rows * cols - total > 0 ? rows * cols - total - 1 : 0;
@@ -1058,14 +1026,14 @@ export default {
       }
       return this.isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button size="small" type="primary" loading={loading} disabled={disabled} onClick={this.submitForm}>
+          <el-button size="small" type="primary" loading={loading} disabled={isBtnDisabled} onClick={this.submitForm}>
             搜 索
           </el-button>
-          <el-button size="small" disabled={disabled} onClick={this.resetForm}>
+          <el-button size="small" disabled={isBtnDisabled} onClick={this.resetForm}>
             重 置
           </el-button>
           {isCollapse ? (
-            <el-button size="small" type="text" disabled={disabled} onClick={this.toggleHandler}>
+            <el-button size="small" type="text" onClick={this.toggleHandler}>
               {expand ? '收起' : '展开'} <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
           ) : null}
@@ -1074,10 +1042,10 @@ export default {
     },
     createFormLayout() {
       const unfixTypes = ['TEXT_AREA'];
-      const { cols, rows, expand, isCollapse } = this;
+      const { cols, defaultRows, expand, isCollapse } = this;
       const colSpan = 24 / cols;
       const formItems = this.createFormItem().filter(item => item !== null);
-      const defaultPlayRows = rows > Math.ceil(formItems.length / cols) ? Math.ceil(formItems.length / cols) : rows;
+      const defaultPlayRows = defaultRows > Math.ceil(formItems.length / cols) ? Math.ceil(formItems.length / cols) : defaultRows;
       const count = expand ? formItems.length : defaultPlayRows * cols - 1;
       const colFormItems = formItems.map((Node, i) => {
         return (
@@ -1099,22 +1067,6 @@ export default {
         return !x ? x : moment(x).format(vf.replace('yyyy', 'YYYY').replace('dd', 'DD'));
       });
       return Array.isArray(val) ? res : res[0];
-    },
-    // 函数防抖
-    debounce(fn, delay) {
-      return function(...args) {
-        fn.timer && clearTimeout(fn.timer);
-        fn.timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    },
-    difference(newVal, oldVal) {
-      const res = {};
-      for (let key in newVal) {
-        if (!_.isEqual(newVal[key], oldVal[key])) {
-          res[key] = newVal[key];
-        }
-      }
-      return res;
     },
     deepFind(arr, mark) {
       let res = null;
@@ -1139,6 +1091,14 @@ export default {
     },
     RESET_FORM() {
       this.resetForm();
+    },
+    // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }
+    SET_FIELDS_VALUE(values = {}) {
+      for (let key in values) {
+        if (this.fieldNames.includes(key)) {
+          this.form[key] = values[key];
+        }
+      }
     },
     async GET_FORM_DATA() {
       try {
@@ -1291,9 +1251,6 @@ export default {
       }
       .desc-text {
         font-size: @textSizeSecondary;
-      }
-      &.is-required .el-form-item__label {
-        color: #f5222d;
       }
       &.is-error {
         .range-date {
