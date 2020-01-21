@@ -144,6 +144,7 @@ export default {
           type: 'MULTIPLE_SELECT',
           label: '兴趣爱好',
           fieldName: 'hobby',
+          filterable: true,
           placeholder: '兴趣爱好',
           itemList: [
             { text: '篮球', value: '1' },

@@ -60,13 +60,11 @@ export default {
       this.list
         .filter(x => !x.hidden && x.fieldName)
         .forEach(x => {
-          const target = { ...x };
-          if (target.type === 'BREAK_SPACE') return;
-          if (_.isObject(target.labelOptions) && target.labelOptions.fieldName) {
-            res.push(target.labelOptions);
-            delete target.labelOptions;
+          if (x.type === 'BREAK_SPACE') return;
+          if (_.isObject(x.labelOptions) && x.labelOptions.fieldName) {
+            res.push(x.labelOptions);
           }
-          res.push(target);
+          res.push(x);
         });
       return res;
     },
@@ -939,7 +937,7 @@ export default {
       } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
-      if (!option.itemList && fetchApi) {
+      if (!itemList && fetchApi) {
         itemList = this[`${fieldName}ItemList`] || [];
         if (!_.isEqual(this[`${fieldName}PrevParams`], params)) {
           this[`${fieldName}PrevParams`] = params;
