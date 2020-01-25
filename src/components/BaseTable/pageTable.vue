@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-20 19:09:09
+ * @Last Modified time: 2020-01-22 14:18:43
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1828,7 +1828,7 @@ export default {
   render() {
     const { columns, columnsRef, loading, list, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
     const toperInfoProps = {
-      props: { total: pagination.total, selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
+      props: { total: this.formatNumber(pagination.total), selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
     };
     const columnFilterProps = {
       props: { columns, columnsRef, onColumnsChange: this.onColumnsChange }

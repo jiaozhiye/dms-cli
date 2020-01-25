@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-05 18:14:49
+ * @Last Modified time: 2020-01-22 12:27:16
  **/
 import Drawer from './Drawer';
 import ContainerRender from '@/utils/ContainerRender';
@@ -44,12 +44,10 @@ export default {
       default: false
     },
     width: {
-      type: [Number, String],
-      default: '72%'
+      type: [Number, String]
     },
     height: {
-      type: [Number, String],
-      default: '300'
+      type: [Number, String]
     },
     zIndex: {
       type: Number,
