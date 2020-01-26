@@ -10,13 +10,13 @@ import _ from 'lodash';
 export default {
   name: 'Cascader',
   props: {
+    value: {
+      type: String
+    },
     list: {
       type: Array,
       required: true,
       default: () => []
-    },
-    initialValue: {
-      type: String
     },
     labels: {
       type: Array,
@@ -25,14 +25,15 @@ export default {
   },
   data() {
     this.prevValue = null;
+    this.clicked = 'off'; // 点击状态
     return {
-      values: this.createInitValue(this.initialValue)
+      currentValues: []
     };
   },
   computed: {
     dataList() {
       let res = [this.list];
-      this.values.forEach((x, i) => {
+      this.currentValues.forEach((x, i) => {
         const arr = res[i].find(k => k.value === x.value).children;
         if (typeof arr !== 'undefined' && Array.isArray(arr)) {
           res.push(arr);
@@ -42,25 +43,29 @@ export default {
     }
   },
   watch: {
-    values: {
-      handler(val) {
-        if (val.length || !this.initialValue) {
-          if (_.isEqual(val, this.prevValue)) return;
+    currentValues(val) {
+      if (val.length || !this.value) {
+        if (_.isEqual(val, this.prevValue)) return;
+        this.$emit('input', val);
+        if (this.clicked === 'on') {
+          this.clicked = 'off';
           this.$emit('change', val);
-          this.prevValue = [...val];
         }
-      },
-      immediate: true
+        this.prevValue = [...val];
+      }
     },
-    initialValue(val) {
-      this.values = this.createInitValue(val);
+    value(val) {
+      this.currentValues = this.createValues(val);
     },
     list() {
-      this.values = this.createInitValue(this.initialValue);
+      this.currentValues = this.createValues(this.value);
     }
   },
+  mounted() {
+    this.currentValues = this.createValues(this.value);
+  },
   methods: {
-    createInitValue(valText) {
+    createValues(valText) {
       let res = [];
       if (valText && _.isString(valText)) {
         const valStrList = valText.split(',');
@@ -77,15 +82,16 @@ export default {
     },
     clickHandle(ev, index, { value, text, children }) {
       ev.stopPropagation();
-      this.$set(this.values, index, { value, text });
-      this.values.length = index + 1;
+      this.clicked = 'on';
+      this.$set(this.currentValues, index, { value, text });
+      this.currentValues.length = index + 1;
       if (!children) {
         this.$emit('close', false);
       }
     }
   },
   render() {
-    const { labels, dataList, values } = this;
+    const { labels, dataList, currentValues } = this;
     return (
       <div class="casc-wrap">
         <table class="table" width="100%">
@@ -100,7 +106,7 @@ export default {
             {dataList.map((list, index) => (
               <td key={`td-${index}`}>
                 {list.map(item => {
-                  const actived = values[index] && values[index].value === item.value ? 'selected' : '';
+                  const actived = currentValues[index] && currentValues[index].value === item.value ? 'selected' : '';
                   return (
                     <li key={item.value} class={actived} onClick={ev => this.clickHandle(ev, index, item)}>
                       {item.text}

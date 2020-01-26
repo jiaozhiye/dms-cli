@@ -385,12 +385,14 @@ export default {
           <el-popover v-model={this.visible[fieldName]} transition="el-zoom-in-top" placement="bottom-start" trigger="click">
             <div style={{ maxHeight: '250px', overflowY: 'auto', ...style }}>
               <Cascader
-                initialValue={form[fieldName]}
+                value={form[fieldName]}
+                onInput={val => {
+                  this.cascaderChangeHandle(fieldName, val);
+                }}
                 list={itemList}
                 labels={titles}
                 style={style}
                 onChange={data => {
-                  this.cascaderChangeHandle(fieldName, data);
                   change(form[fieldName], this[`${fieldName}CascaderTexts`]);
                 }}
                 onClose={() => (this.visible[fieldName] = false)}
@@ -404,7 +406,10 @@ export default {
               disabled={disabled}
               clearable
               style={disabled && { pointerEvents: 'none' }}
-              onClear={() => this.cascaderChangeHandle(fieldName, [])}
+              onClear={() => {
+                this.cascaderChangeHandle(fieldName, []);
+                change(form[fieldName], this[`${fieldName}CascaderTexts`]);
+              }}
             />
           </el-popover>
         </el-form-item>
