@@ -94,7 +94,7 @@ export default {
         this.LODOP.SET_PRINT_PAGESIZE(2, this.pageSize[0], this.pageSize[1], '');
         this.LODOP.SET_SHOW_MODE('LANDSCAPE_DEFROTATED', 1);
       }
-      this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'width: 100%'); // 设置打印内容的自动缩放
+      this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'Full-Width'); // 设置打印内容的自动缩放
       this.LODOP.SET_PRINT_MODE('AUTO_CLOSE_PREWINDOW', 1); // 设置设置完打印后 是否关闭预览窗口;
       this.LODOP.SET_PRINT_COPIES(this.printCopies); // 指定打印份数
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
