@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 19:02:22
+ * @Last Modified time: 2020-01-30 16:06:35
  */
 'use strict';
 const path = require('path');
@@ -17,7 +17,8 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://jettadms-test.faw-vw.com',
-        changeOrigin: true,
+        changeOrigin: true, // 支持跨域
+        secure: false, // 支持 https
         pathRewrite: {
           '^/api': '/api'
         }

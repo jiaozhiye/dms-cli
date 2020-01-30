@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-21 17:09:04
+ * @Last Modified time: 2020-01-30 17:28:56
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -513,7 +513,7 @@ export default {
           valueFormat: 'yyyy'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', defaultTime, minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
       let currentVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -526,6 +526,7 @@ export default {
               val = val === null ? undefined : val;
               form[fieldName] = val;
             }}
+            default-time={defaultTime}
             value-format={conf[dateType].valueFormat}
             placeholder={conf[dateType].placeholder}
             disabled={disabled}
@@ -669,7 +670,7 @@ export default {
     },
     TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -678,6 +679,7 @@ export default {
             pickerOptions={{
               format: valueFormat
             }}
+            default-value={defaultTime}
             value-format={valueFormat}
             placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
@@ -713,7 +715,7 @@ export default {
     },
     TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm', options = {}, style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -725,6 +727,7 @@ export default {
               end: endTime,
               step: stepTime
             }}
+            default-value={defaultTime}
             value-format={valueFormat}
             placeholder={!disabled ? placeholder : ''}
             disabled={disabled}

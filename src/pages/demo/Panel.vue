@@ -80,6 +80,7 @@ export default {
   methods: {
     async getFormData() {
       const res = await this.$refs.form.GET_FORM_DATA();
+      console.log(res);
     },
     heightChangeHandle(height) {
       this.height = `${height.slice(0, -1)} - 60px)`;
@@ -228,9 +229,11 @@ export default {
           style: {}
         },
         {
-          type: 'TIME_SELECT',
+          type: 'DATE',
+          dateType: 'datetime',
           label: '时间',
           fieldName: 'time1',
+          defaultTime: '09:00:00',
           offsetRightCols: 2,
           placeholder: '选择时间',
           rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
