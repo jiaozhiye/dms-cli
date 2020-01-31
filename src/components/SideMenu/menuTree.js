@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-26 08:39:49
+ * @Last Modified time: 2020-01-31 12:01:28
  */
 import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
@@ -53,7 +53,7 @@ export default {
             </template>
           ) : (
             <a href={key} title={title} target="_blank">
-              {item.icon && <Icon type={item.icon} />}
+              {icon && <i class={icon} />}
               <span>{item.title}</span>
             </a>
           );
