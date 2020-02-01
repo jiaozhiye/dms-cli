@@ -80,7 +80,7 @@ instance.interceptors.response.use(response => {
     // token 过期，需要重新登录
     if (resultCode === 40105) {
       store.dispatch('app/createLogout');
-      router.push({ path: '/' });
+      router.push({ path: '/' }).catch(() => {});;
     }
     data.errMsg && notifyAction(data.errMsg, 'error');
   }

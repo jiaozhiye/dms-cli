@@ -7,7 +7,7 @@ export default {
       query
     } = this.$route;
     // refresh view
-    this.$router.replace({ path: `/${path}`, query });
+    this.$router.replace({ path: `/${path}`, query }).catch(() => {});
   },
   render() {
     return null;

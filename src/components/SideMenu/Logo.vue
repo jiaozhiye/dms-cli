@@ -10,8 +10,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-02-01 18:33:14
  **/
 const logoEp = require('@/assets/img/logo_ep.png');
 const logo = require('@/assets/img/logo.png');
@@ -56,7 +56,7 @@ export default {
   line-height: 58px;
   background-color: @logoBgColor;
   overflow: hidden;
-  .router-link-active {
+  a {
     display: block;
     img {
       display: inline-block;

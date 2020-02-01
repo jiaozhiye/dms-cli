@@ -199,7 +199,7 @@ export default {
           name: res.data.name,
           token: res.data.token
         });
-        this.$router.push({ path: '/' });
+        this.$router.push({ path: '/' }).catch(() => {});;
       }
     }
   }

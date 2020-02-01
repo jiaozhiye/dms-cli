@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 13:36:53
+ * @Last Modified time: 2020-02-01 20:46:07
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -36,9 +36,6 @@ export default {
     },
     pages(val) {
       this.createTabMenuList(val.map(x => ({ key: x.path, title: x.meta.title })));
-    },
-    activeKey(val) {
-      this.$router.push({ path: val });
     },
     visible(val) {
       if (val) {
@@ -78,18 +75,24 @@ export default {
       this.removeKeepAliveNames(targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
       if (!this.pathList.includes(this.activeKey)) {
-        this.activeKey = this.pathList[this.pathList.length - 1];
+        this.locationChange(this.pathList[this.pathList.length - 1]);
       }
     },
     handleClick(tab, ev) {
-      this.activeKey = tab.name;
+      this.locationChange(tab.name);
     },
     findCurTagIndex() {
       return this.pages.findIndex(x => x.path === this.currentKey);
     },
+    locationChange(val) {
+      // const { query } = this.$route;
+      this.activeKey = val;
+      this.$router.push({ path: val, query: {} }).catch(() => {});
+    },
     refreshTagHandle() {
+      const { query } = this.$route;
       this.activeKey = this.currentKey;
-      this.refreshView({ path: this.activeKey, query: this.$route.query });
+      this.refreshView({ path: this.activeKey, query });
     },
     closeOtherTagHandle() {
       const index = this.findCurTagIndex();
@@ -98,7 +101,6 @@ export default {
         if (i === index) return;
         this.removeTab(path);
       });
-      this.activeKey = this.currentKey;
     },
     closeTagHandle(dir) {
       const index = this.findCurTagIndex();
@@ -119,7 +121,7 @@ export default {
         }
       });
       if (isClosed) {
-        this.activeKey = this.currentKey;
+        this.locationChange(this.currentKey);
       }
     },
     showContextMenu(key) {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-23 10:59:31
+ * @Last Modified time: 2020-02-01 19:19:01
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -31,7 +31,7 @@ export const constantRouterMap = [
     component: BasicLayout,
     children: [
       {
-        path: '/home',
+        path: '',
         meta: { breadcrumb: false },
         component: RouteView,
         children: [
@@ -41,7 +41,7 @@ export const constantRouterMap = [
             component: RouteView,
             children: [
               {
-                path: '',
+                path: '/home',
                 meta: { title: '概览', bgColor: true, keepAlive: true },
                 component: Dashboard
               }

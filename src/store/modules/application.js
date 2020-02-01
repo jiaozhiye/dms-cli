@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 13:36:07
+ * @Last Modified time: 2020-02-01 17:40:35
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -105,7 +105,7 @@ const actions = {
       } else {
         messageAction('系统菜单获取失败！', 'error');
         dispatch('createLogout');
-        return router.push({ path: '/' });
+        return router.push({ path: '/' }).catch(() => {});;
       }
     }
     // 处理图标
@@ -229,7 +229,7 @@ const actions = {
       type: types.DEL_CNAME,
       data: path
     });
-    router.replace({ path: `/redirect${path}`, query });
+    router.replace({ path: `/redirect${path}`, query }).catch(() => {});
   },
   createNotifyState({ commit, state }, params) {
     commit({

@@ -84,7 +84,7 @@ export default {
       };
     },
     handleSelect(item) {
-      this.$router.push({ path: item.key });
+      this.$router.push({ path: item.key }).catch(() => {});;
       this.clickHandle();
       setTimeout(() => {
         this.menuPath = '';
