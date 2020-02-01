@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 10:43:17
+ * @Last Modified time: 2020-02-01 13:36:53
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -89,7 +89,7 @@ export default {
     },
     refreshTagHandle() {
       this.activeKey = this.currentKey;
-      this.refreshView(this.activeKey);
+      this.refreshView({ path: this.activeKey, query: this.$route.query });
     },
     closeOtherTagHandle() {
       const index = this.findCurTagIndex();

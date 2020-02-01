@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-22 14:18:43
+ * @Last Modified time: 2020-02-01 11:22:44
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1227,7 +1227,7 @@ export default {
             if (_.isNumber(target)) {
               return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
             } else {
-              return target.includes(this.filters[attr]);
+              return target.toLowerCase().includes(this.filters[attr].toString().toLowerCase());
             }
           }
           if (type === 'number' && this.filters[attr].length) {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 14:53:08
+ * @Last Modified time: 2020-02-01 13:36:07
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -224,12 +224,12 @@ const actions = {
       data: params
     });
   },
-  refreshView({ commit, state }, params) {
+  refreshView({ commit, state }, { path, query = {} }) {
     commit({
       type: types.DEL_CNAME,
-      data: params
+      data: path
     });
-    router.replace({ path: `/redirect${params}` });
+    router.replace({ path: `/redirect${path}`, query });
   },
   createNotifyState({ commit, state }, params) {
     commit({
