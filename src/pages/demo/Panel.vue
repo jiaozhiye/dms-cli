@@ -318,7 +318,7 @@ export default {
 .wrapper {
   height: calc(100vh - 135px);
   .line {
-    height: 400px;
+    height: 500px;
     margin-bottom: 20px;
     &:last-child {
       margin: 0;

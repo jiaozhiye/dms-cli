@@ -35,6 +35,7 @@ http://localhost:8080/table
 - 支持多级表头
 - 支持表格列的动态渲染
 - 支持表格的批量操作
+- 支持表格数据导出 Excel
 - 支持表头的筛选和排序，并支持扩展为服务端筛选和排序
 - 支持表格行的选中（多选/单选），并支持默认选中
 - 支持表格分页的显示和隐藏
@@ -83,11 +84,13 @@ http://localhost:8080/table
 - isSelectColumn{Boolean|是否显示可选择的列，默认显示可选择列}
 - defaultSelections{Array|默认选中列表行}
 - isToperInfo{Boolean|是否显示组件的基础信息}
+- isExportExcel{Boolean|是否显示组件的导出功能}
 - isColumnFilter{Boolean|是否显示组件的列筛选排序}
 - isPagination{Boolean|是否显示分页，默认显示分页，但在 dataSource 的模式下不显示分页}
 - isMemoryPagination{Boolean|是否为内存分页，默认 false}
 - uidkey{String|服务端响应数据每条记录的 uuid，默认值是'uid'}
 - datakey{String|服务端响应数据的数组列表对应的 key，支持路径操作('step1.step2.items')，默认值是'items'}
+- exportFileName{String|导出文件的文件名，默认值是 表格数据.xlsx}
 - mergeCellMethod{Function|合并行或列，具体请参考 element-ui table 组件}
 - onColumnsChange{Function|columns 变化时的回调，参数是 columns 数组}
 - onEnterEvent{Function|单元格在有焦点状态下的回车事件和行双击事件的监听函数，参数是当前单元格对应的行数据}
@@ -122,6 +125,7 @@ http://localhost:8080/table
 - precision{Number|单元格或合计的数值精度，保留几位小数}
 - fixed{String|列固定，值为 left/right}
 - align{String|单元格文字对齐方式，left(默认)/center/right}
+- dictItems{Array|数据字典的列表，用于翻译单元格字段，格式为 [{text: 'xxx', value: 1}, ...]}
 - className{String|单元格追加的 class，用于修改某单元格列样式}
 - showOverflowTooltip{Boolean|内容过长被隐藏时显示 tooltip}
 - dateFormat{String|指定日期格式，具体请参考 element-ui date-picker 组件}

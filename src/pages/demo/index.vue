@@ -2,6 +2,7 @@
   <div>
     <TopFilter ref="filter" :list="topFilterList" :initial-value="filterValue" :cols="4" @filterChange="changeHandle" @onCollapse="collapseHandle" />
     <button-area :container-style="{ paddingLeft: '80px' }">
+      <JsonToExcel size="small" type="primary" :initialValue="json_data" :fields="json_fields" fileName="filename.xlsx">导出</JsonToExcel>
       <el-button size="small" type="primary">到货确认</el-button>
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
@@ -40,13 +41,15 @@ import { dictionary } from '@/utils/dictMixin';
 import res from '@/mock/tableData';
 import printData from '@/mock/printData';
 import Panel from './Panel';
+import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
 
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
 export default {
   name: 'Demo',
   components: {
-    Panel
+    Panel,
+    JsonToExcel
   },
   mixins: [authority, dictionary],
   data() {
@@ -57,7 +60,40 @@ export default {
       columns: this.createTableColumns(),
       list: [],
       printList: printData.data,
-      filterValue: { qwe: '22', hello: '1,1-2,1-2-1' }
+      filterValue: { qwe: '22', hello: '1,1-2,1-2-1' },
+      json_fields: {
+        'Complete name': 'name',
+        City: 'city',
+        Telephone: 'phone.mobile',
+        'Telephone 2': {
+          field: 'phone.landline',
+          callback: value => {
+            return `Landline Phone - ${value}`;
+          }
+        }
+      },
+      json_data: [
+        {
+          name: 'Tony Peña',
+          city: '长春',
+          country: 'United States',
+          birthdate: '1978-03-15',
+          phone: {
+            mobile: 15417543010,
+            landline: '(541) 754-3010'
+          }
+        },
+        {
+          name: 'Thessaloniki',
+          city: '沈阳',
+          country: 'Greece',
+          birthdate: '1987-11-23',
+          phone: {
+            mobile: 18552755071,
+            landline: '(2741) 2621-244'
+          }
+        }
+      ]
     };
   },
   mounted() {
@@ -298,9 +334,10 @@ export default {
             { text: '男', value: 1 },
             { text: '女', value: 0 }
           ],
-          render: props => {
-            return <span>{props.row.person.sex === 1 ? '男' : '女'}</span>;
-          }
+          dictItems: [
+            { text: '男', value: 1 },
+            { text: '女', value: 0 }
+          ]
         },
         {
           title: '价格',
@@ -364,6 +401,10 @@ export default {
           editItems: [
             { text: '', falseValue: '0' },
             { text: '', trueValue: '1' }
+          ],
+          dictItems: [
+            { text: '未选择', value: '0' },
+            { text: '已选择', value: '1' }
           ]
         },
         {

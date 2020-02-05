@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 11:22:44
+ * @Last Modified time: 2020-02-02 19:13:03
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -11,6 +11,7 @@ import config from '@/config';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
 import TopInfo from './topInfo';
 import ColumnFilter from './columnFilter';
+import ExportExcel from './exportExcel';
 import Pagination from './pagination';
 import Spin from '@/components/Spin/Spin';
 
@@ -81,6 +82,10 @@ export default {
       type: Boolean,
       default: true
     },
+    isExportExcel: {
+      type: Boolean,
+      default: true
+    },
     isColumnFilter: {
       type: Boolean,
       default: true
@@ -88,6 +93,9 @@ export default {
     isPagination: {
       type: Boolean,
       default: true
+    },
+    exportFileName: {
+      type: String
     },
     mergeCellMethod: {
       type: Function,
@@ -417,17 +425,35 @@ export default {
     },
     // 单元格编辑后的渲染方法
     editedScopedRender(column, props) {
-      const { editType } = column;
-      let res = _.get(props.row, column.dataIndex);
-      if (editType === 'select' || editType === 'select-multiple' || editType === 'checkbox') {
-        if (Array.isArray(column.editItems) && column.editItems.length) {
-          const editItems = editType === 'checkbox' ? column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x })) : column.editItems;
-          res = Array.isArray(res) ? res : [res];
-          res = editItems
-            .filter(x => res.includes(x.value))
-            .map(x => x.text)
-            .join(', ');
-        }
+      // const { editType } = column;
+      // let res = _.get(props.row, column.dataIndex);
+      // if (editType === 'select' || editType === 'select-multiple' || editType === 'checkbox') {
+      //   if (Array.isArray(column.editItems) && column.editItems.length) {
+      //     const editItems = editType === 'checkbox' ? column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x })) : column.editItems;
+      //     res = Array.isArray(res) ? res : [res];
+      //     res = editItems
+      //       .filter(x => res.includes(x.value))
+      //       .map(x => x.text)
+      //       .join(', ');
+      //   }
+      // }
+      let { dataIndex, dictItems, editItems, editType } = column;
+      const val = _.get(props.row, dataIndex);
+      // 处理 checkbox 的情况
+      if (editType === 'checkbox') {
+        editItems = editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x }));
+      }
+      const dicts = editItems || dictItems || [];
+      const target = dicts.find(x => x.value == val);
+      let res = target ? target.text : val;
+      // 数据是数组的情况
+      if (Array.isArray(val)) {
+        res = val
+          .map(x => {
+            let target = dicts.find(k => k.value == x);
+            return target ? target.text : x;
+          })
+          .join(',');
       }
       res = this.dateFormat(column, res);
       res = this.numberFormat(column, res);
@@ -1465,7 +1491,7 @@ export default {
     headerDragendHandler(newWidth, oldWidth, column) {
       const { property } = column;
       if (this.columnsRef) {
-        this.$refs.appFilter.SET_COLUMN_INFO({ [property]: newWidth });
+        this.$refs['column-filter'].SET_COLUMN_INFO({ [property]: newWidth });
       }
       this.$nextTick(() => {
         this.resetRender();
@@ -1826,9 +1852,38 @@ export default {
     }
   },
   render() {
-    const { columns, columnsRef, loading, list, selectionRows, isSelectColumn, isShowSummary, isToperInfo, isColumnFilter, isShowPagination, pagination, $slots, $scopedSlots } = this;
+    const {
+      columns,
+      columnsRef,
+      loading,
+      list,
+      selectionRows,
+      isSelectColumn,
+      isShowSummary,
+      isToperInfo,
+      isExportExcel,
+      isColumnFilter,
+      isShowPagination,
+      exportFileName,
+      pagination,
+      $slots,
+      $scopedSlots
+    } = this;
     const toperInfoProps = {
       props: { total: this.formatNumber(pagination.total), selectionRows, isSelectColumn, clearTableHandler: this.clearTableHandler, deleteHandler: this.deleteHandler }
+    };
+    const exportExcelProps = {
+      props: {
+        columns,
+        data: list,
+        fileName: exportFileName,
+        fetch: {
+          api: this.fetchapi,
+          params: this.fetchParams,
+          total: pagination.total,
+          datakey: this.datakey
+        }
+      }
     };
     const columnFilterProps = {
       props: { columns, columnsRef, onColumnsChange: this.onColumnsChange }
@@ -1886,7 +1941,8 @@ export default {
                   methods: { addRecordFunc: this.addRowHandler, delRecordFunc: this.deleteHandler }
                 })}
             </div>
-            {isColumnFilter && <ColumnFilter ref="appFilter" {...columnFilterProps} />}
+            {isExportExcel && <ExportExcel ref="export-excel" {...exportExcelProps} />}
+            {isColumnFilter && <ColumnFilter ref="column-filter" {...columnFilterProps} />}
           </section>
         </div>
         <Spin spinning={loading} tip="Loading...">
@@ -1911,7 +1967,6 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: @moduleMargin;
-    font-size: 0;
     .slot-wrapper {
       display: inline-block;
       margin-right: @moduleMargin;

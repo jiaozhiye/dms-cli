@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-27 18:03:46
+ * @Last Modified time: 2020-02-02 16:30:46
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -73,6 +73,10 @@ export default {
       type: Boolean,
       default: true
     },
+    isExportExcel: {
+      type: Boolean,
+      default: true
+    },
     isColumnFilter: {
       type: Boolean,
       default: true
@@ -80,6 +84,9 @@ export default {
     isPagination: {
       type: Boolean,
       default: true
+    },
+    exportFileName: {
+      type: String
     },
     mergeCellMethod: {
       type: Function,
