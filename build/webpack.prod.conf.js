@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 08:06:24
+ * @Last Modified time: 2020-02-09 20:19:19
  */
 'use strict';
 
@@ -55,30 +55,25 @@ const webpackConfig = merge(baseWebpackConfig, {
       })
     ],
     splitChunks: {
-      chunks: 'all',
+      chunks: 'all', // 默认值`async`，只处理异步模块；`all`对所有模块生效；`initial`只处理同步模块，对于异步导入的文件不处理
       cacheGroups: {
         vendors: {
           name: 'app.vendors',
-          test: /node_modules/,
-          priority: -10,
-          chunks: 'initial' // 只打包初始时的第三方依赖包
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
         },
-        echarts: {
-          name: 'app.echarts',
-          priority: 100,
-          test: module => /echarts/.test(module.context)
-        },
-        elementUI: {
-          name: 'app.elementUI',
-          priority: 100, // 权重要大于 vendors 和 components, 不然会被打包进 vendors 或 components
-          test: module => /element-ui/.test(module.context)
-        },
-        components: {
-          name: 'app.components', // 抽取出来文件的名字
-          test: utils.resolve('src/components'), // 精确的匹配被抽离的模块
+        default: {
+          name: 'app.commons',
           minChunks: 2, // 最小被引用的次数
-          priority: 10, // 优先级，多个分组冲突时决定把代码放在哪块
+          priority: -20, // 优先级，多个分组冲突时决定把代码放在哪块
           reuseExistingChunk: true // 是否重用已经存在的模块
+        },
+        libs: {
+          name: 'app.libs',
+          test: module => {
+            return /echarts|xlsx/.test(module.context);
+          },
+          priority: 10
         }
       }
     }
