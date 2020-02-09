@@ -1,8 +1,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-02-09 16:00:23
  */
 import Vue from 'vue';
 import config from '@/assets/js/config';
@@ -94,6 +94,10 @@ Vue.use(UploadCropper);
 import UploadFile from '@/components/UploadFile';
 Vue.use(UploadFile);
 
-// 文件导出/下载组件
+// 下载组件
 import DownloadFile from '@/components/DownloadFile';
 Vue.use(DownloadFile);
+
+// 导出 excel/csv 组件
+import JsonToExcel from '@/components/JsonToExcel';
+Vue.use(JsonToExcel);

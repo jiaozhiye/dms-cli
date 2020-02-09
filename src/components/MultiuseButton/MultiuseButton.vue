@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-02-07 14:04:35
  **/
 import _ from 'lodash';
 
@@ -85,7 +85,7 @@ export default {
     isVisible() {
       // 没有权限控制，默认该按钮显示状态
       if (!this.authList) return true;
-      return this.authList.includes(this.authMark);
+      return this.authList.includes(this.authMark.trim());
     }
   },
   methods: {

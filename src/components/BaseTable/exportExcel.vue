@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     createDataList(list) {
-      return list.map(x => {
+      return list.map((x, i) => {
         let item = { ...x };
         this.filterColumns.forEach(x => {
           const { dataIndex, dictItems, editItems, editType } = x;

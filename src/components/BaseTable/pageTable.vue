@@ -1857,6 +1857,7 @@ export default {
       columnsRef,
       loading,
       list,
+      originData,
       selectionRows,
       isSelectColumn,
       isShowSummary,
@@ -1875,13 +1876,13 @@ export default {
     const exportExcelProps = {
       props: {
         columns,
-        data: list,
+        data: originData,
         fileName: exportFileName,
         fetch: {
           api: this.fetchapi,
           params: this.fetchParams,
-          total: pagination.total,
-          datakey: this.datakey
+          datakey: this.datakey,
+          total: pagination.total
         }
       }
     };
