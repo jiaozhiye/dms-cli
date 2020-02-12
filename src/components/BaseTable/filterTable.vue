@@ -116,6 +116,10 @@ export default {
       type: Function,
       default: () => {}
     },
+    onCalcExportData: {
+      type: Function,
+      default: () => {}
+    },
     onSyncTableData: {
       type: Function,
       default: () => {}
@@ -221,8 +225,12 @@ export default {
       if (typeof val !== 'undefined') {
         this.search[`${property}Val`] = val;
       }
+      let curVal = this.search[`${property}Val`];
+      if (type === 'input' && _.isString(curVal)) {
+        curVal = curVal.trim();
+      }
       this.filters = Object.assign({}, this.filters, {
-        [`${type}|${property}`]: this.search[`${property}Val`]
+        [`${type}|${property}`]: curVal
       });
       this.closeAllPopover();
     },

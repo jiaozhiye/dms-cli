@@ -28,6 +28,10 @@ export default {
     fetch: {
       type: Object,
       default: () => ({})
+    },
+    onCalcExportData: {
+      type: Function,
+      default: () => {}
     }
   },
   computed: {
@@ -65,6 +69,8 @@ export default {
         });
         // 设置 index 序号
         _.set(item, 'index', i + 1);
+        // 处理计算导出数据
+        this.onCalcExportData(item);
         return item;
       });
     },

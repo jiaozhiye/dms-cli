@@ -98,6 +98,7 @@ http://localhost:8080/table
 - onCellChange{Function|table 单元格数据变化时的回调，参数 1 -> 被改变单元的的对象{`uid|dataIndex`: val}，参数 2 -> 被改变单元格所对应行的对象}
 - onSummationChange{Function|表格合计变化时的回调，参数是合计字段对应的数组数据}
 - onPageChange{Function|分页变化时的回调，参数是分页信息对象}
+- onCalcExportData{Function|计算处理导出数据的额外方法，参数是行数据}
 - onSyncTableData{Function|同步 table 组件列表数据，参数 1 -> 组件的数据列表，参数 2 -> 是否为首次同步的新数据，通常用来处理和数据相关的始化工作；数据的传递为单向数据流，如页面需要列表数据，必须通过此方式实现}
 
 `FilterTable 组件槽口`

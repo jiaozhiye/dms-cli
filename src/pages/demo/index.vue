@@ -7,7 +7,7 @@
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
       <el-button size="small">销售发票</el-button>
-      <el-button size="small" @click="asdasd">欠货单</el-button>
+      <el-button size="small">欠货单</el-button>
       <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
     <FilterTable
@@ -16,6 +16,7 @@
       :columns="columns"
       :data-source="list"
       :is-memory-pagination="true"
+      :onCalcExportData="asdasd"
       :on-columns-change="columns => (this.columns = columns)"
       :on-sync-table-data="tableDateChange"
     >
@@ -113,8 +114,8 @@ export default {
     }, 3000);
   },
   methods: {
-    asdasd() {
-      console.log(this.BaseTable.GET_REQUIRED_ERROR());
+    asdasd(row) {
+      row.total = row.price * row.num;
     },
     createTopFilters() {
       return [

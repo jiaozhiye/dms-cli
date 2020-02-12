@@ -125,6 +125,10 @@ export default {
       type: Function,
       default: () => {}
     },
+    onCalcExportData: {
+      type: Function,
+      default: () => {}
+    },
     onSyncTableData: {
       type: Function,
       default: () => {}
@@ -1883,7 +1887,8 @@ export default {
           params: this.fetchParams,
           datakey: this.datakey,
           total: pagination.total
-        }
+        },
+        onCalcExportData: this.onCalcExportData
       }
     };
     const columnFilterProps = {
