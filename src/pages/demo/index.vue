@@ -428,6 +428,7 @@ export default {
             { text: '未完成', value: 311 }
           ],
           editable: true,
+          defaultEditable: true,
           editType: 'select',
           editItems: [
             { text: '已完成', value: 1 },
@@ -481,8 +482,16 @@ export default {
     printHandler() {
       this.$refs.print.EXCUTE_PRINT();
     },
-    tableDateChange(list) {
-      // console.log(list);
+    // 表格的 onSyncTableData 事件
+    tableDateChange(list, isFirst) {
+      if (isFirst && list.length > 0) {
+        setTimeout(() => {
+          // 让表格列对应的所有的单元格，可编辑状态禁用   true -> 禁用可编辑状态
+          this.BaseTable.SET_CELL_UNEDITABLE(list, 'state', true);
+          // 有权限的数据，设置成可编辑  false -> 可编辑状态
+          this.BaseTable.SET_CELL_UNEDITABLE([list[0], list[2]], 'state', false);
+        });
+      }
     }
   }
 };

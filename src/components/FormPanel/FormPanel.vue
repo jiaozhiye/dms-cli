@@ -991,8 +991,16 @@ export default {
     },
     // 设置日期控件的禁用状态
     setDisabledDate(time, [minDateTime, maxDateTime]) {
-      const min = new Date(minDateTime).getTime();
-      const max = new Date(maxDateTime).getTime();
+      const min = minDateTime
+        ? moment(minDateTime)
+            .toDate()
+            .getTime()
+        : 0;
+      const max = maxDateTime
+        ? moment(maxDateTime)
+            .toDate()
+            .getTime()
+        : 0;
       if (min && max) {
         return !(time.getTime() > min && time.getTime() < max);
       }

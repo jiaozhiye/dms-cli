@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-02 19:13:03
+ * @Last Modified time: 2020-02-13 20:03:50
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -527,7 +527,7 @@ export default {
             picker-options={{
               disabledDate: time => {
                 if (minDateTime) {
-                  const target = !new Date(minDateTime).getTime() ? this.getFormatData(props.row, minDateTime) : minDateTime;
+                  const target = !this.isDate(minDateTime) ? this.getFormatData(props.row, minDateTime) : minDateTime;
                   return (
                     time.getTime() <
                     moment(target, momentFormat)
@@ -536,7 +536,7 @@ export default {
                   );
                 }
                 if (maxDateTime) {
-                  const target = !new Date(maxDateTime).getTime() ? this.getFormatData(props.row, maxDateTime) : maxDateTime;
+                  const target = !this.isDate(maxDateTime) ? this.getFormatData(props.row, maxDateTime) : maxDateTime;
                   return (
                     time.getTime() >
                     moment(target, momentFormat)
@@ -1729,6 +1729,10 @@ export default {
         fn.timer && clearTimeout(fn.timer);
         fn.timer = setTimeout(() => fn.apply(this, args), delay);
       };
+    },
+    // 判断参数是否是日期类型
+    isDate(date = '') {
+      return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
     },
     // 清除组件的操作记录
     clearHandleLogs() {
