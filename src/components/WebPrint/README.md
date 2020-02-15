@@ -15,6 +15,7 @@ Vue.use(WebPrint);
 `组件参数API`
 
 - fileUrl{String|后台返回的打印文件，格式为 pdf 类型}
+- click{Function|点击按钮触发的事件方法(异步方法)，用于调用打印接口，返回值是 pdf 文件地址}
 
 `组件插槽`
 

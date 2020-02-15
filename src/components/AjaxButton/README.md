@@ -14,7 +14,7 @@ Vue.use(AjaxButton);
 
 `组件参数API`
 
-- click{Function|点击按钮触发的事件，是参数而不是事件}
+- click{Function|点击按钮触发的事件(异步方法)，是参数而不是事件}
 - auth-list{Array|权限数组，通过 authority 的混入，使用 this.auths 即可}
 - auth-mark{String|控制该按钮权限的标识符，业务的 ajax 接口地址}
 - 其他参数同 el-button 组件

@@ -3,7 +3,7 @@
     <div class="topper">
       <span class="title">统计报表</span>
     </div>
-    <div style="margin-top: -11px">
+    <div style="margin-top: -1px">
       <FilterTable
         ref="table"
         :height="214"
@@ -13,6 +13,7 @@
         :is-pagination="false"
         :is-toper-info="false"
         :is-column-filter="false"
+        :is-export-excel="false"
         :on-columns-change="columns => (this.columns = columns)"
       />
     </div>

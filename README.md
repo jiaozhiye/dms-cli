@@ -65,6 +65,7 @@ $ npm run build
   - SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
   - CountUp 数字计数动画组件
   - JsonToExcel 导出 excel/csv 组件
+  - WebPrint 浏览器的 pdf 打印组件
 ```
 
 ## 目录结构

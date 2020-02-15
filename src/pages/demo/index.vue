@@ -24,7 +24,7 @@
         <span>任务分配</span>
       </template>
       <template slot="controls">
-        <web-print size="small" type="primary" fileUrl="/static/webPrint/111.pdf">pdf 打印</web-print>
+        <web-print size="small" type="primary" :click="printHandle">pdf 打印</web-print>
         <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
         <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>
@@ -39,6 +39,7 @@
 <script>
 import { authority } from '@/utils/authMixin';
 import { dictionary } from '@/utils/dictMixin';
+import { sleep } from '@/utils';
 import res from '@/mock/tableData';
 import printData from '@/mock/printData';
 import Panel from './Panel';
@@ -116,6 +117,10 @@ export default {
   methods: {
     asdasd(row) {
       row.total = row.price * row.num;
+    },
+    async printHandle() {
+      await sleep(2000);
+      return '/static/webPrint/111.pdf';
     },
     createTopFilters() {
       return [

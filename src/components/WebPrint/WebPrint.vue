@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-15 14:03:56
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 15:48:24
+ * @Last Modified time: 2020-02-15 18:04:02
  */
 import { Notification } from 'element-ui';
 import BaseDialog from '@/components/BaseDialog/BaseDialog.vue';
@@ -14,44 +14,58 @@ export default {
     fileUrl: {
       type: String,
       default: ''
+    },
+    click: {
+      type: Function,
+      default: null
     }
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      loading: false,
+      filePath: ''
     };
-  },
-  computed: {
-    isPdf() {
-      return !!this.fileUrl;
-    },
-    iframeUrl() {
-      if (!this.isIE()) {
-        return this.fileUrl;
-      }
-      return `/static/webPrint/pdf/web/viewer.html?file=${this.fileUrl}`;
-    }
   },
   methods: {
     isIE() {
       return !!window.ActiveXObject || 'ActiveXObject' in window;
     },
-    clickHandle() {
-      if (!this.isPdf) {
+    createIframeUrl(path = '') {
+      if (!path) return;
+      if (!this.isIE()) {
+        return path;
+      }
+      return `/static/webPrint/pdf/web/viewer.html?file=${path}`;
+    },
+    async clickHandle() {
+      let file = this.fileUrl;
+      if (this.click) {
+        this.loading = true;
+        try {
+          file = await this.click();
+        } catch (err) {}
+        this.loading = false;
+      }
+      // 处理路径
+      file = this.createIframeUrl(file);
+      if (!file) {
         return Notification({ type: 'warning', title: '提示信息', message: 'pdf 文件未载入，无法打印！' });
       }
-      const fileExtName = this.fileUrl.slice(this.fileUrl.lastIndexOf('.') + 1).toLowerCase();
-      if (fileExtName !== 'pdf') {
+      const extname = file.slice(file.lastIndexOf('.') + 1).toLowerCase();
+      if (extname !== 'pdf') {
         return Notification({ type: 'warning', title: '提示信息', message: '文件格式有误，无法打印！' });
       }
-      this.visible = !this.visible;
+      this.filePath = file;
+      this.visible = true;
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $slots, visible, iframeUrl } = this;
+    const { $props, $listeners, $attrs, $slots, visible, loading, filePath } = this;
     const btnProps = {
       props: {
-        ...$props
+        ...$props,
+        loading
       },
       attrs: {
         ...$attrs,
@@ -76,7 +90,7 @@ export default {
       <div class="print-btn el-button">
         <el-button {...btnProps}>{$slots['default'] || '打印'}</el-button>
         <BaseDialog {...wrapProps}>
-          <iframe class="preview-wrap" src={iframeUrl} />
+          <iframe class="preview-wrap" src={filePath} />
         </BaseDialog>
       </div>
     );

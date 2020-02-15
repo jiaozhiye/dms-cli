@@ -14,7 +14,7 @@ Vue.use(MultiuseButton);
 
 `组件参数API`
 
-- click{Function|点击按钮触发的事件方法，用于实现 ajax 的防止重复提交，注意：是参数而不是事件}
+- click{Function|点击按钮触发的事件方法(异步方法)，用于实现 ajax 的防止重复提交，注意：是参数而不是事件}
 - divider{String|按钮前/后的分隔符，值为 before/after}
 - auth-list{Array|权限数组，通过 authority 的混入，使用 this.auths 即可}
 - auth-mark{String|控制该按钮权限的标识符，业务的 ajax 接口地址}
