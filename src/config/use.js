@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-09 16:00:23
+ * @Last Modified time: 2020-02-15 14:08:36
  */
 import Vue from 'vue';
 import config from '@/assets/js/config';
@@ -101,3 +101,7 @@ Vue.use(DownloadFile);
 // 导出 excel/csv 组件
 import JsonToExcel from '@/components/JsonToExcel';
 Vue.use(JsonToExcel);
+
+// 浏览器 PDF 打印组件
+import WebPrint from '@/components/WebPrint';
+Vue.use(WebPrint);

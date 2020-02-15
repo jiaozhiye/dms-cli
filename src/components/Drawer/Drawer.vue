@@ -32,7 +32,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-05 19:15:37
+ * @Last Modified time: 2020-02-15 15:02:20
  **/
 export default {
   name: 'Drawer',
@@ -266,7 +266,6 @@ export default {
           }
         }
       }
-
       .drawer-body {
         padding: 10px 20px;
         word-wrap: break-word;

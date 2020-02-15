@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div>
-      <PortalPage :height="height" loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" />
-    </div>
+    <PortalPage class="portal-height" loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" />
     <div
       :style="{
         position: 'absolute',
@@ -30,7 +28,6 @@ export default {
   components: {
     PortalPage
   },
-  props: ['height'],
   data() {
     return {
       params: {
@@ -48,4 +45,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.portal-height {
+  height: 100%;
+  min-height: calc(80vh - 80px);
+}
+</style>

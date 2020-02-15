@@ -31,8 +31,8 @@
       <el-button @click="closeDrawer">取 消</el-button>
       <ajax-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</ajax-button>
     </div>
-    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }" @heightChange="heightChangeHandle">
-      <Modal :height="height" @close="closeHandler" />
+    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
+      <Modal @close="closeHandler" />
     </BaseDialog>
   </div>
 </template>
@@ -61,7 +61,6 @@ export default {
       ],
       formList: this.createFormList(),
       content: 'qwe',
-      height: '',
       val: { zxc: 'aaa' }
     };
   },
@@ -81,9 +80,6 @@ export default {
     async getFormData() {
       const res = await this.$refs.form.GET_FORM_DATA();
       console.log(res);
-    },
-    heightChangeHandle(height) {
-      this.height = `${height.slice(0, -1)} - 60px)`;
     },
     createFormList() {
       return [

@@ -7,7 +7,6 @@
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
       <el-button size="small">销售发票</el-button>
-      <el-button size="small">欠货单</el-button>
       <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
     <FilterTable
@@ -25,6 +24,7 @@
         <span>任务分配</span>
       </template>
       <template slot="controls">
+        <web-print size="small" type="primary" fileUrl="/static/webPrint/111.pdf">pdf 打印</web-print>
         <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
         <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>

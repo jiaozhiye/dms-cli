@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-21 20:04:57
+ * @Last Modified time: 2020-02-15 15:29:13
  **/
 export default {
   name: 'BaseDialog',
@@ -147,7 +147,7 @@ export default {
     .el-dialog__header {
       height: 56px;
       line-height: 56px;
-      padding: 0 20px;
+      padding: 0 15px;
       box-sizing: border-box;
       border-bottom: 1px solid @borderColor;
       .el-dialog__title {
@@ -155,28 +155,31 @@ export default {
         line-height: inherit;
       }
       .el-dialog__headerbtn {
-        line-height: normal;
+        font-size: 18px;
+        line-height: 1.075;
+        top: 19px;
+        right: 15px;
       }
     }
     .el-dialog__body {
       padding: 10px 0;
       .fullscreen-btn {
         position: absolute;
-        right: 42px;
+        right: 36px;
         top: 16px;
         padding: 5px;
-        line-height: 1;
         cursor: pointer;
         &:hover {
           color: @primaryColor;
         }
       }
       .container {
-        padding: 0 20px;
+        height: 100%;
+        padding: 0 10px;
       }
     }
     .el-dialog__footer {
-      padding: 10px 20px;
+      padding: 10px 15px;
       border-top: 1px solid @borderColor;
     }
   }
