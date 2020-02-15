@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 14:08:36
+ * @Last Modified time: 2020-02-15 21:29:34
  */
 import Vue from 'vue';
 import config from '@/assets/js/config';

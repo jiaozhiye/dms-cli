@@ -3,7 +3,7 @@
     <el-dropdown trigger="click" class="el-dropdown">
       <span class="el-dropdown-link">
         <span class="avatar">
-          <img class="img" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" />
+          <img class="img" src="@/assets/img/avatar.jpg" />
         </span>
         <span>{{ username }}</span>
         <i class="el-icon-arrow-down el-icon--right" />
@@ -30,7 +30,7 @@ export default {
   name: 'PersonalCenter',
   data() {
     return {
-      username: getUser()
+      username: getUser() || '管理员'
     };
   },
   methods: {
@@ -38,7 +38,7 @@ export default {
     logoutHandle() {
       // 需要走后台推出接口
       this.createLogout();
-      this.$router.push({ path: '/login' }).catch(() => {});;
+      this.$router.push({ path: '/login' }).catch(() => {});
     }
   }
 };
