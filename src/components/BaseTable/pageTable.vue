@@ -1929,9 +1929,13 @@ export default {
       },
       style: { width: '100%' }
     };
+    const cls = {
+      [`toper-card`]: true,
+      [`mb10`]: isToperInfo || isColumnFilter || $scopedSlots.controls || isExportExcel
+    };
     return (
       <div class="table-wrapper">
-        <div class="toper-card">
+        <div class={cls}>
           <section>
             {isToperInfo && (
               <TopInfo {...toperInfoProps}>
@@ -1944,13 +1948,7 @@ export default {
             )}
           </section>
           <section>
-            <div class="slot-wrapper">
-              {$scopedSlots.controls &&
-                $scopedSlots.controls({
-                  data: list,
-                  methods: { addRecordFunc: this.addRowHandler, delRecordFunc: this.deleteHandler }
-                })}
-            </div>
+            {$scopedSlots.controls && <div class="slot-wrapper">{$scopedSlots.controls({ methods: { addRecordFunc: this.addRowHandler, delRecordFunc: this.deleteHandler } })}</div>}
             {isExportExcel && <ExportExcel ref="export-excel" {...exportExcelProps} />}
             {isColumnFilter && <ColumnFilter ref="column-filter" {...columnFilterProps} />}
           </section>
@@ -1976,10 +1974,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: @moduleMargin;
     .slot-wrapper {
+      font-size: 0;
       display: inline-block;
       margin-right: @moduleMargin;
+    }
+    &.mb10 {
+      margin-bottom: @moduleMargin;
     }
   }
   .el-table__header-wrapper {

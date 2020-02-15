@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>打印预览</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      button {
+        padding: 5px 10px;
+      }
+    </style>
+    <script>
+      // 获取 url 参数
+      function getSearchParams() {
+        var search = window.location.search,
+          dataObj = {};
+        if (search.indexOf('?') != -1) {
+          var str = decodeURIComponent(search.substr(1)),
+            strs = str.split('&');
+          for (var i = 0; i < strs.length; i++) {
+            dataObj[strs[i].split('=')[0]] = decodeURIComponent(strs[i].split('=')[1]);
+          }
+        }
+        return dataObj;
+      }
+      // 判断 IE
+      function isIE() {
+        return !!window.ActiveXObject || 'ActiveXObject' in window;
+      }
+      // 打印预览
+      function printPreview() {
+        if (!isIE()) {
+          return window.open(fileUrl);
+        }
+        window.open('/static/webPrint/pdf/web/viewer.html?file=' + fileUrl);
+      }
+      var urlParams = getSearchParams();
+      var fileUrl = urlParams.file || '/static/webPrint/111.pdf';
+      document.title = urlParams.title || '奥迪EP-打印预览';
+    </script>
+  </head>
+  <body>
+    <button onclick="printPreview()">PDF 打印</button>
+  </body>
+</html>
