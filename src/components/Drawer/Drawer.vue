@@ -20,7 +20,8 @@
           </button>
         </div>
         <div class="drawer-body">
-          <slot v-if="isShowSlot" />
+          <Spin v-if="loading" :spinning="loading" tip="Loading..." :containerStyle="{ height: 'calc(100vh - 140px)' }" />
+          <slot v-if="isVisible" />
         </div>
       </div>
     </div>
@@ -32,10 +33,15 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 15:02:20
+ * @Last Modified time: 2020-02-17 17:29:18
  **/
+import Spin from '@/components/Spin/Spin';
+
 export default {
   name: 'Drawer',
+  components: {
+    Spin
+  },
   props: {
     visible: {
       type: Boolean,
@@ -122,12 +128,13 @@ export default {
     this.drawerDom = null;
     this.transitionFlag = true;
     return {
-      isVisible: this.visible
+      isVisible: this.visible,
+      loading: this.visible
     };
   },
   computed: {
-    isShowSlot() {
-      return !this.destroyOnClose ? true : this.isVisible;
+    delayTime() {
+      return !this.isIE() ? 300 : 400;
     },
     maskShow() {
       return this.visible ? 'mask-show' : '';
@@ -152,7 +159,13 @@ export default {
   watch: {
     visible(val) {
       if (val) {
-        this.isVisible = true;
+        if (this.destroyOnClose || !this.isVisible) {
+          this.loading = val;
+        }
+        setTimeout(() => {
+          this.isVisible = val;
+          this.loading = !val;
+        }, this.delayTime);
       }
       this.transitionFlag = true;
       this.$emit(val ? 'open' : 'close');
@@ -183,10 +196,13 @@ export default {
       // 防止多次触发
       if (ev.target !== ev.currentTarget || !this.transitionFlag) return;
       this.transitionFlag = false;
-      if (!this.visible) {
+      if (!this.visible && this.destroyOnClose) {
         this.isVisible = false;
       }
       this.$emit('afterVisibleChange', this.visible);
+    },
+    isIE() {
+      return !!window.ActiveXObject || 'ActiveXObject' in window;
     }
   }
 };

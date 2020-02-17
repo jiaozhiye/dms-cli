@@ -27,4 +27,13 @@ Vue.use(Spin);
     <div>需要 Loading 的元素</div>
   </Spin>
 </template>
+
+# js
+export default {
+  data() {
+    return {
+      loading: true
+    }
+  }
+}
 ```
