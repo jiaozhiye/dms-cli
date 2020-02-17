@@ -3,10 +3,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-21 20:08:02
+ * @Last Modified time: 2020-02-17 12:39:57
  **/
 import addEventListener from 'add-dom-event-listener';
 import Spin from '@/components/Spin/Spin';
+import Cookies from 'js-cookie';
 
 export default {
   name: 'PortalPage',
@@ -30,14 +31,14 @@ export default {
       default: '',
       required: true
     },
-    height: {
-      type: [Number, String],
-      default: '300px'
+    containerStyle: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
-      isLogin: false,
+      isLogined: false,
       loading: false
     };
   },
@@ -50,14 +51,13 @@ export default {
   },
   methods: {
     initial() {
-      // 判断 Portal 系统是否已登录
-      const mark = sessionStorage.getItem('portal');
       this.bindLoadPageEvent();
-      if (mark === '1') {
-        this.isLogin = true;
+      // 判断 Portal 系统是否已登录
+      if (Cookies.get('portal') === '1') {
+        this.isLogined = true;
       } else {
         this.bindLoginEvent();
-        this.doLogin();
+        setTimeout(() => this.doLogin());
       }
     },
     doLogin() {
@@ -72,8 +72,8 @@ export default {
     },
     bindLoginEvent() {
       this.tIframeEvent = addEventListener(this.$refs['tIframe'], 'load', ev => {
-        sessionStorage.setItem('portal', '1');
-        this.isLogin = true;
+        Cookies.set('portal', '1', { expires: new Date(new Date().getTime() + 24 * 60 * 1000) });
+        this.isLogined = true;
       });
     },
     calcPanelSize(val) {
@@ -89,15 +89,15 @@ export default {
     }
   },
   render() {
-    const { method, loginUrl, loginParams, pageUrl, height, isLogin, loading } = this;
+    const { method, loginUrl, loginParams, pageUrl, containerStyle, isLogined, loading } = this;
     return (
       <div class="portal">
-        <form ref="form" class="form" target="tIframe" method={method} action={loginUrl}>
+        <form ref="form" class="form" target="form-target" method={method} action={loginUrl}>
           {this.createFormItem(loginParams)}
         </form>
-        <iframe ref="tIframe" name="tIframe" class="t-iframe" />
+        <iframe ref="tIframe" name="form-target" class="t-iframe" />
         <Spin spinning={loading} tip="Portal Loading...">
-          <iframe ref="sIframe" src={isLogin ? pageUrl : null} class="s-iframe" style={{ height: this.calcPanelSize(height) }} />
+          <iframe ref="sIframe" src={isLogined ? pageUrl : null} class="s-iframe" style={containerStyle} />
         </Spin>
       </div>
     );
@@ -108,6 +108,7 @@ export default {
 <style lang="less" scoped>
 .portal {
   width: 100%;
+  height: 100%;
   .form {
     visibility: hidden;
     height: 0;
@@ -121,6 +122,7 @@ export default {
     display: block;
     border: 0;
     width: 100%;
+    height: 100%;
   }
 }
 </style>

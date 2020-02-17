@@ -1,6 +1,12 @@
 <template>
   <div>
-    <PortalPage class="portal-height" loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" />
+    <PortalPage
+      class="portal-height"
+      loginUrl="https://portal.faw-vw.com/pkmslogin.form"
+      :loginParams="params"
+      pageUrl="https://portal.faw-vw.com/asjct/SAPAfterSales/pages/dserpthreepack/threepackcx_result.jsp?vin="
+      :containerStyle="{ minHeight: 'calc(80vh - 140px)' }"
+    />
     <div
       :style="{
         position: 'absolute',
@@ -31,8 +37,8 @@ export default {
   data() {
     return {
       params: {
-        username: 'Liu00001',
-        password: 'b6agrdFb',
+        username: 'SA22001R01',
+        password: 'AUfw3202',
         'login-form-type': 'pwd'
       }
     };
@@ -45,9 +51,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.portal-height {
-  height: 100%;
-  min-height: calc(80vh - 80px);
-}
-</style>
+<style lang="less" scoped></style>

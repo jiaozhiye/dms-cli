@@ -18,7 +18,7 @@ Vue.use(PortalPage);
 - loginUrl{String|登录外部系统的接口地址，必选}
 - loginParams{Object|登录外部系统携带的参数，必选}
 - pageUrl{String|登录之后，要打开外部系统的页面地址，登录外部系统携带的参数，必选}
-- height{String/Number|承载外部系统容器的高度，默认 400px}
+- containerStyle{Object|承载外部系统容器的样式}
 - onSuccess{Function|成功打开外部系统页面的事件，没有参数}
 
 `示例代码`

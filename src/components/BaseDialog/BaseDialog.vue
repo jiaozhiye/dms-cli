@@ -86,6 +86,7 @@ export default {
     handleClick(e) {
       e.stopPropagation();
       this.fullscreen = !this.fullscreen;
+      this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     createStyles(slots) {
       const hdHeight = '76px';
@@ -97,8 +98,6 @@ export default {
         : {
             maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${ftHeight} - ${hdHeight})`
           };
-      // 组件内容高度变化的事件
-      this.$emit('heightChange', dialogBodyHeight.maxHeight || dialogBodyHeight.height);
       return {
         overflowY: 'auto',
         minHeight: '150px',

@@ -110,12 +110,13 @@ export default {
         },
         {
           type: 'DATE',
-          dateType: 'date',
+          dateType: 'datetime',
           label: '日期',
           fieldName: 'date',
           placeholder: '选择月份',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }],
           change: val => {
+            console.log(111, val);
             this.$refs.form.SET_FIELDS_VALUE({ number: 200 });
           }
         },
