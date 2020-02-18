@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-02 16:30:46
+ * @Last Modified time: 2020-02-18 12:44:26
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -13,116 +13,10 @@ import DropDown from './dropDown.vue';
 export default {
   name: 'FilterTable',
   props: {
-    height: {
-      type: [Number, String]
-    },
-    maxHeight: {
-      type: [Number, String]
-    },
     columns: {
       type: Array,
       required: true,
       default: () => []
-    },
-    columnsRef: {
-      type: String,
-      default: ''
-    },
-    dataSource: {
-      type: [Array, Object],
-      default: () => []
-    },
-    fetchapi: Function,
-    params: {
-      type: Object,
-      default: () => ({})
-    },
-    uidkey: {
-      type: String,
-      default: 'uid'
-    },
-    datakey: {
-      type: String,
-      default: 'items'
-    },
-    isMemoryPagination: {
-      type: Boolean,
-      default: false
-    },
-    rowstyles: {
-      type: Array,
-      default: () => []
-    },
-    cellstyles: {
-      type: Array,
-      default: () => []
-    },
-    selectionType: {
-      type: String,
-      default: 'multiple'
-    },
-    isSelectColumn: {
-      type: Boolean,
-      default: true
-    },
-    defaultSelections: {
-      type: Array,
-      default: () => []
-    },
-    isToperInfo: {
-      type: Boolean,
-      default: true
-    },
-    isExportExcel: {
-      type: Boolean,
-      default: true
-    },
-    isColumnFilter: {
-      type: Boolean,
-      default: true
-    },
-    isPagination: {
-      type: Boolean,
-      default: true
-    },
-    exportFileName: {
-      type: String
-    },
-    mergeCellMethod: {
-      type: Function,
-      default: () => {}
-    },
-    onColumnsChange: {
-      type: Function,
-      required: true
-    },
-    onRowSelectChange: {
-      type: Function,
-      default: () => {}
-    },
-    onCellChange: {
-      type: Function,
-      default: () => {}
-    },
-    onSummationChange: {
-      type: Function,
-      default: () => {}
-    },
-    onPageChange: {
-      type: Function,
-      default: () => {}
-    },
-    onEnterEvent: {
-      type: Function,
-      default: () => {}
-    },
-    onCalcExportData: {
-      type: Function,
-      default: () => {}
-    },
-    onSyncTableData: {
-      type: Function,
-      default: () => {}
     }
   },
   data() {

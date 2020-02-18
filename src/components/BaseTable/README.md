@@ -78,6 +78,8 @@ http://localhost:8080/table
 - params{Object|表格上方筛选条件的参数，json 对象}
   - params 中如果有 xhrAbort 属性，并且值是 true，表示取消 ajax 请求
   - params 中如果有 noJumper 属性，并且值是 true，表示当前查询不会跳回到第一页
+- isServerSorter{Boolean|是否开启服务端表头排序}
+- isServerFilter{Boolean|是否开启服务端表头筛选}
 - rowstyles{Array|动态指定列表行的样式[{ row: 行数据, styles: {color: 'red'} }, ...]}
 - cellstyles{Array|动态指定单元格的样式[{ row: 行数据, dataIndex: 'xxx', styles: {backgroundColor: 'red'} }, ...]}
 - selectionType{String|table 行选中类型，multiple/single, 默认是多选}

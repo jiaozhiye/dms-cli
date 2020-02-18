@@ -6,16 +6,17 @@
       <el-button size="small" type="primary">到货确认</el-button>
       <el-button size="small">明细</el-button>
       <el-button size="small">发货单</el-button>
-      <el-button size="small">销售发票</el-button>
+      <el-button size="small" @click="zxczxc">销售发票</el-button>
       <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
     </button-area>
     <FilterTable
       ref="table"
       columns-ref="myTable"
       :columns="columns"
-      :data-source="list"
-      :is-memory-pagination="true"
-      :onCalcExportData="asdasd"
+      :fetchapi="() => {}"
+      :params="params"
+      :uidkey="'id'"
+      :defaultSelections="selectes"
       :on-columns-change="columns => (this.columns = columns)"
       :on-sync-table-data="tableDateChange"
     >
@@ -61,6 +62,8 @@ export default {
       topFilterList: this.createTopFilters(),
       columns: this.createTableColumns(),
       list: [],
+      params: { a: 9 },
+      selectes: [],
       printList: printData.data,
       filterValue: { qwe: '22', hello: '1,1-2,1-2-1' },
       json_fields: {
@@ -100,23 +103,23 @@ export default {
   },
   mounted() {
     this.BaseTable = this.$refs.table;
-    console.log('页面不具备的权限：', this.auths);
-    this.BaseTable.START_LOADING();
-    setTimeout(() => {
-      this.BaseTable.STOP_LOADING();
-      this.list = [...res.data.items];
-      this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
-      this.topFilterList[0].hidden = false;
-      this.topFilterList[0].labelOptions.itemList = [
-        { text: '搜索1', value: '11' },
-        { text: '搜索2', value: '22' }
-      ];
-      this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
-    }, 3000);
+    // console.log('页面不具备的权限：', this.auths);
+    // this.BaseTable.START_LOADING();
+    // setTimeout(() => {
+    //   this.BaseTable.STOP_LOADING();
+    //   this.list = [...res.data.items];
+    //   this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
+    //   this.topFilterList[0].hidden = false;
+    //   this.topFilterList[0].labelOptions.itemList = [
+    //     { text: '搜索1', value: '11' },
+    //     { text: '搜索2', value: '22' }
+    //   ];
+    //   this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
+    // }, 3000);
   },
   methods: {
-    asdasd(row) {
-      row.total = row.price * row.num;
+    zxczxc() {
+      this.params = { ...this.params };
     },
     async printHandle() {
       await sleep(2000);
@@ -423,13 +426,7 @@ export default {
           filterItems: [
             { text: '已完成', value: 1 },
             { text: '进行中', value: 2 },
-            { text: '未完成', value: 3 },
-            { text: '已完成', value: 11 },
-            { text: '进行中', value: 21 },
-            { text: '未完成', value: 31 },
-            { text: '已完成', value: 111 },
-            { text: '进行中', value: 211 },
-            { text: '未完成', value: 311 }
+            { text: '未完成', value: 3 }
           ],
           editable: true,
           defaultEditable: true,
@@ -489,6 +486,7 @@ export default {
     // 表格的 onSyncTableData 事件
     tableDateChange(list, isFirst) {
       if (isFirst && list.length > 0) {
+        !this.selectes.length && (this.selectes = [list[3]]);
         setTimeout(() => {
           // 让表格列对应的所有的单元格，可编辑状态禁用   true -> 禁用可编辑状态
           this.BaseTable.SET_CELL_UNEDITABLE(list, 'state', true);

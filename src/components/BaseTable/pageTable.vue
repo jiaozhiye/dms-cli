@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-13 20:03:50
+ * @Last Modified time: 2020-02-18 20:47:52
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -18,12 +18,6 @@ import Spin from '@/components/Spin/Spin';
 export default {
   name: 'PageTable',
   props: {
-    height: {
-      type: [Number, String]
-    },
-    maxHeight: {
-      type: [Number, String]
-    },
     columns: {
       type: Array,
       required: true,
@@ -50,9 +44,11 @@ export default {
       type: String,
       default: 'items'
     },
-    isMemoryPagination: {
-      type: Boolean,
-      default: false
+    height: {
+      type: [Number, String]
+    },
+    maxHeight: {
+      type: [Number, String]
     },
     rowstyles: {
       type: Array,
@@ -61,6 +57,10 @@ export default {
     cellstyles: {
       type: Array,
       default: () => []
+    },
+    isSelectColumn: {
+      type: Boolean,
+      default: true
     },
     selectionType: {
       type: String,
@@ -74,15 +74,15 @@ export default {
       type: Object,
       default: () => ({})
     },
-    isSelectColumn: {
+    isServerSorter: {
       type: Boolean,
-      default: true
+      default: undefined
+    },
+    isServerFilter: {
+      type: Boolean,
+      default: undefined
     },
     isToperInfo: {
-      type: Boolean,
-      default: true
-    },
-    isExportExcel: {
       type: Boolean,
       default: true
     },
@@ -91,6 +91,14 @@ export default {
       default: true
     },
     isPagination: {
+      type: Boolean,
+      default: true
+    },
+    isMemoryPagination: {
+      type: Boolean,
+      default: false
+    },
+    isExportExcel: {
       type: Boolean,
       default: true
     },
@@ -185,7 +193,7 @@ export default {
       return this.columnFlatMap(this.columns).some(x => x.summation);
     },
     isShowPagination() {
-      return (this.isPagination && Boolean(this.fetchapi)) || this.isMemoryPagination;
+      return this.isPagination || this.isMemoryPagination;
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
@@ -207,7 +215,6 @@ export default {
       };
       // 移除 noJumper 属性
       delete queries.noJumper;
-      // console.log('table 组件中 ajax 请求条件：', queries);
       return queries;
     },
     editableColumns() {
@@ -254,7 +261,8 @@ export default {
       // Element-UI v2.10.x 及以上的版本，在切换表格列显示/隐藏状态时，特别是最后一列，可能会出现 tr 对不齐的 bug
       this.$nextTick(() => this.resetRender());
     },
-    defaultSelections(nextProps) {
+    defaultSelections(nextProps, prevProps) {
+      if (_.isEqual(nextProps, prevProps)) return;
       this.createRowSelection(nextProps);
     },
     columns(nextProps) {
@@ -271,9 +279,11 @@ export default {
     }
   },
   mounted() {
-    this.createTableList(this.dataSource);
-    this.createRowSelection(this.defaultSelections);
-    this.getTableData();
+    if (!this.fetchapi) {
+      this.createTableList(this.dataSource);
+    } else {
+      this.getTableData();
+    }
     this.createTableBody();
     this.calcTableHeight();
     this.bindWindowResizeEvent();
@@ -342,12 +352,12 @@ export default {
       this.syncTableList(true);
       // 总记录数
       this.setPaginationTotal(this.createPageTotal(data, keypath));
-      // 清空操作
-      this.clearTableHandler();
       // 清空 table 组件操作记录
       this.clearHandleLogs();
       // 重置可编辑单元格坐标
       this.setEditPosIndex(-1, -1);
+      // 回显选中行
+      this.createRowSelection(this.selectionRows);
       // 重置滚动条位置
       this.$nextTick(() => {
         this.scrollTopToPosition(0);
@@ -816,6 +826,7 @@ export default {
           const filter = this.filterColumnScopedRender(h, x);
           const editer = this.editColumnScopedRender(h, x);
           const wrapProps = mergeProps(defaultRender, filter, editer, render);
+          const serverSort = _.isUndefined(this.isServerSorter) ? config.table.serverSort : this.isServerSorter;
           return (
             <el-table-column
               key={`${x.dataIndex}-${i}`}
@@ -828,7 +839,7 @@ export default {
               labelClassName={x.editRequired ? 'is-required' : ''}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
-              sortable={config.table.serverSort || x.sorter ? 'custom' : false}
+              sortable={serverSort || x.sorter ? 'custom' : false}
               {...wrapProps}
             >
               {Array.isArray(x.children) && this.createTableColumns(x.children)}
@@ -921,14 +932,14 @@ export default {
     // 匹配日期控件的 dateType
     createDateType(format = 'yyyy-MM-dd HH:mm:ss') {
       // 配置项
-      const config = {
+      const dateTypeConfig = {
         date: { placeholder: '选择日期', format: 'yyyy-MM-dd' },
         datetime: { placeholder: '选择时间', format: 'yyyy-MM-dd HH:mm:ss' }
       };
       let res = {};
-      for (let key in config) {
-        if (config[key].format === format) {
-          res = Object.assign({}, config[key], { dateType: key });
+      for (let key in dateTypeConfig) {
+        if (dateTypeConfig[key].format === format) {
+          res = Object.assign({}, dateTypeConfig[key], { dateType: key });
           break;
         }
       }
@@ -1058,10 +1069,11 @@ export default {
     async getTableData() {
       // 没有 api 接口，xhrAbort: true，取消本次请求
       if (!this.fetchapi || this.fetchParams.xhrAbort) return;
+      // console.log(`ajax 请求参数：`, this.fetchParams);
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/tableData').default;
         // 构建表格数据
-        this.createTableList(res.data);
+        this.createTableList(_.cloneDeep(res.data));
       } else {
         const params = { ...this.fetchParams };
         // 移除 xhrAbort 属性
@@ -1229,7 +1241,8 @@ export default {
     },
     // 表头的过滤筛选
     filterHandler() {
-      if (config.table.serverFilter) {
+      const bool = _.isUndefined(this.isServerFilter) ? config.table.serverFilter : this.isServerFilter;
+      if (bool) {
         this.serverFilter();
       } else {
         this.clientFilter();
@@ -1306,7 +1319,8 @@ export default {
     },
     // 表头排序变化时
     sortChangeHandler({ column, prop, order }) {
-      if (config.table.serverSort) {
+      const bool = _.isUndefined(this.isServerSorter) ? config.table.serverSort : this.isServerSorter;
+      if (bool) {
         this.serverSorter(column, prop, order);
       } else {
         this.clientSorter(column, prop, order);
@@ -1748,8 +1762,9 @@ export default {
     // 清空表头排序条件
     clearTHeadSort() {
       this.$refs.appTable.clearSort();
+      this.sorterParams = {};
       // 清除表头排序箭头的选中状态
-      this.$refs.appTable.columns.forEach(x => (x.order = ''));
+      // this.$refs.appTable.columns.forEach(x => (x.order = ''));
     },
     // 表格上方的清空操作
     clearTableHandler() {
@@ -1967,6 +1982,7 @@ export default {
 @tableBgColor: #f2f2f2;
 @tableHoverColor: #f5f5f5;
 @dangerColor: #f5222d;
+@borderColor: #d9d9d9;
 
 .table-wrapper {
   overflow-x: hidden;
@@ -2072,7 +2088,7 @@ export default {
   .el-table__fixed-right {
     z-index: 1;
     &::before {
-      content: none;
+      background-color: @borderColor;
     }
   }
 }
@@ -2114,7 +2130,7 @@ export default {
         }
         &.highlighted,
         &:hover {
-          background-color: #f5f5f5;
+          background-color: @tableHoverColor;
         }
       }
     }
