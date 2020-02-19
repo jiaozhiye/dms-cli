@@ -151,7 +151,7 @@ export default {
       loading: false,
       tableHeight: this.createTableHeight(this.height),
       list: [], // 列表数据
-      selectionRows: [], // table 选中行
+      selectionRows: this.defaultSelections, // table 选中行
       disabledRows: [], // table 禁用行
       filterParams: {}, // 表头筛选参数
       sorterParams: {}, // 表头排序参数

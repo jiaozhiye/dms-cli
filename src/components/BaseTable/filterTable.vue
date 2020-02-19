@@ -349,14 +349,16 @@ export default {
       );
     },
     doMove(el, val) {
-      el && (el.style.transform = `translate3d(${-1 * val}px, 0, 0)`);
+      if (!el) return;
+      this.scrollLeft = val;
+      el.style.transform = `translate3d(${-1 * val}px, 0, 0)`;
     },
     scrollEventHandle(e) {
       const l = e.target.scrollLeft;
-      this.scrollLeft = l;
+      if (l === this.scrollLeft) return;
       this.throttle(this.doMove, 10)(this.$$tableHeader, l);
       // 处理滚动防抖，避免出现表格线框对不齐的 bug
-      this.debounce(this.RESET_RENDER, 300)();
+      // this.debounce(this.RESET_RENDER, 400)();
     },
     documentEventHandle(e) {
       this.closeAllPopover();
