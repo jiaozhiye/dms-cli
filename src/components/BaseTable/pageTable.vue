@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-18 20:47:52
+ * @Last Modified time: 2020-02-20 02:14:32
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -145,6 +145,7 @@ export default {
   data() {
     this.originData = []; // 原始数据, 用于客户端表头过滤筛选
     this.backUpData = []; // 备份数据
+    this.allSelectionRows = []; // 用于记忆分页选中
     this.cellValChange = false; // 单元格数据是否改变
     this.tableBody = null;
     return {
@@ -310,14 +311,16 @@ export default {
     },
     // 初始化 table row 选中
     createRowSelection(selectedRows) {
-      // 清空行选中状态
-      this.clearSelectionHandle();
       if (!selectedRows.length) return;
       // 单选时
       if (this.selectionType === 'single') {
         selectedRows.length = 1;
       }
-      selectedRows.forEach(row => this.toggleSelectionHandle(row, true));
+      const results = selectedRows.filter(row => this.originData.findIndex(x => x._uid === row._uid) !== -1);
+      if (!results.length) {
+        // return this.clearSelectionHandle();
+      }
+      results.forEach(row => this.toggleSelectionHandle(row, true));
     },
     // 创建内存分页的列表数据
     createLimitRecords() {
@@ -1071,9 +1074,14 @@ export default {
       if (!this.fetchapi || this.fetchParams.xhrAbort) return;
       // console.log(`ajax 请求参数：`, this.fetchParams);
       if (process.env.MOCK_DATA === 'true') {
-        const res = require('@/mock/tableData').default;
+        const { data } = _.cloneDeep(require('@/mock/tableData').default);
+        // 模拟分页
+        const { current, pageSize } = this.fetchParams;
+        const start = (current - 1) * pageSize;
+        const end = start + pageSize;
+        data.items = data.items.slice(start, end);
         // 构建表格数据
-        this.createTableList(_.cloneDeep(res.data));
+        this.createTableList(data);
       } else {
         const params = { ...this.fetchParams };
         // 移除 xhrAbort 属性
@@ -1101,7 +1109,7 @@ export default {
     // 删除列表记录方法
     deleteHandler(rows = []) {
       // 需要移除的数据，选中行 + 参数
-      const removedRows = [...new Set([...rows, ...this.selectionRows])];
+      const removedRows = _.uniqBy([...rows, ...this.selectionRows], '_uid');
       // 移除数据
       for (let i = 0; i < this.list.length; i++) {
         if (removedRows.includes(this.list[i])) {
@@ -1391,9 +1399,8 @@ export default {
     // table row 选中状态变化时
     handleSelectionChange(rows) {
       rows = Array.isArray(rows) ? rows : [rows];
-      if (_.isEqual(rows, this.selectionRows)) return;
-      this.selectionRows = rows;
-      this.debounce(this.onRowSelectChange, 0)(rows);
+      this.selectionRows = _.uniqBy(rows, '_uid');
+      this.debounce(this.onRowSelectChange, 0)(this.selectionRows);
     },
     // 清空 table row 的选中
     clearSelectionHandle() {

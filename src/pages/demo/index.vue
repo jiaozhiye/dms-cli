@@ -18,6 +18,7 @@
       :uidkey="'id'"
       :defaultSelections="selectes"
       :on-columns-change="columns => (this.columns = columns)"
+      :onRowSelectChange="selectionHandle"
       :on-sync-table-data="tableDateChange"
     >
       <template slot="moreActions">
@@ -118,6 +119,9 @@ export default {
     // }, 3000);
   },
   methods: {
+    selectionHandle(rows) {
+      console.log(rows);
+    },
     zxczxc() {
       this.params = { ...this.params };
     },
@@ -486,7 +490,7 @@ export default {
     // 表格的 onSyncTableData 事件
     tableDateChange(list, isFirst) {
       if (isFirst && list.length > 0) {
-        !this.selectes.length && (this.selectes = [list[3]]);
+        !this.selectes.length && (this.selectes = [list[1], list[3]]);
         setTimeout(() => {
           // 让表格列对应的所有的单元格，可编辑状态禁用   true -> 禁用可编辑状态
           this.BaseTable.SET_CELL_UNEDITABLE(list, 'state', true);
