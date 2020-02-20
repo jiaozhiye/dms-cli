@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-20 12:25:34
+ * @Last Modified time: 2020-02-20 23:51:13
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -205,12 +205,8 @@ export default {
       const { current, pageSize } = this.pagination;
       const pagination = this.isShowPagination
         ? {
-            currentPage: current,
             pageSize, // 必须
-            pageNum: current,
-            limit: pageSize,
-            current, // 必须
-            size: pageSize
+            current // 必须
           }
         : {};
       const queries = {
@@ -256,10 +252,14 @@ export default {
       this.toFirstPage();
     },
     fetchParams(nextProps, prevProps) {
-      // 内存分页 && 只有页码发生变化
-      if (this.isMemoryPagination && this.isOnlyPageChange(nextProps, prevProps)) {
-        this.createLimitRecords();
+      const onlyPageChange = this.isOnlyPaginationChange(nextProps, prevProps);
+      if (this.isMemoryPagination) {
+        // 内存分页 && 只有页码发生变化，处理分页
+        onlyPageChange && this.createLimitRecords();
       } else {
+        // 两次请求的参数不等 && 有其他搜索条件变化，清空行选中
+        !_.isEqual(nextProps, prevProps) && !onlyPageChange && this.clearSelectionHandle();
+        // 请求数据
         this.getTableData();
       }
     },
@@ -324,9 +324,6 @@ export default {
       }
       // 筛选有效数据
       const results = rows.filter(row => this.originData.findIndex(x => x._uid === row._uid) !== -1);
-      if (!results.length) {
-        // return this.clearSelectionHandle();
-      }
       results.forEach(row => this.toggleSelectionHandle(row, true));
     },
     // 创建内存分页的列表数据
@@ -335,9 +332,9 @@ export default {
       this.list = this.originData.slice((current - 1) * pageSize, current * pageSize);
     },
     // 是否仅有分页参数产生变化
-    isOnlyPageChange(nextProps, prevProps) {
+    isOnlyPaginationChange(nextProps, prevProps) {
       const diff = Object.keys(this.difference(nextProps, prevProps)).join('|');
-      return diff.includes('current') || diff.includes('pageSize');
+      return diff === 'current' || diff === 'pageSize';
     },
     // 创建表格数据
     createTableList(data) {
@@ -865,9 +862,6 @@ export default {
     },
     // 生成 uuid key
     createUidKey(key = '') {
-      if (key !== '') {
-        key += '-';
-      }
       const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
         let r = (Math.random() * 16) | 0;
         let v = c == 'x' ? r : (r & 0x3) | 0x8;
@@ -1074,25 +1068,26 @@ export default {
     },
     // ajax 获取服务端列表数据
     async getTableData() {
+      const { fetchapi, fetchParams } = this;
       // 没有 api 接口，xhrAbort: true，取消本次请求
-      if (!this.fetchapi || this.fetchParams.xhrAbort) return;
-      // console.log(`ajax 请求参数：`, this.fetchParams);
+      if (!fetchapi || fetchParams.xhrAbort) return;
+      // console.log(`ajax 请求参数：`, fetchParams);
       if (process.env.MOCK_DATA === 'true') {
         const { data } = _.cloneDeep(require('@/mock/tableData').default);
         // 模拟分页
-        const { current, pageSize } = this.fetchParams;
+        const { current, pageSize } = fetchParams;
         const start = (current - 1) * pageSize;
         const end = start + pageSize;
         data.items = data.items.slice(start, end);
         // 构建表格数据
         this.createTableList(data);
       } else {
-        const params = { ...this.fetchParams };
+        const params = { ...fetchParams };
         // 移除 xhrAbort 属性
         delete params.xhrAbort;
         this.START_LOADING();
         try {
-          const res = await this.fetchapi(params);
+          const res = await fetchapi(params);
           if (res.resultCode === 200) {
             // 构建表格数据
             this.createTableList(res.data);
@@ -1263,7 +1258,7 @@ export default {
     serverFilter() {
       const params = {};
       for (let attr in this.filters) {
-        if (!this.filters[attr].length) continue;
+        if (this.isEmpty(this.filters[attr])) continue;
         params[attr.split('|')[1]] = this.filters[attr];
       }
       this.filterParams = params;
@@ -1713,12 +1708,11 @@ export default {
         if (Array.isArray(arr[i].children)) {
           res = this.deepFind(arr[i].children, mark);
         }
-        if (res !== null) {
+        if (res) {
           return res;
         }
         if (arr[i].dataIndex === mark) {
-          res = arr[i];
-          break;
+          return arr[i];
         }
       }
       return res;
@@ -1752,6 +1746,10 @@ export default {
         fn.timer && clearTimeout(fn.timer);
         fn.timer = setTimeout(() => fn.apply(this, args), delay);
       };
+    },
+    // 判断参数是否为空
+    isEmpty(val) {
+      return typeof val === 'undefined' || val === '' || val === null;
     },
     // 判断参数是否是日期类型
     isDate(date = '') {
@@ -1794,6 +1792,10 @@ export default {
         _.set(data, keypath.replace(/[^\.]+$/, 'total'), _.isUndefined(total) ? rows.length : total);
         this.createTableList(data);
       }
+    },
+    DO_REFRESH(isToFirst) {
+      isToFirst && this.toFirstPage();
+      this.getTableData();
     },
     EXECUTE_INSERT(rows) {
       this.addRowHandler(rows);

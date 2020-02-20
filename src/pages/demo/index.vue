@@ -120,10 +120,10 @@ export default {
   },
   methods: {
     selectionHandle(rows) {
-      console.log(rows);
+      // console.log(rows);
     },
     zxczxc() {
-      this.params = { ...this.params };
+      this.params = { ...this.params, a: 7 };
     },
     async printHandle() {
       await sleep(2000);

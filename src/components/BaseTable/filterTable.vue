@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-18 12:44:26
+ * @Last Modified time: 2020-02-20 23:12:41
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -354,11 +354,12 @@ export default {
       el.style.transform = `translate3d(${-1 * val}px, 0, 0)`;
     },
     scrollEventHandle(e) {
-      const l = e.target.scrollLeft;
-      if (l === this.scrollLeft) return;
-      this.throttle(this.doMove, 10)(this.$$tableHeader, l);
+      const { scrollLeft = 0 } = e.target;
+      if (scrollLeft !== this.scrollLeft) {
+        this.throttle(this.doMove, 10)(this.$$tableHeader, scrollLeft);
+      }
       // 处理滚动防抖，避免出现表格线框对不齐的 bug
-      // this.debounce(this.RESET_RENDER, 400)();
+      this.debounce(this.RESET_RENDER, 300)();
     },
     documentEventHandle(e) {
       this.closeAllPopover();
@@ -429,6 +430,9 @@ export default {
     // PageTable 组件对外公开的方法
     SET_TABLE_DATA(...rest) {
       this.$pageTable.SET_TABLE_DATA(...rest);
+    },
+    DO_REFRESH(...rest) {
+      this.$pageTable.DO_REFRESH(...rest);
     },
     EXECUTE_INSERT(...rest) {
       this.$pageTable.EXECUTE_INSERT(...rest);
