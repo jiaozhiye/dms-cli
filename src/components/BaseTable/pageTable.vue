@@ -145,7 +145,6 @@ export default {
   data() {
     this.originData = []; // 原始数据, 用于客户端表头过滤筛选
     this.backUpData = []; // 备份数据
-    this.allSelectionRows = []; // 用于记忆分页选中
     this.cellValChange = false; // 单元格数据是否改变
     this.tableBody = null;
     return {
@@ -285,6 +284,7 @@ export default {
     } else {
       this.getTableData();
     }
+    this.createRowSelection(this.selectionRows);
     this.createTableBody();
     this.calcTableHeight();
     this.bindWindowResizeEvent();
@@ -310,13 +310,14 @@ export default {
         .map(x => x.dataIndex);
     },
     // 初始化 table row 选中
-    createRowSelection(selectedRows) {
-      if (!selectedRows.length) return;
+    createRowSelection(rows) {
+      if (!rows.length) return;
       // 单选时
       if (this.selectionType === 'single') {
-        selectedRows.length = 1;
+        rows.length = 1;
       }
-      const results = selectedRows.filter(row => this.originData.findIndex(x => x._uid === row._uid) !== -1);
+      // 筛选有效数据
+      const results = rows.filter(row => this.originData.findIndex(x => x._uid === row._uid) !== -1);
       if (!results.length) {
         // return this.clearSelectionHandle();
       }
@@ -359,8 +360,6 @@ export default {
       this.clearHandleLogs();
       // 重置可编辑单元格坐标
       this.setEditPosIndex(-1, -1);
-      // 回显选中行
-      this.createRowSelection(this.selectionRows);
       // 重置滚动条位置
       this.$nextTick(() => {
         this.scrollTopToPosition(0);
@@ -1399,8 +1398,8 @@ export default {
     // table row 选中状态变化时
     handleSelectionChange(rows) {
       rows = Array.isArray(rows) ? rows : [rows];
-      this.selectionRows = _.uniqBy(rows, '_uid');
-      this.debounce(this.onRowSelectChange, 0)(this.selectionRows);
+      this.selectionRows = rows;
+      this.debounce(this.onRowSelectChange, 0)(rows);
     },
     // 清空 table row 的选中
     clearSelectionHandle() {
