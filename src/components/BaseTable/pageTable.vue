@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-20 11:30:13
+ * @Last Modified time: 2020-02-20 12:25:34
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1771,9 +1771,11 @@ export default {
     // 清空表头排序条件
     clearTHeadSort() {
       this.$refs.appTable.clearSort();
-      this.boolServerSorter && (this.sorterParams = {});
-      // 清除表头排序箭头的选中状态
-      // this.$refs.appTable.columns.forEach(x => (x.order = ''));
+      if (this.boolServerSorter) {
+        this.sorterParams = {};
+      } else {
+        this.clientSorter(null, null, null);
+      }
     },
     // 表格上方的清空操作
     clearTableHandler() {
