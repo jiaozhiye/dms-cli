@@ -360,8 +360,8 @@ export default {
           sorter: true,
           filter: true,
           filterType: 'number',
-          // summation: true,
-          // summationUnit: '元',
+          summation: true,
+          summationUnit: '元',
           editable: true,
           editType: 'number',
           editRequired: true,
@@ -387,8 +387,8 @@ export default {
           dataIndex: 'total',
           width: 120,
           sorter: true,
-          // summation: true,
-          // summationUnit: '元',
+          summation: true,
+          summationUnit: '元',
           render: props => {
             // 计算规则
             props.row.total = props.row.price * props.row.num;

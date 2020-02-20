@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-20 02:14:32
+ * @Last Modified time: 2020-02-20 11:30:13
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -194,6 +194,12 @@ export default {
     },
     isShowPagination() {
       return this.isPagination || this.isMemoryPagination;
+    },
+    boolServerSorter() {
+      return _.isUndefined(this.isServerSorter) ? config.table.serverSorter : this.isServerSorter;
+    },
+    boolServerFilter() {
+      return _.isUndefined(this.isServerFilter) ? config.table.serverFilter : this.isServerFilter;
     },
     fetchParams() {
       const { current, pageSize } = this.pagination;
@@ -828,7 +834,6 @@ export default {
           const filter = this.filterColumnScopedRender(h, x);
           const editer = this.editColumnScopedRender(h, x);
           const wrapProps = mergeProps(defaultRender, filter, editer, render);
-          const serverSort = _.isUndefined(this.isServerSorter) ? config.table.serverSort : this.isServerSorter;
           return (
             <el-table-column
               key={`${x.dataIndex}-${i}`}
@@ -841,7 +846,7 @@ export default {
               labelClassName={x.editRequired ? 'is-required' : ''}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
-              sortable={serverSort || x.sorter ? 'custom' : false}
+              sortable={this.boolServerSorter || x.sorter ? 'custom' : false}
               {...wrapProps}
             >
               {Array.isArray(x.children) && this.createTableColumns(x.children)}
@@ -1248,8 +1253,7 @@ export default {
     },
     // 表头的过滤筛选
     filterHandler() {
-      const bool = _.isUndefined(this.isServerFilter) ? config.table.serverFilter : this.isServerFilter;
-      if (bool) {
+      if (this.boolServerFilter) {
         this.serverFilter();
       } else {
         this.clientFilter();
@@ -1326,8 +1330,7 @@ export default {
     },
     // 表头排序变化时
     sortChangeHandler({ column, prop, order }) {
-      const bool = _.isUndefined(this.isServerSorter) ? config.table.serverSort : this.isServerSorter;
-      if (bool) {
+      if (this.boolServerSorter) {
         this.serverSorter(column, prop, order);
       } else {
         this.clientSorter(column, prop, order);
@@ -1768,7 +1771,7 @@ export default {
     // 清空表头排序条件
     clearTHeadSort() {
       this.$refs.appTable.clearSort();
-      this.sorterParams = {};
+      this.boolServerSorter && (this.sorterParams = {});
       // 清除表头排序箭头的选中状态
       // this.$refs.appTable.columns.forEach(x => (x.order = ''));
     },
