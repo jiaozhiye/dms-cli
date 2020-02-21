@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-20 23:51:13
+ * @Last Modified time: 2020-02-21 13:12:26
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -186,8 +186,12 @@ export default {
     };
   },
   computed: {
+    // unique key
+    uniqueKey() {
+      return `pageTable_${+new Date()}`;
+    },
     isEditable() {
-      return Boolean(this.editableColumns.length);
+      return !!this.editableColumns.length;
     },
     isShowSummary() {
       return this.columnFlatMap(this.columns).some(x => x.summation);
@@ -231,7 +235,9 @@ export default {
     listChange() {
       const editableKeys = this.createEditableKeys();
       // 不可编辑表格
-      if (!editableKeys.length) return null;
+      if (!editableKeys.length) {
+        return this.list.length;
+      }
       return this.list.map(x => {
         let item = {};
         editableKeys.forEach(key => _.set(item, key, _.get(x, key)));
@@ -281,10 +287,11 @@ export default {
     },
     listChange(nextProps, prevProps) {
       if (_.isEqual(nextProps, prevProps)) return;
-      this.syncTableList();
+      this.debounce(this.syncTableList, 0)();
     }
   },
   mounted() {
+    this.$$appTable = this.$refs['appTable'];
     if (!this.fetchapi) {
       this.createTableList(this.dataSource);
     } else {
@@ -333,8 +340,8 @@ export default {
     },
     // 是否仅有分页参数产生变化
     isOnlyPaginationChange(nextProps, prevProps) {
-      const diff = Object.keys(this.difference(nextProps, prevProps)).join('|');
-      return diff === 'current' || diff === 'pageSize';
+      const diff = Object.keys(this.difference(nextProps, prevProps));
+      return diff.length === 1 && (diff.includes('current') || diff.includes('pageSize'));
     },
     // 创建表格数据
     createTableList(data) {
@@ -432,7 +439,7 @@ export default {
       const rows = this.isMemoryPagination ? this.originData : this.list;
       // 重置数据列表的动态索引
       rows.forEach((row, i) => (row.$index = i));
-      this.onSyncTableData(rows, Boolean(isFirst));
+      this.onSyncTableData(rows, isFirst);
     },
     // 跳转到第一页
     toFirstPage() {
@@ -1179,7 +1186,7 @@ export default {
       }
       // 多选
       if (this.selectionType === 'multiple') {
-        this.$refs.appTable.toggleRowSelection(row, state);
+        this.$$appTable && this.$$appTable.toggleRowSelection(row, state);
       }
     },
     // 单元格双击时
@@ -1213,7 +1220,7 @@ export default {
         inputDom && inputDom.select();
         const targetColumn = this.editableColumns.find(x => x.dataIndex === marks[editableColumnIndex]);
         if (!targetColumn.fixed) return;
-        const fixedTableBody = this.$refs.appTable.$el.querySelector('.el-table__fixed > .el-table__fixed-body-wrapper > .el-table__body');
+        const fixedTableBody = this.$$appTable.$el.querySelector('.el-table__fixed > .el-table__fixed-body-wrapper > .el-table__body');
         const fixedInputDom = fixedTableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
         fixedInputDom && fixedInputDom.select();
       });
@@ -1366,8 +1373,6 @@ export default {
       }
       // 取消单元格编辑状态
       this.cancelPrevCellEditState();
-      // 顺序变化后，同步数据
-      this.syncTableList();
     },
     // 升序算法
     ascSortHandle(arr, prop) {
@@ -1401,7 +1406,7 @@ export default {
     },
     // 清空 table row 的选中
     clearSelectionHandle() {
-      this.$refs.appTable.clearSelection();
+      this.$$appTable && this.$$appTable.clearSelection();
       if (this.selectionType === 'single') {
         this.handleSelectionChange([]);
       }
@@ -1592,7 +1597,7 @@ export default {
       // 不需要自适应
       if (typeof this.height !== 'undefined') return;
       const disY = this.isShowPagination ? 50 : 10;
-      const height = window.innerHeight - this.$refs.appTable.$el.getBoundingClientRect().top - disY;
+      const height = window.innerHeight - this.$$appTable.$el.getBoundingClientRect().top - disY;
       // 设置 tableHeight
       this.$nextTick(() => {
         this.tableHeight = height > 100 ? `${height}px` : `100px`;
@@ -1647,7 +1652,7 @@ export default {
     },
     // 获取 tableBody 节点
     createTableBody() {
-      this.tableBody = this.$refs.appTable.$el.querySelector('.el-table__body');
+      this.tableBody = this.$$appTable.$el.querySelector('.el-table__body');
     },
     // 设置新增行数据的默认值
     setDefaultValue(row) {
@@ -1693,13 +1698,12 @@ export default {
       if (rows.length && this.list.length) {
         this.$nextTick(() => {
           this.scrollTopToPosition(10000);
-          this.resetRender();
         });
       }
     },
     // 重新渲染 table 组件
     resetRender() {
-      this.$refs.appTable.doLayout();
+      this.$$appTable && this.$$appTable.doLayout();
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -1768,7 +1772,7 @@ export default {
     },
     // 清空表头排序条件
     clearTHeadSort() {
-      this.$refs.appTable.clearSort();
+      this.$$appTable && this.$$appTable.clearSort();
       if (this.boolServerSorter) {
         this.sorterParams = {};
       } else {
@@ -1889,6 +1893,7 @@ export default {
   },
   render() {
     const {
+      uniqueKey,
       columns,
       columnsRef,
       loading,
@@ -1932,6 +1937,7 @@ export default {
     const height = this.height !== 'auto' ? { height: this.tableHeight } : null;
     const maxHeight = this.maxHeight ? { maxHeight: this.maxHeight } : null;
     const tableParams = {
+      key: uniqueKey,
       ref: 'appTable',
       props: {
         size: 'mini',

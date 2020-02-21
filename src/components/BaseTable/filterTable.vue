@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-20 23:12:41
+ * @Last Modified time: 2020-02-21 16:12:04
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -20,7 +20,6 @@ export default {
     }
   },
   data() {
-    this.$pageTable = null;
     this.scrollLeft = 0;
     this.arrayTypes = ['checkbox', 'number', 'date-range'];
     return {
@@ -30,24 +29,30 @@ export default {
       filters: {}
     };
   },
+  computed: {
+    // unique key
+    uniqueKey() {
+      return `filterTable_${+new Date()}`;
+    }
+  },
   // keepalive 生命周期钩子，解决在 keep-alive 组件切换时 table 滚动条回到初始位置，表头与表格列对不齐的 bug
   activated() {
-    this.doMove(this.$$tableHeader, 0);
+    this.doMove(this.$tableHeader, 0);
   },
   mounted() {
     // 获取 DOM 节点
-    this.$pageTable = this.$refs.pageTable;
-    this.$$tablebody = this.$pageTable.$el.querySelector('.el-table__body-wrapper');
-    this.$$tableHeader = this.$pageTable.$el.querySelector('.el-table__header-wrapper > .el-table__header');
+    this.$$pageTable = this.$refs['pageTable'];
+    this.$tablebody = this.$$pageTable.$el.querySelector('.el-table__body-wrapper');
+    this.$tableHeader = this.$$pageTable.$el.querySelector('.el-table__header-wrapper > .el-table__header');
     // 事件绑定
-    this.$$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
+    this.$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
     document.addEventListener('click', this.documentEventHandle, false);
   },
   beforeDestroy() {
-    this.$$tablebody.removeEventListener('scroll', this.scrollEventHandle);
+    this.$tablebody.removeEventListener('scroll', this.scrollEventHandle);
     document.removeEventListener('click', this.documentEventHandle);
-    this.$$tablebody = null;
-    this.$$tableHeader = null;
+    this.$tablebody = null;
+    this.$tableHeader = null;
   },
   methods: {
     createVisibleData(columns) {
@@ -139,7 +144,7 @@ export default {
     // 打开当前的筛选面板
     openCurPopover(el, property) {
       this.visible[property] = true;
-      this.offset[property] = this.getOffsetLeft(el, this.$$tableHeader.parentNode) - this.scrollLeft;
+      this.offset[property] = this.getOffsetLeft(el, this.$tableHeader.parentNode) - this.scrollLeft;
       this.$nextTick(() => this.removePopperHandle(el));
     },
     // 移除由于固定列，element-ui 克隆 table 节点带来的多余 popper 节点
@@ -196,7 +201,7 @@ export default {
           placement="left"
           style={{ marginLeft: '-10px' }}
           offsetLeft={this.offset[dataIndex]}
-          boundariesElement={this.$pageTable.$el}
+          boundariesElement={this.$$pageTable.$el}
           containerStyle={{ marginTop: '4px', padding: '10px' }}
         >
           {this.createToperNode(column)}
@@ -356,7 +361,7 @@ export default {
     scrollEventHandle(e) {
       const { scrollLeft = 0 } = e.target;
       if (scrollLeft !== this.scrollLeft) {
-        this.throttle(this.doMove, 10)(this.$$tableHeader, scrollLeft);
+        this.throttle(this.doMove, 10)(this.$tableHeader, scrollLeft);
       }
       // 处理滚动防抖，避免出现表格线框对不齐的 bug
       this.debounce(this.RESET_RENDER, 300)();
@@ -425,68 +430,69 @@ export default {
       this.search = this.createSearchData(this.columns);
     },
     RESET_RENDER() {
-      this.$pageTable.resetRender();
+      this.$$pageTable.resetRender();
     },
     // PageTable 组件对外公开的方法
     SET_TABLE_DATA(...rest) {
-      this.$pageTable.SET_TABLE_DATA(...rest);
+      this.$$pageTable.SET_TABLE_DATA(...rest);
     },
     DO_REFRESH(...rest) {
-      this.$pageTable.DO_REFRESH(...rest);
+      this.$$pageTable.DO_REFRESH(...rest);
     },
     EXECUTE_INSERT(...rest) {
-      this.$pageTable.EXECUTE_INSERT(...rest);
+      this.$$pageTable.EXECUTE_INSERT(...rest);
     },
     EXECUTE_DELETE(...rest) {
-      return this.$pageTable.EXECUTE_DELETE(...rest);
+      return this.$$pageTable.EXECUTE_DELETE(...rest);
     },
     EXECUTE_RESET_HEIGHT() {
-      this.$pageTable.EXECUTE_RESET_HEIGHT();
+      this.$$pageTable.EXECUTE_RESET_HEIGHT();
     },
     SET_COLUMNS_EDITABLE(...rest) {
-      this.$pageTable.SET_COLUMNS_EDITABLE(...rest);
+      this.$$pageTable.SET_COLUMNS_EDITABLE(...rest);
     },
     SET_CELL_DISABLED(...rest) {
-      this.$pageTable.SET_CELL_DISABLED(...rest);
+      this.$$pageTable.SET_CELL_DISABLED(...rest);
     },
     SET_CELL_UNEDITABLE(...rest) {
-      this.$pageTable.SET_CELL_UNEDITABLE(...rest);
+      this.$$pageTable.SET_CELL_UNEDITABLE(...rest);
     },
     SET_DISABLE_SELECT(...rest) {
-      this.$pageTable.SET_DISABLE_SELECT(...rest);
+      this.$$pageTable.SET_DISABLE_SELECT(...rest);
     },
     CLEAR_EXECUTE_LOG() {
-      this.$pageTable.CLEAR_EXECUTE_LOG();
+      this.$$pageTable.CLEAR_EXECUTE_LOG();
     },
     START_LOADING() {
-      this.$pageTable.START_LOADING();
+      this.$$pageTable.START_LOADING();
     },
     STOP_LOADING() {
-      this.$pageTable.STOP_LOADING();
+      this.$$pageTable.STOP_LOADING();
     },
     GET_UPDATE_ROWS() {
-      return this.$pageTable.GET_UPDATE_ROWS();
+      return this.$$pageTable.GET_UPDATE_ROWS();
     },
     GET_INSERT_ROWS() {
-      return this.$pageTable.GET_INSERT_ROWS();
+      return this.$$pageTable.GET_INSERT_ROWS();
     },
     GET_DELETE_ROWS() {
-      return this.$pageTable.GET_DELETE_ROWS();
+      return this.$$pageTable.GET_DELETE_ROWS();
     },
     GET_REQUIRED_ERROR() {
-      return this.$pageTable.GET_REQUIRED_ERROR();
+      return this.$$pageTable.GET_REQUIRED_ERROR();
     },
     GET_FORMAT_ERROR() {
-      return this.$pageTable.GET_FORMAT_ERROR();
+      return this.$$pageTable.GET_FORMAT_ERROR();
     },
     GET_SEARCH_HELPER_ERROR() {
-      return this.$pageTable.GET_SEARCH_HELPER_ERROR();
+      return this.$$pageTable.GET_SEARCH_HELPER_ERROR();
     }
   },
   render() {
     const { $listeners, $slots, $attrs, $scopedSlots } = this;
     const props = getOptionProps(this);
     const wrapProps = mergeProps({
+      key: this.uniqueKey,
       ref: 'pageTable',
       props: {
         ...props,

@@ -972,7 +972,8 @@ export default {
             style={{ ...style }}
             clearable={clearable}
             onChange={val => {
-              change(val);
+              const { text } = itemList.find(x => x.value === val) || {};
+              change(val, !multiple ? text : undefined);
               if (!filterable) return;
               this.filterMethodHandle(fieldName, '');
             }}
