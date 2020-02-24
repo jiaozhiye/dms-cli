@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-21 16:46:56
+ * @Last Modified time: 2020-02-24 19:22:33
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1086,12 +1086,11 @@ export default {
         if (Array.isArray(arr[i].children)) {
           res = this.deepFind(arr[i].children, mark);
         }
-        if (res !== null) {
+        if (res) {
           return res;
         }
         if (arr[i].value === mark) {
-          res = arr[i];
-          break;
+          return arr[i];
         }
       }
       return res;

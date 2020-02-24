@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-21 16:12:04
+ * @Last Modified time: 2020-02-24 19:27:05
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -316,7 +316,7 @@ export default {
       return (
         <el-checkbox-group v-model={this.search[`${dataIndex}Val`]}>
           {filterItems.map(x => (
-            <li key={x.value} class="item">
+            <li key={x.value} class="cb-item">
               <el-checkbox label={x.value}>{x.text}</el-checkbox>
             </li>
           ))}
@@ -328,7 +328,7 @@ export default {
       return (
         <el-radio-group v-model={this.search[`${dataIndex}Val`]} style={{ display: 'block' }}>
           {filterItems.map(x => (
-            <li key={x.value} class="item">
+            <li key={x.value} class="cb-item">
               <el-radio label={x.value}>{x.text}</el-radio>
             </li>
           ))}
@@ -415,12 +415,11 @@ export default {
         if (Array.isArray(arr[i].children)) {
           res = this.deepFind(arr[i].children, mark);
         }
-        if (res !== null) {
+        if (res) {
           return res;
         }
         if (arr[i].dataIndex === mark) {
-          res = arr[i];
-          break;
+          return arr[i];
         }
       }
       return res;
@@ -527,7 +526,7 @@ export default {
     width: 100%;
     padding: 0;
   }
-  li.item:not(:last-child) {
+  li.cb-item:not(:last-child) {
     margin-bottom: 7px;
   }
   /deep/ .range-number {

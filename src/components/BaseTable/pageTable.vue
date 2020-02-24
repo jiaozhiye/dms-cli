@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-21 13:12:26
+ * @Last Modified time: 2020-02-24 19:29:54
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -146,7 +146,6 @@ export default {
     this.originData = []; // 原始数据, 用于客户端表头过滤筛选
     this.backUpData = []; // 备份数据
     this.cellValChange = false; // 单元格数据是否改变
-    this.tableBody = null;
     return {
       loading: false,
       tableHeight: this.createTableHeight(this.height),
@@ -292,17 +291,17 @@ export default {
   },
   mounted() {
     this.$$appTable = this.$refs['appTable'];
+    this.$tableBody = this.$$appTable.$el.querySelector('.el-table__body');
     if (!this.fetchapi) {
       this.createTableList(this.dataSource);
     } else {
       this.getTableData();
     }
     this.createRowSelection(this.selectionRows);
-    this.createTableBody();
     this.calcTableHeight();
-    this.bindWindowResizeEvent();
     this.bindkeyboardEvent();
     this.bindDocumentEvent();
+    this.bindWindowResizeEvent();
   },
   beforeDestroy() {
     // 解绑事件，防止内存泄漏
@@ -1216,7 +1215,7 @@ export default {
         // 因为 el-table 在列固定的特性下，多了 el-table__fixed 节点，里面的 table 节点完全克隆于 el-table__body-wrapper 中的 table 节点，
         // 因此通过 refs 获取到的其实是 el-table__fixed 下的 input，这个节点并不是我们想要的
         // const el = this.$refs[`${rowIndex}|${marks[editableColumnIndex]}`];
-        const inputDom = this.tableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
+        const inputDom = this.$tableBody.querySelector(`.input-${rowIndex}-${this.createClassName(marks[editableColumnIndex])} input`);
         inputDom && inputDom.select();
         const targetColumn = this.editableColumns.find(x => x.dataIndex === marks[editableColumnIndex]);
         if (!targetColumn.fixed) return;
@@ -1526,11 +1525,11 @@ export default {
     },
     // 垂直滚动到指定位置
     scrollTopToPosition(t) {
-      this.tableBody.parentNode.scrollTop = t;
+      this.$tableBody.parentNode.scrollTop = t;
     },
     // 水平滚动到指定位置
     scrollLeftToPosition(l) {
-      this.tableBody.parentNode.scrollLeft = l;
+      this.$tableBody.parentNode.scrollLeft = l;
     },
     // 键盘事件处理方法
     keyboardEventHandle(e) {
@@ -1560,7 +1559,7 @@ export default {
         // 设置可编辑单元格索引
         this.setEditPosIndex(rowIndex, yIndex);
         // 滚动
-        this.scrollLeftToPosition(this.tableBody.querySelector(`tbody > tr > .${this.createClassName(marks[yIndex])}`).offsetLeft - 200);
+        this.scrollLeftToPosition(this.$tableBody.querySelector(`tbody > tr > .${this.createClassName(marks[yIndex])}`).offsetLeft - 200);
       }
       // 上  下
       if (keyCode === 38 || keyCode === 40) {
@@ -1575,7 +1574,7 @@ export default {
         // 设置可编辑单元格索引
         this.setEditPosIndex(xIndex, editableColumnIndex);
         // 滚动
-        this.scrollTopToPosition(this.tableBody.querySelectorAll('tbody > tr')[xIndex].offsetTop);
+        this.scrollTopToPosition(this.$tableBody.querySelectorAll('tbody > tr')[xIndex].offsetTop);
         // 实现行选中
         if (this.isSelectColumn && this.selectionType === 'single') {
           this.handleSelectionChange([this.list[xIndex]]);
@@ -1649,10 +1648,6 @@ export default {
         result = num + result;
       }
       return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
-    },
-    // 获取 tableBody 节点
-    createTableBody() {
-      this.tableBody = this.$$appTable.$el.querySelector('.el-table__body');
     },
     // 设置新增行数据的默认值
     setDefaultValue(row) {
