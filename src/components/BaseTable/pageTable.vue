@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-24 19:29:54
+ * @Last Modified time: 2020-02-26 14:28:26
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -64,7 +64,8 @@ export default {
     },
     selectionType: {
       type: String,
-      default: 'multiple'
+      default: 'multiple',
+      validator: val => ['multiple', 'single'].includes(val)
     },
     defaultSelections: {
       type: Array,
@@ -1692,7 +1693,9 @@ export default {
       });
       if (rows.length && this.list.length) {
         this.$nextTick(() => {
+          this.scrollLeftToPosition(0);
           this.scrollTopToPosition(10000);
+          this.resetRender();
         });
       }
     },

@@ -13,9 +13,7 @@ export default {
     columns: {
       type: Array,
       required: true,
-      default() {
-        return [];
-      }
+      default: () => []
     },
     columnsRef: {
       type: String,

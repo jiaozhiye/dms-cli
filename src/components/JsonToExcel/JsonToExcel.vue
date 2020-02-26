@@ -111,9 +111,6 @@ export default {
       });
       return XLSX.write(this.workbook, this.wbopts);
     },
-    /*
-		Use downloadjs to generate the download link
-		*/
     async export(data, filename) {
       let blob = this.sheetToBlob(data);
       if (_.isFunction(this.beforeFinish)) {
@@ -122,11 +119,6 @@ export default {
       const res = download(blob, filename);
       res ? this.$emit('onFinish') : this.$emit('onError');
     },
-    /*
-		getProcessedJson
-		---------------
-		Get only the data to export, if no fields are set return all the data
-		*/
     getProcessedJson(data, header) {
       let keys = this.getKeys(data, header);
       let newData = [];

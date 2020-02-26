@@ -66,6 +66,7 @@ $ npm run build
   - CountUp 数字计数动画组件
   - JsonToExcel 导出 excel/csv 组件
   - WebPrint 浏览器的 pdf 打印组件
+  - VirtualScroll 虚拟滚动组件
 ```
 
 ## 目录结构
