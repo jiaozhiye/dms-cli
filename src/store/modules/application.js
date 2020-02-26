@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 17:40:35
+ * @Last Modified time: 2020-02-26 18:20:37
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -22,12 +22,11 @@ const deepFind = (arr, mark) => {
     if (Array.isArray(arr[i].children)) {
       res = deepFind(arr[i].children, mark);
     }
-    if (res !== null) {
+    if (res) {
       return res;
     }
     if (arr[i].path === mark) {
-      res = arr[i];
-      break;
+      return arr[i];
     }
   }
   return res;
@@ -69,7 +68,6 @@ const state = {
   commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
   dict: {}, // 数据字典、筛选条件
-  btnLoading: {}, // 按钮状态
   keepAliveNames: [], // 路由组件缓存列表
   isNotifyMark: false // 页面中是否已存在消息通知组件
 };
@@ -105,7 +103,7 @@ const actions = {
       } else {
         messageAction('系统菜单获取失败！', 'error');
         dispatch('createLogout');
-        return router.push({ path: '/' }).catch(() => {});;
+        return router.push({ path: '/' }).catch(() => {});
       }
     }
     // 处理图标
@@ -169,18 +167,6 @@ const actions = {
       return false;
     }
     return state.menuList.some(x => x.key === params);
-  },
-  createBtnLoading({ commit, state }, params) {
-    commit({
-      type: types.BUTTON_LOADING,
-      data: params
-    });
-  },
-  clearBtnLoading({ commit, state }, params) {
-    commit({
-      type: types.BUTTON_LOADING,
-      data: {}
-    });
   },
   async createDictData({ commit, state }, params) {
     if (Object.keys(state.dict).length) return;
@@ -261,9 +247,6 @@ const mutations = {
   },
   [types.TAB_MENU](state, { data }) {
     state.tabMenuList = data;
-  },
-  [types.BUTTON_LOADING](state, { data }) {
-    state.btnLoading = data;
   },
   [types.DICT_DATA](state, { data }) {
     state.dict = data;

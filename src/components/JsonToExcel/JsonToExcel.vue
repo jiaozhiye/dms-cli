@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-02 22:41:44
+ * @Last Modified time: 2020-02-26 18:32:35
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
@@ -90,10 +90,12 @@ export default {
       let { api, params, datakey } = this.fetch;
       let data = this.initialValue;
       if (api) {
-        const res = await api(params);
-        if (res.resultCode === 200) {
-          data = (!datakey ? res.data : _.get(res.data, datakey)) || [];
-        }
+        try {
+          const res = await api(params);
+          if (res.resultCode === 200) {
+            data = (!datakey ? res.data : _.get(res.data, datakey)) || [];
+          }
+        } catch (err) {}
       }
       if (this.formatHandle) {
         data = this.formatHandle(data);
