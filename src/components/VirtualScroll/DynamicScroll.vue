@@ -109,11 +109,7 @@ export default {
           this.$_undefinedMap[id] = true;
           size = 0;
         }
-        result.push({
-          item,
-          id,
-          size
-        });
+        result.push({ item, id, size });
       }
       return result;
     },
