@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-23 10:58:26
+ * @Last Modified time: 2020-02-27 09:23:11
  **/
 import _ from 'lodash';
 
@@ -32,8 +32,6 @@ export default {
     }
   },
   data() {
-    // 组件路径的前缀
-    this.pathFix = 'pages';
     return {
       activeName: this.initialValue
     };
@@ -52,11 +50,12 @@ export default {
   },
   methods: {
     loadComponent(activeName) {
-      const { path } = this.tabMenus.find(x => x.title === activeName) || {};
+      let { path = '' } = this.tabMenus.find(x => x.title === activeName) || {};
       if (!path) return;
+      path = path.endsWith('.vue') ? path : `${path}.vue`;
       // if (this.$options.components[activeName]) return;
       // 动态加载组件
-      this.$options.components[activeName] = () => import(`@/${this.pathFix}/${path}.vue`);
+      this.$options.components[activeName] = () => import(`@/pages/${path}`);
     },
     createTabPanel(h) {
       return this.tabMenus.map(x => {

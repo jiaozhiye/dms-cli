@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-20 17:41:05
+ * @Last Modified time: 2020-02-27 09:26:52
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -49,9 +49,14 @@ export default {
       state: 'stop'
     };
   },
+  computed: {
+    templatePath() {
+      return this.template.endsWith('.vue') ? this.template : `${this.template}.vue`;
+    }
+  },
   created() {
     // 动态加载组件
-    this.$options.component = () => import(`@/pages/printTemplate/${this.template}.vue`);
+    this.$options.component = () => import(`@/pages/printTemplate/${this.templatePath}`);
   },
   beforeDestroy() {
     // 释放内存

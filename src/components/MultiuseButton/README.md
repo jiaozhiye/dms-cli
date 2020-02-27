@@ -36,7 +36,7 @@ Vue.use(MultiuseButton);
 </template>
 
 # js
-import { authority } from '@/utils/authMixin';
+import { authority } from '@/mixins/authMixin';
 import { saveApi } from '@/api/xxx/xxx';
 
 export default {

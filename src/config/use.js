@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 21:29:34
+ * @Last Modified time: 2020-02-27 09:12:54
  */
 import Vue from 'vue';
 import config from '@/assets/js/config';
@@ -54,9 +54,6 @@ Vue.use(BasePrint);
 // 多功能按钮组件
 import MultiuseButton from '@/components/MultiuseButton';
 Vue.use(MultiuseButton);
-
-import AjaxButton from '@/components/AjaxButton';
-Vue.use(AjaxButton);
 
 // 按钮组容器组件
 import ButtonArea from '@/components/ButtonArea';

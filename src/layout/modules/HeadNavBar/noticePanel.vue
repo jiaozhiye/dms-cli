@@ -5,7 +5,7 @@
         <i class="icon el-icon-message-solid" />
       </el-badge>
       <keep-alive>
-        <Notice v-if="visible" />
+        <InsideLetter v-if="visible" />
       </keep-alive>
     </el-popover>
   </div>
@@ -15,15 +15,15 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-02-27 10:08:11
  **/
-import Notice from '@/pages/notice/index';
+import InsideLetter from '@/pages/insideLetter/index';
 
 export default {
   name: 'NoticePanel',
   components: {
-    Notice
+    InsideLetter
   },
   data() {
     return {

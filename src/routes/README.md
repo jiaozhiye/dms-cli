@@ -12,17 +12,14 @@
   {
     title: '备件管理',
     key: '/bjgl',
-    pyt: 'bjgl',
     children: [
       {
         title: '采购管理',
         key: '/bjgl/cggl',
-        pyt: 'cggl',
         children: [
           {
             title: '备件采购订单',           // 标题
             key: '/bjgl/cggl/dd',           // 路由路径
-            pyt: 'bjcgdd',                  // 拼音头
             permission: ['save', 'update']  // 按钮操作权限
           },
         ]

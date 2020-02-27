@@ -2,7 +2,7 @@
   <div class="actions">
     <ScreenFull />
     <NoticePanel />
-    <PersonalCenter />
+    <UserCenter />
   </div>
 </template>
 
@@ -10,19 +10,19 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-02-27 10:17:47
  **/
 import ScreenFull from '@/components/ScreenFull';
-import NoticePanel from './NoticePanel';
-import PersonalCenter from './PersonalCenter';
+import NoticePanel from './noticePanel';
+import UserCenter from '@/pages/userCenter/index';
 
 export default {
   name: 'HeadNavBar',
   components: {
     ScreenFull,
     NoticePanel,
-    PersonalCenter
+    UserCenter
   },
   data() {
     return {};

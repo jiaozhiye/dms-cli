@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 18:17:14
+ * @Last Modified time: 2020-02-27 12:03:38
  */
 import axios from 'axios';
 import qs from 'qs';
 import config from '@/assets/js/config';
 import store from '@/store';
-import { getToken } from '@/assets/js/auth';
+import { getToken } from '@/utils/cookies';
 import router from '@/routes';
 import { notifyAction } from '@/utils';
 

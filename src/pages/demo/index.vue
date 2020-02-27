@@ -34,13 +34,13 @@
     <Drawer :visible.sync="visible" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <Panel @close="closeHandler" />
     </Drawer>
-    <BasePrint ref="print" :data="printList" printerType="stylus" :alwaysPrint="false" :isPreview="false" template="demo/template1" />
+    <BasePrint ref="print" :data="printList" printerType="stylus" :alwaysPrint="false" :isPreview="false" template="demo/template" />
   </div>
 </template>
 
 <script>
-import { authority } from '@/utils/authMixin';
-import { dictionary } from '@/utils/dictMixin';
+import { authority } from '@/mixins/authMixin';
+import { dictionary } from '@/mixins/dictMixin';
 import { sleep } from '@/utils';
 import res from '@/mock/tableData';
 import printData from '@/mock/printData';

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-12 18:29:30
+ * @Last Modified time: 2020-02-27 09:49:57
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -42,7 +42,8 @@ export const dictionary = {
     },
     // deep -> 数据的级数，默认全部递归
     createDictRegion(deep) {
-      return this.deepMapCity(this.region, deep);
+      // this.dict.region -> 数据字典中，关于省市区的递归数据
+      return this.deepMapCity(this.dict.region, deep);
     },
     // 递归构建省市区数据
     deepMapCity(data, deep = 3, step = 1) {

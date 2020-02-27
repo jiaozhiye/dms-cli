@@ -3,10 +3,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-22 12:27:16
+ * @Last Modified time: 2020-02-27 09:53:15
  **/
 import Drawer from './Drawer';
-import ContainerRender from '@/utils/ContainerRender';
+import ContainerRender from './ContainerRender';
 
 export default {
   name: 'VcDrawer',

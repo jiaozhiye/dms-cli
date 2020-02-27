@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 18:20:37
+ * @Last Modified time: 2020-02-27 12:04:22
  */
 import _ from 'lodash';
 import * as types from '../types';
 import router from '@/routes';
 import { messageAction, clearAllCookie } from '@/utils';
-import { setToken, setUser } from '@/assets/js/auth';
-import dictData from '@/mock/dictData';
+import { setToken, setUser } from '@/utils/cookies';
+import localDict from '@/utils/localDict';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
 
 // 路由映射表
@@ -171,11 +171,11 @@ const actions = {
   async createDictData({ commit, state }, params) {
     if (Object.keys(state.dict).length) return;
     if (process.env.MOCK_DATA === 'true') {
-      commit({ type: types.DICT_DATA, data: dictData });
+      commit({ type: types.DICT_DATA, data: localDict });
     } else {
       const res = await getAllDict();
       if (res.resultCode === 200) {
-        const data = { ...dictData, ...res.data };
+        const data = { ...localDict, ...res.data };
         // 数据字典本地存储
         if (!_.isEqual(data, JSON.parse(localStorage.getItem('dict')))) {
           localStorage.setItem('dict', JSON.stringify(data));

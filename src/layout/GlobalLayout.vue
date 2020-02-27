@@ -3,13 +3,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 19:28:09
+ * @Last Modified time: 2020-02-27 10:19:54
  */
-import SideMenu from '@/components/SideMenu';
-import GlobalHeader from '@/components/GlobalHeader';
-import MultiTab from '@/components/MultiTab';
-import HeadNavBar from '@/components/HeadNavBar';
-import Breadcrumb from '@/components/Breadcrumb';
+import SideMenu from './modules/SideMenu';
+import GlobalHeader from './modules/GlobalHeader';
+import HeadNavBar from './modules/HeadNavBar';
+import MultiTab from './modules/MultiTab';
+import Breadcrumb from './modules/Breadcrumb';
 
 export default {
   name: 'GlobalLayout',

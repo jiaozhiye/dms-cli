@@ -29,7 +29,7 @@
       }"
     >
       <el-button @click="closeDrawer">取 消</el-button>
-      <ajax-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</ajax-button>
+      <multiuse-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</multiuse-button>
     </div>
     <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <Modal @close="closeHandler" />
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { authority } from '@/utils/authMixin';
+import { authority } from '@/mixins/authMixin';
 
 import Modal from './Modal';
 import BreakSpace from '@/components/BreakSpace/BreakSpace';

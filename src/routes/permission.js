@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 20:36:25
+ * @Last Modified time: 2020-02-27 12:04:10
  */
 import router from '@/routes';
 import store from '@/store';
 import config from '@/config';
-import { getToken } from '@/assets/js/auth';
+import { getToken } from '@/utils/cookies';
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
 import { Notification } from 'element-ui';
