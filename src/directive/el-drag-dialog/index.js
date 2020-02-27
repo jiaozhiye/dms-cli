@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-27 12:30:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 13:36:07
+ * @Last Modified time: 2020-02-27 15:53:40
  */
 export default {
   inserted(el, binding, vnode) {
@@ -12,7 +12,7 @@ export default {
     dialogHeaderEl.style.cursor = 'move';
 
     dragDom.style.top = 0;
-    dragDom.style.let = 0;
+    dragDom.style.left = 0;
 
     // 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
     const getStyle = (function() {
@@ -68,7 +68,7 @@ export default {
         if (-top > minDragDomTop) {
           top = -minDragDomTop;
         } else if (top > maxDragDomTop) {
-          top = maxDragDomTop;
+          top = maxDragDomTop - 1;
         }
 
         // 移动当前元素

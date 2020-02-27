@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-07 14:04:35
+ * @Last Modified time: 2020-02-27 15:18:12
  **/
 import _ from 'lodash';
 
@@ -96,13 +96,13 @@ export default {
       this.ajaxing = true;
       try {
         await this.click();
+        await this.sleep(200);
       } catch (err) {}
-      await this.sleep(100);
       this.ajaxing = false;
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $scopedSlots, $slots, ajaxing, isDisabled, isVisible, containerStyle, divider } = this;
+    const { $props, $listeners, $attrs, $slots, ajaxing, isDisabled, isVisible, containerStyle, divider } = this;
     const ajaxClick = _.isFunction(this.click) ? { click: this.clickHandler } : null;
     const wrapProps = {
       key: 'multiuse-btn',
@@ -111,15 +111,14 @@ export default {
         loading: ajaxing,
         disabled: isDisabled
       },
+      attrs: $attrs,
       style: {
         ...containerStyle
       },
       on: {
         ...$listeners,
         ...ajaxClick
-      },
-      attrs: $attrs,
-      scopedSlots: $scopedSlots
+      }
     };
     const Button = <el-button {...wrapProps}>{$slots['default']}</el-button>;
     const vNode = !divider ? (
