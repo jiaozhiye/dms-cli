@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-21 22:08:04
+ * @Last Modified time: 2020-02-27 17:40:45
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
@@ -22,6 +22,25 @@ export const errorCapture = async promise => {
   } catch (e) {
     return [e, null];
   }
+};
+
+// 函数防抖
+export const debounce = (fn, delay) => {
+  return function(...args) {
+    fn.timer && clearTimeout(fn.timer);
+    fn.timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+};
+
+// 函数截流
+export const throttle = (fn, delay) => {
+  return function(...args) {
+    let nowTime = +new Date();
+    if (!fn.lastTime || nowTime - fn.lastTime > delay) {
+      fn.apply(this, args);
+      fn.lastTime = nowTime;
+    }
+  };
 };
 
 // 需要确认的操作提示

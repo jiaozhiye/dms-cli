@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-02-27 12:30:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 15:53:40
+ * @Last Modified time: 2020-02-27 17:46:05
  */
+import { throttle } from '@/utils';
+
 export default {
   inserted(el, binding, vnode) {
     const dialogHeaderEl = el.querySelector('.el-dialog__header');
     const dragDom = el.querySelector('.el-dialog');
 
     dialogHeaderEl.style.cursor = 'move';
-
     dragDom.style.top = 0;
     dragDom.style.left = 0;
 
@@ -22,6 +23,14 @@ export default {
         return (dom, attr) => getComputedStyle(dom, false)[attr];
       }
     })();
+
+    // 元素移动的方法
+    function moveHandle(l, t) {
+      dragDom.style.left = `${l}px`;
+      dragDom.style.top = `${t}px`;
+      // emit onDrag event
+      vnode.child.$emit('dragDialog', { left: l, top: t });
+    }
 
     dialogHeaderEl.onmousedown = function(e) {
       // 鼠标按下，计算当前元素距离可视区的距离
@@ -72,11 +81,7 @@ export default {
         }
 
         // 移动当前元素
-        dragDom.style.left = `${left + styL}px`;
-        dragDom.style.top = `${top + styT}px`;
-
-        // emit onDrag event
-        vnode.child.$emit('dragDialog');
+        throttle(moveHandle, 10)(left + styL, top + styT);
       };
 
       document.onmouseup = function(e) {
