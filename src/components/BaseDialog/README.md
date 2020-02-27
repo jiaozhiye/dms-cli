@@ -19,6 +19,7 @@ Vue.use(BaseDialog);
 - destroyOnClose{Boolean|关闭时销毁 Dialog 里的子元素，默认值是 false}
 - title{String/slot|标题}
 - width{String|Dialog 的宽度，默认值 50%}
+- dragable{Boolean|是否可拖拽，默认 true}
 - modal{Boolean|是否需要遮罩层，默认值 true}
 - lockScroll{Boolean|是否在 Dialog 出现时将 body 滚动锁定，默认值 true}
 - customClass{String|Dialog 的自定义类名}

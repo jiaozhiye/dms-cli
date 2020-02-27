@@ -3,10 +3,15 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 15:29:13
+ * @Last Modified time: 2020-02-27 13:41:44
  **/
+import dragDialog from '@/directive/el-drag-dialog';
+
 export default {
   name: 'BaseDialog',
+  directives: {
+    drag: dragDialog
+  },
   props: {
     visible: {
       type: Boolean,
@@ -27,6 +32,10 @@ export default {
     width: {
       type: String,
       default: '60%'
+    },
+    dragable: {
+      type: Boolean,
+      default: true
     },
     top: {
       type: String,
@@ -86,6 +95,12 @@ export default {
     handleClick(e) {
       e.stopPropagation();
       this.fullscreen = !this.fullscreen;
+      // 可拖拽 & 全屏状态 重置 left/top
+      if (this.dragable && this.fullscreen) {
+        const $dragDom = this.$refs['dialog'].$el.querySelector('.el-dialog');
+        $dragDom.style.left = 0;
+        $dragDom.style.top = 0;
+      }
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     createStyles(slots) {
@@ -106,20 +121,21 @@ export default {
     }
   },
   render() {
-    const { closable, maskClosable, containerStyle, $props, $attrs, $listeners, $slots } = this;
+    const { fullscreen, dragable, closable, maskClosable, containerStyle, $props, $attrs, $listeners, $slots } = this;
     const wrapProps = {
-      key: 'dialog',
+      ref: 'dialog',
       props: {
         ...$props,
         appendToBody: true,
         showClose: closable,
         closeOnClickModal: maskClosable,
-        fullscreen: this.fullscreen,
+        fullscreen,
         beforeClose: this.close,
         destroyOnClose: false
       },
       attrs: { ...$attrs },
-      on: { ...$listeners }
+      on: { ...$listeners },
+      directives: dragable ? [{ name: 'drag' }] : null
     };
     return this.isShowDialog ? (
       <el-dialog class="base-dialog" {...wrapProps}>
