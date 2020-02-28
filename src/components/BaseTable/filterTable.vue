@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-24 19:27:05
+ * @Last Modified time: 2020-02-28 14:21:51
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/utils/props-util';
@@ -17,6 +17,121 @@ export default {
       type: Array,
       required: true,
       default: () => []
+    },
+    columnsRef: {
+      type: String,
+      default: ''
+    },
+    dataSource: {
+      type: [Array, Object],
+      default: () => []
+    },
+    fetchapi: Function,
+    params: {
+      type: Object,
+      default: () => ({})
+    },
+    uidkey: {
+      type: String,
+      default: 'uid'
+    },
+    datakey: {
+      type: String,
+      default: 'items'
+    },
+    height: {
+      type: [Number, String]
+    },
+    maxHeight: {
+      type: [Number, String]
+    },
+    rowstyles: {
+      type: Array,
+      default: () => []
+    },
+    cellstyles: {
+      type: Array,
+      default: () => []
+    },
+    isSelectColumn: {
+      type: Boolean,
+      default: true
+    },
+    selectionType: {
+      type: String,
+      default: 'multiple',
+      validator: val => ['multiple', 'single'].includes(val)
+    },
+    defaultSelections: {
+      type: Array,
+      default: () => []
+    },
+    isServerSorter: {
+      type: Boolean,
+      default: undefined
+    },
+    isServerFilter: {
+      type: Boolean,
+      default: undefined
+    },
+    isToperInfo: {
+      type: Boolean,
+      default: true
+    },
+    isColumnFilter: {
+      type: Boolean,
+      default: true
+    },
+    isPagination: {
+      type: Boolean,
+      default: true
+    },
+    isMemoryPagination: {
+      type: Boolean,
+      default: false
+    },
+    isExportExcel: {
+      type: Boolean,
+      default: true
+    },
+    exportFileName: {
+      type: String
+    },
+    mergeCellMethod: {
+      type: Function,
+      default: () => {}
+    },
+    onColumnsChange: {
+      type: Function,
+      required: true
+    },
+    onRowSelectChange: {
+      type: Function,
+      default: () => {}
+    },
+    onCellChange: {
+      type: Function,
+      default: () => {}
+    },
+    onSummationChange: {
+      type: Function,
+      default: () => {}
+    },
+    onPageChange: {
+      type: Function,
+      default: () => {}
+    },
+    onEnterEvent: {
+      type: Function,
+      default: () => {}
+    },
+    onCalcExportData: {
+      type: Function,
+      default: () => {}
+    },
+    onSyncTableData: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -489,17 +604,17 @@ export default {
   },
   render() {
     const { $listeners, $slots, $attrs, $scopedSlots } = this;
-    const props = getOptionProps(this);
+    const $props = getOptionProps(this);
     const wrapProps = mergeProps({
       key: this.uniqueKey,
       ref: 'pageTable',
       props: {
-        ...props,
+        ...$props,
         filters: this.filters,
         columns: this.createFilterColumns(this.columns)
       },
+      ...$attrs,
       on: $listeners,
-      attrs: $attrs,
       scopedSlots: $scopedSlots
     });
     return (

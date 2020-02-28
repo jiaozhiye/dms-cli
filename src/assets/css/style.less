@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-18 09:20:23
+ * @Last Modified time: 2020-02-28 14:04:08
  */
 @import './sidebar.less';
 
@@ -58,26 +58,31 @@ a {
 /**
  * scrollbar style
  */
+/* 滚动条整体部分 */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
-::-webkit-scrollbar-track-piece {
-  background-color: rgba(0, 0, 0, 0);
+/* 滚动条的轨道 */
+::-webkit-scrollbar-track {
+  background-color: #fff;
 }
+/* 滚动条里面的小方块，能向上向下移动 */
 ::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: #cfcfcf;
-  transition: backgroundColor 0.3s ease;
-}
-::-webkit-scrollbar-thumb:vertical {
-  height: 8px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  width: 8px;
+  background-color: #bfbfbf;
+  border-radius: 5px;
+  border: 1px solid #f1f1f1;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #7f7f7f;
+  background-color: #a8a8a8;
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: #787878;
+}
+/* 边角，即两个滚动条的交汇处 */
+::-webkit-scrollbar-corner {
+  background-color: #fff;
 }
 
 ::-ms-clear,
