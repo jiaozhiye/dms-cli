@@ -1,0 +1,74 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-02-28 22:11:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-02 02:10:37
+ */
+/**Variable**/
+
+.v-table {
+  .v-table--header-wrapper {
+    .v-table--header {
+      tr > th[colspan]:not([colspan='1']) {
+        text-align: center;
+      }
+    }
+  }
+  &:not(.b--style-none) {
+    .v-table--header-wrapper {
+      background-color: $v-table-header-background-color;
+    }
+  }
+}
+
+.v-header--column {
+  position: relative;
+  user-select: none;
+  &.col--title-checked {
+    background-color: $v-table-column-header-checked-background-color;
+  }
+  &.col--ellipsis {
+    & > .v-cell {
+      display: flex;
+      align-items: center;
+      .v-cell--title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      & > i,
+      & > span {
+        &:not(.v-cell--title) {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+  .v-resizable {
+    position: absolute;
+    right: -7px;
+    bottom: 0;
+    width: 14px;
+    height: 100%;
+    text-align: center;
+    z-index: 1;
+    cursor: col-resize;
+    &.is--line {
+      &:before,
+      &:after {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:before {
+        width: 1px;
+        height: 50%;
+        background-color: $v-table-resizable-color;
+      }
+      &:after {
+        width: 0;
+        height: 100%;
+      }
+    }
+  }
+}

@@ -1,48 +1,72 @@
 <template>
-  <div class="nomatch-wrap">
-    <div class="content">
-      <h2>404</h2>
-      <div class="desc">抱歉，你访问的页面不存在或仍在开发中</div>
-      <div class="actions">
-        <el-button type="primary" size="small" @click="goHome">返回首页</el-button>
-      </div>
-    </div>
+  <div style="padding: 20px 100px 0;">
+    <VirtualTable :columns="columns" :dataSource="list" uidkey="id" height="500" />
   </div>
 </template>
 
 <script>
+import { VirtualTable } from '@/components/VirtualTable';
+// import res from '@/mock/tableData';
+
+const data = [];
+for (let i = 0; i < 200; i++) {
+  data[i] = {
+    id: i + 1,
+    name: '小明',
+    age: 20,
+    num: 1,
+    hobby: '游泳',
+    address: '长春'
+  };
+}
+
 export default {
-  name: 'Nomatch',
-  methods: {
-    goHome() {
-      this.$router.push({ path: '/' }).catch(() => {});;
-    }
+  name: '',
+  components: { VirtualTable },
+  data() {
+    return {
+      list: data,
+      columns: [
+        {
+          title: '序号',
+          dataIndex: 'id',
+          width: 80
+        },
+        {
+          title: '个人信息',
+          dataIndex: 'person',
+          children: [
+            {
+              title: '姓名',
+              dataIndex: 'name',
+              width: 200
+            },
+            {
+              title: '年龄',
+              dataIndex: 'age',
+              width: 200
+            }
+          ]
+        },
+        {
+          title: '数量',
+          dataIndex: 'num',
+          summation: {
+            unit: '个'
+          }
+        },
+        {
+          title: '爱好',
+          dataIndex: 'hobby',
+          width: 500
+        },
+        {
+          title: '地址',
+          dataIndex: 'address',
+          width: 500
+        }
+      ]
+    };
   }
 };
 </script>
-
-<style lang="less" scoped>
-.nomatch-wrap {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  background: url(../../assets/img/not-found.svg) 20vw 45% no-repeat;
-  .content {
-    flex: 1;
-    margin-left: 55vw;
-    h2 {
-      margin-bottom: 24px;
-      color: #434e59;
-      font-weight: 600;
-      font-size: 72px;
-      line-height: 72px;
-    }
-    .desc {
-      margin-bottom: 16px;
-      color: rgba(0, 0, 0, 0.45);
-      font-size: 20px;
-      line-height: 28px;
-    }
-  }
-}
-</style>

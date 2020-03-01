@@ -3,10 +3,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-28 14:21:51
+ * @Last Modified time: 2020-02-29 10:48:49
  **/
 import _ from 'lodash';
-import { mergeProps, getOptionProps } from '@/utils/props-util';
+import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
 import PageTable from './pageTable.vue';
 import DropDown from './dropDown.vue';
 

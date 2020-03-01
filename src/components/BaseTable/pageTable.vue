@@ -8,7 +8,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import config from '@/config';
-import { mergeProps, getOptionProps } from '@/utils/props-util';
+import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
 import TopInfo from './topInfo';
 import ColumnFilter from './columnFilter';
 import ExportExcel from './exportExcel';

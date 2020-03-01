@@ -3,10 +3,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-22 19:06:37
+ * @Last Modified time: 2020-02-29 10:48:56
  **/
 import _ from 'lodash';
-import { filterEmpty } from '@/utils/props-util';
+import { filterEmpty } from '@/components/_utils/props-util';
 
 export default {
   name: 'SuperTabs',

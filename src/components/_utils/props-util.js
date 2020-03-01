@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-12 13:54:55
+ * @Last Modified time: 2020-02-29 13:08:31
  */
 import isPlainObject from 'lodash/isPlainObject';
 import classNames from 'classnames';
@@ -306,14 +306,14 @@ export {
 // render 示例：
 // render() {
 //   const { $listeners, $slots = {}, $attrs, $scopedSlots } = this;
-//   const props = getOptionProps(this);
+//   const $props = getOptionProps(this);
 //   const wrapProps = mergeProps({
 //     props: {
-//       ...props,
+//       ...$props,
 //       children: $slots || props.children || []
 //     },
-//     on: $listeners,
 //     attrs: $attrs,
+//     on: $listeners,
 //     scopedSlots: $scopedSlots,
 //   });
 //   return (
