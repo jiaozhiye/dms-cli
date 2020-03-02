@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 14:28:26
+ * @Last Modified time: 2020-03-02 11:51:59
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -955,7 +955,6 @@ export default {
     },
     // 组装搜索帮助数据列表
     createSerachHelperList(arr, aliasKey) {
-      const allColumns = this.columnFlatMap(this.columns);
       // 服务端未返回数据
       if (!arr.length) {
         return [{ __empty__: true, message: '暂无数据...' }];
@@ -965,7 +964,9 @@ export default {
         for (let attr in x) {
           if (Object.keys(aliasKey).includes(attr)) {
             const { dataIndex } = aliasKey[attr];
-            const { editType, precision } = allColumns.find(x => x.dataIndex === dataIndex);
+            const target = this.deepFind(this.columns, dataIndex);
+            if (!target) continue;
+            const { editType, precision } = target;
             // 处理数值类型的可编辑单元格，显示数据的精度
             if (editType === 'number' && precision >= 0 && !isNaN(Number(x[attr]))) {
               item[dataIndex] = Number(x[attr]).toFixed(precision);
@@ -985,13 +986,15 @@ export default {
       } = column;
       for (let attr in aliasKey) {
         const key = aliasKey[attr].dataIndex;
+        const target = this.deepFind(this.columns, key);
+        if (!target) continue;
         const item = this.list.find(x => x._uid === row._uid);
         // 如果值是 undefined，重置为空串
         data[key] = typeof data[key] !== 'undefined' ? data[key] : '';
         // 设置相关单元格的值
         _.set(item, key, data[key]);
         // 其他单元格的非空校验
-        if (this.deepFind(this.columns, key).editRequired) {
+        if (target.editRequired) {
           this.validateRequired(key, item._uid, data[key]);
           if (data[key] !== '' && dataIndex !== key) {
             this.setCellEditState(item, key, false);
@@ -1731,14 +1734,13 @@ export default {
     },
     // 获取 column 展平后的一维数组
     columnFlatMap(arr) {
-      let res = [];
-      arr.forEach(x => {
-        let target = { ...x };
-        if (Array.isArray(target.children)) {
-          res.push(...this.columnFlatMap(target.children));
+      const res = [];
+      arr.forEach(column => {
+        if (column.children) {
+          res.push.apply(res, this.columnFlatMap(column.children));
+        } else {
+          res.push(column);
         }
-        delete target.children;
-        res.push(target);
       });
       return res;
     },
