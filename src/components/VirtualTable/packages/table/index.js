@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 02:40:07
+ * @Last Modified time: 2020-03-02 20:47:28
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
 import baseProps from './props';
 
+import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import { columnsFlatMap, createFilterColumns, getScrollBarSize } from '../utils';
 
 import layoutMethods from './layout-methods';
@@ -44,7 +45,7 @@ export default {
       // 是否存在横向滚动条
       scrollX: false,
       // 是否存在纵向滚动条
-      scrollY: false,
+      scrollY: true,
       // 是否启用了纵向 Y 可视渲染方式加载
       scrollYLoad: false,
       // 存放纵向 Y 虚拟滚动相关信息
@@ -64,14 +65,20 @@ export default {
       layout: {
         // 滚动条宽度
         gutterWidth: getScrollBarSize(),
-        // 表格内容宽度
+        // 表格体宽度
         tableBodyWidth: 0,
-        // 表格体可视区高度
-        bodyWrapHeight: 0,
+        // 表格体内容高度
+        tableBodyHeight: 0,
+        // 表格体父容器（视口）高度
+        viewportHeight: 0,
         // 头部高度
         headerHeight: 0,
         // 底部高度
         footerHeight: 0
+      },
+      // 响应式变化的状态
+      resizeState: {
+        width: 0
       }
     };
   },
@@ -90,19 +97,58 @@ export default {
     },
     rowHeight() {
       return this.scrollYStore.rowHeight;
+    },
+    shouldUpdateHeight() {
+      return this.height || this.maxHeight;
+    }
+  },
+  watch: {
+    height(val) {
+      this.setTableHeight(val);
+    },
+    maxHeight() {
+      this.setTableMaxHeight(val);
     }
   },
   created() {
-    this.loadTableData();
+    this.loadTableData().then(() => {
+      this.doLayout();
+    });
   },
   mounted() {
     this.setTableHeight(this.height);
     this.setTableMaxHeight(this.maxHeight);
-    this.updateColumnWidth();
+    this.doLayout();
+    this.bindEvents();
+    this.resizeState = Object.assign({}, { width: this.$vTable.offsetWidth });
+  },
+  destroyed() {
+    this.unbindEvents();
   },
   methods: {
     ...layoutMethods,
     ...coreMethods,
+    bindEvents() {
+      addResizeListener(this.$vTable, this.resizeListener);
+    },
+    unbindEvents() {
+      removeResizeListener(this.$vTable, this.resizeListener);
+    },
+    resizeListener() {
+      const { width: oldWidth } = this.resizeState;
+      let shouldUpdateLayout = false;
+      const width = this.$vTable.offsetWidth;
+      shouldUpdateLayout = oldWidth !== width;
+      if (!shouldUpdateLayout) return;
+      this.resizeState = { width };
+      this.doLayout();
+    },
+    doLayout() {
+      if (this.shouldUpdateHeight) {
+        this.updateElsHeight();
+      }
+      this.updateColumnsWidth();
+    },
     renderBorderLine() {
       return <div class="v-table--border-line" />;
     }

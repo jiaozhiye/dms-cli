@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 01:37:38
+ * @Last Modified time: 2020-03-02 20:49:26
  */
-import { throttle, browse } from '../utils';
+import { throttle, browse, sleep } from '../utils';
+import _ from 'lodash';
 const $browse = browse();
 const isWebkit = $browse['-webkit'] && !$browse.edge;
 const throttleScrollYDuration = $browse.msie ? 20 : 10;
@@ -15,7 +16,7 @@ export default {
     const { height, maxHeight, ellipsis, scrollYStore, dataSource } = this;
     // 是否开启虚拟滚动
     this.scrollYLoad = dataSource.length > 100;
-    this.handleTableData();
+
     if (this.scrollYLoad) {
       // 重置 startIndex / visibleIndex
       scrollYStore.startIndex = 0;
@@ -27,6 +28,8 @@ export default {
         console.error('必须设置组件参数 ellipsis');
       }
     }
+
+    this.handleTableData();
     return this.computeScrollLoad();
   },
   // 处理渲染数据
@@ -92,19 +95,19 @@ export default {
     this.updateScrollYSpace();
   },
   // 计算可视渲染相关数据
-  computeScrollLoad() {
-    return this.$nextTick().then(() => {
-      const { scrollYLoad, scrollYStore, layout } = this;
-      // 计算 Y 逻辑
-      if (scrollYLoad) {
-        const visibleYSize = Number(Math.ceil(layout.bodyWrapHeight / scrollYStore.rowHeight));
+  async computeScrollLoad() {
+    const { scrollYLoad, scrollYStore, layout } = this;
+    if (scrollYLoad) {
+      await sleep(0);
+      const visibleYSize = Number(Math.ceil(layout.viewportHeight / scrollYStore.rowHeight));
 
-        scrollYStore.visibleSize = visibleYSize;
-        scrollYStore.offsetSize = visibleYSize;
-        scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
+      scrollYStore.visibleSize = visibleYSize;
+      scrollYStore.offsetSize = visibleYSize;
+      scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
 
-        this.updateScrollYData();
-      }
-    });
+      this.updateScrollYData();
+      await sleep(0);
+    }
+    return Promise.resolve();
   }
 };

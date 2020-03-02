@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 01:04:06
+ * @Last Modified time: 2020-03-02 17:54:55
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -64,7 +64,7 @@ export default {
         <table class="v-table--footer" cellspacing="0" cellpadding="0" border="0" style={{ width: layout.tableBodyWidth ? `${layout.tableBodyWidth}px` : null }}>
           <colgroup>
             {flatColumns.map(column => (
-              <col key={column.dataIndex} style={{ width: `${column.width}px`, minWidth: `${column.width}px` }} />
+              <col key={column.dataIndex} style={{ width: `${column.width || column.renderWidth}px`, minWidth: `${column.width || column.renderWidth}px` }} />
             ))}
             {$$table.scrollY && <col name="gutter" style={{ width: `${layout.gutterWidth}px` }} />}
           </colgroup>

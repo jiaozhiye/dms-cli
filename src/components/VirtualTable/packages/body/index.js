@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-01 23:42:44
+ * @Last Modified time: 2020-03-02 19:27:28
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -23,11 +23,11 @@ export default {
       return tableBodyWidth ? `${tableBodyWidth - (this.$$table.scrollY ? gutterWidth : 0)}px` : null;
     },
     wrapStyle() {
-      const { headerHeight, bodyWrapHeight, footerHeight } = this.layout;
+      const { headerHeight, viewportHeight, footerHeight } = this.layout;
       let { height, maxHeight } = this.$$table;
       if (height) {
         return {
-          height: `${bodyWrapHeight}px`
+          height: `${viewportHeight}px`
         };
       }
       if (maxHeight) {
@@ -44,7 +44,7 @@ export default {
   mounted() {
     this.$el.onscroll = this.scrollEvent;
   },
-  beforeDestroy() {
+  destroyed() {
     this.$el.onscroll = null;
   },
   methods: {
@@ -90,10 +90,10 @@ export default {
     return (
       <div class="v-table--body-wrapper body--wrapper" style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
-        <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
+        <table ref="vTableBody" class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           <colgroup>
             {flatColumns.map(column => (
-              <col key={column.dataIndex} style={{ width: `${column.width}px`, minWidth: `${column.width}px` }} />
+              <col key={column.dataIndex} style={{ width: `${column.width || column.renderWidth}px`, minWidth: `${column.width || column.renderWidth}px` }} />
             ))}
           </colgroup>
           <tbody>{this.renderRows()}</tbody>

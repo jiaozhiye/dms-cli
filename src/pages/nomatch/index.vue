@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 20px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" uidkey="id" height="500" />
+  <div style="padding: 10px 100px 0;">
+    <VirtualTable :columns="columns" :dataSource="list" uidkey="id" height="400" />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 00:37:08
+ * @Last Modified time: 2020-03-02 20:39:13
  */
 // 获取 columns 展平后的一维数组
 export const columnsFlatMap = columns => {
@@ -120,6 +120,30 @@ export const parseHeight = height => {
     return height;
   }
   return null;
+};
+
+// 等待
+export const sleep = async timeLen => {
+  return new Promise(resolve => setTimeout(resolve, timeLen));
+};
+
+// 根据属性路径获取对象的值
+export const getValueByPath = (object, prop) => {
+  prop = prop || '';
+  const paths = prop.split('.');
+  let current = object;
+  let result = null;
+  for (let i = 0, j = paths.length; i < j; i++) {
+    const path = paths[i];
+    if (!current) break;
+
+    if (i === j - 1) {
+      result = current[path];
+      break;
+    }
+    current = current[path];
+  }
+  return result;
 };
 
 // 获取浏览器内核信息
