@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 17:54:55
+ * @Last Modified time: 2020-03-03 00:13:24
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -10,14 +10,14 @@ import { formatNumber } from '../utils';
 
 export default {
   name: 'TableFooter',
-  props: ['dataSource', 'flatColumns', 'layout', 'uidkey'],
+  props: ['dataSource', 'flatColumns', 'uidkey'],
   inject: ['$$table'],
   computed: {
     summationRows() {
-      const { $$table, dataSource } = this;
+      const { dataSource } = this;
       const summationColumns = this.flatColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
-      const res = { [$$table.uidkey]: 1 };
+      const res = { [this.$$table.uidkey]: 1 };
       summationColumns.forEach(column => {
         const {
           dataIndex,
@@ -42,10 +42,11 @@ export default {
   },
   methods: {
     renderRows() {
+      const { scrollY } = this.$$table;
       return this.summationRows.map(row => (
         <tr key={row[this.uidkey]} class="v-footer--row">
           {this.flatColumns.map((column, index) => this.renderCells(column, row, index))}
-          {this.$$table.scrollY && <td class="gutter"></td>}
+          {scrollY && <td class="gutter"></td>}
         </tr>
       ));
     },
@@ -55,19 +56,31 @@ export default {
           <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>
         </td>
       );
+    },
+    renderColgroup() {
+      const {
+        layout: { gutterWidth },
+        scrollY
+      } = this.$$table;
+      return (
+        <colgroup>
+          {this.flatColumns.map(column => {
+            const { dataIndex, width, renderWidth } = column;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+          })}
+          {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
+        </colgroup>
+      );
     }
   },
   render() {
-    const { $$table, flatColumns, layout } = this;
+    const {
+      layout: { tableBodyWidth }
+    } = this.$$table;
     return (
       <div class="v-table--footer-wrapper body--wrapper">
-        <table class="v-table--footer" cellspacing="0" cellpadding="0" border="0" style={{ width: layout.tableBodyWidth ? `${layout.tableBodyWidth}px` : null }}>
-          <colgroup>
-            {flatColumns.map(column => (
-              <col key={column.dataIndex} style={{ width: `${column.width || column.renderWidth}px`, minWidth: `${column.width || column.renderWidth}px` }} />
-            ))}
-            {$$table.scrollY && <col name="gutter" style={{ width: `${layout.gutterWidth}px` }} />}
-          </colgroup>
+        <table class="v-table--footer" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
+          {this.renderColgroup()}
           <tfoot>{this.renderRows()}</tfoot>
         </table>
       </div>

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 19:27:28
+ * @Last Modified time: 2020-03-03 01:47:19
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 export default {
   name: 'TableBody',
-  props: ['tableData', 'flatColumns', 'layout', 'uidkey'],
+  props: ['tableData', 'flatColumns', 'uidkey'],
   inject: ['$$table'],
   daya() {
     this.prevST = 0;
@@ -19,22 +19,23 @@ export default {
   },
   computed: {
     bodyWidth() {
-      const { tableBodyWidth, gutterWidth } = this.layout;
-      return tableBodyWidth ? `${tableBodyWidth - (this.$$table.scrollY ? gutterWidth : 0)}px` : null;
+      const { layout, scrollY } = this.$$table;
+      const { tableBodyWidth, gutterWidth } = layout;
+      return tableBodyWidth ? `${tableBodyWidth - (scrollY ? gutterWidth : 0)}px` : null;
     },
     wrapStyle() {
-      const { headerHeight, viewportHeight, footerHeight } = this.layout;
-      let { height, maxHeight } = this.$$table;
+      const { layout, height, maxHeight } = this.$$table;
+      const { headerHeight, viewportHeight, footerHeight } = layout;
       if (height) {
         return {
           height: `${viewportHeight}px`
         };
       }
       if (maxHeight) {
-        maxHeight = parseHeight(maxHeight);
-        if (typeof maxHeight === 'number') {
+        const maxTableHeight = parseHeight(maxHeight);
+        if (typeof maxTableHeight === 'number') {
           return {
-            'max-height': `${maxHeight - footerHeight - headerHeight}px`
+            maxHeight: `${maxTableHeight - footerHeight - headerHeight}px`
           };
         }
       }
@@ -83,19 +84,25 @@ export default {
     },
     renderBodyYSpace() {
       return <div class="v-body--y-space" />;
+    },
+    renderColgroup() {
+      return (
+        <colgroup>
+          {this.flatColumns.map(column => {
+            const { dataIndex, width, renderWidth } = column;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+          })}
+        </colgroup>
+      );
     }
   },
   render() {
-    const { $$table, flatColumns, bodyWidth, wrapStyle } = this;
+    const { bodyWidth, wrapStyle } = this;
     return (
       <div class="v-table--body-wrapper body--wrapper" style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
         <table ref="vTableBody" class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
-          <colgroup>
-            {flatColumns.map(column => (
-              <col key={column.dataIndex} style={{ width: `${column.width || column.renderWidth}px`, minWidth: `${column.width || column.renderWidth}px` }} />
-            ))}
-          </colgroup>
+          {this.renderColgroup()}
           <tbody>{this.renderRows()}</tbody>
         </table>
       </div>

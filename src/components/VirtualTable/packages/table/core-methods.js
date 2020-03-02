@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 20:49:26
+ * @Last Modified time: 2020-03-03 02:16:47
  */
 import { throttle, browse, sleep } from '../utils';
 import _ from 'lodash';
@@ -86,7 +86,7 @@ export default {
     const $tableBody = tableBody.$el.querySelector('.v-table--body');
     const $tableYSpaceElem = tableBody.$el.querySelector('.v-body--y-space');
 
-    $tableBody.style.marginTop = `${topSpaceHeight}px`;
+    $tableBody.style.transform = `translateY(${topSpaceHeight}px)`;
     $tableYSpaceElem.style.height = `${bodyHeight}px`;
   },
   // 更新 Y 方向数据
@@ -106,8 +106,9 @@ export default {
       scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
 
       this.updateScrollYData();
-      await sleep(0);
+      await sleep(2);
     }
+
     return Promise.resolve();
   }
 };

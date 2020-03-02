@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 20:28:14
+ * @Last Modified time: 2020-03-03 01:41:05
  */
-import Vue from 'vue';
 import { parseHeight } from '../utils';
+import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import _ from 'lodash';
 
 export default {
@@ -92,5 +92,26 @@ export default {
   },
   setTableMaxHeight(val) {
     this.setTableHeight(val, 'max-height');
+  },
+  bindEvents() {
+    addResizeListener(this.$vTable, this.resizeListener);
+  },
+  unbindEvents() {
+    removeResizeListener(this.$vTable, this.resizeListener);
+  },
+  resizeListener() {
+    const { width: oldWidth } = this.resizeState;
+    let shouldUpdateLayout = false;
+    const width = this.$vTable.offsetWidth;
+    shouldUpdateLayout = oldWidth !== width;
+    if (!shouldUpdateLayout) return;
+    this.resizeState = { width };
+    this.doLayout();
+  },
+  doLayout() {
+    if (this.shouldUpdateHeight) {
+      this.updateElsHeight();
+    }
+    this.updateColumnsWidth();
   }
 };

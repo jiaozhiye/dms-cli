@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 17:54:45
+ * @Last Modified time: 2020-03-03 00:41:52
  */
 import { mapState, mapActions } from 'vuex';
 
@@ -66,25 +66,41 @@ const convertToRows = originColumns => {
 
 export default {
   name: 'TableHeader',
-  props: ['columns', 'flatColumns', 'layout'],
+  props: ['tableColumns', 'flatColumns'],
   inject: ['$$table'],
+  methods: {
+    renderColgroup() {
+      const {
+        layout: { gutterWidth },
+        scrollY
+      } = this.$$table;
+      return (
+        <colgroup>
+          {this.flatColumns.map(column => {
+            const { dataIndex, width, renderWidth } = column;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+          })}
+          {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
+        </colgroup>
+      );
+    }
+  },
   render() {
-    const { $$table, columns, flatColumns, layout } = this;
-    const columnRows = convertToRows(columns);
+    const { tableColumns } = this;
+    const {
+      layout: { tableBodyWidth },
+      scrollY
+    } = this.$$table;
+    const columnRows = convertToRows(tableColumns);
     // 是否拥有多级表头
     const isGroup = columnRows.length > 1;
     if (isGroup) {
-      $$table.isGroup = true;
+      this.$$table.isGroup = true;
     }
     return (
       <div class="v-table--header-wrapper">
-        <table class="v-table--header" cellspacing="0" cellpadding="0" border="0" style={{ width: layout.tableBodyWidth ? `${layout.tableBodyWidth}px` : null }}>
-          <colgroup>
-            {flatColumns.map(column => (
-              <col key={column.dataIndex} style={{ width: `${column.width || column.renderWidth}px`, minWidth: `${column.width || column.renderWidth}px` }} />
-            ))}
-            {$$table.scrollY && <col name="gutter" style={{ width: `${layout.gutterWidth}px` }} />}
-          </colgroup>
+        <table class="v-table--header" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
+          {this.renderColgroup()}
           <thead>
             {columnRows.map((columns, rowIndex) => (
               <tr key={rowIndex} class="v-header--row">
@@ -93,7 +109,7 @@ export default {
                     <div class="v-cell">{column.title}</div>
                   </th>
                 ))}
-                {$$table.scrollY && <th class="gutter"></th>}
+                {scrollY && <th class="gutter"></th>}
               </tr>
             ))}
           </thead>

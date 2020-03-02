@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 20:47:28
+ * @Last Modified time: 2020-03-03 02:27:36
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
 import baseProps from './props';
+import config from '../config';
 
-import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import { columnsFlatMap, createFilterColumns, getScrollBarSize } from '../utils';
 
 import layoutMethods from './layout-methods';
@@ -17,14 +17,6 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
-
-// 行高的映射表
-const rowHeightMaps = {
-  default: 48,
-  medium: 44,
-  small: 40,
-  mini: 36
-};
 
 export default {
   name: 'Table',
@@ -55,7 +47,7 @@ export default {
         renderSize: 0,
         offsetSize: 0,
         visibleSize: 0,
-        rowHeight: rowHeightMaps[this.size || 'default']
+        rowHeight: config.rowHeightMaps[this.size || 'default']
       },
       // 是否拥有多级表头
       isGroup: false,
@@ -116,9 +108,9 @@ export default {
     });
   },
   mounted() {
+    this.doLayout();
     this.setTableHeight(this.height);
     this.setTableMaxHeight(this.maxHeight);
-    this.doLayout();
     this.bindEvents();
     this.resizeState = Object.assign({}, { width: this.$vTable.offsetWidth });
   },
@@ -128,34 +120,13 @@ export default {
   methods: {
     ...layoutMethods,
     ...coreMethods,
-    bindEvents() {
-      addResizeListener(this.$vTable, this.resizeListener);
-    },
-    unbindEvents() {
-      removeResizeListener(this.$vTable, this.resizeListener);
-    },
-    resizeListener() {
-      const { width: oldWidth } = this.resizeState;
-      let shouldUpdateLayout = false;
-      const width = this.$vTable.offsetWidth;
-      shouldUpdateLayout = oldWidth !== width;
-      if (!shouldUpdateLayout) return;
-      this.resizeState = { width };
-      this.doLayout();
-    },
-    doLayout() {
-      if (this.shouldUpdateHeight) {
-        this.updateElsHeight();
-      }
-      this.updateColumnsWidth();
-    },
     renderBorderLine() {
       return <div class="v-table--border-line" />;
     }
   },
   render() {
-    const { size, border, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flatColumns, layout, uidkey } = this;
-    const cls = [
+    const { size, border, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flatColumns, dataSource, uidkey } = this;
+    const vTableCls = [
       `v-table`,
       {
         [`size--${size}`]: !!size,
@@ -169,13 +140,39 @@ export default {
         [`virtual--y`]: scrollYLoad
       }
     ];
+    const tableHeaderProps = {
+      ref: 'tableHeader',
+      props: {
+        tableColumns,
+        flatColumns
+      }
+    };
+    const tableBodyProps = {
+      ref: 'tableBody',
+      props: {
+        tableData,
+        flatColumns,
+        uidkey
+      }
+    };
+    const tableFooterProps = {
+      ref: 'tableFooter',
+      props: {
+        dataSource,
+        flatColumns,
+        uidkey
+      }
+    };
     return (
-      <div ref="v-table" class={cls}>
+      <div ref="v-table" class={vTableCls}>
         {/* 主要内容 */}
         <div class="v-table--main-wrapper">
-          <TableHeader ref="tableHeader" columns={tableColumns} flatColumns={flatColumns} layout={layout} />
-          <TableBody ref="tableBody" tableData={tableData} flatColumns={flatColumns} layout={layout} uidkey={uidkey} />
-          {showFooter && <TableFooter ref="tableFooter" dataSource={this.dataSource} flatColumns={flatColumns} layout={layout} uidkey={uidkey} />}
+          {/* 头部 */}
+          <TableHeader {...tableHeaderProps} />
+          {/* 表格体 */}
+          <TableBody {...tableBodyProps} />
+          {/* 底部 */}
+          {showFooter && <TableFooter {...tableFooterProps} />}
         </div>
         {/* 边框线 */}
         {this.renderBorderLine()}

@@ -9,13 +9,17 @@ import { VirtualTable } from '@/components/VirtualTable';
 // import res from '@/mock/tableData';
 
 const data = [];
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 330; i++) {
   data[i] = {
     id: i + 1,
-    name: '小明',
-    age: 20,
-    num: 1,
-    hobby: '游泳',
+    person: {
+      name: '小明',
+      age: 20,
+      sex: '男'
+    },
+    books: 1,
+    hobby: '游泳, 篮球',
+    email: 'xxx@qq.com',
     address: '长春'
   };
 }
@@ -38,19 +42,24 @@ export default {
           children: [
             {
               title: '姓名',
-              dataIndex: 'name',
+              dataIndex: 'person.name',
               width: 200
             },
             {
               title: '年龄',
-              dataIndex: 'age',
+              dataIndex: 'person.age',
+              width: 200
+            },
+            {
+              title: '性别',
+              dataIndex: 'person.sex',
               width: 200
             }
           ]
         },
         {
-          title: '数量',
-          dataIndex: 'num',
+          title: '图书数量',
+          dataIndex: 'books',
           summation: {
             unit: '个'
           }
@@ -58,12 +67,17 @@ export default {
         {
           title: '爱好',
           dataIndex: 'hobby',
-          width: 500
+          width: 200
+        },
+        {
+          title: '邮箱',
+          dataIndex: 'email',
+          width: 200
         },
         {
           title: '地址',
           dataIndex: 'address',
-          width: 500
+          width: 400
         }
       ]
     };
