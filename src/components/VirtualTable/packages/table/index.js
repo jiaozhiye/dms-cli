@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 19:15:16
+ * @Last Modified time: 2020-03-04 01:12:27
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
 import baseProps from './props';
 import config from '../config';
 
-import { columnsFlatMap, createFilterColumns, getScrollBarSize } from '../utils';
+import { columnsFlatMap, createFilterColumns, parseHeight, getScrollBarSize } from '../utils';
 
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
@@ -87,19 +87,28 @@ export default {
     showFooter() {
       return this.flatColumns.some(x => !!x.summation);
     },
-    rowHeight() {
-      return this.scrollYStore.rowHeight;
-    },
     shouldUpdateHeight() {
       return this.height || this.maxHeight;
+    },
+    tableStyles() {
+      const style = {};
+      const height = parseHeight(this.height);
+      const maxHeight = parseHeight(this.maxHeight);
+      if (height) {
+        style.height = `${height}px`;
+      }
+      if (maxHeight) {
+        style.maxHeight = `${maxHeight}px`;
+      }
+      return style;
     }
   },
   watch: {
-    height(val) {
-      this.setTableHeight(val);
+    height() {
+      this.updateElsHeight();
     },
     maxHeight() {
-      this.setTableMaxHeight(val);
+      this.updateElsHeight();
     }
   },
   created() {
@@ -109,8 +118,6 @@ export default {
   },
   mounted() {
     this.doLayout();
-    this.setTableHeight(this.height);
-    this.setTableMaxHeight(this.maxHeight);
     this.bindEvents();
     this.resizeState = Object.assign({}, { width: this.$vTable.offsetWidth });
   },
@@ -128,7 +135,7 @@ export default {
     }
   },
   render() {
-    const { size, border, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flatColumns, dataSource, uidkey } = this;
+    const { size, border, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flatColumns, dataSource, uidkey, tableStyles } = this;
     const vTableCls = [
       `v-table`,
       {
@@ -167,7 +174,7 @@ export default {
       }
     };
     return (
-      <div ref="v-table" class={vTableCls}>
+      <div ref="v-table" class={vTableCls} style={tableStyles}>
         {/* 主要内容 */}
         <div class="v-table--main-wrapper">
           {/* 头部 */}

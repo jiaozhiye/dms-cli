@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 12:36:04
+ * @Last Modified time: 2020-03-04 01:06:19
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -35,7 +35,7 @@ export default {
         const maxTableHeight = parseHeight(maxHeight);
         if (typeof maxTableHeight === 'number') {
           return {
-            maxHeight: `${maxTableHeight - footerHeight - headerHeight}px`
+            maxHeight: `${maxTableHeight - headerHeight - footerHeight}px`
           };
         }
       }
