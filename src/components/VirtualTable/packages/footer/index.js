@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 00:13:24
+ * @Last Modified time: 2020-03-03 12:36:14
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -41,22 +41,6 @@ export default {
     }
   },
   methods: {
-    renderRows() {
-      const { scrollY } = this.$$table;
-      return this.summationRows.map(row => (
-        <tr key={row[this.uidkey]} class="v-footer--row">
-          {this.flatColumns.map((column, index) => this.renderCells(column, row, index))}
-          {scrollY && <td class="gutter"></td>}
-        </tr>
-      ));
-    },
-    renderCells(column, row, index) {
-      return (
-        <td key={column.dataIndex} class="v-footer--column">
-          <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>
-        </td>
-      );
-    },
     renderColgroup() {
       const {
         layout: { gutterWidth },
@@ -70,6 +54,22 @@ export default {
           })}
           {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
         </colgroup>
+      );
+    },
+    renderRows() {
+      const { scrollY } = this.$$table;
+      return this.summationRows.map(row => (
+        <tr key={row[this.uidkey]} class="v-footer--row">
+          {this.flatColumns.map((column, index) => this.renderCell(column, row, index))}
+          {scrollY && <td class="gutter"></td>}
+        </tr>
+      ));
+    },
+    renderCell(column, row, index) {
+      return (
+        <td key={column.dataIndex} class="v-footer--column">
+          <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>
+        </td>
       );
     }
   },

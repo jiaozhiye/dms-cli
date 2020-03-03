@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 01:47:19
+ * @Last Modified time: 2020-03-03 12:36:04
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -49,21 +49,6 @@ export default {
     this.$el.onscroll = null;
   },
   methods: {
-    renderRows() {
-      const rows = this.tableData.map(row => (
-        <tr key={row[this.uidkey]} class="v-body--row">
-          {this.flatColumns.map(column => this.renderCells(column, row))}
-        </tr>
-      ));
-      return rows;
-    },
-    renderCells(column, row) {
-      return (
-        <td key={column.dataIndex} class="v-body--column">
-          <div class="v-cell">{_.get(row, column.dataIndex)}</div>
-        </td>
-      );
-    },
     scrollEvent(ev) {
       const { scrollYLoad, $refs } = this.$$table;
       const { tableHeader, tableFooter } = $refs;
@@ -93,6 +78,21 @@ export default {
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
           })}
         </colgroup>
+      );
+    },
+    renderRows() {
+      const rows = this.tableData.map(row => (
+        <tr key={row[this.uidkey]} class="v-body--row">
+          {this.flatColumns.map(column => this.renderCell(column, row))}
+        </tr>
+      ));
+      return rows;
+    },
+    renderCell(column, row) {
+      return (
+        <td key={column.dataIndex} class="v-body--column">
+          <div class="v-cell">{_.get(row, column.dataIndex)}</div>
+        </td>
       );
     }
   },

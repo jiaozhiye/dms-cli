@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 20:39:13
+ * @Last Modified time: 2020-03-03 19:17:01
  */
 // 获取 columns 展平后的一维数组
 export const columnsFlatMap = columns => {
@@ -19,24 +19,19 @@ export const columnsFlatMap = columns => {
 
 // 创建列筛选后的列字段数组
 export const createFilterColumns = columns => {
-  const result = [];
-  columns.forEach(x => {
-    let target = { ...x };
-    if (Array.isArray(x.children)) {
-      target.children = createFilterColumns(x.children);
+  return columns.filter(column => {
+    if (column.children) {
+      column.children = createFilterColumns(column.children);
     }
-    if (!target.hidden) {
-      result.push(target);
-    }
+    return !column.hidden;
   });
-  return result;
 };
 
 // 深度查找 column
 export const deepFindColumn = (columns, mark) => {
   let result = null;
   for (let i = 0; i < columns.length; i++) {
-    if (Array.isArray(columns[i].children)) {
+    if (columns[i].children) {
       result = deepFindColumn(columns[i].children, mark);
     }
     if (result) {
@@ -47,6 +42,11 @@ export const deepFindColumn = (columns, mark) => {
     }
   }
   return result;
+};
+
+// 等待
+export const sleep = async timeLen => {
+  return new Promise(resolve => setTimeout(resolve, timeLen));
 };
 
 // 函数截流
@@ -66,6 +66,25 @@ export const debounce = (fn, delay) => {
     fn.timer && clearTimeout(fn.timer);
     fn.timer = setTimeout(() => fn.apply(this, args), delay);
   };
+};
+
+// 根据属性路径获取对象的值
+export const getValueByPath = (object, prop) => {
+  prop = prop || '';
+  const paths = prop.split('.');
+  let current = object;
+  let result = null;
+  for (let i = 0, j = paths.length; i < j; i++) {
+    const path = paths[i];
+    if (!current) break;
+
+    if (i === j - 1) {
+      result = current[path];
+      break;
+    }
+    current = current[path];
+  }
+  return result;
 };
 
 // 获取滚动条宽度
@@ -101,12 +120,31 @@ export const getScrollBarSize = () => {
     }
 
     document.body.removeChild(outer);
-
     cached = widthContained - widthScroll;
   }
 
   return cached;
 };
+
+// 获取元素相对于 目标祖先元素 的位置
+export const getOffsetPos = (elem, container) => {
+  return getNodeOffset(elem, container, { left: 0, top: 0 });
+};
+function getNodeOffset(elem, container, rest) {
+  if (elem) {
+    const parentElem = elem.parentNode;
+    rest.top += elem.offsetTop;
+    rest.left += elem.offsetLeft;
+    if (parentElem && parentElem !== document.documentElement && parentElem !== document.body) {
+      rest.top -= parentElem.scrollTop;
+      rest.left -= parentElem.scrollLeft;
+    }
+    if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+      return getNodeOffset(elem.offsetParent, container, rest);
+    }
+  }
+  return rest;
+}
 
 // 格式化 DOM 元素高度
 export const parseHeight = height => {
@@ -122,34 +160,7 @@ export const parseHeight = height => {
   return null;
 };
 
-// 等待
-export const sleep = async timeLen => {
-  return new Promise(resolve => setTimeout(resolve, timeLen));
-};
-
-// 根据属性路径获取对象的值
-export const getValueByPath = (object, prop) => {
-  prop = prop || '';
-  const paths = prop.split('.');
-  let current = object;
-  let result = null;
-  for (let i = 0, j = paths.length; i < j; i++) {
-    const path = paths[i];
-    if (!current) break;
-
-    if (i === j - 1) {
-      result = current[path];
-      break;
-    }
-    current = current[path];
-  }
-  return result;
-};
-
 // 获取浏览器内核信息
-function isBrowseType(type) {
-  return navigator.userAgent.indexOf(type) > -1;
-}
 export const browse = () => {
   let $body, isChrome, isEdge;
   let isMobile = false;
@@ -174,6 +185,9 @@ export const browse = () => {
   });
   return result;
 };
+function isBrowseType(type) {
+  return navigator.userAgent.indexOf(type) > -1;
+}
 
 // 判断参数是否为空
 export const isEmpty = val => {

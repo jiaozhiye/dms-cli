@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 00:41:52
+ * @Last Modified time: 2020-03-03 21:23:18
  */
 import { mapState, mapActions } from 'vuex';
+import { getOffsetPos, deepFindColumn } from '../utils';
 
 const getAllColumns = columns => {
   const result = [];
@@ -83,36 +84,82 @@ export default {
           {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
         </colgroup>
       );
+    },
+    renderRows(columnRows) {
+      const { scrollY } = this.$$table;
+      return columnRows.map((columns, rowIndex) => (
+        <tr key={rowIndex} class="v-header--row">
+          {columns.map((column, cellIndex) => this.renderCell(column))}
+          {scrollY && <th class="gutter"></th>}
+        </tr>
+      ));
+    },
+    renderCell(column) {
+      const resizableCls = [
+        `v-resizable`,
+        {
+          [`is--line`]: !this.$$table.border
+        }
+      ];
+      return (
+        <th key={column.dataIndex} class="v-header--column" colspan={column.colSpan} rowspan={column.rowSpan}>
+          <div class="v-cell">{column.title}</div>
+          {this.$$table.resizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
+        </th>
+      );
+    },
+    resizeMousedown(ev, column) {
+      const dom = ev.target;
+      const { $vTable, $refs, defaultColumnWidth } = this.$$table;
+      const $tableBody = $refs[`tableBody`].$el;
+      const target = $refs[`resizable-bar`];
+
+      const half = dom.offsetWidth / 2 - 1;
+      const disX = ev.clientX;
+      const left = getOffsetPos(dom, $vTable).left - $tableBody.scrollLeft + half;
+
+      $vTable.classList.add('c--resize');
+      target.style.left = `${left}px`;
+      target.style.display = 'block';
+
+      // 操作表格列 -> 违背了单向数据流原则，后期建议优化
+      const tColumn = deepFindColumn(this.flatColumns, column.dataIndex);
+      const renderWidth = tColumn.width || tColumn.renderWidth;
+
+      document.onmousemove = ev => {
+        let ml = ev.clientX - disX;
+        let rw = renderWidth + ml;
+
+        // 左边界限定
+        if (rw < defaultColumnWidth) return;
+
+        tColumn.width = tColumn.renderWidth = rw;
+        target.style.left = `${ml + left}px`;
+      };
+
+      document.onmouseup = function() {
+        $vTable.classList.remove('c--resize');
+        target.style.display = 'none';
+        this.onmousemove = null;
+        this.onmouseup = null;
+      };
+
+      return false;
     }
   },
   render() {
     const { tableColumns } = this;
     const {
-      layout: { tableBodyWidth },
-      scrollY
+      layout: { tableBodyWidth }
     } = this.$$table;
     const columnRows = convertToRows(tableColumns);
     // 是否拥有多级表头
-    const isGroup = columnRows.length > 1;
-    if (isGroup) {
-      this.$$table.isGroup = true;
-    }
+    this.$$table.isGroup = columnRows.length > 1;
     return (
       <div class="v-table--header-wrapper">
         <table class="v-table--header" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
           {this.renderColgroup()}
-          <thead>
-            {columnRows.map((columns, rowIndex) => (
-              <tr key={rowIndex} class="v-header--row">
-                {columns.map((column, cellIndex) => (
-                  <th key={column.dataIndex} class="v-header--column" colspan={column.colSpan} rowspan={column.rowSpan}>
-                    <div class="v-cell">{column.title}</div>
-                  </th>
-                ))}
-                {scrollY && <th class="gutter"></th>}
-              </tr>
-            ))}
-          </thead>
+          <thead>{this.renderRows(columnRows)}</thead>
         </table>
       </div>
     );

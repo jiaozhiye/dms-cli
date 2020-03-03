@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 17:40:45
+ * @Last Modified time: 2020-03-03 12:16:04
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
@@ -45,14 +45,14 @@ export const throttle = (fn, delay) => {
 
 // 需要确认的操作提示
 export const confirmAction = async (msg = '确认进行此操作?', type = 'warning') => {
-  return MessageBox.confirm(msg, '提示信息', { confirmButtonText: '确定', cancelButtonText: '取消', type });
+  return MessageBox.confirm(msg, '提示信息', { confirmButtonText: '确定', cancelButtonText: '取消', type, dangerouslyUseHTMLString: true });
 };
 
 // Notification 通知提示
 export const notifyAction = async (msg = '暂无...', type = 'success', title = '提示信息') => {
   if (store.state.app.isNotifyMark) return;
   store.dispatch('app/createNotifyState', true);
-  Notification({ title, message: msg, type, duration: config.notifyDuration });
+  Notification({ title, message: msg, type, duration: config.notifyDuration, dangerouslyUseHTMLString: true });
   await sleep(config.notifyDuration);
   store.dispatch('app/createNotifyState', false);
 };

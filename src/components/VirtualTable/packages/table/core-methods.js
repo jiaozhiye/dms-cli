@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 02:16:47
+ * @Last Modified time: 2020-03-03 12:17:17
  */
 import { throttle, browse, sleep } from '../utils';
 import _ from 'lodash';
@@ -106,7 +106,7 @@ export default {
       scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
 
       this.updateScrollYData();
-      await sleep(2);
+      await sleep(5);
     }
 
     return Promise.resolve();

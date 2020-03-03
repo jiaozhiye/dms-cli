@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 02:27:36
+ * @Last Modified time: 2020-03-03 19:15:16
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -82,7 +82,7 @@ export default {
       return createFilterColumns(this.columns);
     },
     flatColumns() {
-      return columnsFlatMap(this.columns);
+      return columnsFlatMap(this.tableColumns);
     },
     showFooter() {
       return this.flatColumns.some(x => !!x.summation);
@@ -122,6 +122,9 @@ export default {
     ...coreMethods,
     renderBorderLine() {
       return <div class="v-table--border-line" />;
+    },
+    renderResizableLine() {
+      return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
     }
   },
   render() {
@@ -176,6 +179,8 @@ export default {
         </div>
         {/* 边框线 */}
         {this.renderBorderLine()}
+        {/* 列宽线 */}
+        {this.renderResizableLine()}
       </div>
     );
   }
