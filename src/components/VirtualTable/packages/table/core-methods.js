@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 09:55:47
+ * @Last Modified time: 2020-03-04 15:16:30
  */
-import { throttle, browse, sleep } from '../utils';
+import { throttle, browse } from '../utils';
 import _ from 'lodash';
 const $browse = browse();
 const isWebkit = $browse['-webkit'] && !$browse.edge;
@@ -97,17 +97,18 @@ export default {
   // 计算可视渲染相关数据
   async computeScrollLoad() {
     const { scrollYLoad, scrollYStore, layout } = this;
-    await sleep(0);
-    if (scrollYLoad) {
-      const visibleYSize = Number(Math.ceil(layout.viewportHeight / scrollYStore.rowHeight));
-      scrollYStore.visibleSize = visibleYSize;
-      scrollYStore.offsetSize = visibleYSize;
-      scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
+    return this.$nextTick().then(() => {
+      if (scrollYLoad) {
+        const visibleYSize = Number(Math.ceil(layout.viewportHeight / scrollYStore.rowHeight));
 
-      this.updateScrollYData();
-      await sleep(5);
-    }
+        // 设置 scrollYStore 初始值
+        scrollYStore.visibleSize = visibleYSize;
+        scrollYStore.offsetSize = visibleYSize;
+        scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
 
-    return Promise.resolve();
+        // 更新数据
+        this.updateScrollYData();
+      }
+    });
   }
 };

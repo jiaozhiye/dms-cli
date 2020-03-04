@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 02:11:33
+ * @Last Modified time: 2020-03-04 15:37:20
  */
 import { parseHeight } from '../utils';
 import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
@@ -86,7 +86,7 @@ export default {
     this.layout.footerHeight = this.showFooter ? tableFooter.$el.clientHeight : 0;
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
-    this.layout.tableBodyHeight = tableBody.$refs.vTableBody.clientHeight;
+    this.layout.tableBodyHeight = tableBody.$el.querySelector('.v-table--body').clientHeight;
 
     this.scrollY = this.layout.tableBodyHeight > this.layout.viewportHeight;
   },
@@ -106,9 +106,9 @@ export default {
     this.doLayout();
   },
   doLayout() {
-    if (this.shouldUpdateHeight) {
-      this.updateElsHeight();
-    }
     this.updateColumnsWidth();
+    if (this.shouldUpdateHeight) {
+      this.$nextTick(this.updateElsHeight);
+    }
   }
 };

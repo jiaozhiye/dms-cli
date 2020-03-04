@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 01:06:19
+ * @Last Modified time: 2020-03-04 13:45:40
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -101,7 +101,7 @@ export default {
     return (
       <div class="v-table--body-wrapper body--wrapper" style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
-        <table ref="vTableBody" class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
+        <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
           <tbody>{this.renderRows()}</tbody>
         </table>
