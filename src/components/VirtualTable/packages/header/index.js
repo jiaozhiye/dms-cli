@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 21:23:18
+ * @Last Modified time: 2020-03-04 22:42:17
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
@@ -67,7 +67,7 @@ const convertToRows = originColumns => {
 
 export default {
   name: 'TableHeader',
-  props: ['tableColumns', 'flatColumns'],
+  props: ['tableColumns', 'flattenColumns'],
   inject: ['$$table'],
   methods: {
     renderColgroup() {
@@ -77,7 +77,7 @@ export default {
       } = this.$$table;
       return (
         <colgroup>
-          {this.flatColumns.map(column => {
+          {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
           })}
@@ -95,10 +95,11 @@ export default {
       ));
     },
     renderCell(column) {
+      const { resizable, bordered } = this.$$table;
       const resizableCls = [
         `v-resizable`,
         {
-          [`is--line`]: !this.$$table.border
+          [`is--line`]: resizable && !bordered
         }
       ];
       return (
@@ -123,7 +124,7 @@ export default {
       target.style.display = 'block';
 
       // 操作表格列 -> 违背了单向数据流原则，后期建议优化
-      const tColumn = deepFindColumn(this.flatColumns, column.dataIndex);
+      const tColumn = deepFindColumn(this.flattenColumns, column.dataIndex);
       const renderWidth = tColumn.width || tColumn.renderWidth;
 
       document.onmousemove = ev => {

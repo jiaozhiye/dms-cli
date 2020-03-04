@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 15:09:21
+ * @Last Modified time: 2020-03-04 22:40:17
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -37,7 +37,7 @@ export default {
       // 是否存在横向滚动条
       scrollX: false,
       // 是否存在纵向滚动条
-      scrollY: true,
+      scrollY: false,
       // 是否启用了纵向 Y 可视渲染方式加载
       scrollYLoad: false,
       // 存放纵向 Y 虚拟滚动相关信息
@@ -81,11 +81,14 @@ export default {
     tableColumns() {
       return createFilterColumns(this.columns);
     },
-    flatColumns() {
+    flattenColumns() {
       return columnsFlatMap(this.tableColumns);
     },
     showFooter() {
-      return this.flatColumns.some(x => !!x.summation);
+      return this.flattenColumns.some(x => !!x.summation);
+    },
+    bordered() {
+      return this.border || this.isGroup;
     },
     shouldUpdateHeight() {
       return this.height || this.maxHeight;
@@ -104,7 +107,7 @@ export default {
     }
   },
   watch: {
-    flatColumns() {
+    flattenColumns() {
       this.doLayout();
     },
     height() {
@@ -131,19 +134,19 @@ export default {
     ...layoutMethods,
     ...coreMethods,
     renderBorderLine() {
-      return <div class="v-table--border-line" />;
+      return this.bordered && <div class="v-table--border-line" />;
     },
     renderResizableLine() {
       return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
     }
   },
   render() {
-    const { size, border, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flatColumns, dataSource, uidkey, tableStyles } = this;
+    const { size, bordered, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flattenColumns, dataSource, uidkey, tableStyles } = this;
     const vTableCls = [
       `v-table`,
       {
         [`size--${size}`]: !!size,
-        [`t--border`]: border || isGroup,
+        [`t--border`]: bordered,
         [`is--empty`]: !tableData.length,
         [`is--group`]: isGroup,
         [`show--head`]: showHeader,
@@ -157,14 +160,14 @@ export default {
       ref: 'tableHeader',
       props: {
         tableColumns,
-        flatColumns
+        flattenColumns
       }
     };
     const tableBodyProps = {
       ref: 'tableBody',
       props: {
         tableData,
-        flatColumns,
+        flattenColumns,
         uidkey
       }
     };
@@ -172,7 +175,7 @@ export default {
       ref: 'tableFooter',
       props: {
         dataSource,
-        flatColumns,
+        flattenColumns,
         uidkey
       }
     };

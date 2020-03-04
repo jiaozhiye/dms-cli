@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 15:37:20
+ * @Last Modified time: 2020-03-04 22:29:54
  */
-import { parseHeight } from '../utils';
 import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import _ from 'lodash';
 
@@ -14,19 +13,20 @@ export default {
     const tableWidth = this.$vTable.clientWidth;
     const scrollYWidth = this.scrollY ? this.layout.gutterWidth : 0;
     // 没有指定宽度的列
-    let flexColumns = this.flatColumns.filter(column => typeof column.width !== 'number');
+    let flexColumns = this.flattenColumns.filter(column => typeof column.width !== 'number');
     // 表格最小宽度
     let bodyMinWidth = 0;
 
-    this.flatColumns.forEach(column => {
-      if (typeof column.width === 'number' && column.renderWidth) {
-        column.renderWidth = null;
+    this.flattenColumns.forEach(column => {
+      if (typeof column.renderWidth === 'undefined') {
+        // 设置 renderWidth 为响应式数据属性
+        this.$set(column, 'renderWidth', null);
       }
     });
 
     if (flexColumns.length > 0) {
       // 获取表格的最小宽度
-      this.flatColumns.forEach(column => {
+      this.flattenColumns.forEach(column => {
         bodyMinWidth += column.width || this.defaultColumnWidth;
       });
 
@@ -38,7 +38,7 @@ export default {
         const totalFlexWidth = tableWidth - scrollYWidth - bodyMinWidth;
 
         if (flexColumns.length === 1) {
-          // flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth;
+          flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth;
         } else {
           // 把富余的宽度均分给除第一列的其他列，剩下来的给第一列（避免宽度均分的时候除不尽）
           const allColumnsWidth = flexColumns.reduce((prev, column) => prev + this.defaultColumnWidth, 0);
@@ -52,7 +52,7 @@ export default {
             column.renderWidth = this.defaultColumnWidth + flexWidth;
           });
 
-          // flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth - noneFirstWidth;
+          flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth - noneFirstWidth;
         }
       } else {
         // 最小宽度大于容器宽度 -> 有横向滚动条
@@ -67,7 +67,7 @@ export default {
       // 表格内容宽度
       this.layout.tableBodyWidth = Math.max(bodyMinWidth, tableWidth);
     } else {
-      this.flatColumns.forEach(column => {
+      this.flattenColumns.forEach(column => {
         column.renderWidth = column.width || this.defaultColumnWidth;
         bodyMinWidth += column.renderWidth;
       });
@@ -88,7 +88,7 @@ export default {
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
     this.layout.tableBodyHeight = tableBody.$el.querySelector('.v-table--body').clientHeight;
 
-    this.scrollY = this.layout.tableBodyHeight > this.layout.viewportHeight;
+    this.scrollY = this.scrollYLoad || this.layout.tableBodyHeight > this.layout.viewportHeight;
   },
   bindEvents() {
     addResizeListener(this.$vTable, this.resizeListener);

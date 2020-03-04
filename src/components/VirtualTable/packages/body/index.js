@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 export default {
   name: 'TableBody',
-  props: ['tableData', 'flatColumns', 'uidkey'],
+  props: ['tableData', 'flattenColumns', 'uidkey'],
   inject: ['$$table'],
   daya() {
     this.prevST = 0;
@@ -73,7 +73,7 @@ export default {
     renderColgroup() {
       return (
         <colgroup>
-          {this.flatColumns.map(column => {
+          {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
           })}
@@ -83,7 +83,7 @@ export default {
     renderRows() {
       const rows = this.tableData.map(row => (
         <tr key={row[this.uidkey]} class="v-body--row">
-          {this.flatColumns.map(column => this.renderCell(column, row))}
+          {this.flattenColumns.map(column => this.renderCell(column, row))}
         </tr>
       ));
       return rows;

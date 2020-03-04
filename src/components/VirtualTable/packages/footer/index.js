@@ -10,12 +10,12 @@ import { formatNumber } from '../utils';
 
 export default {
   name: 'TableFooter',
-  props: ['dataSource', 'flatColumns', 'uidkey'],
+  props: ['dataSource', 'flattenColumns', 'uidkey'],
   inject: ['$$table'],
   computed: {
     summationRows() {
       const { dataSource } = this;
-      const summationColumns = this.flatColumns.filter(x => typeof x.summation !== 'undefined');
+      const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
       const res = { [this.$$table.uidkey]: 1 };
       summationColumns.forEach(column => {
@@ -48,7 +48,7 @@ export default {
       } = this.$$table;
       return (
         <colgroup>
-          {this.flatColumns.map(column => {
+          {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
           })}
@@ -60,7 +60,7 @@ export default {
       const { scrollY } = this.$$table;
       return this.summationRows.map(row => (
         <tr key={row[this.uidkey]} class="v-footer--row">
-          {this.flatColumns.map((column, index) => this.renderCell(column, row, index))}
+          {this.flattenColumns.map((column, index) => this.renderCell(column, row, index))}
           {scrollY && <td class="gutter"></td>}
         </tr>
       ));
