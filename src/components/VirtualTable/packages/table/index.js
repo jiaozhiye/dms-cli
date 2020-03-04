@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 01:12:27
+ * @Last Modified time: 2020-03-04 09:57:06
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -104,6 +104,9 @@ export default {
     }
   },
   watch: {
+    flatColumns() {
+      this.doLayout();
+    },
     height() {
       this.updateElsHeight();
     },

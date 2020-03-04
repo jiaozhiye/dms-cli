@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 21:26:18
+ * @Last Modified time: 2020-03-04 11:31:17
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -10,7 +10,6 @@ import menuRoutes from './modules/menu';
 Vue.use(VueRouter);
 
 const BasicLayout = () => import('@/layout/BasicLayout');
-const RouteView = () => import('@/layout/RouteView');
 const Login = () => import('@/pages/login');
 const Dashboard = () => import('@/pages/dashboard');
 const Redirect = () => import('@/pages/redirect');
@@ -32,39 +31,13 @@ export const constantRouterMap = [
     children: [
       {
         path: '/home',
-        meta: { breadcrumb: false },
-        component: RouteView,
-        children: [
-          {
-            path: '',
-            meta: { breadcrumb: false },
-            component: RouteView,
-            children: [
-              {
-                path: '',
-                meta: { title: '概览', bgColor: true, keepAlive: true },
-                component: Dashboard
-              }
-            ]
-          }
-        ]
+        meta: { title: '概览', bgColor: true, keepAlive: true },
+        component: Dashboard
       },
       ...menuRoutes,
       {
-        path: '/redirect',
-        component: RouteView,
-        children: [
-          {
-            path: '',
-            component: RouteView,
-            children: [
-              {
-                path: '/redirect/:path*',
-                component: Redirect
-              }
-            ]
-          }
-        ]
+        path: '/redirect/:path*',
+        component: Redirect
       }
     ]
   },

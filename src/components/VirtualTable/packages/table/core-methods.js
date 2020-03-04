@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 12:17:17
+ * @Last Modified time: 2020-03-04 09:55:47
  */
 import { throttle, browse, sleep } from '../utils';
 import _ from 'lodash';
@@ -97,10 +97,9 @@ export default {
   // 计算可视渲染相关数据
   async computeScrollLoad() {
     const { scrollYLoad, scrollYStore, layout } = this;
+    await sleep(0);
     if (scrollYLoad) {
-      await sleep(0);
       const visibleYSize = Number(Math.ceil(layout.viewportHeight / scrollYStore.rowHeight));
-
       scrollYStore.visibleSize = visibleYSize;
       scrollYStore.offsetSize = visibleYSize;
       scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
