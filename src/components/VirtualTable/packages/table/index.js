@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 22:40:17
+ * @Last Modified time: 2020-03-05 12:05:53
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -11,6 +11,7 @@ import config from '../config';
 
 import { columnsFlatMap, createFilterColumns, parseHeight, getScrollBarSize } from '../utils';
 
+import columnsMixin from '../columns';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
 
@@ -29,7 +30,7 @@ export default {
       $$table: this
     };
   },
-  mixins: [],
+  mixins: [columnsMixin],
   data() {
     return {
       // 渲染中的数据
@@ -83,6 +84,12 @@ export default {
     },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
+    },
+    leftFixedColumns() {
+      return this.flattenColumns.filter(column => column.fixed === 'left');
+    },
+    rightFixedColumns() {
+      return this.flattenColumns.filter(column => column.fixed === 'right');
     },
     showFooter() {
       return this.flattenColumns.some(x => !!x.summation);
@@ -141,14 +148,32 @@ export default {
     }
   },
   render() {
-    const { size, bordered, isGroup, tableData, showHeader, showFooter, scrollX, scrollY, scrollYLoad, tableColumns, flattenColumns, dataSource, uidkey, tableStyles } = this;
+    const {
+      size,
+      bordered,
+      isGroup,
+      tableData,
+      showHeader,
+      showFooter,
+      scrollX,
+      scrollY,
+      scrollYLoad,
+      tableColumns,
+      flattenColumns,
+      dataSource,
+      uidkey,
+      tableStyles,
+      leftFixedColumns,
+      rightFixedColumns
+    } = this;
     const vTableCls = [
       `v-table`,
       {
         [`size--${size}`]: !!size,
-        [`t--border`]: bordered,
-        [`is--empty`]: !tableData.length,
+        [`is--border`]: bordered,
+        [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
         [`is--group`]: isGroup,
+        [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
         [`scroll--x`]: scrollX,

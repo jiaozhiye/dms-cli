@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 09:10:46
+ * @Last Modified time: 2020-03-05 11:45:39
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -89,8 +89,22 @@ export default {
       return rows;
     },
     renderCell(column, row) {
+      const { leftFixedColumns, rightFixedColumns } = this.$$table;
+      const cls = [
+        `v-body--column`,
+        {
+          [`v-cell-fix-left`]: column.fixed === 'left',
+          [`v-cell-fix-right`]: column.fixed === 'right',
+          [`v-cell-fix-left-last`]: column.fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === column.dataIndex,
+          [`v-cell-fix-right-first`]: column.fixed === 'right' && rightFixedColumns[0].dataIndex === column.dataIndex
+        }
+      ];
+      const stys = {
+        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
+        right: column.fixed === 'right' ? this.$$table.getStickyRight(column.dataIndex) : null
+      };
       return (
-        <td key={column.dataIndex} class="v-body--column">
+        <td key={column.dataIndex} class={cls} style={{ ...stys }}>
           <div class="v-cell">{_.get(row, column.dataIndex)}</div>
         </td>
       );

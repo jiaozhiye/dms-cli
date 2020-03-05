@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 09:10:55
+ * @Last Modified time: 2020-03-05 11:45:12
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -66,8 +66,27 @@ export default {
       ));
     },
     renderCell(column, row, index) {
+      const {
+        leftFixedColumns,
+        rightFixedColumns,
+        layout: { gutterWidth },
+        scrollY
+      } = this.$$table;
+      const cls = [
+        `v-footer--column`,
+        {
+          [`v-cell-fix-left`]: column.fixed === 'left',
+          [`v-cell-fix-right`]: column.fixed === 'right',
+          [`v-cell-fix-left-last`]: column.fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === column.dataIndex,
+          [`v-cell-fix-right-first`]: column.fixed === 'right' && rightFixedColumns[0].dataIndex === column.dataIndex
+        }
+      ];
+      const stys = {
+        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
+        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
+      };
       return (
-        <td key={column.dataIndex} class="v-footer--column">
+        <td key={column.dataIndex} class={cls} style={{ ...stys }}>
           <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>
         </td>
       );

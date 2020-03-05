@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 09:10:35
+ * @Last Modified time: 2020-03-05 11:45:36
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
@@ -95,7 +95,28 @@ export default {
       ));
     },
     renderCell(column) {
-      const { resizable, bordered } = this.$$table;
+      const {
+        leftFixedColumns,
+        rightFixedColumns,
+        layout: { gutterWidth },
+        resizable,
+        bordered,
+        scrollY
+      } = this.$$table;
+
+      const cls = [
+        `v-header--column`,
+        {
+          [`v-cell-fix-left`]: column.fixed === 'left',
+          [`v-cell-fix-right`]: column.fixed === 'right',
+          [`v-cell-fix-left-last`]: column.fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === column.dataIndex,
+          [`v-cell-fix-right-first`]: column.fixed === 'right' && rightFixedColumns[0].dataIndex === column.dataIndex
+        }
+      ];
+      const stys = {
+        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
+        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
+      };
       const resizableCls = [
         `v-resizable`,
         {
@@ -103,7 +124,7 @@ export default {
         }
       ];
       return (
-        <th key={column.dataIndex} class="v-header--column" colspan={column.colSpan} rowspan={column.rowSpan}>
+        <th key={column.dataIndex} class={cls} style={{ ...stys }} colspan={column.colSpan} rowspan={column.rowSpan}>
           <div class="v-cell">{column.title}</div>
           {this.$$table.resizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
         </th>

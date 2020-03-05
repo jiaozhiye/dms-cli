@@ -34,7 +34,8 @@ export default {
         {
           title: '序号',
           dataIndex: 'id',
-          width: 80
+          width: 80,
+          fixed: 'left'
         },
         {
           title: '个人信息',
@@ -66,15 +67,19 @@ export default {
         },
         {
           title: '爱好',
-          dataIndex: 'hobby'
+          dataIndex: 'hobby',
+          width: 300
         },
         {
           title: '邮箱',
-          dataIndex: 'email'
+          dataIndex: 'email',
+          width: 300
         },
         {
           title: '地址',
-          dataIndex: 'address'
+          dataIndex: 'address',
+          fixed: 'right',
+          width: 200
         }
       ]
     };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-02 02:07:05
+ * @Last Modified time: 2020-03-05 12:10:09
  */
 @import './mixin.scss';
 @import './common.scss';
@@ -171,7 +171,51 @@
       text-align: right;
     }
   }
-  &:not(.t--border) {
+
+  // 自定义
+  &.is--fixed {
+    .v-cell-fix-left,
+    .v-cell-fix-right {
+      position: sticky;
+      z-index: 2;
+    }
+    .v-cell-fix-left-last {
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 20px;
+        transform: translateX(100%);
+        // box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.3s, -webkit-box-shadow 0.3s;
+        pointer-events: none;
+      }
+    }
+    .v-cell-fix-right-first {
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        transform: translateX(100%);
+        // box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.3s, -webkit-box-shadow 0.3s;
+        pointer-events: none;
+      }
+    }
+    &.v-table-ping-left .v-cell-fix-left-last::after {
+      box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.15);
+    }
+    &.v-table-ping-right .v-cell-fix-right-first::after {
+      box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &:not(.is--border) {
     .v-header--column,
     .v-body--column,
     .v-footer--column {
@@ -196,7 +240,7 @@
       }
     }
   }
-  &.t--border {
+  &.is--border {
     &:not(.b--style-none) {
       .v-header--column,
       .v-body--column,
