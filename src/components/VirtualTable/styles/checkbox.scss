@@ -1,0 +1,152 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-02-28 22:13:07
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-06 03:44:09
+ */
+.v-checkbox-wrapper {
+  display: inline-block;
+  line-height: 1;
+  cursor: pointer;
+  &:hover {
+    .v-checkbox-inner {
+      border-color: $v-primary-color;
+    }
+  }
+
+  // 禁用
+  &-disabled {
+    cursor: not-allowed;
+    .v-checkbox-input {
+      cursor: not-allowed !important;
+    }
+  }
+
+  .v-checkbox {
+    position: relative;
+    top: -0.09em;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
+    outline: none;
+    cursor: pointer;
+
+    &-inner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      position: relative;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      border: 1px solid #d9d9d9;
+      border-radius: 2px;
+      border-collapse: separate;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      &:after {
+        content: ' ';
+        display: table;
+        width: 5px;
+        height: 9px;
+        position: absolute;
+        top: 50%;
+        left: 21%;
+        border: 2px solid #fff;
+        border-top: 0;
+        border-left: 0;
+        transform: rotate(45deg) scale(0) translate(-50%, -50%);
+        opacity: 0;
+        transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+      }
+    }
+
+    // 获得焦点
+    &-focus {
+      box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+      z-index: 1;
+    }
+
+    &-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      z-index: 1;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  // 选中状态
+  .v-checkbox-checked {
+    .v-checkbox-inner {
+      border-color: $v-primary-color;
+      background-color: $v-primary-color;
+      &:after {
+        transform: rotate(45deg) scale(1) translate(-50%, -50%);
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+      }
+    }
+  }
+
+  // 半选状态
+  .v-checkbox-indeterminate {
+    .v-checkbox-inner {
+      background-color: #fff;
+      border-color: #f5f5f5;
+      &:after {
+        content: ' ';
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background-color: $v-primary-color;
+        border: 0;
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    &.v-checkbox-disabled {
+      .v-checkbox-inner {
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
+        &:after {
+          background-color: rgba(0, 0, 0, 0.25);
+        }
+      }
+    }
+  }
+
+  // 禁用状态
+  .v-checkbox-disabled {
+    cursor: not-allowed;
+
+    &.v-checkbox-checked {
+      .v-checkbox-inner {
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
+
+        &:after {
+          animation-name: none;
+          border-color: rgba(0, 0, 0, 0.25);
+        }
+      }
+    }
+
+    .v-checkbox-inner {
+      border-color: #d9d9d9;
+      background-color: #f5f5f5;
+      &:after {
+        animation-name: none;
+        border-color: #f5f5f5;
+      }
+    }
+
+    & + span {
+      color: rgba(0, 0, 0, 0.25);
+    }
+  }
+}

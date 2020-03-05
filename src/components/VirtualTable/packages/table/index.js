@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 16:43:37
+ * @Last Modified time: 2020-03-06 03:44:40
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -18,6 +18,8 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
+import Radio from '../radio';
+import Checkbox from '../checkbox';
 
 export default {
   name: 'Table',

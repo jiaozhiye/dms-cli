@@ -1,8 +1,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:02:54
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2020-02-28 22:02:54
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-05 23:24:29
  */
 %boxSizing {
   box-sizing: border-box;
@@ -21,33 +21,4 @@ body {
   line-height: 1.5;
   font-variant: tabular-nums;
   font-feature-settings: 'tnum';
-}
-
-/*animat*/
-.t--animat {
-  .v-sort--asc-btn,
-  .v-sort--desc-btn,
-  .v-filter--btn {
-    &:before,
-    &:after {
-      @include animatTransition(border);
-    }
-  }
-  .v-input--wrapper {
-    .v-input {
-      @include animatTransition(border);
-    }
-  }
-  .v-table--expand-btn,
-  .v-tree--node-btn {
-    @include animatTransition(transform);
-  }
-  .v-checkbox,
-  .v-radio {
-    > input {
-      &:checked + span {
-        @include animatTransition(background-color);
-      }
-    }
-  }
 }
