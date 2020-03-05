@@ -157,6 +157,7 @@ export default {
           fieldName: 'number',
           precision: 2,
           maxlength: 3,
+          max: 999,
           offsetRightCols: 1,
           placeholder: '请输入数量...',
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]

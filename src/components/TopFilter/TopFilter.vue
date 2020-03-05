@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-24 19:22:33
+ * @Last Modified time: 2020-03-05 18:11:17
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -225,7 +225,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, step = 1, precision, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, maxlength, step = 1, precision, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -240,7 +240,15 @@ export default {
             step={step}
             precision={precision}
             clearable
-            onChange={change}
+            onChange={val => {
+              if (maxlength > 0 && typeof val !== 'undefined') {
+                const res = Number.parseInt(val).toString();
+                if (res.length > maxlength) {
+                  form[fieldName] = Number(res.slice(0, maxlength));
+                }
+              }
+              change(form[fieldName]);
+            }}
             nativeOnKeydown={this.enterEventHandle}
           />
           {this.createFormItemDesc(descOptions)}
