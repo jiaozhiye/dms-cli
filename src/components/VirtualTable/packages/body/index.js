@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 11:45:39
+ * @Last Modified time: 2020-03-05 16:31:06
  */
 import { mapState, mapActions } from 'vuex';
+import addEventListener from 'add-dom-event-listener';
 import { parseHeight } from '../utils';
 import _ from 'lodash';
 
@@ -12,7 +13,7 @@ export default {
   name: 'TableBody',
   props: ['tableData', 'flattenColumns', 'uidkey'],
   inject: ['$$table'],
-  daya() {
+  data() {
     this.prevST = 0;
     this.prevSL = 0;
     return {};
@@ -43,14 +44,14 @@ export default {
     }
   },
   mounted() {
-    this.$el.onscroll = this.scrollEvent;
+    this.event = addEventListener(this.$el, 'scroll', this.scrollEvent);
   },
   destroyed() {
-    this.$el.onscroll = null;
+    this.event.remove();
   },
   methods: {
     scrollEvent(ev) {
-      const { scrollYLoad, $refs } = this.$$table;
+      const { scrollYLoad, $refs, layout } = this.$$table;
       const { tableHeader, tableFooter } = $refs;
       const { scrollTop: st, scrollLeft: sl } = ev.target;
       if (sl !== this.prevSL) {
@@ -60,6 +61,8 @@ export default {
         if (tableFooter) {
           tableFooter.$el.scrollLeft = sl;
         }
+        this.$$table.isPingLeft = sl > 0;
+        this.$$table.isPingRight = sl + layout.tableWidth < layout.tableBodyWidth;
       }
       if (scrollYLoad && st !== this.prevST) {
         this.$$table.triggerScrollYEvent(ev);
@@ -100,8 +103,8 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
-        right: column.fixed === 'right' ? this.$$table.getStickyRight(column.dataIndex) : null
+        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
+        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex)}px` : null
       };
       return (
         <td key={column.dataIndex} class={cls} style={{ ...stys }}>

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 11:45:36
+ * @Last Modified time: 2020-03-05 15:47:47
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
@@ -81,7 +81,7 @@ export default {
             const { dataIndex, width, renderWidth } = column;
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px` }} />;
           })}
-          {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
+          {scrollY && <col style={{ width: `${gutterWidth}px` }} />}
         </colgroup>
       );
     },
@@ -114,7 +114,7 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
+        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
         right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
       };
       const resizableCls = [

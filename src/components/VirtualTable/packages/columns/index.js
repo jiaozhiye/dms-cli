@@ -2,12 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 10:39:05
+ * @Last Modified time: 2020-03-05 14:10:59
  */
 const columnsMixin = {
   methods: {
     updateColumnsWidth() {
-      // 表格实际宽度
       const tableWidth = this.$vTable.clientWidth;
       const scrollYWidth = this.scrollY ? this.layout.gutterWidth : 0;
       // 没有指定宽度的列
@@ -77,6 +76,9 @@ const columnsMixin = {
         // 表格内容宽度
         this.layout.tableBodyWidth = bodyMinWidth;
       }
+
+      // 表格宽度
+      this.layout.tableWidth = tableWidth;
     },
     getStickyLeft(key) {
       let l = 0;

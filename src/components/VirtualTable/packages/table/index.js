@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 12:05:53
+ * @Last Modified time: 2020-03-05 16:43:37
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -58,6 +58,8 @@ export default {
       layout: {
         // 滚动条宽度
         gutterWidth: getScrollBarSize(),
+        // 表格宽度
+        tableWidth: 0,
         // 表格体宽度
         tableBodyWidth: 0,
         // 表格体内容高度
@@ -69,6 +71,10 @@ export default {
         // 底部高度
         footerHeight: 0
       },
+      // X 滚动条是否离开左边界
+      isPingLeft: false,
+      // X 滚动条是否离开右边界
+      isPingRight: false,
       // 响应式变化的状态
       resizeState: {
         width: 0
@@ -117,6 +123,9 @@ export default {
     flattenColumns() {
       this.doLayout();
     },
+    scrollX(val) {
+      val && (this.isPingRight = val);
+    },
     height() {
       this.updateElsHeight();
     },
@@ -164,7 +173,9 @@ export default {
       uidkey,
       tableStyles,
       leftFixedColumns,
-      rightFixedColumns
+      rightFixedColumns,
+      isPingLeft,
+      isPingRight
     } = this;
     const vTableCls = [
       `v-table`,
@@ -176,6 +187,8 @@ export default {
         [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
+        [`v-table-ping-left`]: isPingLeft,
+        [`v-table-ping-right`]: isPingRight,
         [`scroll--x`]: scrollX,
         [`scroll--y`]: scrollY,
         [`virtual--y`]: scrollYLoad

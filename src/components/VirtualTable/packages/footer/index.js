@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 11:45:12
+ * @Last Modified time: 2020-03-05 15:48:51
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -52,7 +52,7 @@ export default {
             const { dataIndex, width, renderWidth } = column;
             return <col key={dataIndex} style={{ width: `${width || renderWidth}px` }} />;
           })}
-          {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
+          {scrollY && <col style={{ width: `${gutterWidth}px` }} />}
         </colgroup>
       );
     },
@@ -82,7 +82,7 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? this.$$table.getStickyLeft(column.dataIndex) : null,
+        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
         right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
       };
       return (
