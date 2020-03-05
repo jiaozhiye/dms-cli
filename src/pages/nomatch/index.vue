@@ -66,18 +66,15 @@ export default {
         },
         {
           title: '爱好',
-          dataIndex: 'hobby',
-          width: 200
+          dataIndex: 'hobby'
         },
         {
           title: '邮箱',
-          dataIndex: 'email',
-          width: 200
+          dataIndex: 'email'
         },
         {
           title: '地址',
-          dataIndex: 'address',
-          width: 400
+          dataIndex: 'address'
         }
       ]
     };

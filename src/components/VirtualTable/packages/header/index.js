@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 22:42:17
+ * @Last Modified time: 2020-03-05 09:10:35
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
@@ -79,7 +79,7 @@ export default {
         <colgroup>
           {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
-            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px` }} />;
           })}
           {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
         </colgroup>

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 12:36:14
+ * @Last Modified time: 2020-03-05 09:10:55
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -50,7 +50,7 @@ export default {
         <colgroup>
           {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
-            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px` }} />;
           })}
           {scrollY && <col name="gutter" style={{ width: `${gutterWidth}px` }} />}
         </colgroup>

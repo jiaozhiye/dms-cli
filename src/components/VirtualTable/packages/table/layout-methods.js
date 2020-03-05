@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 22:29:54
+ * @Last Modified time: 2020-03-05 09:18:42
  */
 import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import _ from 'lodash';
@@ -37,7 +37,7 @@ export default {
         // 富余的宽度
         const totalFlexWidth = tableWidth - scrollYWidth - bodyMinWidth;
 
-        if (flexColumns.length === 1) {
+        if (flexColumns.length === 1 && this.resizable) {
           flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth;
         } else {
           // 把富余的宽度均分给除第一列的其他列，剩下来的给第一列（避免宽度均分的时候除不尽）
@@ -52,7 +52,9 @@ export default {
             column.renderWidth = this.defaultColumnWidth + flexWidth;
           });
 
-          flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth - noneFirstWidth;
+          if (this.resizable) {
+            flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth - noneFirstWidth;
+          }
         }
       } else {
         // 最小宽度大于容器宽度 -> 有横向滚动条

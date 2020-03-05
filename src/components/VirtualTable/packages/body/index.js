@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 13:45:40
+ * @Last Modified time: 2020-03-05 09:10:46
  */
 import { mapState, mapActions } from 'vuex';
 import { parseHeight } from '../utils';
@@ -75,7 +75,7 @@ export default {
         <colgroup>
           {this.flattenColumns.map(column => {
             const { dataIndex, width, renderWidth } = column;
-            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px` }} />;
           })}
         </colgroup>
       );
