@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 01:13:44
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 14:22:04
+ * @Last Modified time: 2020-03-06 20:16:58
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -24,11 +24,7 @@ export default {
   },
   watch: {
     value(val) {
-      if (val === this.trueValue || val === this.falseValue) {
-        this.updateModel();
-      } else {
-        console.warn('[Table Checkbox]:Value should be trueValue or falseValue.');
-      }
+      this.updateModel();
     }
   },
   mounted() {

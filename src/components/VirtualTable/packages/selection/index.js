@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 17:30:36
+ * @Last Modified time: 2020-03-06 22:08:09
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -12,26 +12,40 @@ export default {
   props: ['column', 'record', 'rowKey'],
   inject: ['$$table'],
   methods: {
-    changeHandle(val) {
-      // console.log(this.$$table.selectionKeys, val);
-    },
     renderRadio() {
-      const { selectionKeys } = this.$$table;
-      console.log(this.rowKey, selectionKeys);
+      const { rowKey, $$table } = this;
+      const { selectionKeys, disabledSelectionKeys } = $$table;
       return (
         <Radio
           value={selectionKeys[0]}
           onInput={val => {
-            this.$$table.selectionKeys = [val];
+            $$table.selectionKeys = [val];
           }}
-          trueValue={this.rowKey}
+          trueValue={rowKey}
           falseValue={null}
-          onChange={this.changeHandle}
+          disabled={disabledSelectionKeys.includes(rowKey)}
         />
       );
     },
     renderCheckbox() {
-      return <Checkbox trueValue={this.rowKey} falseValue={null} onChange={this.changeHandle} />;
+      const { rowKey, $$table } = this;
+      const { selectionKeys, disabledSelectionKeys } = $$table;
+      const prevValue = selectionKeys.includes(rowKey) ? rowKey : null;
+      return (
+        <Checkbox
+          value={prevValue}
+          onInput={val => {
+            if (val !== null) {
+              $$table.selectionKeys = [...new Set([...selectionKeys, val])];
+            } else {
+              $$table.selectionKeys = selectionKeys.filter(x => x !== prevValue);
+            }
+          }}
+          trueValue={rowKey}
+          falseValue={null}
+          disabled={disabledSelectionKeys.includes(rowKey)}
+        />
+      );
     }
   },
   render() {

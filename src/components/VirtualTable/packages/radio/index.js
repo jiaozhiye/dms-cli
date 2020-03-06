@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 22:48:49
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 13:42:51
+ * @Last Modified time: 2020-03-06 20:19:58
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -18,17 +18,12 @@ export default {
   data() {
     return {
       currentValue: this.value,
-      focusWrapper: false,
       focusInner: false
     };
   },
   watch: {
     value(val) {
-      if (val === this.trueValue || val === this.falseValue) {
-        this.updateValue();
-      } else {
-        console.warn('[Table Radio]:Value should be trueValue or falseValue.');
-      }
+      this.updateValue();
     }
   },
   mounted() {
@@ -50,14 +45,12 @@ export default {
       this.currentValue = this.value === this.trueValue;
     },
     onBlur() {
-      this.focusWrapper = false;
       this.focusInner = false;
     },
     onFocus() {
       this.focusInner = true;
     }
   },
-
   render() {
     const wrapCls = [
       `v-radio-wrapper`,

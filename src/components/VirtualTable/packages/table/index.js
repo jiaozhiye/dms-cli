@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 16:52:17
+ * @Last Modified time: 2020-03-06 22:17:56
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -19,6 +19,8 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
+
+const noop = () => {};
 
 export default {
   name: 'Table',
@@ -74,6 +76,8 @@ export default {
       },
       // 选择列的选中数据
       selectionKeys: this.initialSelectionKeys('selectedRowKeys'),
+      // 选择列的禁选数据
+      disabledSelectionKeys: this.initialSelectionKeys('disabledRowKeys'),
       // X 滚动条是否离开左边界
       isPingLeft: false,
       // X 滚动条是否离开右边界
@@ -126,6 +130,11 @@ export default {
   watch: {
     flattenColumns() {
       this.doLayout();
+    },
+    selectionKeys(val) {
+      if (!this.rowSelection) return;
+      const { onChange = noop } = this.rowSelection;
+      onChange(val);
     },
     scrollX(val) {
       val && (this.isPingRight = val);

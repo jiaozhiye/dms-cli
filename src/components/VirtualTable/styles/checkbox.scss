@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 13:39:54
+ * @Last Modified time: 2020-03-06 23:06:28
  */
 .v-checkbox-wrapper {
   display: inline-block;
@@ -19,6 +19,8 @@
     display: inline-block;
     position: relative;
     top: -0.09em;
+    width: 16px;
+    height: 16px;
     white-space: nowrap;
     vertical-align: middle;
     outline: none;
@@ -29,8 +31,8 @@
       position: relative;
       top: 0;
       left: 0;
-      width: 16px;
-      height: 16px;
+      width: 100%;
+      height: 100%;
       border: 1px solid #d9d9d9;
       border-radius: 2px;
       border-collapse: separate;
@@ -41,7 +43,7 @@
         display: table;
         position: absolute;
         top: 50%;
-        left: 21%;
+        left: 22%;
         width: 5px;
         height: 9px;
         border: 2px solid #fff;
@@ -57,16 +59,18 @@
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       margin: 0;
       z-index: 1;
       opacity: 0;
       cursor: pointer;
     }
 
-    &-focus {
-      box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
-      z-index: 1;
-    }
+    // &-focus {
+    //   box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+    //   z-index: 1;
+    // }
 
     &-disabled {
       cursor: not-allowed;
@@ -78,6 +82,18 @@
 
   // 选中状态
   .v-checkbox-checked {
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid $v-primary-color;
+      border-radius: 2px;
+      animation: antCheckboxEffect 0.36s ease-in-out;
+      animation-fill-mode: both;
+    }
     .v-checkbox-inner {
       border-color: $v-primary-color;
       background-color: $v-primary-color;
@@ -145,5 +161,17 @@
     & + span {
       color: rgba(0, 0, 0, 0.25);
     }
+  }
+}
+
+@keyframes antCheckboxEffect {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+    visibility: hidden;
   }
 }

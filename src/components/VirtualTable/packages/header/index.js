@@ -2,10 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 12:30:18
+ * @Last Modified time: 2020-03-06 23:13:17
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
+
+import AllSelection from '../selection/all';
 
 const getAllColumns = columns => {
   const result = [];
@@ -128,10 +130,17 @@ export default {
       const isResizable = resizable && column.dataIndex !== '__selection__';
       return (
         <th key={column.dataIndex} class={cls} style={{ ...stys }} colspan={column.colSpan} rowspan={column.rowSpan}>
-          <div class="v-cell">{column.title}</div>
+          <div class="v-cell">{this.renderCell(column)}</div>
           {isResizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
         </th>
       );
+    },
+    renderCell(column) {
+      const { dataIndex, type } = column;
+      if (dataIndex === '__selection__' && type === 'checkbox') {
+        return <AllSelection />;
+      }
+      return column.title;
     },
     resizeMousedown(ev, column) {
       const dom = ev.target;

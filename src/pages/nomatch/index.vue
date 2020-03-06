@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="{ type: 'radio' }" />
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" />
   </div>
 </template>
 
@@ -81,7 +81,14 @@ export default {
           fixed: 'right',
           width: 200
         }
-      ]
+      ],
+      selection: {
+        type: 'radio',
+        selectedRowKeys: [2, 3],
+        onChange: val => {
+          // console.log(222, val);
+        }
+      }
     };
   }
 };
