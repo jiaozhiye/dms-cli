@@ -2,20 +2,36 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 12:22:21
+ * @Last Modified time: 2020-03-06 17:30:36
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
 
 export default {
   name: 'Selection',
-  props: ['column', 'record'],
+  props: ['column', 'record', 'rowKey'],
+  inject: ['$$table'],
   methods: {
+    changeHandle(val) {
+      // console.log(this.$$table.selectionKeys, val);
+    },
     renderRadio() {
-      return <Radio />;
+      const { selectionKeys } = this.$$table;
+      console.log(this.rowKey, selectionKeys);
+      return (
+        <Radio
+          value={selectionKeys[0]}
+          onInput={val => {
+            this.$$table.selectionKeys = [val];
+          }}
+          trueValue={this.rowKey}
+          falseValue={null}
+          onChange={this.changeHandle}
+        />
+      );
     },
     renderCheckbox() {
-      return <Checkbox />;
+      return <Checkbox trueValue={this.rowKey} falseValue={null} onChange={this.changeHandle} />;
     }
   },
   render() {

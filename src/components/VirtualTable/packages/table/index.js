@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 12:26:16
+ * @Last Modified time: 2020-03-06 16:52:17
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
 import baseProps from './props';
 import config from '../config';
+import _ from 'lodash';
 
 import { columnsFlatMap, createFilterColumns, parseHeight, getScrollBarSize } from '../utils';
 
@@ -71,6 +72,8 @@ export default {
         // 底部高度
         footerHeight: 0
       },
+      // 选择列的选中数据
+      selectionKeys: this.initialSelectionKeys('selectedRowKeys'),
       // X 滚动条是否离开左边界
       isPingLeft: false,
       // X 滚动条是否离开右边界
@@ -171,6 +174,13 @@ export default {
         fixed: 'left',
         type
       };
+    },
+    initialSelectionKeys(type) {
+      const { rowSelection } = this;
+      if (!rowSelection) {
+        return [];
+      }
+      return rowSelection[type] || [];
     },
     renderBorderLine() {
       return this.bordered && <div class="v-table--border-line" />;

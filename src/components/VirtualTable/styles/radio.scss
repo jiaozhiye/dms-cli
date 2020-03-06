@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 12:44:27
+ * @Last Modified time: 2020-03-06 13:42:30
  */
 .v-radio-wrapper {
   display: inline-block;
@@ -15,17 +15,10 @@
     }
   }
 
-  // 禁用
-  &-disabled {
-    cursor: not-allowed;
-    .v-radio-input {
-      cursor: not-allowed !important;
-    }
-  }
-
   .v-radio {
     display: inline-block;
     position: relative;
+    top: -0.09em;
     white-space: nowrap;
     vertical-align: middle;
     outline: none;
@@ -33,11 +26,11 @@
 
     &-inner {
       display: inline-block;
-      width: 16px;
-      height: 16px;
       position: relative;
       top: 0;
       left: 0;
+      width: 16px;
+      height: 16px;
       border: 1px solid #d9d9d9;
       border-radius: 50%;
       background-color: #fff;
@@ -60,12 +53,6 @@
       }
     }
 
-    // 获得焦点
-    &-focus {
-      box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
-      z-index: 1;
-    }
-
     &-input {
       position: absolute;
       top: 0;
@@ -74,6 +61,18 @@
       z-index: 1;
       opacity: 0;
       cursor: pointer;
+    }
+
+    &-focus {
+      box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+      z-index: 1;
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+      .v-radio-input {
+        cursor: not-allowed !important;
+      }
     }
   }
 

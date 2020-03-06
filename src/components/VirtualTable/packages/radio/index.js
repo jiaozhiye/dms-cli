@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 22:48:49
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 01:54:10
+ * @Last Modified time: 2020-03-06 13:42:51
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -27,7 +27,7 @@ export default {
       if (val === this.trueValue || val === this.falseValue) {
         this.updateValue();
       } else {
-        throw 'Value should be trueValue or falseValue.';
+        console.warn('[Table Radio]:Value should be trueValue or falseValue.');
       }
     }
   },
@@ -42,8 +42,8 @@ export default {
       this.currentValue = checked;
 
       const value = checked ? this.trueValue : this.falseValue;
-      this.$emit('input', value);
 
+      this.$emit('input', value);
       this.$emit('change', value);
     },
     updateValue() {

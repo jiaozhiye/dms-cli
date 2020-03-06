@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 12:38:24
+ * @Last Modified time: 2020-03-06 13:30:34
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -90,13 +90,13 @@ export default {
         const key = this.$$table.getRowKey(row, i);
         return (
           <tr key={key} data-row-key={key} class="v-body--row">
-            {this.flattenColumns.map(column => this.renderColumn(column, row))}
+            {this.flattenColumns.map(column => this.renderColumn(column, row, key))}
           </tr>
         );
       });
       return rows;
     },
-    renderColumn(column, row) {
+    renderColumn(column, row, rowKey) {
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight } = this.$$table;
       const cls = [
         `v-body--column`,
@@ -113,14 +113,14 @@ export default {
       };
       return (
         <td key={column.dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{this.renderCell(column, row)}</div>
+          <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
         </td>
       );
     },
-    renderCell(column, row) {
+    renderCell(column, row, rowKey) {
       const { dataIndex } = column;
       if (dataIndex === '__selection__') {
-        return <Selection column={column} record={row} />;
+        return <Selection column={column} record={row} rowKey={rowKey} />;
       }
       return _.get(row, column.dataIndex, '');
     }
