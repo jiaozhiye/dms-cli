@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 03:44:08
+ * @Last Modified time: 2020-03-06 12:44:27
  */
 .v-radio-wrapper {
   display: inline-block;
   line-height: 1;
   cursor: pointer;
+
   &:hover {
     .v-radio-inner {
       border-color: $v-primary-color;
@@ -24,10 +25,10 @@
 
   .v-radio {
     display: inline-block;
-    margin-right: 4px;
     position: relative;
-    vertical-align: sub;
     white-space: nowrap;
+    vertical-align: middle;
+    outline: none;
     cursor: pointer;
 
     &-inner {
@@ -37,19 +38,19 @@
       position: relative;
       top: 0;
       left: 0;
-      background-color: #fff;
       border: 1px solid #d9d9d9;
       border-radius: 50%;
+      background-color: #fff;
       transition: all 0.3s ease;
       &:after {
         content: ' ';
+        display: table;
         position: absolute;
         top: 3px;
         left: 3px;
         width: 8px;
         height: 8px;
         border-radius: 8px;
-        display: table;
         border-top: 0;
         border-left: 0;
         background-color: $v-primary-color;

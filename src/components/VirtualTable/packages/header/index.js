@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 15:47:47
+ * @Last Modified time: 2020-03-06 12:30:18
  */
 import { mapState, mapActions } from 'vuex';
 import { getOffsetPos, deepFindColumn } from '../utils';
@@ -89,15 +89,17 @@ export default {
       const { scrollY } = this.$$table;
       return columnRows.map((columns, rowIndex) => (
         <tr key={rowIndex} class="v-header--row">
-          {columns.map((column, cellIndex) => this.renderCell(column))}
+          {columns.map((column, cellIndex) => this.renderColumn(column))}
           {scrollY && <th class="gutter"></th>}
         </tr>
       ));
     },
-    renderCell(column) {
+    renderColumn(column) {
       const {
         leftFixedColumns,
         rightFixedColumns,
+        getStickyLeft,
+        getStickyRight,
         layout: { gutterWidth },
         resizable,
         bordered,
@@ -114,8 +116,8 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
-        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
+        left: column.fixed === 'left' ? `${getStickyLeft(column.dataIndex)}px` : null,
+        right: column.fixed === 'right' ? `${getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
       };
       const resizableCls = [
         `v-resizable`,
@@ -123,10 +125,11 @@ export default {
           [`is--line`]: resizable && !bordered
         }
       ];
+      const isResizable = resizable && column.dataIndex !== '__selection__';
       return (
         <th key={column.dataIndex} class={cls} style={{ ...stys }} colspan={column.colSpan} rowspan={column.rowSpan}>
           <div class="v-cell">{column.title}</div>
-          {this.$$table.resizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
+          {isResizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
         </th>
       );
     },

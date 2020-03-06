@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 03:44:09
+ * @Last Modified time: 2020-03-06 12:42:48
  */
 .v-checkbox-wrapper {
   display: inline-block;
   line-height: 1;
   cursor: pointer;
+
   &:hover {
     .v-checkbox-inner {
       border-color: $v-primary-color;
@@ -23,9 +24,9 @@
   }
 
   .v-checkbox {
+    display: inline-block;
     position: relative;
     top: -0.09em;
-    display: inline-block;
     white-space: nowrap;
     vertical-align: middle;
     outline: none;
@@ -38,7 +39,6 @@
       position: relative;
       top: 0;
       left: 0;
-      background-color: #fff;
       border: 1px solid #d9d9d9;
       border-radius: 2px;
       border-collapse: separate;
@@ -55,8 +55,8 @@
         border: 2px solid #fff;
         border-top: 0;
         border-left: 0;
-        transform: rotate(45deg) scale(0) translate(-50%, -50%);
         opacity: 0;
+        transform: rotate(45deg) scale(0) translate(-50%, -50%);
         transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
       }
     }
@@ -102,8 +102,8 @@
         left: 50%;
         width: 8px;
         height: 8px;
-        background-color: $v-primary-color;
         border: 0;
+        background-color: $v-primary-color;
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
       }

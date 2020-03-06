@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 03:44:40
+ * @Last Modified time: 2020-03-06 12:26:16
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -18,8 +18,6 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
-import Radio from '../radio';
-import Checkbox from '../checkbox';
 
 export default {
   name: 'Table',
@@ -88,7 +86,8 @@ export default {
       return this.$refs[`v-table`] || null;
     },
     tableColumns() {
-      return createFilterColumns(this.columns);
+      const column = this.createSelectionColumn(this.rowSelection);
+      return createFilterColumns(column ? [column, ...this.columns] : this.columns);
     },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
@@ -151,6 +150,28 @@ export default {
   methods: {
     ...layoutMethods,
     ...coreMethods,
+    getRowKey(row, index) {
+      const { rowKey } = this;
+      const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
+      if (key === undefined) {
+        console.warn('[Table]:Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
+        return index;
+      }
+      return key;
+    },
+    createSelectionColumn(options) {
+      if (!options) {
+        return null;
+      }
+      const { type } = options;
+      return {
+        dataIndex: '__selection__',
+        title: type === 'radio' ? '#' : '',
+        width: 50,
+        fixed: 'left',
+        type
+      };
+    },
     renderBorderLine() {
       return this.bordered && <div class="v-table--border-line" />;
     },
@@ -172,7 +193,6 @@ export default {
       tableColumns,
       flattenColumns,
       dataSource,
-      uidkey,
       tableStyles,
       leftFixedColumns,
       rightFixedColumns,
@@ -207,16 +227,14 @@ export default {
       ref: 'tableBody',
       props: {
         tableData,
-        flattenColumns,
-        uidkey
+        flattenColumns
       }
     };
     const tableFooterProps = {
       ref: 'tableFooter',
       props: {
         dataSource,
-        flattenColumns,
-        uidkey
+        flattenColumns
       }
     };
     return (

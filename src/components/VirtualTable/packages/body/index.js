@@ -2,16 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 16:31:06
+ * @Last Modified time: 2020-03-06 12:38:24
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight } from '../utils';
 import _ from 'lodash';
 
+import Selection from '../selection';
+
 export default {
   name: 'TableBody',
-  props: ['tableData', 'flattenColumns', 'uidkey'],
+  props: ['tableData', 'flattenColumns'],
   inject: ['$$table'],
   data() {
     this.prevST = 0;
@@ -84,15 +86,18 @@ export default {
       );
     },
     renderRows() {
-      const rows = this.tableData.map(row => (
-        <tr key={row[this.uidkey]} class="v-body--row">
-          {this.flattenColumns.map(column => this.renderCell(column, row))}
-        </tr>
-      ));
+      const rows = this.tableData.map((row, i) => {
+        const key = this.$$table.getRowKey(row, i);
+        return (
+          <tr key={key} data-row-key={key} class="v-body--row">
+            {this.flattenColumns.map(column => this.renderColumn(column, row))}
+          </tr>
+        );
+      });
       return rows;
     },
-    renderCell(column, row) {
-      const { leftFixedColumns, rightFixedColumns } = this.$$table;
+    renderColumn(column, row) {
+      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight } = this.$$table;
       const cls = [
         `v-body--column`,
         {
@@ -103,14 +108,21 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
-        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex)}px` : null
+        left: column.fixed === 'left' ? `${getStickyLeft(column.dataIndex)}px` : null,
+        right: column.fixed === 'right' ? `${getStickyRight(column.dataIndex)}px` : null
       };
       return (
         <td key={column.dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{_.get(row, column.dataIndex)}</div>
+          <div class="v-cell">{this.renderCell(column, row)}</div>
         </td>
       );
+    },
+    renderCell(column, row) {
+      const { dataIndex } = column;
+      if (dataIndex === '__selection__') {
+        return <Selection column={column} record={row} />;
+      }
+      return _.get(row, column.dataIndex, '');
     }
   },
   render() {

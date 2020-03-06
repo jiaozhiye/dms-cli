@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" uidkey="id" height="400" />
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="{ type: 'radio' }" />
   </div>
 </template>
 

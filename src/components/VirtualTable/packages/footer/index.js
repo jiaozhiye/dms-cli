@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 15:48:51
+ * @Last Modified time: 2020-03-06 12:31:09
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -10,14 +10,14 @@ import { formatNumber } from '../utils';
 
 export default {
   name: 'TableFooter',
-  props: ['dataSource', 'flattenColumns', 'uidkey'],
+  props: ['dataSource', 'flattenColumns'],
   inject: ['$$table'],
   computed: {
     summationRows() {
       const { dataSource } = this;
       const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
-      const res = { [this.$$table.uidkey]: 1 };
+      const res = {};
       summationColumns.forEach(column => {
         const {
           dataIndex,
@@ -59,7 +59,7 @@ export default {
     renderRows() {
       const { scrollY } = this.$$table;
       return this.summationRows.map(row => (
-        <tr key={row[this.uidkey]} class="v-footer--row">
+        <tr class="v-footer--row">
           {this.flattenColumns.map((column, index) => this.renderCell(column, row, index))}
           {scrollY && <td class="gutter"></td>}
         </tr>
@@ -69,6 +69,8 @@ export default {
       const {
         leftFixedColumns,
         rightFixedColumns,
+        getStickyLeft,
+        getStickyRight,
         layout: { gutterWidth },
         scrollY
       } = this.$$table;
@@ -82,8 +84,8 @@ export default {
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? `${this.$$table.getStickyLeft(column.dataIndex)}px` : null,
-        right: column.fixed === 'right' ? `${this.$$table.getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
+        left: column.fixed === 'left' ? `${getStickyLeft(column.dataIndex)}px` : null,
+        right: column.fixed === 'right' ? `${getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
       };
       return (
         <td key={column.dataIndex} class={cls} style={{ ...stys }}>
