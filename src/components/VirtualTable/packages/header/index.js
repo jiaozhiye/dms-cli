@@ -2,11 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 23:13:17
+ * @Last Modified time: 2020-03-07 22:52:06
  */
 import { mapState, mapActions } from 'vuex';
-import { getOffsetPos, deepFindColumn } from '../utils';
+import _ from 'lodash';
 
+import { getCellValue } from '../utils';
+
+import Resizable from './resizable';
 import AllSelection from '../selection/all';
 
 const getAllColumns = columns => {
@@ -104,81 +107,108 @@ export default {
         getStickyRight,
         layout: { gutterWidth },
         resizable,
-        bordered,
         scrollY
       } = this.$$table;
-
+      const { dataIndex, colSpan, rowSpan, fixed, sorter, orderBy } = column;
       const cls = [
         `v-header--column`,
         {
-          [`v-cell-fix-left`]: column.fixed === 'left',
-          [`v-cell-fix-right`]: column.fixed === 'right',
-          [`v-cell-fix-left-last`]: column.fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === column.dataIndex,
-          [`v-cell-fix-right-first`]: column.fixed === 'right' && rightFixedColumns[0].dataIndex === column.dataIndex
+          [`v-column-has-sorter`]: sorter,
+          [`v-column-sort`]: orderBy !== null,
+          [`v-cell-fix-left`]: fixed === 'left',
+          [`v-cell-fix-right`]: fixed === 'right',
+          [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? `${getStickyLeft(column.dataIndex)}px` : null,
-        right: column.fixed === 'right' ? `${getStickyRight(column.dataIndex) + scrollY ? gutterWidth : 0}px` : null
+        left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
+        right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
       };
-      const resizableCls = [
-        `v-resizable`,
-        {
-          [`is--line`]: resizable && !bordered
-        }
-      ];
-      const isResizable = resizable && column.dataIndex !== '__selection__';
+      const isResizable = resizable && dataIndex !== '__selection__';
       return (
-        <th key={column.dataIndex} class={cls} style={{ ...stys }} colspan={column.colSpan} rowspan={column.rowSpan}>
+        <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
           <div class="v-cell">{this.renderCell(column)}</div>
-          {isResizable && <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, column)} />}
+          {isResizable && <Resizable column={column} />}
         </th>
       );
     },
     renderCell(column) {
-      const { dataIndex, type } = column;
+      const { dataIndex, type, sorter, orderBy, filter, title } = column;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return <AllSelection />;
       }
-      return column.title;
+      const nCellTitle = <span class="v-cell--title">{title}</span>;
+      const VNodes = [nCellTitle];
+      if (sorter) {
+        VNodes.push(this.renderSorter(orderBy));
+      }
+      if (filter) {
+        VNodes.push(this.renderFilter());
+      }
+      return VNodes;
     },
-    resizeMousedown(ev, column) {
-      const dom = ev.target;
-      const { $vTable, $refs, defaultColumnWidth } = this.$$table;
-      const $tableBody = $refs[`tableBody`].$el;
-      const target = $refs[`resizable-bar`];
-
-      const half = dom.offsetWidth / 2 - 1;
-      const disX = ev.clientX;
-      const left = getOffsetPos(dom, $vTable).left - $tableBody.scrollLeft + half;
-
-      $vTable.classList.add('c--resize');
-      target.style.left = `${left}px`;
-      target.style.display = 'block';
-
-      // 操作表格列 -> 违背了单向数据流原则，后期建议优化
-      const tColumn = deepFindColumn(this.flattenColumns, column.dataIndex);
-      const renderWidth = tColumn.width || tColumn.renderWidth;
-
-      document.onmousemove = ev => {
-        let ml = ev.clientX - disX;
-        let rw = renderWidth + ml;
-
-        // 左边界限定
-        if (rw < defaultColumnWidth) return;
-
-        tColumn.width = tColumn.renderWidth = rw;
-        target.style.left = `${ml + left}px`;
-      };
-
-      document.onmouseup = function() {
-        $vTable.classList.remove('c--resize');
-        target.style.display = 'none';
-        this.onmousemove = null;
-        this.onmouseup = null;
-      };
-
-      return false;
+    renderSorter(order) {
+      const ascCls = [
+        `v-sort--asc-btn`,
+        `v-icon--caret-top`,
+        {
+          [`sort--active`]: order === 'ascend'
+        }
+      ];
+      const descCls = [
+        `v-sort--desc-btn`,
+        `v-icon--caret-bottom`,
+        {
+          [`sort--active`]: order === 'descend'
+        }
+      ];
+      return (
+        <span class="v-cell--sort">
+          <i class={ascCls} />
+          <i class={descCls} />
+        </span>
+      );
+    },
+    renderFilter() {
+      const cls = [`v-filter--btn`, `v-icon--funnel`];
+      return (
+        <span class="v-cell--filter">
+          <i class={cls} />
+        </span>
+      );
+    },
+    thClickHandle(ev, column) {
+      ev.stopPropagation();
+      const { sorter, filter } = column;
+      if (sorter) {
+        const order = column.orderBy ? (column.orderBy === 'descend' ? null : 'descend') : 'ascend';
+        if (!order) {
+          // 还原数据
+        } else {
+          this.doSortHandler(column, order);
+        }
+        // 同步状态
+        column.orderBy = order;
+      }
+    },
+    doSortHandler(column, order) {
+      const { dataIndex, sorter } = column;
+      const { dataSource } = this.$$table;
+      let result = [];
+      if (_.isFunction(sorter)) {
+        result = dataSource.sort(sorter);
+      } else {
+        result = dataSource.sort((a, b) => {
+          const start = getCellValue(a, dataIndex);
+          const end = getCellValue(b, dataIndex);
+          if (!!Number(start - end)) {
+            return order === 'ascend' ? start - end : end - start;
+          }
+          return order === 'ascend' ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
+        });
+      }
+      return result;
     }
   },
   render() {

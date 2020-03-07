@@ -61,14 +61,18 @@ export default {
         {
           title: '图书数量',
           dataIndex: 'books',
+          sorter: true,
+          width: 200,
+          filter: {
+            type: 'text'
+          },
           summation: {
             unit: '个'
           }
         },
         {
           title: '爱好',
-          dataIndex: 'hobby',
-          width: 300
+          dataIndex: 'hobby'
         },
         {
           title: '邮箱',
@@ -83,7 +87,7 @@ export default {
         }
       ],
       selection: {
-        type: 'radio',
+        type: 'checkbox',
         selectedRowKeys: [2, 3],
         onChange: val => {
           // console.log(222, val);

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 14:10:59
+ * @Last Modified time: 2020-03-07 20:20:00
  */
 const columnsMixin = {
   methods: {
@@ -15,9 +15,8 @@ const columnsMixin = {
       let bodyMinWidth = 0;
 
       this.flattenColumns.forEach(column => {
-        if (typeof column.renderWidth === 'undefined') {
-          // 设置 renderWidth 为响应式数据属性
-          this.$set(column, 'renderWidth', null);
+        if (typeof column.width === 'number') {
+          column.renderWidth = null;
         }
       });
 

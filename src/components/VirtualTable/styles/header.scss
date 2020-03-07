@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 23:17:22
+ * @Last Modified time: 2020-03-07 22:35:44
  */
 /**Variable**/
 
@@ -18,55 +18,101 @@
       background-color: $v-table-header-background-color;
     }
   }
-}
-
-.v-header--column {
-  position: relative;
-  user-select: none;
-  &.col--title-checked {
-    background-color: $v-table-column-header-checked-background-color;
-  }
-  &.col--ellipsis {
-    & > .v-cell {
-      display: flex;
-      align-items: center;
-      .v-cell--title {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      & > i,
-      & > span {
-        &:not(.v-cell--title) {
-          flex-shrink: 0;
+  .v-header--column {
+    position: relative;
+    user-select: none;
+    &.col--ellipsis {
+      & > .v-cell {
+        display: flex;
+        align-items: center;
+        .v-cell--title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        & > i,
+        & > span {
+          &:not(.v-cell--title) {
+            flex-shrink: 0;
+          }
         }
       }
     }
-  }
-  .v-resizable {
-    position: absolute;
-    right: -7px;
-    bottom: 0;
-    width: 14px;
-    height: 100%;
-    text-align: center;
-    z-index: 1;
-    cursor: col-resize;
-    &.is--line {
-      &:before,
-      &:after {
-        content: '';
-        display: inline-block;
-        vertical-align: middle;
+    /* 排序 */
+    .v-cell--sort {
+      width: 1.5em;
+      height: 1.5em;
+      vertical-align: middle;
+      text-align: center;
+      display: inline-block;
+      position: relative;
+      top: -0.09em;
+      .v-sort--asc-btn,
+      .v-sort--desc-btn {
+        position: absolute;
+        left: 0.35em;
+        color: $v-icon-color;
+        width: 1em;
+        text-align: center;
+        cursor: pointer;
+        &.sort--active {
+          color: $v-primary-color;
+        }
       }
-      &:before {
-        width: 1px;
-        height: 50%;
-        background-color: $v-table-resizable-color;
+      .v-sort--asc-btn {
+        top: -0.04em;
       }
-      &:after {
-        width: 0;
-        height: 100%;
+      .v-sort--desc-btn {
+        bottom: -0.04em;
+      }
+    }
+
+    /* 筛选 */
+    .v-cell--filter {
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      bottom: 0px;
+      width: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      color: $v-icon-color;
+      background-color: $v-table-header-background-color;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      &:hover {
+        color: $v-font-secondary-color;
+        background-color: $v-table-column-filter-hover-color;
+      }
+    }
+
+    .v-resizable {
+      position: absolute;
+      right: -5px;
+      bottom: 0;
+      width: 10px;
+      height: 100%;
+      text-align: center;
+      z-index: 1;
+      cursor: col-resize;
+      &.is--line {
+        &:before,
+        &:after {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+        }
+        &:before {
+          width: 1px;
+          height: 50%;
+          background-color: $v-table-resizable-color;
+        }
+        &:after {
+          width: 0;
+          height: 100%;
+        }
       }
     }
   }

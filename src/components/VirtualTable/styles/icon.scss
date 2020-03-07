@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 21:59:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 23:25:35
+ * @Last Modified time: 2020-03-07 22:39:01
  */
 [class*='v-icon--'] {
   display: inline-block;
@@ -115,7 +115,7 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    border-width: 0.4em;
+    border-width: 0.32em;
     border-style: solid;
     border-color: transparent;
   }
@@ -262,7 +262,7 @@
     @extend %PseudoClass;
     top: 0.05em;
     left: 0;
-    border-width: 0.5em;
+    border-width: 0.45em;
     border-style: solid;
     border-top-color: inherit;
     border-right-color: transparent;
@@ -271,11 +271,11 @@
   }
   &:after {
     @extend %PseudoClass;
-    left: 0.41em;
-    top: 0.4em;
+    left: 0.32em;
+    top: 0.35em;
     width: 0;
     height: 0.5em;
-    border-width: 0 0.2em 0 0;
+    border-width: 0 0.3em 0 0;
     border-style: solid;
     border-right-color: inherit;
   }

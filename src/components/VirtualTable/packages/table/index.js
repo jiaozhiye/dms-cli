@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 22:17:56
+ * @Last Modified time: 2020-03-07 22:40:27
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -10,7 +10,7 @@ import baseProps from './props';
 import config from '../config';
 import _ from 'lodash';
 
-import { columnsFlatMap, createFilterColumns, parseHeight, getScrollBarSize } from '../utils';
+import { columnsFlatMap, createFilterColumns, deepMapColumns, parseHeight, getScrollBarSize } from '../utils';
 
 import columnsMixin from '../columns';
 import layoutMethods from './layout-methods';
@@ -53,6 +53,8 @@ export default {
         visibleSize: 0,
         rowHeight: config.rowHeightMaps[this.size || 'default']
       },
+      // 支持的排序方式
+      sortDirections: ['ascend', 'descend'],
       // 是否拥有多级表头
       isGroup: false,
       // 表格列的默认最小宽度
@@ -93,8 +95,12 @@ export default {
       return this.$refs[`v-table`] || null;
     },
     tableColumns() {
-      const column = this.createSelectionColumn(this.rowSelection);
-      return createFilterColumns(column ? [column, ...this.columns] : this.columns);
+      const columns = deepMapColumns(this.columns, x => {
+        _.isUndefined(x.renderWidth) && this.$set(x, 'renderWidth', null);
+        _.isUndefined(x.orderBy) && this.$set(x, 'orderBy', null);
+      });
+      const selectionColumn = this.createSelectionColumn(this.rowSelection);
+      return createFilterColumns(selectionColumn ? [selectionColumn, ...columns] : columns);
     },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
@@ -107,6 +113,12 @@ export default {
     },
     showFooter() {
       return this.flattenColumns.some(x => !!x.summation);
+    },
+    isHeadSorter() {
+      return this.flattenColumns.some(column => column.sorter);
+    },
+    isHeadFilter() {
+      return this.flattenColumns.some(column => column.filter);
     },
     bordered() {
       return this.border || this.isGroup;
@@ -216,7 +228,9 @@ export default {
       leftFixedColumns,
       rightFixedColumns,
       isPingLeft,
-      isPingRight
+      isPingRight,
+      isHeadSorter,
+      isHeadFilter
     } = this;
     const vTableCls = [
       `v-table`,
@@ -225,11 +239,13 @@ export default {
         [`is--border`]: bordered,
         [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
         [`is--group`]: isGroup,
+        [`is--sortable`]: isHeadSorter,
+        [`is--filter`]: isHeadFilter,
         [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
-        [`v-table-ping-left`]: isPingLeft,
-        [`v-table-ping-right`]: isPingRight,
+        [`table--ping-left`]: isPingLeft,
+        [`table--ping-right`]: isPingRight,
         [`scroll--x`]: scrollX,
         [`scroll--y`]: scrollY,
         [`virtual--y`]: scrollYLoad

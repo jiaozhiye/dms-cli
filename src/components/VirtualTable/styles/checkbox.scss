@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 23:06:28
+ * @Last Modified time: 2020-03-07 22:29:02
  */
 .v-checkbox-wrapper {
   display: inline-block;
@@ -128,7 +128,7 @@
         background-color: #f5f5f5;
         border-color: #d9d9d9;
         &:after {
-          background-color: rgba(0, 0, 0, 0.25);
+          background-color: $v-font-disabled-color;
         }
       }
     }
@@ -144,7 +144,7 @@
         border-color: #d9d9d9;
         &:after {
           animation-name: none;
-          border-color: rgba(0, 0, 0, 0.25);
+          border-color: $v-font-disabled-color;
         }
       }
     }
@@ -159,7 +159,7 @@
     }
 
     & + span {
-      color: rgba(0, 0, 0, 0.25);
+      color: $v-font-disabled-color;
     }
   }
 }

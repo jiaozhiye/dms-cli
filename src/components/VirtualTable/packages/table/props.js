@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 10:27:32
+ * @Last Modified time: 2020-03-07 16:45:56
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -14,7 +14,7 @@ const columnItem = {
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
   ellipsis: PropTypes.bool, // 超过宽度将自动省略
   className: PropTypes.string, // 列样式类名
-  sorter: PropTypes.bool, // 列排序
+  sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
   filter: PropTypes.shape({
     type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项

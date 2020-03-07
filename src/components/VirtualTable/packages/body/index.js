@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 13:30:34
+ * @Last Modified time: 2020-03-07 22:54:19
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -98,21 +98,22 @@ export default {
     },
     renderColumn(column, row, rowKey) {
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight } = this.$$table;
+      const { dataIndex, fixed } = column;
       const cls = [
         `v-body--column`,
         {
-          [`v-cell-fix-left`]: column.fixed === 'left',
-          [`v-cell-fix-right`]: column.fixed === 'right',
-          [`v-cell-fix-left-last`]: column.fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === column.dataIndex,
-          [`v-cell-fix-right-first`]: column.fixed === 'right' && rightFixedColumns[0].dataIndex === column.dataIndex
+          [`v-cell-fix-left`]: fixed === 'left',
+          [`v-cell-fix-right`]: fixed === 'right',
+          [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
         }
       ];
       const stys = {
-        left: column.fixed === 'left' ? `${getStickyLeft(column.dataIndex)}px` : null,
-        right: column.fixed === 'right' ? `${getStickyRight(column.dataIndex)}px` : null
+        left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
+        right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
       };
       return (
-        <td key={column.dataIndex} class={cls} style={{ ...stys }}>
+        <td key={dataIndex} class={cls} style={{ ...stys }}>
           <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
         </td>
       );

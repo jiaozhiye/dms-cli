@@ -2,8 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 19:17:01
+ * @Last Modified time: 2020-03-07 22:56:42
  */
+import _ from 'lodash';
+
 // 获取 columns 展平后的一维数组
 export const columnsFlatMap = columns => {
   const result = [];
@@ -24,6 +26,17 @@ export const createFilterColumns = columns => {
       column.children = createFilterColumns(column.children);
     }
     return !column.hidden;
+  });
+};
+
+// 深度遍历 columns
+export const deepMapColumns = (columns, callback) => {
+  return columns.map(column => {
+    if (column.children) {
+      column.children = deepMapColumns(column.children);
+    }
+    callback && callback(column);
+    return column;
   });
 };
 
@@ -219,6 +232,12 @@ export const isEmpty = val => {
   }
 
   return false;
+};
+
+// 获取格式化后的表格数据
+export const getCellValue = (record, dataIndex) => {
+  const val = _.get(record, dataIndex, '');
+  return _.isNull(val) ? '' : val;
 };
 
 // 数字格式化

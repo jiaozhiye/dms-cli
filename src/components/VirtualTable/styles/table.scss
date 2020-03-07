@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 23:25:36
+ * @Last Modified time: 2020-03-07 22:20:54
  */
 @import './common.scss';
 
@@ -105,34 +105,10 @@
 
   .v-body--row {
     background-color: $v-table-background-color;
-    &.row--stripe {
-      background-color: $v-table-row-striped-background-color;
-      .v-tree--btn-wrapper {
-        background-color: $v-table-row-striped-background-color;
-      }
-    }
-    &.row--current {
-      background-color: $v-table-row-current-background-color;
-      .v-tree--btn-wrapper {
-        background-color: $v-table-row-current-background-color;
-      }
-    }
     &.row--hover {
       background-color: $v-table-row-hover-background-color;
       .v-tree--btn-wrapper {
         background-color: $v-table-row-hover-background-color;
-      }
-      &.row--stripe {
-        background-color: $v-table-row-hover-striped-background-color;
-        .v-tree--btn-wrapper {
-          background-color: $v-table-row-hover-striped-background-color;
-        }
-      }
-      &.row--current {
-        background-color: $v-table-row-hover-current-background-color;
-        .v-tree--btn-wrapper {
-          background-color: $v-table-row-hover-current-background-color;
-        }
       }
     }
   }
@@ -140,16 +116,6 @@
   &.c--resize {
     * {
       cursor: col-resize;
-    }
-  }
-
-  &.column--highlight {
-    .v-header--column {
-      &:not(.col--seq) {
-        &:hover {
-          background-color: $v-table-column-hover-background-color;
-        }
-      }
     }
   }
 
@@ -161,12 +127,6 @@
     text-align: left;
     &:not(.col--ellipsis) {
       padding: #{floor(($v-table-row-height-default - $v-table-row-line-height) / 2)} 0;
-    }
-    &.col--current {
-      background-color: $v-table-column-current-background-color;
-      .v-tree--btn-wrapper {
-        background-color: $v-table-column-current-background-color;
-      }
     }
     &.col--center {
       text-align: center;
@@ -211,11 +171,24 @@
         pointer-events: none;
       }
     }
-    &.v-table-ping-left .v-cell-fix-left-last::after {
+    &.table--ping-left .v-cell-fix-left-last::after {
       box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.15);
     }
-    &.v-table-ping-right .v-cell-fix-right-first::after {
+    &.table--ping-right .v-cell-fix-right-first::after {
       box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &.is--sortable {
+    .v-column-has-sorter {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      &:hover {
+        background-color: $v-table-column-sort-hover-color;
+      }
+      &.v-column-sort {
+        background-color: $v-table-column-sorted-color;
+      }
     }
   }
 
@@ -232,21 +205,9 @@
     }
     .v-header--column {
       background-color: $v-table-header-background-color;
-      &.col--title-checked {
-        background-image: linear-gradient(-90deg, $v-table-header-column-checked-border-color, $v-table-header-column-checked-border-color),
-          linear-gradient(-180deg, $v-table-header-column-checked-border-color, $v-table-header-column-checked-border-color);
-      }
     }
     .v-body--column {
       background-color: $v-table-background-color;
-      &.col--seq-checked {
-        background-image: linear-gradient(-90deg, $v-table-body-seq-column-checked-border-color, $v-table-body-seq-column-checked-border-color),
-          linear-gradient(-180deg, $v-table-body-seq-column-checked-border-color, $v-table-body-seq-column-checked-border-color);
-      }
-      &.col--checked {
-        background-image: linear-gradient(-90deg, $v-table-body-column-checked-border-color, $v-table-body-column-checked-border-color),
-          linear-gradient(-180deg, $v-table-body-column-checked-border-color, $v-table-body-column-checked-border-color);
-      }
     }
     .v-footer--column {
       background-color: $v-table-footer-background-color;
@@ -264,18 +225,9 @@
     }
     .v-header--column {
       background-color: $v-table-header-background-color;
-      &.col--title-checked {
-        background-image: linear-gradient(-180deg, $v-table-header-column-checked-border-color, $v-table-header-column-checked-border-color);
-      }
     }
     .v-body--column {
       background-color: $v-table-background-color;
-      &.col--seq-checked {
-        background-image: linear-gradient(-180deg, $v-table-body-seq-column-checked-border-color, $v-table-body-seq-column-checked-border-color);
-      }
-      &.col--checked {
-        background-image: linear-gradient(-180deg, $v-table-body-column-checked-border-color, $v-table-body-column-checked-border-color);
-      }
     }
     .v-footer--column {
       background-color: $v-table-footer-background-color;
@@ -305,7 +257,7 @@
       &.col--seq {
         background-color: $v-table-header-background-color;
         &.col--seq-checked {
-          background-color: $v-table-column-body-seq-checked-background-color;
+          // background-color: $v-table-column-body-seq-checked-background-color;
         }
       }
     }
