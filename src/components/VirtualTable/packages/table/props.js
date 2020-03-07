@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 16:45:56
+ * @Last Modified time: 2020-03-07 23:26:23
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -58,6 +58,8 @@ export default {
   rowStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   // 给单元格附加样式
   cellStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  // 合并行或列的计算方法
+  spanMethod: PropTypes.func,
   // 行选择
   rowSelection: PropTypes.shape({
     type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 多选/单选，checkbox/radio
