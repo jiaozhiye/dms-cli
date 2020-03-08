@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 15:09:10
+ * @Last Modified time: 2020-03-08 20:19:28
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -19,6 +19,7 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
+import SpinLoading from '../spin';
 import EmptyContent from '../empty';
 
 const noop = () => {};
@@ -39,12 +40,16 @@ export default {
     return {
       // 渲染中的数据
       tableData: [],
+      // 页面是否加载中
+      showLoading: this.loading,
       // 是否存在横向滚动条
       scrollX: false,
       // 是否存在纵向滚动条
       scrollY: false,
       // 是否启用了纵向 Y 可视渲染方式加载
       scrollYLoad: false,
+      // 是否拥有多级表头
+      isGroup: false,
       // 存放纵向 Y 虚拟滚动相关信息
       scrollYStore: {
         startIndex: 0,
@@ -56,8 +61,6 @@ export default {
       },
       // 支持的排序方式
       sortDirections: ['ascend', 'descend'],
-      // 是否拥有多级表头
-      isGroup: false,
       // 表格列的默认最小宽度
       defaultColumnWidth: 100,
       // 表格布局相关参数
@@ -144,6 +147,9 @@ export default {
     flattenColumns() {
       this.doLayout();
     },
+    loading(val) {
+      this.showLoading = val;
+    },
     selectionKeys(val) {
       if (!this.rowSelection) return;
       const { onChange = noop } = this.rowSelection;
@@ -213,25 +219,26 @@ export default {
   },
   render() {
     const {
-      size,
-      bordered,
-      isGroup,
       tableData,
+      tableColumns,
+      flattenColumns,
+      size,
+      showLoading,
+      bordered,
+      tableStyles,
       showHeader,
       showFooter,
+      isGroup,
       isHeadSorter,
       isHeadFilter,
       sortDirections,
       scrollX,
       scrollY,
       scrollYLoad,
-      tableColumns,
-      flattenColumns,
-      tableStyles,
-      leftFixedColumns,
-      rightFixedColumns,
       isPingLeft,
       isPingRight,
+      leftFixedColumns,
+      rightFixedColumns,
       rowStyle,
       cellStyle
     } = this;
@@ -278,23 +285,25 @@ export default {
       }
     };
     return (
-      <div ref="v-table" class={vTableCls} style={tableStyles}>
-        {/* 主要内容 */}
-        <div class="v-table--main-wrapper">
-          {/* 头部 */}
-          <TableHeader {...tableHeaderProps} />
-          {/* 表格体 */}
-          <TableBody {...tableBodyProps} />
-          {/* 底部 */}
-          {showFooter && <TableFooter {...tableFooterProps} />}
+      <SpinLoading spinning={showLoading} tip="Loading...">
+        <div ref="v-table" class={vTableCls} style={tableStyles}>
+          {/* 主要内容 */}
+          <div class="v-table--main-wrapper">
+            {/* 头部 */}
+            <TableHeader {...tableHeaderProps} />
+            {/* 表格体 */}
+            <TableBody {...tableBodyProps} />
+            {/* 底部 */}
+            {showFooter && <TableFooter {...tableFooterProps} />}
+          </div>
+          {/* 边框线 */}
+          {this.renderBorderLine()}
+          {/* 空数据 */}
+          {!tableData.length && <EmptyContent />}
+          {/* 列宽线 */}
+          {this.renderResizableLine()}
         </div>
-        {/* 边框线 */}
-        {this.renderBorderLine()}
-        {/* 空数据 */}
-        {!tableData.length && <EmptyContent />}
-        {/* 列宽线 */}
-        {this.renderResizableLine()}
-      </div>
+      </SpinLoading>
     );
   }
 };

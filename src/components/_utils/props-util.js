@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-29 13:08:31
+ * @Last Modified time: 2020-03-08 18:24:39
  */
 import isPlainObject from 'lodash/isPlainObject';
 import classNames from 'classnames';
@@ -76,6 +76,10 @@ const getSlots = ele => {
   return { ...slots, ...getScopedSlots(ele) };
 };
 
+const getSlot = (self, name = 'default', options = {}) => {
+  return (self.$scopedSlots && self.$scopedSlots[name] && self.$scopedSlots[name](options)) || self.$slots[name] || [];
+};
+
 const getAllChildren = ele => {
   let componentOptions = ele.componentOptions || {};
   if (ele.$vnode) {
@@ -121,17 +125,24 @@ const getComponentFromProp = (instance, prop, options = instance, execute = true
     if (temp !== undefined) {
       return typeof temp === 'function' && execute ? temp(h, options) : temp;
     }
-    return instance.$slots[prop] || (instance.$scopedSlots[prop] && execute && instance.$scopedSlots[prop](options)) || instance.$scopedSlots[prop] || undefined;
+    return (instance.$scopedSlots[prop] && execute && instance.$scopedSlots[prop](options)) || instance.$scopedSlots[prop] || instance.$slots[prop] || undefined;
   } else {
     const h = instance.context.$createElement;
     const temp = getPropsData(instance)[prop];
     if (temp !== undefined) {
       return typeof temp === 'function' && execute ? temp(h, options) : temp;
     }
+    const slotScope = getScopedSlots(instance)[prop];
+    if (slotScope !== undefined) {
+      return typeof slotScope === 'function' && execute ? slotScope(h, options) : slotScope;
+    }
     const slotsProp = [];
     const componentOptions = instance.componentOptions || {};
     (componentOptions.children || []).forEach(child => {
       if (child.data && child.data.slot === prop) {
+        if (child.data.attrs) {
+          delete child.data.attrs.slot;
+        }
         if (child.tag === 'template') {
           slotsProp.push(child.children);
         } else {
@@ -189,6 +200,11 @@ export function getEvents(child) {
     events = child.data.on;
   }
   return { ...events };
+}
+
+// use getListeners instead this.$listeners
+export function getListeners(context) {
+  return (context.$vnode ? context.$vnode.componentOptions.listeners : context.$listeners) || {};
 }
 
 export function getClass(ele) {
@@ -299,6 +315,7 @@ export {
   isValidElement,
   camelize,
   getSlots,
+  getSlot,
   getAllProps,
   getAllChildren
 };

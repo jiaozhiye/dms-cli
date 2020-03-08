@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:56:42
+ * @Last Modified time: 2020-03-08 20:26:57
  */
 import _ from 'lodash';
 
-// 获取 columns 展平后的一维数组
+// 展平 columns
 export const columnsFlatMap = columns => {
   const result = [];
   columns.forEach(column => {
@@ -19,7 +19,7 @@ export const columnsFlatMap = columns => {
   return result;
 };
 
-// 创建列筛选后的列字段数组
+// 筛选 columns
 export const createFilterColumns = columns => {
   return columns.filter(column => {
     if (column.children) {
@@ -40,7 +40,7 @@ export const deepMapColumns = (columns, callback) => {
   });
 };
 
-// 深度查找 column
+// 深度查找 column by dataIndex
 export const deepFindColumn = (columns, mark) => {
   let result = null;
   for (let i = 0; i < columns.length; i++) {
@@ -57,7 +57,7 @@ export const deepFindColumn = (columns, mark) => {
   return result;
 };
 
-// 等待
+// 延迟方法
 export const sleep = async timeLen => {
   return new Promise(resolve => setTimeout(resolve, timeLen));
 };
@@ -234,7 +234,7 @@ export const isEmpty = val => {
   return false;
 };
 
-// 获取格式化后的表格数据
+// 获取格式化后的数据
 export const getCellValue = (record, dataIndex) => {
   const val = _.get(record, dataIndex, '');
   return _.isNull(val) ? '' : val;

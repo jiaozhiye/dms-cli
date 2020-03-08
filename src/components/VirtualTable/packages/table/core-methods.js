@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 15:16:30
+ * @Last Modified time: 2020-03-08 20:20:45
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
+
 const $browse = browse();
 const isWebkit = $browse['-webkit'] && !$browse.edge;
 const throttleScrollYDuration = $browse.msie ? 20 : 10;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 15:09:07
+ * @Last Modified time: 2020-03-08 19:36:07
  */
 @import './common.scss';
 
@@ -62,6 +62,7 @@
   font-size: $v-font-size;
   font-family: $v-font-family;
   background-color: $v-table-background-color;
+  clear: both;
   &:before,
   &:after {
     content: '';
