@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 23:26:23
+ * @Last Modified time: 2020-03-08 14:36:48
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -46,6 +46,8 @@ export default {
   height: PropTypes.oneOfType[(PropTypes.number, PropTypes.string)],
   // 表格的最大高度
   maxHeight: PropTypes.oneOfType[(PropTypes.number, PropTypes.string)],
+  // 页面是否加载中
+  loading: PropTypes.bool.def(false),
   // 所有列是否允许拖动列宽调整大小
   resizable: PropTypes.bool.def(true),
   // 尺寸

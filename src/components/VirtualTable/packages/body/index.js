@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 10:52:52
+ * @Last Modified time: 2020-03-08 14:00:01
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
-import { parseHeight } from '../utils';
+import { parseHeight, getCellValue } from '../utils';
 import _ from 'lodash';
 
 import Selection from '../selection';
@@ -98,19 +98,24 @@ export default {
       return rows;
     },
     renderColumn(column, cellIndex, row, rowIndex, rowKey) {
-      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight } = this.$$table;
-      const { dataIndex, fixed } = column;
+      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis } = this.$$table;
+      const { dataIndex, fixed, align, className } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, cellIndex);
+      const isEllipsis = ellipsis || column.ellipsis;
       if (!rowspan || !colspan) {
         return null;
       }
       const cls = [
         `v-body--column`,
         {
+          [`col--ellipsis`]: isEllipsis,
+          [`col--center`]: align === 'center',
+          [`col--right`]: align === 'right',
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
+          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
+          [className]: !!className
         }
       ];
       const stys = {
@@ -119,7 +124,7 @@ export default {
       };
       const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, cellIndex) : this.cellStyle) : null;
       return (
-        <td key={dataIndex} rowspan={rowspan} colspan={colspan} class={cls} style={{ ...stys, ...extraStys }}>
+        <td key={dataIndex} title={isEllipsis && getCellValue(row, dataIndex)} rowspan={rowspan} colspan={colspan} class={cls} style={{ ...stys, ...extraStys }}>
           <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
         </td>
       );
@@ -129,7 +134,7 @@ export default {
       if (dataIndex === '__selection__') {
         return <Selection column={column} record={row} rowKey={rowKey} />;
       }
-      return _.get(row, column.dataIndex, '');
+      return getCellValue(row, column.dataIndex);
     },
     getSpan(row, column, rowIndex, columnIndex) {
       let rowspan = 1;

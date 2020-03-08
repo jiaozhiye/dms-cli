@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 09:47:01
+ * @Last Modified time: 2020-03-08 15:09:10
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -19,6 +19,7 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
+import EmptyContent from '../empty';
 
 const noop = () => {};
 
@@ -242,7 +243,7 @@ export default {
         [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
         [`is--group`]: isGroup,
         [`is--sortable`]: isHeadSorter,
-        [`is--filter`]: isHeadFilter,
+        [`is--filterable`]: isHeadFilter,
         [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
@@ -289,6 +290,8 @@ export default {
         </div>
         {/* 边框线 */}
         {this.renderBorderLine()}
+        {/* 空数据 */}
+        {!tableData.length && <EmptyContent />}
         {/* 列宽线 */}
         {this.renderResizableLine()}
       </div>

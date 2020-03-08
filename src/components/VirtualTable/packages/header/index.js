@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 12:09:23
+ * @Last Modified time: 2020-03-08 14:01:39
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -115,12 +115,15 @@ export default {
         resizable,
         scrollY
       } = this.$$table;
-      const { dataIndex, colSpan, rowSpan, fixed, sorter, orderBy } = column;
+      const { dataIndex, colSpan, rowSpan, fixed, align, sorter, orderBy, filter } = column;
       const cls = [
         `v-header--column`,
         `col--ellipsis`,
         {
+          [`col--center`]: align === 'center',
+          [`col--right`]: align === 'right',
           [`v-column-has-sorter`]: sorter,
+          [`v-column-has-filter`]: filter,
           [`v-column-sort`]: orderBy !== null,
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
@@ -145,18 +148,15 @@ export default {
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return <AllSelection />;
       }
-      let vNodes = [];
-      let sumWidth = 0;
+      let vNodes = [nCellTitle];
       if (sorter) {
-        sumWidth += 1;
         vNodes.push(this.renderSorter(orderBy));
       }
       if (filter) {
-        sumWidth += 1.75;
         vNodes.push(this.renderFilter());
       }
       const nCellTitle = (
-        <span class="v-cell--title" title={title} style={{ width: `calc(100% + 5px - ${sumWidth}em)` }}>
+        <span class="v-cell--title" title={title}>
           {title}
         </span>
       );
@@ -179,7 +179,7 @@ export default {
         }
       ];
       return (
-        <span class="v-cell--sort">
+        <span class="v-cell--sort" title="排序">
           <i class={ascCls} />
           <i class={descCls} />
         </span>
@@ -188,7 +188,7 @@ export default {
     renderFilter() {
       const cls = [`v-filter--btn`, `v-icon--funnel`];
       return (
-        <span class="v-cell--filter">
+        <span class="v-cell--filter" title="筛选">
           <i class={cls} />
         </span>
       );

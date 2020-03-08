@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 12:07:37
+ * @Last Modified time: 2020-03-08 14:21:19
  */
 /**Variable**/
 
@@ -21,25 +21,15 @@
   .v-header--column {
     position: relative;
     user-select: none;
-    &.col--ellipsis {
-      & > .v-cell {
-        display: flex;
-        align-items: center;
-        .v-cell--title {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    }
+
     /* 排序 */
     .v-cell--sort {
+      position: absolute;
+      right: 0.5em;
       width: 1em;
       height: 1.5em;
       vertical-align: middle;
       text-align: center;
-      display: inline-block;
-      position: relative;
       .v-sort--asc-btn,
       .v-sort--desc-btn {
         position: absolute;
@@ -65,7 +55,7 @@
       position: absolute;
       top: 1px;
       right: 1px;
-      bottom: 0px;
+      bottom: 1px;
       width: 1.75em;
       display: flex;
       justify-content: center;
@@ -78,6 +68,12 @@
       &:hover {
         color: $v-font-secondary-color;
         background-color: $v-table-column-filter-hover-color;
+      }
+    }
+
+    &.v-column-has-sorter.v-column-has-filter {
+      .v-cell--sort {
+        right: 2em !important;
       }
     }
 

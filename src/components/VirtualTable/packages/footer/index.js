@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 09:46:50
+ * @Last Modified time: 2020-03-08 14:04:14
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -74,10 +74,12 @@ export default {
         layout: { gutterWidth },
         scrollY
       } = this.$$table;
-      const { dataIndex, fixed } = column;
+      const { dataIndex, fixed, align } = column;
       const cls = [
         `v-footer--column`,
         {
+          [`col--center`]: align === 'center',
+          [`col--right`]: align === 'right',
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,

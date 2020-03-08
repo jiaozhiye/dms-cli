@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:20:54
+ * @Last Modified time: 2020-03-08 15:09:07
  */
 @import './common.scss';
 
@@ -181,6 +181,7 @@
 
   &.is--sortable {
     .v-column-has-sorter {
+      padding-right: 1em;
       cursor: pointer;
       transition: all 0.3s ease;
       &:hover {
@@ -189,6 +190,18 @@
       &.v-column-sort {
         background-color: $v-table-column-sorted-color;
       }
+    }
+  }
+
+  &.is--filterable {
+    .v-column-has-filter {
+      padding-right: 1.5em;
+    }
+  }
+
+  &.is--sortable.is--filterable {
+    .v-column-has-sorter.v-column-has-filter {
+      padding-right: 2.5em !important;
     }
   }
 
@@ -231,35 +244,6 @@
     }
     .v-footer--column {
       background-color: $v-table-footer-background-color;
-    }
-  }
-
-  &.t--checked,
-  &.t--selected {
-    user-select: none;
-  }
-  &.t--checked {
-    .v-header--column,
-    .v-body--column {
-      &.col--seq {
-        text-align: center;
-        cursor: default;
-      }
-    }
-    .v-header--column {
-      &.col--seq {
-        .v-cell {
-          visibility: hidden;
-        }
-      }
-    }
-    .v-body--column {
-      &.col--seq {
-        background-color: $v-table-header-background-color;
-        &.col--seq-checked {
-          // background-color: $v-table-column-body-seq-checked-background-color;
-        }
-      }
     }
   }
 
@@ -330,6 +314,7 @@
   }
 
   .v-cell {
+    line-height: 1.5;
     white-space: normal;
     word-break: break-all;
     padding: 0 10px;
@@ -413,6 +398,7 @@
       @extend %DefaultColumnHeight;
     }
   }
+  .v-header--column,
   .v-body--column {
     &.col--ellipsis {
       @extend %CellEllipsis;
@@ -508,6 +494,7 @@
   .v-table--empty-content {
     display: block;
     width: 50%;
+    color: $v-font-secondary-color;
     pointer-events: auto;
   }
   &.is--empty {
