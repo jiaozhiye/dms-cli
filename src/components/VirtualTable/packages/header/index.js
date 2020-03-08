@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:52:06
+ * @Last Modified time: 2020-03-08 12:09:23
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -72,8 +72,14 @@ const convertToRows = originColumns => {
 
 export default {
   name: 'TableHeader',
-  props: ['tableColumns', 'flattenColumns'],
+  props: ['tableColumns', 'flattenColumns', 'sortDirections'],
   inject: ['$$table'],
+  data() {
+    return {
+      ascend: this.sortDirections[0],
+      descend: this.sortDirections[1]
+    };
+  },
   methods: {
     renderColgroup() {
       const {
@@ -112,6 +118,7 @@ export default {
       const { dataIndex, colSpan, rowSpan, fixed, sorter, orderBy } = column;
       const cls = [
         `v-header--column`,
+        `col--ellipsis`,
         {
           [`v-column-has-sorter`]: sorter,
           [`v-column-sort`]: orderBy !== null,
@@ -138,29 +145,37 @@ export default {
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return <AllSelection />;
       }
-      const nCellTitle = <span class="v-cell--title">{title}</span>;
-      const VNodes = [nCellTitle];
+      let vNodes = [];
+      let sumWidth = 0;
       if (sorter) {
-        VNodes.push(this.renderSorter(orderBy));
+        sumWidth += 1;
+        vNodes.push(this.renderSorter(orderBy));
       }
       if (filter) {
-        VNodes.push(this.renderFilter());
+        sumWidth += 1.75;
+        vNodes.push(this.renderFilter());
       }
-      return VNodes;
+      const nCellTitle = (
+        <span class="v-cell--title" title={title} style={{ width: `calc(100% + 5px - ${sumWidth}em)` }}>
+          {title}
+        </span>
+      );
+      vNodes.unshift(nCellTitle);
+      return vNodes;
     },
     renderSorter(order) {
       const ascCls = [
         `v-sort--asc-btn`,
         `v-icon--caret-top`,
         {
-          [`sort--active`]: order === 'ascend'
+          [`sort--active`]: order === this.ascend
         }
       ];
       const descCls = [
         `v-sort--desc-btn`,
         `v-icon--caret-bottom`,
         {
-          [`sort--active`]: order === 'descend'
+          [`sort--active`]: order === this.descend
         }
       ];
       return (
@@ -182,7 +197,7 @@ export default {
       ev.stopPropagation();
       const { sorter, filter } = column;
       if (sorter) {
-        const order = column.orderBy ? (column.orderBy === 'descend' ? null : 'descend') : 'ascend';
+        const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
         if (!order) {
           // 还原数据
         } else {
@@ -194,7 +209,7 @@ export default {
     },
     doSortHandler(column, order) {
       const { dataIndex, sorter } = column;
-      const { dataSource } = this.$$table;
+      const dataSource = [...this.$$table.dataSource];
       let result = [];
       if (_.isFunction(sorter)) {
         result = dataSource.sort(sorter);
@@ -203,9 +218,9 @@ export default {
           const start = getCellValue(a, dataIndex);
           const end = getCellValue(b, dataIndex);
           if (!!Number(start - end)) {
-            return order === 'ascend' ? start - end : end - start;
+            return order === this.ascend ? start - end : end - start;
           }
-          return order === 'ascend' ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
+          return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
         });
       }
       return result;

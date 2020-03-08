@@ -87,7 +87,7 @@ export default {
         }
       ],
       selection: {
-        type: 'checkbox',
+        type: 'radio',
         selectedRowKeys: [2, 3],
         onChange: val => {
           // console.log(222, val);

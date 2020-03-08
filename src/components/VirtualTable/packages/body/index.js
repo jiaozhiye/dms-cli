@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 23:37:02
+ * @Last Modified time: 2020-03-08 10:52:52
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -13,7 +13,7 @@ import Selection from '../selection';
 
 export default {
   name: 'TableBody',
-  props: ['flattenColumns', 'tableData'],
+  props: ['flattenColumns', 'tableData', 'rowStyle', 'cellStyle'],
   inject: ['$$table'],
   data() {
     this.prevST = 0;
@@ -86,11 +86,12 @@ export default {
       );
     },
     renderRows() {
-      const rows = this.tableData.map((row, i) => {
-        const key = this.$$table.getRowKey(row, i);
+      const rows = this.tableData.map((row, rowIndex) => {
+        const key = this.$$table.getRowKey(row, rowIndex);
+        const extraStys = this.rowStyle ? (_.isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
         return (
-          <tr key={key} data-row-key={key} class="v-body--row">
-            {this.flattenColumns.map((column, k) => this.renderColumn(column, k, row, i, key))}
+          <tr key={key} data-row-key={key} class="v-body--row" style={extraStys}>
+            {this.flattenColumns.map((column, cellIndex) => this.renderColumn(column, cellIndex, row, rowIndex, key))}
           </tr>
         );
       });
@@ -116,8 +117,9 @@ export default {
         left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
         right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
       };
+      const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, cellIndex) : this.cellStyle) : null;
       return (
-        <td key={dataIndex} rowspan={rowspan} colspan={colspan} class={cls} style={{ ...stys }}>
+        <td key={dataIndex} rowspan={rowspan} colspan={colspan} class={cls} style={{ ...stys, ...extraStys }}>
           <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
         </td>
       );

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:55:36
+ * @Last Modified time: 2020-03-08 09:46:50
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -10,11 +10,11 @@ import { formatNumber } from '../utils';
 
 export default {
   name: 'TableFooter',
-  props: ['dataSource', 'flattenColumns'],
+  props: ['flattenColumns'],
   inject: ['$$table'],
   computed: {
     summationRows() {
-      const { dataSource } = this;
+      const { dataSource } = this.$$table;
       const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
       const res = {};

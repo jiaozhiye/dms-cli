@@ -63,7 +63,7 @@ export function getLodop(oOBJECT, oEMBED) {
   var strHtmChrome = '(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）';
   var strCLodopInstall_1 = "Web打印服务CLodop未安装启动，点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>下载执行安装</a>，";
   var strCLodopInstall_2 = "（若此前已安装过，可<a href='CLodop.protocol:setup' target='_self'>点这里直接再次启动</a>），";
-  var strCLodopInstall_3 = '成功后请<strong>刷新本页面</strong>。';
+  var strCLodopInstall_3 = '成功后请 <a href="javascript:;" onclick="javascript:window.history.go(0)">刷新本页面</a> 。';
   var strCLodopUpdate = "Web打印服务CLodop需升级!点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。";
   var LODOP;
   try {

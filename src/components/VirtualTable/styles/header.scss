@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:35:44
+ * @Last Modified time: 2020-03-08 12:07:37
  */
 /**Variable**/
 
@@ -30,27 +30,20 @@
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        & > i,
-        & > span {
-          &:not(.v-cell--title) {
-            flex-shrink: 0;
-          }
-        }
       }
     }
     /* 排序 */
     .v-cell--sort {
-      width: 1.5em;
+      width: 1em;
       height: 1.5em;
       vertical-align: middle;
       text-align: center;
       display: inline-block;
       position: relative;
-      top: -0.09em;
       .v-sort--asc-btn,
       .v-sort--desc-btn {
         position: absolute;
-        left: 0.35em;
+        left: 0;
         color: $v-icon-color;
         width: 1em;
         text-align: center;
@@ -60,10 +53,10 @@
         }
       }
       .v-sort--asc-btn {
-        top: -0.04em;
+        top: -0.065em;
       }
       .v-sort--desc-btn {
-        bottom: -0.04em;
+        bottom: -0.065em;
       }
     }
 
@@ -73,7 +66,7 @@
       top: 1px;
       right: 1px;
       bottom: 0px;
-      width: 2em;
+      width: 1.75em;
       display: flex;
       justify-content: center;
       align-items: center;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 21:59:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:39:01
+ * @Last Modified time: 2020-03-08 12:10:48
  */
 [class*='v-icon--'] {
   display: inline-block;
@@ -124,7 +124,7 @@
 .v-icon--caret-top {
   @extend %Caret;
   &:before {
-    left: 0.1em;
+    left: 0.2em;
     bottom: 0.3em;
     border-bottom-color: inherit;
   }
@@ -133,7 +133,7 @@
 .v-icon--caret-bottom {
   @extend %Caret;
   &:before {
-    left: 0.1em;
+    left: 0.2em;
     top: 0.3em;
     border-top-color: inherit;
   }
@@ -260,7 +260,7 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    top: 0.05em;
+    top: 0.1em;
     left: 0;
     border-width: 0.45em;
     border-style: solid;
@@ -271,8 +271,8 @@
   }
   &:after {
     @extend %PseudoClass;
-    left: 0.32em;
-    top: 0.35em;
+    left: 0.3em;
+    top: 0.45em;
     width: 0;
     height: 0.5em;
     border-width: 0 0.3em 0 0;

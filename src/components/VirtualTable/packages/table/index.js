@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:40:27
+ * @Last Modified time: 2020-03-08 09:47:01
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -218,19 +218,21 @@ export default {
       tableData,
       showHeader,
       showFooter,
+      isHeadSorter,
+      isHeadFilter,
+      sortDirections,
       scrollX,
       scrollY,
       scrollYLoad,
       tableColumns,
       flattenColumns,
-      dataSource,
       tableStyles,
       leftFixedColumns,
       rightFixedColumns,
       isPingLeft,
       isPingRight,
-      isHeadSorter,
-      isHeadFilter
+      rowStyle,
+      cellStyle
     } = this;
     const vTableCls = [
       `v-table`,
@@ -255,20 +257,22 @@ export default {
       ref: 'tableHeader',
       props: {
         tableColumns,
-        flattenColumns
+        flattenColumns,
+        sortDirections
       }
     };
     const tableBodyProps = {
       ref: 'tableBody',
       props: {
         tableData,
-        flattenColumns
+        flattenColumns,
+        rowStyle,
+        cellStyle
       }
     };
     const tableFooterProps = {
       ref: 'tableFooter',
       props: {
-        dataSource,
         flattenColumns
       }
     };
