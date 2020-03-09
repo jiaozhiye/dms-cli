@@ -798,6 +798,7 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, change = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
+      form[fieldName] !== trueValue && (form[fieldName] = falseValue);
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}

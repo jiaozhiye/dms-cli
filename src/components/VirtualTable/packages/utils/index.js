@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 20:26:57
+ * @Last Modified time: 2020-03-09 22:20:15
  */
 import _ from 'lodash';
 
@@ -174,33 +174,18 @@ export const parseHeight = height => {
 };
 
 // 获取浏览器内核信息
-export const browse = () => {
-  let $body, isChrome, isEdge;
-  let isMobile = false;
-  let result = {
-    isMobile: isMobile,
-    isPC: false
-  };
-  isEdge = isBrowseType('Edge');
-  isChrome = isBrowseType('Chrome');
-  isMobile = /(Android|webOS|iPhone|iPad|iPod|SymbianOS|BlackBerry|Windows Phone)/.test(navigator.userAgent);
-  $body = document.body || document.documentElement;
-  ['webkit', 'khtml', 'moz', 'ms', 'o'].forEach(core => {
-    result['-' + core] = !!$body[core + 'MatchesSelector'];
-  });
-  result = Object.assign({}, result, {
-    edge: isEdge,
-    firefox: isBrowseType('Firefox'),
-    msie: !isEdge && result['-ms'],
-    safari: !isChrome && !isEdge && isBrowseType('Safari'),
-    isMobile: isMobile,
-    isPC: !isMobile
-  });
-  return result;
-};
 function isBrowseType(type) {
   return navigator.userAgent.indexOf(type) > -1;
 }
+export const browse = () => {
+  let result = {
+    webkit: isBrowseType('AppleWebKit'), // 苹果、谷歌内核
+    moz: isBrowseType('Gecko') && isBrowseType('KHTML') == -1, // 火狐内核
+    edge: isBrowseType('Edge'), // Edge 内核
+    msie: isBrowseType('Trident') // IE 内核
+  };
+  return result;
+};
 
 // 判断参数是否为空
 export const isEmpty = val => {

@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 11:14:00
+ * @Last Modified time: 2020-03-09 22:23:03
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
 
 const $browse = browse();
-const isWebkit = $browse['-webkit'] && !$browse.edge;
-const throttleScrollYDuration = $browse.msie ? 20 : 10;
+const isWebkit = $browse['webkit'];
+const throttleScrollYDuration = $browse['msie'] ? 20 : 10;
 
 export default {
   // 加载表格数据
@@ -84,7 +84,7 @@ export default {
     const $tableBody = tableBody.$el.querySelector('.v-table--body');
     const $tableYSpaceElem = tableBody.$el.querySelector('.v-body--y-space');
 
-    $tableBody.style.transform = `translateY(${topSpaceHeight}px)`;
+    $tableBody.style.transform = `translate3d(0, ${topSpaceHeight}px, 0)`;
     $tableYSpaceElem.style.height = `${bodyHeight}px`;
   },
   // 更新 Y 方向数据
@@ -102,7 +102,7 @@ export default {
         // 设置 scrollYStore 初始值
         scrollYStore.visibleSize = visibleYSize;
         scrollYStore.offsetSize = visibleYSize;
-        scrollYStore.renderSize = $browse.edge ? visibleYSize * 10 : isWebkit ? visibleYSize + 2 : visibleYSize * 6;
+        scrollYStore.renderSize = isWebkit ? visibleYSize + 2 : visibleYSize + 5;
 
         // 更新数据
         this.updateScrollYData();
