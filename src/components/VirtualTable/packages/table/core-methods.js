@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 20:20:45
+ * @Last Modified time: 2020-03-09 11:14:00
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -14,14 +14,11 @@ const throttleScrollYDuration = $browse.msie ? 20 : 10;
 export default {
   // 加载表格数据
   loadTableData() {
-    const { height, maxHeight, ellipsis, scrollYStore, dataSource } = this;
+    const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
     // 是否开启虚拟滚动
-    this.scrollYLoad = dataSource.length > 100;
+    this.scrollYLoad = tableFullData.length > 100;
 
     if (this.scrollYLoad) {
-      // 重置 startIndex / visibleIndex
-      scrollYStore.startIndex = 0;
-      scrollYStore.visibleIndex = 0;
       if (!(height || maxHeight)) {
         console.error('必须设置组件参数 height/maxHeight');
       }
@@ -35,9 +32,9 @@ export default {
   },
   // 处理渲染数据
   handleTableData() {
-    const { scrollYLoad, scrollYStore, dataSource } = this;
+    const { scrollYLoad, scrollYStore, tableFullData } = this;
     // 处理显示数据
-    this.tableData = scrollYLoad ? dataSource.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : dataSource;
+    this.tableData = scrollYLoad ? tableFullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableFullData;
   },
   // 纵向 Y 可视渲染事件处理
   triggerScrollYEvent(ev) {
@@ -50,7 +47,7 @@ export default {
   },
   // 纵向 Y 可视渲染处理
   loadScrollYData(ev) {
-    const { dataSource, scrollYStore } = this;
+    const { tableFullData, scrollYStore } = this;
     const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore;
     const scrollTop = ev.target.scrollTop;
     const toVisibleIndex = Math.ceil(scrollTop / rowHeight);
@@ -67,7 +64,7 @@ export default {
         // 向下
         preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize;
         if (preload) {
-          scrollYStore.startIndex = Math.max(0, Math.min(dataSource.length - renderSize, toVisibleIndex - marginSize));
+          scrollYStore.startIndex = Math.max(0, Math.min(tableFullData.length - renderSize, toVisibleIndex - marginSize));
         }
       }
       if (preload) {
@@ -78,10 +75,10 @@ export default {
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace() {
-    const { scrollYStore, dataSource } = this;
+    const { scrollYStore, tableFullData } = this;
     const { tableBody } = this.$refs;
 
-    const bodyHeight = dataSource.length * scrollYStore.rowHeight;
+    const bodyHeight = tableFullData.length * scrollYStore.rowHeight;
     const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0);
 
     const $tableBody = tableBody.$el.querySelector('.v-table--body');

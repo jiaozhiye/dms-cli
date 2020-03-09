@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 20:19:28
+ * @Last Modified time: 2020-03-09 11:36:33
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -37,9 +37,13 @@ export default {
   },
   mixins: [columnsMixin],
   data() {
+    // 原始数据
+    this.tableOriginData = [...this.dataSource];
     return {
       // 渲染中的数据
       tableData: [],
+      // 完整数据
+      tableFullData: [...this.dataSource],
       // 页面是否加载中
       showLoading: this.loading,
       // 是否存在横向滚动条
@@ -144,6 +148,15 @@ export default {
     }
   },
   watch: {
+    dataSource(val) {
+      this.tableFullData = [...val];
+      this.tableOriginData = [...val];
+    },
+    tableFullData() {
+      this.loadTableData().then(() => {
+        this.doLayout();
+      });
+    },
     flattenColumns() {
       this.doLayout();
     },
@@ -185,7 +198,7 @@ export default {
       const { rowKey } = this;
       const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {
-        console.warn('[Table]:Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
+        console.error('[Table]:Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
         return index;
       }
       return key;

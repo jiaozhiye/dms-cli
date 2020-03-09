@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 10:15:45
+ * @Last Modified time: 2020-03-09 10:56:07
  */
 import Checkbox from '../checkbox';
 
@@ -11,8 +11,8 @@ export default {
   inject: ['$$table'],
   computed: {
     allRowKeys() {
-      const { dataSource, getRowKey } = this.$$table;
-      return dataSource.map((record, i) => getRowKey(record, i));
+      const { tableFullData, getRowKey } = this.$$table;
+      return tableFullData.map((record, i) => getRowKey(record, i));
     },
     indeterminate() {
       const { selectionKeys } = this.$$table;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 14:01:39
+ * @Last Modified time: 2020-03-09 11:10:48
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -195,11 +195,12 @@ export default {
     },
     thClickHandle(ev, column) {
       ev.stopPropagation();
+      const { tableOriginData } = this.$$table;
       const { sorter, filter } = column;
       if (sorter) {
         const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
         if (!order) {
-          // 还原数据
+          this.$$table.tableFullData = [...tableOriginData];
         } else {
           this.doSortHandler(column, order);
         }
@@ -209,12 +210,10 @@ export default {
     },
     doSortHandler(column, order) {
       const { dataIndex, sorter } = column;
-      const dataSource = [...this.$$table.dataSource];
-      let result = [];
       if (_.isFunction(sorter)) {
-        result = dataSource.sort(sorter);
+        this.$$table.tableFullData.sort(sorter);
       } else {
-        result = dataSource.sort((a, b) => {
+        this.$$table.tableFullData.sort((a, b) => {
           const start = getCellValue(a, dataIndex);
           const end = getCellValue(b, dataIndex);
           if (!!Number(start - end)) {
@@ -223,7 +222,6 @@ export default {
           return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
         });
       }
-      return result;
     }
   },
   render() {

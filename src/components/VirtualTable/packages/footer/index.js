@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 14:04:14
+ * @Last Modified time: 2020-03-09 10:55:43
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -14,7 +14,7 @@ export default {
   inject: ['$$table'],
   computed: {
     summationRows() {
-      const { dataSource } = this.$$table;
+      const { tableFullData } = this.$$table;
       const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
       const res = {};
@@ -24,7 +24,7 @@ export default {
           precision,
           summation: { unit = '' }
         } = column;
-        const values = dataSource.map(x => Number(_.get(x, dataIndex, 0)));
+        const values = tableFullData.map(x => Number(_.get(x, dataIndex, 0)));
         // 累加求和
         let result = values.reduce((prev, curr) => {
           const value = Number(curr);

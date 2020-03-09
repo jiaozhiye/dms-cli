@@ -17,7 +17,7 @@ for (let i = 0; i < 330; i++) {
       age: 20,
       sex: '男'
     },
-    books: 1,
+    books: i + 1,
     hobby: '游泳, 篮球',
     email: 'xxx@qq.com',
     address: '长春'
