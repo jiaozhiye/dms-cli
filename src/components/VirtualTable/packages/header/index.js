@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 11:10:48
+ * @Last Modified time: 2020-03-09 18:08:25
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -11,6 +11,7 @@ import { getCellValue } from '../utils';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
+import THeadFilter from '../filter';
 
 const getAllColumns = columns => {
   const result = [];
@@ -186,17 +187,11 @@ export default {
       );
     },
     renderFilter() {
-      const cls = [`v-filter--btn`, `v-icon--funnel`];
-      return (
-        <span class="v-cell--filter" title="筛选">
-          <i class={cls} />
-        </span>
-      );
+      return <THeadFilter />;
     },
     thClickHandle(ev, column) {
-      ev.stopPropagation();
       const { tableOriginData } = this.$$table;
-      const { sorter, filter } = column;
+      const { sorter } = column;
       if (sorter) {
         const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
         if (!order) {

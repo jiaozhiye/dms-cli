@@ -44,7 +44,10 @@ export default {
             {
               title: '姓名',
               dataIndex: 'person.name',
-              width: 200
+              width: 200,
+              filter: {
+                type: 'text'
+              }
             },
             {
               title: '年龄',
@@ -78,6 +81,7 @@ export default {
         {
           title: '邮箱',
           dataIndex: 'email',
+
           width: 300
         },
         {
