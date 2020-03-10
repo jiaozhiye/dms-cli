@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 18:02:46
+ * @Last Modified time: 2020-03-10 13:44:42
  */
 /**Variable**/
 
@@ -53,9 +53,9 @@
     /* 筛选 */
     .v-cell--filter {
       position: absolute;
-      top: 1px;
-      right: 1px;
-      bottom: 1px;
+      top: 0;
+      right: 0;
+      bottom: 0;
       width: 1.75em;
       z-index: 1;
       .v-filter-btn {

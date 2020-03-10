@@ -81,14 +81,12 @@ export default {
         {
           title: '邮箱',
           dataIndex: 'email',
-
           width: 300
         },
         {
           title: '地址',
           dataIndex: 'address',
-          fixed: 'right',
-          width: 200
+          fixed: 'right'
         }
       ],
       selection: {

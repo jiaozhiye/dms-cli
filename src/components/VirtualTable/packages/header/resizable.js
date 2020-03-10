@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 19:14:40
+ * @Last Modified time: 2020-03-10 14:02:00
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
 
@@ -11,13 +11,14 @@ export default {
   props: ['column'],
   inject: ['$$table'],
   methods: {
-    resizeMousedown(ev, column) {
+    resizeMousedown(ev) {
+      ev.preventDefault();
       const dom = ev.target;
-      const { $vTable, $refs, flattenColumns, defaultColumnWidth } = this.$$table;
+      const { $vTable, $refs, flattenColumns, defaultColumnWidth, doLayout } = this.$$table;
       const $tableBody = $refs[`tableBody`].$el;
       const target = $refs[`resizable-bar`];
 
-      const half = dom.offsetWidth / 2 - 1;
+      const half = dom.offsetWidth / 2;
       const disX = ev.clientX;
       const left = getOffsetPos(dom, $vTable).left - $tableBody.scrollLeft + half;
 
@@ -26,10 +27,10 @@ export default {
       target.style.display = 'block';
 
       // 操作表格列 -> 违背了单向数据流原则，后期建议优化
-      const tColumn = deepFindColumn(flattenColumns, column.dataIndex);
+      const tColumn = deepFindColumn(flattenColumns, this.column.dataIndex);
       const renderWidth = tColumn.width || tColumn.renderWidth;
 
-      document.onmousemove = ev => {
+      document.onmousemove = function(ev) {
         let ml = ev.clientX - disX;
         let rw = renderWidth + ml;
 
@@ -43,6 +44,7 @@ export default {
       document.onmouseup = function() {
         $vTable.classList.remove('c--resize');
         target.style.display = 'none';
+        doLayout();
         this.onmousemove = null;
         this.onmouseup = null;
       };
@@ -58,6 +60,6 @@ export default {
         [`is--line`]: resizable && !bordered
       }
     ];
-    return <div class={resizableCls} onMousedown={ev => this.resizeMousedown(ev, this.column)} />;
+    return <div class={resizableCls} onMousedown={this.resizeMousedown} />;
   }
 };

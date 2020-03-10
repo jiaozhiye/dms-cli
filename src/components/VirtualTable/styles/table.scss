@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 19:36:07
+ * @Last Modified time: 2020-03-10 13:31:35
  */
 @import './common.scss';
 
@@ -29,10 +29,8 @@
 }
 
 %CellEllipsis {
-  &:not(.col--actived) {
-    .v-cell {
-      @extend %TextEllipsis;
-    }
+  .v-cell {
+    @extend %TextEllipsis;
   }
 }
 
@@ -153,7 +151,6 @@
         bottom: 0;
         width: 20px;
         transform: translateX(100%);
-        // box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.15);
         transition: box-shadow 0.3s, -webkit-box-shadow 0.3s;
         pointer-events: none;
       }
@@ -167,7 +164,6 @@
         bottom: 0;
         width: 20px;
         transform: translateX(-100%);
-        // box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.15);
         transition: box-shadow 0.3s, -webkit-box-shadow 0.3s;
         pointer-events: none;
       }
@@ -210,12 +206,8 @@
     .v-header--column,
     .v-body--column,
     .v-footer--column {
-      background-image: linear-gradient(-90deg, $v-table-border-color, $v-table-border-color), linear-gradient(-180deg, $v-table-border-color, $v-table-border-color);
-      background-repeat: no-repeat;
-      background-size: 1px 100%, 100% 1px;
-      background-position: right top, right bottom;
-      // border-bottom: 1px solid $v-table-border-color;
-      // border-right: 1px solid $v-table-border-color;
+      border-bottom: 1px solid $v-table-border-color;
+      border-right: 1px solid $v-table-border-color;
     }
     .v-header--column {
       background-color: $v-table-header-background-color;
@@ -225,17 +217,19 @@
     }
     .v-footer--column {
       background-color: $v-table-footer-background-color;
+      border-bottom: 0;
     }
   }
 
   &:not(.is--border) {
+    &:before,
+    &:after {
+      border: 0;
+    }
     .v-header--column,
     .v-body--column,
     .v-footer--column {
-      background-image: linear-gradient(-180deg, $v-table-border-color, $v-table-border-color);
-      background-repeat: no-repeat;
-      background-size: 100% 1px;
-      background-position: right bottom;
+      border-bottom: 1px solid $v-table-border-color;
     }
     .v-header--column {
       background-color: $v-table-header-background-color;
@@ -245,6 +239,7 @@
     }
     .v-footer--column {
       background-color: $v-table-footer-background-color;
+      border-bottom: 0;
     }
   }
 
@@ -255,17 +250,6 @@
     .v-footer--column {
       &:not(.col--ellipsis) {
         padding: #{floor(($v-table-row-height-medium - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-    .v-default-input,
-    .v-default-textarea,
-    .v-default-select,
-    .v-input {
-      height: floor($v-table-row-height-medium - 8);
-    }
-    .v-default-input {
-      &[type='date']::-webkit-inner-spin-button {
-        margin-top: 4px;
       }
     }
   }
@@ -279,17 +263,6 @@
         padding: #{floor(($v-table-row-height-small - $v-table-row-line-height) / 2)} 0;
       }
     }
-    .v-default-input,
-    .v-default-textarea,
-    .v-default-select,
-    .v-input {
-      height: floor($v-table-row-height-small - 8);
-    }
-    .v-default-input {
-      &[type='date']::-webkit-inner-spin-button {
-        margin-top: 2px;
-      }
-    }
   }
 
   &.size--mini {
@@ -299,17 +272,6 @@
     .v-footer--column {
       &:not(.col--ellipsis) {
         padding: #{floor(($v-table-row-height-mini - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-    .v-default-input,
-    .v-default-textarea,
-    .v-default-select,
-    .v-input {
-      height: floor($v-table-row-height-mini - 8);
-    }
-    .v-default-input {
-      &[type='date']::-webkit-inner-spin-button {
-        margin-top: 0;
       }
     }
   }
@@ -397,11 +359,6 @@
   .v-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-    }
-  }
-  .v-header--column,
-  .v-body--column {
-    &.col--ellipsis {
       @extend %CellEllipsis;
     }
   }

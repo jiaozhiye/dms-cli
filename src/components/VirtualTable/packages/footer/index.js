@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 10:55:43
+ * @Last Modified time: 2020-03-10 13:32:11
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -77,6 +77,7 @@ export default {
       const { dataIndex, fixed, align } = column;
       const cls = [
         `v-footer--column`,
+        `col--ellipsis`,
         {
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',

@@ -1,6 +1,6 @@
 <template>
   <component :is="tagName">
-    <transition :name="transition" :duration="200" @after-leave="doDestroy">
+    <transition :name="transition" :duration="300" @after-leave="doDestroy">
       <span v-show="!disabled && showPopper" ref="popper" :class="rootClass">
         <slot>{{ content }}</slot>
       </span>

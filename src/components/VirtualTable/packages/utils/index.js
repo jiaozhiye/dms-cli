@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 22:20:15
+ * @Last Modified time: 2020-03-10 12:49:55
  */
 import _ from 'lodash';
 
@@ -178,8 +178,10 @@ function isBrowseType(type) {
   return navigator.userAgent.indexOf(type) > -1;
 }
 export const browse = () => {
+  const isWebkit = isBrowseType('AppleWebKit');
+  const isEdge = isBrowseType('Edge');
   let result = {
-    webkit: isBrowseType('AppleWebKit'), // 苹果、谷歌内核
+    webkit: isWebkit && !isEdge, // 苹果、谷歌内核
     moz: isBrowseType('Gecko') && isBrowseType('KHTML') == -1, // 火狐内核
     edge: isBrowseType('Edge'), // Edge 内核
     msie: isBrowseType('Trident') // IE 内核

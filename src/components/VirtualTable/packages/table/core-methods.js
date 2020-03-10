@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 22:23:03
+ * @Last Modified time: 2020-03-10 13:34:45
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -14,16 +14,16 @@ const throttleScrollYDuration = $browse['msie'] ? 20 : 10;
 export default {
   // 加载表格数据
   loadTableData() {
-    const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
+    const { height, maxHeight, ellipsis, tableFullData } = this;
     // 是否开启虚拟滚动
     this.scrollYLoad = tableFullData.length > 100;
 
     if (this.scrollYLoad) {
       if (!(height || maxHeight)) {
-        console.error('必须设置组件参数 height/maxHeight');
+        console.error('[Table]:必须设置组件参数 `height` 或 `maxHeight`');
       }
       if (!ellipsis) {
-        console.error('必须设置组件参数 ellipsis');
+        console.error('[Table]:必须设置组件参数 `ellipsis`');
       }
     }
 
@@ -102,7 +102,7 @@ export default {
         // 设置 scrollYStore 初始值
         scrollYStore.visibleSize = visibleYSize;
         scrollYStore.offsetSize = visibleYSize;
-        scrollYStore.renderSize = isWebkit ? visibleYSize + 2 : visibleYSize + 5;
+        scrollYStore.renderSize = isWebkit ? visibleYSize + 3 : visibleYSize + 5;
 
         // 更新数据
         this.updateScrollYData();
