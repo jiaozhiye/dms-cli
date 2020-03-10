@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" />
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" @change="changeHandle" />
   </div>
 </template>
 
@@ -97,6 +97,11 @@ export default {
         }
       }
     };
+  },
+  methods: {
+    changeHandle(pagination, filters, sorter, { currentDataSource }) {
+      // console.log(pagination, filters, sorter, currentDataSource);
+    }
   }
 };
 </script>

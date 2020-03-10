@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 12:49:55
+ * @Last Modified time: 2020-03-11 01:22:00
  */
 import _ from 'lodash';
 
@@ -55,6 +55,65 @@ export const deepFindColumn = (columns, mark) => {
     }
   }
   return result;
+};
+
+export const getAllColumns = columns => {
+  const result = [];
+  columns.forEach(column => {
+    if (column.children) {
+      result.push(column);
+      result.push.apply(result, getAllColumns(column.children));
+    } else {
+      result.push(column);
+    }
+  });
+  return result;
+};
+
+// 表头分组
+export const convertToRows = originColumns => {
+  let maxLevel = 1;
+  const traverse = (column, parent) => {
+    if (parent) {
+      column.level = parent.level + 1;
+      if (maxLevel < column.level) {
+        maxLevel = column.level;
+      }
+    }
+    if (column.children) {
+      let colSpan = 0;
+      column.children.forEach(subColumn => {
+        traverse(subColumn, column);
+        colSpan += subColumn.colSpan;
+      });
+      column.colSpan = colSpan;
+    } else {
+      column.colSpan = 1;
+    }
+  };
+
+  originColumns.forEach(column => {
+    column.level = 1;
+    traverse(column);
+  });
+
+  const rows = [];
+  for (let i = 0; i < maxLevel; i++) {
+    rows.push([]);
+  }
+
+  const allColumns = getAllColumns(originColumns);
+
+  allColumns.forEach(column => {
+    if (!column.children) {
+      column.rowSpan = maxLevel - column.level + 1;
+    } else {
+      column.rowSpan = 1;
+    }
+    rows[column.level - 1].push(column);
+  });
+
+  return rows;
 };
 
 // 延迟方法

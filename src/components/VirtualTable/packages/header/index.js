@@ -2,84 +2,43 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 18:08:25
+ * @Last Modified time: 2020-03-11 01:56:54
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
 
-import { getCellValue } from '../utils';
+import { convertToRows, getCellValue, isEmpty } from '../utils';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
 import THeadFilter from '../filter';
 
-const getAllColumns = columns => {
-  const result = [];
-  columns.forEach(column => {
-    if (column.children) {
-      result.push(column);
-      result.push.apply(result, getAllColumns(column.children));
-    } else {
-      result.push(column);
-    }
-  });
-  return result;
-};
-
-const convertToRows = originColumns => {
-  let maxLevel = 1;
-  const traverse = (column, parent) => {
-    if (parent) {
-      column.level = parent.level + 1;
-      if (maxLevel < column.level) {
-        maxLevel = column.level;
-      }
-    }
-    if (column.children) {
-      let colSpan = 0;
-      column.children.forEach(subColumn => {
-        traverse(subColumn, column);
-        colSpan += subColumn.colSpan;
-      });
-      column.colSpan = colSpan;
-    } else {
-      column.colSpan = 1;
-    }
-  };
-
-  originColumns.forEach(column => {
-    column.level = 1;
-    traverse(column);
-  });
-
-  const rows = [];
-  for (let i = 0; i < maxLevel; i++) {
-    rows.push([]);
-  }
-
-  const allColumns = getAllColumns(originColumns);
-
-  allColumns.forEach(column => {
-    if (!column.children) {
-      column.rowSpan = maxLevel - column.level + 1;
-    } else {
-      column.rowSpan = 1;
-    }
-    rows[column.level - 1].push(column);
-  });
-
-  return rows;
-};
-
 export default {
   name: 'TableHeader',
   props: ['tableColumns', 'flattenColumns', 'sortDirections'],
+  provide() {
+    return {
+      $$header: this
+    };
+  },
   inject: ['$$table'],
   data() {
     return {
+      thFilter: {},
+      thSorter: {},
       ascend: this.sortDirections[0],
       descend: this.sortDirections[1]
     };
+  },
+  watch: {
+    thFilter(val) {
+      this.filterHandle();
+      this.$$table.filters = this.formatFilterValue(val);
+    },
+    thSorter(val) {
+      this.sorterHandle();
+      this.$$table.sorter = val;
+    }
   },
   methods: {
     renderColgroup() {
@@ -154,7 +113,7 @@ export default {
         vNodes.push(this.renderSorter(orderBy));
       }
       if (filter) {
-        vNodes.push(this.renderFilter());
+        vNodes.push(this.renderFilter(column));
       }
       const nCellTitle = (
         <span class="v-cell--title" title={title}>
@@ -186,24 +145,42 @@ export default {
         </span>
       );
     },
-    renderFilter() {
-      return <THeadFilter />;
+    renderFilter(column) {
+      return <THeadFilter column={column} />;
     },
     thClickHandle(ev, column) {
-      const { tableOriginData } = this.$$table;
-      const { sorter } = column;
+      const { sorter, dataIndex } = column;
       if (sorter) {
         const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
+        // 同步状态
+        column.orderBy = order;
+        this.thSorter = Object.assign({}, { [dataIndex]: order });
+      }
+    },
+    // 表头排序
+    sorterHandle() {
+      if (0) {
+        this.serverSorter();
+      } else {
+        this.clientSorter();
+      }
+    },
+    // 服务端排序
+    serverSorter() {},
+    // 客户端排序
+    clientSorter() {
+      const { tableOriginData } = this.$$table;
+      for (let key in this.thSorter) {
+        const order = this.thSorter[key];
+        const column = this.flattenColumns.find(column => column.dataIndex === key);
         if (!order) {
           this.$$table.tableFullData = [...tableOriginData];
         } else {
-          this.doSortHandler(column, order);
+          this.doSort(column, order);
         }
-        // 同步状态
-        column.orderBy = order;
       }
     },
-    doSortHandler(column, order) {
+    doSort(column, order) {
       const { dataIndex, sorter } = column;
       if (_.isFunction(sorter)) {
         this.$$table.tableFullData.sort(sorter);
@@ -217,6 +194,54 @@ export default {
           return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
         });
       }
+    },
+    // 表头筛选
+    filterHandle() {
+      if (0) {
+        this.serverFilter();
+      } else {
+        this.clientFilter();
+      }
+    },
+    // 服务端筛选
+    serverFilter() {},
+    // 客户端筛选
+    clientFilter() {
+      const { tableOriginData } = this.$$table;
+      const filterList = [];
+      for (let key in this.thFilter) {
+        const [type, property] = key.split('|');
+        const results = tableOriginData.filter(row => {
+          const cellVal = getCellValue(row, property);
+          const filterVal = this.thFilter[key];
+          if (isEmpty(filterVal)) {
+            return true;
+          }
+          if (type === 'text') {
+            if (_.isNumber(cellVal)) {
+              return Number(filterVal) === cellVal;
+            }
+            return cellVal.toLowerCase().includes(filterVal.toString().toLowerCase());
+          }
+          return true;
+        });
+        filterList.push(results);
+      }
+      if (!Object.keys(this.thFilter).length) {
+        filterList.push(tableOriginData);
+      }
+      // 求给定数组的交集
+      const interList = _.intersection(...filterList);
+      this.$$table.tableFullData = interList;
+    },
+    // 格式化筛选参数
+    formatFilterValue(option) {
+      const result = {};
+      for (let key in option) {
+        if (!key.includes('|')) break;
+        result[key.split('|')[1]] = option[key];
+      }
+      return result;
     }
   },
   render() {

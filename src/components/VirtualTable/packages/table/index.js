@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 14:40:49
+ * @Last Modified time: 2020-03-11 02:00:26
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -44,6 +44,12 @@ export default {
       tableData: [],
       // 完整数据
       tableFullData: [...this.dataSource],
+      // 表头筛选
+      filters: {},
+      // 表头排序
+      sorter: {},
+      // 分页
+      pagination: {},
       // 页面是否加载中
       showLoading: this.loading,
       // 是否存在横向滚动条
@@ -113,6 +119,9 @@ export default {
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
     },
+    changeParams() {
+      return [this.pagination, this.filters, this.sorter, { currentDataSource: this.tableFullData }];
+    },
     leftFixedColumns() {
       return this.flattenColumns.filter(column => column.fixed === 'left');
     },
@@ -159,6 +168,15 @@ export default {
     },
     flattenColumns() {
       this.doLayout();
+    },
+    filters() {
+      this.$emit('change', ...this.changeParams);
+    },
+    sorter() {
+      this.$emit('change', ...this.changeParams);
+    },
+    pagination() {
+      this.$emit('change', ...this.changeParams);
     },
     loading(val) {
       this.showLoading = val;

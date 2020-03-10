@@ -13,8 +13,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2020-03-09 18:07:04
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-11 00:22:40
  */
 import Popper from './popper.js';
 
@@ -31,6 +31,7 @@ function off(element, event, handler) {
 }
 
 export default {
+  name: 'Popper',
   props: {
     tagName: {
       type: String,
@@ -61,9 +62,6 @@ export default {
     forceShow: {
       type: Boolean,
       default: false
-    },
-    dataValue: {
-      default: null
     },
     appendToBody: {
       type: Boolean,
