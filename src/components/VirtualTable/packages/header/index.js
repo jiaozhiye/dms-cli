@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 01:56:54
+ * @Last Modified time: 2020-03-11 18:26:24
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -23,6 +23,7 @@ export default {
   },
   inject: ['$$table'],
   data() {
+    this.tableFilterData = [];
     return {
       thFilter: {},
       thSorter: {},
@@ -174,7 +175,7 @@ export default {
         const order = this.thSorter[key];
         const column = this.flattenColumns.find(column => column.dataIndex === key);
         if (!order) {
-          this.$$table.tableFullData = [...tableOriginData];
+          this.$$table.tableFullData = !this.tableFilterData.length ? [...tableOriginData] : this.tableFilterData;
         } else {
           this.doSort(column, order);
         }
@@ -228,11 +229,14 @@ export default {
         filterList.push(results);
       }
       if (!Object.keys(this.thFilter).length) {
-        filterList.push(tableOriginData);
+        this.tableFilterData = [];
+        this.$$table.tableFullData = [...tableOriginData];
+      } else {
+        // 求给定数组的交集
+        const interList = _.intersection(...filterList);
+        this.tableFilterData = [...interList];
+        this.$$table.tableFullData = [...interList];
       }
-      // 求给定数组的交集
-      const interList = _.intersection(...filterList);
-      this.$$table.tableFullData = interList;
     },
     // 格式化筛选参数
     formatFilterValue(option) {

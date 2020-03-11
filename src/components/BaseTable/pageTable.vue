@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 18:03:10
+ * @Last Modified time: 2020-03-11 19:35:31
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -2034,6 +2034,12 @@ export default {
         overflow: visible;
         color: @textColor;
         font-weight: 700;
+        .sort-caret.ascending {
+          border-bottom-color: @disabledColor;
+        }
+        .sort-caret.descending {
+          border-top-color: @disabledColor;
+        }
         &.is-required::before {
           content: '*';
           color: @dangerColor;
@@ -2041,6 +2047,16 @@ export default {
         }
         div {
           line-height: normal;
+        }
+      }
+      &.ascending {
+        .sort-caret.ascending {
+          border-bottom-color: @primaryColor;
+        }
+      }
+      &.descending {
+        .sort-caret.descending {
+          border-top-color: @primaryColor;
         }
       }
       &.gutter {

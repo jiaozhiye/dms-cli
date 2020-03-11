@@ -157,7 +157,8 @@ export default {
           type: 'INPUT',
           label: '搜索2',
           fieldName: 'zxczxc',
-          readonly: true
+          readonly: true,
+          disabled: true
         },
         {
           type: 'MULTIPLE_SELECT',
