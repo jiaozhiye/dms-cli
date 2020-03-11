@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 09:26:52
+ * @Last Modified time: 2020-03-11 20:09:20
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -25,10 +25,13 @@ export default {
       default: 'vertical'
     },
     printCopies: {
-      type: Number,
-      default: 1
+      type: Number
     },
     alwaysPrint: {
+      type: Boolean,
+      default: false
+    },
+    directPrint: {
       type: Boolean,
       default: false
     },
@@ -101,9 +104,11 @@ export default {
       }
       this.LODOP.SET_PRINT_MODE('PRINT_PAGE_PERCENT', 'Full-Width'); // 设置打印内容的自动缩放
       this.LODOP.SET_PRINT_MODE('AUTO_CLOSE_PREWINDOW', 1); // 设置设置完打印后 是否关闭预览窗口;
-      this.LODOP.SET_PRINT_COPIES(this.printCopies); // 指定打印份数
+      if (typeof this.printCopies !== 'undefined') {
+        this.LODOP.SET_PRINT_COPIES(this.printCopies); // 指定打印份数
+      }
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
-      this.LODOP.PREVIEW();
+      !this.directPrint ? this.LODOP.PREVIEW() : this.LODOP.PRINT(); // 直接打印
     },
     createGlobalStyle(_html_) {
       return css.style + _html_;

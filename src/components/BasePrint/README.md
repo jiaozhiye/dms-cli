@@ -17,9 +17,10 @@
 - data{Object/Array|打印的数据}
 - template{String|调用的打印模板路径，默认前缀为: @/pages/printTemplate/}
 - printerType{String|打印机类型，激光/针式，laser/stylus}
-- printCopies{Number|打印的份数，默认是 1}
+- printCopies{Number|打印的份数，如果设置，打印插件不支持调整}
 - direction{String|打印方向 vertical/horizontal，默认为纵向打印 vertical}
 - alwaysPrint{Boolean|是否按内容走纸(连续无分页打印)，默认是整张走纸 false}
+- directPrint{Boolean|是否直接打印（需要购买版权才能直接打印），不弹出预览，默认 false}
 - isPreview{Boolean|是否显示浏览器预览，开发模板时需要显示，生产环境打印不需要显示预览}
 
 `PrintTemplate 模板组件参数`
