@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 11:35:26
+ * @Last Modified time: 2020-03-11 14:32:38
  */
 import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import _ from 'lodash';
@@ -27,15 +27,18 @@ export default {
     removeResizeListener(this.$vTable, this.resizeListener);
   },
   resizeListener() {
-    const { width: oldWidth } = this.resizeState;
+    const { width: oldWidth, height: oldHeight } = this.resizeState;
     let shouldUpdateLayout = false;
     // X 方向
     const width = this.$vTable.offsetWidth;
     shouldUpdateLayout = oldWidth !== width;
-
+    // Y 方向
+    const height = this.$vTable.offsetHeight;
+    if (this.shouldUpdateHeight && oldHeight !== height) {
+      shouldUpdateLayout = !0;
+    }
     if (!shouldUpdateLayout) return;
-
-    this.resizeState = { width };
+    this.resizeState = { width, height };
     // 重新渲染布局
     this.doLayout();
   },

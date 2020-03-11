@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 02:00:26
+ * @Last Modified time: 2020-03-11 15:20:28
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -100,7 +100,8 @@ export default {
       isPingRight: false,
       // 响应式变化的状态
       resizeState: {
-        width: 0
+        width: 0,
+        height: 0
       }
     };
   },
@@ -204,7 +205,7 @@ export default {
   mounted() {
     this.doLayout();
     this.bindEvents();
-    this.resizeState = Object.assign({}, { width: this.$vTable.offsetWidth });
+    this.initialResizeState();
   },
   destroyed() {
     this.unbindEvents();
@@ -234,12 +235,16 @@ export default {
         type
       };
     },
-    initialSelectionKeys(type) {
-      const { rowSelection } = this;
-      if (!rowSelection) {
+    initialSelectionKeys(mark) {
+      if (!this.rowSelection) {
         return [];
       }
-      return rowSelection[type] || [];
+      const result = this.rowSelection[mark] || [];
+      return this.rowSelection.type === 'radio' ? result.slice(0, 1) : result;
+    },
+    initialResizeState() {
+      const { offsetWidth, offsetHeight } = this.$vTable;
+      this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
     },
     renderBorderLine() {
       return this.bordered && <div class="v-table--border-line" />;

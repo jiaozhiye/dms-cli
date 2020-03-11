@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 14:00:01
+ * @Last Modified time: 2020-03-11 16:20:28
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -86,11 +86,18 @@ export default {
       );
     },
     renderRows() {
+      const { selectionKeys } = this.$$table;
       const rows = this.tableData.map((row, rowIndex) => {
         const key = this.$$table.getRowKey(row, rowIndex);
         const extraStys = this.rowStyle ? (_.isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
+        const cls = [
+          `v-body--row`,
+          {
+            [`v-body--row-selected`]: selectionKeys.includes(key)
+          }
+        ];
         return (
-          <tr key={key} data-row-key={key} class="v-body--row" style={extraStys}>
+          <tr key={key} data-row-key={key} class={cls} style={extraStys}>
             {this.flattenColumns.map((column, cellIndex) => this.renderColumn(column, cellIndex, row, rowIndex, key))}
           </tr>
         );
@@ -98,7 +105,7 @@ export default {
       return rows;
     },
     renderColumn(column, cellIndex, row, rowIndex, rowKey) {
-      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis } = this.$$table;
+      const { sorter, leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis } = this.$$table;
       const { dataIndex, fixed, align, className } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, cellIndex);
       const isEllipsis = ellipsis || column.ellipsis;
@@ -111,6 +118,7 @@ export default {
           [`col--ellipsis`]: isEllipsis,
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
+          [`v-column--sort`]: !!sorter[dataIndex],
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
@@ -124,7 +132,16 @@ export default {
       };
       const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, cellIndex) : this.cellStyle) : null;
       return (
-        <td key={dataIndex} title={isEllipsis && getCellValue(row, dataIndex)} rowspan={rowspan} colspan={colspan} class={cls} style={{ ...stys, ...extraStys }}>
+        <td
+          key={dataIndex}
+          title={isEllipsis && getCellValue(row, dataIndex)}
+          rowspan={rowspan}
+          colspan={colspan}
+          class={cls}
+          style={{ ...stys, ...extraStys }}
+          onClick={ev => this.cellClickHandle(ev, row, column)}
+          onDblclick={ev => this.cellDbclickHandle(ev, row, column)}
+        >
           <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
         </td>
       );
@@ -151,6 +168,14 @@ export default {
         }
       }
       return { rowspan, colspan };
+    },
+    cellClickHandle(ev, row, column) {
+      if (column.dataIndex === '__selection__') return;
+      this.$$table.$emit('rowClick', row, column, ev);
+    },
+    cellDbclickHandle(ev, row, column) {
+      if (column.dataIndex === '__selection__') return;
+      this.$$table.$emit('rowDblclick', row, column, ev);
     }
   },
   render() {

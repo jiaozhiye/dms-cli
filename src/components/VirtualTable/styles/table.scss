@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 13:31:35
+ * @Last Modified time: 2020-03-11 16:18:35
  */
 @import './common.scss';
 
@@ -102,19 +102,31 @@
     }
   }
 
-  .v-body--row {
-    background-color: $v-table-background-color;
-    &.row--hover {
-      background-color: $v-table-row-hover-background-color;
-      .v-tree--btn-wrapper {
-        background-color: $v-table-row-hover-background-color;
-      }
-    }
-  }
-
   &.c--resize {
     * {
       cursor: col-resize;
+    }
+  }
+
+  .v-header--column {
+    background-color: $v-table-header-background-color;
+  }
+  .v-body--column {
+    transition: background-color 0.3s ease;
+    background-color: $v-table-background-color;
+  }
+  .v-footer--column {
+    background-color: $v-table-footer-background-color;
+    border-bottom: 0;
+  }
+  .v-body--row:hover {
+    .v-body--column {
+      background-color: $v-table-row-hover-background-color;
+    }
+  }
+  .v-body--row-selected {
+    .v-body--column {
+      background-color: $v-table-row-selected-background-color;
     }
   }
 
@@ -180,13 +192,16 @@
     .v-column-has-sorter {
       padding-right: 1em;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease;
       &:hover {
         background-color: $v-table-column-sort-hover-color;
       }
       &.v-column-sort {
         background-color: $v-table-column-sorted-color;
       }
+    }
+    .v-column--sort {
+      background-color: #fafafa;
     }
   }
 
@@ -209,16 +224,6 @@
       border-bottom: 1px solid $v-table-border-color;
       border-right: 1px solid $v-table-border-color;
     }
-    .v-header--column {
-      background-color: $v-table-header-background-color;
-    }
-    .v-body--column {
-      background-color: $v-table-background-color;
-    }
-    .v-footer--column {
-      background-color: $v-table-footer-background-color;
-      border-bottom: 0;
-    }
   }
 
   &:not(.is--border) {
@@ -230,16 +235,6 @@
     .v-body--column,
     .v-footer--column {
       border-bottom: 1px solid $v-table-border-color;
-    }
-    .v-header--column {
-      background-color: $v-table-header-background-color;
-    }
-    .v-body--column {
-      background-color: $v-table-background-color;
-    }
-    .v-footer--column {
-      background-color: $v-table-footer-background-color;
-      border-bottom: 0;
     }
   }
 
