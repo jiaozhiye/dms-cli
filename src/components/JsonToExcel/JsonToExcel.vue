@@ -3,10 +3,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 18:32:35
+ * @Last Modified time: 2020-03-11 12:20:30
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
+import { notifyAction } from '@/utils';
 import { download } from './download.js';
 
 export default {
@@ -66,7 +67,9 @@ export default {
       SheetNames: [],
       Sheets: {}
     };
-    return {};
+    return {
+      loading: false
+    };
   },
   computed: {
     // unique identifier
@@ -91,11 +94,16 @@ export default {
       let data = this.initialValue;
       if (api) {
         try {
+          this.loading = !0;
           const res = await api(params);
           if (res.resultCode === 200) {
             data = (!datakey ? res.data : _.get(res.data, datakey)) || [];
           }
         } catch (err) {}
+        this.loading = !1;
+      }
+      if (!data.length) {
+        return notifyAction('数据为空，无法导出！', 'warning');
       }
       if (this.formatHandle) {
         data = this.formatHandle(data);
@@ -184,11 +192,12 @@ export default {
     }
   },
   render() {
-    const { $props, $listeners, $attrs, $slots } = this;
+    const { $props, $listeners, $attrs, $slots, loading } = this;
     const wrapProps = {
       key: this.idName,
       props: {
-        ...$props
+        ...$props,
+        loading
       },
       attrs: {
         id: this.idName,
