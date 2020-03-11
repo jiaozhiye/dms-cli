@@ -33,7 +33,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-04 11:44:32
+ * @Last Modified time: 2020-03-11 21:01:03
  **/
 import Spin from '@/components/Spin/Spin';
 
@@ -239,7 +239,7 @@ export default {
       .drawer-header {
         position: relative;
         padding: 16px 20px;
-        border-radius: 4px 4px 0 0;
+        border-radius: @borderRadius @borderRadius 0 0;
         background: #fff;
         color: rgba(0, 0, 0, 0.65);
         border-bottom: 1px solid @borderColor;

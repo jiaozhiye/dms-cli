@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 09:46:16
+ * @Last Modified time: 2020-03-11 21:27:07
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -260,7 +260,7 @@ export default {
       height: 100%;
       line-height: inherit;
       margin: 0 10px 0 0;
-      border-radius: 6px;
+      border-radius: @borderRadius;
       background-color: #fff;
       border: 1px dashed #c0ccda;
       pointer-events: auto !important;
