@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 20:09:20
+ * @Last Modified time: 2020-03-12 15:31:26
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -53,6 +53,10 @@ export default {
     };
   },
   computed: {
+    // unique key
+    uniqueKey() {
+      return `打印单-${+new Date()}`;
+    },
     templatePath() {
       return this.template.endsWith('.vue') ? this.template : `${this.template}.vue`;
     }
@@ -86,7 +90,7 @@ export default {
         this.LODOP = getLodop();
       }
       if (!this.LODOP) return;
-      this.LODOP.PRINT_INIT('打印表格');
+      this.LODOP.PRINT_INIT(this.uniqueKey);
       // 纵向
       if (this.direction === 'vertical') {
         // 按内容走纸，连续打印
