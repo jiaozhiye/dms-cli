@@ -140,7 +140,7 @@ http://localhost:8080/table
 - summationUnit{String|合计字段的单位}
 - secretType{String|字段值的保密类型，可选参数 name/phone/IDnumber}
 - stopRowSelection{Boolean|该列在单击时，是否阻止行选中行为}
-- sorter{Boolean|是否支持排序}
+- sorter{Boolean/Function|是否支持排序，支持自定义排序规则}
 - filter{Boolean|是否支持表头过滤}
 - filterType{String|表头过滤类型，支持 input/number/checkbox/radio/date-range}
 - filterItems{Array|checkbox 过滤类型的列表数据，[{text: '', value: ''}]}

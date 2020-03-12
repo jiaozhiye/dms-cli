@@ -1356,11 +1356,21 @@ export default {
     },
     // 客户端排序
     clientSorter(column, prop, order) {
+      const tColumn = this.deepFind(this.columns, prop);
+      const tList = this.isMemoryPagination ? this.originData : this.list;
       if (order === 'ascending') {
-        this.ascSortHandle(this.isMemoryPagination ? this.originData : this.list, prop);
+        if (_.isFunction(tColumn.sorter)) {
+          tColumn.sorter(tList, order);
+        } else {
+          this.ascSortHandle(tList, prop);
+        }
       }
       if (order === 'descending') {
-        this.descSortHandle(this.isMemoryPagination ? this.originData : this.list, prop);
+        if (_.isFunction(tColumn.sorter)) {
+          tColumn.sorter(tList, order);
+        } else {
+          this.descSortHandle(tList, prop);
+        }
       }
       if (order === null) {
         if (this.isMemoryPagination) {

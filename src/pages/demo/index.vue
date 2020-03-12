@@ -291,7 +291,20 @@ export default {
           title: '序号',
           dataIndex: 'index',
           width: 70,
-          sorter: true,
+          sorter: (data, order) => {
+            // 升序
+            if (order === 'ascending') {
+              data.sort((a, b) => {
+                return a.index - b.index;
+              });
+            }
+            // 降序
+            if (order === 'descending') {
+              data.sort((a, b) => {
+                return b.index - a.index;
+              });
+            }
+          },
           render: props => {
             return <span>{props.row.index + 1}</span>;
           }
