@@ -258,6 +258,7 @@ export default {
             max={max}
             step={step}
             precision={precision}
+            controls={false}
             clearable
             onChange={val => {
               if (maxlength > 0 && typeof val !== 'undefined') {
@@ -316,6 +317,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => change(form[fieldName])}
@@ -330,6 +332,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => change(form[fieldName])}
@@ -1366,8 +1369,14 @@ export default {
         submit: ev => ev.preventDefault()
       }
     };
+    const cls = [
+      `form-panel`,
+      {
+        [`form-show`]: this.formType === 'show'
+      }
+    ];
     return (
-      <div class="form-panel">
+      <div class={cls}>
         <el-form ref="form" {...wrapProps}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
           {this.createFormButton()}
@@ -1466,6 +1475,22 @@ export default {
       }
       .desc-text {
         font-size: @textSizeSecondary;
+      }
+    }
+  }
+  &.form-show {
+    .is-disabled {
+      .el-input__inner,
+      .el-textarea__inner {
+        border-style: dashed;
+        background-color: #fff;
+      }
+    }
+    .el-range-editor.is-disabled {
+      border-style: dashed;
+      background-color: #fff;
+      .el-range-input {
+        background-color: #fff;
       }
     }
   }

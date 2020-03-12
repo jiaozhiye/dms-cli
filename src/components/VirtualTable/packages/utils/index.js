@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 01:22:00
+ * @Last Modified time: 2020-03-12 20:18:13
  */
 import _ from 'lodash';
 
@@ -255,7 +255,7 @@ export const isEmpty = val => {
 
   if (typeof val === 'boolean') return false;
 
-  if (typeof val === 'number') return !val;
+  if (typeof val === 'number') return false;
 
   if (val instanceof Error) return val.message === '';
 

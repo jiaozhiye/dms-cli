@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-29 10:48:49
+ * @Last Modified time: 2020-03-12 20:38:06
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
@@ -285,7 +285,7 @@ export default {
             this.openCurPopover(e.target, dataIndex);
           }}
         >
-          <span class={this.isValueFalse(this.search[`${dataIndex}Val`]) ? 'th-cell-text' : 'th-cell-text selected'}>
+          <span class={this.isEmpty(this.search[`${dataIndex}Val`]) ? 'th-cell-text' : 'th-cell-text selected'}>
             <span class="title">{title}</span>
             <i class="icon el-icon-arrow-down" />
           </span>
@@ -299,7 +299,7 @@ export default {
     createButtonNode(property, type, val) {
       return (
         <div class="popover-bottom">
-          <el-button type="primary" size="mini" disabled={this.isValueFalse(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
+          <el-button type="primary" size="mini" disabled={this.isEmpty(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
             搜索
           </el-button>
           <el-button size="mini" onClick={e => this.filterHandler(property, type, val)}>
@@ -390,7 +390,7 @@ export default {
             style={{ width: '100px' }}
             placeholder="开始值"
             onChange={val => {
-              if (val !== '' && val > endVal) {
+              if (val !== '' && val - endVal > 0) {
                 setValue([endVal, this.search[`${dataIndex}Val`][1]]);
               }
             }}
@@ -412,7 +412,7 @@ export default {
             style={{ width: '100px' }}
             placeholder="结束值"
             onChange={val => {
-              if (val !== '' && val < startVal) {
+              if (val !== '' && val - startVal < 0) {
                 setValue([this.search[`${dataIndex}Val`][0], startVal]);
               }
             }}
@@ -461,6 +461,7 @@ export default {
             unlink-panels={true}
             style={{ width: '215px' }}
             value-format="yyyy-MM-dd"
+            clearable={false}
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -494,12 +495,30 @@ export default {
       }
       return sl;
     },
-    // 参数值是否是假，假 -> 返回 ture
-    isValueFalse(val = '') {
-      if (Array.isArray(val)) {
-        return !val.filter(x => !_.isUndefined(x)).length;
+    // 判断参数是否为空
+    isEmpty(val) {
+      // null or undefined
+      if (val == null) return true;
+      if (typeof val === 'boolean') return false;
+      if (typeof val === 'number') return false;
+      if (val instanceof Error) return val.message === '';
+      switch (Object.prototype.toString.call(val)) {
+        // String or Array
+        case '[object String]':
+        case '[object Array]':
+          return !val.length;
+        // Map or Set or File
+        case '[object File]':
+        case '[object Map]':
+        case '[object Set]': {
+          return !val.size;
+        }
+        // Plain Object
+        case '[object Object]': {
+          return !Object.keys(val).length;
+        }
       }
-      return !val.toString();
+      return false;
     },
     // 数值类型值得校验
     validateNumber(val) {

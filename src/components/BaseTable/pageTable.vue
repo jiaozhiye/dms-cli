@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 19:35:31
+ * @Last Modified time: 2020-03-12 20:32:51
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1753,7 +1753,28 @@ export default {
     },
     // 判断参数是否为空
     isEmpty(val) {
-      return typeof val === 'undefined' || val === '' || val === null;
+      // null or undefined
+      if (val == null) return true;
+      if (typeof val === 'boolean') return false;
+      if (typeof val === 'number') return false;
+      if (val instanceof Error) return val.message === '';
+      switch (Object.prototype.toString.call(val)) {
+        // String or Array
+        case '[object String]':
+        case '[object Array]':
+          return !val.length;
+        // Map or Set or File
+        case '[object File]':
+        case '[object Map]':
+        case '[object Set]': {
+          return !val.size;
+        }
+        // Plain Object
+        case '[object Object]': {
+          return !Object.keys(val).length;
+        }
+      }
+      return false;
     },
     // 判断参数是否是日期类型
     isDate(date = '') {
@@ -2035,10 +2056,10 @@ export default {
         color: @textColor;
         font-weight: 700;
         .sort-caret.ascending {
-          border-bottom-color: @disabledColor;
+          border-bottom-color: #c1c1c1;
         }
         .sort-caret.descending {
-          border-top-color: @disabledColor;
+          border-top-color: #c1c1c1;
         }
         &.is-required::before {
           content: '*';

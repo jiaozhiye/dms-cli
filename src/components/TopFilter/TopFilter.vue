@@ -239,6 +239,7 @@ export default {
             max={max}
             step={step}
             precision={precision}
+            controls={false}
             clearable
             onChange={val => {
               if (maxlength > 0 && typeof val !== 'undefined') {
@@ -298,6 +299,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => change(form[fieldName])}
@@ -312,6 +314,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => change(form[fieldName])}
