@@ -122,10 +122,10 @@ export default {
         <table>
           <tr>
             <td width="50%" align="left" style="padding-top: 10px; padding-bottom: 10px;">
-              <img src="/static/img/logo_l.png" width="160" />
+              <img src="/static/img/logo_l.png" border="0" width="160" />
             </td>
             <td width="50%" align="right" style="padding-top: 10px; padding-bottom: 10px;">
-              <img src="/static/img/logo_r.png" width="300" />
+              <img src="/static/img/logo_r.png" border="0" width="300" />
             </td>
           </tr>
         </table>
