@@ -111,6 +111,7 @@ export default {
       if (typeof this.printCopies !== 'undefined') {
         this.LODOP.SET_PRINT_COPIES(this.printCopies); // 指定打印份数
       }
+      // ADD_PRINT_TABLE -> 分页时可固定 页眉/页脚
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
       !this.directPrint ? this.LODOP.PREVIEW() : this.LODOP.PRINT(); // 直接打印
     },
