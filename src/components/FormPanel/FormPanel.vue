@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 18:11:41
+ * @Last Modified time: 2020-03-14 14:31:07
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -975,6 +975,13 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             clearable={clearable}
+            on-visible-change={visible => {
+              if (filterable && !visible) {
+                setTimeout(() => {
+                  this.filterMethodHandle(fieldName);
+                }, 300);
+              }
+            }}
             onChange={val => {
               const { text } = itemList.find(x => x.value === val) || {};
               change(val, !multiple ? text : undefined);
