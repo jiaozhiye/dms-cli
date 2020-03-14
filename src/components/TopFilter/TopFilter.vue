@@ -605,12 +605,13 @@ export default {
           }
         }
       ];
+      const cls = [`range-date`, { [`disabled`]: disabled }];
       let startVal;
       let endVal;
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <div class="range-date" style={{ ...style }}>
+          <div class={cls} style={{ ...style }}>
             <el-date-picker
               ref={`${fieldName}-start`}
               type={dateType.replace('exact', '').slice(0, -5)}
@@ -1211,6 +1212,10 @@ export default {
         display: flex;
         border: 1px solid @borderColor;
         border-radius: @borderRadius;
+        transition: border-color 0.3s ease;
+        &:hover:not(.disabled) {
+          border-color: @placeholderColor;
+        }
         .el-date-editor {
           input {
             border: 0 !important;
