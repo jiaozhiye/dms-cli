@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-12 20:18:13
+ * @Last Modified time: 2020-03-15 13:45:30
  */
 import _ from 'lodash';
 
@@ -301,4 +301,10 @@ export const formatNumber = (value = '') => {
     result = num + result;
   }
   return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+};
+
+// 数值类型校验
+export const validateNumber = val => {
+  const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+  return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
 };

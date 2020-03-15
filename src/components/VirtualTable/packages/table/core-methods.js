@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 13:34:45
+ * @Last Modified time: 2020-03-15 13:00:24
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -14,9 +14,17 @@ const throttleScrollYDuration = $browse['msie'] ? 20 : 10;
 export default {
   // 加载表格数据
   loadTableData() {
-    const { height, maxHeight, ellipsis, tableFullData } = this;
+    const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
     // 是否开启虚拟滚动
     this.scrollYLoad = tableFullData.length > 100;
+
+    if (this.__dataChange__) {
+      if (this.scrollYLoad) {
+        scrollYStore.startIndex = 0;
+        scrollYStore.visibleIndex = 0;
+      }
+      this.updateScrollYSpace('reset');
+    }
 
     if (this.scrollYLoad) {
       if (!(height || maxHeight)) {
@@ -52,8 +60,10 @@ export default {
     const scrollTop = ev.target.scrollTop;
     const toVisibleIndex = Math.ceil(scrollTop / rowHeight);
     let preload = false;
+
     if (scrollYStore.visibleIndex !== toVisibleIndex) {
       const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize);
+
       if (scrollYStore.visibleIndex > toVisibleIndex) {
         // 向上
         preload = toVisibleIndex - offsetSize <= startIndex;
@@ -67,24 +77,34 @@ export default {
           scrollYStore.startIndex = Math.max(0, Math.min(tableFullData.length - renderSize, toVisibleIndex - marginSize));
         }
       }
+
       if (preload) {
         this.updateScrollYData();
       }
+
       scrollYStore.visibleIndex = toVisibleIndex;
     }
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
-  updateScrollYSpace() {
+  updateScrollYSpace(type) {
     const { scrollYStore, tableFullData } = this;
     const { tableBody } = this.$refs;
-
-    const bodyHeight = tableFullData.length * scrollYStore.rowHeight;
-    const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0);
-
     const $tableBody = tableBody.$el.querySelector('.v-table--body');
     const $tableYSpaceElem = tableBody.$el.querySelector('.v-body--y-space');
 
-    $tableBody.style.transform = `translate3d(0, ${topSpaceHeight}px, 0)`;
+    // 重置 dom
+    if (type === 'reset') {
+      $tableBody.style.transform = '';
+      $tableYSpaceElem.style.height = '';
+      $tableBody.parentNode.scrollTop = 0;
+      return;
+    }
+
+    // 计算高度
+    const bodyHeight = tableFullData.length * scrollYStore.rowHeight;
+    const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0);
+
+    $tableBody.style.transform = `translateY(${topSpaceHeight}px)`;
     $tableYSpaceElem.style.height = `${bodyHeight}px`;
   },
   // 更新 Y 方向数据

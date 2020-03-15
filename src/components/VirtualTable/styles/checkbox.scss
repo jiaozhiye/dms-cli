@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 21:24:31
+ * @Last Modified time: 2020-03-15 14:37:29
  */
 .v-checkbox-wrapper {
   display: inline-block;
@@ -151,6 +151,10 @@
     & + span {
       color: $v-font-disabled-color;
     }
+  }
+
+  .v-checkbox-text {
+    margin-left: 6px;
   }
 }
 

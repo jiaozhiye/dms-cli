@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 22:48:49
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 20:19:58
+ * @Last Modified time: 2020-03-15 14:36:14
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -73,13 +73,14 @@ export default {
       }
     ];
     const inputCls = [`v-radio-input`];
+    const textCls = [`v-radio-text`];
     return (
       <label class={wrapCls}>
         <span class={radioCls}>
           <span class={innerCls}></span>
           <input type="radio" class={inputCls} disabled={this.disabled} checked={this.currentValue} onChange={this.change} onFocus={this.onFocus} onBlur={this.onBlur} />
         </span>
-        {this.label && <span>{this.label}</span>}
+        {this.label && <span class={textCls}>{this.label}</span>}
       </label>
     );
   }

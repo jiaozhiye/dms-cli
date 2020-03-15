@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-07 22:36:37
+ * @Last Modified time: 2020-03-15 14:37:05
  */
 .v-radio-wrapper {
   display: inline-block;
@@ -119,6 +119,10 @@
     & + span {
       color: $v-font-disabled-color;
     }
+  }
+
+  .v-radio-text {
+    margin-left: 6px;
   }
 }
 

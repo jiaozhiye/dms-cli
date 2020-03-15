@@ -17,7 +17,7 @@ for (let i = 0; i < 330; i++) {
       age: 20,
       sex: '男'
     },
-    books: i + 1,
+    books: i >= 50 ? 50 : i + 1,
     hobby: '游泳, 篮球',
     email: 'xxx@qq.com',
     address: '长春'
@@ -52,7 +52,14 @@ export default {
             {
               title: '年龄',
               dataIndex: 'person.age',
-              width: 200
+              width: 200,
+              filter: {
+                type: 'checkbox',
+                items: [
+                  { text: '少年', value: 18 },
+                  { text: '青年', value: 20 }
+                ]
+              }
             },
             {
               title: '性别',
@@ -68,7 +75,7 @@ export default {
           sorter: true,
           width: 200,
           filter: {
-            type: 'text'
+            type: 'range-number'
           },
           summation: {
             unit: '个'

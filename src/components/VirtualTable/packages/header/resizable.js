@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 14:02:00
+ * @Last Modified time: 2020-03-15 12:54:17
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
 
@@ -60,6 +60,6 @@ export default {
         [`is--line`]: resizable && !bordered
       }
     ];
-    return <div class={resizableCls} onMousedown={this.resizeMousedown} />;
+    return <div class={resizableCls} onMousedown={this.resizeMousedown} onClick={ev => ev.stopPropagation()} />;
   }
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 18:26:24
+ * @Last Modified time: 2020-03-15 14:45:48
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -223,6 +223,24 @@ export default {
               return Number(filterVal) === cellVal;
             }
             return cellVal.toLowerCase().includes(filterVal.toString().toLowerCase());
+          }
+          if (type === 'number') {
+            return Number(filterVal) === cellVal;
+          }
+          if (type === 'range-number') {
+            const [minVal = -Infinity, maxVal = Infinity] = filterVal;
+            return cellVal >= Number(minVal) && cellVal <= Number(maxVal);
+          }
+          if (type === 'radio') {
+            return cellVal === filterVal;
+          }
+          if (type === 'checkbox') {
+            // 单元格的值是数组，说明是多选
+            if (Array.isArray(cellVal)) {
+              return filterVal.every(x => cellVal.includes(x));
+            } else {
+              return filterVal.includes(cellVal);
+            }
           }
           return true;
         });

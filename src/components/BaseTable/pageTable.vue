@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-12 20:32:51
+ * @Last Modified time: 2020-03-15 13:17:21
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -850,7 +850,7 @@ export default {
               labelClassName={x.editRequired ? 'is-required' : ''}
               className={x.className}
               showOverflowTooltip={x.showOverflowTooltip}
-              sortable={this.boolServerSorter || x.sorter ? 'custom' : false}
+              sortable={x.sorter ? 'custom' : false}
               {...wrapProps}
             >
               {Array.isArray(x.children) && this.createTableColumns(x.children)}

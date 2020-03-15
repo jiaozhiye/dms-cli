@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 15:20:28
+ * @Last Modified time: 2020-03-15 13:01:22
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -162,9 +162,12 @@ export default {
       this.tableFullData = [...val];
       this.tableOriginData = [...val];
     },
-    tableFullData() {
+    tableFullData(next, prev) {
+      // 数据变化的状态变量
+      this.__dataChange__ = next.length !== prev.length;
       this.loadTableData().then(() => {
         this.doLayout();
+        this.__dataChange__ = !1;
       });
     },
     flattenColumns() {
