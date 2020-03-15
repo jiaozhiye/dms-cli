@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 15:51:12
+ * @Last Modified time: 2020-03-15 17:11:08
  */
 import Popper from '../popper';
 
@@ -213,6 +213,31 @@ export default {
               );
             })}
           </ul>
+        </div>
+      );
+    },
+    dateHandle(column) {
+      return (
+        <div style="padding-top: 6px">
+          <el-date-picker size="small" type="date" v-model={this.filterParams[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" clearable={false} placeholder="选择日期" />
+        </div>
+      );
+    },
+    [`range-dateHandle`](column) {
+      return (
+        <div style="padding-top: 6px">
+          <el-date-picker
+            size="small"
+            type="daterange"
+            v-model={this.filterParams[this.dataKey]}
+            unlink-panels={true}
+            style={{ width: '200px' }}
+            value-format="yyyy-MM-dd"
+            clearable={false}
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
         </div>
       );
     }

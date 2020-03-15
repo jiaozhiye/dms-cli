@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 14:45:48
+ * @Last Modified time: 2020-03-15 16:31:21
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
+import moment from 'moment';
 
 import { convertToRows, getCellValue, isEmpty } from '../utils';
 
@@ -238,9 +239,15 @@ export default {
             // 单元格的值是数组，说明是多选
             if (Array.isArray(cellVal)) {
               return filterVal.every(x => cellVal.includes(x));
-            } else {
-              return filterVal.includes(cellVal);
             }
+            return filterVal.includes(cellVal);
+          }
+          if (type === 'date') {
+            return moment(cellVal, 'YYYY-MM-DD').diff(moment(filterVal), 'days') === 0;
+          }
+          if (type === 'range-date') {
+            // 是否在时间范围内
+            return moment(cellVal, 'YYYY-MM-DD').isBetween(filterVal[0], filterVal[1], null, '[]');
           }
           return true;
         });

@@ -14,9 +14,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 00:22:40
+ * @Last Modified time: 2020-03-15 17:10:01
  */
 import Popper from './popper.js';
+import config from '../config';
 
 function on(element, event, handler) {
   if (element && event && handler) {
@@ -32,6 +33,7 @@ function off(element, event, handler) {
 
 export default {
   name: 'Popper',
+
   props: {
     tagName: {
       type: String,
@@ -111,6 +113,13 @@ export default {
       }
     };
   },
+
+  computed: {
+    rootElement() {
+      return document.getElementById(config.appRootId) || document.body;
+    }
+  },
+
   watch: {
     showPopper(value) {
       if (value) {
@@ -155,12 +164,12 @@ export default {
       case 'clickToOpen':
         on(this.referenceElm, 'click', this.doShow);
         on(document, 'click', this.handleDocumentClick);
-        on(document, 'mousedown', this.handleDocumentClick);
+        on(this.rootElement, 'mousedown', this.handleDocumentClick);
         break;
       case 'clickToToggle':
         on(this.referenceElm, 'click', this.doToggle);
         on(document, 'click', this.handleDocumentClick);
-        on(document, 'mousedown', this.handleDocumentClick);
+        on(this.rootElement, 'mousedown', this.handleDocumentClick);
         break;
       case 'hover':
         on(this.referenceElm, 'mouseover', this.onMouseOver);
@@ -263,7 +272,7 @@ export default {
       off(this.referenceElm, 'mouseout', this.onMouseOut);
       off(this.referenceElm, 'mouseover', this.onMouseOver);
       off(document, 'click', this.handleDocumentClick);
-      off(document, 'mousedown', this.handleDocumentClick);
+      off(this.rootElement, 'mousedown', this.handleDocumentClick);
 
       this.showPopper = false;
       this.doDestroy();
