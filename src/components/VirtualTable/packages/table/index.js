@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 13:01:22
+ * @Last Modified time: 2020-03-16 12:24:59
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -10,7 +10,7 @@ import baseProps from './props';
 import config from '../config';
 import _ from 'lodash';
 
-import { columnsFlatMap, createFilterColumns, deepMapColumns, parseHeight, getScrollBarSize } from '../utils';
+import { columnsFlatMap, createFilterColumns, deepMapColumns, parseHeight, getScrollBarSize, browse } from '../utils';
 
 import columnsMixin from '../columns';
 import layoutMethods from './layout-methods';
@@ -23,6 +23,7 @@ import SpinLoading from '../spin';
 import EmptyContent from '../empty';
 
 const noop = () => {};
+const isIE = browse()['msie'];
 
 export default {
   name: 'Table',
@@ -102,7 +103,9 @@ export default {
       resizeState: {
         width: 0,
         height: 0
-      }
+      },
+      // 是否是 IE11
+      isIE: isIE
     };
   },
   computed: {

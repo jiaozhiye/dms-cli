@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 13:19:20
+ * @Last Modified time: 2020-03-16 12:38:07
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -69,6 +69,10 @@ export default {
     disabledRowKeys: PropTypes.array, // 禁止选中项的 key 数组
     onChange: PropTypes.func // 选中项发生变化时的回调
   }),
+  // 客户端排序
+  clientSorter: PropTypes.bool,
+  // 客户端筛选
+  clientFilter: PropTypes.bool,
   // columns 变化时的回调
   onColumnsChange: PropTypes.func
 };

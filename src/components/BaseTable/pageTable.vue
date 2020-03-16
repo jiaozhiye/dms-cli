@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 13:17:21
+ * @Last Modified time: 2020-03-16 09:31:29
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1680,7 +1680,7 @@ export default {
       return res;
     },
     // 新增行功能
-    addRowHandler(rows) {
+    addRowHandler(rows, dir = 'bottom') {
       rows = Array.isArray(rows) ? rows : [rows];
       rows.forEach(row => {
         if (typeof row !== 'object') return;
@@ -1693,11 +1693,12 @@ export default {
           _uid: this.createUidKey(),
           isNewRow: true
         });
-        this.list.push(newRow);
-        this.originData.push(newRow);
+        const funcName = dir === 'top' ? 'unshift' : 'push';
+        this.list[funcName](newRow);
+        this.originData[funcName](newRow);
         // 内存分页对备份数据的处理
         if (this.isMemoryPagination) {
-          this.backUpData.push(newRow);
+          this.backUpData[funcName](newRow);
         }
         // 记录新增行操作
         this.actionsLog.insert.push(newRow);
@@ -1707,7 +1708,11 @@ export default {
       if (rows.length && this.list.length) {
         this.$nextTick(() => {
           this.scrollLeftToPosition(0);
-          this.scrollTopToPosition(10000);
+          if (dir === 'top') {
+            this.scrollTopToPosition(0);
+          } else {
+            this.scrollTopToPosition(10000);
+          }
           this.resetRender();
         });
       }
@@ -1832,8 +1837,8 @@ export default {
       isToFirst && this.toFirstPage();
       this.getTableData();
     },
-    EXECUTE_INSERT(rows) {
-      this.addRowHandler(rows);
+    EXECUTE_INSERT(rows, dir) {
+      this.addRowHandler(rows, dir);
     },
     EXECUTE_DELETE(rows) {
       return this.deleteHandler(rows);

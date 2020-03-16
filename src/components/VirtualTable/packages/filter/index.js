@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 17:11:08
+ * @Last Modified time: 2020-03-16 13:59:20
  */
 import Popper from '../popper';
 
@@ -265,7 +265,7 @@ export default {
           onHide={this.popperVisibleHandle}
         >
           <div class={filterBtnCls} slot="reference">
-            <i class="v-icon--funnel" />
+            <i class="iconfont icon-filter-fill" />
           </div>
           <div class="v-popper">
             <div class="v-popper--content">{this.renderContent()}</div>

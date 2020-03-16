@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-10 13:32:11
+ * @Last Modified time: 2020-03-16 12:27:26
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -72,7 +72,8 @@ export default {
         getStickyLeft,
         getStickyRight,
         layout: { gutterWidth },
-        scrollY
+        scrollY,
+        isIE
       } = this.$$table;
       const { dataIndex, fixed, align } = column;
       const cls = [
@@ -83,14 +84,16 @@ export default {
           [`col--right`]: align === 'right',
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
+          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
         }
       ];
-      const stys = {
-        left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-        right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
-      };
+      const stys = !isIE
+        ? {
+            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
+            right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
+          }
+        : null;
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
           <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>

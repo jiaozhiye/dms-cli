@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 16:20:28
+ * @Last Modified time: 2020-03-16 12:27:40
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -105,7 +105,7 @@ export default {
       return rows;
     },
     renderColumn(column, cellIndex, row, rowIndex, rowKey) {
-      const { sorter, leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis } = this.$$table;
+      const { sorter, leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, isIE } = this.$$table;
       const { dataIndex, fixed, align, className } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, cellIndex);
       const isEllipsis = ellipsis || column.ellipsis;
@@ -121,15 +121,17 @@ export default {
           [`v-column--sort`]: !!sorter[dataIndex],
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
+          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
           [className]: !!className
         }
       ];
-      const stys = {
-        left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-        right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
-      };
+      const stys = !isIE
+        ? {
+            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
+            right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
+          }
+        : null;
       const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, cellIndex) : this.cellStyle) : null;
       return (
         <td

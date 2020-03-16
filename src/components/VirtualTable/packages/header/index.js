@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 16:31:21
+ * @Last Modified time: 2020-03-16 14:12:33
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
 import moment from 'moment';
 
+import config from '../config';
 import { convertToRows, getCellValue, isEmpty } from '../utils';
 
 import Resizable from './resizable';
@@ -31,6 +32,14 @@ export default {
       ascend: this.sortDirections[0],
       descend: this.sortDirections[1]
     };
+  },
+  computed: {
+    isClientSorter() {
+      return _.isUndefined(this.$$table.clientSorter) ? config.clientSorter : this.$$table.clientSorter;
+    },
+    isClientFilter() {
+      return _.isUndefined(this.$$table.clientFilter) ? config.clientFilter : this.$$table.clientFilter;
+    }
   },
   watch: {
     thFilter(val) {
@@ -75,7 +84,8 @@ export default {
         getStickyRight,
         layout: { gutterWidth },
         resizable,
-        scrollY
+        scrollY,
+        isIE
       } = this.$$table;
       const { dataIndex, colSpan, rowSpan, fixed, align, sorter, orderBy, filter } = column;
       const cls = [
@@ -89,14 +99,16 @@ export default {
           [`v-column-sort`]: orderBy !== null,
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
+          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex
         }
       ];
-      const stys = {
-        left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-        right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
-      };
+      const stys = !isIE
+        ? {
+            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
+            right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
+          }
+        : null;
       const isResizable = resizable && dataIndex !== '__selection__';
       return (
         <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
@@ -127,15 +139,17 @@ export default {
     },
     renderSorter(order) {
       const ascCls = [
+        `iconfont`,
+        `icon-caret-up`,
         `v-sort--asc-btn`,
-        `v-icon--caret-top`,
         {
           [`sort--active`]: order === this.ascend
         }
       ];
       const descCls = [
+        `iconfont`,
+        `icon-caret-down`,
         `v-sort--desc-btn`,
-        `v-icon--caret-bottom`,
         {
           [`sort--active`]: order === this.descend
         }
@@ -161,7 +175,7 @@ export default {
     },
     // 表头排序
     sorterHandle() {
-      if (0) {
+      if (!this.isClientSorter) {
         this.serverSorter();
       } else {
         this.clientSorter();
@@ -199,7 +213,7 @@ export default {
     },
     // 表头筛选
     filterHandle() {
-      if (0) {
+      if (!this.isClientFilter) {
         this.serverFilter();
       } else {
         this.clientFilter();
@@ -246,7 +260,6 @@ export default {
             return moment(cellVal, 'YYYY-MM-DD').diff(moment(filterVal), 'days') === 0;
           }
           if (type === 'range-date') {
-            // 是否在时间范围内
             return moment(cellVal, 'YYYY-MM-DD').isBetween(filterVal[0], filterVal[1], null, '[]');
           }
           return true;

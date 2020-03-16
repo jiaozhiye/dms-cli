@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-14 14:31:07
+ * @Last Modified time: 2020-03-16 11:15:11
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -304,7 +304,7 @@ export default {
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, min = 0, max, step = 1, precision, readonly, disabled, change = () => {} } = option;
-      const [startVal, endVal] = form[fieldName];
+      const [startVal = min, endVal = max] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -848,7 +848,7 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 200 } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 200, change = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -862,6 +862,7 @@ export default {
             autosize={{ minRows: rows }}
             maxlength={maxlength}
             showWordLimit
+            onChange={change}
           />
         </el-form-item>
       );

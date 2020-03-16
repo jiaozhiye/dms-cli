@@ -172,7 +172,7 @@ http://localhost:8080/table
 
 - SET_TABLE_DATA{Function|设置表格数据，参数是数据列表的数组}
 - DO_REFRESH{Function|执行 table 组件的刷新动作，参数是 true/false(可选)，表示是否跳回第一页}
-- EXECUTE_INSERT{Function|执行插入列表行操作，参数是新增行的对象或数组}
+- EXECUTE_INSERT{Function|执行插入列表行操作，参数 1: 新增行的对象或数组，参数 2: 插入的位置 top/bottom，默认是 bottom}
 - EXECUTE_DELETE{Function|执行移除列表选中行的操作，参数是行数据的数组(可选)，返回值是移除行组成的数组}
 - EXECUTE_RESET_HEIGHT{Function|重新计算并设置 table 组件高度，没有参数}
 - SET_COLUMNS_EDITABLE{Function|动态设置 table 列的编辑状态，参数 1: dataIndex 或由 dataIndex 组成的数组，参数 2: 可编辑状态(true/false)}
