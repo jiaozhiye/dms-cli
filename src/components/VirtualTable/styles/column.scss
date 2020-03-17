@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 15:25:51
+ * @Last Modified time: 2020-03-17 19:25:33
  */
 .v-column-filter {
   display: inline-block;
@@ -13,7 +13,8 @@
       margin-right: 4px;
       font-size: 16px;
     }
-    &:hover {
+    &:hover,
+    &.selected {
       color: $v-primary-color;
     }
   }
@@ -26,7 +27,7 @@
     line-height: 26px;
     .v-handle {
       padding: 2px 4px;
-      cursor: move;
+      cursor: s-resize;
     }
     .fixed {
       position: absolute;

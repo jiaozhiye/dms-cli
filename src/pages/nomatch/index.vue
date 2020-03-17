@@ -110,7 +110,6 @@ export default {
       // console.log(pagination, filters, sorter, currentDataSource);
     },
     columnsChange(list) {
-      console.log(111, list);
       this.columns = list;
     }
   }

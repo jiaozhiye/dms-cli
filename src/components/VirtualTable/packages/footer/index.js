@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 12:27:26
+ * @Last Modified time: 2020-03-17 20:54:10
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -91,7 +91,7 @@ export default {
       const stys = !isIE
         ? {
             left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-            right: fixed === 'right' ? `${getStickyRight(dataIndex) + scrollY ? gutterWidth : 0}px` : null
+            right: fixed === 'right' ? `${getStickyRight(dataIndex) + (scrollY ? gutterWidth : 0)}px` : null
           }
         : null;
       return (

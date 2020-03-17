@@ -2,75 +2,91 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 16:40:17
+ * @Last Modified time: 2020-03-17 21:56:47
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
 import Checkbox from '../checkbox';
+
+import config from '../config';
 
 export default {
   name: 'ColumnFilter',
   props: ['columns'],
   inject: ['$$table'],
   data() {
+    this.dragOptions = { animation: 200 };
     return {
-      leftFixedColumns: this.columns.filter(column => column.fixed === 'left'),
-      rightFixedColumns: this.columns.filter(column => column.fixed === 'right'),
-      mainColumns: this.columns.filter(column => !column.fixed)
+      showPopper: false,
+      leftFixedColumns: [],
+      rightFixedColumns: [],
+      mainColumns: []
     };
   },
   computed: {
-    dragOptions() {
-      return {
-        animation: 200
-      };
-    },
     allColumns() {
       return [...this.leftFixedColumns, ...this.mainColumns, ...this.rightFixedColumns];
     }
   },
+  watch: {
+    columns() {
+      this.createColumns();
+    }
+  },
+  created() {
+    this.createColumns();
+  },
   methods: {
-    fixedHandle(column, dir) {
+    popperVisibleHandle({ showPopper }) {
+      this.showPopper = showPopper;
+    },
+    createColumns() {
+      this.leftFixedColumns = this.columns.filter(column => column.fixed === 'left');
+      this.rightFixedColumns = this.columns.filter(column => column.fixed === 'right');
+      this.mainColumns = this.columns.filter(column => !column.fixed);
+    },
+    fixedChangeHandle(column, dir) {
       column.fixed = dir;
+      this.createColumns();
       this.sortChangeHandle();
     },
-    cancelFixedHandle(dataIndex) {
-      const columns = [...this.leftFixedColumns, ...this.rightFixedColumns];
-      columns.find(column => column.dataIndex === dataIndex).fixed = undefined;
+    cancelFixedHandle(column) {
+      delete column.fixed;
+      this.createColumns();
       this.sortChangeHandle();
     },
     sortChangeHandle() {
       this.$$table.$emit('columnsChange', this.allColumns);
     },
-    renderListItem(x, type) {
+    renderListItem(column, type) {
       const cls = [`iconfont`, `icon-menu`, `v-handle`, [`${type}-handle`]];
       return (
-        <li key={x.dataIndex} class="item">
-          <Checkbox value={!x.hidden} onInput={val => (x.hidden = !val)} onChange={this.sortChangeHandle} />
-          <i class={cls} />
-          <span>{x.title}</span>
+        <li key={column.dataIndex} class="item">
+          <Checkbox value={!column.hidden} onInput={val => (column.hidden = !val)} onChange={this.sortChangeHandle} />
+          <i class={cls} title="拖动排序" />
+          <span>{column.title}</span>
           {type === 'main' ? (
             <span class="fixed">
-              <i class="iconfont icon-step-backward" title="固定左侧" onClick={() => this.fixedHandle(x, 'left')} />
-              <i class="iconfont icon-step-forward" title="固定右侧" onClick={() => this.fixedHandle(x, 'right')} />
+              <i class="iconfont icon-step-backward" title="固定左侧" onClick={() => this.fixedChangeHandle(column, 'left')} />
+              <i class="iconfont icon-step-forward" title="固定右侧" onClick={() => this.fixedChangeHandle(column, 'right')} />
             </span>
           ) : (
             <span class="fixed">
-              <i class="iconfont icon-close-circle" title="取消固定" onClick={() => this.cancelFixedHandle(x.dataIndex)} />
+              <i class="iconfont icon-close-circle" title="取消固定" onClick={() => this.cancelFixedHandle(column)} />
             </span>
           )}
         </li>
       );
     },
-    renderFilterWrap() {
-      const { leftFixedColumns, mainColumns, rightFixedColumns } = this;
+    renderColumnFilterWrap() {
+      const { leftFixedColumns, mainColumns, rightFixedColumns, dragOptions } = this;
       return (
         <div class="v-column-filter--wrap">
           <div class="left">
             <Draggable
               value={leftFixedColumns}
               handle=".left-handle"
-              options={this.dragOptions}
+              options={dragOptions}
               onInput={list => {
                 this.leftFixedColumns = list;
               }}
@@ -84,7 +100,7 @@ export default {
             <Draggable
               value={mainColumns}
               handle=".main-handle"
-              options={this.dragOptions}
+              options={dragOptions}
               onInput={list => {
                 this.mainColumns = list;
               }}
@@ -98,7 +114,7 @@ export default {
             <Draggable
               value={rightFixedColumns}
               handle=".right-handle"
-              options={this.dragOptions}
+              options={dragOptions}
               onInput={list => {
                 this.rightFixedColumns = list;
               }}
@@ -112,15 +128,31 @@ export default {
     }
   },
   render() {
+    const cls = [
+      `text`,
+      {
+        selected: this.showPopper
+      }
+    ];
     return (
       <div class="v-column-filter">
-        <Popper ref="vPopper" trigger="clickToToggle" root-class="v-popover--wrapper" transition="v-zoom-in-top" options={{ placement: 'bottom-end' }} visible-arrow={false} append-to-body={true}>
-          <span slot="reference" class="text">
+        <Popper
+          ref="vPopper"
+          trigger="clickToToggle"
+          root-class="v-popover--wrapper"
+          transition="v-zoom-in-top"
+          options={{ placement: 'bottom-end' }}
+          visible-arrow={false}
+          append-to-body={true}
+          onShow={this.popperVisibleHandle}
+          onHide={this.popperVisibleHandle}
+        >
+          <span slot="reference" class={cls}>
             <i class="iconfont icon-pic-right" />
-            列筛选排序
+            {config.columnFilterText}
           </span>
           <div class="v-popper">
-            <div class="v-popper--content">{this.renderFilterWrap()}</div>
+            <div class="v-popper--content">{this.renderColumnFilterWrap()}</div>
           </div>
         </Popper>
       </div>

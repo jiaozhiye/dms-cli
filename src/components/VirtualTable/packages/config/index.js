@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 12:47:50
+ * @Last Modified time: 2020-03-17 19:20:11
  */
 const config = {
   // Vue 应用，根节点 ID
@@ -18,7 +18,8 @@ const config = {
   clientSorter: true,
   // 客户端表头筛选
   clientFilter: true,
-  emptyText: '暂无数据...'
+  emptyText: '暂无数据...',
+  columnFilterText: '列筛选排序'
 };
 
 export default config;
