@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-12 15:31:26
+ * @Last Modified time: 2020-03-17 18:04:32
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -113,20 +113,21 @@ export default {
       }
       // ADD_PRINT_TABLE -> 分页时可固定 页眉/页脚
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
+      // this.LODOP.SET_PRINT_STYLEA(0, 'HtmWaitMilSecs', 100);
       !this.directPrint ? this.LODOP.PREVIEW() : this.LODOP.PRINT(); // 直接打印
     },
     createGlobalStyle(_html_) {
-      return css.style + _html_;
+      return css.style + '<body>' + _html_ + '</body>';
     },
     createPrintLogo(_html_) {
       const logoHtml = `
         <table>
           <tr>
-            <td width="50%" align="left" style="padding-top: 10px; padding-bottom: 10px;">
-              <img src="/static/img/logo_l.png" border="0" width="160" />
+            <td width="50%" align="left" style="padding: 16px;">
+              <img src="/static/img/logo_l.png" border="0" width="100" />
             </td>
-            <td width="50%" align="right" style="padding-top: 10px; padding-bottom: 10px;">
-              <img src="/static/img/logo_r.png" border="0" width="300" />
+            <td width="50%" align="right" style="padding: 16px;">
+              <img src="/static/img/logo_r.png" border="0" width="200" />
             </td>
           </tr>
         </table>
