@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:23:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 12:50:09
+ * @Last Modified time: 2020-03-17 22:12:08
  */
 import Sortable from './sortable';
 
@@ -475,9 +475,5 @@ const draggableComponent = {
     }
   }
 };
-
-if (typeof window !== 'undefined' && 'Vue' in window) {
-  window.Vue.component('draggable', draggableComponent);
-}
 
 export default draggableComponent;
