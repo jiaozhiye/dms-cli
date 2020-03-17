@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 09:31:29
+ * @Last Modified time: 2020-03-16 16:47:20
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -381,6 +381,7 @@ export default {
     createTableDataKey(dataList, uidkey) {
       const { current, pageSize } = this.pagination;
       dataList.forEach((x, i) => {
+        x.$index = i;
         x.index = (current - 1) * pageSize + i; // 序号
         x._uid = x[uidkey] || x._uid || this.createUidKey(); // 字段值唯一不重复的 key
         this.columnFlatMap(this.columns).forEach(column => {
@@ -1689,6 +1690,7 @@ export default {
         const lastRow = this.originData[this.originData.length - 1];
         const maxIndex = _.isUndefined(lastRow) ? -1 : lastRow.index;
         const newRow = Object.assign({}, target, {
+          $index: maxIndex + 1,
           index: maxIndex + 1,
           _uid: this.createUidKey(),
           isNewRow: true

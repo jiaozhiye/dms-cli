@@ -72,7 +72,5 @@ export default {
   // 客户端排序
   clientSorter: PropTypes.bool,
   // 客户端筛选
-  clientFilter: PropTypes.bool,
-  // columns 变化时的回调
-  onColumnsChange: PropTypes.func
+  clientFilter: PropTypes.bool
 };

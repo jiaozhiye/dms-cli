@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 12:24:59
+ * @Last Modified time: 2020-03-17 15:27:14
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -21,6 +21,7 @@ import TableBody from '../body';
 import TableFooter from '../footer';
 import SpinLoading from '../spin';
 import EmptyContent from '../empty';
+import ColumnFilter from '../column-filter';
 
 const noop = () => {};
 const isIE = browse()['msie'];
@@ -127,10 +128,10 @@ export default {
       return [this.pagination, this.filters, this.sorter, { currentDataSource: this.tableFullData }];
     },
     leftFixedColumns() {
-      return this.flattenColumns.filter(column => column.fixed === 'left');
+      return this.tableColumns.filter(column => column.fixed === 'left');
     },
     rightFixedColumns() {
-      return this.flattenColumns.filter(column => column.fixed === 'right');
+      return this.tableColumns.filter(column => column.fixed === 'right');
     },
     showFooter() {
       return this.flattenColumns.some(x => !!x.summation);
@@ -262,6 +263,7 @@ export default {
   render() {
     const {
       tableData,
+      columns,
       tableColumns,
       flattenColumns,
       size,
@@ -328,6 +330,11 @@ export default {
     };
     return (
       <SpinLoading spinning={showLoading} tip="Loading...">
+        <div>
+          <div class="fr">
+            <ColumnFilter columns={columns} />
+          </div>
+        </div>
         <div ref="v-table" class={vTableCls} style={tableStyles}>
           {/* 主要内容 */}
           <div class="v-table--main-wrapper">
