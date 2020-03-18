@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 16:47:20
+ * @Last Modified time: 2020-03-18 18:39:51
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -266,7 +266,7 @@ export default {
         // 两次请求的参数不等 && 有其他搜索条件变化，清空行选中
         !_.isEqual(nextProps, prevProps) && !onlyPageChange && this.clearSelectionHandle();
         // 请求数据
-        this.getTableData();
+        this.debounce(this.getTableData, 0)();
       }
     },
     columnKeysChange() {

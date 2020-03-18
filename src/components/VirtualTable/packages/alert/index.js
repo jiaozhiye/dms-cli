@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 15:16:14
+ * @Last Modified time: 2020-03-18 15:33:09
  */
 export default {
   name: 'TopInfo',
@@ -10,6 +10,12 @@ export default {
   computed: {
     total() {
       return this.$$table.tableFullData.length;
+    }
+  },
+  methods: {
+    clearHandle() {
+      // 清空列选中
+      this.$$table.clearRowSelection();
     }
   },
   render() {
@@ -20,7 +26,7 @@ export default {
         <span>
           总共 <strong>{this.total}</strong> 条数据，已选择 <strong>{selectionKeys.length}</strong> 项
         </span>
-        <button>清空</button>
+        <button onClick={this.clearHandle}>清空</button>
       </div>
     );
   }

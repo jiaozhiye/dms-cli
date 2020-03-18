@@ -35,7 +35,8 @@ export default {
           title: '序号',
           dataIndex: 'id',
           width: 80,
-          fixed: 'left'
+          fixed: 'left',
+          sorter: true
         },
         {
           title: '个人信息',

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 13:00:24
+ * @Last Modified time: 2020-03-18 15:31:47
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -128,5 +128,9 @@ export default {
         this.updateScrollYData();
       }
     });
+  },
+  // 清空列选中
+  clearRowSelection() {
+    this.selectionKeys = [];
   }
 };
