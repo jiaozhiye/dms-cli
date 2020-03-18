@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 15:31:47
+ * @Last Modified time: 2020-03-18 21:26:39
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -132,5 +132,13 @@ export default {
   // 清空列选中
   clearRowSelection() {
     this.selectionKeys = [];
+  },
+  // 清空表头排序
+  clearTableSorter() {
+    this.$refs[`tableHeader`].clearTheadSorter();
+  },
+  // 清空表头筛选
+  clearTableFilter() {
+    this.$refs[`tableHeader`].clearTheadFilter();
   }
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 15:33:09
+ * @Last Modified time: 2020-03-18 21:27:02
  */
 export default {
   name: 'TopInfo',
@@ -16,6 +16,10 @@ export default {
     clearHandle() {
       // 清空列选中
       this.$$table.clearRowSelection();
+      // 清空表头排序
+      this.$$table.clearTableSorter();
+      // 清空表头筛选
+      this.$$table.clearTableFilter();
     }
   },
   render() {

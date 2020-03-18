@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 20:53:33
+ * @Last Modified time: 2020-03-19 00:02:41
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -27,8 +27,8 @@ export default {
   data() {
     this.tableFilterData = [];
     return {
-      thFilter: {},
-      thSorter: {},
+      filters: {},
+      sorter: {},
       ascend: this.sortDirections[0],
       descend: this.sortDirections[1]
     };
@@ -42,11 +42,11 @@ export default {
     }
   },
   watch: {
-    thFilter(val) {
+    filters(val) {
       this.filterHandle();
       this.$$table.filters = this.formatFilterValue(val);
     },
-    thSorter(val) {
+    sorter(val) {
       this.sorterHandle();
       this.$$table.sorter = val;
     }
@@ -162,15 +162,21 @@ export default {
       );
     },
     renderFilter(column) {
-      return <THeadFilter column={column} />;
+      return <THeadFilter column={column} filters={this.filters} />;
     },
     thClickHandle(ev, column) {
       const { sorter, dataIndex } = column;
       if (sorter) {
         const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
+        // 取消其他排序
+        this.flattenColumns.forEach(x => {
+          if (!x.sorter || x.dataIndex === dataIndex) return;
+          x.orderBy = null;
+        });
         // 同步状态
         column.orderBy = order;
-        this.thSorter = Object.assign({}, { [dataIndex]: order });
+        // 设置排序值
+        this.sorter = Object.assign({}, { [dataIndex]: order });
       }
     },
     // 表头排序
@@ -185,18 +191,25 @@ export default {
     serverSorter() {},
     // 客户端排序
     clientSorter() {
-      const { tableOriginData } = this.$$table;
-      for (let key in this.thSorter) {
-        const order = this.thSorter[key];
+      for (let key in this.sorter) {
+        const order = this.sorter[key];
         const column = this.flattenColumns.find(column => column.dataIndex === key);
         if (!order) {
-          this.$$table.tableFullData = !this.tableFilterData.length ? [...tableOriginData] : this.tableFilterData;
+          this.doResetHandle();
         } else {
-          this.doSort(column, order);
+          this.doSortHandle(column, order);
         }
       }
+      if (!Object.keys(this.sorter).length) {
+        this.doResetHandle();
+      }
     },
-    doSort(column, order) {
+    // 还原数据
+    doResetHandle() {
+      this.$$table.tableFullData = !this.tableFilterData.length ? [...this.$$table.tableOriginData] : this.tableFilterData;
+    },
+    // 排序算法
+    doSortHandle(column, order) {
       const { dataIndex, sorter } = column;
       if (_.isFunction(sorter)) {
         this.$$table.tableFullData.sort(sorter);
@@ -225,11 +238,12 @@ export default {
     clientFilter() {
       const { tableOriginData } = this.$$table;
       const filterList = [];
-      for (let key in this.thFilter) {
+
+      for (let key in this.filters) {
         const [type, property] = key.split('|');
         const results = tableOriginData.filter(row => {
           const cellVal = getCellValue(row, property);
-          const filterVal = this.thFilter[key];
+          const filterVal = this.filters[key];
           if (isEmpty(filterVal)) {
             return true;
           }
@@ -266,7 +280,8 @@ export default {
         });
         filterList.push(results);
       }
-      if (!Object.keys(this.thFilter).length) {
+
+      if (!Object.keys(this.filters).length) {
         this.tableFilterData = [];
         this.$$table.tableFullData = [...tableOriginData];
       } else {
@@ -284,6 +299,18 @@ export default {
         result[key.split('|')[1]] = option[key];
       }
       return result;
+    },
+    // 清空表头排序
+    clearTheadSorter() {
+      this.flattenColumns.forEach(x => {
+        if (!x.sorter) return;
+        x.orderBy = null;
+      });
+      this.sorter = {};
+    },
+    // 清空表头筛选
+    clearTheadFilter() {
+      this.filters = {};
     }
   },
   render() {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 15:12:41
+ * @Last Modified time: 2020-03-18 23:56:22
  */
 import Popper from '../popper';
 
@@ -13,46 +13,61 @@ import Checkbox from '../checkbox';
 
 export default {
   name: 'THeadFilter',
-  props: ['column'],
+  props: ['column', 'filters'],
   inject: ['$$header'],
   data() {
-    this.arrayTypes = ['checkbox', 'range-number', 'date-range'];
+    this.arrayTypes = ['checkbox', 'range-number', 'range-date'];
     return {
       showPopper: false,
-      filterParams: this.initialFilterValue()
+      filterValues: this.initialFilterValue()
     };
   },
   computed: {
     dataKey() {
       const { dataIndex, filter } = this.column;
-      return Object.keys(this.filterParams)[0] || `${filter.type}|${dataIndex}`;
+      return Object.keys(this.filterValues)[0] || `${filter.type}|${dataIndex}`;
+    },
+    isValueEmpty() {
+      return isEmpty(this.filterValues[this.dataKey]);
     },
     isActived() {
-      return !isEmpty(this.$$header.thFilter[this.dataKey]);
+      return !isEmpty(this.filters[this.dataKey]);
+    }
+  },
+  watch: {
+    filters() {
+      // 非激活状态(此筛选项数据为空) -> 恢复初始值
+      if (!this.isActived) {
+        this.filterValues = this.initialFilterValue();
+      }
     }
   },
   methods: {
+    popperVisibleHandle({ showPopper }) {
+      this.showPopper = showPopper;
+    },
     initialFilterValue() {
       const { dataIndex, filter } = this.column;
       return { [`${filter.type}|${dataIndex}`]: this.arrayTypes.includes(filter.type) ? [] : undefined };
     },
-    popperVisibleHandle({ showPopper }) {
-      this.showPopper = showPopper;
-    },
     doFinish() {
-      const cloneFilter = { ...this.$$header.thFilter };
-      if (isEmpty(this.filterParams[this.dataKey])) {
-        this.filterParams = this.initialFilterValue();
-        delete cloneFilter[this.dataKey];
+      const cloneFilters = { ...this.filters };
+      const cloneFilterValues = { ...this.filterValues };
+      // 筛选值为空，移除该筛选属性
+      if (this.isValueEmpty) {
+        delete cloneFilters[this.dataKey];
+        delete cloneFilterValues[this.dataKey];
       }
-      this.$$header.thFilter = Object.assign({}, cloneFilter, this.filterParams);
+      // 设置父组件 filters 值
+      this.$$header.filters = Object.assign({}, cloneFilters, cloneFilterValues);
       this.$refs[`vPopper`].doClose();
     },
     doReset() {
-      if (!Object.keys(this.filterParams).length) {
+      if (this.isValueEmpty) {
         return this.$refs[`vPopper`].doClose();
       }
-      this.filterParams = this.initialFilterValue();
+      // 恢复初始值
+      this.filterValues = this.initialFilterValue();
       this.doFinish();
     },
     renderContent() {
@@ -86,7 +101,7 @@ export default {
       return (
         <div style="padding-top: 6px">
           <el-input
-            v-model={this.filterParams[this.dataKey]}
+            v-model={this.filterValues[this.dataKey]}
             placeholder={`搜索${title}`}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
@@ -103,10 +118,10 @@ export default {
       return (
         <div style="padding-top: 6px">
           <el-input
-            value={this.filterParams[this.dataKey]}
+            value={this.filterValues[this.dataKey]}
             onInput={val => {
               if (!validateNumber(val)) return;
-              this.filterParams[this.dataKey] = val;
+              this.filterValues[this.dataKey] = val;
             }}
             placeholder={`搜索${title}`}
             style={{ width: '180px' }}
@@ -120,23 +135,23 @@ export default {
       );
     },
     [`range-numberHandle`](column) {
-      const [startVal, endVal] = this.filterParams[this.dataKey];
+      const [startVal, endVal] = this.filterValues[this.dataKey];
       const setValue = arr => {
-        this.filterParams[this.dataKey] = arr.map(x => (x !== '' ? x : undefined));
+        this.filterValues[this.dataKey] = arr.every(x => isEmpty(x)) ? [] : arr.map(x => (x !== '' ? x : undefined));
       };
       return (
         <div style="padding-top: 6px; width: 200px;">
           <el-input
-            value={this.filterParams[this.dataKey][0]}
+            value={this.filterValues[this.dataKey][0]}
             onInput={val => {
               if (!validateNumber(val)) return;
-              setValue([val, this.filterParams[this.dataKey][1]]);
+              setValue([val, this.filterValues[this.dataKey][1]]);
             }}
             style={{ width: '93px' }}
             placeholder="开始值"
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
-                setValue([endVal, this.filterParams[this.dataKey][1]]);
+                setValue([endVal, this.filterValues[this.dataKey][1]]);
               }
             }}
             nativeOnKeydown={ev => {
@@ -147,17 +162,17 @@ export default {
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input
-            value={this.filterParams[this.dataKey][1]}
+            value={this.filterValues[this.dataKey][1]}
             onInput={val => {
               if (!validateNumber(val)) return;
-              setValue([this.filterParams[this.dataKey][0], val]);
+              setValue([this.filterValues[this.dataKey][0], val]);
             }}
             min={startVal}
             style={{ width: '93px' }}
             placeholder="结束值"
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
-                setValue([this.filterParams[this.dataKey][0], startVal]);
+                setValue([this.filterValues[this.dataKey][0], startVal]);
               }
             }}
             nativeOnKeydown={ev => {
@@ -176,7 +191,7 @@ export default {
           <ul>
             {filter.items.map(x => (
               <li style="marginTop: 4px">
-                <Radio v-model={this.filterParams[this.dataKey]} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
+                <Radio v-model={this.filterValues[this.dataKey]} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
               </li>
             ))}
           </ul>
@@ -187,7 +202,7 @@ export default {
       const {
         filter: { items = [] }
       } = column;
-      const results = this.filterParams[this.dataKey];
+      const results = this.filterValues[this.dataKey];
       return (
         <div>
           <ul>
@@ -199,9 +214,9 @@ export default {
                     value={prevValue}
                     onInput={val => {
                       if (val !== null) {
-                        this.filterParams[this.dataKey] = [...new Set([...results, val])];
+                        this.filterValues[this.dataKey] = [...new Set([...results, val])];
                       } else {
-                        this.filterParams[this.dataKey] = results.filter(x => x !== prevValue);
+                        this.filterValues[this.dataKey] = results.filter(x => x !== prevValue);
                       }
                     }}
                     trueValue={x.value}
@@ -219,7 +234,7 @@ export default {
     dateHandle(column) {
       return (
         <div style="padding-top: 6px">
-          <el-date-picker size="small" type="date" v-model={this.filterParams[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" clearable={false} placeholder="选择日期" />
+          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" clearable={false} placeholder="选择日期" />
         </div>
       );
     },
@@ -229,7 +244,7 @@ export default {
           <el-date-picker
             size="small"
             type="daterange"
-            v-model={this.filterParams[this.dataKey]}
+            v-model={this.filterValues[this.dataKey]}
             unlink-panels={true}
             style={{ width: '200px' }}
             value-format="yyyy-MM-dd"
