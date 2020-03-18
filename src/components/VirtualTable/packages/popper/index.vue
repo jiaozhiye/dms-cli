@@ -1,6 +1,6 @@
 <template>
   <component :is="tagName">
-    <transition :name="transition" :duration="300" @after-leave="doDestroy">
+    <transition :name="transition" :duration="200" @after-leave="doDestroy">
       <span v-show="!disabled && showPopper" ref="popper" :class="rootClass">
         <slot>{{ content }}</slot>
       </span>
@@ -14,7 +14,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 17:10:01
+ * @Last Modified time: 2020-03-18 14:49:18
  */
 import Popper from './popper.js';
 import config from '../config';

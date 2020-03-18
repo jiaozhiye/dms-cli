@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 13:59:20
+ * @Last Modified time: 2020-03-18 15:12:41
  */
 import Popper from '../popper';
 
@@ -125,14 +125,14 @@ export default {
         this.filterParams[this.dataKey] = arr.map(x => (x !== '' ? x : undefined));
       };
       return (
-        <div style="padding-top: 6px">
+        <div style="padding-top: 6px; width: 200px;">
           <el-input
             value={this.filterParams[this.dataKey][0]}
             onInput={val => {
               if (!validateNumber(val)) return;
               setValue([val, this.filterParams[this.dataKey][1]]);
             }}
-            style={{ width: '100px' }}
+            style={{ width: '93px' }}
             placeholder="开始值"
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
@@ -153,7 +153,7 @@ export default {
               setValue([this.filterParams[this.dataKey][0], val]);
             }}
             min={startVal}
-            style={{ width: '100px' }}
+            style={{ width: '93px' }}
             placeholder="结束值"
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
@@ -267,9 +267,7 @@ export default {
           <div class={filterBtnCls} slot="reference">
             <i class="iconfont icon-filter-fill" />
           </div>
-          <div class="v-popper">
-            <div class="v-popper--content">{this.renderContent()}</div>
-          </div>
+          <div class="v-popper">{this.renderContent()}</div>
         </Popper>
       </span>
     );

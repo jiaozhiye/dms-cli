@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:02:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-05 23:24:29
+ * @Last Modified time: 2020-03-18 10:23:48
  */
 %boxSizing {
   box-sizing: border-box;
@@ -21,4 +21,15 @@ body {
   line-height: 1.5;
   font-variant: tabular-nums;
   font-feature-settings: 'tnum';
+}
+
+.clearfix::after {
+  content: '';
+  height: 0;
+  visibility: hidden;
+  clear: both;
+  display: block;
+}
+.clearfix {
+  zoom: 1;
 }

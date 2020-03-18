@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 21:42:22
+ * @Last Modified time: 2020-03-18 13:37:34
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -21,6 +21,7 @@ import TableBody from '../body';
 import TableFooter from '../footer';
 import SpinLoading from '../spin';
 import EmptyContent from '../empty';
+import Alert from '../alert';
 import ColumnFilter from '../column-filter';
 
 const noop = () => {};
@@ -330,8 +331,11 @@ export default {
     };
     return (
       <SpinLoading spinning={showLoading} tip="Loading...">
-        <div>
-          <div class="fr">
+        <div class="v-table--top-wrapper">
+          <div>
+            <Alert />
+          </div>
+          <div>
             <ColumnFilter columns={columns} />
           </div>
         </div>

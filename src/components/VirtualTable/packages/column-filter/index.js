@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 21:56:47
+ * @Last Modified time: 2020-03-18 13:51:32
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -78,7 +78,7 @@ export default {
         </li>
       );
     },
-    renderColumnFilterWrap() {
+    renderColumnFilter() {
       const { leftFixedColumns, mainColumns, rightFixedColumns, dragOptions } = this;
       return (
         <div class="v-column-filter--wrap">
@@ -149,11 +149,9 @@ export default {
         >
           <span slot="reference" class={cls}>
             <i class="iconfont icon-pic-right" />
-            {config.columnFilterText}
+            <span>{config.columnFilterText}</span>
           </span>
-          <div class="v-popper">
-            <div class="v-popper--content">{this.renderColumnFilterWrap()}</div>
-          </div>
+          <div class="v-popper">{this.renderColumnFilter()}</div>
         </Popper>
       </div>
     );
