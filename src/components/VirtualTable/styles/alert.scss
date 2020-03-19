@@ -2,28 +2,30 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:26:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 15:09:38
+ * @Last Modified time: 2020-03-19 10:09:47
  */
 .v-alert {
   position: relative;
   height: 34px;
-  line-height: 32px;
+  line-height: 2.175;
   border: 1px solid $v-table-border-color;
   background-color: $v-table-header-background-color;
   border-radius: $v-border-radius;
-  padding: 0 5px 0 30px;
+  padding-left: 30px;
   .iconfont {
     position: absolute;
     left: 10px;
-    color: $v-primary-color;
+    top: 7px;
+    top: 8px\9;
     font-size: 16px;
-  }
-  button {
-    background-color: transparent;
-    border-color: transparent;
+    line-height: 1;
     color: $v-primary-color;
-    padding: 0 5px;
-    outline: none;
+  }
+
+  em {
+    color: $v-primary-color;
+    padding: 0 10px;
+    font-style: normal;
     cursor: pointer;
   }
 }

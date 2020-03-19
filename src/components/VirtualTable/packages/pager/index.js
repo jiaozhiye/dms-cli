@@ -1,0 +1,430 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-03-19 13:45:50
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-19 16:55:17
+ */
+export default {
+  name: 'Pager',
+  props: {
+    size: String,
+    // 自定义布局
+    layouts: { type: Array, default: () => ['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total'] },
+    // 当前页
+    currentPage: { type: Number, default: 1 },
+    // 每页大小
+    pageSize: { type: Number, default: 10 },
+    // 总条数
+    total: { type: Number, default: 0 },
+    // 显示页码按钮的数量
+    pagerCount: { type: Number, default: 7 },
+    // 每页大小选项列表
+    pageSizes: { type: Array, default: () => [10, 20, 30, 40, 50] },
+    // 列对其方式
+    align: { type: String, default: 'right' },
+    // 带背景颜色
+    background: { type: Boolean, default: true }
+  },
+  inject: ['$$table'],
+  computed: {
+    vSize() {
+      return this.size || this.$$table.size;
+    },
+    isSizes() {
+      return this.layouts.some(name => name === 'Sizes');
+    },
+    pageCount() {
+      return this.getPageCount(this.total, this.pageSize);
+    },
+    numList() {
+      const len = this.pageCount > this.pagerCount ? this.pagerCount - 2 : this.pagerCount;
+      const rest = [];
+      for (let index = 0; index < len; index++) {
+        rest.push(index);
+      }
+      return rest;
+    },
+    offsetNumber() {
+      return Math.floor((this.pagerCount - 2) / 2);
+    }
+  },
+  render(h) {
+    const { vSize, align } = this;
+    return h(
+      'div',
+      {
+        class: [
+          'v-pager',
+          {
+            [`size--${vSize}`]: vSize,
+            [`align--${align}`]: align,
+            'is--background': this.background
+          }
+        ]
+      },
+      [
+        h(
+          'div',
+          {
+            class: 'v-pager--wrapper'
+          },
+          this.layouts.map(name => this[`render${name}`](h))
+        )
+      ]
+    );
+  },
+  methods: {
+    // 上一页
+    renderPrevPage(h) {
+      return h(
+        'span',
+        {
+          class: [
+            'v-pager--prev-btn',
+            {
+              'is--disabled': this.currentPage <= 1
+            }
+          ],
+          attrs: {
+            title: '上一页'
+          },
+          on: {
+            click: this.prevPage
+          }
+        },
+        [
+          h('i', {
+            class: ['v-pager--btn-icon iconfont icon-left']
+          })
+        ]
+      );
+    },
+    // 向上翻页
+    renderPrevJump(h, tagName) {
+      return h(
+        tagName || 'span',
+        {
+          class: [
+            'v-pager--jump-prev',
+            {
+              'is--fixed': !tagName,
+              'is--disabled': this.currentPage <= 1
+            }
+          ],
+          attrs: {
+            title: '向上跳页'
+          },
+          on: {
+            click: this.prevJump
+          }
+        },
+        [
+          tagName
+            ? h(
+                'i',
+                {
+                  class: ['v-pager--jump-more']
+                },
+                '•••'
+              )
+            : null,
+          h('i', {
+            class: ['v-pager--jump-icon iconfont icon-doubleleft']
+          })
+        ]
+      );
+    },
+    // number
+    renderNumber(h) {
+      return h(
+        'ul',
+        {
+          class: 'v-pager--btn-wrapper'
+        },
+        this.renderPageBtn(h)
+      );
+    },
+    // jumpNumber
+    renderJumpNumber(h) {
+      return h(
+        'ul',
+        {
+          class: 'v-pager--btn-wrapper'
+        },
+        this.renderPageBtn(h, true)
+      );
+    },
+    // 向下翻页
+    renderNextJump(h, tagName) {
+      return h(
+        tagName || 'span',
+        {
+          class: [
+            'v-pager--jump-next',
+            {
+              'is--fixed': !tagName,
+              'is--disabled': this.currentPage >= this.pageCount
+            }
+          ],
+          attrs: {
+            title: '向下跳页'
+          },
+          on: {
+            click: this.nextJump
+          }
+        },
+        [
+          tagName
+            ? h(
+                'i',
+                {
+                  class: ['v-pager--jump-more']
+                },
+                '•••'
+              )
+            : null,
+          h('i', {
+            class: ['v-pager--jump-icon iconfont icon-doubleright']
+          })
+        ]
+      );
+    },
+    // 下一页
+    renderNextPage(h) {
+      return h(
+        'span',
+        {
+          class: [
+            'v-pager--next-btn',
+            {
+              'is--disabled': this.currentPage >= this.pageCount
+            }
+          ],
+          attrs: {
+            title: '下一页'
+          },
+          on: {
+            click: this.nextPage
+          }
+        },
+        [
+          h('i', {
+            class: ['v-pager--btn-icon iconfont icon-right']
+          })
+        ]
+      );
+    },
+    // sizes
+    renderSizes(h) {
+      return (
+        <el-select
+          size="mini"
+          class="v-pager--sizes"
+          value={this.pageSize}
+          onInput={val => {
+            this.pageSizeEvent(val);
+          }}
+        >
+          {this.pageSizes.map(x => (
+            <el-option key={x} label={`${x}条/页`} value={x} />
+          ))}
+        </el-select>
+      );
+    },
+    // FullJump
+    renderFullJump(h) {
+      return this.renderJump(h, true);
+    },
+    // Jump
+    renderJump(h, isFull) {
+      return h(
+        'span',
+        {
+          class: 'v-pager--jump'
+        },
+        [
+          isFull
+            ? h(
+                'span',
+                {
+                  class: 'v-pager--goto-text'
+                },
+                '前往'
+              )
+            : null,
+          h('input', {
+            class: 'v-pager--goto',
+            domProps: {
+              value: this.currentPage
+            },
+            attrs: {
+              type: 'text',
+              autocomplete: 'off'
+            },
+            on: {
+              keydown: this.jumpKeydownEvent,
+              blur: this.triggerJumpEvent
+            }
+          }),
+          isFull
+            ? h(
+                'span',
+                {
+                  class: 'v-pager--classifier-text'
+                },
+                '页'
+              )
+            : null
+        ]
+      );
+    },
+    // PageCount
+    renderPageCount(h) {
+      return h(
+        'span',
+        {
+          class: 'v-pager--count'
+        },
+        [
+          h('span', {
+            class: 'v-pager--separator'
+          }),
+          h('span', this.pageCount)
+        ]
+      );
+    },
+    // total
+    renderTotal(h) {
+      return h(
+        'span',
+        {
+          class: 'v-pager--total'
+        },
+        `共 ${this.total} 条`
+      );
+    },
+    // number
+    renderPageBtn(h, showJump) {
+      const { numList, currentPage, pageCount, pagerCount, offsetNumber } = this;
+      const nums = [];
+      const isOv = pageCount > pagerCount;
+      const isLt = isOv && currentPage > offsetNumber + 1;
+      const isGt = isOv && currentPage < pageCount - offsetNumber;
+      let startNumber = 1;
+      if (isOv) {
+        if (currentPage >= pageCount - offsetNumber) {
+          startNumber = Math.max(pageCount - numList.length + 1, 1);
+        } else {
+          startNumber = Math.max(currentPage - offsetNumber, 1);
+        }
+      }
+      if (showJump && isLt) {
+        nums.push(
+          h(
+            'li',
+            {
+              class: 'v-pager--num-btn',
+              on: {
+                click: () => this.jumpPage(1)
+              }
+            },
+            1
+          ),
+          this.renderPrevJump(h, 'li')
+        );
+      }
+      numList.forEach((item, index) => {
+        const number = startNumber + index;
+        if (number <= pageCount) {
+          nums.push(
+            h(
+              'li',
+              {
+                class: [
+                  'v-pager--num-btn',
+                  {
+                    'is--active': currentPage === number
+                  }
+                ],
+                on: {
+                  click: () => this.jumpPage(number)
+                },
+                key: number
+              },
+              number
+            )
+          );
+        }
+      });
+      if (showJump && isGt) {
+        nums.push(
+          this.renderNextJump(h, 'li'),
+          h(
+            'li',
+            {
+              class: 'v-pager--num-btn',
+              on: {
+                click: () => this.jumpPage(pageCount)
+              }
+            },
+            pageCount
+          )
+        );
+      }
+      return nums;
+    },
+    getPageCount(total, size) {
+      return Math.max(Math.ceil(total / size), 1);
+    },
+    prevPage() {
+      const currentPage = this.currentPage;
+      if (currentPage > 1) {
+        this.jumpPage(Math.max(currentPage - 1, 1));
+      }
+    },
+    nextPage() {
+      const { currentPage, pageCount } = this;
+      if (currentPage < pageCount) {
+        this.jumpPage(Math.min(currentPage + 1, pageCount));
+      }
+    },
+    prevJump() {
+      this.jumpPage(Math.max(this.currentPage - this.numList.length, 1));
+    },
+    nextJump() {
+      this.jumpPage(Math.min(this.currentPage + this.numList.length, this.pageCount));
+    },
+    jumpPage(currentPage) {
+      if (currentPage !== this.currentPage) {
+        this.$emit('update:currentPage', currentPage);
+        this.$emit('change', { type: 'current-change', pageSize: this.pageSize, currentPage });
+      }
+    },
+    pageSizeEvent(pageSize) {
+      this.changePageSize(pageSize);
+    },
+    changePageSize(pageSize) {
+      if (pageSize !== this.pageSize) {
+        this.$emit('update:pageSize', pageSize);
+        this.$emit('change', { type: 'size-change', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) });
+      }
+    },
+    jumpKeydownEvent(evnt) {
+      if (evnt.keyCode === 13) {
+        this.triggerJumpEvent(evnt);
+      } else if (evnt.keyCode === 38) {
+        evnt.preventDefault();
+        this.nextPage();
+      } else if (evnt.keyCode === 40) {
+        evnt.preventDefault();
+        this.prevPage();
+      }
+    },
+    triggerJumpEvent(evnt) {
+      const value = Number(evnt.target.value);
+      const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value;
+      evnt.target.value = current;
+      this.jumpPage(current);
+    }
+  }
+};

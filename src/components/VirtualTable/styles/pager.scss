@@ -1,0 +1,238 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-03-19 13:46:23
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-19 16:36:59
+ */
+.v-pager {
+  height: $v-table-row-height-default;
+  display: flex;
+  align-items: center;
+  font-size: $v-font-size;
+  color: $v-font-color;
+  text-align: right;
+  &.align--left {
+    text-align: left;
+  }
+  &.align--center {
+    text-align: center;
+  }
+  .v-pager--prev-btn,
+  .v-pager--next-btn,
+  .v-pager--num-btn,
+  .v-pager--jump-prev,
+  .v-pager--jump-next {
+    border: 1px solid transparent;
+  }
+  &.is--background {
+    .v-pager--prev-btn,
+    .v-pager--next-btn {
+      background-color: #f4f4f5;
+    }
+    .v-pager--jump-prev,
+    .v-pager--num-btn,
+    .v-pager--jump-next {
+      background-color: #f4f4f5;
+      &:hover {
+        color: $v-primary-color;
+      }
+      &.is--active {
+        color: #fff;
+        background-color: $v-primary-color;
+      }
+    }
+  }
+  &.size--medium {
+    font-size: $v-font-size-medium;
+    min-height: $v-table-row-height-medium;
+    .v-pager--count,
+    .size--content,
+    .v-pager--prev-btn,
+    .v-pager--next-btn,
+    .v-pager--jump-prev,
+    .v-pager--num-btn,
+    .v-pager--jump-next {
+      height: 28px;
+      line-height: 26px;
+    }
+    .v-pager--jump .v-pager--goto,
+    .v-pager--sizes > .v-input {
+      height: 28px;
+    }
+  }
+  &.size--small {
+    font-size: $v-font-size-small;
+    min-height: $v-table-row-height-small;
+    .v-pager--count,
+    .size--content,
+    .v-pager--prev-btn,
+    .v-pager--next-btn,
+    .v-pager--jump-prev,
+    .v-pager--num-btn,
+    .v-pager--jump-next {
+      height: 26px;
+      line-height: 24px;
+    }
+    .v-pager--jump .v-pager--goto,
+    .v-pager--sizes > .v-input {
+      height: 26px;
+    }
+  }
+  &.size--mini {
+    font-size: $v-font-size-mini;
+    min-height: $v-table-row-height-mini;
+    .v-pager--count,
+    .size--content,
+    .v-pager--prev-btn,
+    .v-pager--next-btn,
+    .v-pager--jump-prev,
+    .v-pager--num-btn,
+    .v-pager--jump-next {
+      height: 24px;
+      line-height: 22px;
+    }
+    .v-pager--jump .v-pager--goto,
+    .v-pager--sizes > .v-input {
+      height: 24px;
+    }
+  }
+  .v-pager--wrapper {
+    flex-grow: 1;
+  }
+  .v-pager--total,
+  .v-pager--prev-btn,
+  .v-pager--next-btn,
+  .v-pager--jump,
+  .v-pager--jump-prev,
+  .v-pager--jump-next,
+  .v-pager--count {
+    margin: 0 0.4em;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  .v-pager--prev-btn,
+  .v-pager--jump-prev,
+  .v-pager--num-btn,
+  .v-pager--jump-next,
+  .v-pager--next-btn {
+    cursor: pointer;
+  }
+  .v-pager--count,
+  .size--content,
+  .v-pager--prev-btn,
+  .v-pager--next-btn,
+  .v-pager--jump-prev,
+  .v-pager--num-btn,
+  .v-pager--jump-next {
+    height: 30px;
+    line-height: 28px;
+    display: inline-block;
+  }
+  .v-pager--jump .v-pager--goto,
+  .v-pager--sizes > .v-input {
+    height: 30px;
+  }
+  .v-pager--sizes > .v-select--panel .v-select-option {
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+  }
+  .v-pager--btn-wrapper {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    text-align: center;
+    .v-pager--jump-prev,
+    .v-pager--jump-next {
+      &:hover {
+        .v-pager--jump-more {
+          display: none;
+        }
+        .v-pager--jump-icon {
+          display: inline-block;
+        }
+      }
+    }
+    .v-pager--jump-icon {
+      display: none;
+    }
+  }
+  .v-pager--jump-prev,
+  .v-pager--prev-btn,
+  .v-pager--next-btn,
+  .v-pager--jump-next,
+  .v-pager--num-btn {
+    min-width: 2em;
+    text-align: center;
+    border-radius: $v-border-radius;
+    margin: 0 0.25em;
+    user-select: none;
+    &:hover,
+    &.is--active {
+      color: $v-primary-color;
+    }
+    &.is--disabled {
+      cursor: no-drop;
+      color: $v-font-disabled-color;
+      &:hover {
+        color: $v-font-disabled-color;
+      }
+    }
+  }
+  .v-pager--num-btn {
+    vertical-align: middle;
+    &.is--active {
+      font-weight: 700;
+      color: $v-primary-color;
+    }
+  }
+  .v-pager--btn-icon,
+  .v-pager--jump-icon {
+    margin-top: -2px;
+  }
+  .v-pager--sizes {
+    width: 7em;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+    & .v-input--inner {
+      text-align: center;
+    }
+  }
+  .v-pager--count {
+    min-width: 2em;
+    text-align: center;
+    & > span {
+      vertical-align: middle;
+    }
+    .v-pager--separator {
+      margin-right: 0.2em;
+      &:before {
+        content: '/';
+      }
+    }
+  }
+  .v-pager--jump .v-pager--goto {
+    border-radius: $v-border-radius;
+    border: 1px solid $v-table-border-color;
+    color: $v-font-color;
+    transition: border 0.2s ease-in-out;
+    &:focus {
+      border: 1px solid $v-primary-color;
+      outline: 0;
+    }
+  }
+  .v-pager--jump {
+    .v-pager--goto-text {
+      margin-right: 4px;
+    }
+    .v-pager--classifier-text {
+      margin-left: 4px;
+    }
+    .v-pager--goto {
+      width: 3.2em;
+      text-align: center;
+    }
+  }
+}

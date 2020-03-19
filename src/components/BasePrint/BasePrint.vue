@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 18:04:32
+ * @Last Modified time: 2020-03-19 11:15:37
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -124,10 +124,10 @@ export default {
         <table>
           <tr>
             <td width="50%" align="left" style="padding: 16px;">
-              <img src="/static/img/logo_l.png" border="0" width="100" />
+              <img src="/static/img/logo_l.png" border="0" width="120" />
             </td>
             <td width="50%" align="right" style="padding: 16px;">
-              <img src="/static/img/logo_r.png" border="0" width="200" />
+              <img src="/static/img/logo_r.png" border="0" width="240" height="36" />
             </td>
           </tr>
         </table>

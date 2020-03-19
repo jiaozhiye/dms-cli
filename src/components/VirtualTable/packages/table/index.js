@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 23:52:42
+ * @Last Modified time: 2020-03-19 16:55:42
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -23,6 +23,7 @@ import SpinLoading from '../spin';
 import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
+import Pager from '../pager';
 
 const noop = () => {};
 const isIE = browse()['msie'];
@@ -52,7 +53,7 @@ export default {
       // 表头排序
       sorter: {},
       // 分页
-      pagination: {},
+      pagination: { currentPage: 1, pageSize: 10 },
       // 页面是否加载中
       showLoading: this.loading,
       // 是否存在横向滚动条
@@ -254,6 +255,10 @@ export default {
       const { offsetWidth, offsetHeight } = this.$vTable;
       this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
     },
+    pagerChangeHandle({ currentPage, pageSize }) {
+      this.pagination.currentPage = currentPage;
+      this.pagination.pageSize = pageSize;
+    },
     renderBorderLine() {
       return this.bordered && <div class="v-table--border-line" />;
     },
@@ -285,7 +290,8 @@ export default {
       leftFixedColumns,
       rightFixedColumns,
       rowStyle,
-      cellStyle
+      cellStyle,
+      pagination
     } = this;
     const vTableCls = [
       `v-table`,
@@ -333,9 +339,13 @@ export default {
       <SpinLoading spinning={showLoading} tip="Loading...">
         <div class="v-table--top-wrapper">
           <div>
+            {/* 数据信息/清空 */}
             <Alert />
           </div>
           <div>
+            {/* 默认槽口 */}
+            {this.$slots[`default`]}
+            {/* 列定义 */}
             <ColumnFilter columns={columns} />
           </div>
         </div>
@@ -356,6 +366,8 @@ export default {
           {/* 列宽线 */}
           {this.renderResizableLine()}
         </div>
+        {/* 分页 */}
+        <Pager currentPage={pagination.currentPage} pageSize={pagination.pageSize} total={100} onChange={this.pagerChangeHandle} />
       </SpinLoading>
     );
   }

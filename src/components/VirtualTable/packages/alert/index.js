@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 21:27:02
+ * @Last Modified time: 2020-03-19 10:06:10
  */
 export default {
   name: 'TopInfo',
@@ -30,7 +30,7 @@ export default {
         <span>
           总共 <strong>{this.total}</strong> 条数据，已选择 <strong>{selectionKeys.length}</strong> 项
         </span>
-        <button onClick={this.clearHandle}>清空</button>
+        <em onClick={this.clearHandle}>清空</em>
       </div>
     );
   }

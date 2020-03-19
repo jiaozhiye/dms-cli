@@ -1,6 +1,8 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" @change="changeHandle" @columnsChange="columnsChange" />
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" @change="changeHandle" @columnsChange="columnsChange">
+      <span></span>
+    </VirtualTable>
   </div>
 </template>
 
