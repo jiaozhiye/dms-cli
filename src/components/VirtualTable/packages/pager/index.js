@@ -2,28 +2,32 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:45:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 16:55:17
+ * @Last Modified time: 2020-03-19 17:28:07
  */
+import PropTypes from '@/components/_utils/vue-types';
+import config from '../config';
+
 export default {
   name: 'Pager',
   props: {
-    size: String,
+    // 尺寸
+    size: PropTypes.string,
     // 自定义布局
-    layouts: { type: Array, default: () => ['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total'] },
+    layouts: PropTypes.array.def(['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']),
     // 当前页
-    currentPage: { type: Number, default: 1 },
+    currentPage: PropTypes.number.def(config.pagination.currentPage || 1),
     // 每页大小
-    pageSize: { type: Number, default: 10 },
+    pageSize: PropTypes.number.def(config.pagination.pageSize || 10),
     // 总条数
-    total: { type: Number, default: 0 },
+    total: PropTypes.number.def(0),
     // 显示页码按钮的数量
-    pagerCount: { type: Number, default: 7 },
+    pagerCount: PropTypes.number.def(7),
     // 每页大小选项列表
-    pageSizes: { type: Array, default: () => [10, 20, 30, 40, 50] },
+    pageSizes: PropTypes.array.def([10, 20, 30, 40, 50]),
     // 列对其方式
-    align: { type: String, default: 'right' },
+    align: PropTypes.string.def('right'),
     // 带背景颜色
-    background: { type: Boolean, default: true }
+    background: PropTypes.bool.def(true)
   },
   inject: ['$$table'],
   computed: {
