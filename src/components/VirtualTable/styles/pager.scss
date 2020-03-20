@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:46:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 16:36:59
+ * @Last Modified time: 2020-03-20 16:25:23
  */
 .v-pager {
   height: $v-table-row-height-default;
@@ -42,6 +42,7 @@
       }
     }
   }
+
   &.size--medium {
     font-size: $v-font-size-medium;
     min-height: $v-table-row-height-medium;
@@ -96,6 +97,7 @@
       height: 24px;
     }
   }
+
   .v-pager--wrapper {
     flex-grow: 1;
   }

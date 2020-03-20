@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 21:26:39
+ * @Last Modified time: 2020-03-20 17:30:45
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -36,6 +36,7 @@ export default {
     }
 
     this.handleTableData();
+    this.handleTableTotal();
     return this.computeScrollLoad();
   },
   // 处理渲染数据
@@ -43,6 +44,10 @@ export default {
     const { scrollYLoad, scrollYStore, tableFullData } = this;
     // 处理显示数据
     this.tableData = scrollYLoad ? tableFullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableFullData;
+  },
+  // 处理数据总数
+  handleTableTotal() {
+    this.total = this.tableFullData.length;
   },
   // 纵向 Y 可视渲染事件处理
   triggerScrollYEvent(ev) {

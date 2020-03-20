@@ -2,16 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 10:06:10
+ * @Last Modified time: 2020-03-20 17:34:16
  */
 export default {
-  name: 'TopInfo',
+  name: 'Alert',
   inject: ['$$table'],
-  computed: {
-    total() {
-      return this.$$table.tableFullData.length;
-    }
-  },
+  props: ['total'],
   methods: {
     clearHandle() {
       // 清空列选中

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 20:42:57
+ * @Last Modified time: 2020-03-20 17:23:17
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -40,6 +40,11 @@ export default {
   dataSource: PropTypes.array.def([]),
   // 服务端数据每条记录的 uuid
   rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).def('uid'),
+  // 数据请求接口
+  fetch: PropTypes.shape({
+    api: PropTypes.func.isRequired,
+    params: PropTypes.object
+  }),
   // 是否带有纵向边框
   border: PropTypes.bool.def(true),
   // 表格的高度
@@ -62,6 +67,8 @@ export default {
   cellStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   // 合并行或列的计算方法
   spanMethod: PropTypes.func,
+  // 分页
+  showPagination: PropTypes.bool.def(true),
   // 行选择
   rowSelection: PropTypes.shape({
     type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 多选/单选，checkbox/radio

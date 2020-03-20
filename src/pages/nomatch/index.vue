@@ -67,8 +67,7 @@ export default {
             {
               title: '性别',
               dataIndex: 'person.sex',
-              width: 200,
-              align: 'right'
+              width: 200
             }
           ]
         },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 16:55:42
+ * @Last Modified time: 2020-03-20 17:33:56
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -19,11 +19,12 @@ import coreMethods from './core-methods';
 import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
+import Pager from '../pager';
 import SpinLoading from '../spin';
 import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
-import Pager from '../pager';
+import FullScreen from '../full-screen';
 
 const noop = () => {};
 const isIE = browse()['msie'];
@@ -54,6 +55,8 @@ export default {
       sorter: {},
       // 分页
       pagination: { currentPage: 1, pageSize: 10 },
+      // 记录总数
+      total: 0,
       // 页面是否加载中
       showLoading: this.loading,
       // 是否存在横向滚动条
@@ -108,7 +111,9 @@ export default {
         height: 0
       },
       // 是否是 IE11
-      isIE: isIE
+      isIE: isIE,
+      // 全屏样式
+      isFullScreen: false
     };
   },
   computed: {
@@ -150,6 +155,13 @@ export default {
     shouldUpdateHeight() {
       return this.height || this.maxHeight;
     },
+    calcHeight() {
+      const pagerHeight = this.showPagination ? 48 : 0;
+      if (this.isFullScreen && this.shouldUpdateHeight) {
+        return window.innerHeight - 20 - this.$refs[`v-info`].offsetHeight - pagerHeight;
+      }
+      return null;
+    },
     tableStyles() {
       const style = {};
       const height = parseHeight(this.height);
@@ -159,6 +171,9 @@ export default {
       }
       if (maxHeight) {
         style.maxHeight = `${maxHeight}px`;
+      }
+      if (this.calcHeight) {
+        style.height = `${this.calcHeight}px`;
       }
       return style;
     }
@@ -268,6 +283,7 @@ export default {
   },
   render() {
     const {
+      isFullScreen,
       tableData,
       columns,
       tableColumns,
@@ -291,8 +307,10 @@ export default {
       rightFixedColumns,
       rowStyle,
       cellStyle,
-      pagination
+      pagination,
+      total
     } = this;
+    const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
     const vTableCls = [
       `v-table`,
       {
@@ -335,40 +353,56 @@ export default {
         flattenColumns
       }
     };
+    const pagerProps = {
+      ref: 'pager',
+      props: {
+        currentPage: pagination.currentPage,
+        pageSize: pagination.pageSize,
+        total
+      },
+      on: {
+        change: this.pagerChangeHandle
+      }
+    };
     return (
-      <SpinLoading spinning={showLoading} tip="Loading...">
-        <div class="v-table--top-wrapper">
+      <div class={vWrapperCls}>
+        {/* 表格信息 */}
+        <div ref="v-info" class="v-info--wrapper">
           <div>
-            {/* 数据信息/清空 */}
-            <Alert />
+            {/* 通知 */}
+            <Alert total={total} />
           </div>
           <div>
             {/* 默认槽口 */}
             {this.$slots[`default`]}
+            {/* 全屏 */}
+            <FullScreen />
             {/* 列定义 */}
             <ColumnFilter columns={columns} />
           </div>
         </div>
-        <div ref="v-table" class={vTableCls} style={tableStyles}>
-          {/* 主要内容 */}
-          <div class="v-table--main-wrapper">
-            {/* 头部 */}
-            <TableHeader {...tableHeaderProps} />
-            {/* 表格体 */}
-            <TableBody {...tableBodyProps} />
-            {/* 底部 */}
-            {showFooter && <TableFooter {...tableFooterProps} />}
+        <SpinLoading spinning={showLoading} tip="Loading...">
+          <div ref="v-table" class={vTableCls} style={tableStyles}>
+            {/* 主要内容 */}
+            <div class="v-table--main-wrapper">
+              {/* 头部 */}
+              <TableHeader {...tableHeaderProps} />
+              {/* 表格体 */}
+              <TableBody {...tableBodyProps} />
+              {/* 底部 */}
+              {showFooter && <TableFooter {...tableFooterProps} />}
+            </div>
+            {/* 边框线 */}
+            {this.renderBorderLine()}
+            {/* 空数据 */}
+            {!tableData.length && <EmptyContent />}
+            {/* 列宽线 */}
+            {this.renderResizableLine()}
           </div>
-          {/* 边框线 */}
-          {this.renderBorderLine()}
-          {/* 空数据 */}
-          {!tableData.length && <EmptyContent />}
-          {/* 列宽线 */}
-          {this.renderResizableLine()}
-        </div>
+        </SpinLoading>
         {/* 分页 */}
-        <Pager currentPage={pagination.currentPage} pageSize={pagination.pageSize} total={100} onChange={this.pagerChangeHandle} />
-      </SpinLoading>
+        <Pager {...pagerProps} />
+      </div>
     );
   }
 };
