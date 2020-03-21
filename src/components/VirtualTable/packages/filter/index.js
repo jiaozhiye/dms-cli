@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 23:56:22
+ * @Last Modified time: 2020-03-21 22:09:20
  */
 import Popper from '../popper';
 
@@ -190,7 +190,7 @@ export default {
         <div>
           <ul>
             {filter.items.map(x => (
-              <li style="marginTop: 4px">
+              <li style="marginTop: 8px">
                 <Radio v-model={this.filterValues[this.dataKey]} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
               </li>
             ))}
@@ -209,7 +209,7 @@ export default {
             {items.map(x => {
               const prevValue = results.includes(x.value) ? x.value : null;
               return (
-                <li style="marginTop: 4px">
+                <li style="marginTop: 8px">
                   <Checkbox
                     value={prevValue}
                     onInput={val => {

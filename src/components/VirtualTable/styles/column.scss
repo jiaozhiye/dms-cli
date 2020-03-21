@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 11:11:37
+ * @Last Modified time: 2020-03-21 22:19:36
  */
 .v-column-filter {
   display: inline-block;
@@ -26,7 +26,7 @@
   }
 }
 .v-column-filter--wrap {
-  padding: 2px 10px;
+  padding: 2px $v-module-distance;
   li.item {
     position: relative;
     height: 26px;

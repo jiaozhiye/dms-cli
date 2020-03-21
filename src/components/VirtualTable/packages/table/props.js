@@ -2,24 +2,27 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 17:23:17
+ * @Last Modified time: 2020-03-21 22:59:44
  */
 import PropTypes from '@/components/_utils/vue-types';
 
 const columnItem = {
   dataIndex: PropTypes.string.isRequired,
   title: PropTypes.any.isRequired,
-  width: PropTypes.number,
+  width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
   ellipsis: PropTypes.bool, // 超过宽度将自动省略
   className: PropTypes.string, // 列样式类名
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
+  // 列筛选
   filter: PropTypes.shape({
     type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
+  editRender: PropTypes.func, // 单元格编辑，参数: row, column, rowIndex, cellIndex; 返回值类型: object -> { type: string, items: array, editable: bool, rules: array }
   precision: PropTypes.number, // 数值类型字段的精度
+  // 数据字典
   dictList: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.string,
@@ -27,10 +30,12 @@ const columnItem = {
     })
   ),
   formatType: PropTypes.oneOf(['date', 'datetime', 'finance', 'secret-name', 'secret-phone']), // 字段的格式化类型
+  // 底部合计
   summation: PropTypes.shape({
     dataIndex: PropTypes.string, // 服务端合计的数据字段名，建议和 column 的 dataIndex 一致
     unit: PropTypes.string // 合计字段的单位
-  })
+  }),
+  render: PropTypes.func // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
 };
 
 export default {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 19:16:24
+ * @Last Modified time: 2020-03-21 21:52:54
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -68,11 +68,22 @@ export default {
       );
     },
     renderRows(columnRows) {
-      const { scrollY } = this.$$table;
+      const { scrollY, isIE, rightFixedColumns } = this.$$table;
+      const cls = [
+        `gutter`,
+        {
+          [`v-cell-fix-right`]: !!rightFixedColumns.length
+        }
+      ];
+      const stys = !isIE
+        ? {
+            right: !!rightFixedColumns.length ? 0 : null
+          }
+        : null;
       return columnRows.map((columns, rowIndex) => (
         <tr key={rowIndex} class="v-header--row">
           {columns.map((column, cellIndex) => this.renderColumn(column))}
-          {scrollY && <th class="gutter"></th>}
+          {scrollY && <th class={cls} style={stys}></th>}
         </tr>
       ));
     },

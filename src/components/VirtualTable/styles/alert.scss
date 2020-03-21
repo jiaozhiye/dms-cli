@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:26:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 10:09:47
+ * @Last Modified time: 2020-03-21 22:12:33
  */
 .v-alert {
   position: relative;
@@ -24,7 +24,7 @@
 
   em {
     color: $v-primary-color;
-    padding: 0 10px;
+    padding: 0 $v-module-distance;
     font-style: normal;
     cursor: pointer;
   }
