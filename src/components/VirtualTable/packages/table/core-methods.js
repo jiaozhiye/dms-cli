@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 17:30:45
+ * @Last Modified time: 2020-03-21 21:33:28
  */
 import { throttle, browse } from '../utils';
 import _ from 'lodash';
@@ -37,6 +37,7 @@ export default {
 
     this.handleTableData();
     this.handleTableTotal();
+
     return this.computeScrollLoad();
   },
   // 处理渲染数据

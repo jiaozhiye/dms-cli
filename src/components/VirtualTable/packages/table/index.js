@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 17:33:56
+ * @Last Modified time: 2020-03-21 21:28:54
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -187,7 +187,9 @@ export default {
       // 数据变化的状态变量
       this.__dataChange__ = next.length !== prev.length;
       this.loadTableData().then(() => {
-        this.doLayout();
+        if (this.__dataChange__) {
+          this.doLayout();
+        }
         this.__dataChange__ = !1;
       });
     },
@@ -214,11 +216,8 @@ export default {
     scrollX(val) {
       val && (this.isPingRight = val);
     },
-    height() {
-      this.updateElsHeight();
-    },
-    maxHeight() {
-      this.updateElsHeight();
+    isFullScreen() {
+      setTimeout(this.loadTableData);
     }
   },
   created() {
@@ -232,7 +231,7 @@ export default {
     this.initialResizeState();
   },
   destroyed() {
-    this.unbindEvents();
+    this.removeEvents();
   },
   methods: {
     ...layoutMethods,
@@ -323,8 +322,8 @@ export default {
         [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
-        [`table--ping-left`]: isPingLeft,
-        [`table--ping-right`]: isPingRight,
+        [`is--ping-left`]: isPingLeft,
+        [`is--ping-right`]: isPingRight,
         [`scroll--x`]: scrollX,
         [`scroll--y`]: scrollY,
         [`virtual--y`]: scrollYLoad

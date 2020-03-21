@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 12:54:17
+ * @Last Modified time: 2020-03-21 20:59:25
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
 
@@ -44,6 +44,7 @@ export default {
       document.onmouseup = function() {
         $vTable.classList.remove('c--resize');
         target.style.display = 'none';
+        // 重新渲染布局
         doLayout();
         this.onmousemove = null;
         this.onmouseup = null;
