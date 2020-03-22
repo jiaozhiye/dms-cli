@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 21:33:28
+ * @Last Modified time: 2020-03-22 16:51:17
  */
-import { throttle, browse } from '../utils';
+import { throttle, browse, getCellValue } from '../utils';
 import _ from 'lodash';
 
 const $browse = browse();
@@ -12,6 +12,29 @@ const isWebkit = $browse['webkit'];
 const throttleScrollYDuration = $browse['msie'] ? 20 : 10;
 
 export default {
+  // 创建表格数据
+  createTableData(list) {
+    const results = list.map((record, index) => {
+      record.index = index;
+      // 初始化数据
+      this.flattenColumns.forEach(column => {
+        const { dataIndex, precision } = column;
+        if (dataIndex === '__selection__') return;
+        const cellVal = getCellValue(record, dataIndex);
+        if (precision >= 0 && !isNaN(Number(cellVal))) {
+          _.set(record, dataIndex, Number(cellVal).toFixed(precision));
+        }
+      });
+      return record;
+    });
+
+    // 设置表格数据
+    this.tableFullData = [...results];
+    this.tableOriginData = [...results];
+
+    // 设置总记录数
+    this.setTableTotal();
+  },
   // 加载表格数据
   loadTableData() {
     const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
@@ -36,7 +59,6 @@ export default {
     }
 
     this.handleTableData();
-    this.handleTableTotal();
 
     return this.computeScrollLoad();
   },
@@ -46,9 +68,9 @@ export default {
     // 处理显示数据
     this.tableData = scrollYLoad ? tableFullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableFullData;
   },
-  // 处理数据总数
-  handleTableTotal() {
-    this.total = this.tableFullData.length;
+  // 设置数据总数
+  setTableTotal(total) {
+    this.total = typeof total === 'undefined' ? this.tableFullData.length : total;
   },
   // 纵向 Y 可视渲染事件处理
   triggerScrollYEvent(ev) {
@@ -134,6 +156,11 @@ export default {
         this.updateScrollYData();
       }
     });
+  },
+  // 分页事件
+  pagerChangeHandle({ currentPage, pageSize }) {
+    this.pagination.currentPage = currentPage;
+    this.pagination.pageSize = pageSize;
   },
   // 清空列选中
   clearRowSelection() {

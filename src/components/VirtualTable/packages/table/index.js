@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 11:28:07
+ * @Last Modified time: 2020-03-22 15:46:48
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -13,6 +13,7 @@ import _ from 'lodash';
 import { columnsFlatMap, createFilterColumns, getAllColumns, deepMapColumns, parseHeight, getScrollBarSize, browse } from '../utils';
 
 import columnsMixin from '../columns';
+import selectionMixin from '../selection/mixin';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
 
@@ -40,15 +41,15 @@ export default {
       $$table: this
     };
   },
-  mixins: [columnsMixin],
+  mixins: [columnsMixin, selectionMixin],
   data() {
     // 原始数据
-    this.tableOriginData = [...this.dataSource];
+    this.tableOriginData = [];
     return {
       // 渲染中的数据
       tableData: [],
-      // 完整数据
-      tableFullData: [...this.dataSource],
+      // 完整数据 - 重要
+      tableFullData: [],
       // 表头筛选
       filters: {},
       // 表头排序
@@ -183,8 +184,7 @@ export default {
   },
   watch: {
     dataSource(val) {
-      this.tableFullData = [...val];
-      this.tableOriginData = [...val];
+      this.createTableData(val);
     },
     tableFullData(next, prev) {
       // 数据变化的状态变量
@@ -224,6 +224,7 @@ export default {
     }
   },
   created() {
+    this.createTableData(this.dataSource);
     this.loadTableData().then(() => {
       this.doLayout();
     });
@@ -231,7 +232,7 @@ export default {
   mounted() {
     this.doLayout();
     this.bindEvents();
-    this.initialResizeState();
+    this.createResizeState();
   },
   destroyed() {
     this.removeEvents();
@@ -247,34 +248,6 @@ export default {
         return index;
       }
       return key;
-    },
-    createSelectionColumn(options) {
-      if (!options) {
-        return null;
-      }
-      const { type } = options;
-      return {
-        dataIndex: '__selection__',
-        title: type === 'radio' ? '#' : '',
-        width: 50,
-        fixed: 'left',
-        type
-      };
-    },
-    initialSelectionKeys(mark) {
-      if (!this.rowSelection) {
-        return [];
-      }
-      const result = this.rowSelection[mark] || [];
-      return this.rowSelection.type === 'radio' ? result.slice(0, 1) : result;
-    },
-    initialResizeState() {
-      const { offsetWidth, offsetHeight } = this.$vTable;
-      this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
-    },
-    pagerChangeHandle({ currentPage, pageSize }) {
-      this.pagination.currentPage = currentPage;
-      this.pagination.pageSize = pageSize;
     },
     renderBorderLine() {
       return this.bordered && <div class="v-table--border-line" />;
@@ -325,8 +298,8 @@ export default {
         [`is--empty`]: !tableData.length,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
-        [`is--ping-left`]: isPingLeft,
-        [`is--ping-right`]: isPingRight,
+        [`ping--left`]: isPingLeft,
+        [`ping--right`]: isPingRight,
         [`scroll--x`]: scrollX,
         [`scroll--y`]: scrollY,
         [`virtual--y`]: scrollYLoad

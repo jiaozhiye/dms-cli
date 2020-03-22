@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 19:16:51
+ * @Last Modified time: 2020-03-22 16:49:10
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -10,6 +10,7 @@ import { parseHeight, getCellValue } from '../utils';
 import _ from 'lodash';
 
 import Selection from '../selection';
+import CellEdit from '../edit';
 
 export default {
   name: 'TableBody',
@@ -53,7 +54,7 @@ export default {
   },
   methods: {
     scrollEvent(ev) {
-      const { scrollYLoad, $refs, layout } = this.$$table;
+      const { scrollYLoad, $refs, layout, triggerScrollYEvent } = this.$$table;
       const { tableHeader, tableFooter } = $refs;
       const { scrollTop: st, scrollLeft: sl } = ev.target;
       if (sl !== this.prevSL) {
@@ -67,7 +68,7 @@ export default {
         this.$$table.isPingRight = sl + layout.tableWidth < layout.tableBodyWidth;
       }
       if (scrollYLoad && st !== this.prevST) {
-        this.$$table.triggerScrollYEvent(ev);
+        triggerScrollYEvent(ev);
       }
       this.prevST = st;
       this.prevSL = sl;
@@ -86,28 +87,32 @@ export default {
       );
     },
     renderRows() {
-      const { selectionKeys } = this.$$table;
-      const rows = this.tableData.map((row, rowIndex) => {
-        const key = this.$$table.getRowKey(row, rowIndex);
+      const { getRowKey, tableFullData, selectionKeys } = this.$$table;
+      const rows = this.tableData.map(row => {
+        // 行记录 索引
+        // const rowIndex = tableFullData.findIndex(x => x === row);
+        const rowIndex = row.index;
+        // 行记录 rowKey
+        const rowKey = getRowKey(row, rowIndex);
         const extraStys = this.rowStyle ? (_.isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
         const cls = [
           `v-body--row`,
           {
-            [`v-body--row-selected`]: selectionKeys.includes(key)
+            [`v-body--row-selected`]: selectionKeys.includes(rowKey)
           }
         ];
         return (
-          <tr key={key} data-row-key={key} class={cls} style={extraStys}>
-            {this.flattenColumns.map((column, cellIndex) => this.renderColumn(column, cellIndex, row, rowIndex, key))}
+          <tr key={rowKey} data-row-key={rowKey} class={cls} style={extraStys}>
+            {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey))}
           </tr>
         );
       });
       return rows;
     },
-    renderColumn(column, cellIndex, row, rowIndex, rowKey) {
+    renderColumn(column, columnIndex, row, rowIndex, rowKey) {
       const { sorter, leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, isIE } = this.$$table;
       const { dataIndex, fixed, align, className } = column;
-      const { rowspan, colspan } = this.getSpan(row, column, rowIndex, cellIndex);
+      const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
       const isEllipsis = ellipsis || column.ellipsis;
       if (!rowspan || !colspan) {
         return null;
@@ -132,7 +137,7 @@ export default {
             right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
           }
         : null;
-      const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, cellIndex) : this.cellStyle) : null;
+      const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, columnIndex) : this.cellStyle) : null;
       return (
         <td
           key={dataIndex}
@@ -144,16 +149,23 @@ export default {
           onClick={ev => this.cellClickHandle(ev, row, column)}
           onDblclick={ev => this.cellDbclickHandle(ev, row, column)}
         >
-          <div class="v-cell">{this.renderCell(column, row, rowKey)}</div>
+          <div class="v-cell">{this.renderCell(column, row, rowIndex, columnIndex, rowKey)}</div>
         </td>
       );
     },
-    renderCell(column, row, rowKey) {
-      const { dataIndex } = column;
+    renderCell(column, row, rowIndex, columnIndex, rowKey) {
+      const { dataIndex, editRender, render } = column;
+      const text = getCellValue(row, dataIndex);
       if (dataIndex === '__selection__') {
         return <Selection column={column} record={row} rowKey={rowKey} />;
       }
-      return getCellValue(row, column.dataIndex);
+      if (_.isFunction(editRender)) {
+        return <CellEdit column={column} record={row} rowKey={rowKey} rowIndex={rowIndex} cellIndex={columnIndex} />;
+      }
+      if (_.isFunction(render)) {
+        return render(text, row, column, rowIndex, columnIndex);
+      }
+      return text;
     },
     getSpan(row, column, rowIndex, columnIndex) {
       let rowspan = 1;

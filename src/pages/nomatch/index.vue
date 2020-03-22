@@ -35,15 +35,17 @@ export default {
       columns: [
         {
           title: '序号',
-          dataIndex: 'id',
+          dataIndex: 'index',
           width: 80,
           fixed: 'left',
-          sorter: true
+          sorter: true,
+          render: text => {
+            return text + 1;
+          }
         },
         {
           title: '个人信息',
           dataIndex: 'person',
-          fixed: 'left',
           children: [
             {
               title: '姓名',
@@ -51,6 +53,9 @@ export default {
               width: 200,
               filter: {
                 type: 'text'
+              },
+              editRender: () => {
+                return { type: 'text', editable: true };
               }
             },
             {

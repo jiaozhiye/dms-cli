@@ -193,10 +193,10 @@
         pointer-events: none;
       }
     }
-    &.is--ping-left .v-cell-fix-left-last::after {
+    &.ping--left .v-cell-fix-left-last::after {
       box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.15);
     }
-    &.is--ping-right .v-cell-fix-right-first::after {
+    &.ping--right .v-cell-fix-right-first::after {
       box-shadow: inset -10px 0 8px -8px rgba(0, 0, 0, 0.15);
     }
   }
