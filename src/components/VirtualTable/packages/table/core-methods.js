@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 16:51:17
+ * @Last Modified time: 2020-03-22 17:02:32
  */
 import { throttle, browse, getCellValue } from '../utils';
 import _ from 'lodash';
@@ -27,17 +27,13 @@ export default {
       });
       return record;
     });
-
     // 设置表格数据
     this.tableFullData = [...results];
     this.tableOriginData = [...results];
-
-    // 设置总记录数
-    this.setTableTotal();
   },
   // 加载表格数据
   loadTableData() {
-    const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
+    const { height, maxHeight, ellipsis, scrollYStore, tableFullData, fetch } = this;
     // 是否开启虚拟滚动
     this.scrollYLoad = tableFullData.length > 100;
 
@@ -59,6 +55,7 @@ export default {
     }
 
     this.handleTableData();
+    !fetch && this.setRecordsTotal();
 
     return this.computeScrollLoad();
   },
@@ -69,7 +66,7 @@ export default {
     this.tableData = scrollYLoad ? tableFullData.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : tableFullData;
   },
   // 设置数据总数
-  setTableTotal(total) {
+  setRecordsTotal(total) {
     this.total = typeof total === 'undefined' ? this.tableFullData.length : total;
   },
   // 纵向 Y 可视渲染事件处理

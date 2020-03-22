@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 15:46:48
+ * @Last Modified time: 2020-03-22 17:13:43
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -187,7 +187,6 @@ export default {
       this.createTableData(val);
     },
     tableFullData(next, prev) {
-      // 数据变化的状态变量
       this.__dataChange__ = next.length !== prev.length;
       this.loadTableData().then(() => {
         if (this.__dataChange__) {
