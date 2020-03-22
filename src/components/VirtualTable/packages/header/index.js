@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 21:52:54
+ * @Last Modified time: 2020-03-22 13:35:32
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -82,15 +82,13 @@ export default {
         : null;
       return columnRows.map((columns, rowIndex) => (
         <tr key={rowIndex} class="v-header--row">
-          {columns.map((column, cellIndex) => this.renderColumn(column))}
+          {columns.map((column, cellIndex) => this.renderColumn(column, columns))}
           {scrollY && <th class={cls} style={stys}></th>}
         </tr>
       ));
     },
-    renderColumn(column) {
+    renderColumn(column, columns) {
       const {
-        leftFixedColumns,
-        rightFixedColumns,
         getStickyLeft,
         getStickyRight,
         layout: { gutterWidth },
@@ -99,6 +97,8 @@ export default {
         isIE
       } = this.$$table;
       const { dataIndex, colSpan, rowSpan, fixed, align, sorter, orderBy, filter } = column;
+      const leftFixedColumns = columns.filter(x => x.fixed === 'left');
+      const rightFixedColumns = columns.filter(x => x.fixed === 'right');
       const cls = [
         `v-header--column`,
         `col--ellipsis`,

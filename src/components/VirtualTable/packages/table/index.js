@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 21:28:54
+ * @Last Modified time: 2020-03-22 11:28:07
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -10,7 +10,7 @@ import baseProps from './props';
 import config from '../config';
 import _ from 'lodash';
 
-import { columnsFlatMap, createFilterColumns, deepMapColumns, parseHeight, getScrollBarSize, browse } from '../utils';
+import { columnsFlatMap, createFilterColumns, getAllColumns, deepMapColumns, parseHeight, getScrollBarSize, browse } from '../utils';
 
 import columnsMixin from '../columns';
 import layoutMethods from './layout-methods';
@@ -131,14 +131,17 @@ export default {
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
     },
+    allColumns() {
+      return getAllColumns(this.tableColumns);
+    },
     changeParams() {
       return [this.pagination, this.filters, this.sorter, { currentDataSource: this.tableFullData }];
     },
     leftFixedColumns() {
-      return this.tableColumns.filter(column => column.fixed === 'left');
+      return this.flattenColumns.filter(column => column.fixed === 'left');
     },
     rightFixedColumns() {
-      return this.tableColumns.filter(column => column.fixed === 'right');
+      return this.flattenColumns.filter(column => column.fixed === 'right');
     },
     showFooter() {
       return this.flattenColumns.some(x => !!x.summation);

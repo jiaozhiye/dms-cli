@@ -43,6 +43,7 @@ export default {
         {
           title: '个人信息',
           dataIndex: 'person',
+          fixed: 'left',
           children: [
             {
               title: '姓名',

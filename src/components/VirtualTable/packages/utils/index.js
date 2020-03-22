@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 13:45:30
+ * @Last Modified time: 2020-03-22 11:27:30
  */
 import _ from 'lodash';
 
@@ -33,8 +33,17 @@ export const createFilterColumns = columns => {
 export const deepMapColumns = (columns, callback) => {
   return columns.map(column => {
     if (column.children) {
+      // 处理 fixed
+      column.children.forEach(subColumn => {
+        if (column.fixed) {
+          subColumn.fixed = column.fixed;
+        } else {
+          delete subColumn.fixed;
+        }
+      });
       column.children = deepMapColumns(column.children);
     }
+    // 执行回调
     callback && callback(column);
     return column;
   });
@@ -57,6 +66,7 @@ export const deepFindColumn = (columns, mark) => {
   return result;
 };
 
+// 所有 columns
 export const getAllColumns = columns => {
   const result = [];
   columns.forEach(column => {
@@ -80,9 +90,15 @@ export const convertToRows = originColumns => {
         maxLevel = column.level;
       }
     }
+
     if (column.children) {
       let colSpan = 0;
       column.children.forEach(subColumn => {
+        if (column.fixed) {
+          subColumn.fixed = column.fixed;
+        } else {
+          delete subColumn.fixed;
+        }
         traverse(subColumn, column);
         colSpan += subColumn.colSpan;
       });

@@ -2,8 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 11:27:23
+ * @Last Modified time: 2020-03-22 13:42:05
  */
+import { deepFindColumn } from '../utils';
+
 const columnsMixin = {
   methods: {
     updateColumnsWidth() {
@@ -80,18 +82,20 @@ const columnsMixin = {
       this.layout.tableWidth = tableWidth;
     },
     getStickyLeft(key) {
+      let columns = this.flattenColumns;
       let l = 0;
-      for (let i = 0; i < this.flattenColumns.length; i++) {
-        const column = this.flattenColumns[i];
+      for (let i = 0; i < columns.length; i++) {
+        const column = columns[i];
         if (column.dataIndex === key) break;
         l += column.width || column.renderWidth;
       }
       return l;
     },
     getStickyRight(key) {
+      let columns = this.flattenColumns;
       let r = 0;
-      for (let i = this.flattenColumns.length - 1; i >= 0; i--) {
-        const column = this.flattenColumns[i];
+      for (let i = columns.length - 1; i >= 0; i--) {
+        const column = columns[i];
         if (column.dataIndex === key) break;
         r += column.width || column.renderWidth;
       }
