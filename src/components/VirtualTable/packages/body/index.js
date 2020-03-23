@@ -2,13 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 10:19:00
+ * @Last Modified time: 2020-03-23 16:16:42
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue } from '../utils';
 import config from '../config';
 import _ from 'lodash';
+
+import formatMixin from './format';
 
 import Selection from '../selection';
 import CellEdit from '../edit';
@@ -17,6 +19,12 @@ export default {
   name: 'TableBody',
   props: ['flattenColumns', 'tableData', 'rowStyle', 'cellStyle'],
   inject: ['$$table'],
+  provide() {
+    return {
+      $$body: this
+    };
+  },
+  mixins: [formatMixin],
   data() {
     this.prevST = 0;
     this.prevSL = 0;
@@ -172,7 +180,32 @@ export default {
       if (_.isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
       }
-      return text;
+      return this.renderText(text, column);
+    },
+    renderText(text, column) {
+      const { dictItems, formatType } = column;
+      const dicts = dictItems || [];
+      const target = dicts.find(x => x.value == text);
+      let result = target ? target.text : text;
+      // 数据是数组的情况
+      if (Array.isArray(text)) {
+        result = text
+          .map(x => {
+            let target = dicts.find(k => k.value == x);
+            return target ? target.text : x;
+          })
+          .join(',');
+      }
+      // 处理数据格式化
+      if (formatType) {
+        const render = this[`${formatType}Handle`];
+        if (!render) {
+          console.error('[Table]: 字段的格式化类型 `formatType` 配置不正确');
+        } else {
+          result = render(text);
+        }
+      }
+      return result;
     },
     getSpan(row, column, rowIndex, columnIndex) {
       let rowspan = 1;

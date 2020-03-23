@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 09:18:30
+ * @Last Modified time: 2020-03-23 15:03:38
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -20,10 +20,10 @@ const columnItem = {
     type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
-  editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object -> { type: string, items: array, editable: bool, rules: array }
+  editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object
   precision: PropTypes.number, // 数值类型字段的精度
   // 数据字典
-  dictList: PropTypes.arrayOf(
+  dictItems: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -37,6 +37,27 @@ const columnItem = {
   }),
   render: PropTypes.func // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
 };
+
+/**
+ * editRender: 返回值
+ * {
+ *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'date', 'datetime']),
+ *   items: PropTypes.arrayOf(PropTypes.shape({
+ *     text: PropTypes.string,
+ *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+ *   })),
+ *   editable: PropTypes.bool,
+ *   disabled: PropTypes.bool,
+ *   extra: PropTypes.object,
+ *   rules: PropTypes.arrayOf(PropTypes.shape({
+ *     required: PropTypes.bool,
+ *     message: PropTypes.string,
+ *     validator: PropTypes.func
+ *   })),
+ *   onInput: PropTypes.func,
+ *   onChange: PropTypes.func
+ * }
+ */
 
 export default {
   // 列配置

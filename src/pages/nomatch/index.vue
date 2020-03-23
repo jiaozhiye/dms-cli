@@ -20,9 +20,11 @@ for (let i = 0; i < 330; i++) {
       sex: '男'
     },
     books: i >= 50 ? 50 : i + 1,
-    hobby: '游泳, 篮球',
+    state: 1,
+    hobby: [1, 2],
     email: 'xxx@qq.com',
-    address: '长春'
+    address: '长春',
+    date: '2012-12-12 12:12:12'
   };
 }
 
@@ -54,21 +56,21 @@ export default {
               filter: {
                 type: 'text'
               },
-              editRender: () => {
-                return { type: 'text', editable: true };
+              editRender: row => {
+                return {
+                  type: 'text',
+                  editable: false,
+                  disabled: row.index === 2,
+                  extra: {
+                    maxlength: 8
+                  }
+                };
               }
             },
             {
               title: '年龄',
               dataIndex: 'person.age',
-              width: 200,
-              filter: {
-                type: 'checkbox',
-                items: [
-                  { text: '少年', value: 18 },
-                  { text: '青年', value: 20 }
-                ]
-              }
+              width: 200
             },
             {
               title: '性别',
@@ -85,18 +87,71 @@ export default {
           filter: {
             type: 'range-number'
           },
+          editRender: row => {
+            return {
+              type: 'number',
+              editable: false
+            };
+          },
           summation: {
             unit: '个'
           }
         },
         {
+          title: '状态',
+          dataIndex: 'state',
+          editRender: row => {
+            return {
+              type: 'checkbox',
+              editable: false,
+              extra: {
+                trueValue: 1,
+                falseValue: 0,
+                disabled: true
+              }
+            };
+          },
+          dictItems: [
+            { text: '选中', value: 1 },
+            { text: '非选中', value: 0 }
+          ]
+        },
+        {
           title: '爱好',
-          dataIndex: 'hobby'
+          dataIndex: 'hobby',
+          width: 200,
+          editRender: row => {
+            return {
+              type: 'select-multiple',
+              editable: false,
+              items: [
+                { text: '篮球', value: 1 },
+                { text: '足球', value: 2 }
+              ],
+              extra: {}
+            };
+          },
+          dictItems: [
+            { text: '篮球', value: 1 },
+            { text: '足球', value: 2 }
+          ]
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'date',
+          width: 200,
+          editRender: row => {
+            return {
+              type: 'datetime',
+              editable: false,
+              extra: {}
+            };
+          }
         },
         {
           title: '邮箱',
           dataIndex: 'email',
-          width: 300
+          width: 200
         },
         {
           title: '地址',
