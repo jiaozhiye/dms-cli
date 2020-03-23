@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 15:03:38
+ * @Last Modified time: 2020-03-23 16:57:31
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -47,8 +47,16 @@ const columnItem = {
  *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
  *   })),
  *   editable: PropTypes.bool,
- *   disabled: PropTypes.bool,
- *   extra: PropTypes.object,
+ *   disabled: PropTypes.bool, // 禁用可编辑的状态
+ *   extra: PropTypes.shape({
+ *     maxlength: PropTypes.number,
+ *     max: PropTypes.number,
+ *     min: PropTypes.number,
+ *     trueValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+ *     falseValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+ *     text: PropTypes.string,
+ *     disabled: PropTypes.bool // 表单禁用状态
+ *   }),
  *   rules: PropTypes.arrayOf(PropTypes.shape({
  *     required: PropTypes.bool,
  *     message: PropTypes.string,
