@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 16:49:10
+ * @Last Modified time: 2020-03-23 10:19:00
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue } from '../utils';
+import config from '../config';
 import _ from 'lodash';
 
 import Selection from '../selection';
@@ -19,7 +20,9 @@ export default {
   data() {
     this.prevST = 0;
     this.prevSL = 0;
-    return {};
+    return {
+      clicked: [] // 被点击单元格的坐标
+    };
   },
   computed: {
     bodyWidth() {
@@ -47,10 +50,12 @@ export default {
     }
   },
   mounted() {
-    this.event = addEventListener(this.$el, 'scroll', this.scrollEvent);
+    this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
+    this.event2 = addEventListener(document, 'click', this.clickEvent);
   },
   destroyed() {
-    this.event.remove();
+    this.event1.remove();
+    this.event2.remove();
   },
   methods: {
     scrollEvent(ev) {
@@ -73,6 +78,9 @@ export default {
       this.prevST = st;
       this.prevSL = sl;
     },
+    clickEvent() {
+      this.clicked = [];
+    },
     renderBodyYSpace() {
       return <div class="v-body--y-space" />;
     },
@@ -87,10 +95,9 @@ export default {
       );
     },
     renderRows() {
-      const { getRowKey, tableFullData, selectionKeys } = this.$$table;
+      const { getRowKey, selectionKeys } = this.$$table;
       const rows = this.tableData.map(row => {
         // 行记录 索引
-        // const rowIndex = tableFullData.findIndex(x => x === row);
         const rowIndex = row.index;
         // 行记录 rowKey
         const rowKey = getRowKey(row, rowIndex);
@@ -160,7 +167,7 @@ export default {
         return <Selection column={column} record={row} rowKey={rowKey} />;
       }
       if (_.isFunction(editRender)) {
-        return <CellEdit column={column} record={row} rowKey={rowKey} rowIndex={rowIndex} cellIndex={columnIndex} />;
+        return <CellEdit column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
       if (_.isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
@@ -184,7 +191,11 @@ export default {
       return { rowspan, colspan };
     },
     cellClickHandle(ev, row, column) {
-      if (column.dataIndex === '__selection__') return;
+      ev.stopPropagation();
+      const { getRowKey } = this.$$table;
+      const { dataIndex } = column;
+      if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
+      this.clicked = [getRowKey(row, row.index), dataIndex];
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {

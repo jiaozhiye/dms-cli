@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 11:27:30
+ * @Last Modified time: 2020-03-23 09:58:00
  */
 import _ from 'lodash';
 
@@ -300,6 +300,11 @@ export const isEmpty = val => {
 export const getCellValue = (record, dataIndex) => {
   const val = _.get(record, dataIndex, '');
   return _.isNull(val) ? '' : val;
+};
+
+// 设置单元格的数据
+export const setCellValue = (record, dataIndex, val = '') => {
+  _.set(record, dataIndex, val);
 };
 
 // 数字格式化

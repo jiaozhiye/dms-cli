@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 17:02:32
+ * @Last Modified time: 2020-03-23 10:09:33
  */
-import { throttle, browse, getCellValue } from '../utils';
+import { throttle, browse, getCellValue, setCellValue } from '../utils';
 import _ from 'lodash';
 
 const $browse = browse();
@@ -22,7 +22,7 @@ export default {
         if (dataIndex === '__selection__') return;
         const cellVal = getCellValue(record, dataIndex);
         if (precision >= 0 && !isNaN(Number(cellVal))) {
-          _.set(record, dataIndex, Number(cellVal).toFixed(precision));
+          setCellValue(record, dataIndex, Number(cellVal).toFixed(precision));
         }
       });
       return record;
@@ -47,10 +47,10 @@ export default {
 
     if (this.scrollYLoad) {
       if (!(height || maxHeight)) {
-        console.error('[Table]:必须设置组件参数 `height` 或 `maxHeight`');
+        console.error('[Table]: 必须设置组件参数 `height` 或 `maxHeight`');
       }
       if (!ellipsis) {
-        console.error('[Table]:必须设置组件参数 `ellipsis`');
+        console.error('[Table]: 必须设置组件参数 `ellipsis`');
       }
     }
 

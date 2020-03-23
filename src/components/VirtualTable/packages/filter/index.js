@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 22:09:20
+ * @Last Modified time: 2020-03-23 09:50:47
  */
 import Popper from '../popper';
 
@@ -74,7 +74,7 @@ export default {
       const { type } = this.column.filter;
       const renderFormItem = this[`${type}Handle`];
       if (!renderFormItem) {
-        console.error('[Table]:表头筛选的类型 `type` 配置不正确');
+        console.error('[Table]: 表头筛选的类型 `type` 配置不正确');
         return null;
       }
       return (

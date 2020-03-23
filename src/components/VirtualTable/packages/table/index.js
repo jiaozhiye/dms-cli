@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 17:13:43
+ * @Last Modified time: 2020-03-23 10:09:39
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -243,16 +243,10 @@ export default {
       const { rowKey } = this;
       const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {
-        console.error('[Table]:Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
+        console.error('[Table]: Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
         return index;
       }
       return key;
-    },
-    renderBorderLine() {
-      return this.bordered && <div class="v-table--border-line" />;
-    },
-    renderResizableLine() {
-      return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
     }
   },
   render() {

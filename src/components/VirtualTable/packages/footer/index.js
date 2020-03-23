@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 21:54:29
+ * @Last Modified time: 2020-03-23 10:00:09
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
-import { formatNumber } from '../utils';
+import { formatNumber, setCellValue } from '../utils';
 
 export default {
   name: 'TableFooter',
@@ -35,7 +35,7 @@ export default {
         }, 0);
         // 精度
         result = precision >= 0 ? result.toFixed(precision) : result;
-        _.set(res, dataIndex, `${formatNumber(result)} ${unit}`);
+        setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
       });
       return [res];
     }
