@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 16:57:31
+ * @Last Modified time: 2020-03-23 22:04:04
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -41,13 +41,13 @@ const columnItem = {
 /**
  * editRender: 返回值
  * {
- *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'date', 'datetime']),
+ *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'date', 'datetime']).isRequired,
  *   items: PropTypes.arrayOf(PropTypes.shape({
  *     text: PropTypes.string,
  *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
  *   })),
  *   editable: PropTypes.bool,
- *   disabled: PropTypes.bool, // 禁用可编辑的状态
+ *   disabled: PropTypes.bool, // true -> 强制为非编辑状态，切禁止切换
  *   extra: PropTypes.shape({
  *     maxlength: PropTypes.number,
  *     max: PropTypes.number,
@@ -68,8 +68,10 @@ const columnItem = {
  */
 
 export default {
-  // 列配置
+  // 列配置，必要参数
   columns: PropTypes.arrayOf(PropTypes.shape(columnItem).loose).def([]).isRequired,
+  // 列变化事件，必要参数
+  columnsChange: PropTypes.func.isRequired,
   // 数据数组
   dataSource: PropTypes.array.def([]),
   // 服务端数据每条记录的 uuid

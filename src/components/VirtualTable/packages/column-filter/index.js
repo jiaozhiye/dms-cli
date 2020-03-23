@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 09:26:45
+ * @Last Modified time: 2020-03-23 21:32:27
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -56,7 +56,8 @@ export default {
       this.sortChangeHandle();
     },
     sortChangeHandle() {
-      this.$$table.$emit('columnsChange', this.allColumns);
+      const { columnsChange } = this.$$table;
+      columnsChange && columnsChange(this.allColumns);
     },
     renderListItem(column, type) {
       const cls = [`iconfont`, `icon-menu`, `v-handle`, [`${type}-handle`]];

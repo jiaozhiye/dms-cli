@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 09:50:47
+ * @Last Modified time: 2020-03-23 22:00:27
  */
 import Popper from '../popper';
 
@@ -101,6 +101,7 @@ export default {
       return (
         <div style="padding-top: 6px">
           <el-input
+            size="small"
             v-model={this.filterValues[this.dataKey]}
             placeholder={`搜索${title}`}
             style={{ width: '180px' }}
@@ -118,6 +119,7 @@ export default {
       return (
         <div style="padding-top: 6px">
           <el-input
+            size="small"
             value={this.filterValues[this.dataKey]}
             onInput={val => {
               if (!validateNumber(val)) return;
@@ -142,6 +144,7 @@ export default {
       return (
         <div style="padding-top: 6px; width: 200px;">
           <el-input
+            size="small"
             value={this.filterValues[this.dataKey][0]}
             onInput={val => {
               if (!validateNumber(val)) return;
@@ -162,6 +165,7 @@ export default {
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input
+            size="small"
             value={this.filterValues[this.dataKey][1]}
             onInput={val => {
               if (!validateNumber(val)) return;

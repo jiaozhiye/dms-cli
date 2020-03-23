@@ -2,22 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-06 23:16:31
+ * @Last Modified time: 2020-03-23 21:43:32
  */
-.v-table {
-  .v-table--footer-wrapper {
+.v-table--footer-wrapper {
+  background-color: $v-table-footer-background-color;
+  .gutter {
     background-color: $v-table-footer-background-color;
-    .gutter {
-      background-color: $v-table-footer-background-color;
-    }
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 0;
-      z-index: 3;
-      border-top: 1px solid $v-table-border-color;
-    }
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    z-index: 3;
+    border-top: 1px solid $v-table-border-color;
   }
 }

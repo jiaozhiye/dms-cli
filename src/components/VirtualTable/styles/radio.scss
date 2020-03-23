@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 22:04:24
+ * @Last Modified time: 2020-03-23 22:22:13
  */
 .v-radio-wrapper {
   display: inline-block;
@@ -37,7 +37,7 @@
       border-radius: 50%;
       background-color: #fff;
       transition: all 0.3s ease;
-      &:after {
+      &::after {
         content: ' ';
         display: table;
         position: absolute;
@@ -96,7 +96,7 @@
     }
     .v-radio-inner {
       border-color: $v-primary-color;
-      &:after {
+      &::after {
         transform: scale(0.875);
         opacity: 1;
         transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
@@ -108,10 +108,15 @@
   .v-radio-disabled {
     cursor: not-allowed;
 
+    &::after {
+      animation-name: none;
+      display: none;
+    }
+
     .v-radio-inner {
       border-color: #d9d9d9;
       background-color: #f5f5f5;
-      &:after {
+      &::after {
         background-color: $v-font-disabled-color;
       }
     }

@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 17:05:00
+ * @Last Modified time: 2020-03-23 21:19:33
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
-import { parseHeight, getCellValue } from '../utils';
+import { parseHeight, getCellValue, contains } from '../utils';
 import config from '../config';
 import _ from 'lodash';
 
@@ -33,6 +33,9 @@ export default {
     };
   },
   computed: {
+    $vTableBody() {
+      return this.$el.querySelector('.v-table--body');
+    },
     bodyWidth() {
       const { layout, scrollY } = this.$$table;
       const { tableBodyWidth, gutterWidth } = layout;
@@ -86,7 +89,8 @@ export default {
       this.prevST = st;
       this.prevSL = sl;
     },
-    clickEvent() {
+    clickEvent({ target }) {
+      if (contains(this.$vTableBody, target)) return;
       this.clicked = [];
     },
     renderBodyYSpace() {
@@ -232,7 +236,8 @@ export default {
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {
-      if (column.dataIndex === '__selection__') return;
+      ev.stopPropagation();
+      if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
       this.$$table.$emit('rowDblclick', row, column, ev);
     }
   },

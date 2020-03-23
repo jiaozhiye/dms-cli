@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 16:55:02
+ * @Last Modified time: 2020-03-23 21:48:44
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -169,7 +169,7 @@ export default {
         console.error('[Table]: 单元格编辑的类型 `type` 配置不正确');
         return null;
       }
-      return <div>{render(this.record, this.column)}</div>;
+      return <div class="v-cell--edit">{render(this.record, this.column)}</div>;
     },
     renderCell() {
       const { record, column } = this;

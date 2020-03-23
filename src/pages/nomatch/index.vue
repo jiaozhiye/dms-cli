@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" @change="changeHandle" @columnsChange="columnsChange">
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" :columnsChange="columnsChange" @change="changeHandle">
       <span></span>
     </VirtualTable>
   </div>
@@ -46,6 +46,18 @@ export default {
           }
         },
         {
+          title: '创建时间',
+          dataIndex: 'date',
+          width: 200,
+          editRender: row => {
+            return {
+              type: 'datetime',
+              editable: false,
+              extra: {}
+            };
+          }
+        },
+        {
           title: '个人信息',
           dataIndex: 'person',
           children: [
@@ -62,7 +74,7 @@ export default {
                   editable: false,
                   disabled: row.index === 2,
                   extra: {
-                    maxlength: 8
+                    maxlength: 10
                   }
                 };
               }
@@ -100,6 +112,7 @@ export default {
         {
           title: '状态',
           dataIndex: 'state',
+          width: 200,
           editRender: row => {
             return {
               type: 'checkbox',
@@ -120,6 +133,13 @@ export default {
           title: '爱好',
           dataIndex: 'hobby',
           width: 200,
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '篮球', value: 1 },
+              { text: '足球', value: 2 }
+            ]
+          },
           editRender: row => {
             return {
               type: 'select-multiple',
@@ -135,18 +155,6 @@ export default {
             { text: '篮球', value: 1 },
             { text: '足球', value: 2 }
           ]
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'date',
-          width: 200,
-          editRender: row => {
-            return {
-              type: 'datetime',
-              editable: false,
-              extra: {}
-            };
-          }
         },
         {
           title: '邮箱',
@@ -172,8 +180,8 @@ export default {
     changeHandle(pagination, filters, sorter, { currentDataSource }) {
       // console.log(pagination, filters, sorter, currentDataSource);
     },
-    columnsChange(list) {
-      this.columns = list;
+    columnsChange(columns) {
+      this.columns = columns;
     }
   }
 };

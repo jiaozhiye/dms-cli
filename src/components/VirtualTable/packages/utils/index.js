@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 09:58:00
+ * @Last Modified time: 2020-03-23 21:10:18
  */
 import _ from 'lodash';
 
@@ -33,7 +33,7 @@ export const createFilterColumns = columns => {
 export const deepMapColumns = (columns, callback) => {
   return columns.map(column => {
     if (column.children) {
-      // 处理 fixed
+      // 处理列 fixed
       column.children.forEach(subColumn => {
         if (column.fixed) {
           subColumn.fixed = column.fixed;
@@ -165,7 +165,6 @@ export const getValueByPath = (object, prop) => {
   for (let i = 0, j = paths.length; i < j; i++) {
     const path = paths[i];
     if (!current) break;
-
     if (i === j - 1) {
       result = current[path];
       break;
@@ -210,8 +209,19 @@ export const getScrollBarSize = () => {
     document.body.removeChild(outer);
     cached = widthContained - widthScroll;
   }
-
   return cached;
+};
+
+// 判断元素是否为目标元素的后代
+export const contains = (root, target) => {
+  let node = target;
+  while (node) {
+    if (node === root) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
 };
 
 // 获取元素相对于 目标祖先元素 的位置
@@ -268,11 +278,8 @@ export const browse = () => {
 export const isEmpty = val => {
   // null or undefined
   if (val == null) return true;
-
   if (typeof val === 'boolean') return false;
-
   if (typeof val === 'number') return false;
-
   if (val instanceof Error) return val.message === '';
 
   switch (Object.prototype.toString.call(val)) {
@@ -280,7 +287,6 @@ export const isEmpty = val => {
     case '[object String]':
     case '[object Array]':
       return !val.length;
-
     // Map or Set or File
     case '[object File]':
     case '[object Map]':

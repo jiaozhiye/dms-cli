@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 22:04:29
+ * @Last Modified time: 2020-03-23 22:21:51
  */
 .v-checkbox-wrapper {
   display: inline-block;
@@ -38,7 +38,7 @@
       border-collapse: separate;
       background-color: #fff;
       transition: all 0.3s ease;
-      &:after {
+      &::after {
         content: ' ';
         display: table;
         position: absolute;
@@ -97,7 +97,7 @@
     .v-checkbox-inner {
       border-color: $v-primary-color;
       background-color: $v-primary-color;
-      &:after {
+      &::after {
         transform: rotate(45deg) scale(1) translate(-50%, -50%);
         opacity: 1;
         transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
@@ -111,7 +111,7 @@
       border-color: #d9d9d9;
       background-color: #fff;
 
-      &:after {
+      &::after {
         content: ' ';
         top: 50%;
         left: 50%;
@@ -127,7 +127,7 @@
     &.v-checkbox-disabled {
       .v-checkbox-inner {
         background-color: #f5f5f5;
-        &:after {
+        &::after {
           background-color: $v-font-disabled-color;
         }
       }
@@ -138,11 +138,15 @@
   .v-checkbox-disabled {
     cursor: not-allowed;
 
-    .v-checkbox-inner,
-    &.v-checkbox-checked .v-checkbox-inner {
+    &::after {
+      animation-name: none;
+      display: none;
+    }
+
+    .v-checkbox-inner {
       border-color: #d9d9d9;
       background-color: #f5f5f5;
-      &:after {
+      &::after {
         animation-name: none;
         border-color: $v-font-disabled-color;
       }
