@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:48:44
+ * @Last Modified time: 2020-03-24 10:23:52
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -31,6 +31,15 @@ export default {
       return `${this.rowKey}|${this.columnKey}`;
     }
   },
+  watch: {
+    clicked() {
+      if (!this.editable) return;
+      const { type } = this.options;
+      if (type === 'text' || type === 'number') {
+        setTimeout(() => this.$refs[type].select());
+      }
+    }
+  },
   methods: {
     textHandle(row, column) {
       const { dataIndex } = column;
@@ -38,6 +47,7 @@ export default {
       const prevValue = getCellValue(row, dataIndex);
       return (
         <el-input
+          ref="text"
           size="small"
           value={prevValue}
           maxlength={extra.maxlength}
@@ -59,6 +69,7 @@ export default {
       const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (
         <el-input
+          ref="number"
           size="small"
           value={prevValue}
           onInput={val => {

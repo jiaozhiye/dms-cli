@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:19:33
+ * @Last Modified time: 2020-03-24 10:15:37
  */
 import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -91,7 +91,7 @@ export default {
     },
     clickEvent({ target }) {
       if (contains(this.$vTableBody, target)) return;
-      this.clicked = [];
+      this.setClickedHandle([]);
     },
     renderBodyYSpace() {
       return <div class="v-body--y-space" />;
@@ -232,13 +232,18 @@ export default {
       const { getRowKey } = this.$$table;
       const { dataIndex } = column;
       if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
-      this.clicked = [getRowKey(row, row.index), dataIndex];
+      this.setClickedHandle([getRowKey(row, row.index), dataIndex]);
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {
       ev.stopPropagation();
+      const { dataIndex } = column;
       if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
       this.$$table.$emit('rowDblclick', row, column, ev);
+    },
+    setClickedHandle(arr) {
+      if (_.isEqual(arr, this.clicked)) return;
+      this.clicked = arr;
     }
   },
   render() {
