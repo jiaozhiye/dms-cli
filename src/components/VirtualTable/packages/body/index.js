@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 10:15:37
+ * @Last Modified time: 2020-03-24 13:07:13
  */
-import { mapState, mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
 import config from '../config';

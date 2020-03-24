@@ -2,10 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 13:42:05
+ * @Last Modified time: 2020-03-24 13:07:47
  */
-import { deepFindColumn } from '../utils';
-
 const columnsMixin = {
   methods: {
     updateColumnsWidth() {

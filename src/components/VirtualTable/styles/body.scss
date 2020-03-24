@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:57:58
+ * @Last Modified time: 2020-03-24 12:48:23
  */
 .v-cell--edit {
   .el-input__inner {
@@ -13,6 +13,16 @@
     width: 100%;
     .el-input__inner {
       padding-left: 30px;
+    }
+  }
+  &.is-error {
+    .el-input__inner {
+      border-color: $v-danger-color;
+    }
+    .cell-error {
+      font-size: 12px;
+      color: $v-danger-color;
+      line-height: 1;
     }
   }
 }

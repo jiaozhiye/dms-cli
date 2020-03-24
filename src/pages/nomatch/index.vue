@@ -75,7 +75,8 @@ export default {
                   disabled: row.index === 2,
                   extra: {
                     maxlength: 10
-                  }
+                  },
+                  rules: [{ required: true, message: '姓名不能为空' }]
                 };
               }
             },

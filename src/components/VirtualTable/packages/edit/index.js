@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 10:23:52
+ * @Last Modified time: 2020-03-24 15:17:59
  */
+import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
 import moment from 'moment';
-import { getCellValue, setCellValue } from '../utils';
+import { getCellValue, setCellValue, isEmpty } from '../utils';
 
 import Checkbox from '../checkbox';
 
@@ -16,10 +17,8 @@ export default {
   name: 'CellEdit',
   props: ['column', 'record', 'rowKey', 'columnKey', 'clicked'],
   inject: ['$$table', '$$body'],
-  data() {
-    return {};
-  },
   computed: {
+    ...mapState(['required', 'validate']),
     options() {
       return this.column.editRender(this.record, this.column);
     },
@@ -29,6 +28,17 @@ export default {
     },
     dataKey() {
       return `${this.rowKey}|${this.columnKey}`;
+    },
+    passValidate() {
+      return ![...this.required, ...this.validate].some(({ x, y }) => x === this.rowKey && y === this.columnKey);
+    },
+    requiredText() {
+      const { text } = this.required.find(({ x, y }) => x === this.rowKey && y === this.columnKey) || {};
+      return text;
+    },
+    validateText() {
+      const { text } = this.validate.find(({ x, y }) => x === this.rowKey && y === this.columnKey) || {};
+      return text;
     }
   },
   watch: {
@@ -41,9 +51,27 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addToRequired', 'removeFromRequired', 'addToValidate', 'removeFromValidate']),
+    createFieldValidate(rules, val) {
+      if (!Array.isArray(rules)) {
+        return console.error('[Table]: 可编辑单元格的校验规则 `rules` 配置不正确');
+      }
+      if (!rules.length) return;
+      const { rowKey, columnKey } = this;
+      this.removeFromRequired({ x: rowKey, y: columnKey });
+      this.removeFromValidate({ x: rowKey, y: columnKey });
+      rules.forEach(x => {
+        if (x.required && isEmpty(val)) {
+          this.addToRequired({ x: rowKey, y: columnKey, text: x.message });
+        }
+        if (_.isFunction(x.validator) && x.validator(val)) {
+          this.addToValidate({ x: rowKey, y: columnKey, text: x.message });
+        }
+      });
+    },
     textHandle(row, column) {
       const { dataIndex } = column;
-      const { extra = {}, onInput = noop, onChange = noop } = this.options;
+      const { extra = {}, rules = [], onInput = noop, onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       return (
         <el-input
@@ -56,6 +84,7 @@ export default {
             onInput({ [this.dataKey]: val }, row);
           }}
           onChange={val => {
+            this.createFieldValidate(rules, val);
             onChange({ [this.dataKey]: val }, row);
           }}
           disabled={extra.disabled}
@@ -64,7 +93,7 @@ export default {
     },
     numberHandle(row, column) {
       const { dataIndex, precision } = column;
-      const { extra = {}, onInput = noop, onChange = noop } = this.options;
+      const { extra = {}, rules = [], onInput = noop, onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (
@@ -91,6 +120,7 @@ export default {
             onInput({ [this.dataKey]: val }, row);
           }}
           onChange={val => {
+            this.createFieldValidate(rules, val);
             onChange({ [this.dataKey]: val }, row);
           }}
           disabled={extra.disabled}
@@ -180,7 +210,19 @@ export default {
         console.error('[Table]: 单元格编辑的类型 `type` 配置不正确');
         return null;
       }
-      return <div class="v-cell--edit">{render(this.record, this.column)}</div>;
+      const { passValidate, requiredText, validateText } = this;
+      const cls = [
+        `v-cell--edit`,
+        {
+          [`is-error`]: !passValidate
+        }
+      ];
+      return (
+        <div class={cls}>
+          {render(this.record, this.column)}
+          {!passValidate && <div class="cell-error">{requiredText || validateText}</div>}
+        </div>
+      );
     },
     renderCell() {
       const { record, column } = this;
@@ -189,6 +231,7 @@ export default {
     }
   },
   render() {
-    return this.editable ? this.renderEditCell() : this.renderCell();
+    const { editable, passValidate } = this;
+    return editable || !passValidate ? this.renderEditCell() : this.renderCell();
   }
 };

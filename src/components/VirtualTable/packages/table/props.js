@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 09:12:20
+ * @Last Modified time: 2020-03-24 15:18:00
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -47,7 +47,7 @@ const columnItem = {
  *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
  *   })),
  *   editable: PropTypes.bool,
- *   disabled: PropTypes.bool, // true -> 强制为非编辑状态，且禁止切换
+ *   disabled: PropTypes.bool, // true -> 禁用编辑功能，默认为非编辑状态，且禁止切换
  *   extra: PropTypes.shape({
  *     maxlength: PropTypes.number,
  *     max: PropTypes.number,
