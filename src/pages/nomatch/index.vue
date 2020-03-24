@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" height="400" :rowSelection="selection" :columnsChange="columnsChange" @change="changeHandle">
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" :height="height" :rowSelection="selection" :columnsChange="columnsChange" @change="changeHandle">
       <span></span>
     </VirtualTable>
   </div>
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       list: data,
+      height: 400,
       columns: [
         {
           title: '序号',
@@ -183,6 +184,9 @@ export default {
     },
     columnsChange(columns) {
       this.columns = columns;
+    },
+    clickHandle() {
+      this.height = 500;
     }
   }
 };

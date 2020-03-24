@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 22:00:27
+ * @Last Modified time: 2020-03-24 19:08:58
  */
 import Popper from '../popper';
 
@@ -63,7 +63,7 @@ export default {
       this.$refs[`vPopper`].doClose();
     },
     doReset() {
-      if (this.isValueEmpty) {
+      if (this.isValueEmpty && !this.isActived) {
         return this.$refs[`vPopper`].doClose();
       }
       // 恢复初始值

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 10:09:39
+ * @Last Modified time: 2020-03-24 21:59:29
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -167,19 +167,18 @@ export default {
       return null;
     },
     tableStyles() {
-      const style = {};
+      const { calcHeight } = this;
       const height = parseHeight(this.height);
       const maxHeight = parseHeight(this.maxHeight);
+      if (calcHeight) {
+        return { height: `${calcHeight}px` };
+      }
       if (height) {
-        style.height = `${height}px`;
+        return { height: `${height}px` };
       }
       if (maxHeight) {
-        style.maxHeight = `${maxHeight}px`;
+        return { maxHeight: `${maxHeight}px` };
       }
-      if (this.calcHeight) {
-        style.height = `${this.calcHeight}px`;
-      }
-      return style;
     }
   },
   watch: {
@@ -217,9 +216,6 @@ export default {
     },
     scrollX(val) {
       val && (this.isPingRight = val);
-    },
-    isFullScreen() {
-      setTimeout(this.loadTableData);
     }
   },
   created() {
