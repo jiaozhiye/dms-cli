@@ -84,7 +84,7 @@ export default {
     ul > li {
       padding: 10px 15px;
       line-height: 20px;
-      font-size: @textSizeSecondary;
+      font-size: @textSize;
       border-bottom: 1px solid @borderColorSecondary;
     }
     .no-info {
@@ -98,7 +98,7 @@ export default {
         display: inline-block;
         width: 100%;
         padding-top: 5px;
-        font-size: @textSizeSecondary;
+        font-size: @textSize;
       }
     }
   }

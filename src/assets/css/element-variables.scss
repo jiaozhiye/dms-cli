@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-13 18:44:39
+ * @Last Modified time: 2020-03-25 11:31:52
  */
-/* 改变主题色变量 */
+/* 主题色 */
 $--color-primary: #bb0a30;
 
 $--color-success: #52c41a !default;
@@ -13,14 +13,15 @@ $--color-danger: #f5222d !default;
 $--color-info: #909399 !default;
 
 $--font-size-base: 14px !default;
-$--input-small-font-size: 12px !default;
+$--font-size-small: 14px !default;
+$--input-small-font-size: 14px !default;
+$--button-small-font-size: 14px !default;
+$--button-small-padding-vertical: 8px !default;
 
 $--color-text-primary: rgba(0, 0, 0, 0.65) !default;
-$--color-text-regular: #606266 !default;
-$--color-text-secondary: #909399 !default;
-$--color-text-placeholder: #9c9c9c !default;
-// 特殊需求
-$--disabled-color-base: rgba(0, 0, 0, 0.65) !default;
+$--color-text-regular: #606060 !default;
+$--color-text-secondary: #979797 !default;
+$--color-text-placeholder: #c0c0c0 !default;
 
 $--border-color-base: #d9d9d9 !default;
 $--border-color-light: #d9d9d9 !default;

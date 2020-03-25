@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 18:39:51
+ * @Last Modified time: 2020-03-25 11:15:44
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -495,7 +495,7 @@ export default {
       if (editType === 'select' || editType === 'select-multiple') {
         return (
           <el-select
-            size="mini"
+            size="small"
             multiple={editType === 'select-multiple'}
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
@@ -539,7 +539,7 @@ export default {
         return (
           <el-date-picker
             type={conf.dateType}
-            size="mini"
+            size="small"
             value={prevValue ? moment(prevValue).format(momentFormat) : prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
             placeholder={conf.placeholder}
@@ -583,7 +583,7 @@ export default {
       return (
         <el-input
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
-          size="mini"
+          size="small"
           maxlength={column.maxlength}
           value={prevValue}
           disabled={column.disabled || isDisabled}
@@ -648,7 +648,7 @@ export default {
       return (
         <el-autocomplete
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
-          size="mini"
+          size="small"
           popper-class="autocomplete"
           maxlength={column.maxlength}
           style={{ width: '100%' }}
@@ -1978,7 +1978,7 @@ export default {
       key: uniqueKey,
       ref: 'appTable',
       props: {
-        size: 'mini',
+        size: 'medium',
         border: true,
         ...height,
         ...maxHeight,
@@ -2112,7 +2112,7 @@ export default {
   .el-table__body {
     tbody > tr > td {
       padding: 2px 0;
-      height: 33px;
+      height: 34px;
     }
     .selection-row {
       background-color: @tableHoverColor;
@@ -2152,9 +2152,12 @@ export default {
   }
   .el-table__footer {
     tbody > tr > td {
-      height: 32px;
+      height: 34px;
       padding: 0;
       background-color: @tableBgColor !important;
+      .cell {
+        padding: 0 @modulePadding;
+      }
     }
   }
   .el-table__fixed,
@@ -2178,8 +2181,8 @@ export default {
         td {
           line-height: 26px;
           span {
-            padding: 0 10px;
-            font-size: @textSizeSecondary;
+            padding: 0 @modulePadding;
+            font-size: @textSize;
             &.is-empty {
               display: block;
               text-align: center;

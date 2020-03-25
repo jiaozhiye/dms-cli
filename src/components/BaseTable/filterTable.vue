@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 18:35:04
+ * @Last Modified time: 2020-03-25 11:30:38
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
@@ -459,7 +459,7 @@ export default {
             type="daterange"
             v-model={this.search[`${dataIndex}Val`]}
             unlink-panels={true}
-            style={{ width: '215px' }}
+            style={{ width: '230px' }}
             value-format="yyyy-MM-dd"
             clearable={false}
             range-separator="-"

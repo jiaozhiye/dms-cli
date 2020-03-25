@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 15:22:41
+ * @Last Modified time: 2020-03-25 10:07:20
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -29,6 +29,9 @@ export default {
     dataKey() {
       return `${this.rowKey}|${this.columnKey}`;
     },
+    currentKey() {
+      return this.clicked.length === 2 ? `${this.clicked[0]}|${this.clicked[1]}` : '';
+    },
     passValidate() {
       return ![...this.required, ...this.validate].some(({ x, y }) => x === this.rowKey && y === this.columnKey);
     },
@@ -45,8 +48,12 @@ export default {
     clicked() {
       if (!this.editable) return;
       const { type } = this.options;
-      if (type === 'text' || type === 'number') {
-        setTimeout(() => this.$refs[type].select());
+      const { currentKey } = this;
+      if ((type === 'text' || type === 'number') && currentKey) {
+        setTimeout(() => {
+          let $el = this.$refs[`${type}-${currentKey}`];
+          $el && $el.select();
+        });
       }
     }
   },
@@ -75,7 +82,7 @@ export default {
       const prevValue = getCellValue(row, dataIndex);
       return (
         <el-input
-          ref="text"
+          ref={`text-${this.dataKey}`}
           size="small"
           value={prevValue}
           maxlength={extra.maxlength}
@@ -98,7 +105,7 @@ export default {
       const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (
         <el-input
-          ref="number"
+          ref={`number-${this.dataKey}`}
           size="small"
           value={prevValue}
           onInput={val => {

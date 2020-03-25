@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-12 08:07:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-22 09:58:17
+ * @Last Modified time: 2020-03-25 12:49:19
  */
 export default {
   name: 'TopInfo',
@@ -27,7 +27,7 @@ export default {
           </span>
         </el-alert>
         {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
-          <el-dropdown size="small" style={{ marginLeft: '10px' }} placement="bottom-start">
+          <el-dropdown size="medium " style={{ marginLeft: '10px' }} trigger="click" placement="bottom-start">
             <el-button size="small">
               更多操作
               <i class="el-icon-arrow-down el-icon--right" />
@@ -66,9 +66,8 @@ export default {
       padding-left: 6px;
       padding-right: 0;
       .text {
-        font-size: @textSizeSecondary;
+        font-size: @textSize;
         i {
-          font-size: 13px;
           font-weight: 600;
           color: @primaryColor;
           font-style: normal;

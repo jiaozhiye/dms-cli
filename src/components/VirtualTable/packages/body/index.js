@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 21:55:34
+ * @Last Modified time: 2020-03-25 10:37:10
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -57,15 +57,20 @@ export default {
         }
       }
       return null;
+    },
+    editable() {
+      return this.flattenColumns.some(x => _.isFunction(x.editRender));
     }
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
     this.event2 = addEventListener(document, 'click', this.clickEvent);
+    this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
   destroyed() {
     this.event1.remove();
     this.event2.remove();
+    this.event3.remove();
   },
   methods: {
     scrollEvent(ev) {
@@ -87,6 +92,12 @@ export default {
       }
       this.prevST = st;
       this.prevSL = sl;
+    },
+    keyboardEvent(ev) {
+      if (this.editable) return;
+      // 至少一个单元格获得焦点
+      if (!this.clicked.length) return;
+      // 逻辑...
     },
     clickEvent({ target }) {
       if (contains(this.$vTableBody, target)) return;
@@ -178,6 +189,7 @@ export default {
         return <Selection column={column} record={row} rowKey={rowKey} />;
       }
       if (_.isFunction(editRender)) {
+        // CellEdit -> UI 组件，无状态组件
         return <CellEdit column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
       if (_.isFunction(render)) {

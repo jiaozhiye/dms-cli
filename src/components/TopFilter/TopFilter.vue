@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 10:59:28
+ * @Last Modified time: 2020-03-25 11:21:43
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -145,7 +145,7 @@ export default {
             </el-select>
           )}
           {type === 'CHECKBOX' && (
-            <span style="vertical-align: middle">
+            <span>
               <span class="desc-text" style={{ paddingRight: '10px' }}>
                 {label}
               </span>
@@ -1177,7 +1177,7 @@ export default {
       margin-bottom: 0;
       .el-form-item__label {
         height: 32px;
-        font-size: @textSizeSecondary;
+        font-size: @textSize;
         padding-right: @modulePadding;
         .label-wrap {
           display: inline-block;
@@ -1285,7 +1285,7 @@ export default {
         vertical-align: middle;
       }
       .desc-text {
-        font-size: @textSizeSecondary;
+        font-size: @textSize;
       }
       &.is-error {
         .range-date {
