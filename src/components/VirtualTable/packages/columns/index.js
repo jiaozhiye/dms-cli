@@ -2,10 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 13:07:47
+ * @Last Modified time: 2020-03-25 21:43:07
  */
+import { deepMapColumns, createFilterColumns } from '../utils';
+
 const columnsMixin = {
   methods: {
+    createTableColumns(columns) {
+      const baseColumns = deepMapColumns(columns, x => {
+        _.isUndefined(x.renderWidth) && this.$set(x, 'renderWidth', x.width || null);
+        _.isUndefined(x.orderBy) && this.$set(x, 'orderBy', null);
+      });
+      const selectionColumn = this.createSelectionColumn(this.rowSelection);
+      return createFilterColumns(selectionColumn ? [selectionColumn, ...baseColumns] : baseColumns);
+    },
     updateColumnsWidth() {
       const tableWidth = this.$vTable.clientWidth;
       const scrollYWidth = this.scrollY ? this.layout.gutterWidth : 0;

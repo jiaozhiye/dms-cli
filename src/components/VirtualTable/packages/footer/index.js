@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 13:08:23
+ * @Last Modified time: 2020-03-25 23:07:38
  */
 import _ from 'lodash';
 import { formatNumber, setCellValue } from '../utils';
@@ -17,6 +17,7 @@ export default {
       const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
       const res = {};
+      const val = {};
       summationColumns.forEach(column => {
         const {
           dataIndex,
@@ -32,10 +33,12 @@ export default {
           }
           return prev;
         }, 0);
-        // 精度
         result = precision >= 0 ? result.toFixed(precision) : result;
+        // 设置合计值
+        _.set(val, dataIndex, result);
         setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
       });
+      this.$emit('summationChange', val);
       return [res];
     }
   },

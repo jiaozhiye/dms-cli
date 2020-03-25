@@ -97,7 +97,6 @@ export default {
           title: '图书数量',
           dataIndex: 'books',
           sorter: true,
-          width: 200,
           filter: {
             type: 'range-number'
           },
@@ -166,7 +165,8 @@ export default {
         {
           title: '地址',
           dataIndex: 'address',
-          fixed: 'right'
+          fixed: 'right',
+          width: 200
         }
       ],
       selection: {

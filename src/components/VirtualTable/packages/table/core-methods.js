@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 10:09:33
+ * @Last Modified time: 2020-03-25 22:56:54
  */
 import { throttle, browse, getCellValue, setCellValue } from '../utils';
 import _ from 'lodash';
@@ -158,6 +158,7 @@ export default {
   pagerChangeHandle({ currentPage, pageSize }) {
     this.pagination.currentPage = currentPage;
     this.pagination.pageSize = pageSize;
+    this.$emit('pageChange', { currentPage, pageSize });
   },
   // 清空列选中
   clearRowSelection() {

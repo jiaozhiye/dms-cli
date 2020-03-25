@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 15:25:33
+ * @Last Modified time: 2020-03-25 22:50:41
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -12,6 +12,7 @@ const columnItem = {
   width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
+  hidden: PropTypes.bool, // 隐藏列
   ellipsis: PropTypes.bool, // 超过宽度将自动省略
   className: PropTypes.string, // 列样式类名
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
@@ -29,7 +30,7 @@ const columnItem = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ),
-  formatType: PropTypes.oneOf(['date', 'datetime', 'finance', 'secret-name', 'secret-phone']), // 字段的格式化类型
+  formatType: PropTypes.oneOf(['date', 'datetime', 'finance', 'secret-name', 'secret-phone', 'secret-IDnumber']), // 字段的格式化类型
   // 底部合计
   summation: PropTypes.shape({
     dataIndex: PropTypes.string, // 服务端合计的数据字段名，建议和 column 的 dataIndex 一致

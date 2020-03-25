@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 21:59:29
+ * @Last Modified time: 2020-03-25 23:12:10
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -10,7 +10,7 @@ import baseProps from './props';
 import config from '../config';
 import _ from 'lodash';
 
-import { columnsFlatMap, createFilterColumns, getAllColumns, deepMapColumns, parseHeight, getScrollBarSize, browse } from '../utils';
+import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, browse } from '../utils';
 
 import columnsMixin from '../columns';
 import selectionMixin from '../selection/mixin';
@@ -50,6 +50,8 @@ export default {
       tableData: [],
       // 完整数据 - 重要
       tableFullData: [],
+      // 表格列
+      tableColumns: this.createTableColumns(this.columns),
       // 表头筛选
       filters: {},
       // 表头排序
@@ -121,14 +123,6 @@ export default {
     $vTable() {
       return this.$refs[`v-table`] || null;
     },
-    tableColumns() {
-      const columns = deepMapColumns(this.columns, x => {
-        _.isUndefined(x.renderWidth) && this.$set(x, 'renderWidth', null);
-        _.isUndefined(x.orderBy) && this.$set(x, 'orderBy', null);
-      });
-      const selectionColumn = this.createSelectionColumn(this.rowSelection);
-      return createFilterColumns(selectionColumn ? [selectionColumn, ...columns] : columns);
-    },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
     },
@@ -194,7 +188,8 @@ export default {
         this.__dataChange__ = !1;
       });
     },
-    flattenColumns() {
+    columns(val) {
+      this.tableColumns = this.createTableColumns(val);
       this.doLayout();
     },
     filters() {
