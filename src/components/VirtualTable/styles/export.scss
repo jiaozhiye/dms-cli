@@ -1,0 +1,15 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-03-26 11:26:46
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-03-26 11:29:33
+ */
+.v-export--wrapper {
+  .el-button {
+    color: $v-font-color;
+    transition: color 0.3s ease;
+    &:hover {
+      color: $v-primary-color;
+    }
+  }
+}

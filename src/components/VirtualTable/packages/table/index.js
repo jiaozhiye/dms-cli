@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 10:09:27
+ * @Last Modified time: 2020-03-26 11:31:16
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -26,6 +26,7 @@ import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
 import FullScreen from '../full-screen';
+import Export from '../export';
 
 const noop = () => {};
 const isIE = browse()['msie'];
@@ -244,6 +245,7 @@ export default {
     const {
       isFullScreen,
       tableData,
+      tableFullData,
       columns,
       tableColumns,
       flattenColumns,
@@ -267,7 +269,8 @@ export default {
       rowStyle,
       cellStyle,
       pagination,
-      total
+      total,
+      exportExcel
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
     const vTableCls = [
@@ -323,6 +326,22 @@ export default {
         change: this.pagerChangeHandle
       }
     };
+    const exportProps = exportExcel
+      ? {
+          props: {
+            flattenColumns,
+            data: tableFullData,
+            fileName: exportExcel.fileName,
+            // fetch: {
+            //   api,
+            //   params,
+            //   datakey,
+            //   total
+            // },
+            calcExportHandle: exportExcel.calcExportHandle
+          }
+        }
+      : null;
     return (
       <div class={vWrapperCls}>
         {/* 表格信息 */}
@@ -336,6 +355,8 @@ export default {
             {this.$slots[`default`]}
             {/* 全屏 */}
             <FullScreen />
+            {/* 导出 */}
+            {exportExcel && <Export {...exportProps} />}
             {/* 列定义 */}
             <ColumnFilter columns={columns} />
           </div>

@@ -1,42 +1,29 @@
-<script>
 /*
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 11:36:36
+ * @Last Modified time: 2020-03-26 11:35:42
  */
-import _ from 'lodash';
+import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
 
+import config from '../config';
+import _ from 'lodash';
+
+const noop = () => {};
+
 export default {
-  name: 'ExportExcel',
+  name: 'Export',
   props: {
-    columns: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    data: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    fileName: {
-      type: String,
-      default: '导出数据.xlsx'
-    },
-    fetch: {
-      type: Object,
-      default: () => ({})
-    },
-    onCalcExportData: {
-      type: Function,
-      default: () => {}
-    }
+    flattenColumns: PropTypes.array,
+    data: PropTypes.array.def([]),
+    fileName: PropTypes.string.def('导出数据.xlsx'),
+    fetch: PropTypes.object.def({}),
+    calcExportHandle: PropTypes.func.def(noop)
   },
   computed: {
     filterColumns() {
-      return this.columns.filter(x => x.dataIndex && x.dataIndex !== 'column-action').filter(x => !x.hidden);
+      return this.flattenColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn);
     },
     fields() {
       const target = {};
@@ -51,9 +38,9 @@ export default {
       return list.map((x, i) => {
         let item = { ...x };
         this.filterColumns.forEach(x => {
-          const { dataIndex, dictItems, editItems, editType } = x;
+          const { dataIndex, dictItems } = x;
           const val = _.get(item, dataIndex);
-          const dicts = dictItems || editItems || [];
+          const dicts = dictItems || [];
           const target = dicts.find(x => x.value == val);
           let res = target ? target.text : val;
           // 数据是数组的情况
@@ -70,13 +57,13 @@ export default {
         // 设置 index 序号
         _.set(item, 'index', i + 1);
         // 处理计算导出数据
-        this.onCalcExportData(item);
+        this.calcExportHandle(item);
         return item;
       });
     },
     createFetchParams(fetch) {
       if (!fetch.api) return null;
-      const { api, datakey, total } = fetch;
+      const { api, dataKey, total } = fetch;
       const params = { ...fetch.params };
       // 移除 xhrAbort 属性
       delete params.xhrAbort;
@@ -86,13 +73,9 @@ export default {
           params: {
             ...params,
             currentPage: 1,
-            pageSize: total, // 必须
-            pageNum: 1,
-            limit: total,
-            current: 1, // 必须
-            size: total
+            pageSize: total
           },
-          datakey: fetch.datakey
+          datakey: dataKey
         }
       };
     }
@@ -110,7 +93,7 @@ export default {
       }
     };
     return (
-      <div class="export-wrap">
+      <div class="v-export--wrapper">
         <JsonToExcel size="small" type="text" {...wrapProps}>
           导出
         </JsonToExcel>
@@ -118,14 +101,3 @@ export default {
     );
   }
 };
-</script>
-
-<style lang="less" scoped>
-.export-wrap {
-  display: inline-block;
-  margin-right: @moduleMargin;
-  /deep/ .el-button--text {
-    font-size: @textSize;
-  }
-}
-</style>
