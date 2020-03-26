@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 13:08:38
+ * @Last Modified time: 2020-03-26 10:08:59
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -47,7 +47,7 @@ export default {
     },
     sorter(val) {
       this.sorterHandle();
-      this.$$table.sorter = val;
+      this.$$table.sorter = this.formatSorterValue(val);
     }
   },
   methods: {
@@ -191,14 +191,9 @@ export default {
     },
     // 表头排序
     sorterHandle() {
-      if (!this.isClientSorter) {
-        this.serverSorter();
-      } else {
-        this.clientSorter();
-      }
+      if (!this.isClientSorter) return;
+      this.clientSorter();
     },
-    // 服务端排序
-    serverSorter() {},
     // 客户端排序
     clientSorter() {
       for (let key in this.sorter) {
@@ -236,14 +231,9 @@ export default {
     },
     // 表头筛选
     filterHandle() {
-      if (!this.isClientFilter) {
-        this.serverFilter();
-      } else {
-        this.clientFilter();
-      }
+      if (!this.isClientFilter) return;
+      this.clientFilter();
     },
-    // 服务端筛选
-    serverFilter() {},
     // 客户端筛选
     clientFilter() {
       const { tableOriginData } = this.$$table;
@@ -300,6 +290,15 @@ export default {
         this.tableFilterData = [...interList];
         this.$$table.tableFullData = [...interList];
       }
+    },
+    // 格式化排序参数
+    formatSorterValue(option) {
+      const result = {};
+      const dataIndex = Object.keys(option)[0];
+      if (option[dataIndex] !== null) {
+        result[config.sorterFieldName] = `${dataIndex}|${option[dataIndex]}`;
+      }
+      return result;
     },
     // 格式化筛选参数
     formatFilterValue(option) {

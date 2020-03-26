@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:10:18
+ * @Last Modified time: 2020-03-26 09:24:18
  */
 import _ from 'lodash';
 
@@ -49,6 +49,20 @@ export const deepMapColumns = (columns, callback) => {
   });
 };
 
+// 所有 columns
+export const getAllColumns = columns => {
+  const result = [];
+  columns.forEach(column => {
+    if (column.children) {
+      result.push(column);
+      result.push.apply(result, getAllColumns(column.children));
+    } else {
+      result.push(column);
+    }
+  });
+  return result;
+};
+
 // 深度查找 column by dataIndex
 export const deepFindColumn = (columns, mark) => {
   let result = null;
@@ -66,18 +80,28 @@ export const deepFindColumn = (columns, mark) => {
   return result;
 };
 
-// 所有 columns
-export const getAllColumns = columns => {
-  const result = [];
-  columns.forEach(column => {
-    if (column.children) {
-      result.push(column);
-      result.push.apply(result, getAllColumns(column.children));
-    } else {
-      result.push(column);
+// 查找最后一级的第一个 column
+export const findFirstColumn = column => {
+  const childColumns = column.children;
+  if (childColumns) {
+    if (childColumns[0].children) {
+      return findFirstColumn(childColumns[0]);
     }
-  });
-  return result;
+    return childColumns[0];
+  }
+  return column;
+};
+
+// 查找最后一级的最后一个 column
+export const findLastColumn = column => {
+  const childColumns = column.children;
+  if (childColumns) {
+    if (childColumns[childColumns.length - 1].children) {
+      return findLastColumn(childColumns[childColumns.length - 1]);
+    }
+    return childColumns[childColumns.length - 1];
+  }
+  return column;
 };
 
 // 表头分组
@@ -332,6 +356,6 @@ export const formatNumber = (value = '') => {
 
 // 数值类型校验
 export const validateNumber = val => {
-  const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-  return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
+  const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+  return (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
 };

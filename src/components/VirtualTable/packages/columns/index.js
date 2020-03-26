@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 21:43:07
+ * @Last Modified time: 2020-03-26 09:31:11
  */
-import { deepMapColumns, createFilterColumns } from '../utils';
+import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn } from '../utils';
 
 const columnsMixin = {
   methods: {
@@ -90,20 +90,26 @@ const columnsMixin = {
       this.layout.tableWidth = tableWidth;
     },
     getStickyLeft(key) {
-      let columns = this.flattenColumns;
+      // 说明是表头分组的上层元素，递归查找最下层的第一个后代元素
+      if (this.flattenColumns.findIndex(x => x.dataIndex === key) < 0) {
+        key = findFirstColumn(deepFindColumn(this.tableColumns, key)).dataIndex;
+      }
       let l = 0;
-      for (let i = 0; i < columns.length; i++) {
-        const column = columns[i];
+      for (let i = 0; i < this.flattenColumns.length; i++) {
+        const column = this.flattenColumns[i];
         if (column.dataIndex === key) break;
         l += column.width || column.renderWidth;
       }
       return l;
     },
     getStickyRight(key) {
-      let columns = this.flattenColumns;
+      // 说明是表头分组的上层元素，递归查找最下层的最后一个后代元素
+      if (this.flattenColumns.findIndex(x => x.dataIndex === key) < 0) {
+        key = findLastColumn(deepFindColumn(this.tableColumns, key)).dataIndex;
+      }
       let r = 0;
-      for (let i = columns.length - 1; i >= 0; i--) {
-        const column = columns[i];
+      for (let i = this.flattenColumns.length - 1; i >= 0; i--) {
+        const column = this.flattenColumns[i];
         if (column.dataIndex === key) break;
         r += column.width || column.renderWidth;
       }
