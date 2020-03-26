@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 10:08:31
+ * @Last Modified time: 2020-03-26 19:58:05
  */
 const config = {
   // Vue 应用，根节点 ID
@@ -27,6 +27,8 @@ const config = {
   clientFilter: true,
   // 操作列 dataIndex
   operationColumn: '__action__',
+  // 合计行第一列的文本
+  summaryText: '合计',
   emptyText: '暂无数据...',
   columnFilterText: '列筛选排序'
 };

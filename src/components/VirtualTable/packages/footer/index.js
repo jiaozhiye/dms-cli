@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 23:07:38
+ * @Last Modified time: 2020-03-26 19:58:32
  */
 import _ from 'lodash';
 import { formatNumber, setCellValue } from '../utils';
+import config from '../config';
 
 export default {
   name: 'TableFooter',
@@ -109,7 +110,7 @@ export default {
         : null;
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : '合计'}</div>
+          <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : config.summaryText}</div>
         </td>
       );
     }

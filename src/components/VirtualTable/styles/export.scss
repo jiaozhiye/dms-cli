@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:26:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 11:29:33
+ * @Last Modified time: 2020-03-26 18:44:50
  */
 .v-export--wrapper {
+  margin-left: $v-module-distance;
   .el-button {
     color: $v-font-color;
     transition: color 0.3s ease;

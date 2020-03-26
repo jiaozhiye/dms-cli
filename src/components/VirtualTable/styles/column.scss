@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 22:19:36
+ * @Last Modified time: 2020-03-26 18:43:24
  */
 .v-column-filter {
   display: inline-block;
-  margin-left: 5px;
+  margin-left: $v-module-distance;
   .text {
     position: relative;
     padding-left: 20px;
