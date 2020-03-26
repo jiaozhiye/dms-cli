@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 11:15:37
+ * @Last Modified time: 2020-03-26 21:15:18
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -113,13 +113,13 @@ export default {
       }
       // ADD_PRINT_TABLE -> 分页时可固定 页眉/页脚
       this.LODOP.ADD_PRINT_HTM(0, 0, 'RightMargin: 0', 'BottomMargin: 0', printHTML);
-      // this.LODOP.SET_PRINT_STYLEA(0, 'HtmWaitMilSecs', 100);
       !this.directPrint ? this.LODOP.PREVIEW() : this.LODOP.PRINT(); // 直接打印
     },
     createGlobalStyle(_html_) {
       return css.style + '<body>' + _html_ + '</body>';
     },
     createPrintLogo(_html_) {
+      // 如果出现图片加载的问题，换成 base64 格式
       const logoHtml = `
         <table>
           <tr>

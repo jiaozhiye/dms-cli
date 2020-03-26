@@ -37,7 +37,7 @@ export default {
         {
           title: '序号',
           dataIndex: 'index',
-          width: 70,
+          width: 80,
           sorter: true,
           render: props => {
             return <span>{props.row.index + 1}</span>;

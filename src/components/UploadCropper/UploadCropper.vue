@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 21:27:07
+ * @Last Modified time: 2020-03-26 21:23:23
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -164,7 +164,7 @@ export default {
         img: this.fileData,
         type: 'jpg',
         fillColor: '#fff',
-        width: 750
+        width: 1200
       });
       // 有的后台需要传文件名，不然会报错
       formData.append('file', this.dataURItoBlob(base64.img), this.file.name);

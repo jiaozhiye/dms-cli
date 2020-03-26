@@ -288,7 +288,7 @@ export default {
         {
           title: '序号',
           dataIndex: 'index',
-          width: 70,
+          width: 80,
           sorter: (data, order) => {
             // 升序
             if (order === 'ascending') {
@@ -310,7 +310,7 @@ export default {
         {
           title: '日期',
           dataIndex: 'date',
-          width: 150,
+          width: 200,
           sorter: true,
           filter: true,
           filterType: 'date-range',
@@ -478,6 +478,7 @@ export default {
         {
           title: '地址',
           dataIndex: 'address',
+          width: 200,
           showOverflowTooltip: true,
           editable: true,
           editType: 'text',
