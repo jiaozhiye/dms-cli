@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 10:37:10
+ * @Last Modified time: 2020-03-26 21:40:13
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -139,7 +139,7 @@ export default {
       return rows;
     },
     renderColumn(column, columnIndex, row, rowIndex, rowKey) {
-      const { sorter, leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, isIE } = this.$$table;
+      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, isIE } = this.$$table;
       const { dataIndex, fixed, align, className } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
       const isEllipsis = ellipsis || column.ellipsis;
@@ -152,7 +152,7 @@ export default {
           [`col--ellipsis`]: isEllipsis,
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
-          [`v-column--sort`]: !!sorter[dataIndex],
+          [`v-column--sort`]: this.isColumnSorter(column),
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
@@ -255,6 +255,10 @@ export default {
     setClickedHandle(arr) {
       if (_.isEqual(arr, this.clicked)) return;
       this.clicked = arr;
+    },
+    isColumnSorter(column) {
+      const { sorter } = this.$$table;
+      return Object.values(sorter).length && Object.values(sorter)[0].split('|')[0] === column.dataIndex;
     }
   },
   render() {
