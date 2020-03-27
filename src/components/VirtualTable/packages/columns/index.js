@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 09:31:11
+ * @Last Modified time: 2020-03-27 13:56:37
  */
 import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn } from '../utils';
+import config from '../config';
 
 const columnsMixin = {
   methods: {
@@ -19,6 +20,8 @@ const columnsMixin = {
     updateColumnsWidth() {
       const tableWidth = this.$vTable.clientWidth;
       const scrollYWidth = this.scrollY ? this.layout.gutterWidth : 0;
+      const { defaultColumnWidth } = config;
+
       // 没有指定宽度的列
       let flexColumns = this.flattenColumns.filter(column => typeof column.width !== 'number');
       // 表格最小宽度
@@ -33,7 +36,7 @@ const columnsMixin = {
       if (flexColumns.length > 0) {
         // 获取表格的最小宽度
         this.flattenColumns.forEach(column => {
-          bodyMinWidth += column.width || this.defaultColumnWidth;
+          bodyMinWidth += column.width || defaultColumnWidth;
         });
 
         // 最小宽度小于容器宽度 -> 没有横向滚动条
@@ -44,22 +47,22 @@ const columnsMixin = {
           const totalFlexWidth = tableWidth - scrollYWidth - bodyMinWidth;
 
           if (flexColumns.length === 1 && this.resizable) {
-            flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth;
+            flexColumns[0].renderWidth = defaultColumnWidth + totalFlexWidth;
           } else {
             // 把富余的宽度均分给除第一列的其他列，剩下来的给第一列（避免宽度均分的时候除不尽）
-            const allColumnsWidth = flexColumns.reduce((prev, column) => prev + this.defaultColumnWidth, 0);
+            const allColumnsWidth = flexColumns.reduce((prev, column) => prev + defaultColumnWidth, 0);
             const flexWidthPerPixel = totalFlexWidth / allColumnsWidth;
             let noneFirstWidth = 0;
 
             flexColumns.forEach((column, index) => {
               if (index === 0) return;
-              const flexWidth = Math.floor(this.defaultColumnWidth * flexWidthPerPixel);
+              const flexWidth = Math.floor(defaultColumnWidth * flexWidthPerPixel);
               noneFirstWidth += flexWidth;
-              column.renderWidth = this.defaultColumnWidth + flexWidth;
+              column.renderWidth = defaultColumnWidth + flexWidth;
             });
 
             if (this.resizable) {
-              flexColumns[0].renderWidth = this.defaultColumnWidth + totalFlexWidth - noneFirstWidth;
+              flexColumns[0].renderWidth = defaultColumnWidth + totalFlexWidth - noneFirstWidth;
             }
           }
         } else {
@@ -68,7 +71,7 @@ const columnsMixin = {
 
           // 对没有设置宽度的列宽度设为默认宽度
           flexColumns.forEach(column => {
-            column.renderWidth = this.defaultColumnWidth;
+            column.renderWidth = defaultColumnWidth;
           });
         }
 
@@ -76,7 +79,7 @@ const columnsMixin = {
         this.layout.tableBodyWidth = Math.max(bodyMinWidth, tableWidth);
       } else {
         this.flattenColumns.forEach(column => {
-          column.renderWidth = column.width || this.defaultColumnWidth;
+          column.renderWidth = column.width || defaultColumnWidth;
           bodyMinWidth += column.renderWidth;
         });
 

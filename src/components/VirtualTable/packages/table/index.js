@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 21:00:15
+ * @Last Modified time: 2020-03-27 13:57:57
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -59,7 +59,10 @@ export default {
       // 表头排序
       sorter: {},
       // 分页
-      pagination: { currentPage: 1, pageSize: 10 },
+      pagination: {
+        currentPage: config.pagination.currentPage,
+        pageSize: config.pagination.pageSize
+      },
       // 记录总数
       total: 0,
       // 页面是否加载中
@@ -83,8 +86,6 @@ export default {
       },
       // 支持的排序方式
       sortDirections: ['ascend', 'descend'],
-      // 表格列的默认最小宽度
-      defaultColumnWidth: 100,
       // 表格布局相关参数
       layout: {
         // 滚动条宽度

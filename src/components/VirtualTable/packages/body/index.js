@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 21:40:13
+ * @Last Modified time: 2020-03-27 15:43:32
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -242,14 +242,14 @@ export default {
       ev.stopPropagation();
       const { getRowKey } = this.$$table;
       const { dataIndex } = column;
-      if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
+      if (['__selection__', config.operationColumn].includes(dataIndex)) return;
       this.setClickedHandle([getRowKey(row, row.index), dataIndex]);
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {
       ev.stopPropagation();
       const { dataIndex } = column;
-      if (dataIndex === '__selection__' || dataIndex === config.operationColumn) return;
+      if (['__selection__', config.operationColumn].includes(dataIndex)) return;
       this.$$table.$emit('rowDblclick', row, column, ev);
     },
     setClickedHandle(arr) {

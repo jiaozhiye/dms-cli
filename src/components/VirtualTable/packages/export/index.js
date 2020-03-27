@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 11:35:42
+ * @Last Modified time: 2020-03-27 15:44:32
  */
 import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
 
 import config from '../config';
+import { setCellValue, filterTableColumns } from '../utils';
 import _ from 'lodash';
 
 const noop = () => {};
@@ -23,7 +24,7 @@ export default {
   },
   computed: {
     filterColumns() {
-      return this.flattenColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn);
+      return filterTableColumns(this.flattenColumns, ['__selection__', config.operationColumn]);
     },
     fields() {
       const target = {};
@@ -52,10 +53,10 @@ export default {
               })
               .join(',');
           }
-          _.set(item, dataIndex, res);
+          setCellValue(item, dataIndex, res);
         });
         // 设置 index 序号
-        _.set(item, 'index', i + 1);
+        setCellValue(item, 'index', i + 1);
         // 处理计算导出数据
         this.calcExportHandle(item);
         return item;

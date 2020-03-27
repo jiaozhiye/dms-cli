@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 09:24:18
+ * @Last Modified time: 2020-03-27 15:47:46
  */
 import _ from 'lodash';
 
@@ -102,6 +102,11 @@ export const findLastColumn = column => {
     return childColumns[childColumns.length - 1];
   }
   return column;
+};
+
+// 根据条件过滤 columns
+export const filterTableColumns = (columns, marks) => {
+  return columns.filter(x => !marks.includes(x.dataIndex));
 };
 
 // 表头分组

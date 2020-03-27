@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 19:58:32
+ * @Last Modified time: 2020-03-27 13:42:02
  */
 import _ from 'lodash';
-import { formatNumber, setCellValue } from '../utils';
+import { formatNumber, setCellValue, getCellValue } from '../utils';
 import config from '../config';
 
 export default {
@@ -36,7 +36,7 @@ export default {
         }, 0);
         result = precision >= 0 ? result.toFixed(precision) : result;
         // 设置合计值
-        _.set(val, dataIndex, result);
+        setCellValue(val, dataIndex, result);
         setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
       });
       this.$emit('summationChange', val);
@@ -110,7 +110,7 @@ export default {
         : null;
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{index > 0 ? _.get(row, column.dataIndex, '') : config.summaryText}</div>
+          <div class="v-cell">{index > 0 ? getCellValue(row, column.dataIndex) : config.summaryText}</div>
         </td>
       );
     }

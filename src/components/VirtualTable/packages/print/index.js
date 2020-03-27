@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 12:33:15
+ * @Last Modified time: 2020-03-27 16:04:05
  */
-import { convertToRows, getCellValue } from '../utils';
+import { convertToRows, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
 
 export default {
@@ -44,14 +44,43 @@ export default {
     return {};
   },
   computed: {
+    $$tableBody() {
+      return this.$$table.$refs[`tableBody`];
+    },
     columnRows() {
-      return convertToRows(this.tableColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn));
+      return convertToRows(filterTableColumns(this.tableColumns, ['__selection__', config.operationColumn]));
     },
     flatColumns() {
-      return this.flattenColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn);
+      return filterTableColumns(this.flattenColumns, ['__selection__', config.operationColumn]);
     }
   },
   methods: {
+    createChunckColumns(columns) {
+      columns = [...columns];
+      let res = [];
+      let tmp = [];
+      let sum = 0;
+      let i = 0;
+      for (; i < columns.length; ) {
+        const column = columns[i];
+        const w = column.width || column.renderWidth || config.defaultColumnWidth;
+        sum += w;
+        if (sum <= 750) {
+          tmp.push(column);
+          if (i === columns.length - 1) {
+            res.push(tmp);
+          }
+          i++;
+        } else {
+          columns.splice(0, i);
+          res.push(tmp);
+          tmp = [];
+          sum = 0;
+          i = 0;
+        }
+      }
+      return res;
+    },
     printHandle() {
       const elIframe = document.createElement('iframe');
       elIframe.setAttribute('frameborder', '0');
@@ -68,8 +97,6 @@ export default {
       elIframe.src = `data:text/html;charset=utf-8,${encodeURIComponent(this.toHtml())}`;
     },
     toHtml() {
-      const { tableFullData } = this.$$table;
-      const summationRows = this.showFooter ? this.$$table.$refs[`tableFooter`].summationRows : [];
       let html = [
         `<!DOCTYPE html>`,
         `<html>`,
@@ -81,22 +108,7 @@ export default {
         `</head>`,
         `<body>`
       ].join('');
-      html += `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
-      html += `<colgroup>${this.flatColumns.map(({ width, renderWidth }) => `<col ${(width || renderWidth) > 0 ? `style="width:${width || renderWidth}px"` : ''}>`).join('')}</colgroup>`;
-      if (this.showHeader) {
-        html += `<thead>${this.columnRows
-          .map(columns => `<tr>${columns.map(column => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`)
-          .join('')}</thead>`;
-      }
-      if (tableFullData.length) {
-        html += `<tbody>${tableFullData.map(row => `<tr>${this.flatColumns.map(column => `<td>${getCellValue(row, column.dataIndex)}</td>`).join('')}</tr>`).join('')}</tbody>`;
-      }
-      if (this.showFooter) {
-        html += `<tfoot>${summationRows
-          .map(row => `<tr>${this.flatColumns.map((column, index) => `<td>${index > 0 ? getCellValue(row, column.dataIndex) : config.summaryText}</td>`).join('')}</tr>`)
-          .join('')}</tfoot>`;
-      }
-      html += '</table>';
+      html += this.toTable(this.columnRows, this.flatColumns);
       html += `<div class="v-page-break"></div>`;
       html += `
         <script>
@@ -104,6 +116,35 @@ export default {
         </script>
       `;
       return html + `</body></html>`;
+    },
+    toTable(columnRows, flatColumns) {
+      const { tableFullData } = this.$$table;
+      const summationRows = this.showFooter ? this.$$table.$refs[`tableFooter`].summationRows : [];
+      let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
+      html += `<colgroup>${flatColumns.map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px"}>`).join('')}</colgroup>`;
+      if (this.showHeader) {
+        html += `<thead>${columnRows
+          .map(columns => `<tr>${columns.map(column => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`)
+          .join('')}</thead>`;
+      }
+      if (tableFullData.length) {
+        html += `<tbody>${tableFullData.map(row => `<tr>${flatColumns.map((column, index) => `<td>${this.renderCell(row, row.index, column, index)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+      }
+      if (this.showFooter && flatColumns.some(x => !!x.summation)) {
+        html += `<tfoot>${summationRows
+          .map(row => `<tr>${flatColumns.map((column, index) => `<td>${index > 0 ? getCellValue(row, column.dataIndex) : config.summaryText}</td>`).join('')}</tr>`)
+          .join('')}</tfoot>`;
+      }
+      html += '</table>';
+      return html;
+    },
+    renderCell(row, rowIndex, column, columnIndex) {
+      const { dataIndex, render } = column;
+      const text = getCellValue(row, dataIndex);
+      if (_.isFunction(render)) {
+        return render(text, row, column, rowIndex, columnIndex);
+      }
+      return this.$$tableBody.renderText(text, column);
     }
   },
   render() {

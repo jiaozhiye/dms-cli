@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-21 20:59:25
+ * @Last Modified time: 2020-03-27 13:54:07
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
+import config from '../config';
 
 export default {
   name: 'Resizable',
@@ -14,7 +15,7 @@ export default {
     resizeMousedown(ev) {
       ev.preventDefault();
       const dom = ev.target;
-      const { $vTable, $refs, flattenColumns, defaultColumnWidth, doLayout } = this.$$table;
+      const { $vTable, $refs, flattenColumns, doLayout } = this.$$table;
       const $tableBody = $refs[`tableBody`].$el;
       const target = $refs[`resizable-bar`];
 
@@ -35,7 +36,7 @@ export default {
         let rw = renderWidth + ml;
 
         // 左边界限定
-        if (rw < defaultColumnWidth) return;
+        if (rw < config.defaultColumnWidth) return;
 
         tColumn.width = tColumn.renderWidth = rw;
         target.style.left = `${ml + left}px`;
