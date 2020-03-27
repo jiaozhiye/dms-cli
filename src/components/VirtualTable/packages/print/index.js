@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 20:53:42
+ * @Last Modified time: 2020-03-27 12:33:15
  */
 import { convertToRows, getCellValue } from '../utils';
 import config from '../config';
@@ -37,15 +37,18 @@ export default {
         padding: 5px;
         border: 1px solid #000;
       }
+      .v-page-break {
+        page-break-after: always;
+      }
     `;
     return {};
   },
   computed: {
     columnRows() {
-      return convertToRows(this.tableColumns.filter(x => x.dataIndex !== '__selection__'));
+      return convertToRows(this.tableColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn));
     },
     flatColumns() {
-      return this.flattenColumns.filter(x => x.dataIndex !== '__selection__');
+      return this.flattenColumns.filter(x => x.dataIndex !== '__selection__' && x.dataIndex !== config.operationColumn);
     }
   },
   methods: {
@@ -76,10 +79,10 @@ export default {
         `<title>打印表格</title>`,
         `<style>${this.defaultHtmlStyle}</style>`,
         `</head>`,
-        `<body>`,
-        `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`,
-        `<colgroup>${this.flatColumns.map(({ width, renderWidth }) => `<col ${(width || renderWidth) > 0 ? `style="width:${width || renderWidth}px"` : ''}>`).join('')}</colgroup>`
+        `<body>`
       ].join('');
+      html += `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
+      html += `<colgroup>${this.flatColumns.map(({ width, renderWidth }) => `<col ${(width || renderWidth) > 0 ? `style="width:${width || renderWidth}px"` : ''}>`).join('')}</colgroup>`;
       if (this.showHeader) {
         html += `<thead>${this.columnRows
           .map(columns => `<tr>${columns.map(column => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`)
@@ -94,6 +97,7 @@ export default {
           .join('')}</tfoot>`;
       }
       html += '</table>';
+      html += `<div class="v-page-break"></div>`;
       html += `
         <script>
           setTimeout(() => window.print());
