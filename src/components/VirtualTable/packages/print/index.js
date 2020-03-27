@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 16:04:05
+ * @Last Modified time: 2020-03-27 16:48:41
  */
 import { convertToRows, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
@@ -110,11 +110,7 @@ export default {
       ].join('');
       html += this.toTable(this.columnRows, this.flatColumns);
       html += `<div class="v-page-break"></div>`;
-      html += `
-        <script>
-          setTimeout(() => window.print());
-        </script>
-      `;
+      html += this.toJs();
       return html + `</body></html>`;
     },
     toTable(columnRows, flatColumns) {
@@ -137,6 +133,13 @@ export default {
       }
       html += '</table>';
       return html;
+    },
+    toJs() {
+      return `
+        <script>
+          setTimeout(() => window.print());
+        </script>
+      `;
     },
     renderCell(row, rowIndex, column, columnIndex) {
       const { dataIndex, render } = column;
