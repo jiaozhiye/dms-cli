@@ -45,7 +45,7 @@ export default {
         {
           title: '序号',
           dataIndex: 'index',
-          width: 80,
+          width: 100,
           fixed: 'left',
           sorter: true,
           render: text => {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 19:52:30
+ * @Last Modified time: 2020-03-28 22:38:30
  */
 import _ from 'lodash';
 
@@ -33,8 +33,8 @@ export const createFilterColumns = columns => {
 export const deepMapColumns = (columns, callback) => {
   return columns.map(column => {
     if (column.children) {
-      // 处理列 fixed
       column.children.forEach(subColumn => {
+        subColumn.parentDataIndex = column.dataIndex;
         if (column.fixed) {
           subColumn.fixed = column.fixed;
         } else {

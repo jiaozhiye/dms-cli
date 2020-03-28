@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 17:28:16
+ * @Last Modified time: 2020-03-29 01:49:34
  */
-import { convertToRows, filterTableColumns, getCellValue } from '../utils';
+import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
+import _ from 'lodash';
 
 export default {
   name: 'PrintTable',
@@ -44,16 +45,53 @@ export default {
     return {};
   },
   computed: {
-    columnRows() {
-      return convertToRows(filterTableColumns(this.tableColumns, ['__selection__', config.operationColumn]));
+    headColumns() {
+      return filterTableColumns(this.tableColumns, ['__selection__', config.operationColumn]);
     },
     flatColumns() {
       return filterTableColumns(this.flattenColumns, ['__selection__', config.operationColumn]);
     }
   },
   methods: {
-    createChunckColumns(columns) {
-      columns = [...columns];
+    createChunkColumnRows(chunkColumns, tableColumns) {
+      let res = [];
+      chunkColumns.forEach(columns => {
+        let tmp = [];
+        columns.forEach(column => {
+          if (column.level === 1) {
+            tmp.push(column);
+          } else {
+            tmp.push(this.createDeepColumn(column, tableColumns));
+          }
+        });
+        this.mergeColumns(tmp);
+        res.push(convertToRows(tmp));
+      });
+      return res;
+    },
+    createDeepColumn(item, columns) {
+      const parent = Object.assign({}, deepFindColumn(columns, item.parentDataIndex));
+      parent.children = [item];
+      if (parent.level > 1) {
+        return this.createDeepColumn(parent, columns);
+      }
+      return parent;
+    },
+    mergeColumns(columns) {
+      const keys = [...new Set(columns.map(x => x.dataIndex))];
+      return keys.map(x => {
+        const res = columns.filter(k => k.dataIndex === x);
+        if (res.length <= 1) {
+          return res[0];
+        } else {
+          return this.doMerge(res);
+        }
+      });
+    },
+    doMerge(columns) {
+      // ...
+    },
+    createChunkColumns(columns) {
       let res = [];
       let tmp = [];
       let sum = 0;
@@ -62,7 +100,7 @@ export default {
         const column = columns[i];
         const w = column.width || column.renderWidth || config.defaultColumnWidth;
         sum += w;
-        if (sum <= 750) {
+        if (sum <= config.printWidth) {
           tmp.push(column);
           if (i === columns.length - 1) {
             res.push(tmp);
@@ -94,6 +132,8 @@ export default {
       elIframe.src = `data:text/html;charset=utf-8,${encodeURIComponent(this.toHtml())}`;
     },
     toHtml() {
+      const chunkFlatColumns = this.createChunkColumns([...this.flatColumns]);
+      const chunkColumnRows = this.createChunkColumnRows(chunkFlatColumns, this.headColumns);
       let html = [
         `<!DOCTYPE html>`,
         `<html>`,
@@ -105,8 +145,10 @@ export default {
         `</head>`,
         `<body>`
       ].join('');
-      html += this._toTable(this.columnRows, this.flatColumns);
-      html += `<div class="v-page-break"></div>`;
+      for (let i = 0; i < chunkFlatColumns.length; i++) {
+        html += this._toTable(chunkColumnRows[i], chunkFlatColumns[i]);
+        html += `<div class="v-page-break"></div>`;
+      }
       html += this._toJs();
       return html + `</body></html>`;
     },

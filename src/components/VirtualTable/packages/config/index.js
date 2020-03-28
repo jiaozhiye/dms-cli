@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 20:26:41
+ * @Last Modified time: 2020-03-29 01:41:58
  */
 const config = {
   // Vue 应用，根节点 ID
@@ -31,6 +31,8 @@ const config = {
   clientSorter: true,
   // 客户端表头筛选
   clientFilter: true,
+  // 打印纸的宽度 A4 -> 1040px
+  printWidth: 1040,
   // 操作列 dataIndex
   operationColumn: '__action__',
   // 合计行第一列的文本
