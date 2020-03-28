@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 11:37:33
+ * @Last Modified time: 2020-03-28 09:54:28
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -21,6 +21,7 @@ const columnItem = {
     type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
+  required: PropTypes.bool, // 列是否必填
   editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object
   precision: PropTypes.number, // 数值类型字段的精度
   // 数据字典

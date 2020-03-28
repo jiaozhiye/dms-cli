@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 16:48:41
+ * @Last Modified time: 2020-03-28 09:03:39
  */
 import { convertToRows, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
@@ -108,12 +108,12 @@ export default {
         `</head>`,
         `<body>`
       ].join('');
-      html += this.toTable(this.columnRows, this.flatColumns);
+      html += this._toTable(this.columnRows, this.flatColumns);
       html += `<div class="v-page-break"></div>`;
-      html += this.toJs();
+      html += this._toJs();
       return html + `</body></html>`;
     },
-    toTable(columnRows, flatColumns) {
+    _toTable(columnRows, flatColumns) {
       const { tableFullData } = this.$$table;
       const summationRows = this.showFooter ? this.$$table.$refs[`tableFooter`].summationRows : [];
       let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
@@ -134,7 +134,7 @@ export default {
       html += '</table>';
       return html;
     },
-    toJs() {
+    _toJs() {
       return `
         <script>
           setTimeout(() => window.print());

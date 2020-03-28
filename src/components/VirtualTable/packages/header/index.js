@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 10:08:59
+ * @Last Modified time: 2020-03-28 10:08:47
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -95,7 +95,7 @@ export default {
         scrollY,
         isIE
       } = this.$$table;
-      const { dataIndex, colSpan, rowSpan, fixed, align, sorter, orderBy, filter } = column;
+      const { dataIndex, colSpan, rowSpan, fixed, align, sorter, orderBy, filter, required } = column;
       const leftFixedColumns = columns.filter(x => x.fixed === 'left');
       const rightFixedColumns = columns.filter(x => x.fixed === 'right');
       const cls = [
@@ -104,9 +104,10 @@ export default {
         {
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
+          [`v-column--required`]: !!required,
           [`v-column-has-sorter`]: sorter,
           [`v-column-has-filter`]: filter,
-          [`v-column-sort`]: orderBy !== null,
+          [`v-column--sort`]: orderBy !== null,
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,

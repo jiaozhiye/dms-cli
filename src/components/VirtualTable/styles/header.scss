@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:43:29
+ * @Last Modified time: 2020-03-28 10:06:31
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -19,6 +19,16 @@
 .v-header--column {
   position: relative;
   user-select: none;
+
+  &.v-column--required {
+    .v-cell {
+      &::before {
+        content: '*';
+        color: $v-danger-color;
+        margin-right: 2px;
+      }
+    }
+  }
 
   /* 排序 */
   .v-cell--sort {
@@ -75,12 +85,6 @@
       &.actived {
         color: $v-primary-color;
       }
-    }
-  }
-
-  &.v-column-has-sorter.v-column-has-filter {
-    .v-cell--sort {
-      right: 2em !important;
     }
   }
 
