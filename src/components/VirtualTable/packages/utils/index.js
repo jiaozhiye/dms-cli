@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 15:47:46
+ * @Last Modified time: 2020-03-28 19:52:30
  */
 import _ from 'lodash';
 
@@ -329,6 +329,15 @@ export const isEmpty = val => {
   }
 
   return false;
+};
+
+// 比对两个对象的差异
+export const difference = (object, base) => {
+  return _.transform(object, function(result, value, key) {
+    if (!_.isEqual(value, base[key])) {
+      result[key] = _.isObject(value) && _.isObject(base[key]) ? difference(value, base[key]) : value;
+    }
+  });
 };
 
 // 获取格式化后的数据

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 17:13:44
+ * @Last Modified time: 2020-03-28 20:37:44
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -119,12 +119,14 @@ export default {
       // 是否是 IE11
       isIE: isIE,
       // 全屏样式
-      isFullScreen: false
+      isFullScreen: false,
+      // 服务端合计
+      summaries: {}
     };
   },
   computed: {
     $vTable() {
-      return this.$refs[`v-table`] || null;
+      return this.$refs[`v-table`];
     },
     $$tableHeader() {
       return this.$refs[`tableHeader`];
@@ -164,6 +166,15 @@ export default {
     },
     shouldUpdateHeight() {
       return this.height || this.maxHeight;
+    },
+    fetchParams() {
+      const params = this.fetch ? this.fetch.params : null;
+      return {
+        ...this.sorter,
+        ...this.filters,
+        ...params,
+        ...this.pagination
+      };
     },
     calcHeight() {
       const pagerHeight = this.showPagination ? 48 : 0;
@@ -213,6 +224,14 @@ export default {
     pagination() {
       this.$emit('change', ...this.changeParams);
     },
+    fetchParams(next, prev) {
+      if (!this.fetch) return;
+      if (!this.onlyPaginationChange(next, prev)) {
+        this.pagination.currentPage = 1;
+      } else {
+        this.getTableData();
+      }
+    },
     loading(val) {
       this.showLoading = val;
     },
@@ -226,7 +245,11 @@ export default {
     }
   },
   created() {
-    this.createTableData(this.dataSource);
+    if (!this.fetch) {
+      this.createTableData(this.dataSource);
+    } else {
+      this.getTableData();
+    }
     this.loadTableData().then(() => {
       this.doLayout();
     });
@@ -282,6 +305,8 @@ export default {
       pagination,
       total,
       selectionKeys,
+      fetch,
+      fetchParams,
       exportExcel
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
@@ -352,12 +377,14 @@ export default {
             flattenColumns,
             data: tableFullData,
             fileName: exportExcel.fileName,
-            // fetch: {
-            //   api,
-            //   params,
-            //   datakey,
-            //   total
-            // },
+            fetch: !!fetch
+              ? {
+                  api: fetch.api,
+                  params: fetchParams,
+                  dataKey: fetch.dataKey,
+                  total
+                }
+              : null,
             calcExportHandle: exportExcel.calcExportHandle
           }
         }

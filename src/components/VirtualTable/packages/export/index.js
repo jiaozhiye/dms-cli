@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 15:44:32
+ * @Last Modified time: 2020-03-28 20:15:01
  */
 import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -19,7 +19,7 @@ export default {
     flattenColumns: PropTypes.array,
     data: PropTypes.array.def([]),
     fileName: PropTypes.string.def('导出数据.xlsx'),
-    fetch: PropTypes.object.def({}),
+    fetch: PropTypes.object,
     calcExportHandle: PropTypes.func.def(noop)
   },
   computed: {
@@ -63,11 +63,10 @@ export default {
       });
     },
     createFetchParams(fetch) {
-      if (!fetch.api) return null;
-      const { api, dataKey, total } = fetch;
-      const params = { ...fetch.params };
-      // 移除 xhrAbort 属性
-      delete params.xhrAbort;
+      if (!fetch) {
+        return null;
+      }
+      const { api, params, dataKey, total } = fetch;
       return {
         fetch: {
           api,

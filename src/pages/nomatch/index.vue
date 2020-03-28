@@ -1,5 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
+    <!-- <el-button @click="clickHandle">按钮</el-button> -->
     <VirtualTable :columns="columns" :dataSource="list" rowKey="id" :height="height" :rowSelection="selection" :columnsChange="columnsChange" @change="changeHandle">
       <span></span>
     </VirtualTable>
@@ -35,6 +36,11 @@ export default {
     return {
       list: data,
       height: 400,
+      fetch: {
+        api: () => {},
+        params: {},
+        dataKey: 'items'
+      },
       columns: [
         {
           title: '序号',
@@ -186,7 +192,7 @@ export default {
       this.columns = columns;
     },
     clickHandle() {
-      this.height = 500;
+      this.fetch.params = { a: 7 };
     }
   }
 };

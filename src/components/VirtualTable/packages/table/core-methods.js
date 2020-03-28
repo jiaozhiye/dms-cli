@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 17:22:08
+ * @Last Modified time: 2020-03-28 20:30:14
  */
-import { throttle, browse, getCellValue, setCellValue } from '../utils';
+import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
+import config from '../config';
 import _ from 'lodash';
 
 const $browse = browse();
@@ -30,6 +31,46 @@ export default {
     // 设置表格数据
     this.tableFullData = [...results];
     this.tableOriginData = [...results];
+  },
+  // ajax 获取数据
+  async getTableData() {
+    const { fetch, fetchParams } = this;
+    if (!fetch || fetch.xhrAbort) return;
+    // console.log(`ajax 请求参数：`, fetchParams);
+    if (process.env.MOCK_DATA === 'true') {
+      const { data } = _.cloneDeep(require('@/mock/tableData').default);
+      // 模拟分页
+      const { currentPage, pageSize } = fetchParams;
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      // 处理数据
+      this.createTableData(data.items.slice(start, end));
+      this.setRecordsTotal(data.total);
+    } else {
+      let list = [];
+      let total = 0;
+      this.showLoading = true;
+      try {
+        const res = await fetch.api(fetchParams);
+        if (res.resultCode === 200) {
+          const datakey = fetch.dataKey || config.dataKey;
+          list = _.get(res.data, datakey) || [];
+          total = _.get(res.data, datakey.replace(/[^\.]+$/, config.totalKey)) || list.length || 0;
+        }
+        // 服务端合计
+        if (this.showFooter) {
+          this.flattenColumns
+            .filter(x => x.summation && x.summation.dataIndex)
+            .forEach(x => {
+              this.summaries[x.dataIndex] = Number(res.data[x.summation.dataIndex]) || 0;
+            });
+        }
+      } catch (e) {}
+      this.showLoading = false;
+      // 处理数据
+      this.createTableData(list);
+      this.setRecordsTotal(total);
+    }
   },
   // 加载表格数据
   loadTableData() {
@@ -170,5 +211,10 @@ export default {
   // 清空表头筛选
   clearTableFilter() {
     this.$$tableHeader.clearTheadFilter();
+  },
+  // 是否仅有分页参数产生变化
+  onlyPaginationChange(next, prev) {
+    const diff = Object.keys(difference(next, prev));
+    return diff.length === 1 && (diff.includes('currentPage') || diff.includes('pageSize'));
   }
 };

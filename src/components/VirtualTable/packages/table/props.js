@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 09:54:28
+ * @Last Modified time: 2020-03-28 20:24:19
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -80,9 +80,10 @@ export default {
   rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).def('uid'),
   // 数据请求接口
   fetch: PropTypes.shape({
-    api: PropTypes.func.isRequired,
-    params: PropTypes.object,
-    dataKey: PropTypes.string
+    api: PropTypes.func.isRequired, // api 接口
+    params: PropTypes.object.isRequired, // 接口参数
+    xhrAbort: PropTypes.bool, // 是否取消请求
+    dataKey: PropTypes.string // 数据路径
   }),
   // 是否带有纵向边框
   border: PropTypes.bool.def(true),
