@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 22:10:17
+ * @Last Modified time: 2020-03-28 17:16:43
  */
 import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
 import _ from 'lodash';
@@ -19,14 +19,12 @@ export default {
     this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
   },
   updateElsHeight() {
-    const { tableHeader, tableBody, tableFooter } = this.$refs;
-
     const tableOuterHeight = this.$vTable.offsetHeight;
-    this.layout.headerHeight = this.showHeader ? tableHeader.$el.offsetHeight : 0;
-    this.layout.footerHeight = this.showFooter ? tableFooter.$el.offsetHeight : 0;
+    this.layout.headerHeight = this.showHeader ? this.$$tableHeader.$el.offsetHeight : 0;
+    this.layout.footerHeight = this.showFooter ? this.$$tableFooter.$el.offsetHeight : 0;
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
-    this.layout.tableBodyHeight = tableBody.$el.querySelector('.v-table--body').offsetHeight;
+    this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.v-table--body').offsetHeight;
 
     this.scrollY = this.scrollYLoad || this.layout.tableBodyHeight > this.layout.viewportHeight;
   },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 13:57:57
+ * @Last Modified time: 2020-03-28 17:13:44
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -125,6 +125,15 @@ export default {
   computed: {
     $vTable() {
       return this.$refs[`v-table`] || null;
+    },
+    $$tableHeader() {
+      return this.$refs[`tableHeader`];
+    },
+    $$tableBody() {
+      return this.$refs[`tableBody`];
+    },
+    $$tableFooter() {
+      return this.$refs[`tableFooter`];
     },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);

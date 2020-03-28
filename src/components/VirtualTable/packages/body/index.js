@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 15:43:32
+ * @Last Modified time: 2020-03-28 17:16:07
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -74,15 +74,14 @@ export default {
   },
   methods: {
     scrollEvent(ev) {
-      const { scrollYLoad, $refs, layout, triggerScrollYEvent } = this.$$table;
-      const { tableHeader, tableFooter } = $refs;
+      const { scrollYLoad, $$tableHeader, $$tableFooter, layout, triggerScrollYEvent } = this.$$table;
       const { scrollTop: st, scrollLeft: sl } = ev.target;
       if (sl !== this.prevSL) {
-        if (tableHeader) {
-          tableHeader.$el.scrollLeft = sl;
+        if ($$tableHeader) {
+          $$tableHeader.$el.scrollLeft = sl;
         }
-        if (tableFooter) {
-          tableFooter.$el.scrollLeft = sl;
+        if ($$tableFooter) {
+          $$tableFooter.$el.scrollLeft = sl;
         }
         this.$$table.isPingLeft = sl > 0;
         this.$$table.isPingRight = sl + layout.tableWidth < layout.tableBodyWidth;

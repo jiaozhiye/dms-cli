@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 09:03:39
+ * @Last Modified time: 2020-03-28 17:28:16
  */
 import { convertToRows, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
@@ -44,9 +44,6 @@ export default {
     return {};
   },
   computed: {
-    $$tableBody() {
-      return this.$$table.$refs[`tableBody`];
-    },
     columnRows() {
       return convertToRows(filterTableColumns(this.tableColumns, ['__selection__', config.operationColumn]));
     },
@@ -114,8 +111,8 @@ export default {
       return html + `</body></html>`;
     },
     _toTable(columnRows, flatColumns) {
-      const { tableFullData } = this.$$table;
-      const summationRows = this.showFooter ? this.$$table.$refs[`tableFooter`].summationRows : [];
+      const { tableFullData, $$tableFooter } = this.$$table;
+      const summationRows = this.showFooter ? $$tableFooter.summationRows : [];
       let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns.map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px"}>`).join('')}</colgroup>`;
       if (this.showHeader) {
@@ -147,7 +144,7 @@ export default {
       if (_.isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
       }
-      return this.$$tableBody.renderText(text, column);
+      return this.$$table.$$tableBody.renderText(text, column);
     }
   },
   render() {

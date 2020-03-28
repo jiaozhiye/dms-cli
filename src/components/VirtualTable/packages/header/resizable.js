@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 13:54:07
+ * @Last Modified time: 2020-03-28 17:25:54
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
 import config from '../config';
@@ -11,17 +11,21 @@ export default {
   name: 'Resizable',
   props: ['column'],
   inject: ['$$table'],
+  computed: {
+    $resizableBar() {
+      return this.$$table.$refs[`resizable-bar`];
+    }
+  },
   methods: {
     resizeMousedown(ev) {
       ev.preventDefault();
       const dom = ev.target;
-      const { $vTable, $refs, flattenColumns, doLayout } = this.$$table;
-      const $tableBody = $refs[`tableBody`].$el;
-      const target = $refs[`resizable-bar`];
+      const { $vTable, $$tableBody, flattenColumns, doLayout } = this.$$table;
+      const target = this.$resizableBar;
 
       const half = dom.offsetWidth / 2;
       const disX = ev.clientX;
-      const left = getOffsetPos(dom, $vTable).left - $tableBody.scrollLeft + half;
+      const left = getOffsetPos(dom, $vTable).left - $$tableBody.$el.scrollLeft + half;
 
       $vTable.classList.add('c--resize');
       target.style.left = `${left}px`;

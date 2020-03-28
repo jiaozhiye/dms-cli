@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 22:56:54
+ * @Last Modified time: 2020-03-28 17:22:08
  */
 import { throttle, browse, getCellValue, setCellValue } from '../utils';
 import _ from 'lodash';
@@ -112,10 +112,9 @@ export default {
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace(type) {
-    const { scrollYStore, tableFullData } = this;
-    const { tableBody } = this.$refs;
-    const $tableBody = tableBody.$el.querySelector('.v-table--body');
-    const $tableYSpaceElem = tableBody.$el.querySelector('.v-body--y-space');
+    const { scrollYStore, tableFullData, $$tableBody } = this;
+    const $tableBody = $$tableBody.$el.querySelector('.v-table--body');
+    const $tableYSpaceElem = $$tableBody.$el.querySelector('.v-body--y-space');
 
     // 重置 dom
     if (type === 'reset') {
@@ -166,10 +165,10 @@ export default {
   },
   // 清空表头排序
   clearTableSorter() {
-    this.$refs[`tableHeader`].clearTheadSorter();
+    this.$$tableHeader.clearTheadSorter();
   },
   // 清空表头筛选
   clearTableFilter() {
-    this.$refs[`tableHeader`].clearTheadFilter();
+    this.$$tableHeader.clearTheadFilter();
   }
 };
