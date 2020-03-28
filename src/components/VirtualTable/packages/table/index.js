@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 21:05:44
+ * @Last Modified time: 2020-03-28 21:11:08
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -370,6 +370,12 @@ export default {
         change: this.pagerChangeHandle
       }
     };
+    const alertProps = {
+      props: {
+        total,
+        selectionKeys
+      }
+    };
     const printProps = {
       props: {
         tableColumns,
@@ -402,7 +408,7 @@ export default {
         <div ref="v-info" class="v-info--wrapper">
           <div>
             {/* 通知 */}
-            {showAlert && <Alert total={total} selectionKeys={selectionKeys} />}
+            {showAlert && <Alert {...alertProps} />}
           </div>
           <div>
             {/* 默认槽口 */}
