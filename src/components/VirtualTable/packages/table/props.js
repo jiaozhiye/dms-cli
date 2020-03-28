@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 20:24:19
+ * @Last Modified time: 2020-03-28 21:08:05
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -107,8 +107,6 @@ export default {
   cellStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   // 合并行或列的计算方法
   spanMethod: PropTypes.func,
-  // 分页
-  showPagination: PropTypes.bool.def(true),
   // 行选择
   rowSelection: PropTypes.shape({
     type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 多选/单选，checkbox/radio
@@ -124,5 +122,13 @@ export default {
   exportExcel: PropTypes.shape({
     fileName: PropTypes.string.isRequired, // 导出的文件名，需包含扩展名[xlsx|csv]
     calcExportHandle: PropTypes.func // 计算导出数据，用于对数据的整理
-  })
+  }),
+  // 表格打印
+  tablePrint: PropTypes.shape({}),
+  // 是否显示表格信息
+  showAlert: PropTypes.bool.def(true),
+  // 是否显示列定义
+  showColumnDefine: PropTypes.bool.def(true),
+  // 是否显示全屏按钮
+  showFullScreen: PropTypes.bool.def(true)
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 20:37:44
+ * @Last Modified time: 2020-03-28 21:05:44
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -155,6 +155,9 @@ export default {
     showFooter() {
       return this.flattenColumns.some(x => !!x.summation);
     },
+    showPagination() {
+      return !!this.fetch;
+    },
     isHeadSorter() {
       return this.flattenColumns.some(column => column.sorter);
     },
@@ -177,9 +180,9 @@ export default {
       };
     },
     calcHeight() {
-      const pagerHeight = this.showPagination ? 48 : 0;
+      const pagerHeight = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
-        return window.innerHeight - 20 - this.$refs[`v-info`].offsetHeight - pagerHeight;
+        return window.innerHeight - 30 - this.$refs[`v-info`].offsetHeight - pagerHeight;
       }
       return null;
     },
@@ -289,6 +292,7 @@ export default {
       tableStyles,
       showHeader,
       showFooter,
+      showPagination,
       isGroup,
       isHeadSorter,
       isHeadFilter,
@@ -307,7 +311,10 @@ export default {
       selectionKeys,
       fetch,
       fetchParams,
-      exportExcel
+      exportExcel,
+      showAlert,
+      showFullScreen,
+      showColumnDefine
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
     const vTableCls = [
@@ -395,19 +402,19 @@ export default {
         <div ref="v-info" class="v-info--wrapper">
           <div>
             {/* 通知 */}
-            <Alert total={total} selectionKeys={selectionKeys} />
+            {showAlert && <Alert total={total} selectionKeys={selectionKeys} />}
           </div>
           <div>
             {/* 默认槽口 */}
             {this.$slots[`default`]}
             {/* 全屏 */}
-            <FullScreen />
+            {showFullScreen && <FullScreen />}
             {/* 打印 */}
             <PrintTable {...printProps} />
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
             {/* 列定义 */}
-            <ColumnFilter columns={columns} />
+            {showColumnDefine && <ColumnFilter columns={columns} />}
           </div>
         </div>
         <SpinLoading spinning={showLoading} tip="Loading...">
@@ -430,7 +437,7 @@ export default {
           </div>
         </SpinLoading>
         {/* 分页 */}
-        <Pager {...pagerProps} />
+        {showPagination && <Pager {...pagerProps} />}
       </div>
     );
   }
