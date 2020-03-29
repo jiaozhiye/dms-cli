@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 20:30:14
+ * @Last Modified time: 2020-03-29 13:45:47
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -76,7 +76,7 @@ export default {
   loadTableData() {
     const { height, maxHeight, ellipsis, scrollYStore, tableFullData, fetch } = this;
     // 是否开启虚拟滚动
-    this.scrollYLoad = tableFullData.length > 100;
+    this.scrollYLoad = tableFullData.length > config.virtualScrollY;
 
     if (this.__dataChange__) {
       if (this.scrollYLoad) {

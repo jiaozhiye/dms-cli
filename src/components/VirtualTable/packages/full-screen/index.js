@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 12:23:11
+ * @Last Modified time: 2020-03-29 14:37:59
  */
 import addEventListener from 'add-dom-event-listener';
 
@@ -48,7 +48,7 @@ export default {
     ];
     return (
       <span class="v-full-screen" title={title} onClick={this.clickHandle}>
-        <i class={cls} />
+        <i class={cls} style="font-size: 18px; margin-top: 1px;" />
       </span>
     );
   }

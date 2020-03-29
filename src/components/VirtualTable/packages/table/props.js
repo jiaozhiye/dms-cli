@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 21:08:05
+ * @Last Modified time: 2020-03-29 14:20:06
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -97,6 +97,8 @@ export default {
   resizable: PropTypes.bool.def(true),
   // 尺寸
   size: PropTypes.oneOf(['medium', 'small', 'mini']),
+  // 存储 columns 定义的字段名，不能重复
+  cacheColumnsKey: PropTypes.string,
   // 是否显示表头
   showHeader: PropTypes.bool.def(true),
   // 设置所有内容过长时显示为省略号
@@ -130,5 +132,7 @@ export default {
   // 是否显示列定义
   showColumnDefine: PropTypes.bool.def(true),
   // 是否显示全屏按钮
-  showFullScreen: PropTypes.bool.def(true)
+  showFullScreen: PropTypes.bool.def(true),
+  // 是否显示刷新按钮
+  showRefresh: PropTypes.bool.def(true)
 };

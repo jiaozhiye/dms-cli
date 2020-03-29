@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 01:41:58
+ * @Last Modified time: 2020-03-29 13:45:41
  */
 const config = {
   // Vue 应用，根节点 ID
@@ -25,6 +25,8 @@ const config = {
   dataKey: 'items',
   // 后台返回总条数的 key
   totalKey: 'total',
+  // 虚拟滚动的阀值
+  virtualScrollY: 200,
   // 表头排序的参数名
   sorterFieldName: 'sortby',
   // 客户端表头排序

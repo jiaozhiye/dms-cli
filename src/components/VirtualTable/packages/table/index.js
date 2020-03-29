@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 21:11:08
+ * @Last Modified time: 2020-03-29 14:22:39
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -28,6 +28,7 @@ import ColumnFilter from '../column-filter';
 import FullScreen from '../full-screen';
 import Export from '../export';
 import PrintTable from '../print';
+import Reload from '../reload';
 
 const noop = () => {};
 const isIE = browse()['msie'];
@@ -314,6 +315,7 @@ export default {
       exportExcel,
       showAlert,
       showFullScreen,
+      showRefresh,
       showColumnDefine
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
@@ -415,6 +417,8 @@ export default {
             {this.$slots[`default`]}
             {/* 全屏 */}
             {showFullScreen && <FullScreen />}
+            {/* 刷新 */}
+            {showRefresh && !fetch && <Reload />}
             {/* 打印 */}
             <PrintTable {...printProps} />
             {/* 导出 */}

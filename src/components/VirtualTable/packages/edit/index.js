@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 10:07:20
+ * @Last Modified time: 2020-03-29 13:25:43
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -234,7 +234,7 @@ export default {
     renderCell() {
       const { record, column } = this;
       const text = getCellValue(record, column.dataIndex);
-      return <div>{this.$$body.renderText(text, column)}</div>;
+      return <span>{this.$$body.renderText(text, column)}</span>;
     }
   },
   render() {
