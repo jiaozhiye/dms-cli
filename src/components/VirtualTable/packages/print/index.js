@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 12:50:06
+ * @Last Modified time: 2020-03-29 22:48:11
  */
-import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
+import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
 import _ from 'lodash';
 
@@ -134,19 +134,32 @@ export default {
       return res;
     },
     printHandle() {
-      const elIframe = document.createElement('iframe');
-      elIframe.setAttribute('frameborder', '0');
-      elIframe.style.display = 'none';
-      document.body.appendChild(elIframe);
-      elIframe.onload = function() {
-        // console.log(this.contentWindow);
-        // this.focus();
-        // this.contentWindow.print();
-        setTimeout(() => {
-          this.parentNode.removeChild(this);
-        }, 100);
-      };
-      elIframe.src = `data:text/html;charset=utf-8,${encodeURIComponent(this.toHtml())}`;
+      const opts = { filename: 'print', type: 'html', download: false };
+      downloadFile(opts, this.toHtml()).then(({ content, blob }) => {
+        let printFrame = document.createElement('iframe');
+        printFrame.setAttribute('frameborder', '0');
+        printFrame.setAttribute('width', '100%');
+        printFrame.setAttribute('height', '0');
+        printFrame.style.display = 'none';
+        document.body.appendChild(printFrame);
+        if (this.$$table.isIE) {
+          printFrame.contentDocument.write(content);
+          printFrame.contentDocument.execCommand('print');
+          printFrame.parentNode.removeChild(printFrame);
+          printFrame = null;
+        } else {
+          printFrame.onload = ev => {
+            if (ev.target.src) {
+              ev.target.contentWindow.print();
+            }
+            setTimeout(() => {
+              printFrame.parentNode.removeChild(printFrame);
+              printFrame = null;
+            });
+          };
+          printFrame.src = URL.createObjectURL(blob);
+        }
+      });
     },
     toHtml() {
       const chunkFlatColumns = this.createChunkColumns([...this.flatColumns]);
@@ -157,7 +170,6 @@ export default {
         `<head>`,
         `<meta charset="utf-8">`,
         `<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">`,
-        `<title>打印表格</title>`,
         `<style>${this.defaultHtmlStyle}</style>`,
         `</head>`,
         `<body>`
@@ -166,7 +178,6 @@ export default {
         html += this._toTable(chunkColumnRows[i], chunkFlatColumns[i]);
         html += `<div class="v-page-break"></div>`;
       }
-      html += this._toJs();
       return html + `</body></html>`;
     },
     _toTable(columnRows, flatColumns) {
@@ -189,13 +200,6 @@ export default {
       }
       html += '</table>';
       return html;
-    },
-    _toJs() {
-      return `
-        <script>
-          setTimeout(() => window.print());
-        </script>
-      `;
     },
     renderCell(row, rowIndex, column, columnIndex) {
       const { dataIndex, render } = column;

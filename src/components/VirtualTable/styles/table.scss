@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 14:34:17
+ * @Last Modified time: 2020-03-29 21:24:02
  */
 @import './common.scss';
 
@@ -34,10 +34,6 @@
   }
 }
 
-.v-table-hidden-column {
-  display: none;
-}
-
 .v-table--body-wrapper {
   overflow-y: auto;
   overflow-x: auto;
@@ -53,20 +49,18 @@
   }
 }
 
-/* 全屏 */
-.v-is--maximize {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9;
-  width: 100%;
-  height: 100%;
-  padding: $v-module-distance;
-  background-color: #fff;
-  box-sizing: border-box;
+/* 顶部信息 */
+.v-top-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $v-module-distance;
+  & > div {
+    display: inherit;
+    align-items: center;
+  }
 }
 
-/* table */
+/* table 样式 */
 .v-table {
   position: relative;
   color: $v-font-color;
@@ -100,11 +94,13 @@
     border-collapse: separate;
     table-layout: fixed;
   }
+
   .v-table--header-wrapper,
   .v-table--footer-wrapper {
     overflow-x: hidden;
     overflow-y: hidden;
   }
+
   &:not(.is--empty) {
     &.show--foot {
       &.scroll--x {
@@ -124,19 +120,23 @@
   .v-header--column {
     background-color: $v-table-header-background-color;
   }
+
   .v-body--column {
     transition: background-color 0.3s ease;
     background-color: $v-table-background-color;
   }
+
   .v-footer--column {
     background-color: $v-table-footer-background-color;
     border-bottom: 0;
   }
+
   .v-body--row:hover {
     .v-body--column {
       background-color: $v-table-row-hover-background-color;
     }
   }
+
   .v-body--row-selected {
     .v-body--column {
       background-color: $v-table-row-selected-background-color;
@@ -214,7 +214,7 @@
       }
     }
     .v-column--sort {
-      background-color: #fafafa;
+      background-color: $v-table-header-background-color;
     }
   }
 
@@ -347,16 +347,19 @@
     .v-body--column {
       @extend %DefaultColumnHeight;
     }
+
     &.size--medium {
       .v-body--column {
         @extend %MediumColumnHeight;
       }
     }
+
     &.size--small {
       .v-body--column {
         @extend %SmallColumnHeight;
       }
     }
+
     &.size--mini {
       .v-body--column {
         @extend %MiniColumnHeight;
@@ -381,6 +384,7 @@
       }
     }
   }
+
   &.size--medium {
     .v-header--column,
     .v-body--column,
@@ -398,6 +402,7 @@
       }
     }
   }
+
   &.size--small {
     .v-header--column,
     .v-body--column,
@@ -418,6 +423,7 @@
       }
     }
   }
+
   &.size--mini {
     .v-header--column,
     .v-body--column,
@@ -474,6 +480,7 @@
   }
 }
 
+/* 全屏、刷新 */
 .v-full-screen,
 .v-reload-data {
   display: inline-block;
@@ -490,12 +497,15 @@
   }
 }
 
-.v-info--wrapper {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: $v-module-distance;
-  & > div {
-    display: inherit;
-    align-items: center;
-  }
+/* 全屏 */
+.v-is--maximize {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%;
+  height: 100%;
+  padding: $v-module-distance;
+  background-color: $v-table-background-color;
+  box-sizing: border-box;
 }

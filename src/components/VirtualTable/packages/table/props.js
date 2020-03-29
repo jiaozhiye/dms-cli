@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 14:20:06
+ * @Last Modified time: 2020-03-29 21:16:24
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -120,6 +120,12 @@ export default {
   clientSorter: PropTypes.bool,
   // 客户端筛选
   clientFilter: PropTypes.bool,
+  // 是否显示表格信息
+  showAlert: PropTypes.bool.def(true),
+  // 是否显示全屏按钮
+  showFullScreen: PropTypes.bool.def(true),
+  // 是否显示刷新按钮
+  showRefresh: PropTypes.bool.def(true),
   // 导出表格数据
   exportExcel: PropTypes.shape({
     fileName: PropTypes.string.isRequired, // 导出的文件名，需包含扩展名[xlsx|csv]
@@ -127,12 +133,6 @@ export default {
   }),
   // 表格打印
   tablePrint: PropTypes.shape({}),
-  // 是否显示表格信息
-  showAlert: PropTypes.bool.def(true),
   // 是否显示列定义
-  showColumnDefine: PropTypes.bool.def(true),
-  // 是否显示全屏按钮
-  showFullScreen: PropTypes.bool.def(true),
-  // 是否显示刷新按钮
-  showRefresh: PropTypes.bool.def(true)
+  showColumnDefine: PropTypes.bool.def(true)
 };

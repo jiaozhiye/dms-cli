@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 22:38:30
+ * @Last Modified time: 2020-03-29 22:46:54
  */
 import _ from 'lodash';
 
@@ -372,4 +372,28 @@ export const formatNumber = (value = '') => {
 export const validateNumber = val => {
   const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
   return (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
+};
+
+// 文件下载/blob
+export const downloadFile = (opts, content) => {
+  const { filename, type, download } = opts;
+  const name = `${filename}.${type}`;
+  if (window.Blob) {
+    const blob = new Blob([content], { type: `text/${type}` });
+    if (!download) {
+      return Promise.resolve({ type, content, blob });
+    }
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(blob, name);
+    } else {
+      let linkElem = document.createElement('a');
+      linkElem.target = '_blank';
+      linkElem.download = name;
+      linkElem.href = URL.createObjectURL(blob);
+      document.body.appendChild(linkElem);
+      linkElem.click();
+      document.body.removeChild(linkElem);
+      linkElem = null;
+    }
+  }
 };

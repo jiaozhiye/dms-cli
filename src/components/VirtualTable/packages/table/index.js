@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 14:43:36
+ * @Last Modified time: 2020-03-29 21:30:43
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -31,7 +31,6 @@ import PrintTable from '../print';
 import Reload from '../reload';
 
 const noop = () => {};
-const isIE = browse()['msie'];
 
 export default {
   name: 'Table',
@@ -118,7 +117,7 @@ export default {
         height: 0
       },
       // 是否是 IE11
-      isIE: isIE,
+      isIE: browse()['msie'],
       // 全屏样式
       isFullScreen: false,
       // 服务端合计
@@ -126,6 +125,9 @@ export default {
     };
   },
   computed: {
+    $vTopInfo() {
+      return this.$refs[`v-top-info`];
+    },
     $vTable() {
       return this.$refs[`v-table`];
     },
@@ -144,7 +146,7 @@ export default {
     allColumns() {
       return getAllColumns(this.tableColumns);
     },
-    changeParams() {
+    tableChange() {
       return [this.pagination, this.filters, this.sorter, { currentDataSource: this.tableFullData }];
     },
     leftFixedColumns() {
@@ -168,9 +170,6 @@ export default {
     bordered() {
       return this.border || this.isGroup;
     },
-    shouldUpdateHeight() {
-      return this.height || this.maxHeight;
-    },
     fetchParams() {
       const params = this.fetch ? this.fetch.params : null;
       return {
@@ -180,10 +179,13 @@ export default {
         ...this.pagination
       };
     },
+    shouldUpdateHeight() {
+      return this.height || this.maxHeight;
+    },
     calcHeight() {
       const pagerHeight = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
-        return window.innerHeight - 30 - this.$refs[`v-info`].offsetHeight - pagerHeight;
+        return window.innerHeight - 30 - this.$vTopInfo.offsetHeight - pagerHeight;
       }
       return null;
     },
@@ -220,13 +222,13 @@ export default {
       this.doLayout();
     },
     filters() {
-      this.$emit('change', ...this.changeParams);
+      this.$emit('change', ...this.tableChange);
     },
     sorter() {
-      this.$emit('change', ...this.changeParams);
+      this.$emit('change', ...this.tableChange);
     },
     pagination() {
-      this.$emit('change', ...this.changeParams);
+      this.$emit('change', ...this.tableChange);
     },
     fetchParams(next, prev) {
       if (!this.fetch) return;
@@ -291,6 +293,8 @@ export default {
       showLoading,
       bordered,
       tableStyles,
+      rowStyle,
+      cellStyle,
       showHeader,
       showFooter,
       showPagination,
@@ -305,20 +309,19 @@ export default {
       isPingRight,
       leftFixedColumns,
       rightFixedColumns,
-      rowStyle,
-      cellStyle,
+      fetch,
+      fetchParams,
       pagination,
       total,
       selectionKeys,
-      fetch,
-      fetchParams,
-      exportExcel,
       showAlert,
       showFullScreen,
       showRefresh,
+      exportExcel,
       showColumnDefine
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
+    const vTopInfoCls = [`v-top-info`];
     const vTableCls = [
       `v-table`,
       {
@@ -407,7 +410,7 @@ export default {
     return (
       <div class={vWrapperCls}>
         {/* 表格信息 */}
-        <div ref="v-info" class="v-info--wrapper">
+        <div ref="v-top-info" class={vTopInfoCls}>
           <div>
             {/* 通知 */}
             {showAlert && <Alert {...alertProps} />}
