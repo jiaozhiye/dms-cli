@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 01:49:34
+ * @Last Modified time: 2020-03-29 12:50:06
  */
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
@@ -38,6 +38,9 @@ export default {
         padding: 5px;
         border: 1px solid #000;
       }
+      .v-table--print th[colspan]:not([colspan='1']) {
+        text-align: center;
+      }
       .v-page-break {
         page-break-after: always;
       }
@@ -61,19 +64,21 @@ export default {
           if (column.level === 1) {
             tmp.push(column);
           } else {
-            tmp.push(this.createDeepColumn(column, tableColumns));
+            // 深度拆分列
+            tmp.push(this.deepCreateColumn(column, tableColumns));
           }
         });
-        this.mergeColumns(tmp);
+        // 合并列
+        tmp = this.mergeColumns(tmp);
         res.push(convertToRows(tmp));
       });
       return res;
     },
-    createDeepColumn(item, columns) {
+    deepCreateColumn(item, columns) {
       const parent = Object.assign({}, deepFindColumn(columns, item.parentDataIndex));
       parent.children = [item];
       if (parent.level > 1) {
-        return this.createDeepColumn(parent, columns);
+        return this.deepCreateColumn(parent, columns);
       }
       return parent;
     },
@@ -84,12 +89,24 @@ export default {
         if (res.length <= 1) {
           return res[0];
         } else {
-          return this.doMerge(res);
+          return this.doMerge(res, 'dataIndex')[0];
         }
       });
     },
-    doMerge(columns) {
-      // ...
+    doMerge(columns, mark) {
+      return _(_.cloneDeep(columns))
+        .flatten()
+        .groupBy(mark)
+        .map(
+          _.spread((...values) => {
+            return _.mergeWith(...values, (objValue, srcValue) => {
+              if (_.isArray(objValue)) {
+                return this.doMerge(objValue.concat(srcValue), mark);
+              }
+            });
+          })
+        )
+        .value();
     },
     createChunkColumns(columns) {
       let res = [];
