@@ -2,23 +2,23 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 16:36:41
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 17:01:19
+ * @Last Modified time: 2020-03-30 17:11:13
  */
 .v-expand--icon {
   position: relative;
   display: inline-flex;
   width: 17px;
   height: 17px;
-  color: $v-icon-color;
+  color: $v-font-secondary-color;
   line-height: 12px;
   vertical-align: -2px;
   background: #fff;
   border: 1px solid #d9d9d9;
   border-radius: $v-border-radius;
   outline: none;
-  transition: all 0.3s ease;
   user-select: none;
   cursor: pointer;
+  transition: all 0.3s ease;
   &:hover {
     color: $v-primary-color;
     border-color: $v-primary-color;
