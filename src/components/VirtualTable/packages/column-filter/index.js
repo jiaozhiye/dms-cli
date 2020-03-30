@@ -2,13 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 21:32:27
+ * @Last Modified time: 2020-03-30 12:52:01
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
 import Checkbox from '../checkbox';
 
 import config from '../config';
+
+const noop = () => {};
 
 export default {
   name: 'ColumnFilter',
@@ -24,7 +26,7 @@ export default {
     };
   },
   computed: {
-    allColumns() {
+    realColumns() {
       return [...this.leftFixedColumns, ...this.mainColumns, ...this.rightFixedColumns];
     }
   },
@@ -48,22 +50,22 @@ export default {
     fixedChangeHandle(column, dir) {
       column.fixed = dir;
       this.createColumns();
-      this.sortChangeHandle();
+      this.changeHandle();
     },
     cancelFixedHandle(column) {
       delete column.fixed;
       this.createColumns();
-      this.sortChangeHandle();
+      this.changeHandle();
     },
-    sortChangeHandle() {
-      const { columnsChange } = this.$$table;
-      columnsChange && columnsChange(this.allColumns);
+    changeHandle() {
+      const { columnsChange = noop } = this.$$table;
+      columnsChange(this.realColumns);
     },
     renderListItem(column, type) {
       const cls = [`iconfont`, `icon-menu`, `v-handle`, [`${type}-handle`]];
       return (
         <li key={column.dataIndex} class="item">
-          <Checkbox value={!column.hidden} onInput={val => (column.hidden = !val)} onChange={this.sortChangeHandle} />
+          <Checkbox value={!column.hidden} onInput={val => (column.hidden = !val)} onChange={this.changeHandle} />
           <i class={cls} title="拖动排序" />
           <span>{column.title}</span>
           {type === 'main' ? (
@@ -91,7 +93,7 @@ export default {
               onInput={list => {
                 this.leftFixedColumns = list;
               }}
-              onChange={this.sortChangeHandle}
+              onChange={this.changeHandle}
             >
               <transition-group type="transition">{leftFixedColumns.map(column => this.renderListItem(column, 'left'))}</transition-group>
             </Draggable>
@@ -105,7 +107,7 @@ export default {
               onInput={list => {
                 this.mainColumns = list;
               }}
-              onChange={this.sortChangeHandle}
+              onChange={this.changeHandle}
             >
               <transition-group type="transition">{mainColumns.map(column => this.renderListItem(column, 'main'))}</transition-group>
             </Draggable>
@@ -119,7 +121,7 @@ export default {
               onInput={list => {
                 this.rightFixedColumns = list;
               }}
-              onChange={this.sortChangeHandle}
+              onChange={this.changeHandle}
             >
               <transition-group type="transition">{rightFixedColumns.map(column => this.renderListItem(column, 'right'))}</transition-group>
             </Draggable>

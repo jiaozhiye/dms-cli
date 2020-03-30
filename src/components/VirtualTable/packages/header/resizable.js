@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 17:25:54
+ * @Last Modified time: 2020-03-30 12:57:21
  */
 import { getOffsetPos, deepFindColumn } from '../utils';
 import config from '../config';
@@ -20,7 +20,8 @@ export default {
     resizeMousedown(ev) {
       ev.preventDefault();
       const dom = ev.target;
-      const { $vTable, $$tableBody, flattenColumns, doLayout } = this.$$table;
+      const _this = this;
+      const { $vTable, $$tableBody, columns, flattenColumns, doLayout, setLocalColumns } = this.$$table;
       const target = this.$resizableBar;
 
       const half = dom.offsetWidth / 2;
@@ -49,8 +50,8 @@ export default {
       document.onmouseup = function() {
         $vTable.classList.remove('c--resize');
         target.style.display = 'none';
-        // 重新渲染布局
         doLayout();
+        setLocalColumns(columns);
         this.onmousemove = null;
         this.onmouseup = null;
       };
