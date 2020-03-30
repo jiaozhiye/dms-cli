@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 13:09:21
+ * @Last Modified time: 2020-03-30 15:24:29
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -105,9 +105,7 @@ export default {
         footerHeight: 0
       },
       // 选择列的选中数据
-      selectionKeys: this.initialSelectionKeys('selectedRowKeys'),
-      // 选择列的禁选数据
-      disabledSelectionKeys: this.initialSelectionKeys('disabledRowKeys'),
+      selectionKeys: this.createSelectionKeys(),
       // X 滚动条是否离开左边界
       isPingLeft: false,
       // X 滚动条是否离开右边界

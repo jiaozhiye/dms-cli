@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-22 15:47:00
+ * @Last Modified time: 2020-03-30 15:24:28
  */
 const selectionMixin = {
   methods: {
@@ -20,13 +20,13 @@ const selectionMixin = {
         type
       };
     },
-    // 初始化选择列 keys
-    initialSelectionKeys(mark) {
-      if (!this.rowSelection) {
+    // 选择列已选中 keys
+    createSelectionKeys() {
+      const { rowSelection } = this;
+      if (!rowSelection) {
         return [];
       }
-      const result = this.rowSelection[mark] || [];
-      return this.rowSelection.type === 'radio' ? result.slice(0, 1) : result;
+      return rowSelection.type === 'radio' ? rowSelection.selectedRowKeys.slice(0, 1) : rowSelection.selectedRowKeys;
     }
   }
 };

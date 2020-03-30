@@ -2,10 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 10:16:30
+ * @Last Modified time: 2020-03-30 15:35:56
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
+
+const noop = () => {};
 
 export default {
   name: 'Selection',
@@ -13,37 +15,40 @@ export default {
   inject: ['$$table'],
   methods: {
     renderRadio() {
-      const { rowKey, $$table } = this;
-      const { selectionKeys, disabledSelectionKeys } = $$table;
+      const { record, rowKey } = this;
+      const {
+        selectionKeys,
+        rowSelection: { rowSelectable = noop }
+      } = this.$$table;
       return (
         <Radio
           value={selectionKeys[0]}
           onInput={val => {
-            $$table.selectionKeys = [val];
+            this.$$table.selectionKeys = [val];
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={disabledSelectionKeys.includes(rowKey)}
+          disabled={rowSelectable(record)}
         />
       );
     },
     renderCheckbox() {
-      const { rowKey, $$table } = this;
-      const { selectionKeys, disabledSelectionKeys } = $$table;
+      const { record, rowKey } = this;
+      const {
+        selectionKeys,
+        rowSelection: { rowSelectable = noop }
+      } = this.$$table;
       const prevValue = selectionKeys.includes(rowKey) ? rowKey : null;
       return (
         <Checkbox
           value={prevValue}
           onInput={val => {
-            if (val !== null) {
-              $$table.selectionKeys = [...new Set([...selectionKeys, val])];
-            } else {
-              $$table.selectionKeys = selectionKeys.filter(x => x !== prevValue);
-            }
+            const res = val !== null ? [...new Set([...selectionKeys, val])] : selectionKeys.filter(x => x !== prevValue);
+            this.$$table.selectionKeys = res;
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={disabledSelectionKeys.includes(rowKey)}
+          disabled={rowSelectable(record)}
         />
       );
     }

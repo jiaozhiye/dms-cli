@@ -178,6 +178,9 @@ export default {
       selection: {
         type: 'radio',
         selectedRowKeys: [2, 3],
+        rowSelectable: row => {
+          return row.id === 3;
+        },
         onChange: val => {
           // console.log(222, val);
         }
