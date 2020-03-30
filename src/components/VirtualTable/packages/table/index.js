@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 21:30:43
+ * @Last Modified time: 2020-03-30 10:15:48
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -10,7 +10,7 @@ import baseProps from './props';
 import config from '../config';
 import _ from 'lodash';
 
-import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, browse } from '../utils';
+import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
 
 import columnsMixin from '../columns';
 import selectionMixin from '../selection/mixin';
@@ -216,6 +216,8 @@ export default {
         }
         this.__dataChange__ = !1;
       });
+      // 触发 dataChange 事件
+      debounce(this.dataChangeHandle)();
     },
     columns(val) {
       this.tableColumns = this.createTableColumns(val);

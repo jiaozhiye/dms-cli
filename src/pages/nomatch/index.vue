@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 10px 100px 0;">
     <!-- <el-button @click="clickHandle">按钮</el-button> -->
-    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" :height="height" :rowSelection="selection" :columnsChange="columnsChange" @change="changeHandle">
+    <VirtualTable :columns="columns" :dataSource="list" rowKey="id" :height="height" :rowSelection="selection" :columnsChange="columnsChange" @dataChange="changeHandle">
       <span></span>
     </VirtualTable>
   </div>
@@ -12,7 +12,7 @@ import { VirtualTable } from '@/components/VirtualTable';
 // import res from '@/mock/tableData';
 
 const data = [];
-for (let i = 0; i < 330; i++) {
+for (let i = 0; i < 3; i++) {
   data[i] = {
     id: i + 1,
     person: {
@@ -185,14 +185,14 @@ export default {
     };
   },
   methods: {
-    changeHandle(pagination, filters, sorter, { currentDataSource }) {
-      // console.log(pagination, filters, sorter, currentDataSource);
+    changeHandle() {
+      console.log(111);
     },
     columnsChange(columns) {
       this.columns = columns;
     },
     clickHandle() {
-      this.fetch.params = { a: 7 };
+      this.list.push({ id: Math.random(), books: 10 });
     }
   }
 };

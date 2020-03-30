@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 13:45:47
+ * @Last Modified time: 2020-03-30 10:05:38
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -74,7 +74,7 @@ export default {
   },
   // 加载表格数据
   loadTableData() {
-    const { height, maxHeight, ellipsis, scrollYStore, tableFullData, fetch } = this;
+    const { height, maxHeight, ellipsis, scrollYStore, tableFullData } = this;
     // 是否开启虚拟滚动
     this.scrollYLoad = tableFullData.length > config.virtualScrollY;
 
@@ -96,7 +96,7 @@ export default {
     }
 
     this.handleTableData();
-    !fetch && this.setRecordsTotal();
+    !this.fetch && this.setRecordsTotal();
 
     return this.computeScrollLoad();
   },
@@ -193,6 +193,10 @@ export default {
         this.updateScrollYData();
       }
     });
+  },
+  // 数据变化事件
+  dataChangeHandle() {
+    this.$emit('dataChange', this.tableFullData);
   },
   // 分页事件
   pagerChangeHandle({ currentPage, pageSize }) {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 13:25:43
+ * @Last Modified time: 2020-03-30 09:58:56
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -93,6 +93,7 @@ export default {
           onChange={val => {
             this.createFieldValidate(rules, val);
             onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
           }}
           disabled={extra.disabled}
         />
@@ -129,6 +130,7 @@ export default {
           onChange={val => {
             this.createFieldValidate(rules, val);
             onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
           }}
           disabled={extra.disabled}
         />
@@ -150,6 +152,7 @@ export default {
           clearable
           onChange={val => {
             onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
           }}
           disabled={extra.disabled}
         >
@@ -181,6 +184,7 @@ export default {
           placeholder={!isDateTime ? '选择日期' : '选择时间'}
           onChange={val => {
             onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
           }}
           disabled={extra.disabled}
         />
@@ -202,6 +206,7 @@ export default {
           }}
           onChange={val => {
             onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
           }}
           trueValue={trueValue}
           falseValue={falseValue}
