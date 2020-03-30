@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 21:16:24
+ * @Last Modified time: 2020-03-30 11:07:38
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -136,3 +136,12 @@ export default {
   // 是否显示列定义
   showColumnDefine: PropTypes.bool.def(true)
 };
+
+/**
+ * 事件：
+ * change: 分页、排序、筛选变化时触发，参数：pagination, filters, sorter, { currentDataSource: tableData }
+ * dataChange: 表格数据变化时触发，参数 tableData
+ * summationChange: 表格合计变化时触发，参数 { [dataIndex]: value }
+ * rowClick: 行单击事件，参数 row, column, event
+ * rowDblclick: 行双击事件，参数 row, column, event
+ */

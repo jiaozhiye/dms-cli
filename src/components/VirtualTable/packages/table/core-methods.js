@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 10:05:38
+ * @Last Modified time: 2020-03-30 11:01:32
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -202,7 +202,6 @@ export default {
   pagerChangeHandle({ currentPage, pageSize }) {
     this.pagination.currentPage = currentPage;
     this.pagination.pageSize = pageSize;
-    this.$emit('pageChange', { currentPage, pageSize });
   },
   // 清空列选中
   clearRowSelection() {

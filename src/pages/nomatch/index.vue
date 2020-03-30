@@ -12,7 +12,7 @@ import { VirtualTable } from '@/components/VirtualTable';
 // import res from '@/mock/tableData';
 
 const data = [];
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 330; i++) {
   data[i] = {
     id: i + 1,
     person: {
@@ -186,7 +186,7 @@ export default {
   },
   methods: {
     changeHandle() {
-      console.log(111);
+      // console.log(111);
     },
     columnsChange(columns) {
       this.columns = columns;
