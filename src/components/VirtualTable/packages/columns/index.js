@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-27 13:56:37
+ * @Last Modified time: 2020-03-30 16:36:04
  */
 import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn } from '../utils';
 import config from '../config';
@@ -14,8 +14,9 @@ const columnsMixin = {
         _.isUndefined(x.renderWidth) && this.$set(x, 'renderWidth', x.width || null);
         _.isUndefined(x.orderBy) && this.$set(x, 'orderBy', null);
       });
+      const expandableColumn = this.createExpandableColumn(this.expandable);
       const selectionColumn = this.createSelectionColumn(this.rowSelection);
-      return createFilterColumns(selectionColumn ? [selectionColumn, ...baseColumns] : baseColumns);
+      return createFilterColumns([...(expandableColumn ? [expandableColumn] : []), ...(selectionColumn ? [selectionColumn] : []), ...baseColumns]);
     },
     updateColumnsWidth() {
       const tableWidth = this.$vTable.clientWidth;

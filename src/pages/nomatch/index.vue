@@ -1,7 +1,17 @@
 <template>
   <div style="padding: 10px 100px 0;">
     <!-- <el-button @click="clickHandle">按钮</el-button> -->
-    <VirtualTable cacheColumnsKey="jzyHello" :columns="columns" :dataSource="list" rowKey="id" :height="height" :rowSelection="selection" :columnsChange="columnsChange" @dataChange="changeHandle">
+    <VirtualTable
+      cacheColumnsKey="jzyHello"
+      :columns="columns"
+      :expandable="expandable"
+      :dataSource="list"
+      rowKey="id"
+      :height="height"
+      :rowSelection="selection"
+      :columnsChange="columnsChange"
+      @dataChange="changeHandle"
+    >
       <span></span>
     </VirtualTable>
   </div>
@@ -183,6 +193,11 @@ export default {
         },
         onChange: val => {
           // console.log(222, val);
+        }
+      },
+      expandable: {
+        expandedRowRender: () => {
+          return <div>asdasd</div>;
         }
       }
     };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 10:08:47
+ * @Last Modified time: 2020-03-30 16:29:39
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -120,7 +120,7 @@ export default {
             right: fixed === 'right' ? `${getStickyRight(dataIndex) + (scrollY ? gutterWidth : 0)}px` : null
           }
         : null;
-      const isResizable = resizable && dataIndex !== '__selection__';
+      const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
       return (
         <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
           <div class="v-cell">{this.renderCell(column)}</div>

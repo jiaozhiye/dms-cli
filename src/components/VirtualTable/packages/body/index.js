@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 17:16:07
+ * @Last Modified time: 2020-03-30 16:38:36
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -11,6 +11,7 @@ import _ from 'lodash';
 
 import formatMixin from './format';
 
+import Expandable from '../expandable';
 import Selection from '../selection';
 import CellEdit from '../edit';
 
@@ -184,6 +185,9 @@ export default {
     renderCell(column, row, rowIndex, columnIndex, rowKey) {
       const { dataIndex, editRender, render } = column;
       const text = getCellValue(row, dataIndex);
+      if (dataIndex === '__expandable__') {
+        return <Expandable column={column} record={row} rowKey={rowKey} />;
+      }
       if (dataIndex === '__selection__') {
         return <Selection column={column} record={row} rowKey={rowKey} />;
       }
@@ -241,14 +245,14 @@ export default {
       ev.stopPropagation();
       const { getRowKey } = this.$$table;
       const { dataIndex } = column;
-      if (['__selection__', config.operationColumn].includes(dataIndex)) return;
+      if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
       this.setClickedHandle([getRowKey(row, row.index), dataIndex]);
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {
       ev.stopPropagation();
       const { dataIndex } = column;
-      if (['__selection__', config.operationColumn].includes(dataIndex)) return;
+      if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
       this.$$table.$emit('rowDblclick', row, column, ev);
     },
     setClickedHandle(arr) {

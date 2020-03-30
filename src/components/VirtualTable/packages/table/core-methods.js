@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 11:01:32
+ * @Last Modified time: 2020-03-30 16:31:21
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -20,7 +20,7 @@ export default {
       // 初始化数据
       this.flattenColumns.forEach(column => {
         const { dataIndex, precision } = column;
-        if (dataIndex === '__selection__') return;
+        if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
         const cellVal = getCellValue(record, dataIndex);
         if (precision >= 0 && !isNaN(Number(cellVal))) {
           setCellValue(record, dataIndex, Number(cellVal).toFixed(precision));

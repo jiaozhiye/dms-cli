@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 15:24:29
+ * @Last Modified time: 2020-03-30 16:34:59
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -13,6 +13,7 @@ import _ from 'lodash';
 import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
 
 import columnsMixin from '../columns';
+import expandableMixin from '../expandable/mixin';
 import selectionMixin from '../selection/mixin';
 import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
@@ -44,7 +45,7 @@ export default {
       $$table: this
     };
   },
-  mixins: [columnsMixin, selectionMixin, localStorageMixin],
+  mixins: [columnsMixin, expandableMixin, selectionMixin, localStorageMixin],
   data() {
     // 原始数据
     this.tableOriginData = [];
