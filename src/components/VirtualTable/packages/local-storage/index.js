@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 11:34:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 13:14:10
+ * @Last Modified time: 2020-03-30 17:29:35
  */
 const noop = () => {};
 
@@ -28,6 +28,9 @@ const localStorageMixin = {
         const target = {};
         if (typeof x.hidden !== 'undefined') {
           target.hidden = x.hidden;
+        }
+        if (typeof x.fixed !== 'undefined') {
+          target.fixed = x.fixed;
         }
         if (typeof x.width !== 'undefined') {
           target.width = x.width;
