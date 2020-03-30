@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 11:34:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 13:06:32
+ * @Last Modified time: 2020-03-30 13:14:10
  */
 const noop = () => {};
 
@@ -14,12 +14,12 @@ const localStorageMixin = {
       // 本地存储
       const result = localStorage.getItem(this.cacheColumnsKey);
       if (!result) return;
-      let columns = null;
+      let localColumns = null;
       try {
-        columns = JSON.parse(result);
+        localColumns = JSON.parse(result);
       } catch (e) {}
-      if (!columns) return;
-      return columns.map(x => ({ ...this.columns.find(column => column.dataIndex === x.dataIndex), ...x }));
+      if (!localColumns) return;
+      return localColumns.map(x => ({ ...this.columns.find(k => k.dataIndex === x.dataIndex), ...x }));
     },
     // 本地存储 columns
     setLocalColumns(columns) {
