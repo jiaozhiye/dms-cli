@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 17:08:49
+ * @Last Modified time: 2020-03-30 22:53:47
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -14,6 +14,8 @@ import formatMixin from './format';
 import Expandable from '../expandable';
 import Selection from '../selection';
 import CellEdit from '../edit';
+
+const noop = () => {};
 
 export default {
   name: 'TableBody',
@@ -117,8 +119,9 @@ export default {
       );
     },
     renderRows() {
-      const { getRowKey, selectionKeys } = this.$$table;
-      const rows = this.tableData.map(row => {
+      const { getRowKey, selectionKeys, expandable, ellipsis } = this.$$table;
+      const rows = [];
+      this.tableData.forEach(row => {
         // 行记录 索引
         const rowIndex = row.index;
         // 行记录 rowKey
@@ -130,11 +133,30 @@ export default {
             [`v-body--row-selected`]: selectionKeys.includes(rowKey)
           }
         ];
-        return (
+        rows.push(
           <tr key={rowKey} data-row-key={rowKey} class={cls} style={extraStys}>
             {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey))}
           </tr>
         );
+        // 展开行
+        if (expandable) {
+          const { rowExpandable = noop } = expandable;
+          const expandColumnCls = [
+            `v-body--expanded-column`,
+            {
+              [`col--ellipsis`]: ellipsis
+            }
+          ];
+          if (!rowExpandable(row)) {
+            rows.push(
+              <tr key={`expand_${rowKey}`} class="v-body--expanded-row" style={extraStys}>
+                <td colspan={this.flattenColumns.length} class={expandColumnCls}>
+                  <div class="v-cell">{expandable.expandedRowRender(row)}</div>
+                </td>
+              </tr>
+            );
+          }
+        }
       });
       return rows;
     },
@@ -183,10 +205,12 @@ export default {
       );
     },
     renderCell(column, row, rowIndex, columnIndex, rowKey) {
+      const { expandable } = this.$$table;
       const { dataIndex, editRender, render } = column;
       const text = getCellValue(row, dataIndex);
       if (dataIndex === '__expandable__') {
-        return <Expandable />;
+        const { rowExpandable = noop } = expandable;
+        return !rowExpandable(row) ? <Expandable rowKey={rowKey} /> : null;
       }
       if (dataIndex === '__selection__') {
         return <Selection column={column} record={row} rowKey={rowKey} />;

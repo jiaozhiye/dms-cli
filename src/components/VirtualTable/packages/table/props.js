@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 15:50:34
+ * @Last Modified time: 2020-03-30 22:55:31
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -118,9 +118,9 @@ export default {
   }),
   // 展开行
   expandable: {
-    expandAllRows: PropTypes.bool, // 是否展开所有行
-    expandedRowRender: PropTypes.func.isRequired, // 额外的展开行渲染方法
+    defaultExpandAllRows: PropTypes.bool, // 默认展开所有行
     rowExpandable: PropTypes.func, // 是否允许行展开，参数：row，返回值 bool
+    expandedRowRender: PropTypes.func.isRequired, // 额外的展开行渲染方法
     onChange: PropTypes.func // 展开的行变化时触发
   },
   // 客户端排序

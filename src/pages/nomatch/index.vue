@@ -196,8 +196,9 @@ export default {
         }
       },
       expandable: {
+        defaultExpandAllRows: true,
         expandedRowRender: () => {
-          return <div>asdasd</div>;
+          return <span>asdasd</span>;
         }
       }
     };
