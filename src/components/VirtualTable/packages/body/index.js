@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 22:53:47
+ * @Last Modified time: 2020-03-30 23:36:09
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -119,7 +119,7 @@ export default {
       );
     },
     renderRows() {
-      const { getRowKey, selectionKeys, expandable, ellipsis } = this.$$table;
+      const { getRowKey, selectionKeys, expandable, rowExpandedKeys, ellipsis } = this.$$table;
       const rows = [];
       this.tableData.forEach(row => {
         // 行记录 索引
@@ -147,7 +147,7 @@ export default {
               [`col--ellipsis`]: ellipsis
             }
           ];
-          if (!rowExpandable(row)) {
+          if (!rowExpandable(row) && rowExpandedKeys.includes(rowKey)) {
             rows.push(
               <tr key={`expand_${rowKey}`} class="v-body--expanded-row" style={extraStys}>
                 <td colspan={this.flattenColumns.length} class={expandColumnCls}>
@@ -210,7 +210,8 @@ export default {
       const text = getCellValue(row, dataIndex);
       if (dataIndex === '__expandable__') {
         const { rowExpandable = noop } = expandable;
-        return !rowExpandable(row) ? <Expandable rowKey={rowKey} /> : null;
+        // Expandable -> 受控组件
+        return !rowExpandable(row) ? <Expandable record={row} rowKey={rowKey} /> : null;
       }
       if (dataIndex === '__selection__') {
         return <Selection column={column} record={row} rowKey={rowKey} />;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:34:59
+ * @Last Modified time: 2020-03-31 00:29:25
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -105,8 +105,10 @@ export default {
         // 底部高度
         footerHeight: 0
       },
-      // 选择列的选中数据
+      // 选择列，已选中行的 keys
       selectionKeys: this.createSelectionKeys(),
+      // 已展开行的 keys
+      rowExpandedKeys: this.createRowExpandedKeys(),
       // X 滚动条是否离开左边界
       isPingLeft: false,
       // X 滚动条是否离开右边界
@@ -243,6 +245,9 @@ export default {
     },
     loading(val) {
       this.showLoading = val;
+    },
+    [`rowSelection.selectedRowKeys`]() {
+      this.selectionKeys = this.createSelectionKeys();
     },
     selectionKeys(val) {
       if (!this.rowSelection) return;

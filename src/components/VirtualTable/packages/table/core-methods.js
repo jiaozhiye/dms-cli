@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:31:21
+ * @Last Modified time: 2020-03-31 00:29:55
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -31,6 +31,8 @@ export default {
     // 设置表格数据
     this.tableFullData = [...results];
     this.tableOriginData = [...results];
+    // 设置展开行
+    this.rowExpandedKeys = this.createRowExpandedKeys();
   },
   // ajax 获取数据
   async getTableData() {

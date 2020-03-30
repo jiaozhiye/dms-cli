@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 22:55:31
+ * @Last Modified time: 2020-03-31 00:31:40
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -112,7 +112,7 @@ export default {
   // 行选择
   rowSelection: PropTypes.shape({
     type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 多选/单选，checkbox/radio
-    selectedRowKeys: PropTypes.array, // 选中项的 key 数组
+    selectedRowKeys: PropTypes.array, // 选中项的 key 数组，支持动态赋值
     rowSelectable: PropTypes.func, // 是否允许行选择，参数：row，返回值 bool
     onChange: PropTypes.func // 选中项发生变化时触发
   }),
