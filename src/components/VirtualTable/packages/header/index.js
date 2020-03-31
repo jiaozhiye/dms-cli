@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:29:39
+ * @Last Modified time: 2020-03-31 12:43:54
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -123,7 +123,7 @@ export default {
       const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
       return (
         <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
-          <div class="v-cell">{this.renderCell(column)}</div>
+          <div class="v-cell--wrapper">{this.renderCell(column)}</div>
           {isResizable && <Resizable column={column} />}
         </th>
       );
@@ -133,19 +133,18 @@ export default {
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return <AllSelection />;
       }
-      let vNodes = [nCellTitle];
+      let vNodes = [];
       if (sorter) {
         vNodes.push(this.renderSorter(orderBy));
       }
       if (filter) {
         vNodes.push(this.renderFilter(column));
       }
-      const nCellTitle = (
-        <span class="v-cell--title" title={title}>
+      vNodes.unshift(
+        <div class="v-cell" title={title}>
           {title}
-        </span>
+        </div>
       );
-      vNodes.unshift(nCellTitle);
       return vNodes;
     },
     renderSorter(order) {
