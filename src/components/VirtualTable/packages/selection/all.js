@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-09 10:56:07
+ * @Last Modified time: 2020-03-31 09:45:49
  */
 import Checkbox from '../checkbox';
 
@@ -21,12 +21,8 @@ export default {
   },
   methods: {
     changeHandle(val) {
-      const { $$table, allRowKeys } = this;
-      if (val) {
-        $$table.selectionKeys = allRowKeys;
-      } else {
-        $$table.selectionKeys = [];
-      }
+      const { allRowKeys } = this;
+      this.$$table.selectionKeys = val ? allRowKeys : [];
     }
   },
   render() {

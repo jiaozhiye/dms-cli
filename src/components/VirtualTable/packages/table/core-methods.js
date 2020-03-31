@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 00:29:55
+ * @Last Modified time: 2020-03-31 10:46:39
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -80,7 +80,7 @@ export default {
     // 是否开启虚拟滚动
     this.scrollYLoad = tableFullData.length > config.virtualScrollY;
 
-    if (this.__dataChange__) {
+    if (this.__dataLengthState__) {
       if (this.scrollYLoad) {
         scrollYStore.startIndex = 0;
         scrollYStore.visibleIndex = 0;
@@ -204,6 +204,10 @@ export default {
   pagerChangeHandle({ currentPage, pageSize }) {
     this.pagination.currentPage = currentPage;
     this.pagination.pageSize = pageSize;
+  },
+  // 返回到第一页
+  toFirstPage() {
+    this.pagination.currentPage = 1;
   },
   // 清空列选中
   clearRowSelection() {

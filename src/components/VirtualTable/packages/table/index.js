@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 00:29:25
+ * @Last Modified time: 2020-03-31 10:46:40
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -211,12 +211,10 @@ export default {
       this.createTableData(val);
     },
     tableFullData(next, prev) {
-      this.__dataChange__ = next.length !== prev.length;
+      this.__dataLengthState__ = next.length !== prev.length;
       this.loadTableData().then(() => {
-        if (this.__dataChange__) {
-          this.doLayout();
-        }
-        this.__dataChange__ = !1;
+        this.doLayout();
+        this.__dataLengthState__ = !1;
       });
       // 触发 dataChange 事件
       debounce(this.dataChangeHandle)();
@@ -235,16 +233,16 @@ export default {
     pagination() {
       this.$emit('change', ...this.tableChange);
     },
+    loading(val) {
+      this.showLoading = val;
+    },
     fetchParams(next, prev) {
       if (!this.fetch) return;
       if (!this.onlyPaginationChange(next, prev)) {
-        this.pagination.currentPage = 1;
+        this.toFirstPage();
       } else {
         this.getTableData();
       }
-    },
-    loading(val) {
-      this.showLoading = val;
     },
     [`rowSelection.selectedRowKeys`]() {
       this.selectionKeys = this.createSelectionKeys();
@@ -255,7 +253,7 @@ export default {
       onChange(val);
     },
     scrollX(val) {
-      val && (this.isPingRight = val);
+      this.isPingRight = val;
     }
   },
   created() {

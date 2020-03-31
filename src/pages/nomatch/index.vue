@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 10px 100px 0;">
-    <el-button @click="clickHandle">按钮</el-button>
+    <!-- <el-button @click="clickHandle">按钮</el-button> -->
     <VirtualTable
       cacheColumnsKey="jzyHello"
       :columns="columns"
@@ -196,7 +196,6 @@ export default {
         }
       },
       expandable: {
-        defaultExpandAllRows: true,
         expandedRowRender: () => {
           return <span>asdasd</span>;
         },
