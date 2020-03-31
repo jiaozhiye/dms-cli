@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 10:25:29
+ * @Last Modified time: 2020-03-31 20:36:09
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -193,7 +193,7 @@ export default {
       return (
         <td
           key={dataIndex}
-          title={isEllipsis && getCellValue(row, dataIndex)}
+          title={isEllipsis && this.renderText(getCellValue(row, dataIndex), column)}
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
