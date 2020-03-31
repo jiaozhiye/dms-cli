@@ -3,8 +3,10 @@
     <!-- <el-button @click="clickHandle">按钮</el-button> -->
     <VirtualTable
       cacheColumnsKey="jzyHello"
+      :exportExcel="{
+        fileName: 'aaa.xlsx'
+      }"
       :columns="columns"
-      :expandable="expandable"
       :dataSource="list"
       rowKey="id"
       :height="height"

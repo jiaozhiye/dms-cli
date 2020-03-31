@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 12:42:46
+ * @Last Modified time: 2020-03-31 12:59:32
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -34,6 +34,9 @@
     display: flex;
     align-items: center;
     height: 100%;
+    .v-cell {
+      flex: 1;
+    }
   }
 
   /* 排序 */
