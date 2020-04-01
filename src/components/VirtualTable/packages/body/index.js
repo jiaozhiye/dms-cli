@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 20:36:09
+ * @Last Modified time: 2020-04-01 12:41:00
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -215,7 +215,8 @@ export default {
         return !rowExpandable(row) ? <Expandable record={row} rowKey={rowKey} /> : null;
       }
       if (dataIndex === '__selection__') {
-        return <Selection column={column} record={row} rowKey={rowKey} />;
+        // Selection -> 受控组件
+        return <Selection ref="selection" column={column} record={row} rowKey={rowKey} />;
       }
       if (_.isFunction(editRender)) {
         // CellEdit -> UI 组件，无状态组件
@@ -269,10 +270,22 @@ export default {
     },
     cellClickHandle(ev, row, column) {
       ev.stopPropagation();
-      const { getRowKey } = this.$$table;
+      const { getRowKey, rowSelection, selectionKeys } = this.$$table;
       const { dataIndex } = column;
-      if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
-      this.setClickedHandle([getRowKey(row, row.index), dataIndex]);
+      const rowKey = getRowKey(row, row.index);
+      if (['__expandable__', config.operationColumn].includes(dataIndex)) return;
+      // 处理选择列
+      if (dataIndex === '__selection__') {
+        const { type, rowSelectable = noop } = rowSelection;
+        if (rowSelectable(row)) return;
+        if (type === 'radio') {
+          return this.$refs['selection'].setRowSelection(rowKey);
+        }
+        if (type === 'checkbox') {
+          return this.$refs['selection'].toggleRowSelection(rowKey, !selectionKeys.includes(rowKey));
+        }
+      }
+      this.setClickedHandle([rowKey, dataIndex]);
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {

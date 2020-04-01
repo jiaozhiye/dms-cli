@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 15:35:56
+ * @Last Modified time: 2020-04-01 12:35:51
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -14,6 +14,13 @@ export default {
   props: ['column', 'record', 'rowKey'],
   inject: ['$$table'],
   methods: {
+    setRowSelection(val) {
+      this.$$table.selectionKeys = [val];
+    },
+    toggleRowSelection(val, state) {
+      const { selectionKeys } = this.$$table;
+      this.$$table.selectionKeys = state ? [...new Set([...selectionKeys, val])] : selectionKeys.filter(x => x !== val);
+    },
     renderRadio() {
       const { record, rowKey } = this;
       const {
@@ -24,7 +31,7 @@ export default {
         <Radio
           value={selectionKeys[0]}
           onInput={val => {
-            this.$$table.selectionKeys = [val];
+            // this.setRowSelection(val);
           }}
           trueValue={rowKey}
           falseValue={null}
@@ -43,8 +50,11 @@ export default {
         <Checkbox
           value={prevValue}
           onInput={val => {
-            const res = val !== null ? [...new Set([...selectionKeys, val])] : selectionKeys.filter(x => x !== prevValue);
-            this.$$table.selectionKeys = res;
+            // if (val !== null) {
+            //   this.toggleRowSelection(val, true);
+            // } else {
+            //   this.toggleRowSelection(prevValue, false);
+            // }
           }}
           trueValue={rowKey}
           falseValue={null}
