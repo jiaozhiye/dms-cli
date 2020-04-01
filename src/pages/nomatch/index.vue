@@ -188,8 +188,8 @@ export default {
         }
       ],
       selection: {
-        type: 'radio',
-        selectedRowKeys: [2, 3],
+        type: 'checkbox',
+        selectedRowKeys: [1, 2],
         rowSelectable: row => {
           return row.id === 3;
         },

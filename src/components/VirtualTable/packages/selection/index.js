@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-01 12:35:51
+ * @Last Modified time: 2020-04-01 13:30:02
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -27,15 +27,17 @@ export default {
         selectionKeys,
         rowSelection: { rowSelectable = noop }
       } = this.$$table;
+      const disabled = rowSelectable(record);
+      const prevValue = !disabled ? selectionKeys[0] : null;
       return (
         <Radio
-          value={selectionKeys[0]}
+          value={prevValue}
           onInput={val => {
             // this.setRowSelection(val);
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={rowSelectable(record)}
+          disabled={disabled}
         />
       );
     },
@@ -45,7 +47,8 @@ export default {
         selectionKeys,
         rowSelection: { rowSelectable = noop }
       } = this.$$table;
-      const prevValue = selectionKeys.includes(rowKey) ? rowKey : null;
+      const disabled = rowSelectable(record);
+      const prevValue = !disabled && selectionKeys.includes(rowKey) ? rowKey : null;
       return (
         <Checkbox
           value={prevValue}
@@ -58,7 +61,7 @@ export default {
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={rowSelectable(record)}
+          disabled={disabled}
         />
       );
     }

@@ -2,17 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 09:45:49
+ * @Last Modified time: 2020-04-01 14:23:49
  */
 import Checkbox from '../checkbox';
+
+const noop = () => {};
 
 export default {
   name: 'AllSelection',
   inject: ['$$table'],
   computed: {
     allRowKeys() {
-      const { tableFullData, getRowKey } = this.$$table;
-      return tableFullData.map((record, i) => getRowKey(record, i));
+      const { tableFullData, getRowKey, rowSelection } = this.$$table;
+      const { rowSelectable = noop } = rowSelection;
+      return tableFullData.filter(x => !rowSelectable(x)).map((x, i) => getRowKey(x, i));
     },
     indeterminate() {
       const { selectionKeys } = this.$$table;
@@ -21,11 +24,11 @@ export default {
   },
   methods: {
     changeHandle(val) {
-      const { allRowKeys } = this;
-      this.$$table.selectionKeys = val ? allRowKeys : [];
+      this.$$table.selectionKeys = val ? this.allRowKeys : [];
     }
   },
   render() {
-    return <Checkbox indeterminate={this.indeterminate} trueValue={true} falseValue={false} onChange={this.changeHandle} />;
+    const { selectionKeys } = this.$$table;
+    return <Checkbox indeterminate={this.indeterminate} value={!!selectionKeys.length} onInput={this.changeHandle} />;
   }
 };

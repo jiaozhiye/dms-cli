@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:25:06
+ * @Last Modified time: 2020-04-01 13:35:03
  */
 const selectionMixin = {
   methods: {
@@ -26,7 +26,8 @@ const selectionMixin = {
       if (!rowSelection) {
         return [];
       }
-      return rowSelection.type === 'radio' ? rowSelection.selectedRowKeys.slice(0, 1) : rowSelection.selectedRowKeys;
+      const { type, selectedRowKeys } = rowSelection;
+      return type === 'radio' ? selectedRowKeys.slice(0, 1) : selectedRowKeys;
     }
   }
 };

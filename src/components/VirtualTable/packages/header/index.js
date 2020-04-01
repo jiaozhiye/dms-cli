@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 12:43:54
+ * @Last Modified time: 2020-04-01 13:27:15
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -131,7 +131,11 @@ export default {
     renderCell(column) {
       const { dataIndex, type, sorter, orderBy, filter, title } = column;
       if (dataIndex === '__selection__' && type === 'checkbox') {
-        return <AllSelection />;
+        return (
+          <div class="v-cell">
+            <AllSelection />
+          </div>
+        );
       }
       let vNodes = [];
       if (sorter) {
