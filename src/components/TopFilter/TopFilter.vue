@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 11:21:43
+ * @Last Modified time: 2020-04-01 10:01:26
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -570,7 +570,7 @@ export default {
         }
       };
       const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
-      const [startDate, endDate] = form[fieldName];
+      const [startDate = minDateTime, endDate = maxDateTime] = form[fieldName];
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
@@ -845,7 +845,7 @@ export default {
             .getTime()
         : 0;
       if (min && max) {
-        return !(time.getTime() > min && time.getTime() < max);
+        return !(time.getTime() >= min && time.getTime() <= max);
       }
       if (!!min) {
         return time.getTime() < min;

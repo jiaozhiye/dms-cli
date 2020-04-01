@@ -124,6 +124,8 @@ export default {
           type: 'RANGE_DATE', // DATE_TIME
           label: '日期区间',
           style: { minWidth: '200px' },
+          minDateTime: '2020-03-01',
+          maxDateTime: '2020-05-30',
           fieldName: 'startTime|endTime'
         },
         {

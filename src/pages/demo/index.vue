@@ -115,7 +115,7 @@ export default {
         { text: '搜索1', value: '11' },
         { text: '搜索2', value: '22' }
       ];
-      this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
+      // this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
     }, 3000);
   },
   methods: {
@@ -187,6 +187,8 @@ export default {
           label: '日期区间',
           style: { minWidth: '200px' },
           fieldName: 'startTime|endTime',
+          minDateTime: '2020-03-01',
+          maxDateTime: '2020-05-30',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
