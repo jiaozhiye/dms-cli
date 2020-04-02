@@ -21,7 +21,7 @@
 $ yarn install
 
 # 启动本地服务
-$ npm run dev
+$ npm run start
 
 # 发布，构建生产环境代码
 $ npm run build
