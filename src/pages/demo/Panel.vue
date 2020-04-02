@@ -115,7 +115,7 @@ export default {
           fieldName: 'date',
           placeholder: '选择月份',
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }],
-          change: val => {
+          onChange: val => {
             console.log(111, val);
             this.$refs.form.SET_FIELDS_VALUE({ number: 200 });
           }
@@ -275,7 +275,7 @@ export default {
             params: { a: 9 },
             fileTypes: ['jpg', 'png']
           },
-          change: val => {
+          onChange: val => {
             // console.log(111, val);
           }
         },
@@ -292,7 +292,7 @@ export default {
             params: { a: 9 },
             isCalcHeight: true
           },
-          change: val => {
+          onChange: val => {
             // console.log(111, val);
           }
         }

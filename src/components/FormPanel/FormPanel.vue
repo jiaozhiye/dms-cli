@@ -132,12 +132,12 @@ export default {
     },
     createFormItemLabel(option) {
       const { form } = this;
-      const { label, type = 'SELECT', fieldName, itemList, options = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, type = 'SELECT', fieldName, itemList, options = {}, style = {}, disabled, onChange = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       return (
         <div class="label-wrap" style={{ ...style }}>
           {type === 'SELECT' && (
-            <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={change}>
+            <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={onChange}>
               {itemList.map(x => (
                 <el-option key={x.value} label={x.text} value={x.value} />
               ))}
@@ -148,7 +148,7 @@ export default {
               <span class="desc-text" style={{ paddingRight: '10px' }}>
                 {label}
               </span>
-              <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={change} />
+              <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={onChange} />
             </span>
           )}
         </div>
@@ -197,7 +197,7 @@ export default {
         pattern,
         readonly,
         disabled,
-        change = () => {},
+        onChange = () => {},
         onInput = () => {},
         onFocus = () => {},
         onEnter = () => {}
@@ -227,7 +227,7 @@ export default {
             clearable
             onChange={val => {
               form[fieldName] = val.trim();
-              change(form[fieldName]);
+              onChange(form[fieldName]);
             }}
             onFocus={onFocus}
             nativeOnKeydown={e => {
@@ -244,7 +244,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, maxlength, step = 1, precision, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, style = {}, placeholder = '请输入...', disabled, min = 0, max, maxlength, step = 1, precision, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -267,7 +267,7 @@ export default {
                   form[fieldName] = Number(res.slice(0, maxlength));
                 }
               }
-              change(form[fieldName]);
+              onChange(form[fieldName]);
             }}
           />
           {this.createFormItemDesc(descOptions)}
@@ -276,7 +276,7 @@ export default {
     },
     RANGE_INPUT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, readonly, disabled, onChange = () => {} } = option;
       const [startFieldName, endFieldName] = fieldName.split('|');
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -287,7 +287,7 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={() => change({ [startFieldName]: form[fieldName][0] })}
+            onChange={() => onChange({ [startFieldName]: form[fieldName][0] })}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input
@@ -296,14 +296,14 @@ export default {
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={() => change({ [endFieldName]: form[fieldName][1] })}
+            onChange={() => onChange({ [endFieldName]: form[fieldName][1] })}
           />
         </el-form-item>
       );
     },
     RANGE_INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, min = 0, max, step = 1, precision, readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, min = 0, max, step = 1, precision, readonly, disabled, onChange = () => {} } = option;
       const [startVal = min, endVal = max] = form[fieldName];
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -320,7 +320,7 @@ export default {
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-input-number
@@ -335,14 +335,14 @@ export default {
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
         </el-form-item>
       );
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList, style = {}, placeholder = '请输入...', readonly, disabled, onChange = () => {} } = option;
       const treeWrapProps = {
         props: {
           props: { children: 'children', label: 'text' },
@@ -382,7 +382,7 @@ export default {
                 filterNodeMethod={this.filterNodeHandle}
                 on-node-click={data => {
                   this.treeNodeClickHandle(fieldName, data);
-                  change(this.form[fieldName]);
+                  onChange(this.form[fieldName]);
                 }}
               />
             </div>
@@ -396,7 +396,7 @@ export default {
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => {
                 this.treeNodeClickHandle(fieldName, {});
-                change(this.form[fieldName]);
+                onChange(this.form[fieldName]);
               }}
             />
           </el-popover>
@@ -405,7 +405,7 @@ export default {
     },
     INPUT_CASCADER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, itemList = [], options = {}, style = {}, placeholder = '请选择...', readonly, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, itemList = [], options = {}, style = {}, placeholder = '请选择...', readonly, disabled, onChange = () => {} } = option;
       const { titles = [] } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -421,7 +421,7 @@ export default {
                 labels={titles}
                 style={style}
                 onChange={data => {
-                  change(form[fieldName], this[`${fieldName}CascaderTexts`]);
+                  onChange(form[fieldName], this[`${fieldName}CascaderTexts`]);
                 }}
                 onClose={() => (this.visible[fieldName] = false)}
               />
@@ -436,7 +436,7 @@ export default {
               style={disabled && { pointerEvents: 'none' }}
               onClear={() => {
                 this.cascaderChangeHandle(fieldName, []);
-                change(form[fieldName], this[`${fieldName}CascaderTexts`]);
+                onChange(form[fieldName], this[`${fieldName}CascaderTexts`]);
               }}
             />
           </el-popover>
@@ -445,7 +445,7 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder = '请输入...', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder = '请输入...', disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -455,7 +455,7 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             clearable
-            onChange={change}
+            onChange={onChange}
             fetchSuggestions={(queryString, cb) => this.querySearchAsync(request, fieldName, queryString, cb)}
           />
         </el-form-item>
@@ -463,7 +463,7 @@ export default {
     },
     SEARCH_HELPER_WEB(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, itemList, labelOptions, style = {}, placeholder = '请输入...', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, itemList, labelOptions, style = {}, placeholder = '请输入...', disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -474,7 +474,7 @@ export default {
             disabled={disabled}
             style={{ ...style }}
             clearable
-            onChange={change}
+            onChange={onChange}
             fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, queryString, cb)}
             scopedSlots={{
               default: props => {
@@ -516,7 +516,7 @@ export default {
           valueFormat: 'yyyy'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', defaultTime, minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'date', defaultTime, minDateTime, maxDateTime, style = {}, disabled, onChange = () => {} } = option;
       let currentVal;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -547,7 +547,7 @@ export default {
             onBlur={val => {
               if (!currentVal) return;
               form[fieldName] = this.dateToText(currentVal);
-              change(form[fieldName]);
+              onChange(form[fieldName]);
               currentVal = undefined;
             }}
             nativeOnKeydown={ev => {
@@ -556,7 +556,7 @@ export default {
                 this.$refs[`${fieldName}`].hidePicker();
               }
             }}
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
         </el-form-item>
       );
@@ -585,7 +585,7 @@ export default {
           valueFormat: 'yyyy-MM'
         }
       };
-      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', minDateTime, maxDateTime, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, dateType = 'daterange', minDateTime, maxDateTime, style = {}, disabled, onChange = () => {} } = option;
       // 日期区间快捷键方法
       const createPicker = (picker, days) => {
         const end = new Date();
@@ -669,14 +669,14 @@ export default {
                 getInputIndex(fieldName, ev.target) && this.$refs[`${fieldName}`].hidePicker();
               }
             }}
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
         </el-form-item>
       );
     },
     TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -690,14 +690,14 @@ export default {
             placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
-            onChange={change}
+            onChange={onChange}
           />
         </el-form-item>
       );
     },
     RANGE_TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm:ss', style = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -714,14 +714,14 @@ export default {
             end-placeholder={'结束时间'}
             disabled={disabled}
             style={{ ...style }}
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
         </el-form-item>
       );
     },
     TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm', options = {}, style = {}, placeholder = '选择时间', disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, defaultTime, valueFormat = 'HH:mm', options = {}, style = {}, placeholder = '选择时间', disabled, onChange = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -738,14 +738,14 @@ export default {
             placeholder={!disabled ? placeholder : ''}
             disabled={disabled}
             style={{ ...style }}
-            onChange={change}
+            onChange={onChange}
           />
         </el-form-item>
       );
     },
     RANGE_TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, valueFormat = 'HH:mm', options = {}, style = {}, disabled, onChange = () => {} } = option;
       const { startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       const stepMinute = moment(stepTime, valueFormat).minute();
       const [startVal, endVal] = form[fieldName];
@@ -772,7 +772,7 @@ export default {
             placeholder={'开始时间'}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
           <span style="display: inline-block; text-align: center; width: 14px;">-</span>
           <el-time-select
@@ -795,31 +795,31 @@ export default {
             placeholder={'结束时间'}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
-            onChange={() => change(form[fieldName])}
+            onChange={() => onChange(form[fieldName])}
           />
         </el-form-item>
       );
     },
     CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, onChange = () => {} } = option;
       const { trueValue = '1', falseValue = '0' } = options;
       form[fieldName] !== trueValue && (form[fieldName] = falseValue);
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={change} />
+          <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={onChange} />
           {this.createFormItemDesc(descOptions)}
         </el-form-item>
       );
     },
     MULTIPLE_CHECKBOX(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, limit, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, limit, style = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox-group v-model={form[fieldName]} max={limit} style={{ ...style }} onChange={change}>
+          <el-checkbox-group v-model={form[fieldName]} max={limit} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => {
               return (
                 <el-checkbox key={x.value} label={x.value} disabled={disabled}>
@@ -834,11 +834,11 @@ export default {
     },
     RADIO(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, itemList, style = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={change}>
+          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => (
               <el-radio key={x.value} label={x.value} disabled={disabled}>
                 {x.text}
@@ -851,7 +851,7 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 200, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, style = {}, placeholder = '请输入...', disabled, rows = 2, maxlength = 200, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -865,14 +865,14 @@ export default {
             autosize={{ minRows: rows }}
             maxlength={maxlength}
             showWordLimit
-            onChange={change}
+            onChange={onChange}
           />
         </el-form-item>
       );
     },
     UPLOAD_IMG(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -889,7 +889,7 @@ export default {
             disabled={disabled}
             onChange={val => {
               this.fileChangeHandle(fieldName, val);
-              change(val);
+              onChange(val);
             }}
           />
         </el-form-item>
@@ -897,7 +897,7 @@ export default {
     },
     UPLOAD_FILE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, upload = {}, style = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} ref={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -912,7 +912,7 @@ export default {
             style={{ ...style }}
             onChange={val => {
               this.fileChangeHandle(fieldName, val);
-              change(val);
+              onChange(val);
             }}
           >
             文件上传
@@ -922,11 +922,11 @@ export default {
     },
     TINYMCE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, height, upload = {}, disabled, change = () => {} } = option;
+      const { label, fieldName, labelWidth, labelOptions, height, upload = {}, disabled, onChange = () => {} } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <Tinymce v-model={form[fieldName]} actionUrl={upload.actionUrl} height={height} fixedSize={upload.fixedSize} disabled={disabled} onChange={change} />
+          <Tinymce v-model={form[fieldName]} actionUrl={upload.actionUrl} height={height} fixedSize={upload.fixedSize} disabled={disabled} onChange={onChange} />
         </el-form-item>
       );
     },
@@ -949,7 +949,7 @@ export default {
         disabled,
         limit = 0,
         clearable = !0,
-        change = () => {}
+        onChange = () => {}
       } = option;
       const { fetchApi, params = {} } = request;
       let { itemList } = option;
@@ -988,7 +988,7 @@ export default {
             }}
             onChange={val => {
               const { text } = itemList.find(x => x.value === val) || {};
-              change(val, !multiple ? text : undefined);
+              onChange(val, !multiple ? text : undefined);
               if (!filterable) return;
               this.filterMethodHandle(fieldName, '');
             }}

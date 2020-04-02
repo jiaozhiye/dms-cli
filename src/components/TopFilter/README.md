@@ -49,7 +49,7 @@ Vue.use(TopFilter);
 - minDateTime{String|最小日期，小于该时间的日期段将被禁用}
 - maxDateTime{String|最大日期，大于该时间的日期段将被禁用}
 - options{Object|有些表单控件所需要的配置}
-- change{Function|checkbox 或 select 值变化的回调}
+- onChange{Function|checkbox 或 select 值变化的回调}
 - onInput{Function|INPUT 类型的对应的 input 事件}
 - itemList{Array|下拉框(SELECT/MULTIPLE_SELECT)的数据，[{text: '', value: ''}]}
 - rules{Array|表单验证规则，用法请参考 Element-Ui，支持自定义表单校验}
