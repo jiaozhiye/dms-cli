@@ -27,45 +27,43 @@ $ npm run dev
 $ npm run build
 ```
 
-## 主要功能
+## 微前端拆分，允许修改的公共文件
 
 ```
-- 权限验证
-  - 菜单/页面级权限
-  - 页面按钮级权限
-  - ajax 防重复提交
+- config/index.js 请求代理文件
+- src/api/server.js 请求前缀管理文件
+- routes/index.js 路由配置文件
 
-- 导航菜单
-  - 导航快速检索/收藏和常用导航
-  - 多级菜单，底层递归处理
-  - 自适应收缩侧边栏
-  - 头部标签栏导航，并支持页面缓存
-  - 动态面包屑
+注意：npm 依赖需要统一管理，不允许私自安装；公共的表单校验规则统一管理
+```
 
-- 提供的组件
-  - Anchor 锚点组件
-  - Spin 加载中组件
-  - SvgIcon svg格式的图标组件
-  - ButtonArea 功能按钮区的容器组件
-  - BreakSpace 功能模块的分隔符组件
-  - BaseDialog 模态框组件，支持子组件的销毁
-  - BaseTable 表格组件
-  - Drawer 抽屉组件，支持子组件的销毁
-  - LazyLoadTab 选项卡的按需/动态加载
-  - TopFilter 页面头部筛选组件
-  - UploadCropper 图片上传组件，支持图片的裁剪和压缩
-  - UploadFile 附件上传组件
-  - DownloadFile 文件导出及下载组件
-  - Pinyin 中文字符转换成拼音插件
-  - BasePrint 基于 Lodop 插件的打印组件
-  - FormPanel 表单操作的功能组件
-  - Tinymce 富文本编辑器组件
-  - MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
-  - SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
-  - CountUp 数字计数动画组件
-  - JsonToExcel 导出 excel/csv 组件
-  - WebPrint 浏览器的 pdf 打印组件
-  - VirtualScroll 虚拟滚动组件
+## 组件列表
+
+```
+- Anchor 锚点组件
+- Spin 加载中组件
+- SvgIcon svg格式的图标组件
+- ButtonArea 功能按钮区的容器组件
+- BreakSpace 功能模块的分隔符组件
+- BaseDialog 模态框组件，支持子组件的销毁
+- BaseTable 表格组件
+- Drawer 抽屉组件，支持子组件的销毁
+- LazyLoadTab 选项卡的按需/动态加载
+- TopFilter 页面头部筛选组件
+- UploadCropper 图片上传组件，支持图片的裁剪和压缩
+- UploadFile 附件上传组件
+- DownloadFile 文件导出及下载组件
+- Pinyin 中文字符转换成拼音插件
+- BasePrint 基于 Lodop 插件的打印组件
+- FormPanel 表单操作的功能组件
+- Tinymce 富文本编辑器组件
+- MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
+- SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
+- CountUp 数字计数动画组件
+- JsonToExcel 导出 excel/csv 组件
+- WebPrint 浏览器的 pdf 打印组件
+- VirtualScroll 虚拟滚动组件
+- VirtualTable 新的表格组件
 ```
 
 ## 目录结构

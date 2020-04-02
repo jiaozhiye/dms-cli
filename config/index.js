@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-30 16:06:35
+ * @Last Modified time: 2020-04-02 10:36:43
  */
 'use strict';
 const path = require('path');
@@ -13,7 +13,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
-    // Http Proxy
+    // 请求代理配置 -> can be modified
     proxyTable: {
       '/api': {
         target: 'http://jettadms-test.faw-vw.com',
@@ -24,6 +24,7 @@ module.exports = {
         }
       }
     },
+    // 请求代理配置 END
 
     // Various Dev Server settings
     host: 'localhost',
