@@ -32,7 +32,6 @@ $ npm run build
 ```
 - config/index.js 请求代理文件
 - src/api/server.js 请求前缀管理文件
-- routes/index.js 路由配置文件
 
 注意：npm 依赖需要统一管理，不允许私自安装；公共的表单校验规则统一管理
 ```

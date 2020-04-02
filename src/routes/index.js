@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-02 10:36:47
+ * @Last Modified time: 2020-04-02 13:08:41
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import modulesRoute from './modules';
 
 Vue.use(VueRouter);
 
@@ -14,10 +15,6 @@ const Login = () => import('@/pages/login');
 const Dashboard = () => import('@/pages/dashboard');
 const Redirect = () => import('@/pages/redirect');
 const Nomatch = () => import('@/pages/nomatch');
-
-// 路由表文件 -> can be modified
-import menuRoutes from './modules/menu';
-// 路由表文件 END
 
 // 基础路由
 export const constantRouterMap = [
@@ -38,9 +35,7 @@ export const constantRouterMap = [
         meta: { title: '概览', bgColor: true, keepAlive: true },
         component: Dashboard
       },
-      // 扩展路由表 -> can be modified
-      ...menuRoutes,
-      // 扩展路由表 END
+      ...modulesRoute,
       {
         path: '/redirect/:path*',
         component: Redirect

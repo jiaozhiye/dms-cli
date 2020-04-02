@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 12:04:22
+ * @Last Modified time: 2020-04-02 13:16:13
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -11,9 +11,6 @@ import { messageAction, clearAllCookie } from '@/utils';
 import { setToken, setUser } from '@/utils/cookies';
 import localDict from '@/utils/localDict';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
-
-// 路由映射表
-const routesMap = router.options.routes;
 
 // 数组的递归查找
 const deepFind = (arr, mark) => {
@@ -33,12 +30,12 @@ const deepFind = (arr, mark) => {
 };
 
 // 给导航数据添加图标属性
-const formateNavList = list => {
+const formateNavList = (list, routes) => {
   list.forEach(x => {
     if (Array.isArray(x.children)) {
-      formateNavList(x.children);
+      formateNavList(x.children, routes);
     }
-    let target = deepFind(routesMap, x.key) || {};
+    let target = deepFind(routes, x.key) || {};
     // 图标
     target.meta && (x.icon = target.meta.icon);
     // 隐藏菜单
@@ -106,8 +103,8 @@ const actions = {
         return router.push({ path: '/' }).catch(() => {});
       }
     }
-    // 处理图标
-    formateNavList(data);
+    // 处理导航图标
+    formateNavList(data, router.options.routes);
     commit({ type: types.NAVLIST, data });
     commit({
       type: types.MENULIST,

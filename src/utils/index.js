@@ -2,12 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-03 12:16:04
+ * @Last Modified time: 2020-04-02 12:35:45
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
 import config from '@/config';
 import store from '@/store';
+
+// 异步加载路由组件
+export const asyncLoadComponent = __name__ => () => import(`@/pages/${__name__}`);
 
 // 等待
 export const sleep = async timeLen => {

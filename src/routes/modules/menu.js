@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-16 13:55:40
+ * @Last Modified time: 2020-04-02 12:46:45
  */
+import { asyncLoadComponent } from '@/utils';
 const RouteView = () => import('@/layout/RouteView');
-// 异步路由组件加载
-const AsyncComponent = __name__ => () => import(`@/pages/${__name__}`);
 
 // 菜单路由
-const menuRoutes = [
+export default [
   {
     path: '/bjgl',
     meta: { title: '备件管理', icon: 'iconfont icon-shop' },
@@ -25,17 +24,17 @@ const menuRoutes = [
           {
             path: '/bjgl/cggl/dd',
             meta: { title: '备件采购订单', keepAlive: true },
-            component: AsyncComponent('demo/index')
+            component: asyncLoadComponent('demo/index')
           },
           {
             path: '/bjgl/cggl/rk',
             meta: { title: '备件采购入库', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/bjgl/cggl/tk',
             meta: { title: '备件采购退库', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       },
@@ -48,7 +47,7 @@ const menuRoutes = [
           {
             path: '/bjgl/kcgl/lb',
             meta: { title: '备件清单列表', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       }
@@ -69,22 +68,22 @@ const menuRoutes = [
           {
             path: '/xsgl/xugl/fp',
             meta: { title: '线索分配', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/xugl/jl',
             meta: { title: '线索记录', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/xugl/jh',
             meta: { title: '线索跟进计划', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/xugl/zy',
             meta: { title: '线索转移', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       },
@@ -97,17 +96,17 @@ const menuRoutes = [
           {
             path: '/xsgl/jhgl/xsjh',
             meta: { title: '销售机会', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/jhgl/jhsz',
             meta: { title: '跟进计划设置', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/jhgl/gjjh',
             meta: { title: '机会跟进计划', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       },
@@ -120,17 +119,17 @@ const menuRoutes = [
           {
             path: '/xsgl/khgl/dd',
             meta: { title: '客户订单管理', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/khgl/cx',
             meta: { title: '车辆资源查询', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/xsgl/khgl/gl',
             meta: { title: '车辆资源管理', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       }
@@ -151,12 +150,12 @@ const menuRoutes = [
           {
             path: '/kfgl/hf/xs',
             meta: { title: '销售回访', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           },
           {
             path: '/kfgl/hf/fp',
             meta: { title: '回访分配', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       },
@@ -169,12 +168,10 @@ const menuRoutes = [
           {
             path: '/kfgl/ts/gl',
             meta: { title: '投诉管理', keepAlive: true },
-            component: AsyncComponent('dashboard/index')
+            component: asyncLoadComponent('dashboard/index')
           }
         ]
       }
     ]
   }
 ];
-
-export default menuRoutes;
