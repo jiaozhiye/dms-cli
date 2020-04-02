@@ -41,29 +41,29 @@ $ npm run build
 
 ```
 - Anchor 锚点组件
-- Spin 加载中组件
-- SvgIcon svg格式的图标组件
-- ButtonArea 功能按钮区的容器组件
-- BreakSpace 功能模块的分隔符组件
 - BaseDialog 模态框组件，支持子组件的销毁
+- BasePrint 基于 Lodop 插件的打印组件
 - BaseTable 表格组件
+- BreakSpace 功能模块的分隔符组件
+- ButtonArea 功能按钮区的容器组件
+- CountUp 数字计数动画组件
+- DownloadFile 文件导出及下载组件
 - Drawer 抽屉组件，支持子组件的销毁
+- FormPanel 表单操作的功能组件
+- JsonToExcel 导出 excel/csv 组件
 - LazyLoadTab 选项卡的按需/动态加载
+- MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
+- Pinyin 中文字符转换成拼音插件
+- PortalPage 对接大众 portal 系统组件
+- Spin 加载中组件
+- SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
+- Tinymce 富文本编辑器组件
 - TopFilter 页面头部筛选组件
 - UploadCropper 图片上传组件，支持图片的裁剪和压缩
 - UploadFile 附件上传组件
-- DownloadFile 文件导出及下载组件
-- Pinyin 中文字符转换成拼音插件
-- BasePrint 基于 Lodop 插件的打印组件
-- FormPanel 表单操作的功能组件
-- Tinymce 富文本编辑器组件
-- MultiuseButton 多功能按钮的组件，可实现权限控制及 ajax 防止重复提交
-- SuperTabs 选项卡组件，支持动画切换及顶部插槽扩展功能
-- CountUp 数字计数动画组件
-- JsonToExcel 导出 excel/csv 组件
-- WebPrint 浏览器的 pdf 打印组件
 - VirtualScroll 虚拟滚动组件
 - VirtualTable 新的表格组件
+- WebPrint 浏览器的 pdf 打印组件
 ```
 
 ## 目录结构
