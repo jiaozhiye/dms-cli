@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-01 13:27:15
+ * @Last Modified time: 2020-04-03 18:12:13
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -130,10 +130,11 @@ export default {
     },
     renderCell(column) {
       const { dataIndex, type, sorter, orderBy, filter, title } = column;
+      const { selectionKeys } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return (
           <div class="v-cell">
-            <AllSelection />
+            <AllSelection selectionKeys={selectionKeys} />
           </div>
         );
       }
