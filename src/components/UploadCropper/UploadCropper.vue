@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-wrap">
+  <div class="v-cropper--wrapper">
     <el-upload
       ref="upload"
       action="#"
@@ -36,7 +36,7 @@
     </el-upload>
     <!-- 图片预览弹窗 -->
     <BaseDialog :visible.sync="previewVisible" title="图片预览" destroy-on-close>
-      <div class="preview-wrap">
+      <div class="v-cropper--preview">
         <img :src="dialogImageUrl" alt />
       </div>
     </BaseDialog>
@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 21:23:23
+ * @Last Modified time: 2020-04-06 15:09:29
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -240,7 +240,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.upload-wrap {
+.v-cropper--wrapper {
   width: 100%;
   float: left;
   & > div {
@@ -320,7 +320,7 @@ export default {
     line-height: 20px;
   }
 }
-.preview-wrap {
+.v-cropper--preview {
   display: flex;
   justify-content: center;
   img {

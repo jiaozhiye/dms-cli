@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-01 10:10:18
+ * @Last Modified time: 2020-04-06 15:02:25
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1381,7 +1381,7 @@ export default {
       }
     };
     const cls = [
-      `form-panel`,
+      `v-form-panel`,
       {
         [`form-show`]: this.formType === 'show'
       }
@@ -1399,7 +1399,7 @@ export default {
 </script>
 
 <style lang="less">
-.form-panel {
+.v-form-panel {
   .el-col {
     min-height: 32px;
     margin-bottom: 12px;

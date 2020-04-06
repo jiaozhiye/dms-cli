@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-15 14:03:56
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-15 18:04:02
+ * @Last Modified time: 2020-04-06 15:11:23
  */
 import { Notification } from 'element-ui';
 import BaseDialog from '@/components/BaseDialog/BaseDialog.vue';
@@ -87,10 +87,10 @@ export default {
       }
     };
     return (
-      <div class="print-btn el-button">
+      <div class="v-web-print el-button">
         <el-button {...btnProps}>{$slots['default'] || '打印'}</el-button>
         <BaseDialog {...wrapProps}>
-          <iframe class="preview-wrap" src={filePath} />
+          <iframe class="v-web-print--preview" src={filePath} />
         </BaseDialog>
       </div>
     );
@@ -99,12 +99,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.print-btn {
+.v-web-print {
   display: inline-block;
   padding: 0;
   border: 0;
 }
-.preview-wrap {
+.v-web-print--preview {
   display: block;
   margin: 0;
   padding: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['btn-area', `btn-align-${align}`]" :style="containerStyle">
+  <div :class="['v-btn-area--wrapper', `btn-align-${align}`]" :style="containerStyle">
     <slot />
   </div>
 </template>
@@ -8,8 +8,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-06 15:20:59
  **/
 export default {
   name: 'ButtonArea',
@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.btn-area {
+.v-btn-area--wrapper {
   font-size: 0;
   display: flex;
   flex-wrap: wrap;

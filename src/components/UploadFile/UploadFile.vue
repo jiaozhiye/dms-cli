@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-25 09:46:27
+ * @Last Modified time: 2020-04-06 15:09:57
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 
@@ -144,7 +144,7 @@ export default {
       }
     };
     return (
-      <div class="upload-btn" style={containerStyle}>
+      <div class="v-upload-file" style={containerStyle}>
         <el-upload ref="upload" {...wrapProps}>
           <el-button {...btnProps}>{$slots['default']}</el-button>
           {!$props.isOnlyButton ? (
@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.upload-btn {
+.v-upload-file {
   display: inline-block;
 }
 </style>

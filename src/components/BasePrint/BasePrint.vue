@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 21:15:18
+ * @Last Modified time: 2020-04-06 14:59:12
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -152,10 +152,10 @@ export default {
       });
     },
     createPreviewNodes(_html_) {
-      const $target = document.body.querySelector('.preview-wrap');
+      const $target = document.body.querySelector('.v-preview--wrapper');
       if (!$target) {
         let $wrapper = document.createElement('div');
-        $wrapper.className = 'preview-wrap';
+        $wrapper.className = 'v-preview--wrapper';
         $wrapper.innerHTML = _html_;
         document.body.appendChild($wrapper);
         $wrapper = null;
@@ -170,17 +170,17 @@ export default {
   },
   render(h) {
     const vNode = this.state === 'start' ? this.createPrintComponent(h) : null;
-    return <div class="print-wrap">{vNode}</div>;
+    return <div class="v-print--wrapper">{vNode}</div>;
   }
 };
 </script>
 
 <style lang="less">
-.print-wrap {
+.v-print--wrapper {
   display: none;
   visibility: hidden;
 }
-.preview-wrap {
+.v-preview--wrapper {
   width: 960px;
   padding: 10px;
   border: 1px solid @borderColor;

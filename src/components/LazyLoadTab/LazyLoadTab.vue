@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 09:23:11
+ * @Last Modified time: 2020-04-06 15:03:45
  **/
 import _ from 'lodash';
 
@@ -78,7 +78,7 @@ export default {
     const { type, position } = this;
     return (
       <el-tabs
-        class="lazyLoadTab"
+        class="v-lazy-tab--wrapper"
         type={type}
         value={this.activeName}
         tab-position={position}
@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.lazyLoadTab {
+.v-lazy-tab--wrapper {
   /deep/ .el-tabs__header {
     margin-bottom: @moduleMargin;
     .el-tabs__nav-wrap {

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 13:40:56
+ * @Last Modified time: 2020-04-06 15:19:32
  **/
 import Spin from '@/components/Spin';
 
@@ -172,24 +172,24 @@ export default {
   render() {
     const { isVisible, loading, closable, title, maskzIndex, maskStyle, containerPosition, containerShow, containerzIndex, containerStyle, $slots } = this;
     const cls = [
-      'cover-mask',
+      'drawer-mask',
       {
         [`mask-show`]: this.visible
       }
     ];
     return (
-      <div class="drawer">
+      <div class="v-drawer--wrapper">
         <div class={cls} style={{ ...maskzIndex, ...maskStyle }} onClick={() => this.close('mask')} />
-        <div ref="panel" class="cover-container" style={{ ...containerPosition, ...containerShow, ...containerzIndex, ...containerStyle }}>
-          <div class="drawer-header">
-            <div class="drawer-title">{$slots[`title`] || title}</div>
+        <div ref="panel" class="drawer-container" style={{ ...containerPosition, ...containerShow, ...containerzIndex, ...containerStyle }}>
+          <div class="header">
+            <div class="title">{$slots[`title`] || title}</div>
             {closable && (
-              <span class="drawer-close" onClick={this.close}>
+              <span class="close" onClick={this.close}>
                 <i class="iconfont icon-close" />
               </span>
             )}
           </div>
-          <div class="drawer-container">
+          <div class="container">
             {isVisible && $slots[`default`]}
             {loading && (
               <div class="loading" style={{ height: `calc(100vh - 110px)` }}>
@@ -205,8 +205,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.drawer {
-  .cover-mask {
+.v-drawer--wrapper {
+  .drawer-mask {
     position: fixed;
     top: 0;
     left: 0;
@@ -222,13 +222,13 @@ export default {
     visibility: visible;
     opacity: 0.3;
   }
-  .cover-container {
+  .drawer-container {
     position: fixed;
     visibility: hidden;
     background-color: rgb(255, 255, 255);
     transition: all 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-    .drawer-header {
+    .header {
       display: flex;
       align-items: center;
       position: relative;
@@ -238,10 +238,10 @@ export default {
       box-sizing: border-box;
       border-bottom: 1px solid @borderColor;
       border-radius: @borderRadius @borderRadius 0 0;
-      .drawer-title {
+      .title {
         font-size: 16px;
       }
-      .drawer-close {
+      .close {
         position: absolute;
         padding: 5px;
         right: 10px;
@@ -252,12 +252,12 @@ export default {
           color: @primaryColor;
           text-decoration: none;
         }
-        .iconfont {
+        i {
           font-size: 18px;
         }
       }
     }
-    .drawer-container {
+    .container {
       padding: 10px 15px;
       word-wrap: break-word;
       .loading {

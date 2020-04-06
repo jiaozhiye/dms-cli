@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-01 10:01:26
+ * @Last Modified time: 2020-04-06 15:07:46
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1155,7 +1155,7 @@ export default {
       }
     };
     return (
-      <div class="top-filter">
+      <div class="v-top-filter">
         <el-form ref="form" {...wrapProps}>
           <el-row gutter={10}>{this.createFormLayout()}</el-row>
         </el-form>
@@ -1166,7 +1166,7 @@ export default {
 </script>
 
 <style lang="less">
-.top-filter {
+.v-top-filter {
   .el-col {
     min-height: 32px;
     margin-bottom: 12px;

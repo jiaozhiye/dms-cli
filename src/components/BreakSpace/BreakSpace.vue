@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-06 14:59:40
  **/
 export default {
   name: 'BreakSpace',
@@ -24,7 +24,7 @@ export default {
   render() {
     const { containerStyle, labelStyle, label } = this;
     return (
-      <div class="form-divider" style={{ ...containerStyle }}>
+      <div class="v-form--divider" style={{ ...containerStyle }}>
         <el-divider contentPosition="left">
           <span class="title" style={{ ...labelStyle }}>
             {label}
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.form-divider {
+.v-form--divider {
   width: 100%;
   height: 32px;
   overflow: hidden;

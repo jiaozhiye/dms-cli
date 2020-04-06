@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 12:12:51
+ * @Last Modified time: 2020-04-06 15:04:14
  **/
 import addEventListener from 'add-dom-event-listener';
 import Spin from '@/components/Spin';
@@ -91,7 +91,7 @@ export default {
   render() {
     const { method, loginUrl, loginParams, pageUrl, containerStyle, isLogined, loading } = this;
     return (
-      <div class="portal">
+      <div class="v-portal--wrapper">
         <form ref="form" class="form" target="form-target" method={method} action={loginUrl}>
           {this.createFormItem(loginParams)}
         </form>
@@ -106,7 +106,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.portal {
+.v-portal--wrapper {
   width: 100%;
   height: 100%;
   .form {

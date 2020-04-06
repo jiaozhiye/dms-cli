@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-06 15:15:38
  **/
 import _ from 'lodash';
 
@@ -93,7 +93,7 @@ export default {
   render() {
     const { labels, dataList, currentValues } = this;
     return (
-      <div class="casc-wrap">
+      <div class="v-casc-select--wrapper">
         <table class="table" width="100%">
           {labels.length ? (
             <tr>
@@ -125,7 +125,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.casc-wrap {
+.v-casc-select--wrapper {
   .table {
     tr {
       th {

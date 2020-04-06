@@ -2,8 +2,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-06 14:57:03
  **/
 export default {
   name: 'Anchor',
@@ -122,7 +122,7 @@ export default {
   },
   render() {
     return (
-      <div class="anchor-wrap">
+      <div class="v-anchor--wrapper">
         {this.createLabel()}
         <div class="scroll-wrapper" ref="scroll">
           {this.$slots['default']}
@@ -134,7 +134,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.anchor-wrap {
+.v-anchor--wrapper {
   height: 100%;
   display: flex;
   flex-direction: row;

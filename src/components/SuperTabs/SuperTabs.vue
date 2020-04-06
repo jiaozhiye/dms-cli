@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-29 10:48:56
+ * @Last Modified time: 2020-04-06 15:13:47
  **/
 import _ from 'lodash';
 import { filterEmpty } from '@/components/_utils/props-util';
@@ -168,7 +168,7 @@ export default {
     const menus = this.createTabMenus(children);
     this.labels = menus.map(x => x.label);
     return (
-      <div class="tab-wrapper">
+      <div class="v-super-tab--wrapper">
         <div class="tab-top-bar">
           <div class="tabs-nav-container">
             <div class="tabs-nav-animated">
@@ -188,7 +188,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tab-wrapper {
+.v-super-tab--wrapper {
   width: 100%;
   overflow: hidden;
   .tab-top-bar {

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 14:53:19
+ * @Last Modified time: 2020-04-06 14:58:17
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -139,7 +139,7 @@ export default {
       directives: dragable ? [{ name: 'drag' }] : null
     };
     return this.isShowDialog ? (
-      <el-dialog class="base-dialog" {...wrapProps}>
+      <el-dialog class="v-dialog--wrapper" {...wrapProps}>
         <span key="fullscreen" class="fullscreen-btn" onClick={this.handleClick}>
           <i class="el-icon-full-screen" />
         </span>
@@ -157,7 +157,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.base-dialog {
+.v-dialog--wrapper {
   /deep/ .el-dialog {
     margin: 0 auto;
     .el-dialog__header {

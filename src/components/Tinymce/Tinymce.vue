@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ fullscreen: fullscreen }" class="tinymce-container">
+  <div :class="{ fullscreen: fullscreen }" class="v-tinymce--wrapper">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div v-if="isUploadImage" class="editor-custom-btn-container">
       <UploadImg class="editor-upload-btn" :action-url="actionUrl" :fixed-size="fixedSize" @success="imageSuccessHandle" />
@@ -12,7 +12,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-26 08:54:03
+ * @Last Modified time: 2020-04-06 15:12:51
  **/
 import plugins from './plugins';
 import toolbar from './toolbar';
@@ -202,7 +202,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tinymce-container {
+.v-tinymce--wrapper {
   position: relative;
   line-height: normal;
   /deep/ .mce-fullscreen {
@@ -214,21 +214,23 @@ export default {
   /deep/ .tox-statusbar__branding {
     display: none;
   }
-}
-.tinymce-textarea {
-  visibility: hidden;
-  z-index: -1;
-}
-.editor-custom-btn-container {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  .editor-upload-btn {
-    display: inline-block;
+  .tinymce-textarea {
+    visibility: hidden;
+    z-index: -1;
   }
-}
-.fullscreen .editor-custom-btn-container {
-  position: fixed;
-  z-index: 9999;
+  .editor-custom-btn-container {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    .editor-upload-btn {
+      display: inline-block;
+    }
+  }
+  .fullscreen {
+    &.editor-custom-btn-container {
+      position: fixed;
+      z-index: 9999;
+    }
+  }
 }
 </style>
