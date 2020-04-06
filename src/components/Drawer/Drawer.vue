@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:19:32
+ * @Last Modified time: 2020-04-06 15:53:57
  **/
 import Spin from '@/components/Spin';
 
@@ -184,7 +184,7 @@ export default {
           <div class="header">
             <div class="title">{$slots[`title`] || title}</div>
             {closable && (
-              <span class="close" onClick={this.close}>
+              <span class="close" title="关闭" onClick={this.close}>
                 <i class="iconfont icon-close" />
               </span>
             )}

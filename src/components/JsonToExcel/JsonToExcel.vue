@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 12:20:30
+ * @Last Modified time: 2020-04-06 15:33:42
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
@@ -212,5 +212,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped></style>
