@@ -22,8 +22,8 @@
         bottom: 0,
         right: 0,
         zIndex: 9,
-        borderTop: '1px solid #e9e9e9',
-        padding: '10px 20px',
+        borderTop: '1px solid #d9d9d9',
+        padding: '10px 15px',
         background: '#fff',
         textAlign: 'right'
       }"
@@ -31,7 +31,7 @@
       <el-button @click="closeDrawer">取 消</el-button>
       <multiuse-button size="small" type="primary" :auth-list="auths" auth-mark="/api/aaa" :click="closeDrawer">提 交</multiuse-button>
     </div>
-    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
+    <BaseDialog :visible.sync="visible" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
       <Modal @close="closeHandler" />
     </BaseDialog>
   </div>
@@ -316,7 +316,7 @@ export default {
 
 <style lang="less" scoped>
 .wrapper {
-  height: calc(100vh - 135px);
+  height: calc(100vh - 120px);
   .line {
     height: 500px;
     margin-bottom: 20px;

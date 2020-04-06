@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 11:15:44
+ * @Last Modified time: 2020-04-06 12:12:35
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,7 +13,7 @@ import TopInfo from './topInfo';
 import ColumnFilter from './columnFilter';
 import ExportExcel from './exportExcel';
 import Pagination from './pagination';
-import Spin from '@/components/Spin/Spin';
+import Spin from '@/components/Spin';
 
 export default {
   name: 'PageTable',

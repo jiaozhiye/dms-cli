@@ -31,7 +31,7 @@
         <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
       </template>
     </FilterTable>
-    <Drawer :visible.sync="visible" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
+    <Drawer :visible.sync="visible" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
       <Panel @close="closeHandler" />
     </Drawer>
     <BasePrint ref="print" :data="printList" :isPreview="false" template="demo/template" />
@@ -105,9 +105,9 @@ export default {
   mounted() {
     this.BaseTable = this.$refs.table;
     // console.log('页面不具备的权限：', this.auths);
-    // this.BaseTable.START_LOADING();
+    this.BaseTable.START_LOADING();
     setTimeout(() => {
-      // this.BaseTable.STOP_LOADING();
+      this.BaseTable.STOP_LOADING();
       // this.list = [...res.data.items];
       // this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
       this.topFilterList[0].hidden = false;

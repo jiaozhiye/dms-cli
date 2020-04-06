@@ -3,10 +3,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-17 12:39:57
+ * @Last Modified time: 2020-04-06 12:12:51
  **/
 import addEventListener from 'add-dom-event-listener';
-import Spin from '@/components/Spin/Spin';
+import Spin from '@/components/Spin';
 import Cookies from 'js-cookie';
 
 export default {

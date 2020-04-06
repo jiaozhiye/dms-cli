@@ -1,47 +1,14 @@
-<template>
-  <div class="drawer">
-    <div :class="['cover-mask', maskShow]" :style="[maskzIndex, maskStyle]" @click.stop="close('mask')" />
-    <div ref="panel" :class="['cover-container']" :style="[containerPosition, containerShow, containerzIndex, containerStyle]">
-      <div class="drawer-content">
-        <div class="drawer-header">
-          <div class="drawer-title">
-            <slot name="title">{{ title }}</slot>
-          </div>
-          <button v-if="closable" class="drawer-close" @click.stop="close()">
-            <span class="drawer-close-x">
-              <i class="anticon anticon-close">
-                <svg viewBox="64 64 896 896" data-icon="close" width="1em" height="1em" fill="currentColor" aria-hidden="true" class>
-                  <path
-                    d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"
-                  />
-                </svg>
-              </i>
-            </span>
-          </button>
-        </div>
-        <div class="drawer-body">
-          <Spin v-if="loading" :spinning="loading" tip="Loading..." :containerStyle="{ height: 'calc(100vh - 140px)' }" />
-          <slot v-if="isVisible" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-11 21:01:03
+ * @Last Modified time: 2020-04-06 13:40:56
  **/
-import Spin from '@/components/Spin/Spin';
+import Spin from '@/components/Spin';
 
 export default {
   name: '',
-  components: {
-    Spin
-  },
   props: {
     visible: {
       type: Boolean,
@@ -136,9 +103,6 @@ export default {
     delayTime() {
       return !this.isIE() ? 300 : 400;
     },
-    maskShow() {
-      return this.visible ? 'mask-show' : '';
-    },
     containerPosition() {
       return this.STYLE[this.position];
     },
@@ -204,6 +168,38 @@ export default {
     isIE() {
       return !!window.ActiveXObject || 'ActiveXObject' in window;
     }
+  },
+  render() {
+    const { isVisible, loading, closable, title, maskzIndex, maskStyle, containerPosition, containerShow, containerzIndex, containerStyle, $slots } = this;
+    const cls = [
+      'cover-mask',
+      {
+        [`mask-show`]: this.visible
+      }
+    ];
+    return (
+      <div class="drawer">
+        <div class={cls} style={{ ...maskzIndex, ...maskStyle }} onClick={() => this.close('mask')} />
+        <div ref="panel" class="cover-container" style={{ ...containerPosition, ...containerShow, ...containerzIndex, ...containerStyle }}>
+          <div class="drawer-header">
+            <div class="drawer-title">{$slots[`title`] || title}</div>
+            {closable && (
+              <span class="drawer-close" onClick={this.close}>
+                <i class="iconfont icon-close" />
+              </span>
+            )}
+          </div>
+          <div class="drawer-container">
+            {isVisible && $slots[`default`]}
+            {loading && (
+              <div class="loading" style={{ height: `calc(100vh - 110px)` }}>
+                <Spin spinning={loading} tip="Loading..." />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   }
 };
 </script>
@@ -232,71 +228,44 @@ export default {
     background-color: rgb(255, 255, 255);
     transition: all 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-    .drawer-content {
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      .drawer-header {
-        position: relative;
-        padding: 16px 20px;
-        border-radius: @borderRadius @borderRadius 0 0;
-        background: #fff;
-        color: rgba(0, 0, 0, 0.65);
-        border-bottom: 1px solid @borderColor;
-        .drawer-title {
-          margin: 0;
-          font-size: 16px;
-          line-height: 22px;
-          font-weight: 500;
-          color: rgba(0, 0, 0, 0.65);
-        }
-        .drawer-close {
-          cursor: pointer;
-          border: 0;
-          background: transparent;
-          position: absolute;
-          right: 0;
-          top: 0;
-          z-index: 10;
-          font-weight: 700;
-          line-height: 1;
-          text-decoration: none;
-          transition: color 0.3s;
-          color: rgba(0, 0, 0, 0.45);
-          outline: 0;
-          padding: 0;
-          &:hover {
-            color: @primaryColor;
-            text-decoration: none;
-          }
-          .drawer-close-x {
-            display: block;
-            font-style: normal;
-            text-align: center;
-            text-transform: none;
-            text-rendering: auto;
-            width: 55px;
-            height: 55px;
-            line-height: 55px;
-            font-size: 16px;
-          }
-        }
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 48px;
+      padding: 0 15px;
+      background: #fff;
+      box-sizing: border-box;
+      border-bottom: 1px solid @borderColor;
+      border-radius: @borderRadius @borderRadius 0 0;
+      .drawer-title {
+        font-size: 16px;
       }
-      .drawer-body {
-        padding: 10px 20px;
-        word-wrap: break-word;
+      .drawer-close {
+        position: absolute;
+        padding: 5px;
+        right: 10px;
+        color: @textColorSecondary;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        &:hover {
+          color: @primaryColor;
+          text-decoration: none;
+        }
+        .iconfont {
+          font-size: 18px;
+        }
       }
     }
-  }
-  .anticon {
-    display: inline-block;
-    font-style: normal;
-    vertical-align: -0.125em;
-    text-align: center;
-    text-transform: none;
-    line-height: 0;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
+    .drawer-container {
+      padding: 10px 15px;
+      word-wrap: break-word;
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
 }
 </style>

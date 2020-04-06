@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 13:41:44
+ * @Last Modified time: 2020-04-06 14:53:19
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -104,7 +104,7 @@ export default {
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     createStyles(slots) {
-      const hdHeight = '76px';
+      const hdHeight = '68px';
       const ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
       const dialogBodyHeight = this.fullscreen
         ? {
@@ -135,6 +135,7 @@ export default {
       },
       attrs: { ...$attrs },
       on: { ...$listeners },
+      // drag -> 拖拽指令
       directives: dragable ? [{ name: 'drag' }] : null
     };
     return this.isShowDialog ? (
@@ -160,19 +161,18 @@ export default {
   /deep/ .el-dialog {
     margin: 0 auto;
     .el-dialog__header {
-      height: 56px;
-      line-height: 56px;
+      height: 48px;
+      line-height: 48px;
       padding: 0 15px;
       box-sizing: border-box;
       border-bottom: 1px solid @borderColor;
       .el-dialog__title {
         font-size: 16px;
-        line-height: inherit;
       }
       .el-dialog__headerbtn {
         font-size: 18px;
         line-height: 1.075;
-        top: 19px;
+        top: 15px;
         right: 15px;
       }
     }
@@ -180,8 +180,8 @@ export default {
       padding: 10px 0;
       .fullscreen-btn {
         position: absolute;
-        right: 36px;
-        top: 16px;
+        right: 35px;
+        top: 12px;
         padding: 5px;
         cursor: pointer;
         &:hover {

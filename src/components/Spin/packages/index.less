@@ -2,18 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 18:35:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 13:02:49
+ * @Last Modified time: 2020-04-06 13:02:09
  */
 // Spin Size
-$spin-dot-size-sm: 14px;
-$spin-dot-size: 20px;
-$spin-dot-size-lg: 32px;
+@spin-dot-size-sm: 14px;
+@spin-dot-size: 20px;
+@spin-dot-size-lg: 32px;
 
 .v-spin {
   box-sizing: border-box;
   position: absolute;
   display: none;
-  color: $v-primary-color;
+  color: @primaryColor;
   text-align: center;
   vertical-align: middle;
   opacity: 0;
@@ -38,7 +38,7 @@ $spin-dot-size-lg: 32px;
         position: absolute;
         top: 50%;
         left: 50%;
-        margin: -$spin-dot-size / 2;
+        margin: -@spin-dot-size / 2;
       }
       .v-spin-text {
         position: absolute;
@@ -48,31 +48,31 @@ $spin-dot-size-lg: 32px;
         text-shadow: 0 1px 2px #fff;
       }
       &.v-spin-show-text .v-spin-dot {
-        margin-top: -$spin-dot-size / 2 - 10px;
+        margin-top: -@spin-dot-size / 2 - 10px;
       }
     }
 
     > div > .v-spin-sm {
       .v-spin-dot {
-        margin: -$spin-dot-size-sm / 2;
+        margin: -@spin-dot-size-sm / 2;
       }
       .v-spin-text {
         padding-top: 2px;
       }
       &.v-spin-show-text .v-spin-dot {
-        margin-top: -$spin-dot-size-sm / 2 - 10px;
+        margin-top: -@spin-dot-size-sm / 2 - 10px;
       }
     }
 
     > div > .v-spin-lg {
       .v-spin-dot {
-        margin: -$spin-dot-size-lg / 2;
+        margin: -@spin-dot-size-lg / 2;
       }
       .v-spin-text {
         padding-top: 8px;
       }
       &.v-spin-show-text .v-spin-dot {
-        margin-top: -$spin-dot-size-lg / 2 - 10px;
+        margin-top: -@spin-dot-size-lg / 2 - 10px;
       }
     }
   }
@@ -114,7 +114,7 @@ $spin-dot-size-lg: 32px;
   // tip
   // ------------------------------
   &-tip {
-    color: $v-primary-color;
+    color: @primaryColor;
   }
 
   // dots
@@ -124,15 +124,15 @@ $spin-dot-size-lg: 32px;
     position: relative;
     display: inline-block;
 
-    width: $spin-dot-size;
-    height: $spin-dot-size;
+    width: @spin-dot-size;
+    height: @spin-dot-size;
 
     i {
       position: absolute;
       display: block;
       width: 9px;
       height: 9px;
-      background-color: $v-primary-color;
+      background-color: @primaryColor;
       border-radius: 100%;
       transform: scale(0.75);
       transform-origin: 50% 50%;
@@ -170,8 +170,8 @@ $spin-dot-size-lg: 32px;
 
   // small
   &-sm &-dot {
-    width: $spin-dot-size-sm;
-    height: $spin-dot-size-sm;
+    width: @spin-dot-size-sm;
+    height: @spin-dot-size-sm;
 
     i {
       width: 6px;
@@ -181,8 +181,8 @@ $spin-dot-size-lg: 32px;
 
   // large
   &-lg &-dot {
-    width: $spin-dot-size-lg;
-    height: $spin-dot-size-lg;
+    width: @spin-dot-size-lg;
+    height: @spin-dot-size-lg;
 
     i {
       width: 14px;

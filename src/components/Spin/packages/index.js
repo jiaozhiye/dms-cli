@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 17:57:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 12:19:01
+ * @Last Modified time: 2020-04-06 13:33:59
  */
 import PropTypes from '@/components/_utils/vue-types';
 import { filterEmpty, getListeners } from '@/components/_utils/props-util';
 
 export default {
-  name: 'SpinLoading',
+  name: 'Spin',
   props: {
     spinning: PropTypes.bool.def(false),
     size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),

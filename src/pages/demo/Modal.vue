@@ -14,8 +14,8 @@
         bottom: 0,
         right: 0,
         zIndex: 9,
-        borderTop: '1px solid #e9e9e9',
-        padding: '10px 20px',
+        borderTop: '1px solid #d9d9d9',
+        padding: '10px 15px',
         background: '#fff',
         textAlign: 'right'
       }"
