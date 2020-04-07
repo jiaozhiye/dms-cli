@@ -4,10 +4,12 @@
     <all-menu :collapsed="collapsed">
       <MenuList :menu="navList" />
     </all-menu>
-    <el-scrollbar class="menu-tree">
-      <star-menu :collapsed="collapsed" />
-      <menu-tree class="side-menu" :menu="navList" :collapsed="collapsed" />
-    </el-scrollbar>
+    <div class="scroll">
+      <div class="inner">
+        <star-menu :collapsed="collapsed" />
+        <menu-tree class="side-menu" :menu="navList" :collapsed="collapsed" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +18,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 10:40:12
+ * @Last Modified time: 2020-04-07 10:47:34
  **/
 import { mapState } from 'vuex';
 import config from '@/config';
@@ -57,11 +59,13 @@ export default {
   background-color: @menuBg;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
   z-index: 5;
-  /deep/ .menu-tree {
-    height: calc(100vh - 116px);
-    background-color: @menuBg;
-    .el-scrollbar__wrap {
-      overflow-x: hidden;
+  .scroll {
+    height: calc(100% - 60px - 40px);
+    overflow-x: hidden;
+    .inner {
+      width: calc(100% + 17px);
+      height: 100%;
+      overflow-y: scroll;
     }
   }
 }
