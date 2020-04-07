@@ -18,7 +18,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 10:47:34
+ * @Last Modified time: 2020-04-07 11:10:56
  **/
 import { mapState } from 'vuex';
 import config from '@/config';
@@ -61,6 +61,7 @@ export default {
   z-index: 5;
   .scroll {
     height: calc(100% - 60px - 40px);
+    background-color: @menuBg;
     overflow-x: hidden;
     .inner {
       width: calc(100% + 17px);

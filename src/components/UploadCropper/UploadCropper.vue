@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:51:46
+ * @Last Modified time: 2020-04-07 11:01:21
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -318,7 +318,7 @@ export default {
     }
   }
   .el-upload__tip {
-    line-height: 20px;
+    line-height: 1.5;
   }
 }
 .v-cropper--preview {

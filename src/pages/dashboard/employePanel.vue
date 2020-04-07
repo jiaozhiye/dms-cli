@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="welcome">
       <div class="avatar">
-        <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" />
+        <img src="@/assets/img/avatar.jpg" />
       </div>
       <div class="info">
         <h3>
