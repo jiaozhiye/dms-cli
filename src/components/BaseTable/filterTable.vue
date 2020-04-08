@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 11:30:38
+ * @Last Modified time: 2020-04-08 17:51:59
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
@@ -653,7 +653,7 @@ export default {
 .popover-wrap {
   display: block;
   padding: 0;
-  min-width: 120px;
+  min-width: 122px;
   overflow-y: auto;
   & > div {
     display: block;
@@ -716,7 +716,7 @@ export default {
 .thead-popper {
   display: flex;
   flex-direction: column;
-  min-width: 120px !important;
+  min-width: 122px !important;
   max-height: calc(100vh - 30px);
   padding: @modulePadding !important;
   margin-top: 4px !important;

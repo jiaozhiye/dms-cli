@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 09:46:26
+ * @Last Modified time: 2020-04-08 18:08:42
  **/
 export default {
   name: 'DropDown',
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       offsetX: 0,
-      minHeight: 90
+      minHeight: 70
     };
   },
   watch: {
@@ -56,7 +56,7 @@ export default {
       if (!this.boundariesElement) {
         return this.minHeight;
       }
-      const res = this.boundariesElement.querySelector('.el-table').offsetHeight - 42;
+      const res = this.boundariesElement.querySelector('.el-table').offsetHeight - 65;
       return res > this.minHeight ? res : this.minHeight;
     }
   },
@@ -97,7 +97,7 @@ export default {
     flex-direction: column;
     position: absolute;
     top: 34px;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #fff;
     border: 1px solid @borderColorSecondary;
     border-radius: @borderRadius;
     box-shadow: @boxShadow;

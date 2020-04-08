@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:02:25
+ * @Last Modified time: 2020-04-08 17:29:37
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1196,9 +1196,9 @@ export default {
     getFormData() {
       this.excuteFormData(this.form);
       return new Promise((resolve, reject) => {
-        this.$refs.form.validate((valid, fieldNames) => {
+        this.$refs.form.validate((valid, fields) => {
           if (!valid) {
-            reject(fieldNames);
+            reject(fields);
           } else {
             resolve(this.form);
           }
@@ -1209,11 +1209,16 @@ export default {
       ev && ev.preventDefault();
       let isErr;
       this.excuteFormData(this.form);
-      this.$refs.form.validate(valid => {
+      this.$refs.form.validate((valid, fields) => {
         isErr = !valid;
-        if (!valid) return;
-        this.loadingHandler();
-        this.$emit('formChange', this.form);
+        if (!valid) {
+          if (_.isElement(this.scrollContainer)) {
+            this.createAnchorFixed(fields);
+          }
+        } else {
+          this.loadingHandler();
+          this.$emit('formChange', this.form);
+        }
       });
       return isErr;
     },
