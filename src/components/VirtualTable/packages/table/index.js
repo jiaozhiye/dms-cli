@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 10:46:40
+ * @Last Modified time: 2020-04-09 14:40:08
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -84,7 +84,7 @@ export default {
         renderSize: 0,
         offsetSize: 0,
         visibleSize: 0,
-        rowHeight: config.rowHeightMaps[this.size || 'default']
+        rowHeight: config.rowHeightMaps[this.size]
       },
       // 支持的排序方式
       sortDirections: ['ascend', 'descend'],

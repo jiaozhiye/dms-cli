@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 09:41:41
+ * @Last Modified time: 2020-04-09 15:46:13
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -12,30 +12,32 @@ const columnItem = {
   width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
-  hidden: PropTypes.bool, // 隐藏列
+  hidden: PropTypes.bool, // 是否隐藏列
   ellipsis: PropTypes.bool, // 超过宽度将自动省略
   className: PropTypes.string, // 列样式类名
+  children: PropTypes.array, // 内嵌 children，以渲染分组表头
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
   // 列筛选
   filter: PropTypes.shape({
     type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
-  required: PropTypes.bool, // 列是否必填
-  editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object
   precision: PropTypes.number, // 数值类型字段的精度
-  // 数据字典
+  formatType: PropTypes.oneOf(['date', 'datetime', 'finance', 'secret-name', 'secret-phone', 'secret-IDnumber']), // 字段的格式化类型
+  required: PropTypes.bool, // 可编辑列是否必填
+  editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object
+  // 数据字典配置
   dictItems: PropTypes.arrayOf(
     PropTypes.shape({
       text: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ),
-  formatType: PropTypes.oneOf(['date', 'datetime', 'finance', 'secret-name', 'secret-phone', 'secret-IDnumber']), // 字段的格式化类型
   // 底部合计
   summation: PropTypes.shape({
     dataIndex: PropTypes.string, // 服务端合计的数据字段名，建议和 column 的 dataIndex 一致
-    unit: PropTypes.string // 合计字段的单位
+    unit: PropTypes.string, // 合计字段的单位
+    onChange: PropTypes.func // 字段合计变化时触发
   }),
   render: PropTypes.func // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
 };
@@ -73,13 +75,13 @@ const columnItem = {
 export default {
   // 列配置，必要参数
   columns: PropTypes.arrayOf(PropTypes.shape(columnItem).loose).def([]).isRequired,
-  // 列变化事件，必要参数
+  // 表格列变化事件，必要参数
   columnsChange: PropTypes.func.isRequired,
   // 数据数组
   dataSource: PropTypes.array.def([]),
-  // 服务端数据每条记录的 uuid
+  // 表格行 key 的取值
   rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).def('uid'),
-  // 数据请求接口
+  // 向后台请求数据的接口
   fetch: PropTypes.shape({
     api: PropTypes.func.isRequired, // api 接口
     params: PropTypes.object.isRequired, // 接口参数
@@ -96,9 +98,9 @@ export default {
   loading: PropTypes.bool.def(false),
   // 所有列是否允许拖动列宽调整大小
   resizable: PropTypes.bool.def(true),
-  // 尺寸
-  size: PropTypes.oneOf(['medium', 'small', 'mini']),
-  // 存储 columns 定义的字段名，不能重复
+  // 表格尺寸
+  size: PropTypes.oneOf(['default', 'medium', 'small', 'mini']).def('default'),
+  // 存储列配置的字段名，不能重复
   cacheColumnsKey: PropTypes.string,
   // 是否显示表头
   showHeader: PropTypes.bool.def(true),
@@ -110,14 +112,14 @@ export default {
   cellStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   // 合并行或列的计算方法
   spanMethod: PropTypes.func,
-  // 行选择
+  // 列表项是否可选择
   rowSelection: PropTypes.shape({
-    type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 多选/单选，checkbox/radio
+    type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 选择类型
     selectedRowKeys: PropTypes.array, // 选中项的 key 数组，支持动态赋值
     rowSelectable: PropTypes.func, // 是否允许行选择，参数：row，返回值 bool
     onChange: PropTypes.func // 选中项发生变化时触发
   }),
-  // 展开行
+  // 展开行配置项
   expandable: {
     defaultExpandAllRows: PropTypes.bool, // 默认展开所有行
     rowExpandable: PropTypes.func, // 是否允许行展开，参数：row，返回值 bool
@@ -128,7 +130,7 @@ export default {
   clientSorter: PropTypes.bool,
   // 客户端筛选
   clientFilter: PropTypes.bool,
-  // 是否显示表格信息
+  // 是否显示表格顶部信息
   showAlert: PropTypes.bool.def(true),
   // 是否显示全屏按钮
   showFullScreen: PropTypes.bool.def(true),
@@ -149,7 +151,6 @@ export default {
  * 事件：
  * change: 分页、排序、筛选变化时触发，参数：pagination, filters, sorter, { currentDataSource: tableData }
  * dataChange: 表格数据变化时触发，参数 tableData
- * summationChange: 表格合计变化时触发，参数 { [dataIndex]: value }
  * rowClick: 行单击事件，参数 row, column, event
  * rowDblclick: 行双击事件，参数 row, column, event
  */

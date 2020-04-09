@@ -2,11 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-28 18:24:30
+ * @Last Modified time: 2020-04-09 15:10:19
  */
 import _ from 'lodash';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
 import config from '../config';
+
+const noop = () => {};
 
 export default {
   name: 'TableFooter',
@@ -18,12 +20,11 @@ export default {
       const summationColumns = this.flattenColumns.filter(x => typeof x.summation !== 'undefined');
       // 结果
       const res = {};
-      const val = {};
       summationColumns.forEach(column => {
         const {
           dataIndex,
           precision,
-          summation: { unit = '' }
+          summation: { unit = '', onChange = noop }
         } = column;
         const values = tableFullData.map(x => Number(_.get(x, dataIndex, 0)));
         // 累加求和
@@ -40,10 +41,10 @@ export default {
         }
         result = precision >= 0 ? result.toFixed(precision) : result;
         // 设置合计值
-        setCellValue(val, dataIndex, result);
         setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
+        // 触发事件
+        onChange(result);
       });
-      this.$emit('summationChange', val);
       return [res];
     }
   },
