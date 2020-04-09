@@ -59,8 +59,8 @@
 | precision  | 数值类型字段的精度                                            | number                                                                        | -      |
 | formatType | 字段的格式化类型                                              | date \| datetime \| finance \| secret-name \| secret-phone \| secret-IDnumber | -      |
 | required   | 可编辑列是否必填                                              | boolean                                                                       | false  |
-| editRender | 可编辑单元格                                                  | Function(row, column) => object                                               | -      |
-| dictItems  | 数据字典配置，数组值得格式 `text`, `value` 两个 key           | object                                                                        | -      |
+| editRender | 可编辑单元格，返回值请参考[配置项](#editable)                 | Function(row, column) => object                                               | -      |
+| dictItems  | 数据字典配置，数组值的格式 `text`, `value` 两个 key           | object                                                                        | -      |
 | summation  | 底部合计，[配置项](#summation)                                | object                                                                        | -      |
 | render     | 列渲染方法                                                    | Function(text, row, column, rowIndex, cellIndex) => JSX Node                  | -      |
 
@@ -78,7 +78,41 @@
 | 参数  | 说明                                              | 类型                                                                      | 默认值 |
 | ----- | ------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
 | type  | 列筛选类型，必要参数                              | text \| checkbox \| radio \| number \| range-number \| date \| range-date | string | - |
-| items | 筛选列表项，数组值得格式 `text`, `value` 两个 key | array                                                                     | -      |
+| items | 筛选列表项，数组值的格式 `text`, `value` 两个 key | array                                                                     | -      |
+
+### editable
+
+| 参数     | 说明                                                  | 类型                                                                        | 默认值 |
+| -------- | ----------------------------------------------------- | --------------------------------------------------------------------------- | ------ |
+| type     | 可编辑类型                                            | text \| number \| select \| select-multiple \| checkbox \| date \| datetime | string | - |
+| items    | 下拉框的列表项，数组值的格式 `text`, `value` 两个 key | array                                                                       | -      |
+| editable | 是否可编辑                                            | boolean                                                                     | -      |
+| disabled | 是否禁用编辑功能，且禁止切换                          | boolean                                                                     | -      |
+| extra    | 可编辑表单的额外配置项，[配置项](#extra)              | object                                                                      | -      |
+| rules    | 表单校验规则，数组值请参考[配置项](#rule)             | array                                                                       | -      |
+| onInput  | 表单的 input 事件                                     | Function                                                                    | -      |
+| onChange | 表单的 change 事件                                    | Function                                                                    | -      |
+| onEnter  | 表单的 enter 事件                                     | Function                                                                    | -      |
+
+### extra
+
+| 参数       | 说明               | 类型             | 默认值 |
+| ---------- | ------------------ | ---------------- | ------ |
+| maxlength  | 最大长度           | number           | -      |
+| max        | 最大值             | number           | -      |
+| min        | 最小值             | number           | -      |
+| trueValue  | 针对 checkbox 生效 | string \| number | -      |
+| falseValue | 针对 checkbox 生效 | string \| number | -      |
+| text       | 显示的文本         | string           | -      |
+| disabled   | 表单禁用状态       | boolean          | -      |
+
+### rule
+
+| 参数      | 说明           | 类型                           | 默认值 |
+| --------- | -------------- | ------------------------------ | ------ |
+| required  | 是否必填       | boolean                        | -      |
+| message   | 提示信息       | string                         | -      |
+| validator | 自定义校验规则 | Function(cellValue) => boolean | -      |
 
 ### summation
 
