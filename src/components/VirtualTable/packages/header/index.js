@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-03 18:12:13
+ * @Last Modified time: 2020-04-09 17:50:17
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -81,12 +81,12 @@ export default {
         : null;
       return columnRows.map((columns, rowIndex) => (
         <tr key={rowIndex} class="v-header--row">
-          {columns.map((column, cellIndex) => this.renderColumn(column, columns))}
+          {columns.map((column, cellIndex) => this.renderColumn(column, columns, rowIndex, cellIndex))}
           {scrollY && <th class={cls} style={stys}></th>}
         </tr>
       ));
     },
-    renderColumn(column, columns) {
+    renderColumn(column, columns, rowIndex, cellIndex) {
       const {
         getStickyLeft,
         getStickyRight,
