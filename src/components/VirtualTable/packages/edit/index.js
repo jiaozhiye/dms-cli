@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 09:58:56
+ * @Last Modified time: 2020-04-09 10:42:43
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -78,7 +78,7 @@ export default {
     },
     textHandle(row, column) {
       const { dataIndex } = column;
-      const { extra = {}, rules = [], onInput = noop, onChange = noop } = this.options;
+      const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       return (
         <el-input
@@ -95,13 +95,18 @@ export default {
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
+          nativeOnKeydown={ev => {
+            if (ev.keyCode === 13) {
+              onEnter({ [this.dataKey]: val }, row);
+            }
+          }}
           disabled={extra.disabled}
         />
       );
     },
     numberHandle(row, column) {
       const { dataIndex, precision } = column;
-      const { extra = {}, rules = [], onInput = noop, onChange = noop } = this.options;
+      const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (
@@ -131,6 +136,11 @@ export default {
             this.createFieldValidate(rules, val);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
+          }}
+          nativeOnKeydown={ev => {
+            if (ev.keyCode === 13) {
+              onEnter({ [this.dataKey]: val }, row);
+            }
           }}
           disabled={extra.disabled}
         />

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 00:31:40
+ * @Last Modified time: 2020-04-09 09:41:41
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -65,7 +65,8 @@ const columnItem = {
  *     validator: PropTypes.func // 自定义校验规则，参数: val(表单项的值); 返回值类型: bool
  *   })),
  *   onInput: PropTypes.func,
- *   onChange: PropTypes.func
+ *   onChange: PropTypes.func,
+ *   onEnter: PropTypes.func
  * }
  */
 
