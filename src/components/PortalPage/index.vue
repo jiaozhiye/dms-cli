@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:04:14
+ * @Last Modified time: 2020-04-10 22:05:14
  **/
 import addEventListener from 'add-dom-event-listener';
 import Spin from '@/components/Spin';
@@ -67,7 +67,7 @@ export default {
       this.loading = true;
       this.sIframeEvent = addEventListener(this.$refs['sIframe'], 'load', ev => {
         this.loading = false;
-        this.$emit('onSuccess');
+        this.$emit('success');
       });
     },
     bindLoginEvent() {

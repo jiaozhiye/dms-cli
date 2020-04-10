@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:33:42
+ * @Last Modified time: 2020-04-10 21:16:27
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
@@ -90,14 +90,14 @@ export default {
       if (_.isFunction(this.beforeGenerate)) {
         await this.beforeGenerate();
       }
-      let { api, params, datakey } = this.fetch;
+      let { api, params, dataKey } = this.fetch;
       let data = this.initialValue;
       if (api) {
         try {
           this.loading = !0;
           const res = await api(params);
           if (res.resultCode === 200) {
-            data = (!datakey ? res.data : _.get(res.data, datakey)) || [];
+            data = (!dataKey ? res.data : _.get(res.data, dataKey)) || [];
           }
         } catch (err) {}
         this.loading = !1;
@@ -127,7 +127,7 @@ export default {
         await this.beforeFinish();
       }
       const res = download(blob, filename);
-      res ? this.$emit('onFinish') : this.$emit('onError');
+      res ? this.$emit('success') : this.$emit('error');
     },
     getProcessedJson(data, header) {
       let keys = this.getKeys(data, header);

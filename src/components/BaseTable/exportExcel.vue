@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 11:36:36
+ * @Last Modified time: 2020-04-10 21:16:09
  */
 import _ from 'lodash';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -92,7 +92,7 @@ export default {
             current: 1, // 必须
             size: total
           },
-          datakey: fetch.datakey
+          dataKey: fetch.datakey
         }
       };
     }

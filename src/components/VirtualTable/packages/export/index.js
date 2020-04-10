@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:23:50
+ * @Last Modified time: 2020-04-10 21:17:29
  */
 import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -75,7 +75,7 @@ export default {
             currentPage: 1,
             pageSize: total
           },
-          datakey: dataKey
+          dataKey
         }
       };
     }
