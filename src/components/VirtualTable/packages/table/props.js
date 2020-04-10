@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 15:46:13
+ * @Last Modified time: 2020-04-10 14:07:10
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -142,7 +142,9 @@ export default {
     calcExportHandle: PropTypes.func // 计算导出数据，用于对数据的整理
   }),
   // 表格打印
-  tablePrint: PropTypes.shape({}),
+  tablePrint: PropTypes.shape({
+    showLogo: PropTypes.bool.def(true) // 是否显示打印单 logo
+  }),
   // 是否显示列定义
   showColumnDefine: PropTypes.bool.def(true)
 };

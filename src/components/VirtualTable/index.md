@@ -149,6 +149,10 @@
 
 ### tablePrint
 
+| 参数     | 说明                | 类型    | 默认值 |
+| -------- | ------------------- | ------- | ------ |
+| showLogo | 是否显示打印单 logo | boolean | true   |
+
 ## 注意
 
 在 Table 中，`dataSource` 和 `columns` 里的数据值都需要指定 `key` 值。对于 `dataSource` 默认将每列数据的 `key` 属性作为唯一的标识。

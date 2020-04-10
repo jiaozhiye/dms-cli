@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 15:10:19
+ * @Last Modified time: 2020-04-10 13:51:20
  */
 import _ from 'lodash';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
@@ -113,9 +113,10 @@ export default {
             right: fixed === 'right' ? `${getStickyRight(dataIndex) + (scrollY ? gutterWidth : 0)}px` : null
           }
         : null;
+      const text = getCellValue(row, dataIndex);
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{index > 0 ? getCellValue(row, column.dataIndex) : config.summaryText}</div>
+          <div class="v-cell">{index === 0 && text === '' ? config.summaryText : text}</div>
         </td>
       );
     }

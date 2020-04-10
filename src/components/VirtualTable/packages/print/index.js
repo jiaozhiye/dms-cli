@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:25:04
+ * @Last Modified time: 2020-04-10 13:56:58
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 export default {
   name: 'PrintTable',
-  props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter'],
+  props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter', 'showLogo'],
   inject: ['$$table'],
   data() {
     this.defaultHtmlStyle = `
@@ -23,20 +23,22 @@ export default {
         box-sizing: border-box;
       }
       table {
+        table-layout: fixed;
         border-spacing: 0;
         border-collapse: collapse;
-        table-layout: fixed;
       }
       .v-table--print {
-        width: 100%;
         font-size: 14px;
         text-align: left;
-        border: 1px solid #000;
       }
       .v-table--print th,
       .v-table--print td {
         padding: 5px;
         border: 1px solid #000;
+      }
+      .no-border th,
+      .no-border td {
+        border: 0!important;
       }
       .v-table--print th[colspan]:not([colspan='1']) {
         text-align: center;
@@ -186,20 +188,46 @@ export default {
       let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns.map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px"}>`).join('')}</colgroup>`;
       if (this.showHeader) {
-        html += `<thead>${columnRows
-          .map(columns => `<tr>${columns.map(column => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`)
-          .join('')}</thead>`;
+        html += [
+          `<thead>`,
+          this.showLogo ? `<tr><th colspan="${flatColumns.length}" style="border: 0">${this._toLogo()}</th></tr>` : '',
+          columnRows.map(columns => `<tr>${columns.map(column => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`).join(''),
+          `</thead>`
+        ].join('');
       }
       if (tableFullData.length) {
         html += `<tbody>${tableFullData.map(row => `<tr>${flatColumns.map((column, index) => `<td>${this.renderCell(row, row.index, column, index)}</td>`).join('')}</tr>`).join('')}</tbody>`;
       }
       if (this.showFooter && flatColumns.some(x => !!x.summation)) {
         html += `<tfoot>${summationRows
-          .map(row => `<tr>${flatColumns.map((column, index) => `<td>${index > 0 ? getCellValue(row, column.dataIndex) : config.summaryText}</td>`).join('')}</tr>`)
+          .map(
+            row =>
+              `<tr>${flatColumns
+                .map((column, index) => {
+                  let text = getCellValue(row, column.dataIndex);
+                  return `<td>${index === 0 && text === '' ? config.summaryText : text}</td>`;
+                })
+                .join('')}</tr>`
+          )
           .join('')}</tfoot>`;
       }
       html += '</table>';
       return html;
+    },
+    _toLogo() {
+      const baseUrl = window.location.origin;
+      return `
+        <table class="no-border" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="50%" align="left">
+              <img src="${baseUrl}/static/img/logo_l.png" border="0" width="120" />
+            </td>
+            <td width="50%" align="right">
+              <img src="${baseUrl}/static/img/logo_r.png" border="0" width="240" height="36" />
+            </td>
+          </tr>
+        </table>
+      `;
     },
     renderCell(row, rowIndex, column, columnIndex) {
       const { dataIndex, render } = column;

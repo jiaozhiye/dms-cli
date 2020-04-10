@@ -6,6 +6,9 @@
       :exportExcel="{
         fileName: 'aaa.xlsx'
       }"
+      :tablePrint="{
+        showLogo: true
+      }"
       :columns="columns"
       :dataSource="list"
       rowKey="id"

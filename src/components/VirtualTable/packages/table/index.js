@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 14:40:08
+ * @Last Modified time: 2020-04-10 14:07:54
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -323,6 +323,7 @@ export default {
       showAlert,
       showFullScreen,
       showRefresh,
+      tablePrint,
       exportExcel,
       showColumnDefine
     } = this;
@@ -387,14 +388,17 @@ export default {
         selectionKeys
       }
     };
-    const printProps = {
-      props: {
-        tableColumns,
-        flattenColumns,
-        showHeader,
-        showFooter
-      }
-    };
+    const printProps = tablePrint
+      ? {
+          props: {
+            tableColumns,
+            flattenColumns,
+            showHeader,
+            showFooter,
+            showLogo: _.isUndefined(tablePrint.showLogo) ? true : tablePrint.showLogo
+          }
+        }
+      : null;
     const exportProps = exportExcel
       ? {
           props: {
@@ -429,7 +433,7 @@ export default {
             {/* 刷新 */}
             {showRefresh && !!fetch && <Reload />}
             {/* 打印 */}
-            <PrintTable {...printProps} />
+            {tablePrint && <PrintTable {...printProps} />}
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
             {/* 列定义 */}
