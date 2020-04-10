@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-08 17:29:37
+ * @Last Modified time: 2020-04-10 17:00:26
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -28,7 +28,7 @@ export default {
     },
     formType: {
       type: String,
-      default: 'add'
+      default: 'default'
     },
     cols: {
       type: Number,
@@ -40,7 +40,7 @@ export default {
     },
     isSubmitBtn: {
       type: Boolean,
-      default: true
+      default: false
     },
     scrollContainer: {
       default: null
@@ -103,7 +103,7 @@ export default {
       const { type = '', fieldName, numberFormat, secretType, readonly } = item;
       // 初始值
       let val = this.initialValue[fieldName];
-      if (this.formType === 'show') {
+      if (this.formType === 'onlyShow') {
         item.disabled = true;
       }
       if (this.arrayTypes.includes(type)) {
@@ -1217,7 +1217,7 @@ export default {
           }
         } else {
           this.loadingHandler();
-          this.$emit('formChange', this.form);
+          this.$emit('change', this.form);
         }
       });
       return isErr;
@@ -1268,12 +1268,12 @@ export default {
     createFormButton() {
       const { loading } = this;
       const colSpan = 24 / this.cols;
-      return this.isSubmitBtn && this.formType !== 'show' ? (
+      return this.isSubmitBtn && this.formType === 'default' ? (
         <el-row gutter={10}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
               <el-button size="small" type="primary" loading={loading} onClick={this.submitForm}>
-                {this.formType === 'add' ? '保 存' : '修 改'}
+                保 存
               </el-button>
               <el-button size="small" onClick={this.resetForm}>
                 重 置
@@ -1388,7 +1388,7 @@ export default {
     const cls = [
       `v-form-panel`,
       {
-        [`form-show`]: this.formType === 'show'
+        [`form-show`]: this.formType === 'onlyShow'
       }
     ];
     return (

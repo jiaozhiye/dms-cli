@@ -3,7 +3,7 @@
     <div id="wrapper" class="wrapper">
       <Anchor :label-list="labels">
         <div id="row-01" class="line">
-          <FormPanel ref="form" :scrollContainer="outerWrap" :initial-value="val" :list="formList" label-width="100" form-type="add" />
+          <FormPanel ref="form" :scrollContainer="outerWrap" :initial-value="val" :list="formList" label-width="100" />
         </div>
         <div id="row-02" class="line">
           <el-button @click="visible = true">三级交互</el-button>
