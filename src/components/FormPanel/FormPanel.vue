@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 17:00:26
+ * @Last Modified time: 2020-04-11 23:02:16
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -475,7 +475,7 @@ export default {
             style={{ ...style }}
             clearable
             onChange={onChange}
-            fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, queryString, cb)}
+            fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, itemList, queryString, cb)}
             scopedSlots={{
               default: props => {
                 const { item } = props;
@@ -1059,7 +1059,7 @@ export default {
     },
     // 获取搜索帮助数据
     async querySearchAsync(request, fieldName, queryString = '', cb) {
-      const { fetchApi, params = {}, datakey = '', valueKey } = request;
+      const { fetchApi, params = {}, datakey = '', valueKey = 'value' } = request;
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/sHelperData').default;
         setTimeout(() => {
@@ -1077,8 +1077,7 @@ export default {
     createSerachHelperList(list, valueKey) {
       return list.map(x => ({ value: x[valueKey] }));
     },
-    querySearchHandle(fieldName, queryString = '', cb) {
-      const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
+    querySearchHandle(fieldName, itemList = [], queryString = '', cb) {
       const res = queryString ? itemList.filter(this.createSearchHelpFilter(queryString)) : itemList;
       cb(res);
     },

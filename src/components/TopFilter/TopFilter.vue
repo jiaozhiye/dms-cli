@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:07:46
+ * @Last Modified time: 2020-04-11 22:52:14
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -460,7 +460,7 @@ export default {
             clearable
             onChange={onChange}
             nativeOnKeydown={this.enterEventHandle}
-            fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, queryString, cb)}
+            fetchSuggestions={(queryString, cb) => this.querySearchHandle(fieldName, itemList, queryString, cb)}
             scopedSlots={{
               default: props => {
                 const { item } = props;
@@ -904,8 +904,7 @@ export default {
     createSerachHelperList(list, valueKey) {
       return list.map(x => ({ value: x[valueKey] }));
     },
-    querySearchHandle(fieldName, queryString = '', cb) {
-      const { itemList = [] } = this.formItemList.find(x => x.fieldName === fieldName) || {};
+    querySearchHandle(fieldName, itemList = [], queryString = '', cb) {
       const res = queryString ? itemList.filter(this.createSearchHelpFilter(queryString)) : itemList;
       cb(res);
     },

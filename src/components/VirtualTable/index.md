@@ -59,8 +59,8 @@
 | precision  | 数值类型字段的精度                                            | number                                                                        | -      |
 | formatType | 字段的格式化类型                                              | date \| datetime \| finance \| secret-name \| secret-phone \| secret-IDnumber | -      |
 | required   | 可编辑列是否必填                                              | boolean                                                                       | false  |
-| editRender | 可编辑单元格，返回值请参考[配置项](#editable)                 | Function(row, column) => object                                               | -      |
-| dictItems  | 数据字典配置，数组值的格式 `text`, `value` 两个 key           | object                                                                        | -      |
+| editRender | 可编辑单元格，返回值请参考 [配置项](#editable)                | Function(row, column) => object                                               | -      |
+| dictItems  | 数据字典配置，[配置项](#item)                                 | array                                                                         | -      |
 | summation  | 底部合计，[配置项](#summation)                                | object                                                                        | -      |
 | render     | 列渲染方法                                                    | Function(text, row, column, rowIndex, cellIndex) => JSX Node                  | -      |
 
@@ -71,28 +71,35 @@
 | api      | ajax 接口，必要参数                 | Function | -      |
 | params   | 接口参数，必要参数                  | object   | -      |
 | xhrAbort | 是否取消请求                        | boolean  | false  |
-| dataKey  | 数据的 key，支持 `a.b.c` 的路径写法 | string   | -      |
+| dataKey  | 数据的 key，支持 `a.b.c` 的路径写法 | string   | items  |
 
 ### filter
 
-| 参数  | 说明                                              | 类型                                                                      | 默认值 |
-| ----- | ------------------------------------------------- | ------------------------------------------------------------------------- | ------ |
-| type  | 列筛选类型，必要参数                              | text \| checkbox \| radio \| number \| range-number \| date \| range-date | string | - |
-| items | 筛选列表项，数组值的格式 `text`, `value` 两个 key | array                                                                     | -      |
+| 参数  | 说明                        | 类型                                                                      | 默认值 |
+| ----- | --------------------------- | ------------------------------------------------------------------------- | ------ |
+| type  | 列筛选类型，必要参数        | text \| checkbox \| radio \| number \| range-number \| date \| range-date | string | - |
+| items | 筛选列表项，[配置项](#item) | array                                                                     | -      |
 
 ### editable
 
-| 参数     | 说明                                                  | 类型                                                                        | 默认值 |
-| -------- | ----------------------------------------------------- | --------------------------------------------------------------------------- | ------ |
-| type     | 可编辑类型                                            | text \| number \| select \| select-multiple \| checkbox \| date \| datetime | string | - |
-| items    | 下拉框的列表项，数组值的格式 `text`, `value` 两个 key | array                                                                       | -      |
-| editable | 是否可编辑                                            | boolean                                                                     | -      |
-| disabled | 是否禁用编辑功能，且禁止切换                          | boolean                                                                     | -      |
-| extra    | 可编辑表单的额外配置项，[配置项](#extra)              | object                                                                      | -      |
-| rules    | 表单校验规则，数组值请参考[配置项](#rule)             | array                                                                       | -      |
-| onInput  | 表单的 input 事件                                     | Function                                                                    | -      |
-| onChange | 表单的 change 事件                                    | Function                                                                    | -      |
-| onEnter  | 表单的 enter 事件                                     | Function                                                                    | -      |
+| 参数     | 说明                                      | 类型                                                                        | 默认值 |
+| -------- | ----------------------------------------- | --------------------------------------------------------------------------- | ------ |
+| type     | 可编辑类型                                | text \| number \| select \| select-multiple \| checkbox \| date \| datetime | string | - |
+| items    | 下拉框的列表项，[配置项](#item)           | array                                                                       | -      |
+| editable | 是否可编辑                                | boolean                                                                     | -      |
+| disabled | 是否禁用编辑功能，且禁止切换              | boolean                                                                     | -      |
+| extra    | 可编辑表单的额外配置项，[配置项](#extra)  | object                                                                      | -      |
+| rules    | 表单校验规则，数组值请参考[配置项](#rule) | array                                                                       | -      |
+| onInput  | 表单的 input 事件                         | Function                                                                    | -      |
+| onChange | 表单的 change 事件                        | Function                                                                    | -      |
+| onEnter  | 表单的 enter 事件                         | Function                                                                    | -      |
+
+### item
+
+| 参数  | 说明         | 类型             | 默认值 |
+| ----- | ------------ | ---------------- | ------ |
+| text  | 列表项的文本 | string           | -      |
+| value | 列表项的值   | string \| number | -      |
 
 ### extra
 
