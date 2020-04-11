@@ -18,7 +18,7 @@
 
 ```bash
 # 安装依赖
-$ yarn install
+$ yarn install 或 npm install
 
 # 启动本地服务
 $ npm run start
@@ -100,4 +100,4 @@ $ npm run build
 └── package.json               # package.json
 ```
 
-欢迎访问个人 [github](https://github.com/jiaozhiye/) 主页.
+欢迎访问个人 [github](https://github.com/jiaozhiye) 主页.
