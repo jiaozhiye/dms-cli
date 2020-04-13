@@ -2,15 +2,15 @@
 
 ### FormPanel
 
-| 参数            | 说明                                                           | 类型                | 默认值  |
-| --------------- | -------------------------------------------------------------- | ------------------- | ------- |
-| list            | 表单组件数据数组，[配置项](#formItem)，必要参数                | array               | -       |
-| initialValue    | 表单组件的初始值，只在组件首次加载时生效                       | obkect              | -       |
-| formType        | 表单的类型                                                     | default \| onlyShow | default |
-| cols            | 每行显示的列数，只能是被 24 整除的值                           | number              | 3       |
-| labelWidth      | label 标签的宽度，单位 px                                      | number              | 80      |
-| scrollContainer | 具有滚动条的容器，需要具有定位属性，用于表单校验信息的锚点定位 | HTMLNode            | -       |
-| isSubmitBtn     | 是否显示保存、重置按钮                                         | boolean             | false   |
+| 参数            | 说明                                                     | 类型                | 默认值  |
+| --------------- | -------------------------------------------------------- | ------------------- | ------- |
+| list            | 表单组件数据数组，[配置项](#formItem)，必要参数          | array               | -       |
+| initialValue    | 表单组件的初始值，只在组件首次加载时生效                 | obkect              | -       |
+| formType        | 表单的类型                                               | default \| onlyShow | default |
+| cols            | 每行显示的列数，只能是被 24 整除的值                     | number              | 3       |
+| labelWidth      | label 标签的宽度，单位 px                                | number              | 80      |
+| scrollContainer | 具有滚动条的容器(有定位属性)，用于表单校验信息的锚点定位 | HTMLNode            | -       |
+| isSubmitBtn     | 是否显示保存、重置按钮                                   | boolean             | false   |
 
 ### 事件
 
