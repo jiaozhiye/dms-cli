@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TopFilter ref="filter" :list="topFilterList" :initial-value="filterValue" :cols="4" @filterChange="changeHandle" @onCollapse="collapseHandle" />
+    <TopFilter ref="filter" :list="topFilterList" :initial-value="filterValue" :cols="4" @change="changeHandle" @collapseChange="collapseHandle" />
     <button-area :container-style="{ paddingLeft: '80px' }">
       <JsonToExcel size="small" type="primary" :initialValue="json_data" :fields="json_fields" fileName="filename.xlsx">导出</JsonToExcel>
       <el-button size="small" type="primary">到货确认</el-button>
@@ -111,7 +111,7 @@ export default {
       // this.list = [...res.data.items];
       // this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
       this.topFilterList[0].hidden = false;
-      this.topFilterList[0].labelOptions.itemList = [
+      this.topFilterList[0].labelOptions.options.itemList = [
         { text: '搜索1', value: '11' },
         { text: '搜索2', value: '22' }
       ];
@@ -139,14 +139,18 @@ export default {
           placeholder: '请输入标题名称...',
           labelOptions: {
             fieldName: 'qwe',
-            itemList: []
+            options: {
+              itemList: []
+            }
           },
-          onInput: val => {
-            let res = pinyin(val, { style: STYLE_FIRST_LETTER })
-              .flat()
-              .join('')
-              .toUpperCase();
-            this.$refs.filter.SET_FIELDS_VALUE({ zxczxc: res });
+          options: {
+            onInput: val => {
+              let res = pinyin(val, { style: STYLE_FIRST_LETTER })
+                .flat()
+                .join('')
+                .toUpperCase();
+              this.$refs.filter.SET_FIELDS_VALUE({ zxczxc: res });
+            }
           },
           rules: [
             { required: true, message: '请输入标题名称', trigger: 'blur' },
@@ -165,7 +169,9 @@ export default {
           label: '所属分类',
           fieldName: 'cid',
           placeholder: '所属分类',
-          filterable: true,
+          options: {
+            filterable: true
+          },
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }],
           request: {
             fetchApi: () => {},
@@ -187,21 +193,25 @@ export default {
           label: '日期区间',
           style: { minWidth: '200px' },
           fieldName: 'startTime|endTime',
-          minDateTime: '2020-03-01',
-          maxDateTime: '2020-05-30',
+          options: {
+            minDateTime: '2020-03-01',
+            maxDateTime: '2020-05-30'
+          },
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
           type: 'MULTIPLE_SELECT',
           label: '兴趣爱好',
           fieldName: 'hobby',
-          filterable: true,
           placeholder: '兴趣爱好',
-          itemList: [
-            { text: '篮球', value: '1' },
-            { text: '足球', value: '2' },
-            { text: '乒乓球', value: '3' }
-          ],
+          options: {
+            filterable: true,
+            itemList: [
+              { text: '篮球', value: '1' },
+              { text: '足球', value: '2' },
+              { text: '乒乓球', value: '3' }
+            ]
+          },
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
@@ -209,7 +219,9 @@ export default {
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          itemList: [{ text: '中国' }, { text: '美国' }],
+          options: {
+            itemList: [{ text: '中国' }, { text: '美国' }]
+          },
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {
@@ -219,54 +231,54 @@ export default {
           placeholder: '请输入标题名称...',
           style: { minWidth: '300px' },
           options: {
-            titles: ['品牌', '车型', '车系']
-          },
-          itemList: [
-            {
-              text: '一级分类1',
-              value: '1',
-              children: [
-                {
-                  text: '二级分类一级分类1一级分类1一级分类11-1',
-                  value: '1-1',
-                  children: [
-                    {
-                      text: '三级分类1-1',
-                      value: '1-1-1'
-                    },
-                    {
-                      text: '三级分类1-2',
-                      value: '1-1-2'
-                    }
-                  ]
-                },
-                {
-                  text: '二级分类1-2',
-                  value: '1-2',
-                  children: [
-                    {
-                      text: '三级分类2-1',
-                      value: '1-2-1'
-                    },
-                    {
-                      text: '三级分类2-2',
-                      value: '1-2-2'
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              text: '一级分类2',
-              value: '2',
-              children: [
-                {
-                  text: '二级分类2-1',
-                  value: '2-1'
-                }
-              ]
-            }
-          ]
+            titles: ['品牌', '车型', '车系'],
+            itemList: [
+              {
+                text: '一级分类1',
+                value: '1',
+                children: [
+                  {
+                    text: '二级分类一级分类1一级分类1一级分类11-1',
+                    value: '1-1',
+                    children: [
+                      {
+                        text: '三级分类1-1',
+                        value: '1-1-1'
+                      },
+                      {
+                        text: '三级分类1-2',
+                        value: '1-1-2'
+                      }
+                    ]
+                  },
+                  {
+                    text: '二级分类1-2',
+                    value: '1-2',
+                    children: [
+                      {
+                        text: '三级分类2-1',
+                        value: '1-2-1'
+                      },
+                      {
+                        text: '三级分类2-2',
+                        value: '1-2-2'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                text: '一级分类2',
+                value: '2',
+                children: [
+                  {
+                    text: '二级分类2-1',
+                    value: '2-1'
+                  }
+                ]
+              }
+            ]
+          }
         }
       ];
     },
