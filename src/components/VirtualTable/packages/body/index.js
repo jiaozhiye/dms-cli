@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 13:18:16
+ * @Last Modified time: 2020-04-13 16:06:59
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -45,9 +45,9 @@ export default {
       return tableBodyWidth ? `${tableBodyWidth - (scrollY ? gutterWidth : 0)}px` : null;
     },
     wrapStyle() {
-      const { layout, height, maxHeight, calcHeight } = this.$$table;
+      const { layout, height, maxHeight, fullHeight, autoHeight } = this.$$table;
       const { headerHeight, viewportHeight, footerHeight } = layout;
-      if (calcHeight || height) {
+      if (fullHeight || autoHeight || height) {
         return {
           height: `${viewportHeight}px`
         };

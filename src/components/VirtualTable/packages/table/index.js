@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 14:07:54
+ * @Last Modified time: 2020-04-13 16:30:27
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -65,6 +65,8 @@ export default {
         currentPage: config.pagination.currentPage,
         pageSize: config.pagination.pageSize
       },
+      // 计算的表格高度
+      autoHeight: 300,
       // 记录总数
       total: 0,
       // 页面是否加载中
@@ -184,7 +186,7 @@ export default {
     shouldUpdateHeight() {
       return this.height || this.maxHeight;
     },
-    calcHeight() {
+    fullHeight() {
       const pagerHeight = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
         return window.innerHeight - 30 - this.$vTopInfo.offsetHeight - pagerHeight;
@@ -192,14 +194,14 @@ export default {
       return null;
     },
     tableStyles() {
-      const { calcHeight } = this;
+      const { fullHeight, autoHeight } = this;
       const height = parseHeight(this.height);
       const maxHeight = parseHeight(this.maxHeight);
-      if (calcHeight) {
-        return { height: `${calcHeight}px` };
+      if (fullHeight) {
+        return { height: `${fullHeight}px` };
       }
       if (height) {
-        return { height: `${height}px` };
+        return height !== 'auto' ? { height: `${height}px` } : { height: `${autoHeight}px` };
       }
       if (maxHeight) {
         return { maxHeight: `${maxHeight}px` };

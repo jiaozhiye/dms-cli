@@ -12,7 +12,7 @@
       :columns="columns"
       :dataSource="list"
       rowKey="id"
-      :height="height"
+      height="auto"
       :rowSelection="selection"
       :columnsChange="columnsChange"
       @dataChange="changeHandle"

@@ -10,8 +10,8 @@
 | rowKey           | 表格行 key 的取值，可以是字符串或一个函数     | string\|Function(row, index):string                    | 'uid'   |
 | fetch            | 向后台请求数据的接口，[配置项](#fetch)        | object                                                 | -       |
 | border           | 是否带有纵向边框                              | boolean                                                | true    |
-| height           | 表格的高度，单位 px                           | string \| number                                       | -       |
-| maxHeight        | 表格的最大高度，单位 px                       | string \| number                                       | -       |
+| height           | 表格的高度，单位 px                           | number \| auto                                         | -       |
+| maxHeight        | 表格的最大高度，单位 px                       | number                                                 | -       |
 | loading          | 页面是否加载中                                | boolean                                                | false   |
 | resizable        | 所有列是否允许拖动列宽调整大小                | boolean                                                | true    |
 | size             | 表格尺寸                                      | default \| medium \| small \| mini                     | default |
