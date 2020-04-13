@@ -89,10 +89,8 @@ export default {
             type: 'CHECKBOX',
             fieldName: 'zxczxc',
             label: '交强险',
-            options: {
-              trueValue: '1001',
-              falseValue: '1002'
-            }
+            trueValue: '1001',
+            falseValue: '1002'
           },
           fieldName: 'zxc'
         },
@@ -101,11 +99,13 @@ export default {
           label: '所属分类',
           fieldName: 'cid',
           placeholder: '所属分类',
-          filterable: true,
-          itemList: [
-            { text: '热点', value: '1' },
-            { text: '资讯', value: '2' }
-          ],
+          options: {
+            filterable: true,
+            itemList: [
+              { text: '热点', value: '1' },
+              { text: '资讯', value: '2' }
+            ]
+          },
           rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }]
         },
         {
@@ -122,23 +122,27 @@ export default {
         },
         {
           type: 'RANGE_DATE', // DATE_TIME
+          fieldName: 'startTime|endTime',
           label: '日期区间',
           style: { minWidth: '200px' },
-          minDateTime: '2020-03-01',
-          maxDateTime: '2020-05-30',
-          fieldName: 'startTime|endTime'
+          options: {
+            minDateTime: '2020-03-01',
+            maxDateTime: '2020-05-30'
+          }
         },
         {
           type: 'MULTIPLE_SELECT',
           label: '兴趣爱好',
           fieldName: 'hobby',
           placeholder: '兴趣爱好',
-          filterable: true,
-          itemList: [
-            { text: '篮球', value: '1' },
-            { text: '足球', value: '2' },
-            { text: '乒乓球', value: '3' }
-          ],
+          options: {
+            filterable: true,
+            itemList: [
+              { text: '篮球', value: '1' },
+              { text: '足球', value: '2' },
+              { text: '乒乓球', value: '3' }
+            ]
+          },
           rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
         },
         {
@@ -146,20 +150,24 @@ export default {
           label: '搜索帮助',
           fieldName: 'person',
           placeholder: '请输入员工名称...',
-          itemList: [
-            { text: '篮球', value: '1' },
-            { text: '足球', value: '2' },
-            { text: '乒乓球', value: '3' }
-          ],
+          options: {
+            itemList: [
+              { text: '篮球', value: '1' },
+              { text: '足球', value: '2' },
+              { text: '乒乓球', value: '3' }
+            ]
+          },
           rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
         },
         {
           type: 'INPUT_NUMBER',
           label: '数量',
           fieldName: 'number',
-          precision: 2,
-          maxlength: 3,
-          max: 999,
+          options: {
+            precision: 2,
+            maxlength: 3,
+            max: 999
+          },
           offsetRightCols: 1,
           placeholder: '请输入数量...',
           rules: [{ required: true, message: '请输入数量', trigger: 'blur' }]
@@ -169,58 +177,60 @@ export default {
           label: '所属机构',
           fieldName: 'tid',
           placeholder: '所属机构',
-          itemList: [
-            {
-              value: 1,
-              text: '一级 1',
-              children: [
-                {
-                  value: 4,
-                  text: '二级 1-1',
-                  disabled: true,
-                  children: [
-                    {
-                      value: 9,
-                      text: '三级 1-1-1',
-                      disabled: true
-                    },
-                    {
-                      value: 10,
-                      text: '三级 1-1-2'
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              value: 2,
-              text: '一级 2',
-              children: [
-                {
-                  value: 5,
-                  text: '二级 2-1'
-                },
-                {
-                  value: 6,
-                  text: '二级 2-2'
-                }
-              ]
-            },
-            {
-              value: 3,
-              text: '一级 3',
-              children: [
-                {
-                  value: 7,
-                  text: '二级 3-1'
-                },
-                {
-                  value: 8,
-                  text: '二级 3-2'
-                }
-              ]
-            }
-          ],
+          options: {
+            itemList: [
+              {
+                value: 1,
+                text: '一级 1',
+                children: [
+                  {
+                    value: 4,
+                    text: '二级 1-1',
+                    disabled: true,
+                    children: [
+                      {
+                        value: 9,
+                        text: '三级 1-1-1',
+                        disabled: true
+                      },
+                      {
+                        value: 10,
+                        text: '三级 1-1-2'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: 2,
+                text: '一级 2',
+                children: [
+                  {
+                    value: 5,
+                    text: '二级 2-1'
+                  },
+                  {
+                    value: 6,
+                    text: '二级 2-2'
+                  }
+                ]
+              },
+              {
+                value: 3,
+                text: '一级 3',
+                children: [
+                  {
+                    value: 7,
+                    text: '二级 3-1'
+                  },
+                  {
+                    value: 8,
+                    text: '二级 3-2'
+                  }
+                ]
+              }
+            ]
+          },
           rules: [{ required: true, message: '请选择所属机构', trigger: 'change' }]
         },
         {
@@ -233,9 +243,11 @@ export default {
           dateType: 'datetime',
           label: '时间',
           fieldName: 'time1',
-          defaultTime: '09:00:00',
-          offsetRightCols: 2,
-          placeholder: '选择时间',
+          options: {
+            defaultTime: '09:00:00',
+            offsetRightCols: 2,
+            placeholder: '选择时间'
+          },
           rules: [{ required: true, message: '请选择时间', trigger: 'change' }]
         },
         {
@@ -261,7 +273,9 @@ export default {
           label: '时间',
           fieldName: 'xcv',
           readonly: true,
-          secretType: 'phone'
+          options: {
+            secretType: 'phone'
+          }
         },
         {
           type: 'UPLOAD_FILE',

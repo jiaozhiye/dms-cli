@@ -27,32 +27,6 @@
 | SET_FIELDS_VALUE | 设置表单字段的值       | Function(values:object) | -                                             |
 | GET_FORM_DATA    | 获取表单数据，异步方法 | -                       | 返回错误前置的数组 [error, formValue]         |
 
-### formItem
-
-| 参数            | 说明                                           | 类型                | 默认值   |
-| --------------- | ---------------------------------------------- | ------------------- | -------- |
-| type            | 表单类型                                       | [配置项](#formType) | string   | - |
-| label           | 标题名称                                       | string              | -        |
-| labelWidth      | label 标签的的宽度，需要加单位 px              | string              | 80       |
-| fieldName       | 表单项字段 key                                 | string              | -        |
-| style           | 表单元素的 css 样式                            | object              | -        |
-| rules           | 表单校验规则，用法请参考 Element-Ui            | array               | -        |
-| placeholder     | 表单元素的提示文字                             | string              | -        |
-| readonly        | 是否只读                                       | boolean             | false    |
-| disabled        | 是否禁用                                       | boolean             | false    |
-| hidden          | 是否隐藏表单项                                 | boolean             | false    |
-| clearable       | 是否开启擦除按钮                               | boolean             | true     |
-| noResetable     | 设置表单项是否会被重置                         | boolean             | false    |
-| selfCols        | 表单元素自身占据的列数                         | number              | 1        |
-| offsetLeftCols  | 表单元素左侧的间隔列数                         | number              | 1        |
-| offsetRightCols | 表单元素右侧的间隔列数                         | number              | 1        |
-| options         | 表单元素的外配置，[配置项](#options)           | object              | -        |
-| request         | 表单项的 ajax 请求配置，[配置项](#request)     | object              | -        |
-| upload          | 表单附件上传的配置，[配置项](#upload)          | object              | -        |
-| labelOptions    | label 标签的自定义渲染，[配置项](#labelOption) | object              | -        |
-| descOptions     | 描述信息的自定义渲染，[配置项](#descOption)    | object              | -        |
-| render          | 表单元素的渲染方法                             | func                | JSX Node |
-
 ### formType
 
 | 表单类型           | 说明                 |
@@ -82,11 +56,74 @@
 | TINYMCE            | 富文本编辑器         |
 | BREAK_SPACE        | 表单分隔符           |
 
+### formItem
+
+| 参数            | 说明                                           | 类型                | 默认值   |
+| --------------- | ---------------------------------------------- | ------------------- | -------- |
+| type            | 表单类型                                       | [配置项](#formType) | string   | - |
+| label           | 标题名称                                       | string              | -        |
+| labelWidth      | label 标签的的宽度，需要加单位 px              | string              | 80       |
+| fieldName       | 表单项字段 key                                 | string              | -        |
+| style           | 表单元素的 css 样式                            | object              | -        |
+| rules           | 表单校验规则，用法请参考 Element-Ui            | array               | -        |
+| placeholder     | 表单元素的提示文字                             | string              | -        |
+| readonly        | 是否只读                                       | boolean             | false    |
+| disabled        | 是否禁用                                       | boolean             | false    |
+| hidden          | 是否隐藏表单项                                 | boolean             | false    |
+| clearable       | 是否开启擦除按钮                               | boolean             | true     |
+| noResetable     | 设置表单项是否会被重置                         | boolean             | false    |
+| selfCols        | 表单元素自身占据的列数                         | number              | 1        |
+| offsetLeftCols  | 表单元素左侧的间隔列数                         | number              | 1        |
+| offsetRightCols | 表单元素右侧的间隔列数                         | number              | 1        |
+| options         | 表单元素的外配置，[配置项](#options)           | object              | -        |
+| request         | 表单项的 ajax 请求配置，[配置项](#request)     | object              | -        |
+| upload          | 表单附件上传的配置，[配置项](#upload)          | object              | -        |
+| labelOptions    | label 标签的自定义渲染，[配置项](#labelOption) | object              | -        |
+| descOptions     | 描述信息的自定义渲染，[配置项](#descOption)    | object              | -        |
+| render          | 表单元素的渲染方法                             | func                | JSX Node |
+| onChange        | 表单元素值变化的回调                           | func                | -        |
+
 ### options
 
-| 参数       | 说明                             | 类型 | 默认值   |
-| ---------- | -------------------------------- | ---- | -------- |
-| unitRender | 输入框后置内容的渲染方法 - INPUT | func | JSX Node |
+| 参数        | 说明                                                          | 类型                                 | 默认值   |
+| ----------- | ------------------------------------------------------------- | ------------------------------------ | -------- |
+| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX  | array                                | -        |
+| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX | bool                                 | false    |
+| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX      | number                               | -        |
+| rows        | 文本域的行数 - TEXT_AREA                                      | number                               | -        |
+| minlength   | 原生属性，最小输入长度 - INPUT                                | number                               | 0        |
+| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                      | number                               | 200      |
+| pattern     | 表单元素值得正则格式校验                                      | regExp                               | -        |
+| secretType  | 字段值的保密类型，并切在只读或禁用的状态下有效 - INPUT        | finance \| name \| phone \| IDnumber | -        |
+| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               | 0        |
+| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               |          |
+| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER              | number                               | 1        |
+| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                    | number                               | -        |
+| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE         | string                               | -        |
+| minDateTime | 最小日期，小于该时间的日期段将被禁用                          | string                               | -        |
+| maxDateTime | 最大日期，大于该时间的日期段将被禁用                          | string                               | -        |
+| defaultTime | 默认的时间，格式 HH:mm:ss                                     | string                               | -        |
+| startTime   | 开始时间 - TIME_SELECT                                        | string                               | 00:00    |
+| endTime     | 结束时间 - TIME_SELECT                                        | string                               | 23:45    |
+| stepTime    | 时间变化的步长 - TIME_SELECT                                  | string                               | 00:15    |
+| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER       | array                                | -        |
+| onInput     | 输入框 input 事件的回调 - INPUT                               | func                                 | -        |
+| onEnter     | 输入框回车事件的回调 - INPUT                                  | func                                 | -        |
+| onFocus     | 输入框获得焦点事件的回调 - INPUT                              | func                                 | -        |
+| unitRender  | 输入框后置内容的渲染方法 - INPUT                              | func                                 | JSX Node |
+
+### dateType
+
+| 参数           | 说明                                           | 类型   | 默认值 |
+| -------------- | ---------------------------------------------- | ------ | ------ |
+| date           | 日期类型，值得格式 yyyy-MM-dd HH:mm:ss         | tring  | -      |
+| datetime       | 日期时间类型，值得格式 yyyy-MM-dd HH:mm:ss     | tring  | -      |
+| exactdate      | 严格日期类型，值得格式 yyyy-MM-dd              | string | -      |
+| daterange      | 日期区间类型，值得格式 yyyy-MM-dd HH:mm:ss     | string | -      |
+| datetimerange  | 日期时间区间类型，值得格式 yyyy-MM-dd HH:mm:ss | string | -      |
+| exactdaterange | 严格日期时间区间类型，值得格式 yyyy-MM-dd      | string | -      |
+| month          | 月份类型，值得格式 yyyy-MM                     | string | -      |
+| monthrange     | 月份区间类型，值得格式 yyyy-MM                 | string | -      |
 
 ### labelOption
 
