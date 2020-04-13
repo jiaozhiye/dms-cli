@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:30:27
+ * @Last Modified time: 2020-04-13 16:32:48
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -65,7 +65,7 @@ export default {
         currentPage: config.pagination.currentPage,
         pageSize: config.pagination.pageSize
       },
-      // 计算的表格高度
+      // 自适应的表格高度
       autoHeight: 300,
       // 记录总数
       total: 0,
