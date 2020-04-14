@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 21:17:29
+ * @Last Modified time: 2020-04-14 21:17:05
  */
 import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -11,16 +11,13 @@ import config from '../config';
 import { setCellValue, filterTableColumns } from '../utils';
 import _ from 'lodash';
 
-const noop = () => {};
-
 export default {
   name: 'Export',
   props: {
     flattenColumns: PropTypes.array,
     data: PropTypes.array.def([]),
     fileName: PropTypes.string.def('导出数据.xlsx'),
-    fetch: PropTypes.object,
-    calcExportHandle: PropTypes.func.def(noop)
+    fetch: PropTypes.object
   },
   computed: {
     filterColumns() {
@@ -36,10 +33,10 @@ export default {
   },
   methods: {
     createDataList(list) {
-      return list.map((x, i) => {
+      return list.map(x => {
         let item = { ...x };
-        this.filterColumns.forEach(x => {
-          const { dataIndex, dictItems } = x;
+        this.filterColumns.forEach((column, index) => {
+          const { dataIndex, dictItems, render, extraRender } = column;
           const val = _.get(item, dataIndex);
           const dicts = dictItems || [];
           const target = dicts.find(x => x.value == val);
@@ -53,12 +50,16 @@ export default {
               })
               .join(',');
           }
+          // render 情况
+          if (_.isFunction(render)) {
+            res = render(val, item, column, item.index, index);
+          }
+          // extraRender 情况
+          if (_.isFunction(extraRender)) {
+            res = extraRender(val, item, column, item.index, index);
+          }
           setCellValue(item, dataIndex, res);
         });
-        // 设置 index 序号
-        setCellValue(item, 'index', i + 1);
-        // 处理计算导出数据
-        this.calcExportHandle(item);
         return item;
       });
     },

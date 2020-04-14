@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 13:56:58
+ * @Last Modified time: 2020-04-14 21:15:26
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
@@ -230,8 +230,11 @@ export default {
       `;
     },
     renderCell(row, rowIndex, column, columnIndex) {
-      const { dataIndex, render } = column;
+      const { dataIndex, render, extraRender } = column;
       const text = getCellValue(row, dataIndex);
+      if (_.isFunction(extraRender)) {
+        return extraRender(text, row, column, rowIndex, columnIndex);
+      }
       if (_.isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
       }

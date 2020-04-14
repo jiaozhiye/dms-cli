@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:04:22
+ * @Last Modified time: 2020-04-14 22:30:04
  */
 import PropTypes from '@/components/_utils/vue-types';
 
@@ -39,13 +39,14 @@ const columnItem = {
     unit: PropTypes.string, // 合计字段的单位
     onChange: PropTypes.func // 字段合计变化时触发
   }),
-  render: PropTypes.func // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
+  render: PropTypes.func, // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
+  extraRender: PropTypes.func // 额外的渲染方法，用于处理导出或打印单元格的值，参数: text, row, column, rowIndex, cellIndex; 返回值类型: string/number
 };
 
 /**
  * editRender: 返回值
  * {
- *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'date', 'datetime']).isRequired,
+ *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'search-helper', 'date', 'datetime']).isRequired,
  *   items: PropTypes.arrayOf(PropTypes.shape({
  *     text: PropTypes.string,
  *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -68,7 +69,8 @@ const columnItem = {
  *   })),
  *   onInput: PropTypes.func,
  *   onChange: PropTypes.func,
- *   onEnter: PropTypes.func
+ *   onEnter: PropTypes.func,
+ *   onClick: PropTypes.func
  * }
  */
 
@@ -138,8 +140,7 @@ export default {
   showRefresh: PropTypes.bool.def(true),
   // 导出表格数据
   exportExcel: PropTypes.shape({
-    fileName: PropTypes.string.isRequired, // 导出的文件名，需包含扩展名[xlsx|csv]
-    calcExportHandle: PropTypes.func // 计算导出数据，用于对数据的整理
+    fileName: PropTypes.string.isRequired // 导出的文件名，需包含扩展名[xlsx|csv]
   }),
   // 表格打印
   tablePrint: PropTypes.shape({

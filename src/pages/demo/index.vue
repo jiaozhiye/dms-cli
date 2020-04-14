@@ -216,13 +216,16 @@ export default {
           },
           editRender: row => {
             return {
-              type: 'text',
+              type: 'search-helper',
               editable: false,
               disabled: row.index === 2,
               extra: {
                 maxlength: 10
               },
-              rules: [{ required: true, message: '姓名不能为空' }]
+              rules: [{ required: true, message: '姓名不能为空' }],
+              onClick: () => {
+                this.visible = !this.visible;
+              }
             };
           }
         },
@@ -296,6 +299,9 @@ export default {
           render: (text, row) => {
             row.total = row.price * row.num;
             return <span>{row.total}</span>;
+          },
+          extraRender: (text, row) => {
+            return row.price * row.num;
           }
         },
         {

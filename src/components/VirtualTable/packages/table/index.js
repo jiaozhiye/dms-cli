@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 16:08:24
+ * @Last Modified time: 2020-04-14 21:05:37
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -416,8 +416,7 @@ export default {
                   dataKey: fetch.dataKey,
                   total
                 }
-              : null,
-            calcExportHandle: exportExcel.calcExportHandle
+              : null
           }
         }
       : null;
