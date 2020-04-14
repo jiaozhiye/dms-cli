@@ -39,6 +39,12 @@
 | rowClick    | 行单击事件                 | Function(row, column, event)                                            |
 | rowDblclick | 行双击事件                 | Function(row, column, event)                                            |
 
+### 方法
+
+| 方法名称         | 说明         | 参数 | 返回值 |
+| ---------------- | ------------ | ---- | ------ |
+| CALCULATE_HEIGHT | 计算表格高度 | -    | -      |
+
 ### column
 
 | 参数       | 说明                                           | 类型                                                         | 默认值 |

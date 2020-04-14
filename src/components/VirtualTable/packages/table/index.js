@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:32:48
+ * @Last Modified time: 2020-04-14 16:08:24
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -18,6 +18,7 @@ import selectionMixin from '../selection/mixin';
 import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
+import interfaceMethods from './interface-methods';
 
 import TableHeader from '../header';
 import TableBody from '../body';
@@ -279,6 +280,7 @@ export default {
   methods: {
     ...layoutMethods,
     ...coreMethods,
+    ...interfaceMethods,
     getRowKey(row, index) {
       const { rowKey } = this;
       const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];

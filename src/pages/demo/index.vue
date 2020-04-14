@@ -9,6 +9,7 @@
       <el-button>按钮5</el-button>
     </button-area>
     <VirtualTable
+      ref="table"
       cacheColumnsKey="jzyDemoTable"
       height="auto"
       :columns="columns"
@@ -22,7 +23,7 @@
     >
       <span>
         <el-button type="primary" icon="el-icon-plus" @click="addInfoHandle">新建</el-button>
-        <el-button type="danger" icon="el-icon-delete">删除</el-button>
+        <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </span>
     </VirtualTable>
     <base-dialog :visible.sync="visible" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
@@ -37,6 +38,8 @@
 <script>
 import { dictionary } from '@/mixins/dictMixin';
 
+import { notifyAction, confirmAction } from '@/utils';
+
 import SearchHelper from './searchHelper';
 import AddInfo from './addInfo';
 
@@ -45,6 +48,7 @@ export default {
   components: { SearchHelper, AddInfo },
   mixins: [dictionary],
   data() {
+    this.selectedKeys = [];
     return {
       filterList: this.createTopFilterList(),
       filterValue: { b: '2' },
@@ -56,11 +60,13 @@ export default {
       },
       selection: {
         type: 'checkbox',
-        selectedRowKeys: [1, 2],
+        selectedRowKeys: this.selectedKeys,
         rowSelectable: row => {
           return row.id === 3;
         },
-        onChange: val => {}
+        onChange: val => {
+          this.selectedKeys = val;
+        }
       },
       exportExcel: {
         fileName: '导出文件.xlsx'
@@ -75,6 +81,9 @@ export default {
   computed: {
     $topFilter() {
       return this.$refs.topFilter;
+    },
+    $table() {
+      return this.$refs.table;
     }
   },
   methods: {
@@ -179,7 +188,7 @@ export default {
           width: 80,
           sorter: true,
           render: text => {
-            return <span>{text + 1}</span>;
+            return text + 1;
           }
         },
         {
@@ -380,7 +389,7 @@ export default {
       this.fetch.params = Object.assign({}, this.fetch.params, val);
     },
     collapseChangeHandle(val) {
-      console.log(val);
+      this.$table.CALCULATE_HEIGHT();
     },
     dataChangeHandle(tableData) {
       // ...
@@ -395,6 +404,17 @@ export default {
     // 新建按钮
     addInfoHandle() {
       this.visible_panel = true;
+    },
+    // 删除按钮
+    async removeHandle() {
+      if (!this.selectedKeys.length) {
+        return notifyAction(`请选择数据！`, 'warning');
+      }
+      try {
+        await confirmAction();
+        // 点击确定后，执行下边代码
+        // ...
+      } catch (err) {}
     },
     // 关闭抽屉组件
     closeDrawerHandle(state) {

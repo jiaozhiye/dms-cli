@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 11:27:41
+ * @Last Modified time: 2020-04-14 17:20:16
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -161,7 +161,8 @@ export default {
       const { isTooltip, style = {}, content = '描述信息...' } = option;
       if (isTooltip) {
         return (
-          <el-tooltip effect="dark" content={content} placement="right">
+          <el-tooltip effect="dark" placement="right">
+            <div slot="content">{content}</div>
             <i class="desc-icon el-icon-info"></i>
           </el-tooltip>
         );

@@ -55,6 +55,24 @@ export default {
           }
         },
         {
+          type: 'DATE',
+          label: '表单项3',
+          fieldName: 'c',
+          options: {
+            dateType: 'date'
+          }
+        },
+        {
+          type: 'INPUT',
+          label: '表单项4',
+          fieldName: 'd',
+          style: { width: `calc(100% - 30px)` },
+          descOptions: {
+            isTooltip: true,
+            content: `说明文字`
+          }
+        },
+        {
           type: 'UPLOAD_FILE',
           label: '上传文件',
           fieldName: 'wayFiles',
