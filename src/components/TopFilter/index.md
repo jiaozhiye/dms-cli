@@ -75,26 +75,28 @@
 
 ### options
 
-| 参数        | 说明                                                          | 类型   | 默认值   |
-| ----------- | ------------------------------------------------------------- | ------ | -------- |
-| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX  | array  | -        |
-| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX | bool   | false    |
-| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX      | number | -        |
-| rows        | 文本域的行数 - TEXT_AREA                                      | number | -        |
-| minlength   | 原生属性，最小输入长度 - INPUT                                | number | 0        |
-| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                      | number | 200      |
-| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number | 0        |
-| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number |          |
-| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER              | number | 1        |
-| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                    | number | -        |
-| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE         | string | -        |
-| minDateTime | 最小日期，小于该时间的日期段将被禁用                          | string | -        |
-| maxDateTime | 最大日期，大于该时间的日期段将被禁用                          | string | -        |
-| defaultTime | 默认的时间，格式 HH:mm:ss                                     | string | -        |
-| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER       | array  | -        |
-| onInput     | 输入框 input 事件的回调 - INPUT                               | func   | -        |
-| onFocus     | 输入框获得焦点事件的回调 - INPUT                              | func   | -        |
-| unitRender  | 输入框后置内容的渲染方法 - INPUT                              | func   | JSX Node |
+| 参数        | 说明                                                          | 类型             | 默认值   |
+| ----------- | ------------------------------------------------------------- | ---------------- | -------- |
+| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX  | array            | -        |
+| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX | bool             | false    |
+| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX      | number           | -        |
+| rows        | 文本域的行数 - TEXT_AREA                                      | number           | -        |
+| minlength   | 原生属性，最小输入长度 - INPUT                                | number           | 0        |
+| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                      | number           | 200      |
+| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number           | 0        |
+| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number           |          |
+| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER              | number           | 1        |
+| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                    | number           | -        |
+| trueValue   | 选中的值 - CHECKBOX                                           | number \| string | 1        |
+| falseValue  | 非中的值 - CHECKBOX                                           | number \| string | 0        |
+| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE         | string           | -        |
+| minDateTime | 最小日期，小于该时间的日期段将被禁用                          | string           | -        |
+| maxDateTime | 最大日期，大于该时间的日期段将被禁用                          | string           | -        |
+| defaultTime | 默认的时间，格式 HH:mm:ss                                     | string           | -        |
+| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER       | array            | -        |
+| onInput     | 输入框 input 事件的回调 - INPUT                               | func             | -        |
+| onFocus     | 输入框获得焦点事件的回调 - INPUT                              | func             | -        |
+| unitRender  | 输入框后置内容的渲染方法 - INPUT                              | func             | JSX Node |
 
 ### dateType
 

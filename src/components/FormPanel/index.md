@@ -98,6 +98,8 @@
 | min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               | 0        |
 | max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               |          |
 | step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER              | number                               | 1        |
+| trueValue   | 选中的值 - CHECKBOX                                           | number \| string                     | 1        |
+| falseValue  | 非中的值 - CHECKBOX                                           | number \| string                     | 0        |
 | precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                    | number                               | -        |
 | dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE         | string                               | -        |
 | minDateTime | 最小日期，小于该时间的日期段将被禁用                          | string                               | -        |

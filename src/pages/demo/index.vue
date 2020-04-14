@@ -1,197 +1,141 @@
 <template>
   <div>
-    <TopFilter ref="filter" :list="topFilterList" :initial-value="filterValue" :cols="4" @change="changeHandle" @collapseChange="collapseHandle" />
+    <top-filter ref="topFilter" :cols="4" :list="filterList" :initial-value="filterValue" @change="filterChangeHandle" @collapseChange="collapseChangeHandle" />
     <button-area :container-style="{ paddingLeft: '80px' }">
-      <JsonToExcel size="small" type="primary" :initialValue="json_data" :fields="json_fields" fileName="filename.xlsx">导出</JsonToExcel>
-      <el-button size="small" type="primary">到货确认</el-button>
-      <el-button size="small">明细</el-button>
-      <el-button size="small">发货单</el-button>
-      <el-button size="small" @click="zxczxc">销售发票</el-button>
-      <multiuse-button size="small" :auth-list="auths" auth-mark="/api/aaa">出库</multiuse-button>
+      <el-button type="primary">按钮1</el-button>
+      <el-button>按钮2</el-button>
+      <el-button>按钮3</el-button>
+      <el-button>按钮4</el-button>
+      <el-button>按钮5</el-button>
     </button-area>
-    <FilterTable
-      ref="table"
-      columns-ref="myTable"
+    <VirtualTable
+      cacheColumnsKey="jzyDemoTable"
+      height="auto"
       :columns="columns"
-      :fetchapi="() => {}"
-      :params="params"
-      :uidkey="'id'"
-      :defaultSelections="selectes"
-      :on-columns-change="columns => (this.columns = columns)"
-      :onRowSelectChange="selectionHandle"
-      :on-sync-table-data="tableDateChange"
+      :fetch="fetch"
+      :rowKey="record => record.id"
+      :rowSelection="selection"
+      :exportExcel="exportExcel"
+      :tablePrint="tablePrint"
+      :columnsChange="columns => (this.columns = columns)"
+      @dataChange="dataChangeHandle"
     >
-      <template slot="moreActions">
-        <span>批量删除</span>
-        <span>任务分配</span>
-      </template>
-      <template slot="controls">
-        <web-print size="small" type="primary" :click="printHandle">pdf 打印</web-print>
-        <el-button size="small" type="primary" icon="el-icon-plus" @click="visible = true">新建</el-button>
-        <el-button size="small" icon="el-icon-printer" @click="printHandler">打印</el-button>
-      </template>
-    </FilterTable>
-    <Drawer :visible.sync="visible" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
-      <Panel @close="closeHandler" />
-    </Drawer>
-    <BasePrint ref="print" :data="printList" :isPreview="false" template="demo/template" />
+      <span>
+        <el-button type="primary" icon="el-icon-plus" @click="addInfoHandle">新建</el-button>
+        <el-button type="danger" icon="el-icon-delete">删除</el-button>
+      </span>
+    </VirtualTable>
+    <base-dialog :visible.sync="visible" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+      <search-helper @close="closeDialogHandle" />
+    </base-dialog>
+    <drawer :visible.sync="visible_panel" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+      <add-info @close="closeDrawerHandle" />
+    </drawer>
   </div>
 </template>
 
 <script>
-import { authority } from '@/mixins/authMixin';
 import { dictionary } from '@/mixins/dictMixin';
-import { sleep } from '@/utils';
-import res from '@/mock/tableData';
-import printData from '@/mock/printData';
-import Panel from './Panel';
-import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
 
-import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
+import SearchHelper from './searchHelper';
+import AddInfo from './addInfo';
 
 export default {
-  name: 'Demo',
-  components: {
-    Panel,
-    JsonToExcel
-  },
-  mixins: [authority, dictionary],
+  name: 'JzyDemo',
+  components: { SearchHelper, AddInfo },
+  mixins: [dictionary],
   data() {
-    this.BaseTable = null;
     return {
-      visible: false,
-      topFilterList: this.createTopFilters(),
+      filterList: this.createTopFilterList(),
+      filterValue: { b: '2' },
       columns: this.createTableColumns(),
-      list: [],
-      params: { a: 9 },
-      selectes: [],
-      printList: printData.data,
-      filterValue: { qwe: '22', hello: '1,1-2,1-2-1' },
-      json_fields: {
-        'Complete name': 'name',
-        City: 'city',
-        Telephone: 'phone.mobile',
-        'Telephone 2': {
-          field: 'phone.landline',
-          callback: value => {
-            return `Landline Phone - ${value}`;
-          }
-        }
+      fetch: {
+        api: () => {},
+        params: {},
+        dataKey: 'items'
       },
-      json_data: [
-        {
-          name: 'Tony Peña',
-          city: '长春',
-          country: 'United States',
-          birthdate: '1978-03-15',
-          phone: {
-            mobile: 15417543010,
-            landline: '(541) 754-3010'
-          }
+      selection: {
+        type: 'checkbox',
+        selectedRowKeys: [1, 2],
+        rowSelectable: row => {
+          return row.id === 3;
         },
-        {
-          name: 'Thessaloniki',
-          city: '沈阳',
-          country: 'Greece',
-          birthdate: '1987-11-23',
-          phone: {
-            mobile: 18552755071,
-            landline: '(2741) 2621-244'
-          }
-        }
-      ]
+        onChange: val => {}
+      },
+      exportExcel: {
+        fileName: '导出文件.xlsx'
+      },
+      tablePrint: {
+        showLogo: true
+      },
+      visible: false,
+      visible_panel: false
     };
   },
-  mounted() {
-    this.BaseTable = this.$refs.table;
-    // console.log('页面不具备的权限：', this.auths);
-    this.BaseTable.START_LOADING();
-    setTimeout(() => {
-      this.BaseTable.STOP_LOADING();
-      // this.list = [...res.data.items];
-      // this.BaseTable.SET_DISABLE_SELECT([this.list[0], this.list[2]]);
-      this.topFilterList[0].hidden = false;
-      this.topFilterList[0].labelOptions.options.itemList = [
-        { text: '搜索1', value: '11' },
-        { text: '搜索2', value: '22' }
-      ];
-      // this.$refs.filter.SET_FIELDS_VALUE({ 'startTime|endTime': ['2019-10-12', '2019-10-28'] });
-    }, 3000);
+  computed: {
+    $topFilter() {
+      return this.$refs.topFilter;
+    }
   },
   methods: {
-    selectionHandle(rows) {
-      // console.log(rows);
-    },
-    zxczxc() {
-      this.params = { ...this.params, a: 7 };
-    },
-    async printHandle() {
-      await sleep(2000);
-      return '/static/webPrint/111.pdf';
-    },
-    createTopFilters() {
+    // 创建列表搜索配置项
+    createTopFilterList() {
       return [
         {
           type: 'INPUT',
-          label: '搜索',
-          fieldName: 'title',
-          hidden: true,
-          placeholder: '请输入标题名称...',
-          labelOptions: {
-            fieldName: 'qwe',
-            options: {
-              itemList: []
-            }
-          },
+          label: '条件1',
+          fieldName: 'a',
+          readonly: true,
           options: {
-            onInput: val => {
-              let res = pinyin(val, { style: STYLE_FIRST_LETTER })
-                .flat()
-                .join('')
-                .toUpperCase();
-              this.$refs.filter.SET_FIELDS_VALUE({ zxczxc: res });
+            unitRender: () => {
+              return (
+                <el-button
+                  icon="el-icon-search"
+                  onClick={() => {
+                    this.visible = !this.visible;
+                  }}
+                />
+              );
             }
           },
           rules: [
-            { required: true, message: '请输入标题名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            { required: true, message: '请输入条件', trigger: 'change' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'change' }
           ]
         },
         {
-          type: 'INPUT',
-          label: '搜索2',
-          fieldName: 'zxczxc',
-          readonly: true,
-          disabled: true
-        },
-        {
-          type: 'MULTIPLE_SELECT',
-          label: '所属分类',
-          fieldName: 'cid',
-          placeholder: '所属分类',
+          type: 'SELECT',
+          label: '条件2',
+          fieldName: 'b',
           options: {
+            itemList: [
+              { text: '列表1', value: '1' },
+              { text: '列表2', value: '2' }
+            ],
             filterable: true
-          },
-          rules: [{ required: true, message: '请选择所属分类', trigger: 'change' }],
-          request: {
-            fetchApi: () => {},
-            params: {},
-            datakey: 'items',
-            valueKey: 'id',
-            textKey: 'name'
           }
         },
         {
           type: 'DATE',
-          label: '日期',
-          fieldName: 'date',
-          placeholder: '选择日期',
-          rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
+          label: '条件3',
+          fieldName: 'c',
+          options: {
+            dateType: 'exactdate'
+          }
+        },
+        {
+          type: 'CHECKBOX',
+          label: '条件4',
+          fieldName: 'd',
+          options: {
+            trueValue: '1',
+            falseValue: '0'
+          }
         },
         {
           type: 'RANGE_DATE',
-          label: '日期区间',
-          style: { minWidth: '200px' },
+          label: '条件5',
+          style: { minWidth: '220px' },
           fieldName: 'startTime|endTime',
           options: {
             minDateTime: '2020-03-01',
@@ -200,100 +144,30 @@ export default {
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
         {
-          type: 'MULTIPLE_SELECT',
-          label: '兴趣爱好',
-          fieldName: 'hobby',
-          placeholder: '兴趣爱好',
-          options: {
-            filterable: true,
-            itemList: [
-              { text: '篮球', value: '1' },
-              { text: '足球', value: '2' },
-              { text: '乒乓球', value: '3' }
-            ]
-          },
-          rules: [{ required: true, message: '请选择兴趣爱好', trigger: 'change' }]
-        },
-        {
-          type: 'SEARCH_HELPER_WEB',
-          label: '搜索帮助',
-          fieldName: 'person',
-          placeholder: '请输入员工名称...',
-          options: {
-            itemList: [{ text: '中国' }, { text: '美国' }]
-          },
-          rules: [{ required: true, message: '请输入员工名称', trigger: 'change' }]
-        },
-        {
-          type: 'INPUT_CASCADER',
-          label: '联机',
-          fieldName: 'hello',
-          placeholder: '请输入标题名称...',
-          style: { minWidth: '300px' },
-          options: {
-            titles: ['品牌', '车型', '车系'],
-            itemList: [
-              {
-                text: '一级分类1',
-                value: '1',
-                children: [
-                  {
-                    text: '二级分类一级分类1一级分类1一级分类11-1',
-                    value: '1-1',
-                    children: [
-                      {
-                        text: '三级分类1-1',
-                        value: '1-1-1'
-                      },
-                      {
-                        text: '三级分类1-2',
-                        value: '1-1-2'
-                      }
-                    ]
-                  },
-                  {
-                    text: '二级分类1-2',
-                    value: '1-2',
-                    children: [
-                      {
-                        text: '三级分类2-1',
-                        value: '1-2-1'
-                      },
-                      {
-                        text: '三级分类2-2',
-                        value: '1-2-2'
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                text: '一级分类2',
-                value: '2',
-                children: [
-                  {
-                    text: '二级分类2-1',
-                    value: '2-1'
-                  }
-                ]
-              }
-            ]
+          type: 'SEARCH_HELPER',
+          label: '条件6',
+          fieldName: 'f',
+          request: {
+            fetchApi: () => {},
+            params: {},
+            datakey: 'items',
+            valueKey: 'name'
           }
         }
       ];
     },
+    // 创建表格列配置
     createTableColumns() {
       return [
         {
           title: '操作',
-          dataIndex: 'column-action',
+          dataIndex: '__action__', // 操作列的 dataIndex 的值不能改
+          fixed: 'left',
           width: 100,
-          render: (props, h) => {
+          render: () => {
             return (
               <div>
-                <multiuse-button type="text" divider="after" containerStyle={{ color: 'red' }} auth-list={this.auths} auth-mark={'/api/bbb/*'}>
-                  编辑
-                </multiuse-button>
+                <el-button type="text">编辑</el-button>
                 <el-button type="text">查看</el-button>
               </div>
             );
@@ -303,165 +177,162 @@ export default {
           title: '序号',
           dataIndex: 'index',
           width: 80,
-          sorter: (data, order) => {
-            // 升序
-            if (order === 'ascending') {
-              data.sort((a, b) => {
-                return a.index - b.index;
-              });
-            }
-            // 降序
-            if (order === 'descending') {
-              data.sort((a, b) => {
-                return b.index - a.index;
-              });
-            }
-          },
-          render: props => {
-            return <span>{props.row.index + 1}</span>;
+          sorter: true,
+          render: text => {
+            return <span>{text + 1}</span>;
           }
         },
         {
-          title: '日期',
+          title: '创建时间',
           dataIndex: 'date',
-          width: 200,
+          width: 220,
           sorter: true,
-          filter: true,
-          filterType: 'date-range',
-          editRequired: true,
-          editable: true,
-          editType: 'date-picker'
+          filter: {
+            type: 'range-date'
+          },
+          editRender: row => {
+            return {
+              type: 'datetime'
+            };
+          }
         },
         {
           title: '姓名',
           dataIndex: 'person.name',
-          width: 120,
+          width: 150,
+          required: true,
           sorter: true,
-          filter: true,
-          filterType: 'input',
-          editable: true,
-          editType: 'text',
-          editRequired: true,
-          searchHelper: {
-            fetchApi: () => {},
-            params: {},
-            // key -> 数据字段名
-            // value -> json 对象，dataIndex 的值就是 column 的 dataIndex
-            aliasKey: {
-              name: {
-                // 注意：当前列（column）的 dataIndex 必须配置在 aliasKey 中，最好放在一项
-                dataIndex: 'person.name'
+          filter: {
+            type: 'text'
+          },
+          editRender: row => {
+            return {
+              type: 'text',
+              editable: false,
+              disabled: row.index === 2,
+              extra: {
+                maxlength: 10
               },
-              number: {
-                dataIndex: 'num'
-              },
-              price: {
-                dataIndex: 'price'
-              }
-            }
+              rules: [{ required: true, message: '姓名不能为空' }]
+            };
           }
         },
         {
           title: '性别',
           dataIndex: 'person.sex',
           width: 100,
-          sorter: true,
-          filter: true,
-          filterType: 'radio',
-          filterItems: [
-            { text: '男', value: 1 },
-            { text: '女', value: 0 }
-          ],
           dictItems: [
-            { text: '男', value: 1 },
-            { text: '女', value: 0 }
+            { text: '男', value: '1' },
+            { text: '女', value: '0' }
           ]
+        },
+        {
+          title: '年龄',
+          dataIndex: 'person.age',
+          width: 150,
+          sorter: true,
+          filter: {
+            type: 'range-number'
+          }
         },
         {
           title: '价格',
           dataIndex: 'price',
-          width: 120,
-          precision: 2,
-          numberFormat: true,
+          width: 150,
+          required: true,
           sorter: true,
-          filter: true,
-          filterType: 'number',
-          summation: true,
-          summationUnit: '元',
-          editable: true,
-          editType: 'number',
-          editRequired: true,
-          // 可编辑的单元格在强制不可编辑状态下的渲染函数，可以绑定事件
-          editDisableRender: props => {
-            return <div onClick={() => alert('强制不可编辑单元格自定义的单击事件')}>{props.row.price}</div>;
+          filter: {
+            type: 'range-number'
+          },
+          editRender: row => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000
+              },
+              rules: [{ required: true, message: '价格不能为空' }]
+            };
           }
         },
         {
           title: '数量',
           dataIndex: 'num',
-          width: 120,
+          width: 150,
+          required: true,
           sorter: true,
-          editable: true,
-          editType: 'number',
-          precision: 0,
-          editRequired: true,
-          max: 300,
-          min: 0
+          filter: {
+            type: 'range-number'
+          },
+          editRender: row => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000
+              },
+              rules: [{ required: true, message: '数量不能为空' }]
+            };
+          }
         },
         {
           title: '总价',
           dataIndex: 'total',
-          width: 120,
+          width: 150,
           sorter: true,
-          summation: true,
-          summationUnit: '元',
-          render: props => {
-            // 计算规则
-            props.row.total = props.row.price * props.row.num;
-            const domStyle = props.row.total > 1000 ? {} : null;
-            return <div style={domStyle}>{props.row.total}</div>;
+          filter: {
+            type: 'range-number'
+          },
+          summation: {
+            unit: '元'
+          },
+          render: (text, row) => {
+            row.total = row.price * row.num;
+            return <span>{row.total}</span>;
           }
         },
         {
           title: '是否选择',
           dataIndex: 'choice',
           align: 'center',
-          sorter: true,
-          filter: true,
-          filterType: 'radio',
-          filterItems: [
-            { text: '未选择', value: '0' },
-            { text: '已选择', value: '1' }
-          ],
-          editable: true,
-          defaultEditable: true,
-          editType: 'checkbox',
-          editItems: [
-            { text: '', falseValue: '0' },
-            { text: '', trueValue: '1' }
-          ],
+          width: 150,
+          editRender: row => {
+            return {
+              type: 'checkbox',
+              editable: true,
+              extra: {
+                trueValue: 1,
+                falseValue: 0,
+                disabled: true
+              }
+            };
+          },
           dictItems: [
-            { text: '未选择', value: '0' },
-            { text: '已选择', value: '1' }
+            { text: '选中', value: 1 },
+            { text: '非选中', value: 0 }
           ]
         },
         {
           title: '状态',
           dataIndex: 'state',
           width: 150,
-          sorter: true,
-          filter: true,
-          filterType: 'checkbox',
-          editRequired: true,
-          filterItems: [
-            { text: '已完成', value: 1 },
-            { text: '进行中', value: 2 },
-            { text: '未完成', value: 3 }
-          ],
-          editable: true,
-          defaultEditable: true,
-          editType: 'select',
-          editItems: [
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '已完成', value: 1 },
+              { text: '进行中', value: 2 },
+              { text: '未完成', value: 3 }
+            ]
+          },
+          editRender: row => {
+            return {
+              type: 'select',
+              items: [
+                { text: '已完成', value: 1 },
+                { text: '进行中', value: 2 },
+                { text: '未完成', value: 3 }
+              ]
+            };
+          },
+          dictItems: [
             { text: '已完成', value: 1 },
             { text: '进行中', value: 2 },
             { text: '未完成', value: 3 }
@@ -470,19 +341,28 @@ export default {
         {
           title: '业余爱好',
           dataIndex: 'hobby',
-          width: 150,
-          sorter: true,
-          filter: true,
-          filterType: 'checkbox',
-          filterItems: [
-            { text: '篮球', value: 1 },
-            { text: '足球', value: 2 },
-            { text: '乒乓球', value: 3 },
-            { text: '游泳', value: 4 }
-          ],
-          editable: true,
-          editType: 'select-multiple',
-          editItems: [
+          width: 200,
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '篮球', value: 1 },
+              { text: '足球', value: 2 },
+              { text: '乒乓球', value: 3 },
+              { text: '游泳', value: 4 }
+            ]
+          },
+          editRender: row => {
+            return {
+              type: 'select-multiple',
+              items: [
+                { text: '篮球', value: 1 },
+                { text: '足球', value: 2 },
+                { text: '乒乓球', value: 3 },
+                { text: '游泳', value: 4 }
+              ]
+            };
+          },
+          dictItems: [
             { text: '篮球', value: 1 },
             { text: '足球', value: 2 },
             { text: '乒乓球', value: 3 },
@@ -492,42 +372,34 @@ export default {
         {
           title: '地址',
           dataIndex: 'address',
-          width: 200,
-          showOverflowTooltip: true,
-          editable: true,
-          editType: 'text',
-          editPattern: /^[0-9a-zA-Z ]+$/
+          width: 300
         }
       ];
     },
-    changeHandle(val) {
-      console.log('搜索的参数：', val);
+    filterChangeHandle(val) {
+      this.fetch.params = Object.assign({}, this.fetch.params, val);
     },
-    collapseHandle() {
-      this.$nextTick(() => {
-        this.BaseTable.EXECUTE_RESET_HEIGHT();
-      });
+    collapseChangeHandle(val) {
+      console.log(val);
     },
-    closeHandler(val) {
-      this.visible = val;
+    dataChangeHandle(tableData) {
+      // ...
     },
-    printHandler() {
-      this.$refs.print.EXCUTE_PRINT();
-    },
-    // 表格的 onSyncTableData 事件
-    tableDateChange(list, isFirst) {
-      if (isFirst && list.length > 0) {
-        !this.selectes.length && (this.selectes = [list[1], list[3]]);
-        setTimeout(() => {
-          // 让表格列对应的所有的单元格，可编辑状态禁用   true -> 禁用可编辑状态
-          this.BaseTable.SET_CELL_UNEDITABLE(list, 'state', true);
-          // 有权限的数据，设置成可编辑  false -> 可编辑状态
-          this.BaseTable.SET_CELL_UNEDITABLE([list[0], list[2]], 'state', false);
-        });
+    // 关闭搜索帮助窗口
+    closeDialogHandle(state, val) {
+      if (typeof val !== 'undefined') {
+        this.$topFilter.SET_FIELDS_VALUE({ a: val });
       }
+      this.visible = state;
+    },
+    // 新建按钮
+    addInfoHandle() {
+      this.visible_panel = true;
+    },
+    // 关闭抽屉组件
+    closeDrawerHandle(state) {
+      this.visible_panel = state;
     }
   }
 };
 </script>
-
-<style lang="less"></style>

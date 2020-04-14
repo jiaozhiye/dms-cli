@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 09:12:54
+ * @Last Modified time: 2020-04-14 10:11:26
  */
 import Vue from 'vue';
 import config from '@/assets/js/config';
@@ -34,6 +34,10 @@ Vue.use(FormPanel);
 // Table 组件
 import FilterTable from '@/components/BaseTable';
 Vue.use(FilterTable);
+
+// VirtualTable 组件
+import VirtualTable from '@/components/VirtualTable';
+Vue.use(VirtualTable);
 
 // 抽屉组件
 import Drawer from '@/components/Drawer';

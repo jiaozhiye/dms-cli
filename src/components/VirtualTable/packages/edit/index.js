@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 10:42:43
+ * @Last Modified time: 2020-04-14 11:17:42
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -184,6 +184,7 @@ export default {
         <el-date-picker
           size="small"
           type={!isDateTime ? 'date' : 'datetime'}
+          style={{ width: '100%' }}
           value={moment(prevValue).format(dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD'))}
           onInput={val => {
             setCellValue(row, dataIndex, val);

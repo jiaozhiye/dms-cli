@@ -2,33 +2,33 @@
 
 ### Table
 
-| 参数             | 说明                                          | 类型                                                   | 默认值  |
-| ---------------- | --------------------------------------------- | ------------------------------------------------------ | ------- |
-| columns          | 表格列的配置描述，[配置项](#column)，必要参数 | array                                                  | -       |
-| columnsChange    | 表格列变化事件，必要参数                      | Function(columns)                                      | -       |
-| dataSource       | 数据数组                                      | array                                                  | -       |
-| rowKey           | 表格行 key 的取值，可以是字符串或一个函数     | string\|Function(row, index) => string                 | uid     |
-| fetch            | 向后台请求数据的接口，[配置项](#fetch)        | object                                                 | -       |
-| border           | 是否带有纵向边框                              | boolean                                                | true    |
-| height           | 表格的高度，单位 px                           | number \| auto                                         | -       |
-| maxHeight        | 表格的最大高度，单位 px                       | number                                                 | -       |
-| loading          | 页面是否加载中                                | boolean                                                | false   |
-| resizable        | 所有列是否允许拖动列宽调整大小                | boolean                                                | true    |
-| size             | 表格尺寸                                      | default \| medium \| small \| mini                     | default |
-| cacheColumnsKey  | 存储列配置的字段名，不能重复                  | string                                                 | -       |
-| showHeader       | 是否显示表头                                  | boolean                                                | true    |
-| ellipsis         | 设置所有内容过长时显示为省略号                | boolean                                                | true    |
-| rowStyle         | 给行附加样式                                  | object \| Function(row, rowIndex)                      | -       |
-| cellStyle        | 给单元格附加样式                              | object \| Function(row, column, rowIndex, columnIndex) | -       |
-| spanMethod       | 合并行或列的计算方法                          | Function({row, column, rowIndex, columnIndex})         | -       |
-| rowSelection     | 列表项是否可选择，[配置项](#rowSelection)     | object                                                 | -       |
-| expandable       | 展开行配置项，[配置项](#expandable)           | object                                                 | -       |
-| showAlert        | 是否显示表格信息                              | boolean                                                | true    |
-| showFullScreen   | 是否显示全屏按钮                              | boolean                                                | true    |
-| showRefresh      | 是否显示刷新按钮                              | boolean                                                | true    |
-| exportExcel      | 导出表格数据，[配置项](#exportExcel)          | object                                                 | -       |
-| tablePrint       | 表格打印，[配置项](#tablePrint)               | object                                                 | -       |
-| showColumnDefine | 是否显示列定义                                | boolean                                                | true    |
+| 参数             | 说明                                      | 类型                                                   | 默认值  |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ | ------- |
+| columns          | 表格列的配置，[配置项](#column)，必要参数 | array                                                  | -       |
+| columnsChange    | 表格列变化事件，必要参数                  | Function(columns)                                      | -       |
+| dataSource       | 数据数组                                  | array                                                  | -       |
+| rowKey           | 表格行 key 的取值，可以是字符串或一个函数 | string\|Function(row, index) => string                 | uid     |
+| fetch            | 向后台请求数据的接口，[配置项](#fetch)    | object                                                 | -       |
+| border           | 是否带有纵向边框                          | boolean                                                | true    |
+| height           | 表格的高度，单位 px                       | number \| auto                                         | -       |
+| maxHeight        | 表格的最大高度，单位 px                   | number                                                 | -       |
+| loading          | 页面是否加载中                            | boolean                                                | false   |
+| resizable        | 所有列是否允许拖动列宽调整大小            | boolean                                                | true    |
+| size             | 表格尺寸                                  | default \| medium \| small \| mini                     | default |
+| cacheColumnsKey  | 存储列配置的字段名，不能重复              | string                                                 | -       |
+| showHeader       | 是否显示表头                              | boolean                                                | true    |
+| ellipsis         | 设置所有内容过长时显示为省略号            | boolean                                                | true    |
+| rowStyle         | 给行附加样式                              | object \| Function(row, rowIndex)                      | -       |
+| cellStyle        | 给单元格附加样式                          | object \| Function(row, column, rowIndex, columnIndex) | -       |
+| spanMethod       | 合并行或列的计算方法                      | Function({row, column, rowIndex, columnIndex})         | -       |
+| rowSelection     | 列表项是否可选择，[配置项](#rowSelection) | object                                                 | -       |
+| expandable       | 展开行配置项，[配置项](#expandable)       | object                                                 | -       |
+| showAlert        | 是否显示表格信息                          | boolean                                                | true    |
+| showFullScreen   | 是否显示全屏按钮                          | boolean                                                | true    |
+| showRefresh      | 是否显示刷新按钮                          | boolean                                                | true    |
+| exportExcel      | 导出表格数据，[配置项](#exportExcel)      | object                                                 | -       |
+| tablePrint       | 表格打印，[配置项](#tablePrint)           | object                                                 | -       |
+| showColumnDefine | 是否显示列定义                            | boolean                                                | true    |
 
 ### 事件
 

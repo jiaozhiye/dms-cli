@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 10:11:42
+ * @Last Modified time: 2020-04-14 11:18:32
  */
 const config = {
   // Vue 应用，根节点 ID
   appRootId: 'app',
   // 表格列的默认最小宽度
-  defaultColumnWidth: 100,
+  defaultColumnWidth: 80,
   // 行高的映射表
   rowHeightMaps: {
     default: 48,
@@ -19,7 +19,7 @@ const config = {
   // 分页
   pagination: {
     currentPage: 1,
-    pageSize: 10
+    pageSize: 20
   },
   // 后台返回数据的路径
   dataKey: 'items',

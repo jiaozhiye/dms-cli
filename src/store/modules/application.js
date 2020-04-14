@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-02 13:16:13
+ * @Last Modified time: 2020-04-14 14:03:09
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -167,20 +167,19 @@ const actions = {
   },
   async createDictData({ commit, state }, params) {
     if (Object.keys(state.dict).length) return;
+    let data = {};
     if (process.env.MOCK_DATA === 'true') {
-      commit({ type: types.DICT_DATA, data: localDict });
+      data = { ...localDict };
     } else {
       const res = await getAllDict();
       if (res.resultCode === 200) {
-        const data = { ...localDict, ...res.data };
-        // 数据字典本地存储
-        if (!_.isEqual(data, JSON.parse(localStorage.getItem('dict')))) {
-          localStorage.setItem('dict', JSON.stringify(data));
-        }
-        // Vuex 状态存储
-        commit({ type: types.DICT_DATA, data });
+        data = { ...localDict, ...res.data };
       }
     }
+    // 数据字典本地存储
+    localStorage.setItem('dict', JSON.stringify(data));
+    // Vuex 状态存储
+    commit({ type: types.DICT_DATA, data });
   },
   addKeepAliveNames({ commit, state }, params) {
     if (state.keepAliveNames.some(x => x.value === params.value)) return;

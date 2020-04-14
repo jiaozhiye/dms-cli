@@ -35,7 +35,7 @@
         />
       </span>
       <span class="cropper-face cropper-move" @mousedown="cropMove" @touchstart="cropMove" />
-      <span v-if="info" class="crop-info" :style="{ top: cropInfo.top }">{{ this.cropInfo.width }} × {{ this.cropInfo.height }}</span>
+      <span v-if="info" class="crop-info" :style="{ top: cropInfo.top }">{{ cropInfo.width }} × {{ cropInfo.height }}</span>
       <span v-if="!fixedBox">
         <span class="crop-line line-w" @mousedown="changeCropSize($event, false, true, 0, 1)" @touchstart="changeCropSize($event, false, true, 0, 1)" />
         <span class="crop-line line-a" @mousedown="changeCropSize($event, true, false, 1, 0)" @touchstart="changeCropSize($event, true, false, 1, 0)" />
