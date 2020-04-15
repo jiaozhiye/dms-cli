@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-26 08:29:48
+ * @Last Modified time: 2020-04-15 23:00:24
  */
 export default [
   {
@@ -20,7 +20,7 @@ export default [
           },
           {
             title: '备件采购入库',
-            key: 'https://www.baidu.com/'
+            key: '/bjgl/cggl/rk'
           },
           {
             title: '备件采购退库',
