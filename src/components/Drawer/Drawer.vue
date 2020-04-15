@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:53:57
+ * @Last Modified time: 2020-04-15 21:18:29
  **/
 import Spin from '@/components/Spin';
 
@@ -111,13 +111,7 @@ export default {
         visibility: 'visible',
         transform: `translate3d(0, 0, 0)`
       };
-      return this.visible ? style : '';
-    },
-    maskzIndex() {
-      return { zIndex: this.zIndex };
-    },
-    containerzIndex() {
-      return { zIndex: this.zIndex + 1 };
+      return this.visible ? style : null;
     }
   },
   watch: {
@@ -170,7 +164,7 @@ export default {
     }
   },
   render() {
-    const { isVisible, loading, closable, title, maskzIndex, maskStyle, containerPosition, containerShow, containerzIndex, containerStyle, $slots } = this;
+    const { isVisible, loading, closable, title, zIndex, maskStyle, containerPosition, containerShow, containerStyle, $slots } = this;
     const cls = [
       'drawer-mask',
       {
@@ -179,8 +173,8 @@ export default {
     ];
     return (
       <div class="v-drawer--wrapper">
-        <div class={cls} style={{ ...maskzIndex, ...maskStyle }} onClick={() => this.close('mask')} />
-        <div ref="panel" class="drawer-container" style={{ ...containerPosition, ...containerShow, ...containerzIndex, ...containerStyle }}>
+        <div class={cls} style={{ ...maskStyle, zIndex }} onClick={() => this.close('mask')} />
+        <div ref="panel" class="drawer-container" style={{ ...containerPosition, ...containerShow, ...containerStyle, zIndex: zIndex + 1 }}>
           <div class="header">
             <div class="title">{$slots[`title`] || title}</div>
             {closable && (
@@ -210,17 +204,17 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.65);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
-    transform-origin: 50% 50% 0px;
-    opacity: 0;
+    transform-origin: 50% 50% 0;
   }
   .mask-show {
+    opacity: 1;
     visibility: visible;
-    opacity: 0.3;
   }
   .drawer-container {
     position: fixed;

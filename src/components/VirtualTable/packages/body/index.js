@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 17:45:20
+ * @Last Modified time: 2020-04-15 20:22:31
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -102,8 +102,7 @@ export default {
     },
     rootClickEvent(ev) {
       const { target } = ev;
-      if (target.className === 'v-cell--normal') return;
-      if (contains(this.$vTableBody, target)) return;
+      if (target.className === 'v-cell--normal' || contains(this.$vTableBody, target)) return;
       this.setClickedValues([]);
     },
     renderBodyYSpace() {
@@ -175,7 +174,7 @@ export default {
           [`col--ellipsis`]: isEllipsis,
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
-          [`v-column--sort`]: !!column.orderBy,
+          [`v-column--sort`]: !!orderBy,
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
