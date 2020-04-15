@@ -81,6 +81,7 @@ export function getLodop(oOBJECT, oEMBED) {
         Notification({
           title: 'CLodop 信息',
           dangerouslyUseHTMLString: true,
+          duration: 0,
           message: strCLodopInstall_1 + (CLodopIsLocal ? strCLodopInstall_2 : '') + strCLodopInstall_3
         });
         return;
@@ -117,6 +118,7 @@ export function getLodop(oOBJECT, oEMBED) {
           Notification({
             title: 'CLodop 信息',
             dangerouslyUseHTMLString: true,
+            duration: 0,
             message: strHtmChrome
           });
         }
@@ -124,12 +126,14 @@ export function getLodop(oOBJECT, oEMBED) {
           Notification({
             title: 'CLodop 信息',
             dangerouslyUseHTMLString: true,
+            duration: 0,
             message: strHtmFireFox
           });
         }
         Notification({
           title: 'CLodop 信息',
           dangerouslyUseHTMLString: true,
+          duration: 0,
           message: is64IE ? strHtm64_Install : strHtmInstall
         });
         return LODOP;
