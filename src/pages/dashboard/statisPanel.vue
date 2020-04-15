@@ -3,18 +3,16 @@
     <div class="topper">
       <span class="title">统计报表</span>
     </div>
-    <div style="margin-top: -1px">
-      <FilterTable
-        ref="table"
+    <div style="margin-top: -11px">
+      <VirtualTable
         :height="214"
         :columns="columns"
-        :data-source="list"
-        :is-select-column="false"
-        :is-pagination="false"
-        :is-toper-info="false"
-        :is-column-filter="false"
-        :is-export-excel="false"
-        :on-columns-change="columns => (this.columns = columns)"
+        :dataSource="list"
+        :rowKey="record => record.id"
+        :showAlert="false"
+        :showFullScreen="false"
+        :showColumnDefine="false"
+        :columnsChange="columns => (this.columns = columns)"
       />
     </div>
   </div>
@@ -39,15 +37,14 @@ export default {
           dataIndex: 'index',
           width: 80,
           sorter: true,
-          render: props => {
-            return <span>{props.row.index + 1}</span>;
+          render: text => {
+            return text + 1;
           }
         },
         {
           title: '日期',
           dataIndex: 'date',
-          width: 150,
-          dateFormat: 'yyyy-MM-dd'
+          width: 200
         },
         {
           title: '姓名',
@@ -59,7 +56,7 @@ export default {
           dataIndex: 'price',
           width: 120,
           precision: 2,
-          numberFormat: true
+          formatType: 'finance'
         },
         {
           title: '数量',
@@ -71,12 +68,12 @@ export default {
           title: '总价',
           dataIndex: 'total',
           precision: 2,
-          summation: true,
-          summationUnit: '元',
-          render: props => {
-            // 计算规则
-            props.row.total = props.row.price * props.row.num;
-            return <div>{props.row.total}</div>;
+          summation: {
+            unit: '元'
+          },
+          render: (text, row) => {
+            row.total = row.price * row.num;
+            return <span>{row.total}</span>;
           }
         }
       ];
