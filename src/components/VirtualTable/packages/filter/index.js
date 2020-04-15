@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 19:08:58
+ * @Last Modified time: 2020-04-15 17:25:24
  */
 import Popper from '../popper';
 
@@ -238,7 +238,7 @@ export default {
     dateHandle(column) {
       return (
         <div style="padding-top: 6px">
-          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" clearable={false} placeholder="选择日期" />
+          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" placeholder="选择日期" />
         </div>
       );
     },
@@ -250,9 +250,8 @@ export default {
             type="daterange"
             v-model={this.filterValues[this.dataKey]}
             unlink-panels={true}
-            style={{ width: '200px' }}
+            style={{ width: '230px' }}
             value-format="yyyy-MM-dd"
-            clearable={false}
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"

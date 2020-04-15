@@ -14,7 +14,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 14:49:18
+ * @Last Modified time: 2020-04-15 17:18:04
  */
 import Popper from './popper.js';
 import config from '../config';
@@ -115,7 +115,7 @@ export default {
   },
 
   computed: {
-    rootElement() {
+    $rootElement() {
       return document.getElementById(config.appRootId) || document.body;
     }
   },
@@ -163,13 +163,13 @@ export default {
     switch (this.trigger) {
       case 'clickToOpen':
         on(this.referenceElm, 'click', this.doShow);
-        on(document, 'click', this.handleDocumentClick);
-        on(this.rootElement, 'mousedown', this.handleDocumentClick);
+        // on(document, 'click', this.handleDocumentClick);
+        on(this.$rootElement, 'mousedown', this.handleDocumentClick);
         break;
       case 'clickToToggle':
         on(this.referenceElm, 'click', this.doToggle);
-        on(document, 'click', this.handleDocumentClick);
-        on(this.rootElement, 'mousedown', this.handleDocumentClick);
+        // on(document, 'click', this.handleDocumentClick);
+        on(this.$rootElement, 'mousedown', this.handleDocumentClick);
         break;
       case 'hover':
         on(this.referenceElm, 'mouseover', this.onMouseOver);
@@ -271,8 +271,8 @@ export default {
       off(this.referenceElm, 'blur', this.doClose);
       off(this.referenceElm, 'mouseout', this.onMouseOut);
       off(this.referenceElm, 'mouseover', this.onMouseOver);
-      off(document, 'click', this.handleDocumentClick);
-      off(this.rootElement, 'mousedown', this.handleDocumentClick);
+      // off(document, 'click', this.handleDocumentClick);
+      off(this.$rootElement, 'mousedown', this.handleDocumentClick);
 
       this.showPopper = false;
       this.doDestroy();

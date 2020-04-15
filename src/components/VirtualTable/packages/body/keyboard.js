@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 10:48:29
+ * @Last Modified time: 2020-04-15 17:01:44
  */
 const keyboardMixin = {
   methods: {
-    documentKeyboardEvent(ev) {
+    keyboardEvent(ev) {
       if (!this.editableColumns.length) return;
       // 至少一个单元格获得焦点
       if (!this.clicked.length) return;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:06:59
+ * @Last Modified time: 2020-04-15 17:01:48
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -36,6 +36,9 @@ export default {
     };
   },
   computed: {
+    $rootElement() {
+      return document.getElementById(config.appRootId) || document.body;
+    },
     $vTableBody() {
       return this.$el.querySelector('.v-table--body');
     },
@@ -68,8 +71,8 @@ export default {
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
-    this.event2 = addEventListener(document, 'click', this.documentClickEvent);
-    this.event3 = addEventListener(document, 'keydown', this.documentKeyboardEvent);
+    this.event2 = addEventListener(this.$rootElement, 'click', this.rootClickEvent);
+    this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
   destroyed() {
     this.event1.remove();
@@ -97,7 +100,9 @@ export default {
       this.prevST = st;
       this.prevSL = sl;
     },
-    documentClickEvent({ target }) {
+    rootClickEvent(ev) {
+      const { target } = ev;
+      if (target.className === 'v-cell--normal') return;
       if (contains(this.$vTableBody, target)) return;
       this.setClickedValues([]);
     },
@@ -264,7 +269,6 @@ export default {
       return { rowspan, colspan };
     },
     cellClickHandle(ev, row, column) {
-      ev.stopPropagation();
       const { getRowKey, rowSelection, selectionKeys } = this.$$table;
       const { dataIndex } = column;
       const rowKey = getRowKey(row, row.index);
@@ -284,7 +288,6 @@ export default {
       this.$$table.$emit('rowClick', row, column, ev);
     },
     cellDbclickHandle(ev, row, column) {
-      ev.stopPropagation();
       const { dataIndex } = column;
       if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
       this.$$table.$emit('rowDblclick', row, column, ev);

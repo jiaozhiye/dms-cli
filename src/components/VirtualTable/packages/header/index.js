@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-09 17:50:17
+ * @Last Modified time: 2020-04-15 14:30:59
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -43,10 +43,12 @@ export default {
   watch: {
     filters(val) {
       this.filterHandle();
+      if (this.isClientFilter) return;
       this.$$table.filters = this.formatFilterValue(val);
     },
     sorter(val) {
       this.sorterHandle();
+      if (this.isClientSorter) return;
       this.$$table.sorter = this.formatSorterValue(val);
     }
   },
