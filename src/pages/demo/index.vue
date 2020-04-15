@@ -227,7 +227,7 @@ export default {
               editable: true,
               extra: {
                 maxlength: 10,
-                disabled: row.index === 2
+                disabled: row.id === 3
               },
               rules: [{ required: true, message: '姓名不能为空' }],
               onClick: (cell, row, column, cb, ev) => {
