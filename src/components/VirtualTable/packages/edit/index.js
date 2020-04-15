@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 22:32:03
+ * @Last Modified time: 2020-04-15 10:43:39
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -49,7 +49,7 @@ export default {
       if (!this.editable) return;
       const { type } = this.options;
       const { currentKey } = this;
-      if ((type === 'text' || type === 'number' || type === 'search-helper') && currentKey) {
+      if ((type === 'text' || type === 'number') && currentKey) {
         setTimeout(() => {
           let $el = this.$refs[`${type}-${currentKey}`];
           $el && $el.select();
@@ -231,23 +231,29 @@ export default {
       const { extra = {}, rules = [], onClick = noop, onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       return (
-        <el-input
-          ref={`search-helper-${this.dataKey}`}
-          size="small"
-          value={prevValue}
-          onChange={val => {
-            this.createFieldValidate(rules, val);
-            onChange({ [this.dataKey]: val }, row);
-            this.$$table.dataChangeHandle();
-          }}
-          readonly={true}
-          disabled={extra.disabled}
-        >
+        <el-input ref={`search-helper-${this.dataKey}`} size="small" value={prevValue} readonly={true} disabled={extra.disabled}>
           <el-button
             slot="append"
             icon="el-icon-search"
             onClick={ev => {
-              onClick({ [this.dataKey]: prevValue }, row, ev);
+              onClick(
+                { [this.dataKey]: prevValue },
+                row,
+                column,
+                (val, others) => {
+                  setCellValue(row, dataIndex, val);
+                  // 对其他单元格赋值
+                  if (_.isObject(others) && Object.keys(others).length) {
+                    for (let key in others) {
+                      setCellValue(row, key, others[key]);
+                    }
+                  }
+                  this.createFieldValidate(rules, val);
+                  onChange({ [this.dataKey]: val }, row);
+                  this.$$table.dataChangeHandle();
+                },
+                ev
+              );
             }}
           />
         </el-input>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>表单搜索帮助 内容</div>
+    <div>表格搜索帮助 内容</div>
     <div
       :style="{
         position: 'absolute',
@@ -23,13 +23,15 @@
 <script>
 export default {
   name: '',
+  props: ['row', 'dataIndex', 'callback'],
   methods: {
     confirmHandle() {
       // ...
-      this.cancelHandle('hello');
+      this.callback && this.callback('hello', { 'person.age': 20 });
+      this.cancelHandle();
     },
-    cancelHandle(val) {
-      this.$emit('close', false, val);
+    cancelHandle() {
+      this.$emit('close', false);
     }
   }
 };

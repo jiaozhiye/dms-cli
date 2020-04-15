@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 21:05:37
+ * @Last Modified time: 2020-04-15 11:04:16
  */
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
@@ -241,7 +241,8 @@ export default {
     },
     fetchParams(next, prev) {
       if (!this.fetch) return;
-      if (!this.onlyPaginationChange(next, prev)) {
+      const isOnlyPageChange = this.onlyPaginationChange(next, prev);
+      if (!isOnlyPageChange && next.currentPage > 1) {
         this.toFirstPage();
       } else {
         this.getTableData();

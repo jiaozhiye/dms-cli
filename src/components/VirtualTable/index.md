@@ -23,6 +23,8 @@
 | spanMethod       | 合并行或列的计算方法                      | Function({row, column, rowIndex, columnIndex})         | -       |
 | rowSelection     | 列表项是否可选择，[配置项](#rowSelection) | object                                                 | -       |
 | expandable       | 展开行配置项，[配置项](#expandable)       | object                                                 | -       |
+| clientSorter     | 是否开启客户端表头排序                    | boolean                                                | true    |
+| clientFilter     | 是否开启客户端表头筛选                    | boolean                                                | true    |
 | showAlert        | 是否显示表格信息                          | boolean                                                | true    |
 | showFullScreen   | 是否显示全屏按钮                          | boolean                                                | true    |
 | showRefresh      | 是否显示刷新按钮                          | boolean                                                | true    |
@@ -99,18 +101,18 @@
 
 ### editable
 
-| 参数     | 说明                                      | 类型                       | 默认值 |
-| -------- | ----------------------------------------- | -------------------------- | ------ |
-| type     | 可编辑类型，[配置项](#editType)，必要参数 | string                     | -      |
-| items    | 下拉框的列表项，[配置项](#item)           | array                      | -      |
-| editable | 是否可编辑                                | boolean                    | -      |
-| disabled | 是否禁用编辑功能，且禁止切换              | boolean                    | -      |
-| extra    | 可编辑表单的额外配置项，[配置项](#extra)  | object                     | -      |
-| rules    | 表单校验规则，数组值请参考[配置项](#rule) | array                      | -      |
-| onInput  | 表单的 input 事件                         | Function(cell, row)        | -      |
-| onChange | 表单的 change 事件                        | Function(cell, row)        | -      |
-| onEnter  | 表单的 enter 事件                         | Function(cell, row)        | -      |
-| onClick  | 搜索帮助的单击事件                        | Function(cell, row, event) | -      |
+| 参数     | 说明                                        | 类型                            | 默认值 |
+| -------- | ------------------------------------------- | ------------------------------- | ------ |
+| type     | 可编辑类型，[配置项](#editType)，必要参数   | string                          | -      |
+| items    | 下拉框的列表项，[配置项](#item)             | array                           | -      |
+| editable | 是否可编辑                                  | boolean                         | -      |
+| disabled | 是否禁用编辑功能，且禁止切换                | boolean                         | -      |
+| extra    | 可编辑表单的额外配置项，[配置项](#extra)    | object                          | -      |
+| rules    | 表单校验规则，数组值请参考[配置项](#rule)   | array                           | -      |
+| onInput  | 表单的 input 事件                           | Function(cell, row)             | -      |
+| onChange | 表单的 change 事件                          | Function(cell, row)             | -      |
+| onEnter  | 表单的 enter 事件                           | Function(cell, row)             | -      |
+| onClick  | 搜索帮助的单击事件，只对 search-helper 有效 | Function，[参数列表](#shParams) | -      |
 
 ### editType
 
@@ -124,6 +126,16 @@
 | search-helper   | 搜索帮助      |
 | date            | 日期类型      |
 | datetime        | 日期-时间类型 |
+
+### shParams
+
+| 参数   | 说明                                   | 类型                        | 默认值 |
+| ------ | -------------------------------------- | --------------------------- | ------ |
+| cell   | 单元格的值                             | object                      | -      |
+| row    | 行数据                                 | object                      | -      |
+| column | 列配置                                 | object                      | -      |
+| cb     | 回调函数，设置单元格的值并触发表单校验 | Function(cellValue, others) | -      |
+| event  | 单击事件的事件对象                     | object                      | -      |
 
 ### formatType
 

@@ -26,12 +26,15 @@
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </span>
     </VirtualTable>
-    <base-dialog :visible.sync="visible" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+    <base-dialog :visible.sync="visible_filter" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
       <search-helper @close="closeDialogHandle" />
     </base-dialog>
     <drawer :visible.sync="visible_panel" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
       <add-info @close="closeDrawerHandle" />
     </drawer>
+    <base-dialog :visible.sync="visible_table" title="表格的搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+      <table-search-helper :row="tableShParams.row" :dataIndex="tableShParams.dataIndex" :callback="tableShParams.callback" @close="val => (this.visible_table = val)" />
+    </base-dialog>
   </div>
 </template>
 
@@ -42,10 +45,11 @@ import { notifyAction, confirmAction } from '@/utils';
 
 import SearchHelper from './searchHelper';
 import AddInfo from './addInfo';
+import TableSearchHelper from './tableSearchHelper';
 
 export default {
   name: 'JzyDemo',
-  components: { SearchHelper, AddInfo },
+  components: { SearchHelper, AddInfo, TableSearchHelper },
   mixins: [dictionary],
   data() {
     this.selectedKeys = [];
@@ -74,8 +78,11 @@ export default {
       tablePrint: {
         showLogo: true
       },
-      visible: false,
-      visible_panel: false
+      visible_filter: false,
+      visible_panel: false,
+      visible_table: false,
+      // 表格搜索帮助组件的参数
+      tableShParams: {}
     };
   },
   computed: {
@@ -101,7 +108,7 @@ export default {
                 <el-button
                   icon="el-icon-search"
                   onClick={() => {
-                    this.visible = !this.visible;
+                    this.visible_filter = true;
                   }}
                 />
               );
@@ -208,7 +215,7 @@ export default {
         {
           title: '姓名',
           dataIndex: 'person.name',
-          width: 150,
+          width: 200,
           required: true,
           sorter: true,
           filter: {
@@ -217,14 +224,15 @@ export default {
           editRender: row => {
             return {
               type: 'search-helper',
-              editable: false,
-              disabled: row.index === 2,
+              editable: true,
               extra: {
-                maxlength: 10
+                maxlength: 10,
+                disabled: row.index === 2
               },
               rules: [{ required: true, message: '姓名不能为空' }],
-              onClick: () => {
-                this.visible = !this.visible;
+              onClick: (cell, row, column, cb, ev) => {
+                this.tableShParams = { row, dataIndex: column.dataIndex, callback: cb };
+                this.visible_table = true;
               }
             };
           }
@@ -241,7 +249,7 @@ export default {
         {
           title: '年龄',
           dataIndex: 'person.age',
-          width: 150,
+          width: 100,
           sorter: true,
           filter: {
             type: 'range-number'
@@ -405,7 +413,7 @@ export default {
       if (typeof val !== 'undefined') {
         this.$topFilter.SET_FIELDS_VALUE({ a: val });
       }
-      this.visible = state;
+      this.visible_filter = state;
     },
     // 新建按钮
     addInfoHandle() {
@@ -423,8 +431,12 @@ export default {
       } catch (err) {}
     },
     // 关闭抽屉组件
-    closeDrawerHandle(state) {
+    closeDrawerHandle(state, val) {
       this.visible_panel = state;
+      if (val) {
+        // 执行表格刷新
+        this.fetch.params = Object.assign({}, this.fetch.params);
+      }
     }
   }
 };
