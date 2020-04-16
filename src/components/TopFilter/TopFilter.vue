@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 17:20:42
+ * @Last Modified time: 2020-04-16 21:48:53
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -258,6 +258,7 @@ export default {
             v-model={form[fieldName][0]}
             readonly={readonly}
             disabled={disabled}
+            placeholder={!disabled ? '开始值' : ''}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => onChange({ [startFieldName]: form[fieldName][0] })}
@@ -267,6 +268,7 @@ export default {
             v-model={form[fieldName][1]}
             readonly={readonly}
             disabled={disabled}
+            placeholder={!disabled ? '结束值' : ''}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => onChange({ [endFieldName]: form[fieldName][1] })}
@@ -291,6 +293,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            placeholder={!disabled ? '开始值' : ''}
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
@@ -306,6 +309,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
+            placeholder={!disabled ? '结束值' : ''}
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable

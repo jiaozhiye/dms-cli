@@ -21,11 +21,11 @@
       :columnsChange="columns => (this.columns = columns)"
       @dataChange="dataChangeHandle"
     >
-      <span>
+      <template slot="default">
         <el-button type="primary" icon="el-icon-plus" @click="addInfoHandle">新建</el-button>
         <web-print size="small" type="primary" :click="printHandle">pdf 打印</web-print>
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
-      </span>
+      </template>
     </VirtualTable>
     <base-dialog :visible.sync="visible_filter" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <search-helper @close="closeDialogHandle" />
