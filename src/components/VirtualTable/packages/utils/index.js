@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 22:46:54
+ * @Last Modified time: 2020-04-16 17:31:34
  */
 import _ from 'lodash';
 
@@ -254,10 +254,7 @@ export const contains = (root, target) => {
 };
 
 // 获取元素相对于 目标祖先元素 的位置
-export const getOffsetPos = (elem, container) => {
-  return getNodeOffset(elem, container, { left: 0, top: 0 });
-};
-function getNodeOffset(elem, container, rest) {
+export const getNodeOffset = (elem, container, rest = { left: 0, top: 0 }) => {
   if (elem) {
     const parentElem = elem.parentNode;
     rest.top += elem.offsetTop;
@@ -271,7 +268,7 @@ function getNodeOffset(elem, container, rest) {
     }
   }
   return rest;
-}
+};
 
 // 格式化 DOM 元素高度
 export const parseHeight = height => {

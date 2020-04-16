@@ -134,6 +134,7 @@ export default {
       }
       td {
         padding: 5px;
+        vertical-align: top;
         li {
           list-style: none;
           line-height: 28px;

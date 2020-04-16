@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 12:57:21
+ * @Last Modified time: 2020-04-16 17:31:33
  */
-import { getOffsetPos, deepFindColumn } from '../utils';
+import { getNodeOffset, deepFindColumn } from '../utils';
 import config from '../config';
 
 export default {
@@ -26,7 +26,7 @@ export default {
 
       const half = dom.offsetWidth / 2;
       const disX = ev.clientX;
-      const left = getOffsetPos(dom, $vTable).left - $$tableBody.$el.scrollLeft + half;
+      const left = getNodeOffset(dom, $vTable).left - $$tableBody.$el.scrollLeft + half;
 
       $vTable.classList.add('c--resize');
       target.style.left = `${left}px`;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 17:20:16
+ * @Last Modified time: 2020-04-16 17:37:22
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -134,14 +134,14 @@ export default {
     },
     createFormItemLabel(option) {
       const { form } = this;
-      const { label, type = 'SELECT', fieldName, options = {}, trueValue = '1', falseValue = '0', style = {}, disabled, onChange = noop } = option;
-      const { itemList } = options;
+      const { label, type = 'SELECT', fieldName, options = {}, style = {}, disabled, onChange = noop } = option;
+      const { itemList, trueValue = '1', falseValue = '0' } = options;
       return (
         <div class="label-wrap" style={{ ...style }}>
           {type === 'SELECT' && (
             <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={onChange}>
               {itemList.map(x => (
-                <el-option key={x.value} label={x.text} value={x.value} />
+                <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
               ))}
             </el-select>
           )}
@@ -808,10 +808,10 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox-group v-model={form[fieldName]} max={limit} style={{ ...style }} onChange={onChange}>
+          <el-checkbox-group v-model={form[fieldName]} max={limit} disabled={disabled} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => {
               return (
-                <el-checkbox key={x.value} label={x.value} disabled={disabled}>
+                <el-checkbox key={x.value} label={x.value} disabled={x.disabled}>
                   {x.text}
                 </el-checkbox>
               );
@@ -828,9 +828,9 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={onChange}>
+          <el-radio-group v-model={form[fieldName]} disabled={disabled} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => (
-              <el-radio key={x.value} label={x.value} disabled={disabled}>
+              <el-radio key={x.value} label={x.value} disabled={x.disabled}>
                 {x.text}
               </el-radio>
             ))}
@@ -1149,16 +1149,26 @@ export default {
         }
       }
     },
+    getNodeOffset(elem, container, rest = { left: 0, top: 0 }) {
+      if (elem) {
+        const parentElem = elem.parentNode;
+        rest.top += elem.offsetTop;
+        rest.left += elem.offsetLeft;
+        if (parentElem && parentElem !== document.documentElement && parentElem !== document.body) {
+          rest.top -= parentElem.scrollTop;
+          rest.left -= parentElem.scrollLeft;
+        }
+        if (container && (elem === container || elem.offsetParent === container) ? 0 : elem.offsetParent) {
+          return this.getNodeOffset(elem.offsetParent, container, rest);
+        }
+      }
+      return rest;
+    },
     // 计算目标元素相对于滚动容器的上边距
     calcOffsetTop(_id) {
-      let $target = document.getElementById(`fp-${_id}`);
-      let top = $target.offsetTop;
-      let $parent = $target.offsetParent;
-      while ($parent !== null && $parent !== this.scrollContainer) {
-        top += $parent.offsetTop;
-        $parent = $parent.offsetParent;
-      }
-      return top;
+      const $target = document.getElementById(`fp-${_id}`);
+      const $container = this.scrollContainer.offsetParent;
+      return this.getNodeOffset($target, $container).top - this.scrollContainer.offsetTop;
     },
     // 锚点定位没有通过校验的表单项
     createAnchorFixed(ids) {

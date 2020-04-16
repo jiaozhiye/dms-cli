@@ -142,7 +142,7 @@ export default {
           {type === 'SELECT' && (
             <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={onChange}>
               {itemList.map(x => (
-                <el-option key={x.value} label={x.text} value={x.value} />
+                <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
               ))}
             </el-select>
           )}
@@ -702,10 +702,10 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-checkbox-group v-model={form[fieldName]} max={limit} style={{ ...style }} onChange={onChange}>
+          <el-checkbox-group v-model={form[fieldName]} max={limit} disabled={disabled} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => {
               return (
-                <el-checkbox key={x.value} label={x.value} disabled={disabled}>
+                <el-checkbox key={x.value} label={x.value} disabled={x.disabled}>
                   {x.text}
                 </el-checkbox>
               );
@@ -722,9 +722,9 @@ export default {
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
-          <el-radio-group v-model={form[fieldName]} style={{ ...style }} onChange={onChange}>
+          <el-radio-group v-model={form[fieldName]} disabled={disabled} style={{ ...style }} onChange={onChange}>
             {itemList.map(x => (
-              <el-radio key={x.value} label={x.value} disabled={disabled}>
+              <el-radio key={x.value} label={x.value} disabled={x.disabled}>
                 {x.text}
               </el-radio>
             ))}

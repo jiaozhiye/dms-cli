@@ -149,7 +149,7 @@ export default {
           <el-button {...btnProps}>{$slots['default']}</el-button>
           {!$props.isOnlyButton ? (
             <div slot="tip" class="el-upload__tip">
-              {`只能上传 ${fileTypes.join(',')} 格式，文件大小不超过${fileSize}M`}
+              {`只能上传 ${fileTypes.join(',')} 格式，大小不超过${fileSize}M`}
             </div>
           ) : null}
         </el-upload>

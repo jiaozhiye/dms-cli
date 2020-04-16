@@ -107,7 +107,7 @@ export default {
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     createStyles(slots) {
-      const hdHeight = '68px';
+      const hdHeight = '48px';
       const ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
       const dialogBodyHeight = this.fullscreen
         ? {
@@ -117,9 +117,9 @@ export default {
             maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${ftHeight} - ${hdHeight})`
           };
       return {
-        overflowY: 'auto',
         minHeight: '150px',
-        ...dialogBodyHeight
+        ...dialogBodyHeight,
+        overflowY: 'auto'
       };
     },
     isIE() {
@@ -151,7 +151,7 @@ export default {
         </span>
         {Object.keys($slots).map(name => (
           <section key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
-            <div class="container" style={containerStyle}>
+            <div class="container" style={{ ...containerStyle }}>
               {$slots[name]}
             </div>
           </section>
@@ -183,7 +183,7 @@ export default {
       }
     }
     .el-dialog__body {
-      padding: 10px 0;
+      padding: 0;
       .fullscreen-btn {
         position: absolute;
         right: 35px;
@@ -195,8 +195,8 @@ export default {
         }
       }
       .container {
-        height: 100%;
-        padding: 0 10px;
+        margin: 10px;
+        box-sizing: border-box;
       }
     }
     .el-dialog__footer {

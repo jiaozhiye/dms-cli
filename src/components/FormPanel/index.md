@@ -2,15 +2,15 @@
 
 ### FormPanel
 
-| 参数            | 说明                                                     | 类型                | 默认值  |
-| --------------- | -------------------------------------------------------- | ------------------- | ------- |
-| list            | 表单组件数据数组，[配置项](#formItem)，必要参数          | array               | -       |
-| initialValue    | 表单组件的初始值，只在组件首次加载时生效                 | obkect              | -       |
-| formType        | 表单的类型                                               | default \| onlyShow | default |
-| cols            | 每行显示的列数，只能是被 24 整除的值                     | number              | 3       |
-| labelWidth      | label 标签的宽度，单位 px                                | number              | 80      |
-| scrollContainer | 具有滚动条的容器(有定位属性)，用于表单校验信息的锚点定位 | HTMLNode            | -       |
-| isSubmitBtn     | 是否显示保存、重置按钮                                   | boolean             | false   |
+| 参数            | 说明                                            | 类型                | 默认值  |
+| --------------- | ----------------------------------------------- | ------------------- | ------- |
+| list            | 表单组件数据数组，[配置项](#formItem)，必要参数 | array               | -       |
+| initialValue    | 表单组件的初始值，只在组件首次加载时生效        | obkect              | -       |
+| formType        | 表单的类型                                      | default \| onlyShow | default |
+| cols            | 每行显示的列数，只能是被 24 整除的值            | number              | 3       |
+| labelWidth      | label 标签的宽度，单位 px                       | number              | 80      |
+| scrollContainer | 具有滚动条的容器，用于表单校验信息的锚点定位    | HTMLNode            | -       |
+| isSubmitBtn     | 是否显示保存、重置按钮                          | boolean             | false   |
 
 ### 事件
 
@@ -85,34 +85,35 @@
 
 ### options
 
-| 参数        | 说明                                                          | 类型                                 | 默认值   |
-| ----------- | ------------------------------------------------------------- | ------------------------------------ | -------- |
-| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX  | array                                | -        |
-| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX | bool                                 | false    |
-| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX      | number                               | -        |
-| rows        | 文本域的行数 - TEXT_AREA                                      | number                               | -        |
-| minlength   | 原生属性，最小输入长度 - INPUT                                | number                               | 0        |
-| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                      | number                               | 200      |
-| pattern     | 表单元素值得正则格式校验                                      | regExp                               | -        |
-| secretType  | 字段值的保密类型，并切在只读或禁用的状态下有效 - INPUT        | finance \| name \| phone \| IDnumber | -        |
-| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               | 0        |
-| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                      | number                               |          |
-| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER              | number                               | 1        |
-| trueValue   | 选中的值 - CHECKBOX                                           | number \| string                     | 1        |
-| falseValue  | 非中的值 - CHECKBOX                                           | number \| string                     | 0        |
-| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                    | number                               | -        |
-| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE         | string                               | -        |
-| minDateTime | 最小日期，小于该时间的日期段将被禁用                          | string                               | -        |
-| maxDateTime | 最大日期，大于该时间的日期段将被禁用                          | string                               | -        |
-| defaultTime | 默认的时间，格式 HH:mm:ss                                     | string                               | -        |
-| startTime   | 开始时间 - TIME_SELECT                                        | string                               | 00:00    |
-| endTime     | 结束时间 - TIME_SELECT                                        | string                               | 23:45    |
-| stepTime    | 时间变化的步长 - TIME_SELECT                                  | string                               | 00:15    |
-| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER       | array                                | -        |
-| onInput     | 输入框 input 事件的回调 - INPUT                               | func                                 | -        |
-| onEnter     | 输入框回车事件的回调 - INPUT                                  | func                                 | -        |
-| onFocus     | 输入框获得焦点事件的回调 - INPUT                              | func                                 | -        |
-| unitRender  | 输入框后置内容的渲染方法 - INPUT                              | func                                 | JSX Node |
+| 参数        | 说明                                                             | 类型                                 | 默认值   |
+| ----------- | ---------------------------------------------------------------- | ------------------------------------ | -------- |
+| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX     | array                                | -        |
+| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX    | bool                                 | false    |
+| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX         | number                               | -        |
+| rows        | 文本域的行数 - TEXT_AREA                                         | number                               | -        |
+| minlength   | 原生属性，最小输入长度 - INPUT                                   | number                               | 0        |
+| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                         | number                               | 200      |
+| pattern     | 表单元素值得正则格式校验                                         | regExp                               | -        |
+| secretType  | 字段值的保密类型，并切在只读或禁用的状态下有效 - INPUT           | finance \| name \| phone \| IDnumber | -        |
+| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               | 0        |
+| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               |          |
+| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER                 | number                               | 1        |
+| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                       | number                               | -        |
+| disabled    | 是否禁用列表项 - SELECT/MULTIPLE_SELECT/MULTIPLE_CHECKBOX/RADIO/ | boolean                              | false    |
+| trueValue   | 选中的值 - CHECKBOX                                              | number \| string                     | 1        |
+| falseValue  | 非中的值 - CHECKBOX                                              | number \| string                     | 0        |
+| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE            | string                               | -        |
+| minDateTime | 最小日期，小于该时间的日期段将被禁用                             | string                               | -        |
+| maxDateTime | 最大日期，大于该时间的日期段将被禁用                             | string                               | -        |
+| defaultTime | 默认的时间，格式 HH:mm:ss                                        | string                               | -        |
+| startTime   | 开始时间 - TIME_SELECT                                           | string                               | 00:00    |
+| endTime     | 结束时间 - TIME_SELECT                                           | string                               | 23:45    |
+| stepTime    | 时间变化的步长 - TIME_SELECT                                     | string                               | 00:15    |
+| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER          | array                                | -        |
+| onInput     | 输入框 input 事件的回调 - INPUT                                  | func                                 | -        |
+| onEnter     | 输入框回车事件的回调 - INPUT                                     | func                                 | -        |
+| onFocus     | 输入框获得焦点事件的回调 - INPUT                                 | func                                 | -        |
+| unitRender  | 输入框后置内容的渲染方法 - INPUT                                 | func                                 | JSX Node |
 
 ### dateType
 
@@ -129,13 +130,13 @@
 
 ### labelOption
 
-| 参数      | 说明                              | 类型    | 默认值 |
-| --------- | --------------------------------- | ------- | ------ |
-| fieldName | 表单项字段 key                    | string  | -      |
-| itemList  | 下拉框的数据列表，[配置项](#item) | array   | -      |
-| style     | 表单元素的 css 样式               | object  | -      |
-| disabled  | 是否禁用                          | boolean | false  |
-| onChange  | checkbox 或 select 值变化的回调   | func    | -      |
+| 参数      | 说明                                 | 类型    | 默认值 |
+| --------- | ------------------------------------ | ------- | ------ |
+| fieldName | 表单项字段 key                       | string  | -      |
+| options   | 表单元素的外配置，[配置项](#options) | object  | -      |
+| style     | 表单元素的 css 样式                  | object  | -      |
+| disabled  | 是否禁用                             | boolean | false  |
+| onChange  | checkbox 或 select 值变化的回调      | func    | -      |
 
 ### descOption
 

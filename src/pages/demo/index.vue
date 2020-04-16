@@ -26,13 +26,13 @@
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </span>
     </VirtualTable>
-    <base-dialog :visible.sync="visible_filter" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+    <base-dialog :visible.sync="visible_filter" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <search-helper @close="closeDialogHandle" />
     </base-dialog>
-    <drawer :visible.sync="visible_panel" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+    <drawer :visible.sync="visible_panel" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <add-info @close="closeDrawerHandle" />
     </drawer>
-    <base-dialog :visible.sync="visible_table" title="表格的搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', overflow: 'auto', paddingBottom: '52px' }">
+    <base-dialog :visible.sync="visible_table" title="表格的搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <table-search-helper :row="tableShParams.row" :dataIndex="tableShParams.dataIndex" :callback="tableShParams.callback" @close="val => (this.visible_table = val)" />
     </base-dialog>
   </div>

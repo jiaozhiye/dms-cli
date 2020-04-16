@@ -186,7 +186,7 @@ export default {
           <div class="container">
             {isVisible && $slots[`default`]}
             {loading && (
-              <div class="loading" style={{ height: `calc(100vh - 110px)` }}>
+              <div class="loading">
                 <Spin spinning={loading} tip="Loading..." />
               </div>
             )}
@@ -219,7 +219,7 @@ export default {
   .drawer-container {
     position: fixed;
     visibility: hidden;
-    background-color: rgb(255, 255, 255);
+    background-color: #fff;
     transition: all 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
     .header {
@@ -228,7 +228,6 @@ export default {
       position: relative;
       height: 48px;
       padding: 0 15px;
-      background: #fff;
       box-sizing: border-box;
       border-bottom: 1px solid @borderColor;
       border-radius: @borderRadius @borderRadius 0 0;
@@ -252,9 +251,12 @@ export default {
       }
     }
     .container {
+      height: calc(100% - 48px);
       padding: 10px 15px;
-      word-wrap: break-word;
+      overflow-y: auto;
+      box-sizing: border-box;
       .loading {
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
