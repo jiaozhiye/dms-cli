@@ -23,7 +23,8 @@
     >
       <template slot="default">
         <el-button type="primary" icon="el-icon-plus" @click="addInfoHandle">新建</el-button>
-        <web-print size="small" type="primary" :click="printHandle">pdf 打印</web-print>
+        <web-print :click="printHandle">pdf 打印</web-print>
+        <el-button icon="el-icon-printer" @click="printHandle2">插件打印</el-button>
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </template>
     </VirtualTable>
@@ -36,6 +37,7 @@
     <base-dialog :visible.sync="visible_table" title="表格的搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <table-search-helper :row="tableShParams.row" :dataIndex="tableShParams.dataIndex" :callback="tableShParams.callback" @close="val => (this.visible_table = val)" />
     </base-dialog>
+    <base-print ref="print" :data="printList" :isPreview="false" template="demo/template" />
   </div>
 </template>
 
@@ -47,6 +49,8 @@ import { notifyAction, confirmAction, sleep } from '@/utils';
 import SearchHelper from './searchHelper';
 import AddInfo from './addInfo';
 import TableSearchHelper from './tableSearchHelper';
+
+import printData from '@/mock/printData';
 
 export default {
   name: 'JzyDemo',
@@ -79,6 +83,7 @@ export default {
       tablePrint: {
         showLogo: true
       },
+      printList: printData.data,
       visible_filter: false,
       visible_panel: false,
       visible_table: false,
@@ -443,6 +448,9 @@ export default {
     async printHandle() {
       await sleep(1000);
       return '/static/webPrint/20200415.pdf';
+    },
+    printHandle2() {
+      this.$refs.print.EXCUTE_PRINT();
     }
   }
 };
