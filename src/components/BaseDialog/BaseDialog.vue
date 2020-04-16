@@ -72,6 +72,9 @@ export default {
     };
   },
   computed: {
+    delayTime() {
+      return !this.isIE() ? 300 : 400;
+    },
     isShowDialog() {
       return this.destroyOnClose ? this.isVisible : true;
     }
@@ -84,7 +87,7 @@ export default {
         setTimeout(() => {
           this.isVisible = false;
           this.fullscreen = false;
-        }, 300);
+        }, this.delayTime);
       }
     }
   },
@@ -118,6 +121,9 @@ export default {
         minHeight: '150px',
         ...dialogBodyHeight
       };
+    },
+    isIE() {
+      return !!window.ActiveXObject || 'ActiveXObject' in window;
     }
   },
   render() {
