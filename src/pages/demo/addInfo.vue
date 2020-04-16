@@ -131,7 +131,7 @@ export default {
         },
         {
           type: 'INPUT_TREE',
-          label: '所属机构',
+          label: '表单项10',
           fieldName: 'k',
           options: {
             itemList: [
@@ -189,7 +189,7 @@ export default {
         },
         {
           type: 'SELECT',
-          label: '表单项10',
+          label: '表单项11',
           fieldName: 'l',
           options: {
             filterable: true
@@ -203,7 +203,7 @@ export default {
         },
         {
           type: 'MULTIPLE_SELECT',
-          label: '表单项11',
+          label: '表单项12',
           fieldName: 'm',
           options: {
             itemList: [
@@ -216,7 +216,7 @@ export default {
         {
           type: 'UPLOAD_FILE',
           label: '上传文件',
-          fieldName: 'wayFiles',
+          fieldName: 'n',
           upload: {
             actionUrl: '/api/file/oss/upload',
             limit: 2,
@@ -226,8 +226,8 @@ export default {
         },
         {
           type: 'UPLOAD_IMG',
-          label: '上传身份证',
-          fieldName: 'wayPicture',
+          label: '上传图片',
+          fieldName: 'o',
           upload: {
             actionUrl: '/api/file/oss/upload',
             fixedSize: [5, 3],
