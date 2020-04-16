@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 11:01:21
+ * @Last Modified time: 2020-04-16 21:36:44
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -255,16 +255,21 @@ export default {
     border-radius: 0;
     pointer-events: none;
     .el-upload-list__item {
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 148px;
       height: 100%;
-      line-height: inherit;
       margin: 0 10px 0 0;
       border-radius: @borderRadius;
       background-color: #fff;
-      border: 1px dashed #c0ccda;
+      border: 1px dashed #c0c0c0;
       pointer-events: auto !important;
       overflow: hidden;
+      transition: all 0.3s ease;
+      &:hover {
+        border-color: #a0a0a0;
+      }
       .title {
         position: absolute;
         width: 100%;
@@ -275,7 +280,7 @@ export default {
         bottom: 0;
         line-height: 20px;
         color: #fff;
-        font-size: 12px;
+        font-size: @textSizeSecondary;
       }
       .img {
         display: block;
@@ -294,7 +299,7 @@ export default {
         cursor: default;
         opacity: 0;
         background-color: rgba(0, 0, 0, 0.5);
-        transition: all 0.3s;
+        transition: all 0.3s ease;
         &:hover {
           opacity: 1;
         }
@@ -308,12 +313,6 @@ export default {
             color: #fff;
           }
         }
-      }
-    }
-    .upload-icon-plus {
-      transition: none;
-      i {
-        vertical-align: middle;
       }
     }
   }

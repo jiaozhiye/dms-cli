@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 14:58:17
+ * @Last Modified time: 2020-04-16 21:21:41
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -56,16 +56,14 @@ export default {
       type: Boolean,
       default: false
     },
-    footerHeight: {
-      type: [Number, String],
-      default: 53
-    },
     containerStyle: {
       type: Object,
       default: () => ({})
     }
   },
   data() {
+    this.hdHeight = 48;
+    this.ftHeight = 52;
     return {
       isVisible: this.visible,
       fullscreen: false
@@ -107,19 +105,18 @@ export default {
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     createStyles(slots) {
-      const hdHeight = '48px';
-      const ftHeight = Object.keys(slots).includes('footer') ? `${this.footerHeight}px` : '0px';
+      const ftHeight = Object.keys(slots).includes('footer') ? this.ftHeight : 0;
       const dialogBodyHeight = this.fullscreen
         ? {
-            height: `calc(100vh - ${ftHeight} - ${hdHeight})`
+            height: `calc(100vh - ${this.hdHeight}px - ${ftHeight}px)`
           }
         : {
-            maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${ftHeight} - ${hdHeight})`
+            maxHeight: `calc(100vh - ${this.top} - ${this.top} - ${this.hdHeight}px - ${ftHeight}px)`
           };
       return {
-        minHeight: '150px',
+        minHeight: `150px`,
         ...dialogBodyHeight,
-        overflowY: 'auto'
+        overflowY: `auto`
       };
     },
     isIE() {
@@ -144,6 +141,7 @@ export default {
       // drag -> 拖拽指令
       directives: dragable ? [{ name: 'drag' }] : null
     };
+    const extraStyle = fullscreen ? { paddingBottom: `10px` } : null;
     return this.isShowDialog ? (
       <el-dialog class="v-dialog--wrapper" {...wrapProps}>
         <span key="fullscreen" class="fullscreen-btn" onClick={this.handleClick}>
@@ -151,7 +149,7 @@ export default {
         </span>
         {Object.keys($slots).map(name => (
           <section key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
-            <div class="container" style={{ ...containerStyle }}>
+            <div class="container" style={{ ...containerStyle, ...extraStyle }}>
               {$slots[name]}
             </div>
           </section>
@@ -195,7 +193,9 @@ export default {
         }
       }
       .container {
-        margin: 10px;
+        height: 100%;
+        padding: 10px;
+        overflow-y: auto;
         box-sizing: border-box;
       }
     }

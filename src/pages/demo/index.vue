@@ -23,6 +23,7 @@
     >
       <span>
         <el-button type="primary" icon="el-icon-plus" @click="addInfoHandle">新建</el-button>
+        <web-print size="small" type="primary" :click="printHandle">pdf 打印</web-print>
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </span>
     </VirtualTable>
@@ -41,7 +42,7 @@
 <script>
 import { dictionary } from '@/mixins/dictMixin';
 
-import { notifyAction, confirmAction } from '@/utils';
+import { notifyAction, confirmAction, sleep } from '@/utils';
 
 import SearchHelper from './searchHelper';
 import AddInfo from './addInfo';
@@ -364,7 +365,7 @@ export default {
         {
           title: '业余爱好',
           dataIndex: 'hobby',
-          width: 200,
+          width: 150,
           filter: {
             type: 'checkbox',
             items: [
@@ -437,6 +438,11 @@ export default {
         // 执行表格刷新
         this.fetch.params = Object.assign({}, this.fetch.params);
       }
+    },
+    // 打印方法
+    async printHandle() {
+      await sleep(1000);
+      return '/static/webPrint/20200415.pdf';
     }
   }
 };

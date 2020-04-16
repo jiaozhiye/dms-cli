@@ -238,7 +238,9 @@ export default {
         position: absolute;
         padding: 5px;
         right: 10px;
+        top: 10px;
         color: @textColorSecondary;
+        line-height: 1;
         cursor: pointer;
         transition: color 0.3s ease;
         &:hover {

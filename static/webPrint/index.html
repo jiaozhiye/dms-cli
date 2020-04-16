@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>打印预览</title>
+    <title>Web 打印预览</title>
     <style>
       * {
         margin: 0;
@@ -43,7 +43,7 @@
         window.open('/static/webPrint/pdf/web/viewer.html?file=' + fileUrl);
       }
       var urlParams = getSearchParams();
-      var fileUrl = urlParams.file || '/static/webPrint/111.pdf';
+      var fileUrl = urlParams.file || '/static/webPrint/20200415.pdf';
       document.title = urlParams.title || '打印预览';
     </script>
   </head>
