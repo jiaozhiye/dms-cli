@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 10:19:54
+ * @Last Modified time: 2020-04-17 22:36:31
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
@@ -32,7 +32,7 @@ export default {
     const { $slots = {}, $route, collapsed, asideWidth } = this;
     const bgColor = $route.meta.bgColor ? 'bg-color' : '';
     return (
-      <el-container class="layout">
+      <el-container id="app" class="layout">
         <el-aside class="sidebar" style={{ width: asideWidth }}>
           <SideMenu collapsed={collapsed} />
         </el-aside>

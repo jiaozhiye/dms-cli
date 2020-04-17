@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 14:36:42
+ * @Last Modified time: 2020-04-17 22:38:41
  */
 import Vue from 'vue';
-import App from './App.vue';
+import App from './app';
 import router from '@/routes';
 import store from '@/store';
 import '@/filters';
