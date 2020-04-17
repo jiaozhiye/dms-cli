@@ -28,14 +28,14 @@
         <el-button type="danger" icon="el-icon-delete" @click="removeHandle">删除</el-button>
       </template>
     </VirtualTable>
-    <base-dialog :visible.sync="visible_filter" title="搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
+    <base-dialog :visible.sync="visible_filter" title="表单搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <search-helper @close="closeDialogHandle" />
     </base-dialog>
     <drawer :visible.sync="visible_panel" title="标题名称" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
       <add-info @close="closeDrawerHandle" />
     </drawer>
     <base-dialog :visible.sync="visible_table" title="表格的搜索帮助" destroy-on-close :container-style="{ height: 'calc(100% - 52px)', paddingBottom: '52px' }">
-      <table-search-helper :row="tableShParams.row" :dataIndex="tableShParams.dataIndex" :callback="tableShParams.callback" @close="val => (this.visible_table = val)" />
+      <table-search-helper :row="tableShProps.row" :dataIndex="tableShProps.dataIndex" :callback="tableShProps.callback" @close="val => (this.visible_table = val)" />
     </base-dialog>
     <base-print ref="print" :data="printList" :isPreview="false" template="demo/template" />
   </div>
@@ -88,7 +88,7 @@ export default {
       visible_panel: false,
       visible_table: false,
       // 表格搜索帮助组件的参数
-      tableShParams: {}
+      tableShProps: {}
     };
   },
   computed: {
@@ -237,7 +237,7 @@ export default {
               },
               rules: [{ required: true, message: '姓名不能为空' }],
               onClick: (cell, row, column, cb, ev) => {
-                this.tableShParams = { row, dataIndex: column.dataIndex, callback: cb };
+                this.tableShProps = { row, dataIndex: column.dataIndex, callback: cb };
                 this.visible_table = true;
               }
             };
