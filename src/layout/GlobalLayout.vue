@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-17 22:36:31
+ * @Last Modified time: 2020-04-17 22:47:04
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
@@ -59,14 +59,14 @@ export default {
 .layout {
   height: 100%;
   .sidebar {
-    transition: width 0.3s;
+    transition: width 0.3s ease;
     overflow: visible;
   }
   .container {
     padding: 0 10px;
   }
   .bg-color {
-    background-color: #f0f2f5;
+    background-color: @backgroundColorSecondary;
   }
 }
 </style>
