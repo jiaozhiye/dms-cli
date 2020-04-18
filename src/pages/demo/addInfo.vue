@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       formList: this.createFormList(),
-      formValue: { aa: '1' }
+      formValue: { p: '1' }
     };
   },
   computed: {
@@ -46,7 +46,7 @@ export default {
           label: '表单项1',
           fieldName: 'a',
           labelOptions: {
-            fieldName: 'aa',
+            fieldName: 'p',
             options: {
               itemList: [
                 { text: '选项1', value: '1' },
@@ -54,7 +54,7 @@ export default {
               ]
             }
           },
-          rules: [{ required: true, message: '请输入', trigger: 'change' }]
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }]
         },
         {
           type: 'SELECT',

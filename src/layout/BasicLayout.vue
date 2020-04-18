@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:09:53
+ * @Last Modified time: 2020-04-18 21:47:10
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapState('app', ['keepAliveNames']),
     cachedNames() {
-      return [...this.keepAliveNames.map(x => x.value)];
+      return this.keepAliveNames.map(x => x.value);
     },
     key() {
       return this.$route.fullPath;

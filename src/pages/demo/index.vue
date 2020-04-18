@@ -53,7 +53,7 @@ import TableSearchHelper from './tableSearchHelper';
 import printData from '@/mock/printData';
 
 export default {
-  name: 'JzyDemo',
+  name: 'DemoJzy',
   components: { SearchHelper, AddInfo, TableSearchHelper },
   mixins: [dictionary],
   data() {

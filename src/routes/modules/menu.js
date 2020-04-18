@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 20:19:51
+ * @Last Modified time: 2020-04-18 21:39:19
  */
 import { asyncLoadComponent } from '@/utils';
 
@@ -73,7 +73,6 @@ export default [
     meta: { title: '车辆资源管理', keepAlive: true },
     component: asyncLoadComponent('dashboard/index')
   },
-
   {
     path: '/kfgl/hf/xs',
     meta: { title: '销售回访', keepAlive: true },
