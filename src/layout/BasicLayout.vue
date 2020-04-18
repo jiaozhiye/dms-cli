@@ -3,14 +3,22 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 19:22:47
+ * @Last Modified time: 2020-04-18 20:05:32
  */
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
-import RouteView from './RouteView';
 
 export default {
   name: 'BasicLayout',
+  computed: {
+    ...mapState('app', ['keepAliveNames']),
+    cachedNames() {
+      return [...this.keepAliveNames.map(x => x.value)];
+    },
+    key() {
+      return this.$route.fullPath;
+    }
+  },
   mounted() {
     // 登录后，获取所有的数据字典值
     this.createDictData();
@@ -25,9 +33,11 @@ export default {
   render() {
     return (
       <GlobalLayout>
-        <transition name="page-transition" mode="out-in">
-          <RouteView />
-        </transition>
+        {/* <transition name="fade-transform" mode="out-in"> */}
+        <keep-alive include={this.cachedNames}>
+          <router-view key={this.key} />
+        </keep-alive>
+        {/* </transition> */}
       </GlobalLayout>
     );
   }
@@ -35,14 +45,28 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-transition-enter-active {
+/* fade-transition */
+.fade-transition-enter-active {
   transition: all 0.3s ease-in;
 }
-.page-transition-leave-active {
+.fade-transition-leave-active {
   transition: all 0.3s ease-out;
 }
-.page-transition-enter,
-.page-transition-leave-to {
+.fade-transition-enter,
+.fade-transition-leave-to {
   opacity: 0;
+}
+/* fade-transform */
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all 0.3s;
+}
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
 }
 </style>

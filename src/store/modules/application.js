@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 14:03:09
+ * @Last Modified time: 2020-04-18 19:28:44
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -12,12 +12,11 @@ import { setToken, setUser } from '@/utils/cookies';
 import localDict from '@/utils/localDict';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
 
-// 数组的递归查找
-const deepFind = (arr, mark) => {
+const deepMapRoutes = (arr, mark) => {
   let res = null;
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray(arr[i].children)) {
-      res = deepFind(arr[i].children, mark);
+      res = deepMapRoutes(arr[i].children, mark);
     }
     if (res) {
       return res;
@@ -29,31 +28,28 @@ const deepFind = (arr, mark) => {
   return res;
 };
 
-// 给导航数据添加图标属性
-const formateNavList = (list, routes) => {
-  list.forEach(x => {
-    if (Array.isArray(x.children)) {
-      formateNavList(x.children, routes);
-    }
-    let target = deepFind(routes, x.key) || {};
-    // 图标
-    target.meta && (x.icon = target.meta.icon);
-    // 隐藏菜单
-    target.hideInMenu && (x.hideInMenu = true);
-  });
-};
-
-// 提取可点击的菜单项
-const formateMenu = list => {
+const flatMapMenus = list => {
   const res = [];
   list.forEach(x => {
     if (Array.isArray(x.children)) {
-      res.push(...formateMenu(x.children));
+      res.push(...flatMapMenus(x.children));
     } else {
       res.push(x);
     }
   });
   return res;
+};
+
+const formateNavList = (list, routes) => {
+  list.forEach(x => {
+    if (Array.isArray(x.children)) {
+      x.children.forEach(sub => (sub.parentKey = x.key));
+      formateNavList(x.children, routes);
+    }
+    let target = deepMapRoutes(routes, x.key) || {};
+    // 隐藏菜单
+    target.hideInMenu && (x.hideInMenu = true);
+  });
 };
 
 // state
@@ -103,13 +99,9 @@ const actions = {
         return router.push({ path: '/' }).catch(() => {});
       }
     }
-    // 处理导航图标
     formateNavList(data, router.options.routes);
     commit({ type: types.NAVLIST, data });
-    commit({
-      type: types.MENULIST,
-      data: formateMenu(data)
-    });
+    commit({ type: types.MENULIST, data: flatMapMenus(data) });
     return true;
   },
   clearNavList({ dispatch, commit, state }, params) {

@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 23:00:24
+ * @Last Modified time: 2020-04-18 18:32:02
  */
 export default [
   {
     title: '备件管理',
     key: '/bjgl',
+    icon: 'icon-shop',
     children: [
       {
         title: '采购管理',
@@ -16,7 +17,7 @@ export default [
           {
             title: '备件采购订单',
             key: '/bjgl/cggl/dd',
-            permission: ['/api/aaa', '/api/bbb/*']
+            permission: ['save', 'update']
           },
           {
             title: '备件采购入库',
@@ -43,6 +44,7 @@ export default [
   {
     title: '销售管理',
     key: '/xsgl',
+    icon: 'icon-barchart',
     children: [
       {
         title: '线索管理',
@@ -107,6 +109,7 @@ export default [
   {
     title: '客服管理',
     key: '/kfgl',
+    icon: 'icon-customerservice',
     children: [
       {
         title: '回访',

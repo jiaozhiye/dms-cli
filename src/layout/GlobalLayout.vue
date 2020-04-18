@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-17 22:47:04
+ * @Last Modified time: 2020-04-18 17:23:45
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
@@ -63,7 +63,8 @@ export default {
     overflow: visible;
   }
   .container {
-    padding: 0 10px;
+    padding: 0 @modulePadding;
+    overflow-x: hidden;
   }
   .bg-color {
     background-color: @backgroundColorSecondary;

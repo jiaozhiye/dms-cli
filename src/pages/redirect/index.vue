@@ -2,15 +2,13 @@
 export default {
   name: 'Redirect',
   beforeCreate() {
-    const {
-      params: { path },
-      query
-    } = this.$route;
+    const { params, query } = this.$route;
+    const { path } = params;
     // refresh view
     this.$router.replace({ path: `/${path}`, query }).catch(() => {});
   },
-  render() {
-    return null;
+  render(h) {
+    return h();
   }
 };
 </script>

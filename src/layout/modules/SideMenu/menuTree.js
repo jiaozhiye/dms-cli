@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 10:17:08
+ * @Last Modified time: 2020-04-18 18:21:16
  */
 import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
@@ -48,12 +48,12 @@ export default {
           const isHttpLink = /^https?:\/\//.test(key);
           const menuItemNode = !isHttpLink ? (
             <template slot="title">
-              {icon && <i class={icon} />}
+              {icon && <i class={`iconfont ${icon}`} />}
               <span title={title}>{title}</span>
             </template>
           ) : (
             <a href={key} title={title} target="_blank">
-              {icon && <i class={icon} />}
+              {icon && <i class={`iconfont ${icon}`} />}
               <span>{item.title}</span>
             </a>
           );

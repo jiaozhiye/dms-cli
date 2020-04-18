@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 12:04:10
+ * @Last Modified time: 2020-04-18 18:06:02
  */
 import router from '@/routes';
 import store from '@/store';
@@ -12,15 +12,17 @@ import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
 import { Notification } from 'element-ui';
 
+NProgress.configure({ showSpinner: false });
+
 // 访问白名单
 const whiteList = ['/login'];
 
 // 权限白名单
 const whiteAuth = ['/login', '/home', '/redirect', '/404'];
 
-// 阻止跳转
-const noJump = next => {
-  next(false);
+// 路由重定向
+const redirect = (next, path) => {
+  path ? next({ path }) : next(false);
   NProgress.done();
 };
 
@@ -37,16 +39,12 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (isLogin()) {
     if (to.path === '/login') {
-      next({ path: '/' });
+      redirect('/');
     } else {
       if (!store.state.app.navList.length) {
         // 通过 vuex 管理导航数据
-        const res = await store.dispatch('app/createNavList');
-        if (res) {
-          next({ ...to, replace: true });
-        } else {
-          return noJump(next);
-        }
+        const bool = await store.dispatch('app/createNavList');
+        bool ? next({ ...to, replace: true }) : redirect(false);
       } else {
         let { tabMenuList } = store.state.app;
         if (tabMenuList.length >= config.maxCacheNum && !tabMenuList.some(x => x.key === to.path)) {
@@ -54,14 +52,14 @@ router.beforeEach(async (to, from, next) => {
             title: '提示信息',
             message: `最多支持 ${config.maxCacheNum} 个菜单项！`
           });
-          return noJump(next);
+          return redirect(false);
         }
         let isAuth = await store.dispatch('app/checkAuthority', to.path);
         // 权限校验
         if (isAuth || whiteAuth.some(x => to.path.startsWith(x))) {
           next();
         } else {
-          next({ path: '/404' });
+          redirect('/404');
         }
       }
     }
@@ -72,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.includes(to.path)) {
       next();
     } else {
-      next({ path: '/login' });
+      redirect('/login');
     }
   }
 });
