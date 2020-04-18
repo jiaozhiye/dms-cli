@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-02 10:36:43
+ * @Last Modified time: 2020-04-18 22:13:01
  */
 'use strict';
 const path = require('path');
@@ -28,7 +28,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost',
-    port: 8081,
+    port: 8080,
     autoOpenBrowser: true,
 
     // Use Eslint
