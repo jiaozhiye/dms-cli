@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-08 17:51:59
+ * @Last Modified time: 2020-04-18 21:14:44
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
@@ -163,7 +163,7 @@ export default {
     this.$tablebody.addEventListener('scroll', this.scrollEventHandle, false);
     document.addEventListener('click', this.documentEventHandle, false);
   },
-  beforeDestroy() {
+  destroyed() {
     this.$tablebody.removeEventListener('scroll', this.scrollEventHandle);
     document.removeEventListener('click', this.documentEventHandle);
     this.$tablebody = null;

@@ -304,7 +304,7 @@ export default {
     this.bindDocumentEvent();
     this.bindWindowResizeEvent();
   },
-  beforeDestroy() {
+  destroyed() {
     // 解绑事件，防止内存泄漏
     window.removeEventListener('resize', this.calcTableHeight);
     document.removeEventListener('keydown', this.keyboardEventHandle);

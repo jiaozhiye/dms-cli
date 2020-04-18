@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-01 20:46:07
+ * @Last Modified time: 2020-04-18 21:15:44
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -52,7 +52,7 @@ export default {
     this.$multiTab = this.$refs.multiTab.$el;
     this.bindContextmenuEvent();
   },
-  beforeDestroy() {
+  destroyed() {
     this.eventHandler.remove();
   },
   methods: {

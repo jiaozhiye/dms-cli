@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:23:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-17 22:12:08
+ * @Last Modified time: 2020-04-18 21:16:06
  */
 import Sortable from './sortable';
 
@@ -245,7 +245,7 @@ const draggableComponent = {
     this.computeIndexes();
   },
 
-  beforeDestroy() {
+  destroyed() {
     if (this._sortable !== undefined) this._sortable.destroy();
   },
 

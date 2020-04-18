@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 14:57:03
+ * @Last Modified time: 2020-04-18 21:14:38
  **/
 export default {
   name: 'Anchor',
@@ -34,7 +34,7 @@ export default {
     this.setPositionArr();
     this.bindScrollEvent();
   },
-  beforeDestroy() {
+  destroyed() {
     // 移除事件监听
     this.scroll.removeEventListener('scroll', this.scrollEventHandle);
   },

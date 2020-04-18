@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 22:05:14
+ * @Last Modified time: 2020-04-18 21:15:19
  **/
 import addEventListener from 'add-dom-event-listener';
 import Spin from '@/components/Spin';
@@ -45,7 +45,7 @@ export default {
   mounted() {
     this.initial();
   },
-  beforeDestroy() {
+  destroyed() {
     this.tIframeEvent && this.tIframeEvent.remove();
     this.sIframeEvent && this.sIframeEvent.remove();
   },

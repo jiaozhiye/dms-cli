@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 16:02:12
+ * @Last Modified time: 2020-04-18 21:14:41
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -65,7 +65,7 @@ export default {
     // 动态加载组件
     this.$options.component = () => import(`@/pages/printTemplate/${this.templatePath}`);
   },
-  beforeDestroy() {
+  destroyed() {
     // 释放内存
     this.LODOP = null;
   },

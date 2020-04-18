@@ -50,7 +50,7 @@ export default {
   mounted() {
     this.initial();
   },
-  beforeDestroy() {
+  destroyed() {
     if (this.myChart) {
       this.myChart.dispose();
     }

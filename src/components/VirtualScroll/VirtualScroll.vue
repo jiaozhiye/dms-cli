@@ -49,7 +49,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-25 20:12:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 01:20:39
+ * @Last Modified time: 2020-04-18 21:15:34
  */
 import { scrollParent } from './utils';
 
@@ -190,7 +190,7 @@ export default {
     });
   },
 
-  beforeDestroy() {
+  destroyed() {
     this.removeListeners();
   },
 
