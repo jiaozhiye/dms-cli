@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 09:49:57
+ * @Last Modified time: 2020-04-19 09:40:24
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -19,8 +19,12 @@ export const dictionary = {
     }
   },
   methods: {
-    // code -> 数据字典的 code 码
-    // vals -> 需要过滤数据字典项的值
+    /**
+     * @description 创建数据字典列表，支持过滤
+     * @param {string|number} code 数据字典的 code 码
+     * @param {array} vals 需要过滤数据字典项的值
+     * @returns {array}
+     */
     createDictList(code, vals = []) {
       vals = Array.isArray(vals) ? vals : [vals];
       let res = [];
@@ -30,7 +34,12 @@ export const dictionary = {
       }
       return res;
     },
-    // val -> 数据的值    code -> 数据字典的 code 码
+    /**
+     * @description 数据字典的翻译
+     * @param {string|number} val 数据的值
+     * @param {string|number} code 数据字典的编码
+     * @returns {string} 翻译后的文本
+     */
     createDictText(val, code) {
       let res = '';
       if (!val) return res;
@@ -40,12 +49,15 @@ export const dictionary = {
       }
       return res;
     },
-    // deep -> 数据的级数，默认全部递归
+    /**
+     * @description 创建省市区数据列表
+     * @param {number} deep 数据的级数，默认全部递归
+     * @returns {array}
+     */
     createDictRegion(deep) {
-      // this.dict.region -> 数据字典中，关于省市区的递归数据
+      // this.dict.region -> 数据字典中省市区的递归数据
       return this.deepMapCity(this.dict.region, deep);
     },
-    // 递归构建省市区数据
     deepMapCity(data, deep = 3, step = 1) {
       const res = [];
       for (let key in data) {

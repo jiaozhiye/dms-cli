@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 20:47:21
+ * @Last Modified time: 2020-04-19 09:15:25
  **/
 import { mapState } from 'vuex';
 import router from '@/routes';
@@ -73,7 +73,7 @@ export default {
 <style lang="less" scoped>
 .breadcrumb-wrap {
   display: flex;
-  padding: @modulePadding 0;
+  margin-bottom: @modulePadding;
   /deep/ .el-breadcrumb__item {
     .is-link {
       color: @textColor;

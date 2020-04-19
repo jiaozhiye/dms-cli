@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 18:32:02
+ * @Last Modified time: 2020-04-19 08:55:13
  */
 export default [
   {
@@ -35,7 +35,7 @@ export default [
         children: [
           {
             title: '备件清单列表',
-            key: '/bjgl/kcgl/lb'
+            key: 'https://www.baidu.com/'
           }
         ]
       }

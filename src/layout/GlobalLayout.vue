@@ -3,13 +3,15 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 17:23:45
+ * @Last Modified time: 2020-04-19 09:19:49
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
 import HeadNavBar from './modules/HeadNavBar';
 import MultiTab from './modules/MultiTab';
 import Breadcrumb from './modules/Breadcrumb';
+
+import config from '@/config';
 
 export default {
   name: 'GlobalLayout',
@@ -29,7 +31,7 @@ export default {
     }
   },
   render() {
-    const { $slots = {}, $route, collapsed, asideWidth } = this;
+    const { collapsed, asideWidth, $route, $slots } = this;
     const bgColor = $route.meta.bgColor ? 'bg-color' : '';
     return (
       <el-container id="app" class="layout">
@@ -45,8 +47,8 @@ export default {
             </GlobalHeader>
           </el-header>
           <el-main class={`container ${bgColor}`}>
-            <Breadcrumb />
-            <section>{$slots.default}</section>
+            {config.showBreadcrumb && <Breadcrumb />}
+            <div>{$slots.default}</div>
           </el-main>
         </el-container>
       </el-container>
@@ -63,7 +65,7 @@ export default {
     overflow: visible;
   }
   .container {
-    padding: 0 @modulePadding;
+    padding: @modulePadding @modulePadding 0;
     overflow-x: hidden;
   }
   .bg-color {

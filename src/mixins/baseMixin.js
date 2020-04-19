@@ -1,8 +1,8 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-19 09:34:38
  */
 import _ from 'lodash';
 
@@ -28,7 +28,7 @@ export const basic = {
      * 表单项数据比对方法
      * @param {Object} formData 表单数据
      * @param {Object} originData 原始数据
-     * @return {Boolean} 与原始数据一致，返回 true；否则，返回 false
+     * @returns {Boolean} 与原始数据一致，返回 true；否则，返回 false
      */
     formDataCompare(formData, originData = {}) {
       const keys = Object.keys(formData).filter(x => !x.includes('|'));

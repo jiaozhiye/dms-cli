@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 18:21:16
+ * @Last Modified time: 2020-04-19 08:55:49
  */
 import _ from 'lodash';
 import variables from '@/assets/css/variables.less';
@@ -45,8 +45,8 @@ export default {
         .map(item => {
           const { key, title, icon } = item;
           // 判断是否为 http 链接
-          const isHttpLink = /^https?:\/\//.test(key);
-          const menuItemNode = !isHttpLink ? (
+          const httpLink = /^https?:\/\//.test(key);
+          const menuItemNode = !httpLink ? (
             <template slot="title">
               {icon && <i class={`iconfont ${icon}`} />}
               <span title={title}>{title}</span>
@@ -66,7 +66,7 @@ export default {
             );
           }
           return (
-            <el-menu-item key={key} index={!isHttpLink ? key : null}>
+            <el-menu-item key={key} index={!httpLink ? key : ''}>
               {menuItemNode}
             </el-menu-item>
           );

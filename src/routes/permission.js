@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 18:06:02
+ * @Last Modified time: 2020-04-19 08:34:39
  */
 import router from '@/routes';
 import store from '@/store';
@@ -39,12 +39,12 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (isLogin()) {
     if (to.path === '/login') {
-      redirect('/');
+      redirect(next, '/');
     } else {
       if (!store.state.app.navList.length) {
         // 通过 vuex 管理导航数据
         const bool = await store.dispatch('app/createNavList');
-        bool ? next({ ...to, replace: true }) : redirect(false);
+        bool ? next({ ...to, replace: true }) : redirect(next, false);
       } else {
         let { tabMenuList } = store.state.app;
         if (tabMenuList.length >= config.maxCacheNum && !tabMenuList.some(x => x.key === to.path)) {
@@ -52,14 +52,14 @@ router.beforeEach(async (to, from, next) => {
             title: '提示信息',
             message: `最多支持 ${config.maxCacheNum} 个菜单项！`
           });
-          return redirect(false);
+          return redirect(next, false);
         }
         let isAuth = await store.dispatch('app/checkAuthority', to.path);
         // 权限校验
         if (isAuth || whiteAuth.some(x => to.path.startsWith(x))) {
           next();
         } else {
-          redirect('/404');
+          redirect(next, '/404');
         }
       }
     }
@@ -70,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.includes(to.path)) {
       next();
     } else {
-      redirect('/login');
+      redirect(next, '/login');
     }
   }
 });

@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 22:27:52
+ * @Last Modified time: 2020-04-19 09:16:53
  */
 export default {
   systemName: '奥迪EP系统',
   maxCacheNum: 10, // 路由组件最大缓存数量
-  notifyDuration: 3500, // 通知消息组件显示时间
+  showBreadcrumb: true, // 是否显示面包屑
+  notifyDuration: 3000, // 通知消息组件显示时间
   table: {
     pageNum: 1,
     pageSize: 20, // 10, 20, 30, 40
