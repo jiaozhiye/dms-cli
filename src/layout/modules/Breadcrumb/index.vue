@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-19 09:15:25
+ * @Last Modified time: 2020-04-19 09:55:38
  **/
 import { mapState } from 'vuex';
 import router from '@/routes';
@@ -75,9 +75,12 @@ export default {
   display: flex;
   margin-bottom: @modulePadding;
   /deep/ .el-breadcrumb__item {
+    .el-breadcrumb__inner {
+      color: @textColor;
+    }
     .is-link {
       color: @textColor;
-      font-weight: 400;
+      font-weight: normal;
       &:hover {
         color: @primaryColor;
       }
