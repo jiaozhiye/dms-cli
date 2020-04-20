@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-24 15:18:17
+ * @Last Modified time: 2020-04-20 14:22:40
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -12,7 +12,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     required: [],
-    validate: []
+    validate: [],
+    updated: []
   },
   actions: {
     addToRequired({ commit, state }, params) {
@@ -38,6 +39,24 @@ const store = new Vuex.Store({
         type: `REMOVE_VALIDATE`,
         data: params
       });
+    },
+    addToUpdated({ commit, state }, params) {
+      commit({
+        type: `ADD_UPDATED`,
+        data: params
+      });
+    },
+    removeFromUpdated({ commit, state }, params) {
+      commit({
+        type: `REMOVE_UPDATED`,
+        data: params
+      });
+    },
+    clearAllLog({ commit, state }, params) {
+      commit({
+        type: `CLEAR_ALL_LOG`,
+        data: params
+      });
     }
   },
   mutations: {
@@ -60,6 +79,19 @@ const store = new Vuex.Store({
       const index = state.validate.findIndex(item => item.x === data.x && item.y === data.y);
       if (index < 0) return;
       state.validate.splice(index, 1);
+    },
+    [`ADD_UPDATED`](state, { data }) {
+      const index = state.updated.findIndex(row => row === data);
+      if (index !== -1) return;
+      state.updated.push(data);
+    },
+    [`REMOVE_UPDATED`](state, { data }) {
+      const index = state.updated.findIndex(row => row === data);
+      if (index < 0) return;
+      state.updated.splice(index, 1);
+    },
+    [`CLEAR_ALL_LOG`](state, { data }) {
+      state.updated = [];
     }
   }
 });

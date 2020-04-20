@@ -1,6 +1,8 @@
 <template>
   <div style="padding: 10px 100px 0;">
+    <el-button @click="clickHandle">按钮</el-button>
     <VirtualTable
+      ref="table"
       :exportExcel="{
         fileName: 'aaa.xlsx'
       }"
@@ -216,7 +218,9 @@ export default {
     },
     clickHandle() {
       // this.list.push({ id: Math.random(), books: 10 });
-      this.selection.selectedRowKeys = [4];
+      // this.list.splice(0, 1);
+      // this.selection.selectedRowKeys = [4];
+      // console.log(this.$refs.table.GET_LOG());
     }
   }
 };

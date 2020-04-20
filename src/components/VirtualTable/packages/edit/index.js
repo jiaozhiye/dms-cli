@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 16:46:50
+ * @Last Modified time: 2020-04-20 14:16:22
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -58,7 +58,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addToRequired', 'removeFromRequired', 'addToValidate', 'removeFromValidate']),
+    ...mapActions(['addToRequired', 'removeFromRequired', 'addToValidate', 'removeFromValidate', 'addToUpdated']),
     createFieldValidate(rules, val) {
       if (!Array.isArray(rules)) {
         return console.error('[Table]: 可编辑单元格的校验规则 `rules` 配置不正确');
@@ -92,6 +92,7 @@ export default {
           }}
           onChange={val => {
             this.createFieldValidate(rules, val);
+            this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
@@ -134,6 +135,7 @@ export default {
           }}
           onChange={val => {
             this.createFieldValidate(rules, val);
+            this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
@@ -159,8 +161,10 @@ export default {
             setCellValue(row, dataIndex, val);
           }}
           placeholder="请选择"
-          clearable
+          clearable={!0}
           onChange={val => {
+            this.createFieldValidate(rules, val);
+            this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
@@ -194,6 +198,7 @@ export default {
           clearable={!1}
           placeholder={!isDateTime ? '选择日期' : '选择时间'}
           onChange={val => {
+            this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
@@ -216,6 +221,7 @@ export default {
             setCellValue(row, dataIndex, val);
           }}
           onChange={val => {
+            this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
@@ -249,6 +255,7 @@ export default {
                     }
                   }
                   this.createFieldValidate(rules, val);
+                  this.addToUpdated(row);
                   onChange({ [this.dataKey]: val }, row);
                   this.$$table.dataChangeHandle();
                 },
