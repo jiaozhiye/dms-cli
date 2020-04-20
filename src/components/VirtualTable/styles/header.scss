@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 12:59:32
+ * @Last Modified time: 2020-04-20 21:47:45
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -47,6 +47,7 @@
     margin-top: -10px;
     width: 12px;
     height: 20px;
+    text-align: left;
     .v-sort--asc-btn,
     .v-sort--desc-btn {
       position: absolute;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 17:46:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-18 14:49:10
+ * @Last Modified time: 2020-04-20 21:44:33
  */
 .v-popover--wrapper {
   position: absolute;
@@ -14,6 +14,8 @@
 .v-popper {
   min-width: 150px;
   min-height: 40px;
+  max-height: calc(100vh - 75px);
+  overflow-y: auto;
   padding: 4px 0;
   background: #fff;
   border-radius: $v-border-radius;

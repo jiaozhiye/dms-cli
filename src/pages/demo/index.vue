@@ -99,6 +99,23 @@ export default {
       return this.$refs.table;
     }
   },
+  // beforeRouteLeave(to, from, next) {
+  //   if (this.$vnode && this.$vnode.data.keepAlive) {
+  //     var key = this.$vnode.key == null ? this.$vnode.componentOptions.Ctor.cid + (this.$vnode.componentOptions.tag ? `::${this.$vnode.componentOptions.tag}` : '') : this.$vnode.key;
+  //     var cache = this.$vnode.parent.componentInstance.cache;
+  //     var keys = this.$vnode.parent.componentInstance.keys;
+  //     if (cache[key]) {
+  //       if (keys.length) {
+  //         var index = keys.indexOf(key);
+  //         if (index > -1) {
+  //           keys.splice(index, 1);
+  //         }
+  //       }
+  //       delete cache[key];
+  //     }
+  //   }
+  //   next();
+  // },
   methods: {
     // 创建列表搜索配置项
     createTopFilterList() {
@@ -303,6 +320,7 @@ export default {
           title: '总价',
           dataIndex: 'total',
           width: 150,
+          align: 'right',
           sorter: true,
           filter: {
             type: 'range-number'

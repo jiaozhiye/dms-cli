@@ -3,10 +3,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:47:10
+ * @Last Modified time: 2020-04-20 21:20:12
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
+
+import config from '@/config';
 
 export default {
   name: 'BasicLayout',
@@ -35,7 +37,7 @@ export default {
       <GlobalLayout>
         {/* <transition name="fade-transform" mode="out-in"> */}
         <keep-alive include={this.cachedNames}>
-          <router-view key={this.key} />
+          <router-view key={this.key} max={config.maxCacheNum} />
         </keep-alive>
         {/* </transition> */}
       </GlobalLayout>
