@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 19:28:44
+ * @Last Modified time: 2020-04-21 16:28:25
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -243,19 +243,13 @@ const mutations = {
     state.keepAliveNames = [...state.keepAliveNames, data];
   },
   [types.DEL_CNAME](state, { data }) {
-    state.keepAliveNames.splice(
-      state.keepAliveNames.findIndex(x => x.key === data),
-      1
-    );
+    state.keepAliveNames = state.keepAliveNames.filter(x => x.key !== data);
   },
   [types.ADD_STAR_MENU](state, { data }) {
     state.starMenuList = _.uniqWith([...state.starMenuList, data], _.isEqual);
   },
   [types.DEL_STAR_MENU](state, { data }) {
-    state.starMenuList.splice(
-      state.starMenuList.findIndex(x => x.key === data),
-      1
-    );
+    state.starMenuList = state.starMenuList.filter(x => x.key !== data);
   },
   [types.NOTIFY_STATE](state, { data }) {
     state.isNotifyMark = data;
