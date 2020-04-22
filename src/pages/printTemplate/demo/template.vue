@@ -80,12 +80,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-24 10:04:47
+ * @Last Modified time: 2020-04-22 19:13:53
  **/
 import moment from 'moment';
 
 export default {
-  name: 'template1',
   props: ['data'],
   data() {
     return {

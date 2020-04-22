@@ -20,7 +20,7 @@ import config from '@/config';
 const chartConf = config.charts;
 
 export default {
-  name: '',
+  name: 'Chart1',
   props: {
     fetchapi: {
       type: Function,

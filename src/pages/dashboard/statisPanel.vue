@@ -22,7 +22,6 @@
 import res from '@/mock/tableData';
 
 export default {
-  name: '',
   data() {
     return {
       list: [...res.data.items],

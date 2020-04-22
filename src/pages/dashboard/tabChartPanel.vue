@@ -24,7 +24,6 @@ import Chart1 from '@/charts/dashboard/chart1';
 import Chart2 from '@/charts/dashboard/chart2';
 
 export default {
-  name: '',
   components: {
     Chart1,
     Chart2

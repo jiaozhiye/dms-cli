@@ -13,7 +13,6 @@
 import Chart from '@/charts/dashboard/chart4';
 
 export default {
-  name: '',
   components: {
     Chart
   },

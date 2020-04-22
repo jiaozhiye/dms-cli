@@ -48,7 +48,7 @@ const dataList = [
 ];
 
 export default {
-  name: 'Notice',
+  name: 'InsideLetter',
   data() {
     return {
       defaultTabLabel: '通知',

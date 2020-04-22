@@ -26,7 +26,6 @@
 import { phone } from '@/utils/validate';
 
 export default {
-  name: '',
   data() {
     return {
       form: {

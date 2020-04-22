@@ -21,13 +21,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 12:03:58
+ * @Last Modified time: 2020-04-22 19:13:35
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/utils/cookies';
 
 export default {
-  name: 'PersonalCenter',
+  name: 'UserCenter',
   data() {
     return {
       username: getUser() || '管理员'

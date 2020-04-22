@@ -22,7 +22,6 @@
 
 <script>
 export default {
-  name: '',
   data() {
     return {
       formList: this.createFormList(),

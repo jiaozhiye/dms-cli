@@ -22,7 +22,6 @@
 
 <script>
 export default {
-  name: '',
   props: ['row', 'dataIndex', 'callback'],
   methods: {
     confirmHandle() {
