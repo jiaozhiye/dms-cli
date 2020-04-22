@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:14:38
+ * @Last Modified time: 2020-04-22 16:55:49
  **/
 export default {
   name: 'Anchor',
@@ -35,7 +35,6 @@ export default {
     this.bindScrollEvent();
   },
   destroyed() {
-    // 移除事件监听
     this.scroll.removeEventListener('scroll', this.scrollEventHandle);
   },
   methods: {
@@ -77,7 +76,6 @@ export default {
     setPositionArr() {
       this.posArr = this.labelList.map(x => document.getElementById(x.id).offsetTop);
     },
-    // 函数防抖
     debounce(fn, delay) {
       return function(...args) {
         fn.timer && clearTimeout(fn.timer);

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:14:50
+ * @Last Modified time: 2020-04-22 17:00:27
  **/
 import { CountUp } from 'countup.js';
 import _ from 'lodash';
@@ -39,7 +39,7 @@ export default {
     this.create();
   },
   destroyed() {
-    this.destroy();
+    this.instance = null;
   },
   methods: {
     create() {
@@ -74,9 +74,6 @@ export default {
       if (this.instance && _.isFunction(this.instance.update)) {
         return this.instance.update(newEndVal);
       }
-    },
-    destroy() {
-      this.instance = null;
     }
   },
   render() {

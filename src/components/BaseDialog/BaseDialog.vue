@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-16 21:21:41
+ * @Last Modified time: 2020-04-22 13:59:21
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -104,8 +104,8 @@ export default {
       }
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
-    createStyles(slots) {
-      const ftHeight = Object.keys(slots).includes('footer') ? this.ftHeight : 0;
+    createStyles(isFooter) {
+      const ftHeight = isFooter ? this.ftHeight : 0;
       const dialogBodyHeight = this.fullscreen
         ? {
             height: `calc(100vh - ${this.hdHeight}px - ${ftHeight}px)`
@@ -124,7 +124,7 @@ export default {
     }
   },
   render() {
-    const { fullscreen, dragable, closable, maskClosable, containerStyle, $props, $attrs, $listeners, $slots } = this;
+    const { isShowDialog, fullscreen, dragable, closable, maskClosable, containerStyle, $props, $attrs, $listeners, $slots } = this;
     const wrapProps = {
       ref: 'dialog',
       props: {
@@ -142,20 +142,18 @@ export default {
       directives: dragable ? [{ name: 'drag' }] : null
     };
     const extraStyle = fullscreen ? { paddingBottom: `10px` } : null;
-    return this.isShowDialog ? (
+    const isFooterSlot = Object.keys($slots).includes('footer');
+    return (
       <el-dialog class="v-dialog--wrapper" {...wrapProps}>
         <span key="fullscreen" class="fullscreen-btn" onClick={this.handleClick}>
           <i class="el-icon-full-screen" />
         </span>
-        {Object.keys($slots).map(name => (
-          <section key={name} slot={name} style={name === 'default' ? this.createStyles($slots) : null}>
-            <div class="container" style={{ ...containerStyle, ...extraStyle }}>
-              {$slots[name]}
-            </div>
-          </section>
-        ))}
+        <div class="container" style={{ ...this.createStyles(isFooterSlot), ...containerStyle, ...extraStyle }}>
+          {isShowDialog ? $slots[`default`] : null}
+        </div>
+        {isShowDialog && isFooterSlot ? $slots[`footer`] : null}
       </el-dialog>
-    ) : null;
+    );
   }
 };
 </script>

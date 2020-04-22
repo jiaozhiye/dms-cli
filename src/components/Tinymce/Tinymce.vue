@@ -12,7 +12,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:12:51
+ * @Last Modified time: 2020-04-22 16:51:37
  **/
 import plugins from './plugins';
 import toolbar from './toolbar';
@@ -172,6 +172,8 @@ export default {
         this.tinymce.execCommand('mceFullScreen');
       }
       this.tinymce.destroy();
+      this.tinymce = null;
+      window.tinymce = null;
     },
     setContent(val) {
       this.tinymceVal = val;

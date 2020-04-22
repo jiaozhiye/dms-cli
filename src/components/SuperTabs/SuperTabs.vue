@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:13:47
+ * @Last Modified time: 2020-04-22 16:46:58
  **/
 import _ from 'lodash';
 import { filterEmpty } from '@/components/_utils/props-util';
@@ -25,7 +25,7 @@ export default {
     },
     animated: {
       type: Boolean,
-      default: true
+      default: false
     },
     lazyLoad: {
       type: Boolean,
@@ -130,7 +130,8 @@ export default {
     createTabsContent(arr) {
       return arr.map(x => {
         const isActive = x.label === this.currentValue;
-        let Component = <keep-alive>{x.children}</keep-alive>;
+        // let Component = <keep-alive>{x.children}</keep-alive>;
+        let Component = x.children;
         if (!this.destroyOnClose) {
           if (this.lazyLoad) {
             if (isActive) {

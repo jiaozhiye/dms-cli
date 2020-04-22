@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SuperTabs :initial-value="defaultTabLabel" size="large">
+    <SuperTabs :initial-value="defaultTabLabel" size="large" animated>
       <div slot="extraContent">
         <el-radio-group v-model="fetchParams.radioValue" size="small" @change="changeHandle">
           <el-radio-button label="1001">今日</el-radio-button>

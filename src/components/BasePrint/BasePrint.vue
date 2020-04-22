@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:14:41
+ * @Last Modified time: 2020-04-22 16:57:55
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -45,10 +45,10 @@ export default {
     }
   },
   data() {
+    this.LODOP = null;
     // 打印纸尺寸
     this.pageSize = this.printerType === 'laser' ? [2100, 2970] : [2400, 2800];
     return {
-      LODOP: null,
       state: 'stop'
     };
   },

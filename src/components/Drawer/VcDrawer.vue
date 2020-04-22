@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 21:18:33
+ * @Last Modified time: 2020-04-22 15:58:03
  **/
 import Drawer from './Drawer';
 import ContainerRender from './ContainerRender';
@@ -78,7 +78,7 @@ export default {
     visible(val) {
       if (val && !this.$refs._component) {
         // 首次进入
-        setTimeout(() => (this.isVisible = val), 20);
+        setTimeout(() => (this.isVisible = val));
       } else {
         this.isVisible = val;
       }

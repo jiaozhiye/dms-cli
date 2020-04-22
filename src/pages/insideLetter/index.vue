@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SuperTabs :initial-value="defaultTabLabel" :tab-bar-gutter="15">
+    <SuperTabs :initial-value="defaultTabLabel" :tab-bar-gutter="15" animated>
       <tab-panel :label="noticeList.title">
         <div class="list">
           <ul v-if="noticeList.list.length">

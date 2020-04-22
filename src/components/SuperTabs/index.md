@@ -7,7 +7,7 @@
 | initialValue   | 当前激活选项卡的标题，必要参数             | string         | -      |
 | tabBarGutter   | tabs 之间的间隙，单位 px                   | number         | 0      |
 | size           | 尺寸                                       | small \| large | small  |
-| animated       | 是否开启选项卡切换时动画                   | boolean        | true   |
+| animated       | 是否开启选项卡切换时动画                   | boolean        | false  |
 | lazyLoad       | 是否延迟加载选项卡组件                     | boolean        | true   |
 | destroyOnClose | 切换选项卡并处于隐藏状态时，是否销毁子组件 | boolean        | false  |
 
