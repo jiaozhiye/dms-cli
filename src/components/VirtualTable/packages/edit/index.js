@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-20 14:16:22
+ * @Last Modified time: 2020-04-22 20:27:53
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -134,6 +134,8 @@ export default {
             onInput({ [this.dataKey]: val }, row);
           }}
           onChange={val => {
+            val = Number(val).toFixed(precision);
+            setCellValue(row, dataIndex, val);
             this.createFieldValidate(rules, val);
             this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);

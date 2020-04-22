@@ -282,6 +282,7 @@ export default {
           title: '价格',
           dataIndex: 'price',
           width: 150,
+          precision: 2,
           required: true,
           sorter: true,
           filter: {
@@ -320,6 +321,7 @@ export default {
           title: '总价',
           dataIndex: 'total',
           width: 150,
+          precision: 2,
           align: 'right',
           sorter: true,
           filter: {
@@ -330,10 +332,10 @@ export default {
           },
           render: (text, row) => {
             row.total = row.price * row.num;
-            return <span>{row.total}</span>;
+            return <span>{row.total.toFixed(2)}</span>;
           },
           extraRender: (text, row) => {
-            return row.price * row.num;
+            return Number(row.price * row.num).toFixed(2);
           }
         },
         {
