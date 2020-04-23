@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-08 18:08:42
+ * @Last Modified time: 2020-04-23 14:35:24
  **/
 export default {
   name: 'DropDown',
@@ -83,7 +83,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wrapper {
   display: inline-flex;
   align-items: center;
@@ -98,9 +98,9 @@ export default {
     position: absolute;
     top: 34px;
     background-color: #fff;
-    border: 1px solid @borderColorSecondary;
-    border-radius: @borderRadius;
-    box-shadow: @boxShadow;
+    border: 1px solid $borderColorSecondary;
+    border-radius: $borderRadius;
+    box-shadow: $boxShadow;
     cursor: default;
   }
 }

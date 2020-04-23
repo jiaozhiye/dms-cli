@@ -12,10 +12,5 @@
     //     "styleLibraryName": "~theme"
     //   }
     // ]
-  ],
-  "env": {
-    "development": {
-      "plugins": ["dynamic-import-node"]
-    }
-  }
+  ]
 }

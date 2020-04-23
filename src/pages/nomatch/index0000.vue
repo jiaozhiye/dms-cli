@@ -15,13 +15,13 @@ export default {
   name: 'Nomatch',
   methods: {
     goHome() {
-      this.$router.push({ path: '/' }).catch(() => {});;
+      this.$router.push({ path: '/' }).catch(() => {});
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .nomatch-wrap {
   display: flex;
   height: 100%;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 11:04:26
+ * @Last Modified time: 2020-04-23 14:41:51
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 
@@ -159,7 +159,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-upload-file {
   display: inline-block;
   /deep/ .el-upload__tip {

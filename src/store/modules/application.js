@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-21 16:28:25
+ * @Last Modified time: 2020-04-23 19:32:23
  */
 import _ from 'lodash';
 import * as types from '../types';
 import router from '@/routes';
 import { messageAction, clearAllCookie } from '@/utils';
 import { setToken, setUser } from '@/utils/cookies';
+import variables from '@/assets/css/variables.scss';
 import localDict from '@/utils/localDict';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
 
@@ -60,6 +61,7 @@ const state = {
   starMenuList: [], // 收藏导航
   commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
+  theme: variables.theme, // 主题色
   dict: {}, // 数据字典、筛选条件
   keepAliveNames: [], // 路由组件缓存列表
   isNotifyMark: false // 页面中是否已存在消息通知组件

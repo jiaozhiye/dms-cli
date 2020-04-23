@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-11 10:53:33
+ * @Last Modified time: 2020-04-23 22:58:59
  */
 'use strict';
 
@@ -70,15 +70,14 @@ exports.cssLoaders = function(options) {
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
-    less: generateLoaders('less', { javascriptEnabled: true }).concat({
-      // less 变量的全局注入
+    less: generateLoaders('less'),
+    sass: generateLoaders('sass', { indentedSyntax: true }),
+    scss: generateLoaders('sass', { javascriptEnabled: true }).concat({
       loader: 'style-resources-loader',
       options: {
-        patterns: [path.resolve(__dirname, '../src/assets/css/variables.less')]
+        patterns: [path.resolve(__dirname, '../src/assets/css/variables.scss')]
       }
     }),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   };

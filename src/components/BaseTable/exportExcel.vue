@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 21:16:09
+ * @Last Modified time: 2020-04-23 14:35:33
  */
 import _ from 'lodash';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -120,12 +120,12 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .export-wrap {
   display: inline-block;
-  margin-right: @moduleMargin;
+  margin-right: $moduleMargin;
   /deep/ .el-button--text {
-    font-size: @textSize;
+    font-size: $textSize;
   }
 }
 </style>

@@ -49,7 +49,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-25 20:12:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:15:34
+ * @Last Modified time: 2020-04-23 14:41:54
  */
 import { scrollParent } from './utils';
 
@@ -557,7 +557,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .virtual-scroll {
   position: relative;
 }

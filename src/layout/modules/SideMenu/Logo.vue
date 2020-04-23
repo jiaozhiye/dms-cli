@@ -11,7 +11,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 10:21:38
+ * @Last Modified time: 2020-04-23 14:43:41
  **/
 const logoEp = require('@/assets/img/logo_ep.png');
 const logo = require('@/assets/img/logo.png');
@@ -50,10 +50,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .logo {
   height: 60px;
-  background-color: @logoBgColor;
+  background-color: $logoBgColor;
   overflow: hidden;
   a {
     height: 100%;

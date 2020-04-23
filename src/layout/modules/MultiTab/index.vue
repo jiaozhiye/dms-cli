@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:15:44
+ * @Last Modified time: 2020-04-23 14:42:52
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -170,17 +170,17 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .multi-wrap {
   /deep/ .multi-tab {
     position: relative;
     .el-tabs__header {
       margin: 0;
-      border-bottom-color: @borderColor;
+      border-bottom-color: $borderColor;
       .el-tabs__nav {
-        border-color: @borderColor;
+        border-color: $borderColor;
         .el-tabs__item {
-          border-left-color: @borderColor;
+          border-left-color: $borderColor;
           &.is-active {
             font-weight: 700;
           }
@@ -199,8 +199,8 @@ export default {
     top: 50px;
     background-color: #fff;
     padding: 6px 0;
-    border: 1px solid @borderColorSecondary;
-    border-radius: @borderRadius;
+    border: 1px solid $borderColorSecondary;
+    border-radius: $borderRadius;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     z-index: 9999;
   }

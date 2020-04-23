@@ -199,14 +199,14 @@ export default {
           name: res.data.name,
           token: res.data.token
         });
-        this.$router.push({ path: '/' }).catch(() => {});;
+        this.$router.push({ path: '/' }).catch(() => {});
       }
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .login {
   display: flex;
   height: 100vh;
@@ -248,8 +248,8 @@ export default {
         vertical-align: middle;
       }
       &:hover {
-        background-color: @primaryColor;
-        border-color: @primaryColor;
+        background-color: $primaryColor;
+        border-color: $primaryColor;
       }
     }
   }
@@ -262,12 +262,12 @@ export default {
         padding-top: 10vh;
         .top {
           display: flex;
-          color: @textColorSecondary;
+          color: $textColorSecondary;
           span {
             padding: 6px;
             cursor: pointer;
             &.actived {
-              color: @primaryColor;
+              color: $primaryColor;
             }
           }
           i {
@@ -302,7 +302,7 @@ export default {
                 top: 0;
                 right: 10px;
                 font-size: 16px;
-                color: @textColorSecondary;
+                color: $textColorSecondary;
                 cursor: pointer;
                 user-select: none;
               }
@@ -312,7 +312,7 @@ export default {
                 a {
                   font-size: 13px;
                   &:hover {
-                    color: @primaryColor;
+                    color: $primaryColor;
                   }
                 }
               }
@@ -337,7 +337,7 @@ export default {
                 vertical-align: middle;
               }
               &:hover {
-                color: @primaryColor;
+                color: $primaryColor;
               }
             }
           }

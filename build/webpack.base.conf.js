@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-14 22:23:17
+ * @Last Modified time: 2020-04-24 01:04:42
  */
 'use strict';
 
@@ -11,6 +11,11 @@ const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
 const { VueLoaderPlugin } = require('vue-loader');
+const ThemeColorReplacer = require('webpack-theme-color-replacer');
+const forElementUI = require('webpack-theme-color-replacer/forElementUI');
+
+// 主题色
+const primaryColor = '#1890ff';
 
 // Eslint 校验
 const createLintingRule = () => ({
@@ -96,5 +101,33 @@ module.exports = {
       }
     ]
   },
-  plugins: [new VueLoaderPlugin()]
+  plugins: [
+    new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        ENV_CONFIG: JSON.stringify(process.env.ENV_CONFIG)
+      }
+    }),
+    new ThemeColorReplacer({
+      fileName: utils.assetsPath('css/theme-colors.[contenthash:8].css'),
+      matchColors: [
+        ...forElementUI.getElementUISeries(primaryColor), // element-ui 主题色
+        primaryColor // 自定义主题色
+      ],
+      changeSelector: forElementUI.changeSelector
+    })
+  ],
+  node: {
+    // prevent webpack from injecting useless setImmediate polyfill because Vue
+    // source contains it (although only uses it if it's native).
+    setImmediate: false,
+    // prevent webpack from injecting mocks to Node native modules
+    // that does not make sense for the client
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty'
+  }
 };

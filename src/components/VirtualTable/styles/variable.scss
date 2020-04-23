@@ -2,33 +2,34 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 21:58:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 10:16:04
+ * @Last Modified time: 2020-04-23 15:38:16
  */
 /* font-family */
 $v-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
   Segoe UI Symbol;
+
 $v-font-size: 14px;
 $v-font-size-medium: 14px;
 $v-font-size-small: 13px;
 $v-font-size-mini: 12px;
 
-$v-font-color: rgba(0, 0, 0, 0.65);
-$v-font-secondary-color: rgba(0, 0, 0, 0.45);
-$v-font-disabled-color: rgba(0, 0, 0, 0.25);
+$v-font-color: $textColor;
+$v-font-secondary-color: $textColorSecondary;
+$v-font-disabled-color: $disabledColor;
 
 /* primary color */
-$v-primary-color: #1890ff;
-$v-danger-color: #f5222d;
+$v-primary-color: $primaryColor;
+$v-danger-color: $errorColor;
 
 // module distance
-$v-module-distance: 10px;
+$v-module-distance: $moduleMargin;
 
 /* border radius */
-$v-border-radius: 2px;
+$v-border-radius: $borderRadius;
 
 /* icon */
 $v-icon-font-family: Verdana, Arial, Tahoma;
-$v-icon-color: rgb(191, 191, 191);
+$v-icon-color: rgb(190, 190, 190);
 
 /* table color */
 $v-table-header-background-color: #fafafa;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:03:45
+ * @Last Modified time: 2020-04-23 14:39:44
  **/
 import _ from 'lodash';
 
@@ -93,10 +93,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-lazy-tab--wrapper {
   /deep/ .el-tabs__header {
-    margin-bottom: @moduleMargin;
+    margin-bottom: $moduleMargin;
     .el-tabs__nav-wrap {
       .el-tabs__item {
         padding: 0 5px;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 13:59:21
+ * @Last Modified time: 2020-04-23 14:34:47
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -158,7 +158,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-dialog--wrapper {
   /deep/ .el-dialog {
     margin: 0 auto;
@@ -167,7 +167,7 @@ export default {
       line-height: 48px;
       padding: 0 15px;
       box-sizing: border-box;
-      border-bottom: 1px solid @borderColor;
+      border-bottom: 1px solid $borderColor;
       .el-dialog__title {
         font-size: 16px;
       }
@@ -187,7 +187,7 @@ export default {
         padding: 5px;
         cursor: pointer;
         &:hover {
-          color: @primaryColor;
+          color: $primaryColor;
         }
       }
       .container {
@@ -199,7 +199,7 @@ export default {
     }
     .el-dialog__footer {
       padding: 10px 15px;
-      border-top: 1px solid @borderColor;
+      border-top: 1px solid $borderColor;
     }
   }
 }

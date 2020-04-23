@@ -35,7 +35,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-01-01 14:45:06
+ * @Last Modified time: 2020-04-23 14:44:11
  **/
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -84,7 +84,7 @@ export default {
       };
     },
     handleSelect(item) {
-      this.$router.push({ path: item.key }).catch(() => {});;
+      this.$router.push({ path: item.key }).catch(() => {});
       this.clickHandle();
       setTimeout(() => {
         this.menuPath = '';
@@ -109,7 +109,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .menu-list {
   height: 100%;
   &::after {
@@ -119,7 +119,7 @@ export default {
     height: 100%;
     right: 0;
     top: 0;
-    background: @menuBg;
+    background: $menuBg;
   }
   /deep/ .search {
     height: 120px;
@@ -129,9 +129,9 @@ export default {
         width: 300px;
         .el-input__inner {
           color: #fff;
-          font-size: @textSize;
+          font-size: $textSize;
           border-radius: 0;
-          background: @allMenuBgColor;
+          background: $allMenuBgColor;
           border: none;
           border-bottom: 1px solid #626466;
         }
@@ -156,14 +156,14 @@ export default {
           .el-tabs__nav-scroll {
             overflow-y: auto;
             .el-tabs__nav {
-              padding-bottom: @modulePadding;
+              padding-bottom: $modulePadding;
             }
           }
           .el-tabs__item {
             padding: 0 0 0 15px;
             height: 34px;
             line-height: 34px;
-            color: @menuText;
+            color: $menuText;
             &.is-active {
               font-weight: 700;
               color: #fff;
@@ -189,7 +189,7 @@ export default {
             page-break-inside: avoid;
             break-inside: avoid;
             h4 {
-              color: @menuText;
+              color: $menuText;
               font-weight: 700;
               line-height: 34px;
               border-bottom: 1px solid #626466;
@@ -203,17 +203,17 @@ export default {
                   cursor: pointer;
                 }
                 .el-icon-star-on {
-                  color: @menuText;
+                  color: $menuText;
                 }
                 .el-icon-star-off {
-                  color: @menuText;
+                  color: $menuText;
                 }
                 a {
-                  font-size: @textSizeSecondary;
-                  color: @menuText;
+                  font-size: $textSizeSecondary;
+                  color: $menuText;
                   transition: all 0.3s ease;
                   &:hover {
-                    color: @menuActiveText;
+                    color: $menuActiveText;
                   }
                 }
               }

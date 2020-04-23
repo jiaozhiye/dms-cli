@@ -21,7 +21,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 19:13:35
+ * @Last Modified time: 2020-04-23 14:54:17
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/utils/cookies';
@@ -44,14 +44,14 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .setting {
   margin-left: 15px;
   .el-dropdown {
     .el-dropdown-link {
       display: inline-block;
       padding: 5px 0;
-      font-size: @textSize;
+      font-size: $textSize;
       cursor: pointer;
       .avatar {
         display: inline-block;

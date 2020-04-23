@@ -29,19 +29,19 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wrapper {
   width: 100%;
   height: 240px;
   background-color: #fff;
-  border-radius: @borderRadius;
-  box-shadow: @boxShadow;
+  border-radius: $borderRadius;
+  box-shadow: $boxShadow;
   .topper {
     display: flex;
     height: 46px;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid @borderColor;
+    border-bottom: 1px solid $borderColor;
     .title {
       padding-left: 15px;
     }
@@ -56,10 +56,10 @@ export default {
       list-style: none;
       align-items: center;
       i {
-        margin-right: @moduleMargin;
-        background-color: @backgroundColorSecondary;
-        color: @textColorSecondary;
-        font-size: @textSizeSecondary;
+        margin-right: $moduleMargin;
+        background-color: $backgroundColorSecondary;
+        color: $textColorSecondary;
+        font-size: $textSizeSecondary;
         font-weight: 600;
         text-align: center;
         width: 20px;

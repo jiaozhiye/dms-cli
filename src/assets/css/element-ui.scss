@@ -1,0 +1,17 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-04-23 15:16:36
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-04-24 02:54:49
+ */
+.el-notification {
+  a {
+    color: $errorColor;
+    text-decoration: underline;
+  }
+}
+.el-button {
+  .iconfont {
+    margin-right: 5px;
+  }
+}

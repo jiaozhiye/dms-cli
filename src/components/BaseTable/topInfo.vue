@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-12 08:07:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-25 12:49:19
+ * @Last Modified time: 2020-04-23 14:37:39
  */
 export default {
   name: 'TopInfo',
@@ -47,29 +47,29 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-@tableBgColor: #f2f2f2;
+<style lang="scss" scoped>
+$tableBgColor: #f2f2f2;
 
 .top-info {
   display: flex;
   align-items: center;
   .alert {
     height: 32px;
-    padding: 0 @modulePadding;
-    background-color: @tableBgColor;
-    border: 1px solid @borderColor;
+    padding: 0 $modulePadding;
+    background-color: $tableBgColor;
+    border: 1px solid $borderColor;
     /deep/ .el-icon-info {
-      color: @primaryColor;
+      color: $primaryColor;
     }
     /deep/ .el-alert__content {
       display: flex;
       padding-left: 6px;
       padding-right: 0;
       .text {
-        font-size: @textSize;
+        font-size: $textSize;
         i {
           font-weight: 600;
-          color: @primaryColor;
+          color: $primaryColor;
           font-style: normal;
         }
       }

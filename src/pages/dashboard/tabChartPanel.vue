@@ -44,13 +44,13 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wrapper {
   width: 100%;
   height: 410px;
   margin-top: 15px;
   background-color: #fff;
-  border-radius: @borderRadius;
-  box-shadow: @boxShadow;
+  border-radius: $borderRadius;
+  box-shadow: $boxShadow;
 }
 </style>

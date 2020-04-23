@@ -2,40 +2,40 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 10:16:14
+ * @Last Modified time: 2020-04-23 22:30:34
  */
 /* 主题色 */
 $--color-primary: #1890ff;
 
-$--color-success: #52c41a !default;
-$--color-warning: #faad14 !default;
-$--color-danger: #f5222d !default;
-$--color-info: #909399 !default;
+$--color-success: #52c41a;
+$--color-warning: #faad14;
+$--color-danger: #f5222d;
+$--color-info: #909399;
 
-$--font-size-base: 14px !default;
-$--font-size-small: 14px !default;
-$--input-small-font-size: 14px !default;
-$--button-small-font-size: 14px !default;
+$--font-size-base: 14px;
+$--font-size-small: 14px;
+$--input-small-font-size: 14px;
+$--button-small-font-size: 14px;
 
-$--color-text-primary: rgba(0, 0, 0, 0.65) !default;
-$--color-text-regular: #606060 !default;
-$--color-text-secondary: #979797 !default;
-$--color-text-placeholder: #b8b8b8 !default;
+$--color-text-primary: rgba(0, 0, 0, 0.65);
+$--color-text-regular: #606060;
+$--color-text-secondary: #979797;
+$--color-text-placeholder: #b8b8b8;
 
-$--border-color-base: #d9d9d9 !default;
-$--border-color-light: #d9d9d9 !default;
-$--border-color-lighter: #e4e7ed !default;
+$--border-color-base: #d9d9d9;
+$--border-color-light: #d9d9d9;
+$--border-color-lighter: #e4e7ed;
 
-$--border-radius-base: 2px !default;
-$--button-small-border-radius: 2px !default;
-$--button-mini-border-radius: 2px !default;
-$--button-small-padding-vertical: 8px !default;
+$--border-radius-base: 2px;
+$--button-small-border-radius: 2px;
+$--button-mini-border-radius: 2px;
+$--button-small-padding-vertical: 8px;
 
-$--background-color-base: #f2f2f2 !default;
-$--table-border-color: #d9d9d9 !default;
+$--background-color-base: #f2f2f2;
+$--table-border-color: #d9d9d9;
 
-$--checkbox-disabled-checked-icon-color: #333 !default;
-$--radio-disabled-checked-icon-color: #666 !default;
+$--checkbox-disabled-checked-icon-color: #333;
+$--radio-disabled-checked-icon-color: #666;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';

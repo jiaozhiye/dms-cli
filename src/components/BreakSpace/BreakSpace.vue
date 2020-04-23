@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 14:59:40
+ * @Last Modified time: 2020-04-23 14:38:10
  **/
 export default {
   name: 'BreakSpace',
@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-form--divider {
   width: 100%;
   height: 32px;
@@ -44,20 +44,20 @@ export default {
   /deep/ .el-divider--horizontal {
     margin: 15px 0;
     .el-divider__text {
-      padding: 0 @modulePadding;
+      padding: 0 $modulePadding;
       &.is-left {
-        left: -@moduleMargin;
+        left: -$moduleMargin;
       }
       .title {
         display: inline-block;
         height: 20px;
-        font-size: @textSize;
+        font-size: $textSize;
         &::before {
           content: '';
           display: inline-block;
           width: 6px;
           height: 100%;
-          background-color: @primaryColor;
+          background-color: $primaryColor;
           margin-right: 8px;
           vertical-align: middle;
         }

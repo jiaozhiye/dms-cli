@@ -18,7 +18,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:15:46
+ * @Last Modified time: 2020-04-23 14:43:21
  **/
 import addEventListener from 'add-dom-event-listener';
 
@@ -66,19 +66,19 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .all-menu {
   height: 40px;
-  background-color: @menuBg;
+  background-color: $menuBg;
   .title {
     height: 100%;
     line-height: 40px;
-    color: @menuText;
+    color: $menuText;
     padding-left: 20px;
     cursor: pointer;
     &.selected,
     &:hover {
-      background-color: @menuHover;
+      background-color: $menuHover;
     }
     i {
       width: 24px;
@@ -112,7 +112,7 @@ export default {
     top: 0;
     width: 650px;
     height: 100%;
-    background: @allMenuBgColor;
+    background: $allMenuBgColor;
     z-index: -1;
     box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
     transform: translate3d(-100%, 0, 0);

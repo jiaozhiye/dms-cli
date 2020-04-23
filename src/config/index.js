@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-19 10:00:03
+ * @Last Modified time: 2020-04-23 23:54:32
  */
-export default {
+const config = {
   systemName: '奥迪EP系统',
   maxCacheNum: 10, // 路由组件最大缓存数量
   showBreadcrumb: true, // 是否显示面包屑
@@ -30,3 +30,5 @@ export default {
     lineColor: 'rgba(0, 0, 0, 0.35)'
   }
 };
+
+export default config;

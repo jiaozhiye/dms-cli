@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:15:49
+ * @Last Modified time: 2020-04-23 14:45:45
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -219,10 +219,10 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .worker {
   min-width: 80px;
-  padding: @modulePadding;
+  padding: $modulePadding;
   position: relative;
   .img {
     display: inline-block;
@@ -241,7 +241,7 @@ export default {
     line-height: 24px;
   }
   .time-len {
-    margin-left: @moduleMargin;
+    margin-left: $moduleMargin;
   }
   .del-btn {
     position: absolute;
@@ -249,7 +249,7 @@ export default {
     right: 5px;
     cursor: pointer;
     &:hover {
-      color: @primaryColor;
+      color: $primaryColor;
     }
   }
   & > * {
@@ -264,33 +264,33 @@ export default {
   flex-wrap: wrap;
   position: relative;
   .worker {
-    border: 1px solid @borderColorSecondary;
-    border-radius: @borderRadius;
-    margin-right: @moduleMargin;
-    box-shadow: @boxShadow;
+    border: 1px solid $borderColorSecondary;
+    border-radius: $borderRadius;
+    margin-right: $moduleMargin;
+    box-shadow: $boxShadow;
     background-color: #fff;
     cursor: move;
   }
 }
 .plan-container {
-  margin-top: @moduleMargin;
+  margin-top: $moduleMargin;
   .table-wrap {
     width: 100%;
-    border: 1px solid @borderColorSecondary;
+    border: 1px solid $borderColorSecondary;
     thead tr th {
       text-align: left;
       font-weight: 700;
       padding: 10px 0 10px 10px;
-      border: 1px solid @borderColorSecondary;
-      background-color: @backgroundColor;
+      border: 1px solid $borderColorSecondary;
+      background-color: $backgroundColor;
       vertical-align: middle;
     }
     tbody tr td {
       height: 46px;
-      border: 1px solid @borderColorSecondary;
+      border: 1px solid $borderColorSecondary;
       vertical-align: middle;
       &.actived {
-        background-color: @backgroundColorSecondary;
+        background-color: $backgroundColorSecondary;
       }
     }
   }

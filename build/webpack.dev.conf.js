@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-12-17 14:37:35
+ * @Last Modified time: 2020-04-24 01:58:00
  */
 'use strict';
 
@@ -54,8 +54,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new Dotenv(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html',
+      template: 'public/index.html',
       inject: true,
+      favicon: 'public/favicon.ico',
       templateParameters: {
         BASE_URL: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
       }

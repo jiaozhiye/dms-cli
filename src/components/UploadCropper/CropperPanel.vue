@@ -110,7 +110,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
 .cropper-wrap {
   flex: 1;
   .cropper-content {

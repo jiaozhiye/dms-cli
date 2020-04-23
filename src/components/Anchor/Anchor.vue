@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 16:55:49
+ * @Last Modified time: 2020-04-23 14:34:28
  **/
 export default {
   name: 'Anchor',
@@ -131,7 +131,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-anchor--wrapper {
   height: 100%;
   display: flex;
@@ -139,8 +139,8 @@ export default {
   /deep/ .labels {
     width: 80px;
     height: 100%;
-    margin-right: @moduleMargin;
-    border-right: 1px solid @borderColor;
+    margin-right: $moduleMargin;
+    border-right: 1px solid $borderColor;
     li {
       list-style: none;
       height: 40px;
@@ -150,7 +150,7 @@ export default {
       position: relative;
       cursor: pointer;
       &.selected {
-        color: @primaryColor;
+        color: $primaryColor;
         &::after {
           content: '';
           position: absolute;
@@ -158,15 +158,15 @@ export default {
           top: 0;
           width: 2px;
           height: 100%;
-          background-color: @primaryColor;
+          background-color: $primaryColor;
         }
       }
     }
   }
   .scroll-wrapper {
     flex: 1;
-    margin-right: -@moduleMargin;
-    padding-right: @modulePadding;
+    margin-right: -$moduleMargin;
+    padding-right: $modulePadding;
     height: 100%;
     position: relative;
     overflow-x: hidden !important;

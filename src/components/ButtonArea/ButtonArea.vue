@@ -9,7 +9,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:20:59
+ * @Last Modified time: 2020-04-23 14:38:18
  **/
 export default {
   name: 'ButtonArea',
@@ -26,25 +26,25 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-btn-area--wrapper {
   font-size: 0;
   display: flex;
   flex-wrap: wrap;
   /deep/ .el-button {
     margin: 0;
-    margin-bottom: @moduleMargin;
+    margin-bottom: $moduleMargin;
   }
   &.btn-align-left {
     justify-content: flex-start;
     & > * {
-      margin-right: @moduleMargin !important;
+      margin-right: $moduleMargin !important;
     }
   }
   &.btn-align-right {
     justify-content: flex-end;
     & > * {
-      margin-left: @moduleMargin !important;
+      margin-left: $moduleMargin !important;
     }
   }
 }

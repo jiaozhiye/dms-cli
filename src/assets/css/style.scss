@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 21:47:43
+ * @Last Modified time: 2020-04-24 02:44:38
  */
-@import './sidebar.less';
+@import './reset.css';
+@import './element-ui.scss';
 
 /**
  * public
@@ -16,11 +17,11 @@ body {
 }
 body {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-  color: @textColor;
-  font-size: @textSize;
+  color: $textColor;
+  font-size: $textSize;
 }
 a {
-  color: @textColor;
+  color: $textColor;
   text-decoration: none;
 }
 .text_overflow_cut {
@@ -91,20 +92,9 @@ a {
 
 input:-ms-input-placeholder,
 textarea:-ms-input-placeholder {
-  color: @disabledColor !important;
+  color: $disabledColor !important;
 }
 
 /**
  * app style
  */
-.el-notification {
-  a {
-    color: @primaryColor;
-    text-decoration: underline;
-  }
-}
-.el-button {
-  .iconfont {
-    margin-right: 5px;
-  }
-}

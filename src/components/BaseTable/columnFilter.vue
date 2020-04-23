@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2019-11-12 09:46:40
+ * @Last Modified time: 2020-04-23 14:35:07
  **/
 import _ from 'lodash';
 
@@ -159,10 +159,10 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
 .columns-dropdown {
   cursor: pointer;
-  color: @primaryColor;
+  color: $primaryColor;
   .icon {
     margin-right: 4px;
     font-weight: 700;

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 19:23:43
+ * @Last Modified time: 2020-04-23 14:38:36
  **/
 import Spin from '@/components/Spin';
 
@@ -197,7 +197,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-drawer--wrapper {
   .drawer-mask {
     position: fixed;
@@ -228,8 +228,8 @@ export default {
       height: 48px;
       padding: 0 15px;
       box-sizing: border-box;
-      border-bottom: 1px solid @borderColor;
-      border-radius: @borderRadius @borderRadius 0 0;
+      border-bottom: 1px solid $borderColor;
+      border-radius: $borderRadius $borderRadius 0 0;
       .title {
         font-size: 16px;
       }
@@ -238,12 +238,12 @@ export default {
         padding: 5px;
         right: 10px;
         top: 10px;
-        color: @textColorSecondary;
+        color: $textColorSecondary;
         line-height: 1;
         cursor: pointer;
         transition: color 0.3s ease;
         &:hover {
-          color: @primaryColor;
+          color: $primaryColor;
           text-decoration: none;
         }
         i {

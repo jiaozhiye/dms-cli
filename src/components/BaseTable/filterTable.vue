@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:14:44
+ * @Last Modified time: 2020-04-23 14:36:08
  **/
 import _ from 'lodash';
 import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
@@ -649,7 +649,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .popover-wrap {
   display: block;
   padding: 0;
@@ -686,7 +686,7 @@ export default {
 }
 .popover-bottom {
   padding: 0;
-  margin-top: @moduleMargin;
+  margin-top: $moduleMargin;
   overflow: visible;
 }
 .th-cell {
@@ -696,7 +696,7 @@ export default {
   .th-cell-text {
     pointer-events: none;
     .title {
-      color: @textColor;
+      color: $textColor;
       font-weight: 700;
     }
     .icon {
@@ -705,22 +705,22 @@ export default {
     &.selected {
       .title,
       .icon {
-        color: @primaryColor !important;
+        color: $primaryColor !important;
       }
     }
   }
 }
 </style>
 
-<style lang="less">
+<style lang="scss">
 .thead-popper {
   display: flex;
   flex-direction: column;
   min-width: 122px !important;
   max-height: calc(100vh - 30px);
-  padding: @modulePadding !important;
+  padding: $modulePadding !important;
   margin-top: 4px !important;
-  box-shadow: @boxShadow !important;
+  box-shadow: $boxShadow !important;
   overflow-y: auto;
 }
 </style>

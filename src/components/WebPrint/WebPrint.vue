@@ -98,7 +98,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-web-print {
   display: inline-block;
   padding: 0;

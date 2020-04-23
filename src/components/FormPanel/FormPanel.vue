@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-16 21:48:15
+ * @Last Modified time: 2020-04-23 14:39:17
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1397,7 +1397,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
 .v-form-panel {
   .el-col {
     min-height: 32px;
@@ -1409,13 +1409,13 @@ export default {
       margin-bottom: 0;
       .el-form-item__label {
         height: 32px;
-        font-size: @textSize;
-        padding-right: @modulePadding;
+        font-size: $textSize;
+        padding-right: $modulePadding;
         .label-wrap {
           display: inline-block;
           max-width: calc(100% - 10px);
           .el-input__inner {
-            border-color: @borderColor;
+            border-color: $borderColor;
             padding: 0 8px;
             & + span.el-input__suffix {
               right: 0;
@@ -1465,7 +1465,7 @@ export default {
         }
         .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
         .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
-          border-color: @borderColor;
+          border-color: $borderColor;
         }
       }
       .el-range-editor {
@@ -1484,7 +1484,7 @@ export default {
         vertical-align: middle;
       }
       .desc-text {
-        font-size: @textSize;
+        font-size: $textSize;
       }
     }
   }
@@ -1512,7 +1512,7 @@ export default {
   }
   .el-tree {
     .el-tree-node[aria-disabled='true'] > .el-tree-node__content {
-      color: @disabledColor;
+      color: $disabledColor;
       background: none;
       cursor: not-allowed;
       .is-leaf {

@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .dashboard {
   padding: 5px 0 0;
   .main {

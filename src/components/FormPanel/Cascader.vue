@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:15:38
+ * @Last Modified time: 2020-04-23 14:38:37
  **/
 import _ from 'lodash';
 
@@ -124,7 +124,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-casc-select--wrapper {
   .table {
     tr {
@@ -153,7 +153,7 @@ export default {
             background-color: #f5f7fa;
           }
           &.selected {
-            color: @primaryColor;
+            color: $primaryColor;
           }
         }
       }

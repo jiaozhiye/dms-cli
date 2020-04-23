@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 12:12:35
+ * @Last Modified time: 2020-04-23 14:53:58
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -2035,11 +2035,11 @@ export default {
 };
 </script>
 
-<style lang="less">
-@tableBgColor: #f2f2f2;
-@tableHoverColor: #f5f5f5;
-@dangerColor: #f5222d;
-@borderColor: #d9d9d9;
+<style lang="scss">
+$tableBgColor: #f2f2f2;
+$tableHoverColor: #f5f5f5;
+$dangerColor: #f5222d;
+$borderColor: #d9d9d9;
 
 .table-wrapper {
   overflow-x: hidden;
@@ -2050,10 +2050,10 @@ export default {
     .slot-wrapper {
       font-size: 0;
       display: inline-block;
-      margin-right: @moduleMargin;
+      margin-right: $moduleMargin;
     }
     &.mb10 {
-      margin-bottom: @moduleMargin;
+      margin-bottom: $moduleMargin;
     }
   }
   .el-table__header-wrapper {
@@ -2067,10 +2067,10 @@ export default {
       overflow: visible;
       height: 40px;
       padding: 0;
-      background-color: @tableBgColor !important;
+      background-color: $tableBgColor !important;
       .cell {
         overflow: visible;
-        color: @textColor;
+        color: $textColor;
         font-weight: 700;
         .sort-caret.ascending {
           border-bottom-color: #c1c1c1;
@@ -2080,7 +2080,7 @@ export default {
         }
         &.is-required::before {
           content: '*';
-          color: @dangerColor;
+          color: $dangerColor;
           margin-right: 4px;
         }
         div {
@@ -2089,12 +2089,12 @@ export default {
       }
       &.ascending {
         .sort-caret.ascending {
-          border-bottom-color: @primaryColor;
+          border-bottom-color: $primaryColor;
         }
       }
       &.descending {
         .sort-caret.descending {
-          border-top-color: @primaryColor;
+          border-top-color: $primaryColor;
         }
       }
       &.gutter {
@@ -2115,10 +2115,10 @@ export default {
       height: 34px;
     }
     .selection-row {
-      background-color: @tableHoverColor;
+      background-color: $tableHoverColor;
     }
     .hover-row {
-      background-color: @tableHoverColor;
+      background-color: $tableHoverColor;
       & > td {
         background: none;
       }
@@ -2139,7 +2139,7 @@ export default {
       &.is-error {
         .form-item-error {
           line-height: 1;
-          color: @dangerColor;
+          color: $dangerColor;
           text-align: left;
         }
       }
@@ -2154,9 +2154,9 @@ export default {
     tbody > tr > td {
       height: 34px;
       padding: 0;
-      background-color: @tableBgColor !important;
+      background-color: $tableBgColor !important;
       .cell {
-        padding: 0 @modulePadding;
+        padding: 0 $modulePadding;
       }
     }
   }
@@ -2164,7 +2164,7 @@ export default {
   .el-table__fixed-right {
     z-index: 1;
     &::before {
-      background-color: @borderColor;
+      background-color: $borderColor;
     }
   }
 }
@@ -2181,12 +2181,12 @@ export default {
         td {
           line-height: 26px;
           span {
-            padding: 0 @modulePadding;
-            font-size: @textSize;
+            padding: 0 $modulePadding;
+            font-size: $textSize;
             &.is-empty {
               display: block;
               text-align: center;
-              color: @disabledColor;
+              color: $disabledColor;
               .icon {
                 font-size: 16px;
                 vertical-align: middle;
@@ -2206,7 +2206,7 @@ export default {
         }
         &.highlighted,
         &:hover {
-          background-color: @tableHoverColor;
+          background-color: $tableHoverColor;
         }
       }
     }

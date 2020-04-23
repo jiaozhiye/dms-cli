@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 16:46:58
+ * @Last Modified time: 2020-04-23 14:40:15
  **/
 import _ from 'lodash';
 import { filterEmpty } from '@/components/_utils/props-util';
@@ -188,7 +188,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-super-tab--wrapper {
   width: 100%;
   overflow: hidden;
@@ -196,8 +196,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid @borderColor;
-    margin-bottom: @moduleMargin;
+    border-bottom: 1px solid $borderColor;
+    margin-bottom: $moduleMargin;
     .tabs-nav-container {
       height: 100%;
       margin-bottom: -1px;
@@ -211,11 +211,11 @@ export default {
           cursor: pointer;
           &.tab-active,
           &:hover {
-            color: @primaryColor;
+            color: $primaryColor;
           }
           &.no-events,
           &.no-events:hover {
-            color: @disabledColor;
+            color: $disabledColor;
             cursor: not-allowed;
           }
           &.tab-small {
@@ -231,14 +231,14 @@ export default {
           bottom: 0;
           height: 2px;
           z-index: 1;
-          background-color: @primaryColor;
+          background-color: $primaryColor;
           transform-origin: 0 50%;
           transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
       }
     }
     .tabs-extra-content {
-      margin-right: @moduleMargin;
+      margin-right: $moduleMargin;
     }
   }
   .tabs-content {

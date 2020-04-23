@@ -2,19 +2,21 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 10:11:26
+ * @Last Modified time: 2020-04-23 23:31:08
  */
 import Vue from 'vue';
-import config from '@/assets/js/config';
 import ElementUI from 'element-ui';
+// 自定义主题
+import '@/assets/css/element-variables.scss';
 
-if (config.env === 'development') {
-  // require('element-ui/lib/theme-chalk/index.css');
-  require('@/assets/css/element-variables.scss');
-} else {
-  // 自定义主题
-  require('@/assets/css/element-variables.scss');
-}
+const APP_ENV = (function(env) {
+  if (env === 'development') {
+    // ...
+  } else {
+    console.log = console.warn = console.info = () => {};
+  }
+  return { env };
+})(process.env.NODE_ENV);
 
 // 全局设置 ElementUI
 Vue.use(ElementUI, { size: 'small', zIndex: 1000 });

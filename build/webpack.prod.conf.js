@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-09 20:19:19
+ * @Last Modified time: 2020-04-24 01:45:18
  */
 'use strict';
 
@@ -88,9 +88,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     new HtmlWebpackPlugin({
       filename: config.build.index,
-      template: 'index.html',
+      template: 'public/index.html',
       inject: true,
-      favicon: utils.resolve('/favicon.ico'),
+      favicon: utils.resolve('public/favicon.ico'),
       minify: {
         removeComments: true,
         collapseWhitespace: true,

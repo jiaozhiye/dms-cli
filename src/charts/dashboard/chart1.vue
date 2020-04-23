@@ -11,7 +11,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 21:14:19
+ * @Last Modified time: 2020-04-23 14:33:37
  */
 import echarts from 'echarts';
 import { sleep } from '@/utils';
@@ -164,7 +164,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .chartWrap {
   width: 100%;
   min-height: 300px;

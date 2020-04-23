@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 16:57:55
+ * @Last Modified time: 2020-04-23 23:46:55
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -175,7 +175,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
 .v-lodop-print {
   display: none;
   visibility: hidden;
@@ -183,7 +183,7 @@ export default {
 .v-lodop-print--preview {
   width: 960px;
   padding: 10px;
-  border: 1px solid @borderColor;
+  border: 1px solid $borderColor;
   margin: 0 auto;
 }
 </style>

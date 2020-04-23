@@ -45,14 +45,14 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wrapper {
   display: flex;
   height: 90px;
   background-color: #fff;
-  border-left: 4px solid @primaryColor;
-  border-radius: @borderRadius;
-  box-shadow: @boxShadow;
+  border-left: 4px solid $primaryColor;
+  border-radius: $borderRadius;
+  box-shadow: $boxShadow;
   align-items: center;
   .welcome {
     flex: 1;

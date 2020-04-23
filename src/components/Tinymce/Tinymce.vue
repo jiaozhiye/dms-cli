@@ -203,7 +203,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-tinymce--wrapper {
   position: relative;
   line-height: normal;

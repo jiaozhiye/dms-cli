@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-19 09:19:49
+ * @Last Modified time: 2020-04-23 14:42:11
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .layout {
   height: 100%;
   .sidebar {
@@ -65,11 +65,11 @@ export default {
     overflow: visible;
   }
   .container {
-    padding: @modulePadding @modulePadding 0;
+    padding: $modulePadding $modulePadding 0;
     overflow-x: hidden;
   }
   .bg-color {
-    background-color: @backgroundColorSecondary;
+    background-color: $backgroundColorSecondary;
   }
 }
 </style>

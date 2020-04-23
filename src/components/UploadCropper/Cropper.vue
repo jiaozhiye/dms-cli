@@ -1511,7 +1511,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .vue-cropper {
   position: relative;
   width: 100%;

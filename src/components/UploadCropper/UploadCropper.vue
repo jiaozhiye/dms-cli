@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-16 21:36:44
+ * @Last Modified time: 2020-04-23 14:41:48
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -239,7 +239,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .v-cropper--wrapper {
   width: 100%;
   float: left;
@@ -261,7 +261,7 @@ export default {
       width: 148px;
       height: 100%;
       margin: 0 10px 0 0;
-      border-radius: @borderRadius;
+      border-radius: $borderRadius;
       background-color: #fff;
       border: 1px dashed #c0c0c0;
       pointer-events: auto !important;
@@ -280,7 +280,7 @@ export default {
         bottom: 0;
         line-height: 20px;
         color: #fff;
-        font-size: @textSizeSecondary;
+        font-size: $textSizeSecondary;
       }
       .img {
         display: block;

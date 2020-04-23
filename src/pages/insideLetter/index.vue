@@ -75,7 +75,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .wrapper {
   margin: -12px;
   width: 340px;
@@ -84,13 +84,13 @@ export default {
     ul > li {
       padding: 10px 15px;
       line-height: 20px;
-      font-size: @textSize;
-      border-bottom: 1px solid @borderColorSecondary;
+      font-size: $textSize;
+      border-bottom: 1px solid $borderColorSecondary;
     }
     .no-info {
       text-align: center;
       padding: 30px 0;
-      color: @disabledColor;
+      color: $disabledColor;
       i {
         font-size: 26px;
       }
@@ -98,7 +98,7 @@ export default {
         display: inline-block;
         width: 100%;
         padding-top: 5px;
-        font-size: @textSize;
+        font-size: $textSize;
       }
     }
   }

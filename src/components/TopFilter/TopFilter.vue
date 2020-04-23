@@ -1151,7 +1151,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="scss">
 .v-top-filter {
   .el-col {
     min-height: 32px;
@@ -1163,13 +1163,13 @@ export default {
       margin-bottom: 0;
       .el-form-item__label {
         height: 32px;
-        font-size: @textSize;
-        padding-right: @modulePadding;
+        font-size: $textSize;
+        padding-right: $modulePadding;
         .label-wrap {
           display: inline-block;
           max-width: calc(100% - 10px);
           .el-input__inner {
-            border-color: @borderColor;
+            border-color: $borderColor;
             padding: 0 8px;
             & + span.el-input__suffix {
               right: 0;
@@ -1196,11 +1196,11 @@ export default {
       }
       .range-date {
         display: flex;
-        border: 1px solid @borderColor;
-        border-radius: @borderRadius;
+        border: 1px solid $borderColor;
+        border-radius: $borderRadius;
         transition: border-color 0.3s ease;
         &:hover:not(.disabled) {
-          border-color: @placeholderColor;
+          border-color: $placeholderColor;
         }
         .el-date-editor {
           input {
@@ -1229,8 +1229,8 @@ export default {
           }
         }
         .is-disabled {
-          background-color: @backgroundColor;
-          color: @disabledColor;
+          background-color: $backgroundColor;
+          color: $disabledColor;
           cursor: not-allowed;
         }
       }
@@ -1252,7 +1252,7 @@ export default {
         }
         .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
         .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
-          border-color: @borderColor;
+          border-color: $borderColor;
         }
       }
       .el-range-editor {
@@ -1271,7 +1271,7 @@ export default {
         vertical-align: middle;
       }
       .desc-text {
-        font-size: @textSize;
+        font-size: $textSize;
       }
       &.is-error {
         .range-date {
@@ -1288,7 +1288,7 @@ export default {
   }
   .el-tree {
     .el-tree-node[aria-disabled='true'] > .el-tree-node__content {
-      color: @disabledColor;
+      color: $disabledColor;
       background: none;
       cursor: not-allowed;
       .is-leaf {

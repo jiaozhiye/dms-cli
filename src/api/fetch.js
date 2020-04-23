@@ -2,17 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 12:03:38
+ * @Last Modified time: 2020-04-23 13:42:04
  */
 import axios from 'axios';
 import qs from 'qs';
-import config from '@/assets/js/config';
+import config from '@/config/serverMap';
 import store from '@/store';
 import { getToken } from '@/utils/cookies';
 import router from '@/routes';
 import { notifyAction } from '@/utils';
-
-console.info(config.envText);
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -39,7 +37,7 @@ const getConfigHeaders = () => {
 };
 
 const instance = axios.create({
-  baseURL: config.serverUrl,
+  baseURL: config.baseUrl,
   timeout: 10000,
   withCredentials: true, // 跨域请求时是否需要使用凭证
   paramsSerializer: params => {

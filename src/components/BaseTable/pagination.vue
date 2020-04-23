@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-19 09:59:49
+ * @Last Modified time: 2020-04-23 14:37:38
  **/
 export default {
   name: 'Pagination',
@@ -53,9 +53,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .pagination {
-  padding: @modulePadding 0;
+  padding: $modulePadding 0;
   text-align: right;
   /deep/ .el-pagination__jump {
     margin-left: 0;
