@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-20 14:27:46
+ * @Last Modified time: 2020-04-24 13:00:30
  */
 import baseProps from './props';
 import store from '../store';
@@ -253,7 +253,10 @@ export default {
     selectionKeys(val) {
       if (!this.rowSelection) return;
       const { onChange = noop } = this.rowSelection;
-      onChange(val);
+      onChange(
+        val,
+        this.tableFullData.filter(x => val.includes(this.getRowKey(x)))
+      );
     },
     scrollX(val) {
       this.isPingRight = val;

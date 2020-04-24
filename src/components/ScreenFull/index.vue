@@ -9,7 +9,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:39:55
+ * @Last Modified time: 2020-04-24 12:50:10
  **/
 import screenfull from 'screenfull';
 
@@ -52,10 +52,11 @@ export default {
 
 <style lang="scss" scoped>
 .v-screen-full {
-  .screenfull-svg {
+  /deep/ .screenfull-svg {
     display: inline-block;
+    width: 20px;
+    height: 20px;
     padding: 5px;
-    font-size: 18px;
     fill: $textColor;
     cursor: pointer;
   }

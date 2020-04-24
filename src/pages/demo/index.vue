@@ -73,7 +73,7 @@ export default {
         rowSelectable: row => {
           return row.id === 3;
         },
-        onChange: val => {
+        onChange: (val, rows) => {
           this.selectedKeys = val;
         }
       },

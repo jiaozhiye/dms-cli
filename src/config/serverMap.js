@@ -2,23 +2,23 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 13:28:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 13:32:03
+ * @Last Modified time: 2020-04-24 12:40:30
  */
 const serverConfig = {
   dev: {
-    baseUrl: '/'
+    host: '/'
   },
   tst: {
-    baseUrl: '//tst.xxx.com'
+    host: '//tst.xxx.com'
   },
   uat: {
-    baseUrl: '//uat.xxx.com'
+    host: '//uat.xxx.com'
   },
   pre: {
-    baseUrl: '//pre.xxx.com'
+    host: '//pre.xxx.com'
   },
   prod: {
-    base: '//xxx.com'
+    host: '//xxx.com'
   }
 };
 

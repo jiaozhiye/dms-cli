@@ -187,12 +187,12 @@
 
 ### rowSelection
 
-| 参数            | 说明                 | 类型                          | 默认值 |
-| --------------- | -------------------- | ----------------------------- | ------ |
-| type            | 选择类型，必要参数   | checkbox \| radio             | -      |
-| selectedRowKeys | 选中项的 key 数组    | array                         | -      |
-| rowSelectable   | 是否允许行选择       | Function(row) => boolean      | -      |
-| onChange        | 选中项发生变化时触发 | Function(selectionKeys:array) | -      |
+| 参数            | 说明                 | 类型                                   | 默认值 |
+| --------------- | -------------------- | -------------------------------------- | ------ |
+| type            | 选择类型，必要参数   | checkbox \| radio                      | -      |
+| selectedRowKeys | 选中项的 rowKey 数组 | array                                  | -      |
+| rowSelectable   | 是否允许行选择       | Function(row) => boolean               | -      |
+| onChange        | 选中项发生变化时触发 | Function(selectionKeys, selectionRows) | -      |
 
 ### expandable
 

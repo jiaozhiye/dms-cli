@@ -13,7 +13,7 @@
     "build-pre": "cross-env NODE_ENV=production ENV_CONFIG=pre node --max-old-space-size=32768 build/prod.js",
     "lint": "eslint --ext .js,.vue ./src",
     "lint:fix": "eslint --fix --ext .js,.vue ./src",
-    "format": "prettier --write \"./src/**/*.{js,vue,jsx,css,less}\""
+    "format": "prettier --write \"./src/**/*.{js,vue,jsx,css,scss}\""
   },
   "husky": {
     "hooks": {

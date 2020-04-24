@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 13:42:04
+ * @Last Modified time: 2020-04-24 12:40:29
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -37,7 +37,7 @@ const getConfigHeaders = () => {
 };
 
 const instance = axios.create({
-  baseURL: config.baseUrl,
+  baseURL: config.host,
   timeout: 10000,
   withCredentials: true, // 跨域请求时是否需要使用凭证
   paramsSerializer: params => {
