@@ -31,7 +31,7 @@
 ```bash
 # template
 <template>
-  <lazy-load-tab :initial-value="activeName" :tab-mnus="menus" />
+  <lazy-load-tab :initial-value="activeName" :tab-menus="menus" />
 </template>
 
 # js

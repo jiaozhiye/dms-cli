@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-23 22:22:13
+ * @Last Modified time: 2020-04-25 19:02:18
  */
 .v-radio-wrapper {
   display: inline-block;
   line-height: 1;
   cursor: pointer;
 
-  &:hover {
+  &:hover:not(&-disabled) {
     .v-radio-inner {
       border-color: $v-primary-color;
     }
@@ -114,8 +114,8 @@
     }
 
     .v-radio-inner {
-      border-color: #d9d9d9;
-      background-color: #f5f5f5;
+      border-color: #d9d9d9 !important;
+      background-color: #f5f5f5 !important;
       &::after {
         background-color: $v-font-disabled-color;
       }

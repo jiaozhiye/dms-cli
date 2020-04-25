@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-16 21:48:53
+ * @Last Modified time: 2020-04-25 19:28:42
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1200,7 +1200,7 @@ export default {
         border-radius: $borderRadius;
         transition: border-color 0.3s ease;
         &:hover:not(.disabled) {
-          border-color: $placeholderColor;
+          border-color: #b8b8b8;
         }
         .el-date-editor {
           input {

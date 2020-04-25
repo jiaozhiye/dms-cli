@@ -2,10 +2,21 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 22:51:21
+ * @Last Modified time: 2020-04-25 19:33:55
  */
 // 全局主色
 $primaryColor: #1890ff;
+
+// 主色的过滤色
+$primaryLight-1: mix(#fff, $primaryColor, 10%);
+$primaryLight-2: mix(#fff, $primaryColor, 20%);
+$primaryLight-3: mix(#fff, $primaryColor, 30%);
+$primaryLight-4: mix(#fff, $primaryColor, 40%);
+$primaryLight-5: mix(#fff, $primaryColor, 50%);
+$primaryLight-6: mix(#fff, $primaryColor, 60%);
+$primaryLight-7: mix(#fff, $primaryColor, 70%);
+$primaryLight-8: mix(#fff, $primaryColor, 80%);
+$primaryLight-9: mix(#fff, $primaryColor, 90%);
 
 // 成功色
 $successColor: #52c41a;
@@ -25,9 +36,6 @@ $textColorSecondary: rgba(0, 0, 0, 0.45);
 // 失效色
 $disabledColor: rgba(0, 0, 0, 0.25);
 
-// 表单提示文字色
-$placeholderColor: #b8b8b8;
-
 // 文本大小
 $textSize: 14px;
 
@@ -38,7 +46,7 @@ $textSizeSecondary: 12px;
 $borderColor: #d9d9d9;
 
 // 次边框色
-$borderColorSecondary: #e4e7ed;
+$borderColorSecondary: #e8e8e8;
 
 // 组件/浮层圆角
 $borderRadius: 2px;
@@ -52,7 +60,7 @@ $backgroundColor: #f2f2f2;
 // 次背景色
 $backgroundColorSecondary: #f5f5f5;
 
-// sidebar 侧栏
+// sidebar 侧栏颜色
 $menuText: rgba(255, 255, 255, 0.65);
 $menuActiveText: #fff;
 $subMenuActiveText: #fff;
@@ -63,10 +71,10 @@ $menuHover: #292929;
 $subMenuBg: #1a1a1a;
 $subMenuHover: #2e2e2e;
 
-// Logo背景
+// Logo 背景色
 $logoBgColor: #1c2327;
 
-// 全部导航背景
+// AllMenu 划出面板背景色
 $allMenuBgColor: #313538;
 
 // 模块之间距离

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 14:04:48
+ * @Last Modified time: 2020-04-25 19:32:37
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -217,7 +217,7 @@ export default {
     padding: 6px 0;
     border: 1px solid $borderColorSecondary;
     border-radius: $borderRadius;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: $boxShadow;
     z-index: 9999;
   }
 }

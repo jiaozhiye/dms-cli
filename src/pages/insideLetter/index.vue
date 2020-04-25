@@ -85,7 +85,7 @@ export default {
       padding: 10px 15px;
       line-height: 20px;
       font-size: $textSize;
-      border-bottom: 1px solid $borderColorSecondary;
+      border-bottom: 1px solid #e8e8e8;
     }
     .no-info {
       text-align: center;

@@ -3,7 +3,7 @@
     v-model="theme"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
-    :predefine="['#1890ff', '#409eff', '#304156', '#212121', '#11a983', '#13c2c2', '#6959CD', '#f5222d']"
+    :predefine="['#1890ff', '#2f54eb', '#722ed1', '#11a983', '#13c2c2', '#52c41a', '#304156', '#f5222d', '#fa541c', '#faad14']"
     @change="changeThemeColor"
   />
 </template>
@@ -13,7 +13,7 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 19:44:29
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 02:37:25
+ * @Last Modified time: 2020-04-25 20:05:29
  */
 import client from 'webpack-theme-color-replacer/client';
 import forElementUI from 'webpack-theme-color-replacer/forElementUI';
