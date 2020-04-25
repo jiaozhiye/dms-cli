@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 13:43:02
+ * @Last Modified time: 2020-04-25 14:04:48
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -29,8 +29,9 @@ export default {
   },
   watch: {
     $route(val) {
-      if (this.isRedirect(val.path)) return;
-      this.activeKey = val.path;
+      const { path } = val;
+      if (path.startsWith('/redirect')) return;
+      this.activeKey = path;
       this.addKeepAlive(val);
       if (!this.pathList.includes(this.activeKey)) {
         this.pages.push(val);
@@ -53,9 +54,6 @@ export default {
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),
-    isRedirect(path) {
-      return path.startsWith('/redirect');
-    },
     getHomeRoute(path) {
       return this.deepMapRoutes(this.$router.options.routes, path);
     },
