@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:34:47
+ * @Last Modified time: 2020-04-25 11:23:37
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -62,6 +62,7 @@ export default {
     }
   },
   data() {
+    this.$$dialog = null;
     this.hdHeight = 48;
     this.ftHeight = 52;
     return {
@@ -80,6 +81,7 @@ export default {
   watch: {
     visible(val) {
       if (val) {
+        this.resetDialogPosition();
         this.isVisible = val;
       } else {
         setTimeout(() => {
@@ -88,6 +90,9 @@ export default {
         }, this.delayTime);
       }
     }
+  },
+  mounted() {
+    this.$$dialog = this.$refs['dialog'].$el.querySelector('.el-dialog');
   },
   methods: {
     close() {
@@ -98,9 +103,7 @@ export default {
       this.fullscreen = !this.fullscreen;
       // 可拖拽 & 全屏状态 重置 left/top
       if (this.dragable && this.fullscreen) {
-        const $dragDom = this.$refs['dialog'].$el.querySelector('.el-dialog');
-        $dragDom.style.left = 0;
-        $dragDom.style.top = 0;
+        this.resetDialogPosition();
       }
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
@@ -118,6 +121,11 @@ export default {
         ...dialogBodyHeight,
         overflowY: `auto`
       };
+    },
+    resetDialogPosition() {
+      if (!this.$$dialog) return;
+      this.$$dialog.style.left = 0;
+      this.$$dialog.style.top = 0;
     },
     isIE() {
       return !!window.ActiveXObject || 'ActiveXObject' in window;

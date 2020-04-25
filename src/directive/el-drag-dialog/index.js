@@ -2,9 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-27 12:30:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-27 17:46:05
+ * @Last Modified time: 2020-04-25 11:17:21
  */
 import { throttle } from '@/utils';
+
+const getStyle = (obj, attr) => {
+  return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, false)[attr];
+};
 
 export default {
   inserted(el, binding, vnode) {
@@ -15,19 +19,10 @@ export default {
     dragDom.style.top = 0;
     dragDom.style.left = 0;
 
-    // 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
-    const getStyle = (function() {
-      if (window.document.currentStyle) {
-        return (dom, attr) => dom.currentStyle[attr];
-      } else {
-        return (dom, attr) => getComputedStyle(dom, false)[attr];
-      }
-    })();
-
     // 元素移动的方法
-    function moveHandle(l, t) {
-      dragDom.style.left = `${l}px`;
-      dragDom.style.top = `${t}px`;
+    function moveHandle(el, [l, t]) {
+      el.style.left = `${l}px`;
+      el.style.top = `${t}px`;
       // emit onDrag event
       vnode.child.$emit('dragDialog', { left: l, top: t });
     }
@@ -81,15 +76,19 @@ export default {
         }
 
         // 移动当前元素
-        throttle(moveHandle, 10)(left + styL, top + styT);
+        throttle(moveHandle, 10)(dragDom, [left + styL, top + styT]);
       };
 
-      document.onmouseup = function(e) {
+      document.onmouseup = function() {
         this.onmousemove = null;
         this.onmouseup = null;
       };
 
       return false;
     };
+  },
+  unbind(el) {
+    const dialogHeaderEl = el.querySelector('.el-dialog__header');
+    dialogHeaderEl.onmousedown = null;
   }
 };

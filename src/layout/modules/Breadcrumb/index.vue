@@ -3,10 +3,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:42:30
+ * @Last Modified time: 2020-04-25 13:12:10
  **/
 import { mapState } from 'vuex';
-import router from '@/routes';
 
 export default {
   name: 'Breadcrumb',
@@ -24,7 +23,7 @@ export default {
     // },
     breadcrumbs() {
       const { path } = this.$route;
-      return path === '/home' ? [this.deepMapRoutes(router.options.routes, 'path', path).meta.title] : this.matchRoutes(this.navList, path);
+      return path === '/home' ? [this.deepMapRoutes(this.$router.options.routes, 'path', path).meta.title] : this.matchRoutes(this.navList, path);
     }
   },
   methods: {

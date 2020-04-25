@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 01:27:46
+ * @Last Modified time: 2020-04-25 13:54:00
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -32,7 +32,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '/home',
-        meta: { title: '概览', bgColor: true, keepAlive: false },
+        meta: { title: '概览', affix: true, bgColor: true, keepAlive: false },
         component: Dashboard
       },
       ...modulesRoute,

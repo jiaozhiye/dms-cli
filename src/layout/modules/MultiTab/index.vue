@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:42:52
+ * @Last Modified time: 2020-04-25 13:43:02
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -11,16 +11,18 @@ import addEventListener from 'add-dom-event-listener';
 export default {
   name: 'MultiTab',
   data() {
-    this.$multiTab = null; // DOM 节点
     return {
       activeKey: this.$route.path,
-      pages: [this.$route],
+      pages: this.$route.path === '/home' ? [this.getHomeRoute('/home')] : [this.getHomeRoute('/home'), this.$route],
       visible: false,
       currentKey: '',
       position: { x: 0, y: 0 }
     };
   },
   computed: {
+    $multiTab() {
+      return this.$refs.multiTab.$el;
+    },
     pathList() {
       return this.pages.map(x => x.path);
     }
@@ -36,29 +38,26 @@ export default {
     },
     pages(val) {
       this.createTabMenuList(val.map(x => ({ key: x.path, title: x.meta.title })));
-    },
-    visible(val) {
-      if (val) {
-        document.body.addEventListener('click', this.closeContextMenu);
-      } else {
-        document.body.removeEventListener('click', this.closeContextMenu);
-      }
     }
   },
   created() {
     this.addKeepAlive(this.$route);
   },
   mounted() {
-    this.$multiTab = this.$refs.multiTab.$el;
     this.bindContextmenuEvent();
+    this.bindDocumentEvent();
   },
   destroyed() {
-    this.eventHandler.remove();
+    this.contextmenuEvent.remove();
+    this.clickEvent.remove();
   },
   methods: {
     ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),
     isRedirect(path) {
       return path.startsWith('/redirect');
+    },
+    getHomeRoute(path) {
+      return this.deepMapRoutes(this.$router.options.routes, path);
     },
     getRouteComponent(route) {
       return route.matched[route.matched.length - 1].components.default;
@@ -70,6 +69,7 @@ export default {
       this.addKeepAliveNames({ key: this.activeKey, value: name });
     },
     removeTab(targetKey) {
+      if (targetKey === '/home') return;
       this.pages = this.pages.filter(page => page.path !== targetKey);
       // 移除组件缓存列表
       this.removeKeepAliveNames(targetKey);
@@ -132,7 +132,7 @@ export default {
       this.visible = false;
     },
     bindContextmenuEvent() {
-      this.eventHandler = addEventListener(this.$multiTab, 'contextmenu', ev => {
+      this.contextmenuEvent = addEventListener(this.$multiTab, 'contextmenu', ev => {
         ev.preventDefault();
         const classNames = [...ev.target.classList];
         if (classNames.includes('el-tabs__item')) {
@@ -146,8 +146,26 @@ export default {
         }
       });
     },
+    bindDocumentEvent() {
+      this.clickEvent = addEventListener(document, 'click', this.closeContextMenu);
+    },
+    deepMapRoutes(arr, mark) {
+      let res = null;
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i].children)) {
+          res = this.deepMapRoutes(arr[i].children, mark);
+        }
+        if (res) {
+          return res;
+        }
+        if (arr[i].path === mark) {
+          return arr[i];
+        }
+      }
+      return res;
+    },
     createPanelList() {
-      return this.pages.map(x => <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={this.pages.length > 1} />);
+      return this.pages.map(x => <el-tab-pane key={x.path} name={x.path} label={x.meta.title} closable={!x.meta.affix && !!this.pages.length} />);
     }
   },
   render() {
@@ -156,14 +174,14 @@ export default {
         <el-tabs ref="multiTab" class="multi-tab" type="card" value={this.activeKey} on-tab-click={this.handleClick} on-tab-remove={this.removeTab}>
           {this.createPanelList()}
         </el-tabs>
-        {this.visible ? (
+        {this.visible && (
           <ul class="contextmenu el-dropdown-menu--small" style={{ left: `${this.position.x + 10}px`, top: `${this.position.y + 2}px` }}>
             <el-dropdown-item nativeOnClick={this.refreshTagHandle}>刷新当前</el-dropdown-item>
             <el-dropdown-item nativeOnClick={() => this.closeTagHandle('right')}>关闭右侧</el-dropdown-item>
             <el-dropdown-item nativeOnClick={() => this.closeTagHandle('left')}>关闭左侧</el-dropdown-item>
             {this.pages.length > 1 && <el-dropdown-item nativeOnClick={this.closeOtherTagHandle}>关闭其他</el-dropdown-item>}
           </ul>
-        ) : null}
+        )}
       </div>
     );
   }

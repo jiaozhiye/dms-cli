@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 19:32:23
+ * @Last Modified time: 2020-04-25 12:42:13
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -205,7 +205,7 @@ const actions = {
       type: types.DEL_CNAME,
       data: path
     });
-    router.replace({ path: `/redirect${path}`, query }).catch(() => {});
+    setTimeout(() => router.replace({ path: `/redirect${path}`, query }).catch(() => {}));
   },
   createNotifyState({ commit, state }, params) {
     commit({
