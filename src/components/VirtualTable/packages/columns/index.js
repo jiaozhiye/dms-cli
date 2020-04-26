@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 16:36:04
+ * @Last Modified time: 2020-04-26 16:40:25
  */
 import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn } from '../utils';
 import config from '../config';
@@ -118,6 +118,11 @@ const columnsMixin = {
         r += column.width || column.renderWidth;
       }
       return r;
+    },
+    resetColumns() {
+      deepMapColumns(this.tableColumns, x => {
+        delete x.orderBy;
+      });
     }
   }
 };

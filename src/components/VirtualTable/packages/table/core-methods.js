@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:18:18
+ * @Last Modified time: 2020-04-26 16:37:38
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -225,5 +225,10 @@ export default {
   onlyPaginationChange(next, prev) {
     const diff = Object.keys(difference(next, prev));
     return diff.length === 1 && (diff.includes('currentPage') || diff.includes('pageSize'));
+  },
+  // 析构方法
+  destroy() {
+    this.removeEvents();
+    this.resetColumns();
   }
 };

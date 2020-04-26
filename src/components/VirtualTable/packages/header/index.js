@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 15:16:54
+ * @Last Modified time: 2020-04-26 16:28:58
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -216,9 +216,9 @@ export default {
         this.doResetHandle();
       }
     },
-    // 还原数据
+    // 还原排序数据
     doResetHandle() {
-      this.$$table.tableFullData = !this.tableFilterData.length ? [...this.$$table.tableOriginData] : [...this.tableFilterData];
+      this.$$table.tableFullData = [...this.tableFilterData];
     },
     // 排序算法
     doSortHandle(column, order) {
@@ -289,14 +289,13 @@ export default {
       }
 
       if (!Object.keys(this.filters).length) {
-        this.tableFilterData = [];
-        this.$$table.tableFullData = [...tableOriginData];
+        this.tableFilterData = [...tableOriginData];
       } else {
         // 求给定数组的交集
-        const interList = _.intersection(...filterList);
-        this.tableFilterData = [...interList];
-        this.$$table.tableFullData = [...interList];
+        this.tableFilterData = _.intersection(...filterList);
       }
+
+      this.$$table.tableFullData = [...this.tableFilterData];
     },
     // 格式化排序参数
     formatSorterValue(option) {

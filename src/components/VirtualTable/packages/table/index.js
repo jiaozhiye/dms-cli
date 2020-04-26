@@ -278,7 +278,7 @@ export default {
     this.createResizeState();
   },
   destroyed() {
-    this.removeEvents();
+    this.destroy();
   },
   methods: {
     ...layoutMethods,
