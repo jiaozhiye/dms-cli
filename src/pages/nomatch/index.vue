@@ -1,24 +1,26 @@
 <template>
   <div style="padding: 10px 100px 0;">
     <el-button @click="clickHandle">按钮</el-button>
-    <VirtualTable
-      ref="table"
-      :exportExcel="{
-        fileName: 'aaa.xlsx'
-      }"
-      :tablePrint="{
-        showLogo: true
-      }"
-      :columns="columns"
-      :dataSource="list"
-      rowKey="id"
-      :height="height"
-      :rowSelection="selection"
-      :columnsChange="columnsChange"
-      @dataChange="changeHandle"
-    >
-      <span></span>
-    </VirtualTable>
+    <div v-if="visible">
+      <VirtualTable
+        ref="table"
+        :exportExcel="{
+          fileName: 'aaa.xlsx'
+        }"
+        :tablePrint="{
+          showLogo: true
+        }"
+        :columns="columns"
+        :dataSource="list"
+        rowKey="id"
+        :height="height"
+        :rowSelection="selection"
+        :columnsChange="columnsChange"
+        @dataChange="changeHandle"
+      >
+        <span></span>
+      </VirtualTable>
+    </div>
   </div>
 </template>
 
@@ -47,6 +49,7 @@ export default {
   components: { VirtualTable },
   data() {
     return {
+      visible: true,
       list: data,
       height: 400,
       fetch: {
@@ -221,6 +224,7 @@ export default {
       // this.list.splice(0, 1);
       // this.selection.selectedRowKeys = [4];
       // console.log(this.$refs.table.GET_LOG());
+      this.visible = !this.visible;
     }
   }
 };

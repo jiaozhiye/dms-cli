@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 14:30:59
+ * @Last Modified time: 2020-04-26 15:16:54
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -109,7 +109,7 @@ export default {
           [`v-column--required`]: !!required,
           [`v-column-has-sorter`]: sorter,
           [`v-column-has-filter`]: filter,
-          [`v-column--sort`]: orderBy !== null,
+          [`v-column--sort`]: !!orderBy,
           [`v-cell-fix-left`]: fixed === 'left',
           [`v-cell-fix-right`]: fixed === 'right',
           [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
@@ -182,9 +182,9 @@ export default {
       return <THeadFilter column={column} filters={this.filters} />;
     },
     thClickHandle(ev, column) {
-      const { sorter, dataIndex } = column;
+      const { sorter, orderBy, dataIndex } = column;
       if (sorter) {
-        const order = column.orderBy ? (column.orderBy === this.descend ? null : this.descend) : this.ascend;
+        const order = orderBy ? (orderBy === this.descend ? null : this.descend) : this.ascend;
         // 取消其他排序
         this.flattenColumns.forEach(x => {
           if (!x.sorter || x.dataIndex === dataIndex) return;
@@ -218,7 +218,7 @@ export default {
     },
     // 还原数据
     doResetHandle() {
-      this.$$table.tableFullData = !this.tableFilterData.length ? [...this.$$table.tableOriginData] : this.tableFilterData;
+      this.$$table.tableFullData = !this.tableFilterData.length ? [...this.$$table.tableOriginData] : [...this.tableFilterData];
     },
     // 排序算法
     doSortHandle(column, order) {

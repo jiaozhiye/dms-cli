@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 22:45:15
+ * @Last Modified time: 2020-04-26 14:09:09
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -30,15 +30,20 @@ export default {
     this.createCommonMenuList();
   },
   methods: {
-    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList'])
+    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList']),
+    createMainContainer() {
+      return (
+        <keep-alive include={this.cachedNames} max={config.maxCacheNum}>
+          <router-view />
+        </keep-alive>
+      );
+    }
   },
   render() {
     return (
       <GlobalLayout>
         {/* <transition name="fade-transform" mode="out-in"> */}
-        <keep-alive include={this.cachedNames} max={config.maxCacheNum}>
-          <router-view key={this.key} />
-        </keep-alive>
+        {this.createMainContainer()}
         {/* </transition> */}
       </GlobalLayout>
     );

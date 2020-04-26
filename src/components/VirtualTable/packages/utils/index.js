@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-16 17:31:34
+ * @Last Modified time: 2020-04-26 15:35:39
  */
 import _ from 'lodash';
 
@@ -41,7 +41,7 @@ export const deepMapColumns = (columns, callback) => {
           delete subColumn.fixed;
         }
       });
-      column.children = deepMapColumns(column.children);
+      column.children = deepMapColumns(column.children, callback);
     }
     // 执行回调
     callback && callback(column);
