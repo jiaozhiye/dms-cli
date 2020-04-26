@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 16:28:58
+ * @Last Modified time: 2020-04-26 17:29:36
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -24,7 +24,7 @@ export default {
   },
   inject: ['$$table'],
   data() {
-    this.tableFilterData = [];
+    this.tableFilterData = [...this.$$table.tableFullData];
     return {
       filters: {},
       sorter: {},
@@ -296,6 +296,8 @@ export default {
       }
 
       this.$$table.tableFullData = [...this.tableFilterData];
+      // 执行排序
+      this.sorterHandle();
     },
     // 格式化排序参数
     formatSorterValue(option) {
