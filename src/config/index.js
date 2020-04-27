@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 23:54:32
+ * @Last Modified time: 2020-04-27 14:22:27
  */
 const config = {
   systemName: '奥迪EP系统',
+  prefix: '/api', // ajax 请求前缀
   maxCacheNum: 10, // 路由组件最大缓存数量
   showBreadcrumb: true, // 是否显示面包屑
   notifyDuration: 3000, // 通知消息组件显示时间

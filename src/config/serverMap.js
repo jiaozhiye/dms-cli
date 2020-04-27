@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 13:28:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 12:40:30
+ * @Last Modified time: 2020-04-27 13:58:21
  */
-const serverConfig = {
+const config = {
   dev: {
     host: '/'
   },
@@ -22,4 +22,4 @@ const serverConfig = {
   }
 };
 
-export default serverConfig[process.env.ENV_CONFIG];
+export default config[process.env.ENV_CONFIG];

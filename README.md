@@ -4,7 +4,7 @@
 
 ## 前序准备
 
-- 本地安装 nodejs 请使用 v12.10.0 及以上版本，建议使用 nvm 管理。
+- 本地安装 nodejs 请使用 v12.16.0 及以上版本，建议使用 nvm 管理。
 - 建议使用 yarn 管理 npm 依赖。
 - 编译器统一使用 VScode，必要的插件列表：
   - Vetur
@@ -21,7 +21,7 @@
 $ yarn install 或 npm install
 
 # 启动本地服务
-$ npm run start
+$ npm run start 或 npm run dev
 
 # 发布，构建生产环境代码
 $ npm run build
@@ -31,7 +31,6 @@ $ npm run build
 
 ```
 - config/index.js 请求代理文件
-- src/api/server.js 请求前缀管理文件
 
 注意：npm 依赖需要统一管理，不允许私自安装；公共的表单校验规则统一管理
 ```
@@ -71,20 +70,25 @@ $ npm run build
 ├── build                      # webpack 构建相关
 ├── config                     # webpack 参数配置
 ├── static                     # 资源文件
+├── public                     # 公共资源
+│   ├── index.html             # 所有请求
+│   ├── favicon.ico            # favicon 图标
 ├── src                        # 源代码
 │   ├── api                    # 所有请求
 │   ├── assets                 # 静态资源
+│   ├── charts                 # 图表组件
 │   ├── components             # 全局公用组件
 │   ├── config                 # 全局配置
 │   ├── directive              # 全局指令
 │   ├── filters                # 全局 filter
 │   ├── layout                 # 全局 layout
+│   ├── mixins                 # 全局混入
 │   ├── mock                   # 项目 mock 模拟数据
 │   ├── pages                  # 所有页面
 │   ├── routes                 # 路由
 │   ├── store                  # 全局 store 管理
 │   ├── utils                  # 全局公用方法
-│   ├── App.vue                # 入口页面
+│   ├── app.js                 # 根组件
 │   └── main.js                # 入口文件
 ├── .babelrc                   # babel-loader 配置
 ├── .editorconfig              # EditorConfig 配置
@@ -92,10 +96,9 @@ $ npm run build
 ├── .eslintignore              # Eslint 忽略清单
 ├── .eslintrc.js               # Eslint 校验规则
 ├── .gitignore                 # git 忽略清单
+├── .npmrc                     # npm 配置
+├── .postcssrc.js              # postcss 配置
 ├── .prettierrc                # Prettier 配置
-├── favicon.ico                # favicon 图标
-├── index.html                 # html 模板
-├── postcss.config.js          # postcss 配置
 ├── README.md                  # README.md
 └── package.json               # package.json
 ```
