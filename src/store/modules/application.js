@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 12:42:13
+ * @Last Modified time: 2020-04-28 10:51:23
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -11,7 +11,7 @@ import { messageAction, clearAllCookie } from '@/utils';
 import { setToken, setUser } from '@/utils/cookies';
 import variables from '@/assets/css/variables.scss';
 import localDict from '@/utils/localDict';
-import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api';
+import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api/login';
 
 const deepMapRoutes = (arr, mark) => {
   let res = null;

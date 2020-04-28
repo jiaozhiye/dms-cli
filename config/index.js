@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-18 22:13:01
+ * @Last Modified time: 2020-04-28 11:04:52
  */
 'use strict';
 const path = require('path');
@@ -16,9 +16,9 @@ module.exports = {
     // 请求代理配置 -> can be modified
     proxyTable: {
       '/api': {
-        target: 'http://jettadms-test.faw-vw.com',
+        target: 'http://192.168.66.30:9008',
         changeOrigin: true, // 支持跨域
-        secure: false, // 支持 https
+        // secure: false, // 支持 https
         pathRewrite: {
           '^/api': '/api'
         }
