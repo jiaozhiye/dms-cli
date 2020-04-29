@@ -3,7 +3,7 @@
     <div class="left">
       <div class="logo-wrap">
         <span>
-          <img src="@/assets/img/logo_yq.png" width="120" />
+          <img src="@/assets/img/logo_yq.png" width="140" />
         </span>
         <span>
           <img src="@/assets/img/logo_audi.png" width="240" />
@@ -209,24 +209,25 @@ export default {
 <style lang="scss" scoped>
 .login {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background: #fff url(../../assets/img/login_bg.svg) no-repeat 50%;
   background-size: 100%;
   .left {
     flex: 1;
     background: url(../../assets/img/login_left_bg.jpg) 100% 0 no-repeat;
     background-size: cover;
+    overflow-y: hidden;
     .logo-wrap {
       display: flex;
-      padding: 8vh 10vh 0;
+      padding: 40px 50px 0;
       justify-content: space-between;
       align-items: center;
     }
     .copy-wrap {
-      padding: 15vh 10vh 0;
+      padding: 15vh 40px 0;
     }
     .btn-wrap {
-      padding: 6vh 10vh 0;
+      padding: 10vh 40px 0;
     }
     .audi-button {
       display: inline-block;
@@ -292,7 +293,7 @@ export default {
               /deep/ .el-input__inner {
                 font-size: 14px;
                 border: 0;
-                border-bottom: 1px solid #d6d6d6 !important;
+                border-bottom: 1px solid $borderColor !important;
               }
               /deep/ .el-input__icon {
                 font-size: 18px;
@@ -325,7 +326,7 @@ export default {
           }
         }
         .footer {
-          margin-top: 15vh;
+          margin-top: 10vh;
           .quick {
             line-height: 30px;
             span {
