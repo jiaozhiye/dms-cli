@@ -11,7 +11,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 19:11:26
+ * @Last Modified time: 2020-04-29 16:52:08
  */
 import echarts from 'echarts';
 import { sleep } from '@/utils';
@@ -59,14 +59,14 @@ export default {
   methods: {
     async initial() {
       this.loading = true;
-      if (process.env.MOCK_DATA === 'true') {
+      if (process.env.MOCK_DATA) {
         await sleep(500);
         const { chart4 } = require('@/mock/chartData').default;
         this.draw(chart4);
       } else {
         try {
           const res = await this.fetchapi(this.params);
-          if (res.resultCode === 200) {
+          if (res.code === 200) {
             this.draw(res.data);
           }
         } catch (e) {}

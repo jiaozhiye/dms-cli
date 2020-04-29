@@ -52,7 +52,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:41:48
+ * @Last Modified time: 2020-04-28 16:19:58
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 import canvasCompress from './compress';
@@ -174,7 +174,7 @@ export default {
       }
       try {
         const res = await axios.post(this.actionUrl, formData);
-        if (res.resultCode === 200) {
+        if (res.code === 200) {
           this.fileList.push({ name: this.file.name, url: res.data || '' });
         }
       } catch (err) {

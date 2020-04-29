@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 01:24:43
+ * @Last Modified time: 2020-04-29 15:16:43
  */
 import router from '@/routes';
 import store from '@/store';
@@ -18,7 +18,7 @@ NProgress.configure({ showSpinner: false });
 const whiteList = ['/login'];
 
 // 权限白名单
-const whiteAuth = ['/login', '/home', '/redirect', '/404'];
+const whiteAuth = ['/login', '/home', '/redirect', '/404', '/test'];
 
 // 路由重定向
 const redirect = (next, path) => {

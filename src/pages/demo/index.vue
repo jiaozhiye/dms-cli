@@ -13,7 +13,7 @@
       cacheColumnsKey="jzyDemoTable"
       height="auto"
       :columns="columns"
-      :fetch="fetch"
+      :dataSource="list"
       :rowKey="record => record.id"
       :rowSelection="selection"
       :exportExcel="exportExcel"
@@ -50,6 +50,7 @@ import SearchHelper from './searchHelper';
 import AddInfo from './addInfo';
 import TableSearchHelper from './tableSearchHelper';
 
+import tableData from '@/mock/tableData';
 import printData from '@/mock/printData';
 
 export default {
@@ -67,6 +68,7 @@ export default {
         params: {},
         dataKey: 'items'
       },
+      list: tableData.data.items,
       selection: {
         type: 'checkbox',
         selectedRowKeys: this.selectedKeys,

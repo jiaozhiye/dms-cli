@@ -197,7 +197,8 @@ export default {
             fetchApi: () => {},
             params: {},
             datakey: 'items',
-            valueKey: 'name'
+            valueKey: 'id',
+            textKey: 'name'
           }
         },
         {
@@ -234,13 +235,13 @@ export default {
             limit: 1,
             params: {}
           }
+        },
+        {
+          type: 'TINYMCE',
+          label: '表单项12',
+          selfCols: 3,
+          fieldName: 'z'
         }
-        // {
-        //   type: 'TINYMCE',
-        //   label: '表单项12',
-        //   selfCols: 3,
-        //   fieldName: 'z'
-        // }
       ];
     },
     findFormItem(val) {

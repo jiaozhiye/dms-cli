@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 19:28:42
+ * @Last Modified time: 2020-04-29 17:41:10
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -844,13 +844,14 @@ export default {
     // 下拉框的筛选方法
     filterMethodHandle(fieldName, queryString = '') {
       const target = this.formItemList.find(x => x.fieldName === fieldName);
-      const itemList = target.itemList || this[`${fieldName}ItemList`] || [];
+      const { options = {} } = target;
+      const itemList = options.itemList || this[`${fieldName}ItemList`] || [];
       if (!this[`${fieldName}OriginItemList`]) {
         this[`${fieldName}OriginItemList`] = itemList;
       }
       const res = queryString ? this[`${fieldName}OriginItemList`].filter(this.createSearchHelpFilter(queryString)) : this[`${fieldName}OriginItemList`];
       if (!this[`${fieldName}ItemList`]) {
-        target.itemList = res;
+        _.set(target, 'options.itemList', res);
       } else {
         this[`${fieldName}ItemList`] = res;
         this.$forceUpdate();
@@ -863,7 +864,7 @@ export default {
         this[`${fieldName}ItemList`] = res.data.map(x => ({ value: x[valueKey], text: x[textKey] }));
       } else {
         const res = await fetchApi(params);
-        if (res.resultCode === 200) {
+        if (res.code === 200) {
           const dataList = !datakey ? res.data : _.get(res.data, datakey, []);
           this[`${fieldName}ItemList`] = dataList.map(x => ({ value: x[valueKey], text: x[textKey] }));
         }
@@ -880,7 +881,7 @@ export default {
         }, 500);
       } else {
         const res = await fetchApi({ ...{ [fieldName]: queryString }, ...params });
-        if (res.resultCode === 200) {
+        if (res.code === 200) {
           const dataList = !datakey ? res.data : _.get(res.data, datakey, []);
           cb(this.createSerachHelperList(dataList, valueKey));
         }

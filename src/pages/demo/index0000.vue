@@ -212,6 +212,11 @@ export default {
       }
     };
   },
+  computed: {
+    $table() {
+      return this.$refs[`table`];
+    }
+  },
   methods: {
     changeHandle() {
       // console.log(111);
@@ -224,7 +229,8 @@ export default {
       // this.list.splice(0, 1);
       // this.selection.selectedRowKeys = [4];
       // console.log(this.$refs.table.GET_LOG());
-      this.visible = !this.visible;
+      // this.visible = !this.visible;
+      // this.$table.INSERT_RECORDS({ id: Math.random(), books: 10 });
     }
   }
 };

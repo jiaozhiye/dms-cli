@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:53:58
+ * @Last Modified time: 2020-04-28 16:29:12
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -157,7 +157,7 @@ export default {
       sorterParams: {}, // 表头排序参数
       // 分页
       pagination: {
-        current: config.table.pageNum || 1,
+        currentPage: config.table.pageNum || 1,
         pageSize: config.table.pageSize || 20,
         total: 0
       },
@@ -206,11 +206,11 @@ export default {
       return _.isUndefined(this.isServerFilter) ? config.table.serverFilter : this.isServerFilter;
     },
     fetchParams() {
-      const { current, pageSize } = this.pagination;
+      const { currentPage, pageSize } = this.pagination;
       const pagination = this.isShowPagination
         ? {
-            pageSize, // 必须
-            current // 必须
+            currentPage, // 必须
+            pageSize // 必须
           }
         : {};
       const queries = {
@@ -335,13 +335,13 @@ export default {
     },
     // 创建内存分页的列表数据
     createLimitRecords() {
-      const { current, pageSize } = this.pagination;
-      this.list = this.originData.slice((current - 1) * pageSize, current * pageSize);
+      const { currentPage, pageSize } = this.pagination;
+      this.list = this.originData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     },
     // 是否仅有分页参数产生变化
     isOnlyPaginationChange(nextProps, prevProps) {
       const diff = Object.keys(this.difference(nextProps, prevProps));
-      return diff.length === 1 && (diff.includes('current') || diff.includes('pageSize'));
+      return diff.length === 1 && (diff.includes('currentPage') || diff.includes('pageSize'));
     },
     // 创建表格数据
     createTableList(data) {
@@ -379,10 +379,10 @@ export default {
     },
     // 处理列表数据
     createTableDataKey(dataList, uidkey) {
-      const { current, pageSize } = this.pagination;
+      const { currentPage, pageSize } = this.pagination;
       dataList.forEach((x, i) => {
         x.$index = i;
-        x.index = (current - 1) * pageSize + i; // 序号
+        x.index = (currentPage - 1) * pageSize + i; // 序号
         x._uid = x[uidkey] || x._uid || this.createUidKey(); // 字段值唯一不重复的 key
         this.columnFlatMap(this.columns).forEach(column => {
           const { dataIndex, precision, editable, editType } = column;
@@ -444,7 +444,7 @@ export default {
     },
     // 跳转到第一页
     toFirstPage() {
-      this.pagination.current = 1;
+      this.pagination.currentPage = 1;
     },
     // 设置分页总数
     setPaginationTotal(val) {
@@ -1071,7 +1071,7 @@ export default {
         }, 500);
       } else {
         const res = await fetchApi({ ...{ [key]: queryString }, ...params });
-        if (res.resultCode === 200) {
+        if (res.code === 200) {
           const list = !datakey ? res.data : _.get(res.data, datakey, []);
           cb(this.createSerachHelperList(list, aliasKey));
         }
@@ -1086,8 +1086,8 @@ export default {
       if (process.env.MOCK_DATA === 'true') {
         const { data } = _.cloneDeep(require('@/mock/tableData').default);
         // 模拟分页
-        const { current, pageSize } = fetchParams;
-        const start = (current - 1) * pageSize;
+        const { currentPage, pageSize } = fetchParams;
+        const start = (currentPage - 1) * pageSize;
         const end = start + pageSize;
         data.items = data.items.slice(start, end);
         // 构建表格数据
@@ -1099,7 +1099,7 @@ export default {
         this.START_LOADING();
         try {
           const res = await fetchapi(params);
-          if (res.resultCode === 200) {
+          if (res.code === 200) {
             // 构建表格数据
             this.createTableList(res.data);
           }

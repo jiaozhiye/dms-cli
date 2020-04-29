@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-19 09:40:24
+ * @Last Modified time: 2020-04-29 16:17:44
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -29,7 +29,7 @@ export const dictionary = {
       vals = Array.isArray(vals) ? vals : [vals];
       let res = [];
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        res = this.dict[code].map(x => ({ text: x.codeCnDesc, value: x.codeId }));
+        res = this.dict[code].map(x => ({ text: x.cnText, value: x.value }));
         res = res.filter(x => !vals.includes(x.value));
       }
       return res;
@@ -44,8 +44,8 @@ export const dictionary = {
       let res = '';
       if (!val) return res;
       if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        const target = this.dict[code].find(x => x.codeId == val);
-        res = target ? target.codeCnDesc : val;
+        const target = this.dict[code].find(x => x.value == val);
+        res = target ? target.cnText : val;
       }
       return res;
     },

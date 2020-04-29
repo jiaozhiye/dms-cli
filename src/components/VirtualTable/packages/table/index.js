@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 13:00:30
+ * @Last Modified time: 2020-04-29 10:37:27
  */
 import baseProps from './props';
 import store from '../store';
@@ -14,6 +14,7 @@ import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, debounce,
 import columnsMixin from '../columns';
 import expandableMixin from '../expandable/mixin';
 import selectionMixin from '../selection/mixin';
+import validateMixin from '../edit/validate';
 import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
@@ -45,7 +46,7 @@ export default {
       $$table: this
     };
   },
-  mixins: [columnsMixin, expandableMixin, selectionMixin, localStorageMixin],
+  mixins: [columnsMixin, expandableMixin, selectionMixin, validateMixin, localStorageMixin],
   data() {
     // 原始数据
     this.tableOriginData = [];

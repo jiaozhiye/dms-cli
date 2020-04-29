@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 12:40:29
+ * @Last Modified time: 2020-04-28 16:14:37
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -23,6 +23,7 @@ const codeMessage = {
   404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
   406: '请求的格式不可得。',
   410: '请求的资源被永久删除，且不会再得到的。',
+  412: '客户端请求信息的先决条件错误。',
   422: '当创建一个对象时，发生一个验证错误。',
   500: '服务器发生错误，请检查服务器。',
   502: '网关错误。',
@@ -67,15 +68,14 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => {
   let { config, headers, data } = response;
-  let { resultCode } = data;
   // 错误数据提示
-  if (resultCode !== 200) {
+  if (data.code !== 200) {
     // token 过期，需要重新登录
-    if (resultCode === 40105) {
+    if (data.code === 40105) {
       store.dispatch('app/createLogout');
       router.push({ path: '/' }).catch(() => {});
     }
-    data.errMsg && notifyAction(data.errMsg, 'error');
+    data.msg && notifyAction(data.msg, 'error');
   }
   // 判断是否为导出/下载
   if (config.responseType === 'blob') {

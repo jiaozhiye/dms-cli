@@ -12,7 +12,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 16:51:37
+ * @Last Modified time: 2020-04-29 17:05:33
  **/
 import plugins from './plugins';
 import toolbar from './toolbar';
@@ -100,7 +100,7 @@ export default {
   deactivated() {
     this.destroyTinymce();
   },
-  destroyed() {
+  beforeDestroy() {
     this.destroyTinymce();
   },
   methods: {

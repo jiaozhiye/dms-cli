@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:41:51
+ * @Last Modified time: 2020-04-28 16:19:59
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
 
@@ -79,7 +79,7 @@ export default {
       this.fileList = fileList;
     },
     successHandle(res, file, fileList) {
-      if (res.resultCode === 200) {
+      if (res.code === 200) {
         this.fileList = [...this.fileList, { name: file.name, url: res.data || '' }];
       }
     },

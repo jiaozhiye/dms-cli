@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 16:37:38
+ * @Last Modified time: 2020-04-29 09:25:10
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -14,13 +14,15 @@ const throttleScrollYDuration = $browse['msie'] ? 20 : 10;
 
 export default {
   // 创建表格数据
-  createTableData(list) {
+  createTableData(list, callback) {
     const results = list.map((record, index) => {
       record.index = index;
       // 初始化数据
       this.flattenColumns.forEach(column => {
         const { dataIndex, precision } = column;
         if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
+        // 回调方法
+        callback && callback(record, dataIndex);
         const cellVal = getCellValue(record, dataIndex);
         if (precision >= 0 && !isNaN(Number(cellVal))) {
           setCellValue(record, dataIndex, Number(cellVal).toFixed(precision));
@@ -54,7 +56,7 @@ export default {
       this.showLoading = true;
       try {
         const res = await fetch.api(fetchParams);
-        if (res.resultCode === 200) {
+        if (res.code === 200) {
           const datakey = fetch.dataKey || config.dataKey;
           list = _.get(res.data, datakey) || [];
           total = _.get(res.data, datakey.replace(/[^\.]+$/, config.totalKey)) || list.length || 0;

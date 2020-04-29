@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 21:16:27
+ * @Last Modified time: 2020-04-28 16:19:49
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
@@ -96,7 +96,7 @@ export default {
         try {
           this.loading = !0;
           const res = await api(params);
-          if (res.resultCode === 200) {
+          if (res.code === 200) {
             data = (!dataKey ? res.data : _.get(res.data, dataKey)) || [];
           }
         } catch (err) {}

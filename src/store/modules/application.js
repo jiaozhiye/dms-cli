@@ -2,13 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-28 10:51:23
+ * @Last Modified time: 2020-04-29 15:47:04
  */
 import _ from 'lodash';
 import * as types from '../types';
 import router from '@/routes';
-import { messageAction, clearAllCookie } from '@/utils';
-import { setToken, setUser } from '@/utils/cookies';
+import { setToken, setUser, removeToken } from '@/utils/cookies';
 import variables from '@/assets/css/variables.scss';
 import localDict from '@/utils/localDict';
 import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api/login';
@@ -78,12 +77,13 @@ const actions = {
     });
   },
   createLogout({ dispatch, commit, state }, params) {
-    clearAllCookie();
+    removeToken();
     commit({
       type: types.LOGOUT,
       data: {}
     });
     dispatch('clearNavList');
+    router.push({ path: '/' }).catch(() => {});
   },
   async createNavList({ dispatch, commit, state }, params) {
     if (state.navList.length) return;
@@ -92,13 +92,15 @@ const actions = {
       const res = require('@/mock/sideMenu').default;
       data = res;
     } else {
-      const res = await getNavList();
-      if (res.resultCode === 200 && res.data.length) {
-        data = res.data;
-      } else {
-        messageAction('系统菜单获取失败！', 'error');
-        dispatch('createLogout');
-        return router.push({ path: '/' }).catch(() => {});
+      try {
+        const res = await getNavList();
+        if (res.code === 200 && res.data.length) {
+          data = res.data;
+        } else {
+          return dispatch('createLogout');
+        }
+      } catch (err) {
+        return dispatch('createLogout');
       }
     }
     formateNavList(data, router.options.routes);
@@ -121,7 +123,7 @@ const actions = {
       data = res;
     } else {
       const res = await getStarMenuList();
-      if (res.resultCode === 200) {
+      if (res.code === 200) {
         data = res.data;
       }
     }
@@ -135,7 +137,7 @@ const actions = {
       data = res;
     } else {
       const res = await getCommonMenuList();
-      if (res.resultCode === 200) {
+      if (res.code === 200) {
         data = res.data;
       }
     }
@@ -166,7 +168,7 @@ const actions = {
       data = { ...localDict };
     } else {
       const res = await getAllDict();
-      if (res.resultCode === 200) {
+      if (res.code === 200) {
         data = { ...localDict, ...res.data };
       }
     }

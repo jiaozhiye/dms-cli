@@ -150,7 +150,7 @@ export default {
       actionApp: {
         title: '下载APP',
         visible: false,
-        desc: '请扫描二维码下载奥迪销售助手APP'
+        desc: '请扫描二维码下载大众销售助手APP'
       },
       actionPwd: {
         title: '密码找回',
@@ -190,14 +190,13 @@ export default {
     },
     async loginHandle() {
       const res = await doLogin({
-        username: this.form.username,
-        password: this.form.password
+        name: this.form.username,
+        pwd: this.form.password
       });
-      if (res.code === 1) {
+      if (res.code === 200) {
         this.createLoginInfo({
-          id: res.data.id,
-          name: res.data.name,
-          token: res.data.token
+          name: res.data.vPersonName,
+          token: res.jwt || 'jwt'
         });
         this.$router.push({ path: '/' }).catch(() => {});
       }

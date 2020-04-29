@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 15:35:39
+ * @Last Modified time: 2020-04-29 09:09:45
  */
 import _ from 'lodash';
 
@@ -393,4 +393,14 @@ export const downloadFile = (opts, content) => {
       linkElem = null;
     }
   }
+};
+
+// 生成 uuid key
+export const createUidKey = (key = '') => {
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    let r = (Math.random() * 16) | 0;
+    let v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+  return key + uuid;
 };

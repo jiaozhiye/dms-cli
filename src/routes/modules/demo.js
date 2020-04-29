@@ -2,12 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 01:24:53
+ * @Last Modified time: 2020-04-29 16:53:33
  */
 import { asyncLoadComponent } from '@/utils';
 
 // 菜单路由
 export default [
+  {
+    path: '/test',
+    meta: { title: '测试页面', keepAlive: true },
+    component: asyncLoadComponent('demo/index')
+  },
   {
     path: '/bjgl/cggl/dd',
     meta: { title: '备件采购订单', keepAlive: true },
