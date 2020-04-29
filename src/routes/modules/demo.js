@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 16:53:33
+ * @Last Modified time: 2020-04-29 17:54:46
  */
 import { asyncLoadComponent } from '@/utils';
 
@@ -21,7 +21,7 @@ export default [
   {
     path: '/bjgl/cggl/rk',
     meta: { title: '备件采购入库', keepAlive: true },
-    component: asyncLoadComponent('dashboard/index')
+    component: asyncLoadComponent('demo/index0000')
   },
   {
     path: '/bjgl/cggl/tk',

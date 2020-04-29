@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px 100px 0;">
+  <div>
     <el-button @click="clickHandle">按钮</el-button>
     <div v-if="visible">
       <VirtualTable
@@ -45,7 +45,7 @@ for (let i = 0; i < 220; i++) {
   };
 }
 export default {
-  name: '',
+  name: 'DemoJzy0000',
   components: { VirtualTable },
   data() {
     return {
