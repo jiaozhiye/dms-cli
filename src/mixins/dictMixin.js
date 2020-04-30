@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 10:28:54
+ * @Last Modified time: 2020-04-30 11:11:23
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -15,7 +15,7 @@ export const dictionary = {
   beforeCreate() {
     this.dict = getLocalDict();
     if (!Object.keys(this.dict).length) {
-      notifyAction('本地数据字典被清空，请刷新当前页面!', 'warning');
+      notifyAction('本地数据字典被清空，请刷新当前页面！', 'warning');
     }
   },
   methods: {

@@ -60,7 +60,7 @@ $ npm run build
 - UploadCropper 图片上传组件，支持图片的裁剪和压缩
 - UploadFile 附件上传组件
 - VirtualScroll 虚拟滚动组件
-- VirtualTable 新的表格组件
+- VirtualTable 新的表格组件，可支持 20w 数据渲染
 - WebPrint 浏览器的 pdf 打印组件
 ```
 

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 10:27:42
+ * @Last Modified time: 2020-04-30 11:02:11
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
@@ -82,7 +82,7 @@ export const confirmAction = async (msg = '确认进行此操作?', type = 'warn
  * @description Notification 通知提示
  * @param {string} msg 提示的文本
  * @param {string} type 提示类型
- * @param {number} delay 延迟的时间，单位 毫秒
+ * @param {number} delay 延迟的时间，单位 毫秒，如果值是 0，为手动关闭模式
  * @returns
  */
 export const notifyAction = async (msg = '暂无...', type = 'success', delay = config.notifyDuration) => {
