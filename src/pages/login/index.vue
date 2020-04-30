@@ -195,8 +195,8 @@ export default {
       });
       if (res.code === 200) {
         this.createLoginInfo({
-          name: res.data.vPersonName,
-          token: res.jwt || 'jwt'
+          name: res.data.rData.vRoleName,
+          token: res.data.jwt || 'jwt'
         });
         this.$router.push({ path: '/' }).catch(() => {});
       }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 15:47:04
+ * @Last Modified time: 2020-04-30 15:25:08
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -60,6 +60,7 @@ const state = {
   starMenuList: [], // 收藏导航
   commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
+  lang: 'zh', // 多语言
   theme: variables.theme, // 主题色
   dict: {}, // 数据字典、筛选条件
   keepAliveNames: [], // 路由组件缓存列表
@@ -214,6 +215,18 @@ const actions = {
       type: types.NOTIFY_STATE,
       data: params
     });
+  },
+  setLanguage({ commit, state }, params) {
+    commit({
+      type: types.LANGUAGE,
+      data: params
+    });
+  },
+  setThemeColor({ commit, state }, params) {
+    commit({
+      type: types.THEME_COLOR,
+      data: params
+    });
   }
 };
 
@@ -257,6 +270,12 @@ const mutations = {
   },
   [types.NOTIFY_STATE](state, { data }) {
     state.isNotifyMark = data;
+  },
+  [types.LANGUAGE](state, { data }) {
+    state.lang = data;
+  },
+  [types.THEME_COLOR](state, { data }) {
+    state.theme = data;
   }
 };
 

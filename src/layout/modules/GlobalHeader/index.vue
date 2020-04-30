@@ -17,7 +17,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 12:50:01
+ * @Last Modified time: 2020-04-30 15:54:00
  **/
 export default {
   name: 'GlobalHeader',
@@ -65,7 +65,7 @@ export default {
     }
   }
   .menus {
-    margin: 0 220px 0 65px;
+    margin: 0 240px 0 65px;
     padding-top: 20px;
   }
   .action {

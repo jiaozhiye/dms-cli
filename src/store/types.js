@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-02-26 18:10:06
+ * @Last Modified time: 2020-04-30 15:23:46
  */
 // app
 export const LOGININFO = 'LOGININFO';
@@ -18,3 +18,5 @@ export const DEL_CNAME = 'DEL_CNAME';
 export const ADD_STAR_MENU = 'ADD_STAR_MENU';
 export const DEL_STAR_MENU = 'DEL_STAR_MENU';
 export const NOTIFY_STATE = 'NOTIFY_STATE';
+export const LANGUAGE = 'LANGUAGE';
+export const THEME_COLOR = 'THEME_COLOR';

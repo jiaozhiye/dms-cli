@@ -30,7 +30,11 @@ $ npm run build
 ## 微前端拆分，允许修改的公共文件
 
 ```
-- config/index.js 请求代理文件
+1. framework - 架构
+2. system - 系统
+3. sales - 销售
+4. service - 服务 + 备件 + 工具
+5. others - 其他
 
 注意：npm 依赖需要统一管理，不允许私自安装；公共的表单校验规则统一管理
 ```
@@ -81,6 +85,7 @@ $ npm run build
 │   ├── config                 # 全局配置
 │   ├── directive              # 全局指令
 │   ├── filters                # 全局 filter
+│   ├── lang                   # 多语言支持
 │   ├── layout                 # 全局 layout
 │   ├── mixins                 # 全局混入
 │   ├── mock                   # 项目 mock 模拟数据
