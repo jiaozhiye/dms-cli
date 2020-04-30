@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 14:09:09
+ * @Last Modified time: 2020-04-30 09:08:25
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -19,6 +19,9 @@ export default {
     },
     cachedNames() {
       return this.keepAliveNames.map(x => x.value);
+    },
+    isKeepAlive() {
+      return this.$route.meta.keepAlive;
     }
   },
   mounted() {

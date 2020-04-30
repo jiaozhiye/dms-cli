@@ -229,3 +229,294 @@ return <Table rowKey="uid" />;
 // 或
 return <Table rowKey={record => record.uid} />;
 ```
+
+`示例代码`
+
+```bash
+# template
+<template>
+  <VirtualTable
+    ref="table"
+    cacheColumnsKey="jzyDemoTable"
+    height="auto"
+    :columns="columns"
+    :fetch="fetch"
+    :rowKey="record => record.id"
+    :rowSelection="selection"
+    :exportExcel="exportExcel"
+    :tablePrint="tablePrint"
+    :columnsChange="columns => (this.columns = columns)"
+    @dataChange="dataChangeHandle"
+  >
+    <template slot="default">
+      <el-button type="primary" icon="el-icon-plus">新建</el-button>
+    </template>
+  </VirtualTable>
+</template>
+
+# js
+export default {
+  data() {
+    this.selectedKeys = [];
+    return {
+      columns: this.createTableColumns(),
+      fetch: {
+        api: () => {},
+        params: {},
+        dataKey: 'items'
+      },
+      selection: {
+        type: 'checkbox',
+        selectedRowKeys: this.selectedKeys,
+        rowSelectable: row => {
+          return row.id === 3;
+        },
+        onChange: (val, rows) => {
+          this.selectedKeys = val;
+        }
+      },
+      exportExcel: {
+        fileName: '导出文件.xlsx'
+      },
+      tablePrint: {
+        showLogo: true
+      },
+    };
+  },
+  methods: {
+    // 创建表格列配置
+    createTableColumns() {
+      return [
+        {
+          title: '操作',
+          dataIndex: '__action__', // 操作列的 dataIndex 的值不能改
+          fixed: 'left',
+          width: 100,
+          render: () => {
+            return (
+              <div>
+                <el-button type="text">编辑</el-button>
+                <el-button type="text">查看</el-button>
+              </div>
+            );
+          }
+        },
+        {
+          title: '序号',
+          dataIndex: 'index',
+          width: 80,
+          sorter: true,
+          render: text => {
+            return text + 1;
+          }
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'date',
+          width: 220,
+          sorter: true,
+          filter: {
+            type: 'range-date'
+          },
+          editRender: row => {
+            return {
+              type: 'datetime'
+            };
+          }
+        },
+        {
+          title: '姓名',
+          dataIndex: 'person.name',
+          width: 200,
+          required: true,
+          sorter: true,
+          filter: {
+            type: 'text'
+          },
+          editRender: row => {
+            return {
+              type: 'search-helper',
+              editable: true,
+              extra: {
+                maxlength: 10,
+                disabled: row.id === 3
+              },
+              rules: [{ required: true, message: '姓名不能为空' }],
+              onClick: (cell, row, column, cb, ev) => {
+                this.tableShProps = { row, dataIndex: column.dataIndex, callback: cb };
+                this.visible_table = true;
+              }
+            };
+          }
+        },
+        {
+          title: '性别',
+          dataIndex: 'person.sex',
+          width: 100,
+          dictItems: [
+            { text: '男', value: '1' },
+            { text: '女', value: '0' }
+          ]
+        },
+        {
+          title: '年龄',
+          dataIndex: 'person.age',
+          width: 100,
+          sorter: true,
+          filter: {
+            type: 'range-number'
+          }
+        },
+        {
+          title: '价格',
+          dataIndex: 'price',
+          width: 150,
+          precision: 2,
+          required: true,
+          sorter: true,
+          filter: {
+            type: 'range-number'
+          },
+          editRender: row => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000
+              },
+              rules: [{ required: true, message: '价格不能为空' }]
+            };
+          }
+        },
+        {
+          title: '数量',
+          dataIndex: 'num',
+          width: 150,
+          required: true,
+          sorter: true,
+          filter: {
+            type: 'range-number'
+          },
+          editRender: row => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000
+              },
+              rules: [{ required: true, message: '数量不能为空' }]
+            };
+          }
+        },
+        {
+          title: '总价',
+          dataIndex: 'total',
+          width: 150,
+          precision: 2,
+          align: 'right',
+          sorter: true,
+          filter: {
+            type: 'range-number'
+          },
+          summation: {
+            unit: '元'
+          },
+          render: (text, row) => {
+            row.total = row.price * row.num;
+            return <span>{row.total.toFixed(2)}</span>;
+          },
+          extraRender: (text, row) => {
+            return Number(row.price * row.num).toFixed(2);
+          }
+        },
+        {
+          title: '是否选择',
+          dataIndex: 'choice',
+          align: 'center',
+          width: 150,
+          editRender: row => {
+            return {
+              type: 'checkbox',
+              editable: true,
+              extra: {
+                trueValue: 1,
+                falseValue: 0,
+                disabled: true
+              }
+            };
+          },
+          dictItems: [
+            { text: '选中', value: 1 },
+            { text: '非选中', value: 0 }
+          ]
+        },
+        {
+          title: '状态',
+          dataIndex: 'state',
+          width: 150,
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '已完成', value: 1 },
+              { text: '进行中', value: 2 },
+              { text: '未完成', value: 3 }
+            ]
+          },
+          editRender: row => {
+            return {
+              type: 'select',
+              items: [
+                { text: '已完成', value: 1 },
+                { text: '进行中', value: 2 },
+                { text: '未完成', value: 3 }
+              ]
+            };
+          },
+          dictItems: [
+            { text: '已完成', value: 1 },
+            { text: '进行中', value: 2 },
+            { text: '未完成', value: 3 }
+          ]
+        },
+        {
+          title: '业余爱好',
+          dataIndex: 'hobby',
+          width: 150,
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '篮球', value: 1 },
+              { text: '足球', value: 2 },
+              { text: '乒乓球', value: 3 },
+              { text: '游泳', value: 4 }
+            ]
+          },
+          editRender: row => {
+            return {
+              type: 'select-multiple',
+              items: [
+                { text: '篮球', value: 1 },
+                { text: '足球', value: 2 },
+                { text: '乒乓球', value: 3 },
+                { text: '游泳', value: 4 }
+              ]
+            };
+          },
+          dictItems: [
+            { text: '篮球', value: 1 },
+            { text: '足球', value: 2 },
+            { text: '乒乓球', value: 3 },
+            { text: '游泳', value: 4 }
+          ]
+        },
+        {
+          title: '地址',
+          dataIndex: 'address',
+          width: 300
+        }
+      ];
+    },
+    dataChangeHandle(tableData) {
+      // ...
+    }
+  }
+};
+```

@@ -150,3 +150,107 @@
 | ----- | ------------ | ---------------- | ------ |
 | text  | 列表项的文本 | string           | -      |
 | value | 列表项的值   | string \| number | -      |
+
+`示例代码`
+
+```bash
+# template
+<template>
+  <top-filter ref="topFilter" :cols="4" :list="filterList" :initial-value="filterValue" @change="filterChangeHandle" @collapseChange="collapseChangeHandle" />
+</template>
+
+# js
+export default {
+  data() {
+    return {
+      filterList: this.createTopFilterList(),
+      filterValue: { b: '2' },
+    };
+  },
+  methods: {
+    createTopFilterList() {
+      return [
+        {
+          type: 'INPUT',
+          label: '条件1',
+          fieldName: 'a',
+          readonly: true,
+          options: {
+            unitRender: () => {
+              return (
+                <el-button
+                  icon="el-icon-search"
+                  onClick={() => {
+                    this.visible_filter = true;
+                  }}
+                />
+              );
+            }
+          },
+          rules: [
+            { required: true, message: '请输入条件', trigger: 'change' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'change' }
+          ]
+        },
+        {
+          type: 'SELECT',
+          label: '条件2',
+          fieldName: 'b',
+          options: {
+            itemList: [
+              { text: '列表1', value: '1' },
+              { text: '列表2', value: '2' }
+            ],
+            filterable: true
+          }
+        },
+        {
+          type: 'DATE',
+          label: '条件3',
+          fieldName: 'c',
+          options: {
+            dateType: 'exactdate'
+          }
+        },
+        {
+          type: 'CHECKBOX',
+          label: '条件4',
+          fieldName: 'd',
+          options: {
+            trueValue: '1',
+            falseValue: '0'
+          }
+        },
+        {
+          type: 'RANGE_DATE',
+          label: '条件5',
+          style: { minWidth: '220px' },
+          fieldName: 'startTime|endTime',
+          options: {
+            minDateTime: '2020-03-01',
+            maxDateTime: '2020-05-30'
+          },
+          rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
+        },
+        {
+          type: 'SEARCH_HELPER',
+          label: '条件6',
+          fieldName: 'f',
+          request: {
+            fetchApi: () => {},
+            params: {},
+            datakey: 'items',
+            valueKey: 'name'
+          }
+        }
+      ];
+    },
+    filterChangeHandle(val) {
+      // ...
+    },
+    collapseChangeHandle(val) {
+      // ...
+    }
+  }
+};
+```

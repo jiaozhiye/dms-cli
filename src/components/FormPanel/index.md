@@ -188,3 +188,166 @@
 | ----- | ------------ | ---------------- | ------ |
 | text  | 列表项的文本 | string           | -      |
 | value | 列表项的值   | string \| number | -      |
+
+`示例代码`
+
+```bash
+# template
+<template>
+  <form-panel ref="formPanel" :initial-value="formValue" :list="formList" label-width="90" />
+</template>
+
+# js
+export default {
+  data() {
+    return {
+      formList: this.createFormList(),
+      formValue: { p: '1' }
+    };
+  },
+  methods: {
+    createFormList() {
+      return [
+        {
+          type: 'INPUT',
+          label: '表单项1',
+          fieldName: 'a',
+          labelOptions: {
+            fieldName: 'p',
+            options: {
+              itemList: [
+                { text: '选项1', value: '1' },
+                { text: '选项2', value: '2' }
+              ]
+            }
+          },
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }]
+        },
+        {
+          type: 'SELECT',
+          label: '表单项2',
+          fieldName: 'b',
+          options: {
+            itemList: [
+              { text: '列表1', value: '1' },
+              { text: '列表2', value: '2' }
+            ],
+            filterable: true
+          }
+        },
+        {
+          type: 'DATE',
+          label: '表单项3',
+          fieldName: 'c',
+          options: {
+            dateType: 'date'
+          }
+        },
+        {
+          type: 'INPUT',
+          label: '表单项4',
+          fieldName: 'd',
+          style: { width: `calc(100% - 30px)` },
+          descOptions: {
+            isTooltip: true,
+            content: `说明文字`
+          }
+        },
+        {
+          type: 'INPUT_NUMBER',
+          label: '表单项5',
+          fieldName: 'e',
+          style: { width: `calc(100% - 30px)` },
+          descOptions: {
+            content: '元'
+          }
+        },
+        {
+          type: 'CHECKBOX',
+          label: '表单项6',
+          fieldName: 'f',
+          options: {
+            trueValue: '1',
+            falseValue: '0'
+          },
+          onChange: val => {
+            this.findFormItem('g').disabled = val === '1';
+          }
+        },
+        {
+          type: 'DATE',
+          label: '表单项7',
+          fieldName: 'g',
+          options: {
+            dateType: 'exactdate'
+          }
+        },
+        {
+          type: 'RANGE_INPUT_NUMBER',
+          label: '表单项8',
+          fieldName: 'h|i',
+          options: {
+            min: 1,
+            max: 100
+          }
+        },
+        {
+          type: 'INPUT',
+          label: '表单项9',
+          fieldName: 'j'
+        },
+        {
+          type: 'SELECT',
+          label: '表单项11',
+          fieldName: 'l',
+          options: {
+            filterable: true
+          },
+          request: {
+            fetchApi: () => {},
+            params: {},
+            datakey: 'items',
+            valueKey: 'id',
+            textKey: 'name'
+          }
+        },
+        {
+          type: 'MULTIPLE_SELECT',
+          label: '表单项12',
+          fieldName: 'm',
+          options: {
+            itemList: [
+              { text: '篮球', value: '1' },
+              { text: '足球', value: '2' },
+              { text: '乒乓球', value: '3' }
+            ]
+          }
+        },
+        {
+          type: 'UPLOAD_FILE',
+          label: '上传文件',
+          fieldName: 'n',
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            limit: 2,
+            params: {},
+            fileTypes: ['jpg', 'png']
+          }
+        },
+        {
+          type: 'UPLOAD_IMG',
+          label: '上传图片',
+          fieldName: 'o',
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            fixedSize: [5, 3],
+            isCalcHeight: true,
+            limit: 1,
+            params: {}
+          }
+        }
+      ];
+    }
+  }
+};
+```

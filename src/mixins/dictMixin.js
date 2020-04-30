@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 16:17:44
+ * @Last Modified time: 2020-04-30 10:28:54
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
@@ -21,7 +21,7 @@ export const dictionary = {
   methods: {
     /**
      * @description 创建数据字典列表，支持过滤
-     * @param {string|number} code 数据字典的 code 码
+     * @param {string} code 数据字典的 code 码
      * @param {array} vals 需要过滤数据字典项的值
      * @returns {array}
      */
@@ -37,7 +37,7 @@ export const dictionary = {
     /**
      * @description 数据字典的翻译
      * @param {string|number} val 数据的值
-     * @param {string|number} code 数据字典的编码
+     * @param {string} code 数据字典的编码
      * @returns {string} 翻译后的文本
      */
     createDictText(val, code) {
