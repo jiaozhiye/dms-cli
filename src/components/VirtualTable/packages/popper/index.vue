@@ -1,7 +1,7 @@
 <template>
   <component :is="tagName">
     <transition :name="transition" :duration="200" @after-leave="doDestroy">
-      <span v-show="!disabled && showPopper" ref="popper" :class="rootClass">
+      <span v-show="!disabled && showPopper" ref="popper" :class="rootClass" :style="containerStyle">
         <slot>{{ content }}</slot>
       </span>
     </transition>
@@ -14,7 +14,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 17:18:04
+ * @Last Modified time: 2020-05-01 20:58:22
  */
 import Popper from './popper.js';
 import config from '../config';
@@ -94,8 +94,14 @@ export default {
     rootClass: {
       type: String,
       default: ''
+    },
+    containerStyle: {
+      type: Object,
+      default: () => ({})
     }
   },
+
+  inject: ['$$table'],
 
   data() {
     return {
@@ -115,8 +121,8 @@ export default {
   },
 
   computed: {
-    $rootElement() {
-      return document.getElementById(config.appRootId) || document.body;
+    $tableBody() {
+      return this.$$table ? this.$$table.$$tableBody.$el : null;
     }
   },
 
@@ -163,13 +169,11 @@ export default {
     switch (this.trigger) {
       case 'clickToOpen':
         on(this.referenceElm, 'click', this.doShow);
-        // on(document, 'click', this.handleDocumentClick);
-        on(this.$rootElement, 'mousedown', this.handleDocumentClick);
+        on(document, 'click', this.handleDocumentClick);
         break;
       case 'clickToToggle':
         on(this.referenceElm, 'click', this.doToggle);
-        // on(document, 'click', this.handleDocumentClick);
-        on(this.$rootElement, 'mousedown', this.handleDocumentClick);
+        on(document, 'click', this.handleDocumentClick);
         break;
       case 'hover':
         on(this.referenceElm, 'mouseover', this.onMouseOver);
@@ -183,6 +187,11 @@ export default {
         on(this.referenceElm, 'blur', this.onMouseOut);
         on(this.popper, 'blur', this.onMouseOut);
         break;
+    }
+
+    // tableBody 绑定事件
+    if (this.$tableBody) {
+      on(this.$tableBody, 'mousedown', this.onMouseDown);
     }
   },
 
@@ -271,8 +280,9 @@ export default {
       off(this.referenceElm, 'blur', this.doClose);
       off(this.referenceElm, 'mouseout', this.onMouseOut);
       off(this.referenceElm, 'mouseover', this.onMouseOver);
-      // off(document, 'click', this.handleDocumentClick);
-      off(this.$rootElement, 'mousedown', this.handleDocumentClick);
+
+      off(document, 'click', this.handleDocumentClick);
+      off(this.$tableBody, 'mousedown', this.onMouseDown);
 
       this.showPopper = false;
       this.doDestroy();
@@ -307,6 +317,10 @@ export default {
       this._timer = setTimeout(() => {
         this.showPopper = false;
       }, this.delayOnMouseOut);
+    },
+
+    onMouseDown(ev) {
+      ev.target === this.$tableBody && this.handleDocumentClick(ev);
     },
 
     handleDocumentClick(e) {

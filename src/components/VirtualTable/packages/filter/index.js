@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-15 17:25:24
+ * @Last Modified time: 2020-05-01 20:08:13
  */
 import Popper from '../popper';
 
@@ -10,6 +10,8 @@ import { isEmpty, validateNumber } from '../utils';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
+// element-ui Popup -> zIndex
+import { PopupManager } from 'element-ui/lib/utils/popup';
 
 export default {
   name: 'THeadFilter',
@@ -275,6 +277,7 @@ export default {
           ref="vPopper"
           trigger="clickToToggle"
           root-class="v-popover--wrapper"
+          containerStyle={{ zIndex: PopupManager.nextZIndex() || 1000 }}
           transition="v-zoom-in-top"
           options={{ placement: 'bottom-end' }}
           visible-arrow={false}

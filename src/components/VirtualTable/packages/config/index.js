@@ -2,11 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 11:18:32
+ * @Last Modified time: 2020-05-01 18:53:57
  */
 const config = {
-  // Vue 应用，根节点 ID
-  appRootId: 'app',
   // 表格列的默认最小宽度
   defaultColumnWidth: 80,
   // 行高的映射表

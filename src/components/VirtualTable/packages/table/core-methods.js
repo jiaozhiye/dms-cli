@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 09:25:10
+ * @Last Modified time: 2020-05-01 16:49:00
  */
 import { throttle, browse, difference, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -66,7 +66,7 @@ export default {
           this.flattenColumns
             .filter(x => x.summation && x.summation.dataIndex)
             .forEach(x => {
-              this.summaries[x.dataIndex] = Number(res.data[x.summation.dataIndex]) || 0;
+              setCellValue(this.summaries, x.dataIndex, Number(res.data[x.summation.dataIndex]) || 0);
             });
         }
       } catch (e) {}

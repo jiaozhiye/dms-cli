@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 13:51:20
+ * @Last Modified time: 2020-05-01 16:21:11
  */
 import _ from 'lodash';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
@@ -37,7 +37,7 @@ export default {
         }, 0);
         // 服务端合计
         if (Object.keys(summaries).includes(dataIndex)) {
-          result = summaries[dataIndex];
+          result = getCellValue(summaries, dataIndex);
         }
         result = precision >= 0 ? result.toFixed(precision) : result;
         // 设置合计值

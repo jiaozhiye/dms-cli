@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 17:46:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-20 21:44:33
+ * @Last Modified time: 2020-05-01 20:08:34
  */
 .v-popover--wrapper {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 9;
+  z-index: 999;
 }
 
 .v-popper {
