@@ -2,10 +2,24 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 16:06:10
+ * @Last Modified time: 2020-05-02 16:25:22
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
+
+const deepMapCity = (data, deep = 3, step = 1) => {
+  const res = [];
+  for (let key in data) {
+    const target = { value: data[key]['regionCode'], text: data[key]['regionName'] };
+    if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
+      if (step < deep) {
+        target.children = deepMapCity(data[key].children, deep, step + 1);
+      }
+    }
+    res.push(target);
+  }
+  return res;
+};
 
 export const dictionary = {
   beforeCreate() {
@@ -52,20 +66,7 @@ export const dictionary = {
      */
     createDictRegion(deep) {
       // this.$dict.region -> 数据字典中省市区的递归数据
-      return this.deepMapCity(this.$dict.region, deep);
-    },
-    deepMapCity(data, deep = 3, step = 1) {
-      const res = [];
-      for (let key in data) {
-        const target = { value: data[key]['regionCode'], text: data[key]['regionName'] };
-        if (_.isObject(data[key].children) && Object.keys(data[key].children).length) {
-          if (step < deep) {
-            target.children = this.deepMapCity(data[key].children, deep, step + 1);
-          }
-        }
-        res.push(target);
-      }
-      return res;
+      return deepMapCity(this.$dict.region, deep);
     }
   }
 };
