@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:42:11
+ * @Last Modified time: 2020-05-02 14:47:51
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
@@ -48,7 +48,7 @@ export default {
           </el-header>
           <el-main class={`container ${bgColor}`}>
             {config.showBreadcrumb && <Breadcrumb />}
-            <div>{$slots.default}</div>
+            <div class="route-view">{$slots.default}</div>
           </el-main>
         </el-container>
       </el-container>
@@ -65,11 +65,18 @@ export default {
     overflow: visible;
   }
   .container {
-    padding: $modulePadding $modulePadding 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
     overflow-x: hidden;
-  }
-  .bg-color {
-    background-color: $backgroundColorSecondary;
+    .route-view {
+      flex: 1;
+      padding: $modulePadding $modulePadding 0;
+      box-sizing: border-box;
+    }
+    &.bg-color {
+      background-color: $backgroundColorSecondary;
+    }
   }
 }
 </style>

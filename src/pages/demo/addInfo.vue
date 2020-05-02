@@ -21,7 +21,12 @@
 </template>
 
 <script>
+import { dictionary } from '@/mixins/dictMixin';
+import { language } from '@/mixins/langMixin';
+import { authority } from '@/mixins/authMixin';
+
 export default {
+  mixins: [dictionary, language, authority],
   data() {
     return {
       formList: this.createFormList(),

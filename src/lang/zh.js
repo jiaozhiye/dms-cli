@@ -1,8 +1,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:35
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2020-05-02 09:16:35
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-02 15:32:57
  */
 export default {
   app: {
@@ -66,12 +66,14 @@ export default {
     print: '打印',
     export: '导出',
     import: '导入',
+    upload: '上传',
     download: '下载',
     search: '搜索',
     reset: '重置',
     save: '保存',
     clear: '清空',
-    action: '操作'
+    action: '操作',
+    preview: '预览'
   },
   insideLetter: {
     notice: '通知',

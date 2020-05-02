@@ -13,12 +13,12 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 19:44:29
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 20:05:29
+ * @Last Modified time: 2020-05-02 15:44:58
  */
 import client from 'webpack-theme-color-replacer/client';
 import forElementUI from 'webpack-theme-color-replacer/forElementUI';
 
-const savedColor = localStorage.getItem('theme_color');
+const savedColor = localStorage.getItem('theme');
 
 export default {
   name: 'ThemePicker',
@@ -46,7 +46,7 @@ export default {
         }
       };
       return client.changer.changeColor(options, Promise).then(x => {
-        localStorage.setItem('theme_color', newColor);
+        localStorage.setItem('theme', newColor);
       });
     }
   }

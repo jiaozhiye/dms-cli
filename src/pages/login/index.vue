@@ -103,6 +103,7 @@ import { mapActions } from 'vuex';
 import { sleep } from '@/utils';
 import { phone } from '@/utils/validate';
 import { doLogin } from '@/api/login';
+import { language } from '@/mixins/langMixin';
 
 import backPwd from './backPwd.vue';
 
@@ -118,6 +119,7 @@ export default {
   components: {
     backPwd
   },
+  mixins: [language],
   data() {
     // tab 标签
     this.labels = [

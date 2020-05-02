@@ -19,9 +19,12 @@
 </template>
 
 <script>
+import { language } from '@/mixins/langMixin';
+
 import res from '@/mock/tableData';
 
 export default {
+  mixins: [language],
   data() {
     return {
       list: [...res.data.items],

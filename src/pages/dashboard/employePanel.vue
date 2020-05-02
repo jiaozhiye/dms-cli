@@ -38,7 +38,10 @@
 </template>
 
 <script>
+import { language } from '@/mixins/langMixin';
+
 export default {
+  mixins: [language],
   data() {
     return {};
   }

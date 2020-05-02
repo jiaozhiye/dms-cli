@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 15:25:08
+ * @Last Modified time: 2020-05-02 16:00:03
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -46,9 +46,11 @@ const formateNavList = (list, routes) => {
       x.children.forEach(sub => (sub.parentKey = x.key));
       formateNavList(x.children, routes);
     }
-    let target = deepMapRoutes(routes, x.key) || {};
-    // 隐藏菜单
-    target.hideInMenu && (x.hideInMenu = true);
+    let target = deepMapRoutes(routes, x.key);
+    if (target) {
+      target.meta && (target.meta.title = x.title);
+      target.hideInMenu && (x.hideInMenu = true);
+    }
   });
 };
 
@@ -60,7 +62,7 @@ const state = {
   starMenuList: [], // 收藏导航
   commonMenuList: [], // 常用导航
   tabMenuList: [], // 导航选项卡列表
-  lang: 'zh', // 多语言
+  lang: localStorage.getItem('lang') || 'zh', // 多语言
   theme: variables.theme, // 主题色
   dict: {}, // 数据字典、筛选条件
   keepAliveNames: [], // 路由组件缓存列表

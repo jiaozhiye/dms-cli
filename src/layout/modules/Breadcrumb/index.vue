@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 08:39:48
+ * @Last Modified time: 2020-05-02 14:06:22
  **/
 import { mapState } from 'vuex';
 
@@ -72,7 +72,7 @@ export default {
 <style lang="scss" scoped>
 .breadcrumb-wrap {
   display: flex;
-  margin-bottom: $modulePadding;
+  padding: $modulePadding $modulePadding 0;
   /deep/ .el-breadcrumb__item {
     .el-breadcrumb__inner {
       color: $textColor;

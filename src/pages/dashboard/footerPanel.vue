@@ -3,7 +3,11 @@
 </template>
 
 <script>
-export default {};
+import { language } from '@/mixins/langMixin';
+
+export default {
+  mixins: [language]
+};
 </script>
 
 <style lang="scss" scoped></style>

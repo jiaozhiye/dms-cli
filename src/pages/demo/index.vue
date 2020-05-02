@@ -43,6 +43,8 @@
 
 <script>
 import { dictionary } from '@/mixins/dictMixin';
+import { language } from '@/mixins/langMixin';
+import { authority } from '@/mixins/authMixin';
 
 import { notifyAction, confirmAction, sleep } from '@/utils';
 
@@ -56,7 +58,7 @@ import printData from '@/mock/printData';
 export default {
   name: 'DemoJzy',
   components: { SearchHelper, AddInfo, TableSearchHelper },
-  mixins: [dictionary],
+  mixins: [dictionary, language, authority],
   data() {
     this.selectedKeys = [];
     return {

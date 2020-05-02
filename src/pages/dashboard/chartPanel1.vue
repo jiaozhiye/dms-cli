@@ -10,12 +10,15 @@
 </template>
 
 <script>
+import { language } from '@/mixins/langMixin';
+
 import Chart from '@/charts/dashboard/chart3';
 
 export default {
   components: {
     Chart
   },
+  mixins: [language],
   data() {
     return {
       fetchApi: () => {},

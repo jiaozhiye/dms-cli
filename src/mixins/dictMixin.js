@@ -2,19 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 11:11:23
+ * @Last Modified time: 2020-05-02 16:06:10
  */
 import _ from 'lodash';
 import { notifyAction } from '@/utils';
 
-const getLocalDict = () => {
-  return JSON.parse(localStorage.getItem('dict')) || {};
-};
-
 export const dictionary = {
   beforeCreate() {
-    this.dict = getLocalDict();
-    if (!Object.keys(this.dict).length) {
+    this.$dict = JSON.parse(localStorage.getItem('dict')) || {};
+    if (!Object.keys(this.$dict).length) {
       notifyAction('本地数据字典被清空，请刷新当前页面！', 'warning');
     }
   },
@@ -28,8 +24,8 @@ export const dictionary = {
     createDictList(code, vals = []) {
       vals = Array.isArray(vals) ? vals : [vals];
       let res = [];
-      if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        res = this.dict[code].map(x => ({ text: x.cnText, value: x.value }));
+      if (_.isObject(this.$dict) && Array.isArray(this.$dict[code])) {
+        res = this.$dict[code].map(x => ({ text: x.cnText, value: x.value }));
         res = res.filter(x => !vals.includes(x.value));
       }
       return res;
@@ -43,8 +39,8 @@ export const dictionary = {
     createDictText(val, code) {
       let res = '';
       if (!val) return res;
-      if (_.isObject(this.dict) && Array.isArray(this.dict[code])) {
-        const target = this.dict[code].find(x => x.value == val);
+      if (_.isObject(this.$dict) && Array.isArray(this.$dict[code])) {
+        const target = this.$dict[code].find(x => x.value == val);
         res = target ? target.cnText : val;
       }
       return res;
@@ -55,8 +51,8 @@ export const dictionary = {
      * @returns {array}
      */
     createDictRegion(deep) {
-      // this.dict.region -> 数据字典中省市区的递归数据
-      return this.deepMapCity(this.dict.region, deep);
+      // this.$dict.region -> 数据字典中省市区的递归数据
+      return this.deepMapCity(this.$dict.region, deep);
     },
     deepMapCity(data, deep = 3, step = 1) {
       const res = [];

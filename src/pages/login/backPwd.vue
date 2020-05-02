@@ -23,9 +23,11 @@
 </template>
 
 <script>
+import { language } from '@/mixins/langMixin';
 import { phone } from '@/utils/validate';
 
 export default {
+  mixins: [language],
   data() {
     return {
       form: {

@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { language } from '@/mixins/langMixin';
+
 import Chart1 from '@/charts/dashboard/chart1';
 import Chart2 from '@/charts/dashboard/chart2';
 
@@ -28,6 +30,7 @@ export default {
     Chart1,
     Chart2
   },
+  mixins: [language],
   data() {
     return {
       fetchParams: {
