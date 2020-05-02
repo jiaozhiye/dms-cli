@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 16:10:17
+ * @Last Modified time: 2020-05-02 10:33:56
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -12,6 +12,7 @@ import { getToken } from '@/utils/cookies';
 import router from '@/routes';
 import { notifyAction } from '@/utils';
 
+// 请求异常提示信息
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -31,12 +32,17 @@ const codeMessage = {
   504: '网关超时。'
 };
 
+// 服务端成功的状态码
+const successCodes = [200];
+
+// 自定义扩展 header 请求头
 const getConfigHeaders = () => {
   return {
-    jwt: getToken() || ''
+    jwt: getToken()
   };
 };
 
+// 创建 axios 实例
 const instance = axios.create({
   baseURL: config.host,
   timeout: 10000,
@@ -68,8 +74,8 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => {
   let { config, headers, data } = response;
-  // 错误数据提示
-  if (data.code !== 200) {
+  // 请求异常提示信息
+  if (!successCodes.includes(data.code)) {
     // token 过期，需要重新登录
     if (data.code === 40105) {
       store.dispatch('app/createLogout');

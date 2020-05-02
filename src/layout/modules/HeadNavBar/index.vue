@@ -13,9 +13,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 15:37:59
+ * @Last Modified time: 2020-05-02 10:35:12
  **/
-import ScreenFull from '@/components/ScreenFull';
+import ScreenFull from '../ScreenFull';
 import ThemePicker from '../ThemePicker';
 import LangSelect from '../LangSelect';
 import NoticePanel from './noticePanel';

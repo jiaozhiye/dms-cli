@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 11:34:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 20:23:15
+ * @Last Modified time: 2020-05-02 11:47:39
  */
 import _ from 'lodash';
 
@@ -16,11 +16,15 @@ const localStorageMixin = {
       // 本地存储
       const result = localStorage.getItem(this.cacheColumnsKey);
       if (!result) return;
-      let localColumns = null;
+      let localColumns = [];
       try {
         localColumns = JSON.parse(result);
       } catch (e) {}
-      if (!localColumns) return;
+      const diffs = _.xor(
+        localColumns.map(x => x.dataIndex),
+        this.columns.map(x => x.dataIndex)
+      );
+      if (diffs.length > 0) return;
       return localColumns.map(x => {
         let target = this.columns.find(k => k.dataIndex === x.dataIndex);
         if (_.isUndefined(x.fixed)) {
