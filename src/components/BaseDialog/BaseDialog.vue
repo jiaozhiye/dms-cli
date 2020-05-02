@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 11:23:37
+ * @Last Modified time: 2020-05-02 19:12:45
  **/
 import dragDialog from '@/directive/el-drag-dialog';
 
@@ -27,7 +27,7 @@ export default {
     },
     title: {
       type: String,
-      default: '标题'
+      default: ''
     },
     width: {
       type: String,

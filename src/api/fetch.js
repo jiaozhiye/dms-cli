@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 10:33:56
+ * @Last Modified time: 2020-05-02 19:11:27
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -57,7 +57,7 @@ const instance = axios.create({
 const errorHandler = error => {
   const { response = {} } = error;
   const errortext = codeMessage[response.status] || response.statusText || '网络连接错误，请检查网络。';
-  notifyAction(errortext, 'error', `请求错误 ${response.status || ''}`);
+  notifyAction(errortext, 'error');
   return Promise.reject(error);
 };
 

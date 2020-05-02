@@ -3,14 +3,14 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:38:10
+ * @Last Modified time: 2020-05-02 19:13:15
  **/
 export default {
   name: 'BreakSpace',
   props: {
     label: {
       type: String,
-      default: '标题'
+      default: ''
     },
     containerStyle: {
       type: Object,

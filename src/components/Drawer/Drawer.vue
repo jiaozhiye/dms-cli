@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-22 19:20:02
+ * @Last Modified time: 2020-05-02 19:14:44
  **/
 import VDrawer from './VDrawer';
 import ContainerRender from './ContainerRender';
@@ -29,7 +29,7 @@ export default {
     },
     title: {
       type: String,
-      default: '标题'
+      default: ''
     },
     position: {
       type: String,
