@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 19:32:37
+ * @Last Modified time: 2020-05-02 08:33:25
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -174,10 +174,10 @@ export default {
         </el-tabs>
         {this.visible && (
           <ul class="contextmenu el-dropdown-menu--small" style={{ left: `${this.position.x + 10}px`, top: `${this.position.y + 2}px` }}>
-            <el-dropdown-item nativeOnClick={this.refreshTagHandle}>刷新当前</el-dropdown-item>
-            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('right')}>关闭右侧</el-dropdown-item>
-            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('left')}>关闭左侧</el-dropdown-item>
-            {this.pages.length > 1 && <el-dropdown-item nativeOnClick={this.closeOtherTagHandle}>关闭其他</el-dropdown-item>}
+            <el-dropdown-item nativeOnClick={this.refreshTagHandle}>{this.$t('multiTab.refresh')}</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('right')}>{this.$t('multiTab.closeRight')}</el-dropdown-item>
+            <el-dropdown-item nativeOnClick={() => this.closeTagHandle('left')}>{this.$t('multiTab.closeLeft')}</el-dropdown-item>
+            {this.pages.length > 1 && <el-dropdown-item nativeOnClick={this.closeOtherTagHandle}>{this.$t('multiTab.closeOthers')}</el-dropdown-item>}
           </ul>
         )}
       </div>

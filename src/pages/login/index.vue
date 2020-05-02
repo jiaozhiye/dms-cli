@@ -14,7 +14,7 @@
       </div>
       <div class="btn-wrap">
         <a href="javascript:;" class="audi-button">
-          <span>了解详情</span>
+          <span>{{ $t('login.viewDetails') }}</span>
           <i class="el-icon-right" />
         </a>
       </div>
@@ -36,44 +36,44 @@
               <div class="box">
                 <el-form ref="form-user" size="medium" :model="form" :rules="rules">
                   <el-form-item prop="username">
-                    <el-input v-model="form.username" prefix-icon="el-icon-user" placeholder="请输入用户名" auto-complete="on" />
+                    <el-input v-model="form.username" prefix-icon="el-icon-user" :placeholder="$t('login.username')" auto-complete="on" />
                   </el-form-item>
                   <el-form-item prop="password">
-                    <el-input v-model="form.password" :type="passwordType" placeholder="请输入密码" prefix-icon="el-icon-lock" auto-complete="on" @keyup.enter.native="loginHandle" />
+                    <el-input v-model="form.password" :type="passwordType" :placeholder="$t('login.password')" prefix-icon="el-icon-lock" auto-complete="on" @keyup.enter.native="loginHandle" />
                     <span class="show-pwd" @click="showPwdHandle">
                       <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
                     </span>
                   </el-form-item>
                 </el-form>
                 <div class="forget">
-                  <a href="javascript:;" @click="forgetPwdHandle">忘记密码</a>
+                  <a href="javascript:;" @click="forgetPwdHandle">{{ $t('login.forgotPassword') }}</a>
                 </div>
               </div>
               <div class="box">
                 <el-form ref="form-phone" size="medium" :model="form" :rules="rules">
                   <el-form-item prop="phone">
-                    <el-input v-model="form.phone" prefix-icon="el-icon-mobile-phone" placeholder="请输入手机号" />
+                    <el-input v-model="form.phone" prefix-icon="el-icon-mobile-phone" :placeholder="$t('login.phone')" />
                   </el-form-item>
                   <el-form-item>
-                    <el-input v-model="form.vcode" type="password" class="fl" placeholder="验证码" style="width: 50%" prefix-icon="el-icon-message" />
-                    <el-button class="fr" style="width: 38%">获取验证码</el-button>
+                    <el-input v-model="form.vcode" type="password" class="fl" :placeholder="$t('login.authCode')" style="width: 50%" prefix-icon="el-icon-message" />
+                    <el-button class="fr" style="width: 38%">{{ $t('login.getAuthCode') }}</el-button>
                   </el-form-item>
                 </el-form>
               </div>
             </div>
             <div style="padding-top: 30px;">
-              <multiuse-button type="primary" size="medium" class="login-btn" :click="loginHandle">登 录</multiuse-button>
+              <multiuse-button type="primary" size="medium" class="login-btn" :click="loginHandle">{{ $t('login.loginButton') }}</multiuse-button>
             </div>
           </div>
           <div class="footer">
             <div class="quick">
               <span @click="showDialogHandle('Wx')">
                 <i class="iconfont icon-weixin" />
-                微信登录
+                {{ $t('login.weChat') }}
               </span>
               <span @click="showDialogHandle('App')">
                 <i class="iconfont icon-appxiazai" />
-                APP下载
+                {{ $t('login.appDownload') }}
               </span>
             </div>
           </div>
@@ -121,8 +121,8 @@ export default {
   data() {
     // tab 标签
     this.labels = [
-      { text: '用户名登录', value: 'user' },
-      { text: '手机号登录', value: 'phone' }
+      { text: this.$t('login.loginMethodByUser'), value: 'user' },
+      { text: this.$t('login.loginMethodByPhone'), value: 'phone' }
     ];
     // app 二维码
     this.appDevQrcode = appDevQrcode;
@@ -136,24 +136,24 @@ export default {
         vcode: ''
       },
       rules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        username: [{ required: true, message: this.$t('login.username'), trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('login.password'), trigger: 'blur' }],
         phone: [{ required: true, validator: phone, trigger: 'blur' }]
       },
       passwordType: 'password',
       currentMark: 'user', // 当前标记
       actionWx: {
-        title: '微信登录',
+        title: this.$t('login.weChat'),
         visible: false,
         desc: '请使用微信扫描二维码登录'
       },
       actionApp: {
-        title: '下载APP',
+        title: this.$t('login.appDownload'),
         visible: false,
         desc: '请扫描二维码下载大众销售助手APP'
       },
       actionPwd: {
-        title: '密码找回',
+        title: this.$t('login.retrievePassword'),
         visible: false
       }
     };

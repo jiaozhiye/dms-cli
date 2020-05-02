@@ -2,7 +2,7 @@
   <div class="menu-list">
     <div class="search">
       <div class="top">
-        <el-autocomplete v-model="menuPath" value-key="title" :fetch-suggestions="querySearch" placeholder="请输入菜单名称/拼音头" @select="handleSelect">
+        <el-autocomplete v-model="menuPath" value-key="title" :fetch-suggestions="querySearch" :placeholder="$t('sidebar.allNavPlaceholder')" @select="handleSelect">
           <i slot="prefix" class="el-icon-search el-input__icon" />
           <template slot-scope="{ item }">
             <span class="name">{{ item.title }}</span>
@@ -35,7 +35,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:44:11
+ * @Last Modified time: 2020-05-02 07:56:44
  **/
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';

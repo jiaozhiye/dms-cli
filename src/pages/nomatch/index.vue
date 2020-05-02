@@ -2,9 +2,9 @@
   <div class="nomatch-wrap">
     <div class="content">
       <h2>404</h2>
-      <div class="desc">抱歉，你访问的页面不存在或仍在开发中</div>
+      <div class="desc">{{ $t('noMatch.text') }}</div>
       <div class="actions">
-        <el-button type="primary" size="small" @click="goHome">返回首页</el-button>
+        <el-button type="primary" size="small" @click="goHome">{{ $t('login.backHome') }}</el-button>
       </div>
     </div>
   </div>

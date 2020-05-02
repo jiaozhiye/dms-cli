@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-01 20:27:48
+ * @Last Modified time: 2020-05-02 07:14:54
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -68,7 +68,7 @@ export default {
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
-    this.event2 = addEventListener(document, 'click', this.cancelEvent);
+    this.event2 = addEventListener(document.body, 'click', this.cancelEvent);
     this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
   destroyed() {
@@ -98,7 +98,8 @@ export default {
       this.prevSL = sl;
     },
     cancelEvent(ev) {
-      const { target } = ev;
+      const { target, currentTarget } = ev;
+      if (target === currentTarget) return;
       if (target.className === 'v-cell--normal' || contains(this.$vTableBody, target)) return;
       this.setClickedValues([]);
     },

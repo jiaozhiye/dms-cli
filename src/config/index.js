@@ -2,10 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 16:04:47
+ * @Last Modified time: 2020-05-02 07:46:10
  */
+import i18n from '@/lang';
+
 const config = {
-  systemName: '大众MEP系统',
+  systemName: i18n.t('app.title'),
   prefix: '/api', // ajax 请求前缀
   maxCacheNum: 10, // 路由组件最大缓存数量
   showBreadcrumb: true, // 是否显示面包屑

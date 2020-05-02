@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 13:12:10
+ * @Last Modified time: 2020-05-02 08:39:48
  **/
 import { mapState } from 'vuex';
 
@@ -57,7 +57,7 @@ export default {
   render() {
     return (
       <div class="breadcrumb-wrap">
-        <span>位置导航：</span>
+        <span>{this.$t('dreadcrumb.location')}：</span>
         <el-breadcrumb separator="/">
           {this.breadcrumbs.map(x => (
             <el-breadcrumb-item key={x}>{x}</el-breadcrumb-item>

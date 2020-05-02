@@ -9,8 +9,8 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-setting">个人中心</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-switch-button" divided @click.native="logoutHandle">退出登录</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-setting">{{ $t('settings.usercenter') }}</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-switch-button" divided @click.native="logoutHandle">{{ $t('settings.logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -21,7 +21,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 15:51:27
+ * @Last Modified time: 2020-05-02 08:36:10
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/utils/cookies';

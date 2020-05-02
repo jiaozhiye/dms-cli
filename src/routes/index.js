@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 13:54:00
+ * @Last Modified time: 2020-05-02 08:06:09
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import modulesRoute from './modules';
+import i18n from '@/lang';
 
 Vue.use(VueRouter);
 
@@ -20,19 +21,19 @@ const Nomatch = () => import('@/pages/nomatch');
 export const constantRouterMap = [
   {
     path: '/login',
-    meta: { title: '用户登录' },
+    meta: { title: i18n.t('login.title') },
     component: Login,
     hidden: true
   },
   {
     path: '/',
-    meta: { title: '首页' },
+    meta: { title: i18n.t('app.home') },
     redirect: '/home',
     component: BasicLayout,
     children: [
       {
         path: '/home',
-        meta: { title: '概览', affix: true, bgColor: true, keepAlive: false },
+        meta: { title: i18n.t('app.dashboard'), affix: true, bgColor: true, keepAlive: false },
         component: Dashboard
       },
       ...modulesRoute,

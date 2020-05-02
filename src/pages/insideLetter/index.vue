@@ -8,7 +8,7 @@
           </ul>
           <dl v-else class="no-info">
             <i class="el-icon-warning-outline" />
-            <span>暂无数据</span>
+            <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
       </tab-panel>
@@ -19,7 +19,7 @@
           </ul>
           <dl v-else class="no-info">
             <i class="el-icon-warning-outline" />
-            <span>暂无数据</span>
+            <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
       </tab-panel>
@@ -30,7 +30,7 @@
           </ul>
           <dl v-else class="no-info">
             <i class="el-icon-warning-outline" />
-            <span>暂无数据</span>
+            <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
       </tab-panel>
@@ -39,36 +39,30 @@
 </template>
 
 <script>
-const dataList = [
-  { id: 1, title: '通知1' },
-  { id: 2, title: '通知2' },
-  { id: 3, title: '通知3' },
-  { id: 4, title: '通知4' },
-  { id: 5, title: '通知5' }
-];
+import dataList from '@/mock/noticeData';
 
 export default {
   name: 'InsideLetter',
   data() {
     return {
-      defaultTabLabel: '通知',
+      defaultTabLabel: this.$t('insideLetter.notice'),
       noticeList: {
-        title: '通知',
+        title: this.$t('insideLetter.notice'),
         list: []
       },
       messageList: {
-        title: '消息',
+        title: this.$t('insideLetter.message'),
         list: []
       },
       todoList: {
-        title: '待办',
+        title: this.$t('insideLetter.waiting'),
         list: []
       }
     };
   },
   mounted() {
-    const title = `通知(${dataList.length})`;
-    this.noticeList.list = dataList;
+    const title = `${this.$t('insideLetter.notice')}(${dataList.data.length})`;
+    this.noticeList.list = dataList.data;
     this.defaultTabLabel = title;
     this.noticeList.title = title;
   }

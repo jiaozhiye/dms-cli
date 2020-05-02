@@ -14,7 +14,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-01 20:58:22
+ * @Last Modified time: 2020-05-02 07:20:13
  */
 import Popper from './popper.js';
 import config from '../config';
@@ -169,11 +169,11 @@ export default {
     switch (this.trigger) {
       case 'clickToOpen':
         on(this.referenceElm, 'click', this.doShow);
-        on(document, 'click', this.handleDocumentClick);
+        on(document.body, 'click', this.handleDocumentClick);
         break;
       case 'clickToToggle':
         on(this.referenceElm, 'click', this.doToggle);
-        on(document, 'click', this.handleDocumentClick);
+        on(document.body, 'click', this.handleDocumentClick);
         break;
       case 'hover':
         on(this.referenceElm, 'mouseover', this.onMouseOver);
@@ -281,7 +281,7 @@ export default {
       off(this.referenceElm, 'mouseout', this.onMouseOut);
       off(this.referenceElm, 'mouseover', this.onMouseOver);
 
-      off(document, 'click', this.handleDocumentClick);
+      off(document.body, 'click', this.handleDocumentClick);
       off(this.$tableBody, 'mousedown', this.onMouseDown);
 
       this.showPopper = false;
@@ -334,6 +334,8 @@ export default {
       ) {
         return;
       }
+
+      if (e.target === e.currentTarget) return;
 
       this.$emit('documentClick', this);
 

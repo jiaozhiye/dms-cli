@@ -1,112 +1,84 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-02 09:16:43
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-02 09:17:06
+ */
 export default {
-  navbar: {
-    logOut: 'Log Out',
-    dashboard: 'Dashboard',
-    github: 'Github',
-    theme: 'Theme',
-    size: 'Global Size'
+  app: {
+    title: '大众MEP系统',
+    home: '首页',
+    dashboard: '概览',
+    emptyText: '暂无数据...'
   },
-  login: {
-    title: 'Login Form',
-    logIn: 'Log in',
-    username: 'Username',
-    password: 'Password',
-    any: 'any',
-    thirdparty: 'Or connect with',
-    thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
+  sidebar: {
+    allNavTitle: '全部导航',
+    allNavPlaceholder: '请输入菜单名称/拼音头',
+    usedNav: '常用导航',
+    starNav: '我的收藏'
   },
-  documentation: {
-    documentation: 'Documentation',
-    github: 'Github Repository'
-  },
-  permission: {
-    addRole: 'New Role',
-    editPermission: 'Edit Permission',
-    roles: 'Your roles',
-    switchRoles: 'Switch roles',
-    tips:
-      'In some cases it is not suitable to use v-permission, such as element Tab component or el-table-column and other asynchronous rendering dom cases which can only be achieved by manually setting the v-if.',
-    delete: 'Delete',
-    confirm: 'Confirm',
-    cancel: 'Cancel'
-  },
-  guide: {
-    description: 'The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',
-    button: 'Show Guide'
-  },
-  components: {
-    documentation: 'Documentation',
-    tinymceTips:
-      'Rich text editor is a core part of management system, but at the same time is a place with lots of problems. In the process of selecting rich texts, I also walked a lot of detours. The common rich text editors in the market are basically used, and the finally chose Tinymce. See documentation for more detailed rich text editor comparisons and introductions.',
-    dropzoneTips:
-      'Because my business has special needs, and has to upload images to qiniu, so instead of a third party, I chose encapsulate it by myself. It is very simple, you can see the detail code in @/components/Dropzone.',
-    stickyTips: 'when the page is scrolled to the preset position will be sticky on the top.',
-    backToTopTips1: 'When the page is scrolled to the specified position, the Back to Top button appears in the lower right corner',
-    backToTopTips2:
-      'You can customize the style of the button, show / hide, height of appearance, height of the return. If you need a text prompt, you can use element-ui el-tooltip elements externally',
-    imageUploadTips:
-      'Since I was using only the vue@1 version, and it is not compatible with mockjs at the moment, I modified it myself, and if you are going to use it, it is better to use official version.'
-  },
-  table: {
-    dynamicTips1: 'Fixed header, sorted by header order',
-    dynamicTips2: 'Not fixed header, sorted by click order',
-    dragTips1: 'The default order',
-    dragTips2: 'The after dragging order',
-    title: 'Title',
-    importance: 'Imp',
-    type: 'Type',
-    remark: 'Remark',
-    search: 'Search',
-    add: 'Add',
-    export: 'Export',
-    reviewer: 'reviewer',
-    id: 'ID',
-    date: 'Date',
-    author: 'Author',
-    readings: 'Readings',
-    status: 'Status',
-    actions: 'Actions',
-    edit: 'Edit',
-    publish: 'Publish',
-    draft: 'Draft',
-    delete: 'Delete',
-    cancel: 'Cancel',
-    confirm: 'Confirm'
-  },
-  errorLog: {
-    tips: 'Please click the bug icon in the upper right corner',
-    description:
-      'Now the management system are basically the form of the spa, it enhances the user experience, but it also increases the possibility of page problems, a small negligence may lead to the entire page deadlock. Fortunately Vue provides a way to catch handling exceptions, where you can handle errors or report exceptions.',
-    documentation: 'Document introduction'
-  },
-  excel: {
-    export: 'Export',
-    selectedExport: 'Export Selected Items',
-    placeholder: 'Please enter the file name(default excel-list)'
-  },
-  zip: {
-    export: 'Export',
-    placeholder: 'Please enter the file name(default file)'
-  },
-  pdf: {
-    tips: 'Here we use window.print() to implement the feature of downloading pdf.'
-  },
-  theme: {
-    change: 'Change Theme',
-    documentation: 'Theme documentation',
-    tips: 'Tips: It is different from the theme-pick on the navbar is two different skinning methods, each with different application scenarios. Refer to the documentation for details.'
-  },
-  tagsView: {
-    refresh: 'Refresh',
-    close: 'Close',
-    closeOthers: 'Close Others',
-    closeAll: 'Close All'
+  multiTab: {
+    refresh: '刷新当前',
+    closeRight: '关闭右侧',
+    closeLeft: '关闭左侧',
+    closeOthers: '关闭其它'
   },
   settings: {
-    title: 'Page style setting',
-    theme: 'Theme Color',
-    tagsView: 'Open Tags-View',
-    fixedHeader: 'Fixed Header',
-    sidebarLogo: 'Sidebar Logo'
+    usercenter: '个人中心',
+    logout: '退出登录'
+  },
+  dreadcrumb: {
+    location: '位置导航'
+  },
+  login: {
+    title: '系统登录',
+    viewDetails: '了解详情',
+    username: '请输入用户名',
+    password: '请输入密码',
+    phone: '请输入手机号',
+    authCode: '验证码',
+    getAuthCode: '获取验证码',
+    forgotPassword: '忘记密码',
+    retrievePassword: '密码找回',
+    resetPassword: '重置密码',
+    loginButton: '登 录',
+    weChat: '微信登录',
+    appDownload: 'App下载',
+    loginMethodByUser: '用户名登录',
+    loginMethodByPhone: '手机号登录',
+    nextStep: '下一步',
+    backHome: '返回首页'
+  },
+  noMatch: {
+    text: '抱歉，你访问的页面不存在或仍在开发中'
+  },
+  button: {
+    confirm: '确定',
+    cancel: '取消',
+    close: '关闭',
+    submit: '提交',
+    remove: '删除',
+    edit: '编辑',
+    modify: '修改',
+    details: '详情',
+    view: '查看',
+    newAdd: '新建',
+    print: '打印',
+    export: '导出',
+    import: '导入',
+    download: '下载',
+    search: '搜索',
+    reset: '重置',
+    save: '保存',
+    clear: '清空',
+    action: '操作'
+  },
+  insideLetter: {
+    notice: '通知',
+    message: '消息',
+    waiting: '代办'
+  },
+  table: {
+    //
   }
 };
