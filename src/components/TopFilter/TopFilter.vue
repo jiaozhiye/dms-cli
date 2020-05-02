@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 17:41:10
+ * @Last Modified time: 2020-05-02 18:31:19
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1276,7 +1276,10 @@ export default {
       }
       &.is-error {
         .range-date {
-          border-color: #f5222d;
+          border-color: $errorColor;
+          &:hover {
+            border-color: $errorColor !important;
+          }
         }
       }
     }
