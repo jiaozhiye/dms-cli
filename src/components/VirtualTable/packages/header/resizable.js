@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 17:54:01
+ * @Last Modified time: 2020-05-02 18:04:03
  */
 import { getNodeOffset, deepFindColumn } from '../utils';
 import config from '../config';
@@ -18,7 +18,9 @@ export default {
   },
   methods: {
     resizeMousedown(ev) {
+      ev.stopPropagation();
       ev.preventDefault();
+
       const dom = ev.target;
       const { $vTable, $$tableBody, columns, flattenColumns, doLayout, setLocalColumns } = this.$$table;
       const target = this.$resizableBar;
@@ -66,6 +68,6 @@ export default {
         [`is--line`]: resizable && !bordered
       }
     ];
-    return <div class={resizableCls} onMousedown={this.resizeMousedown} onClick={ev => ev.stopPropagation()} />;
+    return <div class={resizableCls} onMousedown={this.resizeMousedown} />;
   }
 };

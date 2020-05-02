@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-01 20:08:13
+ * @Last Modified time: 2020-05-02 17:53:40
  */
 import Popper from '../popper';
 
@@ -272,7 +272,7 @@ export default {
       }
     ];
     return (
-      <span class="v-cell--filter" title="筛选" onClick={ev => ev.stopPropagation()}>
+      <span class="v-cell--filter" title="筛选" onMousedown={ev => ev.stopPropagation()}>
         <Popper
           ref="vPopper"
           trigger="clickToToggle"

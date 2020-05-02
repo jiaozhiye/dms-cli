@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-26 17:29:36
+ * @Last Modified time: 2020-05-02 17:55:02
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -124,7 +124,7 @@ export default {
         : null;
       const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
       return (
-        <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
+        <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onMousedown={ev => this.thClickHandle(ev, column)}>
           <div class="v-cell--wrapper">{this.renderCell(column)}</div>
           {isResizable && <Resizable column={column} />}
         </th>
