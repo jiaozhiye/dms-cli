@@ -17,7 +17,7 @@
  * @Author: 焦质晔
  * @Date: 2020-04-30 15:17:48
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 16:25:55
+ * @Last Modified time: 2020-05-03 11:34:02
  */
 import { mapState, mapActions } from 'vuex';
 
@@ -32,6 +32,10 @@ export default {
       this.$i18n.locale = lang;
       this.setLanguage(lang);
       localStorage.setItem('lang', lang);
+      // 浏览器刷新，重新获取数据
+      // ...
+      // 可能需要重新获取基础信息
+      // ...
     }
   }
 };

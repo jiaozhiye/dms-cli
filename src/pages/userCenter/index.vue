@@ -21,7 +21,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 08:36:10
+ * @Last Modified time: 2020-05-03 11:37:16
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/utils/cookies';
@@ -38,7 +38,6 @@ export default {
     logoutHandle() {
       // 需要走后台推出接口
       this.createLogout();
-      this.$router.push({ path: '/login' }).catch(() => {});
     }
   }
 };

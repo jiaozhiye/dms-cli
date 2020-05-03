@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 19:11:27
+ * @Last Modified time: 2020-05-03 11:31:48
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -38,7 +38,9 @@ const successCodes = [200];
 // 自定义扩展 header 请求头
 const getConfigHeaders = () => {
   return {
-    jwt: getToken()
+    jwt: getToken(), // token
+    lang: store.state.app.lang, // 多语言
+    userAgent: 'pc' // 设备
   };
 };
 
