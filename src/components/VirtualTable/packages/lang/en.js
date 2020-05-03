@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:18:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 20:10:20
+ * @Last Modified time: 2020-05-03 23:29:25
  */
 export default {
   config: {
     summaryText: 'summary',
     emptyText: 'data is empty...',
-    columnFilterText: 'columns definition'
+    columnFilterText: 'column define'
   },
   alert: {
     total: 'Total {total}',
