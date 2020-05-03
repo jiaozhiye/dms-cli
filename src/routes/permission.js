@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 10:45:44
+ * @Last Modified time: 2020-05-04 07:37:49
  */
 import router from '@/routes';
 import store from '@/store';
 import config from '@/config';
 import { getToken } from '@/utils/cookies';
+import { notifyAction } from '@/utils';
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
-import { Notification } from 'element-ui';
+import i18n from '@/lang';
 
 NProgress.configure({ showSpinner: false });
 
@@ -48,10 +49,7 @@ router.beforeEach(async (to, from, next) => {
       } else {
         let { tabNavList } = store.state.app;
         if (tabNavList.length >= config.maxCacheNum && !tabNavList.some(x => x.key === to.path)) {
-          Notification.warning({
-            title: '提示信息',
-            message: `最多支持 ${config.maxCacheNum} 个菜单项！`
-          });
+          notifyAction(i18n.t('information.maxCache', { total: config.maxCacheNum }), 'warning');
           return redirect(next, false);
         }
         let isAuth = await store.dispatch('app/checkAuthority', to.path);

@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 11:02:11
+ * @Last Modified time: 2020-05-04 07:26:34
  */
 import { MessageBox, Notification, Message } from 'element-ui';
 import Cookies from 'js-cookie';
 import config from '@/config';
+import i18n from '@/lang';
 import store from '@/store';
 
 /**
@@ -74,8 +75,8 @@ export const throttle = (fn, delay) => {
  * @param {string} type 提示类型
  * @returns
  */
-export const confirmAction = async (msg = '确认进行此操作?', type = 'warning') => {
-  return MessageBox.confirm(msg, '提示信息', { confirmButtonText: '确定', cancelButtonText: '取消', type, dangerouslyUseHTMLString: true });
+export const confirmAction = async (msg = i18n.t('information.confirm'), type = 'warning') => {
+  return MessageBox.confirm(msg, i18n.t('information.title'), { confirmButtonText: i18n.t('button.confirm'), cancelButtonText: i18n.t('button.cancel'), type, dangerouslyUseHTMLString: true });
 };
 
 /**
@@ -85,10 +86,10 @@ export const confirmAction = async (msg = '确认进行此操作?', type = 'warn
  * @param {number} delay 延迟的时间，单位 毫秒，如果值是 0，为手动关闭模式
  * @returns
  */
-export const notifyAction = async (msg = '暂无...', type = 'success', delay = config.notifyDuration) => {
+export const notifyAction = async (msg = '', type = 'success', delay = config.notifyDuration) => {
   if (store.state.app.isNotifyMark) return;
   store.dispatch('app/createNotifyState', true);
-  Notification({ title: '提示信息', message: msg, type, duration: delay, dangerouslyUseHTMLString: true });
+  Notification({ title: i18n.t('information.title'), message: msg, type, duration: delay, dangerouslyUseHTMLString: true });
   await sleep(config.notifyDuration);
   store.dispatch('app/createNotifyState', false);
 };
@@ -99,7 +100,7 @@ export const notifyAction = async (msg = '暂无...', type = 'success', delay = 
  * @param {string} type 提示类型
  * @returns
  */
-export const messageAction = async (msg = '暂无...', type = 'info') => {
+export const messageAction = async (msg = '', type = 'info') => {
   if (store.state.app.isNotifyMark) return;
   store.dispatch('app/createNotifyState', true);
   Message({ message: msg, showClose: true, type, duration: config.notifyDuration });

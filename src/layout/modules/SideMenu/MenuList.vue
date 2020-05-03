@@ -35,10 +35,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 07:56:44
+ * @Last Modified time: 2020-05-04 07:41:03
  **/
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
+import { notifyAction } from '@/utils';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
 export default {
@@ -98,7 +99,7 @@ export default {
     starClickHandle(star, key, title) {
       if (!star) {
         if (this.starMenuList.length >= 10) {
-          return this.$message.warning('最多只能收藏 10 个菜单');
+          return notifyAction(this.$t('information.maxStar', { total: 10 }), 'warning');
         }
         this.addStarMenuList({ key, title });
       } else {

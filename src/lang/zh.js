@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 14:49:35
+ * @Last Modified time: 2020-05-04 07:38:38
  */
 export default {
   app: {
@@ -80,7 +80,10 @@ export default {
     message: '消息',
     waiting: '代办'
   },
-  table: {
-    //
+  information: {
+    title: '提示信息',
+    confirm: '确认进行此操作？',
+    maxCache: '最多支持 {total} 个菜单项！',
+    maxStar: '最多只能收藏 {total} 个菜单！'
   }
 };

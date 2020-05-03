@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 08:33:25
+ * @Last Modified time: 2020-05-04 07:46:32
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -37,8 +37,11 @@ export default {
         this.pages.push(val);
       }
     },
-    pages(val) {
-      this.createTabNavList(val.map(x => ({ key: x.path, title: x.meta.title })));
+    pages: {
+      handler(val) {
+        this.createTabNavList(val.map(x => ({ key: x.path, title: x.meta.title })));
+      },
+      immediate: true
     }
   },
   created() {
