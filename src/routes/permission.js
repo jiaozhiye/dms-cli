@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 15:16:43
+ * @Last Modified time: 2020-05-03 10:45:44
  */
 import router from '@/routes';
 import store from '@/store';
@@ -46,8 +46,8 @@ router.beforeEach(async (to, from, next) => {
         const bool = await store.dispatch('app/createNavList');
         bool ? next({ ...to, replace: true }) : redirect(next, false);
       } else {
-        let { tabMenuList } = store.state.app;
-        if (tabMenuList.length >= config.maxCacheNum && !tabMenuList.some(x => x.key === to.path)) {
+        let { tabNavList } = store.state.app;
+        if (tabNavList.length >= config.maxCacheNum && !tabNavList.some(x => x.key === to.path)) {
           Notification.warning({
             title: '提示信息',
             message: `最多支持 ${config.maxCacheNum} 个菜单项！`

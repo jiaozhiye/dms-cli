@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 09:08:25
+ * @Last Modified time: 2020-05-03 11:18:47
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -25,7 +25,7 @@ export default {
     }
   },
   mounted() {
-    // 登录后，获取所有的数据字典值
+    // 获取数据字典值
     this.createDictData();
     // 获取收藏导航
     this.createStarMenuList();

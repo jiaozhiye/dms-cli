@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 16:00:03
+ * @Last Modified time: 2020-05-03 11:24:24
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -28,11 +28,11 @@ const deepMapRoutes = (arr, mark) => {
   return res;
 };
 
-const flatMapMenus = list => {
+const flattenNavList = list => {
   const res = [];
   list.forEach(x => {
     if (Array.isArray(x.children)) {
-      res.push(...flatMapMenus(x.children));
+      res.push(...flattenNavList(x.children));
     } else {
       res.push(x);
     }
@@ -61,10 +61,10 @@ const state = {
   menuList: [], // 可点击(三级)的子菜单列表
   starMenuList: [], // 收藏导航
   commonMenuList: [], // 常用导航
-  tabMenuList: [], // 导航选项卡列表
+  tabNavList: [], // 导航选项卡列表
   lang: localStorage.getItem('lang') || 'zh', // 多语言
   theme: variables.theme, // 主题色
-  dict: {}, // 数据字典、筛选条件
+  dict: {}, // 数据字典
   keepAliveNames: [], // 路由组件缓存列表
   isNotifyMark: false // 页面中是否已存在消息通知组件
 };
@@ -108,7 +108,7 @@ const actions = {
     }
     formateNavList(data, router.options.routes);
     commit({ type: types.NAVLIST, data });
-    commit({ type: types.MENULIST, data: flatMapMenus(data) });
+    commit({ type: types.MENULIST, data: flattenNavList(data) });
     return true;
   },
   clearNavList({ dispatch, commit, state }, params) {
@@ -116,7 +116,7 @@ const actions = {
       type: types.NAVLIST,
       data: []
     });
-    dispatch('clearTabMenuList');
+    dispatch('createTabNavList', []);
   },
   async createStarMenuList({ commit, state }, params) {
     if (state.starMenuList.length) return;
@@ -146,17 +146,12 @@ const actions = {
     }
     commit({ type: types.COMMON_MENU, data });
   },
-  createTabMenuList({ commit, state }, params) {
+  createTabNavList({ commit, state }, params) {
     commit({
-      type: types.TAB_MENU,
+      type: types.TAB_NAVLIST,
       data: params
     });
-  },
-  clearTabMenuList({ commit, state }, params) {
-    commit({
-      type: types.TAB_MENU,
-      data: []
-    });
+    localStorage.setItem('tab_nav', JSON.stringify(params));
   },
   checkAuthority({ commit, state }, params) {
     if (!state.menuList.length) {
@@ -183,13 +178,13 @@ const actions = {
   addKeepAliveNames({ commit, state }, params) {
     if (state.keepAliveNames.some(x => x.value === params.value)) return;
     commit({
-      type: types.ADD_CNAME,
+      type: types.ADD_CACHE,
       data: params
     });
   },
   removeKeepAliveNames({ commit, state }, params) {
     commit({
-      type: types.DEL_CNAME,
+      type: types.DEL_CACHE,
       data: params
     });
   },
@@ -205,11 +200,8 @@ const actions = {
       data: params
     });
   },
-  refreshView({ commit, state }, { path, query = {} }) {
-    commit({
-      type: types.DEL_CNAME,
-      data: path
-    });
+  refreshView({ dispatch }, { path, query = {} }) {
+    dispatch('removeKeepAliveNames', path);
     setTimeout(() => router.replace({ path: `/redirect${path}`, query }).catch(() => {}));
   },
   createNotifyState({ commit, state }, params) {
@@ -252,16 +244,16 @@ const mutations = {
   [types.MENULIST](state, { data }) {
     state.menuList = data;
   },
-  [types.TAB_MENU](state, { data }) {
-    state.tabMenuList = data;
+  [types.TAB_NAVLIST](state, { data }) {
+    state.tabNavList = data;
   },
   [types.DICT_DATA](state, { data }) {
     state.dict = data;
   },
-  [types.ADD_CNAME](state, { data }) {
+  [types.ADD_CACHE](state, { data }) {
     state.keepAliveNames = [...state.keepAliveNames, data];
   },
-  [types.DEL_CNAME](state, { data }) {
+  [types.DEL_CACHE](state, { data }) {
     state.keepAliveNames = state.keepAliveNames.filter(x => x.key !== data);
   },
   [types.ADD_STAR_MENU](state, { data }) {

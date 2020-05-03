@@ -38,7 +38,7 @@ export default {
       }
     },
     pages(val) {
-      this.createTabMenuList(val.map(x => ({ key: x.path, title: x.meta.title })));
+      this.createTabNavList(val.map(x => ({ key: x.path, title: x.meta.title })));
     }
   },
   created() {
@@ -53,7 +53,7 @@ export default {
     this.clickEvent.remove();
   },
   methods: {
-    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabMenuList', 'refreshView']),
+    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabNavList', 'refreshView']),
     getHomeRoute(path) {
       return this.deepMapRoutes(this.$router.options.routes, path);
     },
