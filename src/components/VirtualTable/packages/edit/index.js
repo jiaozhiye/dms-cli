@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-01 17:35:10
+ * @Last Modified time: 2020-05-03 08:47:03
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
@@ -178,7 +178,7 @@ export default {
           size="small"
           type={!isDateTime ? 'date' : 'datetime'}
           style={{ width: '100%' }}
-          value={moment(prevValue).format(dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD'))}
+          value={prevValue ? moment(prevValue).format(dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD')) : prevValue}
           onInput={val => {
             setCellValue(row, dataIndex, val);
           }}

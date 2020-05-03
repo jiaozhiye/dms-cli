@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 17:55:02
+ * @Last Modified time: 2020-05-03 10:34:47
  */
 import _ from 'lodash';
 import moment from 'moment';
@@ -288,16 +288,15 @@ export default {
         filterList.push(results);
       }
 
-      if (!Object.keys(this.filters).length) {
-        this.tableFilterData = [...tableOriginData];
-      } else {
-        // 求给定数组的交集
-        this.tableFilterData = _.intersection(...filterList);
-      }
-
+      this.createTableFilterData(Object.keys(this.filters).length ? _.intersection(...filterList) : tableOriginData);
       this.$$table.tableFullData = [...this.tableFilterData];
+
       // 执行排序
       this.sorterHandle();
+    },
+    // 设置 tableFilterData 值
+    createTableFilterData(dataList) {
+      this.tableFilterData = [...dataList];
     },
     // 格式化排序参数
     formatSorterValue(option) {
