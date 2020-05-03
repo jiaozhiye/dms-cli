@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:46:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-20 16:25:23
+ * @Last Modified time: 2020-05-03 23:25:54
  */
 .v-pager {
   height: $v-table-row-height-default;
@@ -43,6 +43,26 @@
     }
   }
 
+  &.size--default {
+    font-size: $v-font-size;
+    min-height: $v-table-row-height-default;
+    .v-pager--count,
+    .size--content,
+    .v-pager--prev-btn,
+    .v-pager--next-btn,
+    .v-pager--jump-prev,
+    .v-pager--num-btn,
+    .v-pager--jump-next {
+      height: 30px;
+      line-height: 28px;
+    }
+    .v-pager--jump .v-pager--goto,
+    .v-pager--sizes > .el-input {
+      font-size: $v-font-size;
+      height: 30px;
+    }
+  }
+
   &.size--medium {
     font-size: $v-font-size-medium;
     min-height: $v-table-row-height-medium;
@@ -57,7 +77,8 @@
       line-height: 26px;
     }
     .v-pager--jump .v-pager--goto,
-    .v-pager--sizes > .v-input {
+    .v-pager--sizes > .el-input {
+      font-size: $v-font-size-medium;
       height: 28px;
     }
   }
@@ -75,7 +96,8 @@
       line-height: 24px;
     }
     .v-pager--jump .v-pager--goto,
-    .v-pager--sizes > .v-input {
+    .v-pager--sizes > .el-input {
+      font-size: $v-font-size-small;
       height: 26px;
     }
   }
@@ -93,7 +115,8 @@
       line-height: 22px;
     }
     .v-pager--jump .v-pager--goto,
-    .v-pager--sizes > .v-input {
+    .v-pager--sizes > .el-input {
+      font-size: $v-font-size-mini;
       height: 24px;
     }
   }
@@ -131,13 +154,12 @@
     display: inline-block;
   }
   .v-pager--jump .v-pager--goto,
-  .v-pager--sizes > .v-input {
+  .v-pager--sizes > .el-input {
     height: 30px;
   }
   .v-pager--sizes > .v-select--panel .v-select-option {
     height: 22px;
     line-height: 22px;
-    text-align: center;
   }
   .v-pager--btn-wrapper {
     list-style-type: none;
@@ -198,8 +220,8 @@
     text-align: center;
     display: inline-block;
     vertical-align: middle;
-    & .v-input--inner {
-      text-align: center;
+    .el-input > .el-input__inner {
+      height: 100%;
     }
   }
   .v-pager--count {
