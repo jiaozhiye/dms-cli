@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 10:34:47
+ * @Last Modified time: 2020-05-03 16:33:08
  */
 import _ from 'lodash';
 import moment from 'moment';
 
 import config from '../config';
+import i18n from '../lang';
 import { convertToRows, getCellValue, isEmpty } from '../utils';
 
 import Resizable from './resizable';
@@ -172,9 +173,9 @@ export default {
         }
       ];
       return (
-        <span class="v-cell--sort" title="排序">
-          <i class={ascCls} />
-          <i class={descCls} />
+        <span class="v-cell--sort">
+          <i class={ascCls} title={i18n.t('sorter.asc')} />
+          <i class={descCls} title={i18n.t('sorter.desc')} />
         </span>
       );
     },

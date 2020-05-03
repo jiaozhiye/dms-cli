@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 15:37:17
+ * @Last Modified time: 2020-05-03 17:02:41
  */
 export default {
   app: {
@@ -12,7 +12,7 @@ export default {
     emptyText: '暂无数据...'
   },
   sidebar: {
-    allNavTitle: '全部导航',
+    allNavTitle: 'All Navigation',
     allNavPlaceholder: '请输入菜单名称/拼音头',
     usedNav: '常用导航',
     starNav: '我的收藏'
@@ -62,7 +62,7 @@ export default {
     modify: '修改',
     details: '详情',
     view: '查看',
-    newAdd: '新建',
+    add: '新建',
     print: '打印',
     export: '导出',
     import: '导入',

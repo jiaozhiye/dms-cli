@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 08:47:03
+ * @Last Modified time: 2020-05-03 16:14:07
  */
 import { mapState, mapActions } from 'vuex';
 import _ from 'lodash';
 import moment from 'moment';
-import { getCellValue, setCellValue, isEmpty } from '../utils';
+import i18n from '../lang';
+import { getCellValue, setCellValue } from '../utils';
 
 import Checkbox from '../checkbox';
 
@@ -149,7 +150,7 @@ export default {
           onInput={val => {
             setCellValue(row, dataIndex, val);
           }}
-          placeholder="请选择"
+          placeholder={i18n.t('editable.selectPlaceholder')}
           clearable={!0}
           onChange={val => {
             this.createFieldValidate(rules, val);
@@ -185,7 +186,7 @@ export default {
           format={dateFormat}
           value-format={dateFormat}
           clearable={!1}
-          placeholder={!isDateTime ? '选择日期' : '选择时间'}
+          placeholder={!isDateTime ? i18n.t('editable.datePlaceholder') : i18n.t('editable.datetimePlaceholder')}
           onChange={val => {
             this.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);

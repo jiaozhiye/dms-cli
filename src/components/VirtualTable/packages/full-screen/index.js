@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-29 14:37:59
+ * @Last Modified time: 2020-05-03 16:30:00
  */
 import addEventListener from 'add-dom-event-listener';
+import i18n from '../lang';
 
 export default {
   name: 'FullScreen',
@@ -16,7 +17,7 @@ export default {
   },
   computed: {
     title() {
-      return !this.isFull ? '全屏' : '取消全屏';
+      return !this.isFull ? i18n.t('screen.full') : i18n.t('screen.cancelFull');
     }
   },
   methods: {

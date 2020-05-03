@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 21:15:26
+ * @Last Modified time: 2020-05-03 16:34:51
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
+import i18n from '../lang';
 import _ from 'lodash';
 
 export default {
@@ -244,7 +245,7 @@ export default {
   render() {
     return (
       <span class="v-print--wrapper" onClick={this.printHandle}>
-        <i class="iconfont icon-printer" /> 打印
+        <i class="iconfont icon-printer" /> {i18n.t('print.text')}
       </span>
     );
   }

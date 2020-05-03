@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 10:37:27
+ * @Last Modified time: 2020-05-03 15:32:57
  */
 import baseProps from './props';
 import store from '../store';
 import config from '../config';
+import i18n from '../lang';
 import _ from 'lodash';
 
 import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, debounce, browse } from '../utils';

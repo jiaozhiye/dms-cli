@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 21:17:05
+ * @Last Modified time: 2020-05-03 16:17:15
  */
 import PropTypes from '@/components/_utils/vue-types';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
 
 import config from '../config';
+import i18n from '../lang';
 import { setCellValue, filterTableColumns } from '../utils';
 import _ from 'lodash';
 
@@ -16,7 +17,7 @@ export default {
   props: {
     flattenColumns: PropTypes.array,
     data: PropTypes.array.def([]),
-    fileName: PropTypes.string.def('导出数据.xlsx'),
+    fileName: PropTypes.string.def(`${i18n.t('export.fileName')}.xlsx`),
     fetch: PropTypes.object
   },
   computed: {
@@ -96,7 +97,7 @@ export default {
     return (
       <div class="v-export--wrapper">
         <JsonToExcel size="small" type="text" {...wrapProps}>
-          导出
+          {i18n.t('export.text')}
         </JsonToExcel>
       </div>
     );

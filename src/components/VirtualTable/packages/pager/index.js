@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:45:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-19 17:28:07
+ * @Last Modified time: 2020-05-03 15:58:36
  */
 import PropTypes from '@/components/_utils/vue-types';
 import config from '../config';
+import i18n from '../lang';
 
 export default {
   name: 'Pager',
@@ -90,7 +91,7 @@ export default {
             }
           ],
           attrs: {
-            title: '上一页'
+            title: i18n.t('pagination.prev')
           },
           on: {
             click: this.prevPage
@@ -116,7 +117,7 @@ export default {
             }
           ],
           attrs: {
-            title: '向上跳页'
+            title: i18n.t('pagination.jumpPrev')
           },
           on: {
             click: this.prevJump
@@ -171,7 +172,7 @@ export default {
             }
           ],
           attrs: {
-            title: '向下跳页'
+            title: i18n.t('pagination.jumpNext')
           },
           on: {
             click: this.nextJump
@@ -205,7 +206,7 @@ export default {
             }
           ],
           attrs: {
-            title: '下一页'
+            title: i18n.t('pagination.next')
           },
           on: {
             click: this.nextPage
@@ -230,7 +231,7 @@ export default {
           }}
         >
           {this.pageSizes.map(x => (
-            <el-option key={x} label={`${x}条/页`} value={x} />
+            <el-option key={x} label={`${x}${i18n.t('pagination.pagesize')}`} value={x} />
           ))}
         </el-select>
       );
@@ -253,7 +254,7 @@ export default {
                 {
                   class: 'v-pager--goto-text'
                 },
-                '前往'
+                i18n.t('pagination.goto')
               )
             : null,
           h('input', {
@@ -276,7 +277,7 @@ export default {
                 {
                   class: 'v-pager--classifier-text'
                 },
-                '页'
+                i18n.t('pagination.pageClassifier')
               )
             : null
         ]
@@ -304,7 +305,7 @@ export default {
         {
           class: 'v-pager--total'
         },
-        `共 ${this.total} 条`
+        i18n.t('pagination.total', { total: this.total })
       );
     },
     // number

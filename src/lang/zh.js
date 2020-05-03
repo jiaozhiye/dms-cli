@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 15:32:57
+ * @Last Modified time: 2020-05-03 14:49:35
  */
 export default {
   app: {
@@ -62,7 +62,7 @@ export default {
     modify: '修改',
     details: '详情',
     view: '查看',
-    newAdd: '新建',
+    add: '新建',
     print: '打印',
     export: '导出',
     import: '导入',

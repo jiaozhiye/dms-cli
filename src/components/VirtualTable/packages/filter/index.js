@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 17:53:40
+ * @Last Modified time: 2020-05-03 16:26:42
  */
 import Popper from '../popper';
 
 import { isEmpty, validateNumber } from '../utils';
+import i18n from '../lang';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -90,10 +91,10 @@ export default {
       return (
         <div style="padding: 10px 0 6px">
           <el-button type="primary" size="mini" onClick={this.doFinish}>
-            搜索
+            {i18n.t('filter.search')}
           </el-button>
           <el-button size="mini" onClick={this.doReset}>
-            重置
+            {i18n.t('filter.reset')}
           </el-button>
         </div>
       );
@@ -105,7 +106,7 @@ export default {
           <el-input
             size="small"
             v-model={this.filterValues[this.dataKey]}
-            placeholder={`搜索${title}`}
+            placeholder={i18n.t('filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -127,7 +128,7 @@ export default {
               if (!validateNumber(val)) return;
               this.filterValues[this.dataKey] = val;
             }}
-            placeholder={`搜索${title}`}
+            placeholder={i18n.t('filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -153,7 +154,7 @@ export default {
               setValue([val, this.filterValues[this.dataKey][1]]);
             }}
             style={{ width: '93px' }}
-            placeholder="开始值"
+            placeholder={i18n.t('filter.startValuePlaceholder')}
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
                 setValue([endVal, this.filterValues[this.dataKey][1]]);
@@ -175,7 +176,7 @@ export default {
             }}
             min={startVal}
             style={{ width: '93px' }}
-            placeholder="结束值"
+            placeholder={i18n.t('filter.endValuePlaceholder')}
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
                 setValue([this.filterValues[this.dataKey][0], startVal]);
@@ -240,7 +241,7 @@ export default {
     dateHandle(column) {
       return (
         <div style="padding-top: 6px">
-          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" placeholder="选择日期" />
+          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" placeholder={i18n.t('filter.datePlaceholder')} />
         </div>
       );
     },
@@ -255,8 +256,8 @@ export default {
             style={{ width: '230px' }}
             value-format="yyyy-MM-dd"
             range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            start-placeholder={i18n.t('filter.startDatePlaceholder')}
+            end-placeholder={i18n.t('filter.endDatePlaceholder')}
           />
         </div>
       );
@@ -272,7 +273,7 @@ export default {
       }
     ];
     return (
-      <span class="v-cell--filter" title="筛选" onMousedown={ev => ev.stopPropagation()}>
+      <span class="v-cell--filter" title={i18n.t('filter.text')} onMousedown={ev => ev.stopPropagation()}>
         <Popper
           ref="vPopper"
           trigger="clickToToggle"

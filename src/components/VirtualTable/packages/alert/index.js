@@ -2,8 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 21:00:35
+ * @Last Modified time: 2020-05-03 15:45:54
  */
+import i18n from '../lang';
+
 export default {
   name: 'Alert',
   props: ['total', 'selectionKeys'],
@@ -24,9 +26,9 @@ export default {
       <div class="v-alert">
         <i class="iconfont icon-info-circle-fill" />
         <span>
-          总共 <strong>{total}</strong> 条数据，已选择 <strong>{selectionKeys.length}</strong> 项
+          {i18n.t('alert.total', { total })}，{i18n.t('alert.selected', { total: selectionKeys.length })}
         </span>
-        <em onClick={this.clearHandle}>清空</em>
+        <em onClick={this.clearHandle}>{i18n.t('alert.clear')}</em>
       </div>
     );
   }

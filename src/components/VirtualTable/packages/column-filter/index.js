@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 12:35:16
+ * @Last Modified time: 2020-05-03 16:07:41
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
 import Checkbox from '../checkbox';
 
 import config from '../config';
+import i18n from '../lang';
 
 const noop = () => {};
 
@@ -66,16 +67,16 @@ export default {
       return (
         <li key={column.dataIndex} class="item">
           <Checkbox value={!column.hidden} onInput={val => (column.hidden = !val)} onChange={this.changeHandle} />
-          <i class={cls} title="拖动排序" />
+          <i class={cls} title={i18n.t('columnFilter.draggable')} />
           <span>{column.title}</span>
           {type === 'main' ? (
             <span class="fixed">
-              <i class="iconfont icon-step-backward" title="固定左侧" onClick={() => this.fixedChangeHandle(column, 'left')} />
-              <i class="iconfont icon-step-forward" title="固定右侧" onClick={() => this.fixedChangeHandle(column, 'right')} />
+              <i class="iconfont icon-step-backward" title={i18n.t('columnFilter.fixedLeft')} onClick={() => this.fixedChangeHandle(column, 'left')} />
+              <i class="iconfont icon-step-forward" title={i18n.t('columnFilter.fixedRight')} onClick={() => this.fixedChangeHandle(column, 'right')} />
             </span>
           ) : (
             <span class="fixed">
-              <i class="iconfont icon-close-circle" title="取消固定" onClick={() => this.cancelFixedHandle(column)} />
+              <i class="iconfont icon-close-circle" title={i18n.t('columnFilter.cancelFixed')} onClick={() => this.cancelFixedHandle(column)} />
             </span>
           )}
         </li>
