@@ -14,7 +14,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 07:20:13
+ * @Last Modified time: 2020-05-03 13:10:39
  */
 import Popper from './popper.js';
 import config from '../config';
@@ -111,11 +111,7 @@ export default {
       currentPlacement: '',
       popperOptions: {
         placement: 'bottom',
-        modifiers: {
-          computeStyle: {
-            gpuAcceleration: false // 使用 left/top 定位
-          }
-        }
+        gpuAcceleration: false // 使用 left/top 定位
       }
     };
   },
@@ -130,14 +126,8 @@ export default {
     showPopper(value) {
       if (value) {
         this.$emit('show', this);
-        if (this.popperJS) {
-          this.popperJS.enableEventListeners();
-        }
         this.updatePopper();
       } else {
-        if (this.popperJS) {
-          this.popperJS.disableEventListeners();
-        }
         this.$emit('hide', this);
       }
     },
@@ -334,8 +324,6 @@ export default {
       ) {
         return;
       }
-
-      if (e.target === e.currentTarget) return;
 
       this.$emit('documentClick', this);
 

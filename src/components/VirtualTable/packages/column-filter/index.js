@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-01 20:08:22
+ * @Last Modified time: 2020-05-03 12:35:16
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -142,7 +142,7 @@ export default {
         <Popper
           ref="vPopper"
           trigger="clickToToggle"
-          root-class="v-popover--wrapper"
+          root-class="v-popper--wrapper"
           containerStyle={{ zIndex: 9999 }}
           transition="v-zoom-in-top"
           options={{ placement: 'bottom-end' }}

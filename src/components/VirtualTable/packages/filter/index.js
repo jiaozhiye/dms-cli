@@ -276,7 +276,7 @@ export default {
         <Popper
           ref="vPopper"
           trigger="clickToToggle"
-          root-class="v-popover--wrapper"
+          root-class="v-popper--wrapper"
           containerStyle={{ zIndex: PopupManager.nextZIndex() || 1000 }}
           transition="v-zoom-in-top"
           options={{ placement: 'bottom-end' }}
