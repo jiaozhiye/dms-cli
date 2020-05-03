@@ -2,9 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 09:09:45
+ * @Last Modified time: 2020-05-03 20:04:43
  */
 import _ from 'lodash';
+
+export const hasOwn = (obj, key) => {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+};
 
 // 展平 columns
 export const columnsFlatMap = columns => {

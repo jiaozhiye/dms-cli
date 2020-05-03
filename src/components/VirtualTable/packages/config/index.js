@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 16:39:06
+ * @Last Modified time: 2020-05-03 22:18:53
  */
 import i18n from '../lang';
 
@@ -38,11 +38,11 @@ const config = {
   // 操作列 dataIndex
   operationColumn: '__action__',
   // 合计行第一列的文本
-  summaryText: i18n.t('config.summaryText'),
+  summaryText: () => i18n.t('config.summaryText'),
   // 暂无数据
-  emptyText: i18n.t('config.emptyText'),
+  emptyText: () => i18n.t('config.emptyText'),
   // 列定义
-  columnFilterText: i18n.t('config.columnFilterText')
+  columnFilterText: () => i18n.t('config.columnFilterText')
 };
 
 export default config;

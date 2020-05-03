@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 15:05:39
+ * @Last Modified time: 2020-05-03 20:00:18
  */
 import Vue from 'vue';
 import ElementUI from 'element-ui';
@@ -45,7 +45,7 @@ Vue.use(FilterTable);
 
 // VirtualTable 组件
 import VirtualTable from '@/components/VirtualTable';
-Vue.use(VirtualTable);
+Vue.use(VirtualTable, { i18n: (key, value) => i18n.t(key, value) });
 
 // 抽屉组件
 import Drawer from '@/components/Drawer';

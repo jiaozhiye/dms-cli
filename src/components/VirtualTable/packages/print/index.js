@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 16:34:51
+ * @Last Modified time: 2020-05-03 22:18:43
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
@@ -206,7 +206,7 @@ export default {
               `<tr>${flatColumns
                 .map((column, index) => {
                   let text = getCellValue(row, column.dataIndex);
-                  return `<td>${index === 0 && text === '' ? config.summaryText : text}</td>`;
+                  return `<td>${index === 0 && text === '' ? config.summaryText() : text}</td>`;
                 })
                 .join('')}</tr>`
           )

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 14:47:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 20:32:57
+ * @Last Modified time: 2020-05-03 22:18:06
  */
 import config from '../config';
 
@@ -21,7 +21,7 @@ export default {
   render() {
     return (
       <div class="v-table--empty-placeholder" style={this.styles}>
-        <div class="v-table--empty-content">{config.emptyText}</div>
+        <div class="v-table--empty-content">{config.emptyText()}</div>
       </div>
     );
   }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 16:07:41
+ * @Last Modified time: 2020-05-03 22:17:14
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -154,7 +154,7 @@ export default {
         >
           <span slot="reference" class={cls}>
             <i class="iconfont icon-pic-right" />
-            {config.columnFilterText}
+            {config.columnFilterText()}
           </span>
           <div class="v-popper">{this.renderColumnFilter()}</div>
         </Popper>

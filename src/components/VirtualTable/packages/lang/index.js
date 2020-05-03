@@ -2,26 +2,83 @@
  * @Author: 焦质晔
  * @Date: 2020-04-30 14:59:03
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 15:26:52
+ * @Last Modified time: 2020-05-03 20:05:18
  */
-import VueI18n from 'vue-i18n';
-import enLocale from './en';
-import zhLocale from './zh';
+import Vue from 'vue';
+import _ from 'lodash';
+import { hasOwn } from '../utils';
+import defaultLang from './zh';
 
-const messages = {
-  en: {
-    ...enLocale
-  },
-  zh: {
-    ...zhLocale
+const RE_NARGS = /(%|)\{([0-9a-zA-Z_]+)\}/g;
+
+/**
+ * template
+ * @param {String} string
+ * @param {Array} ...args
+ * @returns {String}
+ */
+const format = (string, ...args) => {
+  if (args.length === 1 && typeof args[0] === 'object') {
+    args = args[0];
+  }
+
+  if (!args || !args.hasOwnProperty) {
+    args = {};
+  }
+
+  return string.replace(RE_NARGS, (match, prefix, i, index) => {
+    let result;
+
+    if (string[index - 1] === '{' && string[index + match.length] === '}') {
+      return i;
+    } else {
+      result = hasOwn(args, i) ? args[i] : null;
+      if (result === null || result === undefined) {
+        return '';
+      }
+
+      return result;
+    }
+  });
+};
+
+let lang = defaultLang;
+let merged = false;
+
+let i18nHandler = function() {
+  const vuei18n = Object.getPrototypeOf(this || Vue).$t;
+  if (typeof vuei18n === 'function' && !!Vue.locale) {
+    if (!merged) {
+      merged = true;
+      Vue.locale(Vue.config.lang, _.merge(lang, Vue.locale(Vue.config.lang) || {}));
+    }
+    return vuei18n.apply(this, arguments);
   }
 };
 
-const i18n = new VueI18n({
-  // set locale  zh | en
-  locale: localStorage.getItem('lang') || 'zh',
-  // set locale messages
-  messages
-});
+export const t = function(path, options) {
+  let value = i18nHandler.apply(this, arguments);
+  if (value !== null && value !== undefined) return value;
 
-export default i18n;
+  const array = path.split('.');
+  let current = lang;
+
+  for (let i = 0, j = array.length; i < j; i++) {
+    const property = array[i];
+    value = current[property];
+    if (i === j - 1) return format(value, options);
+    if (!value) return '';
+    current = value;
+  }
+  return '';
+};
+
+export const use = function(l) {
+  lang = l || lang;
+};
+
+export const i18n = function(fn) {
+  i18nHandler = fn || i18nHandler;
+};
+
+export default { use, t, i18n };
