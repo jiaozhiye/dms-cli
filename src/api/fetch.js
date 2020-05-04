@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 11:31:48
+ * @Last Modified time: 2020-05-04 08:29:44
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -11,6 +11,7 @@ import store from '@/store';
 import { getToken } from '@/utils/cookies';
 import router from '@/routes';
 import { notifyAction } from '@/utils';
+import i18n from '@/lang';
 
 // 请求异常提示信息
 const codeMessage = {
@@ -58,7 +59,7 @@ const instance = axios.create({
 // 异常处理程序
 const errorHandler = error => {
   const { response = {} } = error;
-  const errortext = codeMessage[response.status] || response.statusText || '网络连接错误，请检查网络。';
+  const errortext = codeMessage[response.status] || response.statusText || i18n.t('fetch.default');
   notifyAction(errortext, 'error');
   return Promise.reject(error);
 };

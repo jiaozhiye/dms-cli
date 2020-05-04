@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 07:38:44
+ * @Last Modified time: 2020-05-04 08:29:03
  */
 export default {
   app: {
@@ -85,5 +85,8 @@ export default {
     confirm: '确认进行此操作？',
     maxCache: '最多支持 {total} 个菜单项！',
     maxStar: '最多只能收藏 {total} 个菜单！'
+  },
+  fetch: {
+    default: '网络连接错误，请检查网络。'
   }
 };
