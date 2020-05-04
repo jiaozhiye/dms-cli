@@ -18,6 +18,7 @@
 | 事件名称       | 说明                 | 回调参数                   |
 | -------------- | -------------------- | -------------------------- |
 | change         | 搜索提交，触发的事件 | Function(formValue:object) |
+| resetChange    | 点击重置，触发的事件 | Function(formValue:object) |
 | collapseChange | 展开/收起变化时触发  | Function(state:boolean)    |
 
 ### 方法

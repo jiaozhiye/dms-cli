@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 18:31:19
+ * @Last Modified time: 2020-05-04 11:08:37
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -1018,7 +1018,7 @@ export default {
       });
       this.excuteFormData(this.form);
       if (this.isPassValidate(this.form)) {
-        this.$emit('filterChange', this.form);
+        this.$emit('change', this.form);
       }
       // 清空变量，释放内存
       cloneForm = null;
@@ -1029,6 +1029,7 @@ export default {
             this.doClearValidate(this.$refs[x.fieldName]);
           }
         });
+        this.$emit('resetChange', this.form);
       });
     },
     toggleHandler() {
