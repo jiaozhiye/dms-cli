@@ -32,16 +32,16 @@
         <i class="el-icon-plus" />
         <span>{{ titles[fileList.length] }}</span>
       </div>
-      <div slot="tip" class="el-upload__tip">{{ `只能上传 ${fileTypes.join(',')} 格式的图片` }}</div>
+      <div slot="tip" class="el-upload__tip">{{ $t('uploadCropper.tooltip', { type: fileTypes.join(',') }) }}</div>
     </el-upload>
     <!-- 图片预览弹窗 -->
-    <BaseDialog :visible.sync="previewVisible" title="图片预览" destroy-on-close>
+    <BaseDialog :visible.sync="previewVisible" :title="$t('uploadCropper.preview')" destroy-on-close>
       <div class="v-cropper--preview">
         <img :src="dialogImageUrl" alt />
       </div>
     </BaseDialog>
     <!-- 剪裁组件弹窗 -->
-    <BaseDialog :visible.sync="cropperVisible" title="图片裁剪" width="800" destroy-on-close>
+    <BaseDialog :visible.sync="cropperVisible" :title="$t('uploadCropper.cropper')" width="800" destroy-on-close>
       <CropperPanel ref="uploadCropper" :img-file="file" :fixed-number="fixedSize" :loading.sync="isLoading" @upload="uploadHandler" />
     </BaseDialog>
   </div>
@@ -179,7 +179,7 @@ export default {
         }
       } catch (err) {
         this.$emit('error', err);
-        this.$message.error('图片上传失败！');
+        this.$message.error(this.$t('uploadCropper.uploadError'));
       }
       this.cropperVisible = false;
       this.isLoading = false;
@@ -211,7 +211,7 @@ export default {
       try {
         await this.downloadFile(this.fileList[index]);
       } catch (err) {
-        this.$message.error('图片下载失败！');
+        this.$message.error(this.$t('uploadCropper.downError'));
       }
     },
     // 获取服务端文件 to blob

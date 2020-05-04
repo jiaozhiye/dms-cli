@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-28 16:29:12
+ * @Last Modified time: 2020-05-04 19:32:46
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -499,7 +499,7 @@ export default {
             multiple={editType === 'select-multiple'}
             value={prevValue}
             onInput={val => _.set(props.row, dataIndex, val)}
-            placeholder="请选择"
+            placeholder={this.$t('baseTable.selectPlaceholder')}
             clearable={true}
             disabled={column.disabled || isDisabled}
             onChange={value => {
@@ -788,7 +788,7 @@ export default {
         <el-table-column
           key="-"
           prop="-"
-          label="选择"
+          label="#"
           fixed="left"
           width="50"
           scopedSlots={{
@@ -942,8 +942,8 @@ export default {
     createDateType(format = 'yyyy-MM-dd HH:mm:ss') {
       // 配置项
       const dateTypeConfig = {
-        date: { placeholder: '选择日期', format: 'yyyy-MM-dd' },
-        datetime: { placeholder: '选择时间', format: 'yyyy-MM-dd HH:mm:ss' }
+        date: { placeholder: this.$t('baseTable.datePlaceholder'), format: 'yyyy-MM-dd' },
+        datetime: { placeholder: this.$t('baseTable.datetimePlaceholder'), format: 'yyyy-MM-dd HH:mm:ss' }
       };
       let res = {};
       for (let key in dateTypeConfig) {
@@ -958,7 +958,7 @@ export default {
     createSerachHelperList(arr, aliasKey) {
       // 服务端未返回数据
       if (!arr.length) {
-        return [{ __empty__: true, message: '暂无数据...' }];
+        return [{ __empty__: true, message: this.$t('baseTable.noData') }];
       }
       return arr.map(x => {
         const item = {};
@@ -1490,7 +1490,7 @@ export default {
         const { property } = column;
         // 第一列显示合计
         if (index === 0) {
-          sums[index] = '合计';
+          sums[index] = this.$t('baseTable.summaryText');
           return;
         }
         const targetColumn = this.deepFind(this.columns, property);

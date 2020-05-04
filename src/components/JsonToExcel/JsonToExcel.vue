@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-28 16:19:49
+ * @Last Modified time: 2020-05-04 18:01:42
  */
 import _ from 'lodash';
 import XLSX from 'xlsx';
@@ -103,7 +103,7 @@ export default {
         this.loading = !1;
       }
       if (!data.length) {
-        return notifyAction('数据为空，无法导出！', 'warning');
+        return notifyAction(this.$t('jsonToExcel.noData'), 'warning');
       }
       if (this.formatHandle) {
         data = this.formatHandle(data);

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 23:46:55
+ * @Last Modified time: 2020-05-04 18:29:40
  **/
 import { getLodop } from './LodopFuncs';
 import css from './assets/style.module.js';
@@ -55,7 +55,7 @@ export default {
   computed: {
     // unique key
     uniqueKey() {
-      return `打印单-${+new Date()}`;
+      return `sheet-${+new Date()}`;
     },
     templatePath() {
       return this.template.endsWith('.vue') ? this.template : `${this.template}.vue`;

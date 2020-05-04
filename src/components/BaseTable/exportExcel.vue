@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:35:33
+ * @Last Modified time: 2020-05-04 19:24:34
  */
 import _ from 'lodash';
 import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
@@ -112,7 +112,7 @@ export default {
     return (
       <div class="export-wrap">
         <JsonToExcel size="small" type="text" {...wrapProps}>
-          导出
+          {this.$t('baseTable.export')}
         </JsonToExcel>
       </div>
     );

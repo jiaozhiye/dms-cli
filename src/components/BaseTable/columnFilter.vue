@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:35:07
+ * @Last Modified time: 2020-05-04 18:41:08
  **/
 import _ from 'lodash';
 
@@ -136,7 +136,7 @@ export default {
       <el-dropdown hide-on-click={false} trigger="click">
         <span class="columns-dropdown">
           <i class="icon el-icon-s-operation" />
-          列筛选排序
+          {this.$t('baseTable.columnFilterText')}
         </span>
         <el-dropdown-menu style={{ minWidth: '120px', maxHeight: 'calc(100vh - 30px)', overflowY: 'auto' }} slot="dropdown">
           <el-tree

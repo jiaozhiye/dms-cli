@@ -3,9 +3,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-28 16:19:59
+ * @Last Modified time: 2020-05-04 18:21:12
  **/
 import axios, { getConfigHeaders } from '@/api/fetch';
+import { notifyAction } from '@/utils';
 
 export default {
   name: 'UploadFile',
@@ -68,10 +69,10 @@ export default {
       const isType = this.fileTypes.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase());
       const isLt5M = file.size / 1024 / 1024 < this.fileSize;
       if (!isType) {
-        this.$notify({ title: '提示信息', message: `上传的文件只能是 ${this.fileTypes.join(',')} 格式！`, type: 'warning' });
+        notifyAction(this.$t('uploadFile.tooltip', { type: this.fileTypes.join(',') }), 'warning');
       }
       if (!isLt5M) {
-        this.$notify({ title: '提示信息', message: `上传文件大小不能超过 ${this.fileSize}M！`, type: 'warning' });
+        notifyAction(this.$t('uploadFile.sizeLimit', { size: this.fileSize }), 'warning');
       }
       return isType && isLt5M;
     },
@@ -85,13 +86,13 @@ export default {
     },
     errorHandle(err) {
       this.$emit('error', err);
-      this.$message.error('文件上传失败！');
+      this.$message.error(this.$t('uploadFile.uploadError'));
     },
     async previewFileHandle(file) {
       try {
         await this.downloadFile(file);
       } catch (err) {
-        this.$message.error('文件下载失败！');
+        this.$message.error(this.$t('uploadFile.downError'));
       }
     },
     // 获取服务端文件 to blob
@@ -149,7 +150,7 @@ export default {
           <el-button {...btnProps}>{$slots['default']}</el-button>
           {!$props.isOnlyButton ? (
             <div slot="tip" class="el-upload__tip">
-              {`只能上传 ${fileTypes.join(',')} 格式，大小不超过${fileSize}M`}
+              {`${this.$t('uploadFile.tooltip', { type: fileTypes.join(',') })}，${this.$t('uploadFile.sizeLimit', { size: fileSize })}`}
             </div>
           ) : null}
         </el-upload>

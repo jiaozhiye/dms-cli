@@ -300,10 +300,10 @@ export default {
       return (
         <div class="popover-bottom">
           <el-button type="primary" size="mini" disabled={this.isEmpty(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
-            搜索
+            {this.$t('baseTable.search')}
           </el-button>
           <el-button size="mini" onClick={e => this.filterHandler(property, type, val)}>
-            重置
+            {this.$t('baseTable.reset')}
           </el-button>
         </div>
       );
@@ -362,7 +362,7 @@ export default {
       return (
         <el-input
           v-model={this.search[`${dataIndex}Val`]}
-          placeholder={`搜索${title}`}
+          placeholder={this.$t('baseTable.inputPlaceholder', { title })}
           style={{ width: '180px' }}
           nativeOnKeydown={e => {
             e.stopPropagation();
@@ -388,7 +388,7 @@ export default {
               setValue([val, this.search[`${dataIndex}Val`][1]]);
             }}
             style={{ width: '100px' }}
-            placeholder="开始值"
+            placeholder={this.$t('baseTable.startValue')}
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
                 setValue([endVal, this.search[`${dataIndex}Val`][1]]);
@@ -410,7 +410,7 @@ export default {
             }}
             min={startVal}
             style={{ width: '100px' }}
-            placeholder="结束值"
+            placeholder={this.$t('baseTable.endValue')}
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
                 setValue([this.search[`${dataIndex}Val`][0], startVal]);
@@ -463,8 +463,8 @@ export default {
             value-format="yyyy-MM-dd"
             clearable={false}
             range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            start-placeholder={this.$t('baseTable.startDate')}
+            end-placeholder={this.$t('baseTable.endDate')}
           />
         </div>
       );

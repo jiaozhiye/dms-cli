@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 08:28:54
+ * @Last Modified time: 2020-05-04 19:34:21
  */
 export default {
   app: {
@@ -88,5 +88,53 @@ export default {
   },
   fetch: {
     default: '网络连接错误，请检查网络。'
+  },
+  baseTable: {
+    search: '搜索',
+    reset: '重置',
+    inputPlaceholder: '搜索{title}',
+    startValue: '开始值',
+    endValue: '结束值',
+    startDate: '开始日期',
+    endDate: '结束日期',
+    noData: '暂无数据...',
+    columnFilterText: '列筛选排序',
+    export: '导出',
+    total: '共 {total} 条数据',
+    selected: '已选择 {total} 项',
+    clear: '清空',
+    moreAction: '更多操作',
+    selectPlaceholder: '请选择',
+    datePlaceholder: '选择日期',
+    datetimePlaceholder: '选择时间',
+    summaryText: '合计'
+  },
+  downLoadFile: {
+    error: '文件下载失败！'
+  },
+  jsonToExcel: {
+    noData: '数据为空，无法导出！'
+  },
+  tinymce: {
+    wordsLimit: '文字数量已达上限！',
+    uploadImg: '上传图片'
+  },
+  uploadCropper: {
+    tooltip: '只能上传 {type} 格式的图片',
+    preview: '图片预览',
+    cropper: '图片裁剪',
+    uploadError: '图片上传失败！',
+    downError: '图片下载失败！'
+  },
+  uploadFile: {
+    tooltip: '只能上传 {type} 格式',
+    sizeLimit: '大小不能超过 {size}M',
+    uploadError: '文件上传失败！',
+    downError: '文件下载失败！'
+  },
+  webPrint: {
+    noData: 'pdf 文件未载入，无法打印！',
+    error: '文件格式有误，无法打印！',
+    preview: '打印预览'
   }
 };

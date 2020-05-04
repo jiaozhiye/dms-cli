@@ -3,9 +3,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-15 14:03:56
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-06 15:11:23
+ * @Last Modified time: 2020-05-04 18:27:37
  */
-import { Notification } from 'element-ui';
+import { notifyAction } from '@/utils';
 import BaseDialog from '@/components/BaseDialog/BaseDialog.vue';
 
 export default {
@@ -50,11 +50,11 @@ export default {
       // 处理路径
       file = this.createIframeUrl(file);
       if (!file) {
-        return Notification({ type: 'warning', title: '提示信息', message: 'pdf 文件未载入，无法打印！' });
+        return notifyAction(this.$t('webPrint.noData'), 'warning');
       }
       const extname = file.slice(file.lastIndexOf('.') + 1).toLowerCase();
       if (extname !== 'pdf') {
-        return Notification({ type: 'warning', title: '提示信息', message: '文件格式有误，无法打印！' });
+        return notifyAction(this.$t('webPrint.error'), 'warning');
       }
       this.filePath = file;
       this.visible = true;
@@ -78,7 +78,7 @@ export default {
     const wrapProps = {
       props: {
         visible,
-        title: '打印预览',
+        title: this.$t('webPrint.preview'),
         width: '80%',
         destroyOnClose: true
       },
@@ -88,7 +88,7 @@ export default {
     };
     return (
       <div class="v-web-print el-button">
-        <el-button {...btnProps}>{$slots['default'] || '打印'}</el-button>
+        <el-button {...btnProps}>{$slots['default']}</el-button>
         <BaseDialog {...wrapProps}>
           <iframe class="v-web-print--preview" src={filePath} />
         </BaseDialog>

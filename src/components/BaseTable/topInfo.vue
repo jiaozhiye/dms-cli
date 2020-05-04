@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-11-12 08:07:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:37:39
+ * @Last Modified time: 2020-05-04 19:27:58
  */
 export default {
   name: 'TopInfo',
@@ -13,23 +13,17 @@ export default {
       <div class="top-info">
         <el-alert class="alert" closable={false} type="info" show-icon>
           <span class="text" slot="title">
-            <span>
-              总共 <i>{this.total}</i> 条数据
-            </span>
-            {this.isSelectColumn && (
-              <span>
-                ，已选择 <i>{this.selectionRows.length}</i> 项
-              </span>
-            )}
+            <span>{this.$t('baseTable.total', { total: this.total })}</span>
+            {this.isSelectColumn && <span>，{this.$t('baseTable.selected', { total: this.selectionRows.length })}</span>}
             <el-button size="small" type="text" style={{ marginLeft: '8px' }} onClick={this.clearTableHandler}>
-              清空
+              {this.$t('baseTable.clear')}
             </el-button>
           </span>
         </el-alert>
         {Array.isArray(this.$slots.moreActions) && this.selectionRows.length ? (
           <el-dropdown size="medium " style={{ marginLeft: '10px' }} trigger="click" placement="bottom-start">
             <el-button size="small">
-              更多操作
+              {this.$t('baseTable.moreAction')}
               <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown" class="dropdown-list">

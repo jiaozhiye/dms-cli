@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-10 16:08:33
+ * @Last Modified time: 2020-05-04 17:49:30
  **/
 import axios from '@/api/fetch';
 
@@ -41,7 +41,7 @@ export default {
         this.$emit('success');
       } catch (err) {
         this.$emit('error', err);
-        this.$message.error('文件下载失败！');
+        this.$message.error(this.$t('downLoadFile.error'));
       }
       this.loading = false;
     },

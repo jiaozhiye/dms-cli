@@ -1,6 +1,6 @@
 <template>
   <div class="upload-container">
-    <el-button icon="el-icon-upload" size="mini" type="primary" @click="dialogVisible = true">上传图片</el-button>
+    <el-button icon="el-icon-upload" size="mini" type="primary" @click="dialogVisible = true">{{ $t('tinymce.uploadImg') }}</el-button>
     <BaseDialog :visible.sync="dialogVisible" destroy-on-close :container-style="{ height: 'calc(100% - 60px)', overflow: 'auto', paddingBottom: '60px' }">
       <div>
         <UploadCropper :action-url="actionUrl" :fixed-size="fixedSize" :limit="20" :is-calc-height="true" @success="handleSuccess" />
@@ -18,8 +18,8 @@
           textAlign: 'right'
         }"
       >
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('button.cancel') }}</el-button>
+        <el-button type="primary" @click="handleSubmit">{{ $t('button.confirm') }}</el-button>
       </div>
     </BaseDialog>
   </div>
