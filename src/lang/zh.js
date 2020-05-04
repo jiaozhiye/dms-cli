@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 19:34:21
+ * @Last Modified time: 2020-05-04 20:33:40
  */
 export default {
   app: {
@@ -130,11 +130,33 @@ export default {
     tooltip: '只能上传 {type} 格式',
     sizeLimit: '大小不能超过 {size}M',
     uploadError: '文件上传失败！',
-    downError: '文件下载失败！'
+    downError: '文件下载失败！',
+    text: '文件上传'
   },
   webPrint: {
     noData: 'pdf 文件未载入，无法打印！',
     error: '文件格式有误，无法打印！',
     preview: '打印预览'
+  },
+  form: {
+    inputPlaceholder: '请输入...',
+    selectPlaceholder: '请选择...',
+    startValue: '开始值',
+    endValue: '结束值',
+    treePlaceholder: '树节点过滤',
+    datePlaceholder: '选择日期',
+    datetimePlaceholder: '选择时间',
+    monthPlaceholder: '选择月份',
+    yearPlaceholder: '选择年份',
+    daterangePlaceholder: ['开始日期', '结束日期'],
+    datetimerangePlaceholder: ['开始时间', '结束时间'],
+    monthrangePlaceholder: ['开始月份', '结束月份'],
+    datePickers: ['最近一周', '最近一个月', '最近三个月', '最近六个月'],
+    search: '搜 索',
+    reset: '重 置',
+    save: '保 存',
+    spread: '展开',
+    collect: '收起',
+    breakSpace: '分割线'
   }
 };

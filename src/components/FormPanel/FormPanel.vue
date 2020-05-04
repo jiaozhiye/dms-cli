@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 17:40:04
+ * @Last Modified time: 2020-05-04 20:33:43
  **/
 import _ from 'lodash';
 import moment from 'moment';
@@ -158,7 +158,7 @@ export default {
     },
     createFormItemDesc(option) {
       if (!option) return null;
-      const { isTooltip, style = {}, content = '描述信息...' } = option;
+      const { isTooltip, style = {}, content = '' } = option;
       if (isTooltip) {
         return (
           <el-tooltip effect="dark" placement="right">
@@ -186,7 +186,7 @@ export default {
     },
     INPUT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder = '请输入...', readonly, disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder = this.$t('form.inputPlaceholder'), readonly, disabled, onChange = noop } = option;
       const { minlength = 0, maxlength, pattern, unitRender, onInput = noop, onEnter = noop, onFocus = noop } = options;
       const prevValue = form[fieldName];
       return (
@@ -230,7 +230,7 @@ export default {
     },
     INPUT_NUMBER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder = '请输入...', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, placeholder = this.$t('form.inputPlaceholder'), disabled, onChange = noop } = option;
       const { maxlength, min = 0, max, step = 1, precision } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -272,7 +272,7 @@ export default {
             v-model={form[fieldName][0]}
             readonly={readonly}
             disabled={disabled}
-            placeholder={!disabled ? '开始值' : ''}
+            placeholder={!disabled ? this.$t('form.startValue') : ''}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => onChange({ [startFieldName]: form[fieldName][0] })}
@@ -282,7 +282,7 @@ export default {
             v-model={form[fieldName][1]}
             readonly={readonly}
             disabled={disabled}
-            placeholder={!disabled ? '结束值' : ''}
+            placeholder={!disabled ? this.$t('form.endValue') : ''}
             style={{ width: `calc(50% - 7px)` }}
             clearable
             onChange={() => onChange({ [endFieldName]: form[fieldName][1] })}
@@ -307,7 +307,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
-            placeholder={!disabled ? '开始值' : ''}
+            placeholder={!disabled ? this.$t('form.startValue') : ''}
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
@@ -323,7 +323,7 @@ export default {
             precision={precision}
             readonly={readonly}
             disabled={disabled}
-            placeholder={!disabled ? '结束值' : ''}
+            placeholder={!disabled ? this.$t('form.endValue') : ''}
             controls={false}
             style={{ width: `calc(50% - 7px)` }}
             clearable
@@ -334,7 +334,7 @@ export default {
     },
     INPUT_TREE(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = '请输入...', readonly, disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = this.$t('form.inputPlaceholder'), readonly, disabled, onChange = noop } = option;
       const { itemList } = options;
       const treeWrapProps = {
         props: {
@@ -360,7 +360,7 @@ export default {
               <input
                 value={this[`${fieldName}TreeFilterTexts`]}
                 class="el-input__inner"
-                placeholder="树节点过滤"
+                placeholder={this.$t('form.treePlaceholder')}
                 onInput={ev => {
                   this[`${fieldName}TreeFilterTexts`] = ev.target.value;
                   this.treeFilterTextHandle(fieldName);
@@ -398,7 +398,7 @@ export default {
     },
     INPUT_CASCADER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = '请选择...', readonly, disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = this.$t('form.selectPlaceholder'), readonly, disabled, onChange = noop } = option;
       const { itemList, titles = [] } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -438,7 +438,7 @@ export default {
     },
     SEARCH_HELPER(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder = '请输入...', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, request = {}, style = {}, placeholder = this.$t('form.inputPlaceholder'), disabled, onChange = noop } = option;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && <span slot="label">{this.createFormItemLabel(labelOptions)}</span>}
@@ -456,7 +456,7 @@ export default {
     },
     SEARCH_HELPER_WEB(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, options = {}, labelOptions, style = {}, placeholder = '请输入...', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, options = {}, labelOptions, style = {}, placeholder = this.$t('form.inputPlaceholder'), disabled, onChange = noop } = option;
       const { itemList } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -490,23 +490,23 @@ export default {
       const { form } = this;
       const conf = {
         date: {
-          placeholder: '选择日期',
+          placeholder: this.$t('form.datePlaceholder'),
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
         datetime: {
-          placeholder: '选择时间',
+          placeholder: this.$t('form.datetimePlaceholder'),
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
         exactdate: {
-          placeholder: '选择日期',
+          placeholder: this.$t('form.datePlaceholder'),
           valueFormat: 'yyyy-MM-dd'
         },
         month: {
-          placeholder: '选择月份',
+          placeholder: this.$t('form.monthPlaceholder'),
           valueFormat: 'yyyy-MM'
         },
         year: {
-          placeholder: '选择年份',
+          placeholder: this.$t('form.yearPlaceholder'),
           valueFormat: 'yyyy'
         }
       };
@@ -560,19 +560,19 @@ export default {
       const { form } = this;
       const conf = {
         daterange: {
-          placeholder: ['开始日期', '结束日期'],
+          placeholder: this.$t('form.daterangePlaceholder'),
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
         datetimerange: {
-          placeholder: ['开始时间', '结束时间'],
+          placeholder: this.$t('form.datetimerangePlaceholder'),
           valueFormat: 'yyyy-MM-dd HH:mm:ss'
         },
         exactdaterange: {
-          placeholder: ['开始日期', '结束日期'],
+          placeholder: this.$t('form.daterangePlaceholder'),
           valueFormat: 'yyyy-MM-dd'
         },
         monthrange: {
-          placeholder: ['开始月份', '结束月份'],
+          placeholder: this.$t('form.monthrangePlaceholder'),
           valueFormat: 'yyyy-MM'
         }
       };
@@ -599,25 +599,25 @@ export default {
       };
       const pickers = [
         {
-          text: '最近一周',
+          text: this.$t('form.datePickers')[0],
           onClick(picker) {
             createPicker(picker, 7);
           }
         },
         {
-          text: '最近一个月',
+          text: this.$t('form.datePickers')[1],
           onClick(picker) {
             createPicker(picker, 30);
           }
         },
         {
-          text: '最近三个月',
+          text: this.$t('form.datePickers')[2],
           onClick(picker) {
             createPicker(picker, 90);
           }
         },
         {
-          text: '最近六个月',
+          text: this.$t('form.datePickers')[3],
           onClick(picker) {
             createPicker(picker, 180);
           }
@@ -668,7 +668,7 @@ export default {
     },
     TIME(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, options = {}, valueFormat = 'HH:mm:ss', style = {}, placeholder = '选择时间', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, options = {}, valueFormat = 'HH:mm:ss', style = {}, placeholder = this.$t('form.datetimePlaceholder'), disabled, onChange = noop } = option;
       const { defaultTime } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -703,8 +703,8 @@ export default {
             }}
             value-format={valueFormat}
             range-separator="-"
-            start-placeholder={'开始时间'}
-            end-placeholder={'结束时间'}
+            start-placeholder={this.$t('form.datetimerangePlaceholder')[0]}
+            end-placeholder={this.$t('form.datetimerangePlaceholder')[1]}
             disabled={disabled}
             style={{ ...style }}
             onChange={() => onChange(form[fieldName])}
@@ -714,7 +714,7 @@ export default {
     },
     TIME_SELECT(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, options = {}, valueFormat = 'HH:mm', style = {}, placeholder = '选择时间', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, options = {}, valueFormat = 'HH:mm', style = {}, placeholder = this.$t('form.datetimePlaceholder'), disabled, onChange = noop } = option;
       const { defaultTime, startTime = '00:00', endTime = '23:45', stepTime = '00:15' } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -762,7 +762,7 @@ export default {
                   .format(valueFormat)
             }}
             value-format={valueFormat}
-            placeholder={'开始时间'}
+            placeholder={this.$t('form.datetimerangePlaceholder')[0]}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             onChange={() => onChange(form[fieldName])}
@@ -785,7 +785,7 @@ export default {
                   .format(valueFormat)
             }}
             value-format={valueFormat}
-            placeholder={'结束时间'}
+            placeholder={this.$t('form.datetimerangePlaceholder')[1]}
             disabled={disabled}
             style={{ width: `calc(50% - 7px)` }}
             onChange={() => onChange(form[fieldName])}
@@ -845,7 +845,7 @@ export default {
     },
     TEXT_AREA(option) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = '请输入...', disabled, onChange = noop } = option;
+      const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = this.$t('form.inputPlaceholder'), disabled, onChange = noop } = option;
       const { rows = 2, maxlength = 200 } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
@@ -910,7 +910,7 @@ export default {
               onChange(val);
             }}
           >
-            文件上传
+            {this.$t('uploadFile.text')}
           </UploadFile>
         </el-form-item>
       );
@@ -926,12 +926,25 @@ export default {
       );
     },
     BREAK_SPACE(option) {
-      const { label = '标题', style = {} } = option;
+      const { label = this.$t('form.breakSpace'), style = {} } = option;
       return <BreakSpace label={label} id={label} labelStyle={style} />;
     },
     createSelectHandle(option, multiple = false) {
       const { form } = this;
-      const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, request = {}, style = {}, placeholder = '请选择...', disabled, clearable = !0, onChange = noop } = option;
+      const {
+        label,
+        fieldName,
+        labelWidth,
+        labelOptions,
+        descOptions,
+        options = {},
+        request = {},
+        style = {},
+        placeholder = this.$t('form.selectPlaceholder'),
+        disabled,
+        clearable = !0,
+        onChange = noop
+      } = option;
       const { filterable, limit } = options;
       const { fetchApi, params = {} } = request;
       let itemList = options.itemList;
@@ -1265,10 +1278,10 @@ export default {
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
               <el-button size="small" type="primary" loading={loading} onClick={this.submitForm}>
-                保 存
+                {this.$t('form.save')}
               </el-button>
               <el-button size="small" onClick={this.resetForm}>
-                重 置
+                {this.$t('form.reset')}
               </el-button>
             </el-form-item>
           </el-col>
