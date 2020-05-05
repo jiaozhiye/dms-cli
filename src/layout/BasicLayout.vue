@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 11:18:47
+ * @Last Modified time: 2020-05-06 00:34:40
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -13,12 +13,12 @@ import config from '@/config';
 export default {
   name: 'BasicLayout',
   computed: {
-    ...mapState('app', ['keepAliveNames']),
+    ...mapState('app', ['keepAliveList', 'iframeList']),
     key() {
       return this.$route.path;
     },
     cachedNames() {
-      return this.keepAliveNames.map(x => x.value);
+      return this.keepAliveList.map(x => x.value);
     },
     isKeepAlive() {
       return this.$route.meta.keepAlive;
@@ -34,20 +34,19 @@ export default {
   },
   methods: {
     ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList']),
-    createMainContainer() {
-      return (
-        <keep-alive include={this.cachedNames} max={config.maxCacheNum}>
-          <router-view />
-        </keep-alive>
-      );
+    createIframeView() {
+      return this.iframeList.map(x => <iframe v-show={this.key === x.key} key={x.key} id={x.key} src={x.value} width="100%" height="100%" border="0" />);
     }
   },
   render() {
     return (
       <GlobalLayout>
         {/* <transition name="fade-transform" mode="out-in"> */}
-        {this.createMainContainer()}
+        <keep-alive include={this.cachedNames} max={config.maxCacheNum}>
+          <router-view />
+        </keep-alive>
         {/* </transition> */}
+        {this.createIframeView()}
       </GlobalLayout>
     );
   }

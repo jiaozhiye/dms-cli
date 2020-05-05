@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 11:24:24
+ * @Last Modified time: 2020-05-05 23:58:10
  */
 import _ from 'lodash';
 import * as types from '../types';
@@ -65,7 +65,8 @@ const state = {
   lang: localStorage.getItem('lang') || 'zh', // 多语言
   theme: variables.theme, // 主题色
   dict: {}, // 数据字典
-  keepAliveNames: [], // 路由组件缓存列表
+  keepAliveList: [], // 路由组件缓存列表
+  iframeList: [], // iframe 列表
   isNotifyMark: false // 页面中是否已存在消息通知组件
 };
 
@@ -175,16 +176,22 @@ const actions = {
     // Vuex 状态存储
     commit({ type: types.DICT_DATA, data });
   },
-  addKeepAliveNames({ commit, state }, params) {
-    if (state.keepAliveNames.some(x => x.value === params.value)) return;
+  addKeepAliveCache({ commit, state }, params) {
+    if (state.keepAliveList.some(x => x.value === params.value)) return;
     commit({
       type: types.ADD_CACHE,
       data: params
     });
   },
-  removeKeepAliveNames({ commit, state }, params) {
+  removeKeepAliveCache({ commit, state }, params) {
     commit({
       type: types.DEL_CACHE,
+      data: params
+    });
+  },
+  createIframeList({ commit, state }, params) {
+    commit({
+      type: types.IFRAME_NAVLIST,
       data: params
     });
   },
@@ -200,9 +207,15 @@ const actions = {
       data: params
     });
   },
-  refreshView({ dispatch }, { path, query = {} }) {
-    dispatch('removeKeepAliveNames', path);
-    setTimeout(() => router.replace({ path: `/redirect${path}`, query }).catch(() => {}));
+  refreshView({ dispatch, commit, state }, { path, query = {} }) {
+    if (document.getElementById(path)) {
+      const data = state.iframeList.find(x => x.key === path);
+      commit({ type: types.DEL_IFRAME, data: path });
+      setTimeout(() => commit({ type: types.ADD_IFRAME, data }));
+    } else {
+      router.replace({ path: `/redirect${path}`, query }).catch(() => {});
+    }
+    dispatch('removeKeepAliveCache', path);
   },
   createNotifyState({ commit, state }, params) {
     commit({
@@ -247,14 +260,23 @@ const mutations = {
   [types.TAB_NAVLIST](state, { data }) {
     state.tabNavList = data;
   },
+  [types.IFRAME_NAVLIST](state, { data }) {
+    state.iframeList = data;
+  },
   [types.DICT_DATA](state, { data }) {
     state.dict = data;
   },
   [types.ADD_CACHE](state, { data }) {
-    state.keepAliveNames = [...state.keepAliveNames, data];
+    state.keepAliveList = [...state.keepAliveList, data];
   },
   [types.DEL_CACHE](state, { data }) {
-    state.keepAliveNames = state.keepAliveNames.filter(x => x.key !== data);
+    state.keepAliveList = state.keepAliveList.filter(x => x.key !== data);
+  },
+  [types.ADD_IFRAME](state, { data }) {
+    state.iframeList = [...state.iframeList, data];
+  },
+  [types.DEL_IFRAME](state, { data }) {
+    state.iframeList = state.iframeList.filter(x => x.key !== data);
   },
   [types.ADD_STAR_MENU](state, { data }) {
     state.starMenuList = _.uniqWith([...state.starMenuList, data], _.isEqual);

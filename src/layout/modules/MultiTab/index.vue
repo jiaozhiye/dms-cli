@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 07:46:32
+ * @Last Modified time: 2020-05-05 23:44:05
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -40,6 +40,7 @@ export default {
     pages: {
       handler(val) {
         this.createTabNavList(val.map(x => ({ key: x.path, title: x.meta.title })));
+        this.createIframeList(val.filter(x => !!x.meta.iframeRoutePath).map(x => ({ key: x.path, value: x.meta.iframeRoutePath })));
       },
       immediate: true
     }
@@ -56,7 +57,7 @@ export default {
     this.clickEvent.remove();
   },
   methods: {
-    ...mapActions('app', ['addKeepAliveNames', 'removeKeepAliveNames', 'createTabNavList', 'refreshView']),
+    ...mapActions('app', ['addKeepAliveCache', 'removeKeepAliveCache', 'createTabNavList', 'createIframeList', 'refreshView']),
     getHomeRoute(path) {
       return this.deepMapRoutes(this.$router.options.routes, path);
     },
@@ -65,15 +66,18 @@ export default {
     },
     addKeepAlive(route) {
       if (!route.meta.keepAlive) return;
-      const { name = '' } = this.getRouteComponent(route);
+      // 当前路由组件
+      const current = this.getRouteComponent(route);
       // 添加组件缓存列表
-      this.addKeepAliveNames({ key: this.activeKey, value: name });
+      if (current && current.name) {
+        this.addKeepAliveCache({ key: this.activeKey, value: current.name });
+      }
     },
     removeTab(targetKey) {
       if (targetKey === '/home') return;
       this.pages = this.pages.filter(page => page.path !== targetKey);
       // 移除组件缓存列表
-      this.removeKeepAliveNames(targetKey);
+      this.removeKeepAliveCache(targetKey);
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
       if (!this.pathList.includes(this.activeKey)) {
         this.locationChange(this.pathList[this.pathList.length - 1]);

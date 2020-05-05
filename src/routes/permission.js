@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 07:37:49
+ * @Last Modified time: 2020-05-05 23:03:40
  */
 import router from '@/routes';
 import store from '@/store';
@@ -19,7 +19,7 @@ NProgress.configure({ showSpinner: false });
 const whiteList = ['/login'];
 
 // 权限白名单
-const whiteAuth = ['/login', '/home', '/redirect', '/404', '/test'];
+const whiteAuth = ['/login', '/home', '/iframe', '/redirect', '/404', '/test'];
 
 // 路由重定向
 const redirect = (next, path) => {
@@ -37,7 +37,7 @@ const isLogin = () => {
 };
 
 router.beforeEach(async (to, from, next) => {
-  NProgress.start();
+  !to.path.startsWith(whiteAuth[2]) && NProgress.start();
   if (isLogin()) {
     if (to.path === '/login') {
       redirect(next, '/');

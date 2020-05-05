@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 15:27:18
+ * @Last Modified time: 2020-05-06 00:35:39
  */
 import { asyncLoadComponent } from '@/utils';
 
@@ -18,6 +18,10 @@ export default [
     meta: { keepAlive: true },
     component: asyncLoadComponent('demo/index')
   },
+  // {
+  //   path: '/bjgl/cggl/dd',
+  //   meta: { iframeRoutePath: '/iframe/test' }
+  // },
   {
     path: '/bjgl/cggl/rk',
     meta: { keepAlive: true },

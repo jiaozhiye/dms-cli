@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 17:27:43
+ * @Last Modified time: 2020-05-06 00:10:53
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import modulesRoute from './modules';
+import moduleRoutes from './modules';
+import iframeRoutes from './modules/iframe';
 import i18n from '@/lang';
 
 Vue.use(VueRouter);
@@ -25,6 +26,7 @@ export const constantRouterMap = [
     component: Login,
     hidden: true
   },
+  ...iframeRoutes,
   {
     path: '/',
     meta: { title: i18n.t('app.home') },
@@ -36,7 +38,7 @@ export const constantRouterMap = [
         meta: { title: i18n.t('app.dashboard'), affix: true, bgColor: true, keepAlive: false },
         component: Dashboard
       },
-      ...modulesRoute,
+      ...moduleRoutes,
       {
         path: '/redirect/:path(.*)',
         component: Redirect
