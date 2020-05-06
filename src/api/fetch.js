@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 08:29:44
+ * @Last Modified time: 2020-05-06 12:48:13
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -39,9 +39,12 @@ const successCodes = [200];
 // 自定义扩展 header 请求头
 const getConfigHeaders = () => {
   return {
+    appId: 'JDMC',
     jwt: getToken(), // token
     lang: store.state.app.lang, // 多语言
-    userAgent: 'pc' // 设备
+    userAgent: 'pc', // 设备
+    Authorization: getToken(),
+    userClient: 'pc'
   };
 };
 

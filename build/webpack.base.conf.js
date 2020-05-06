@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-24 01:04:42
+ * @Last Modified time: 2020-05-06 10:10:14
  */
 'use strict';
 
@@ -44,7 +44,11 @@ module.exports = {
     extensions: ['.js', '.jsx', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
-      '@': utils.resolve('src')
+      '@': utils.resolve('src'),
+      '@system': utils.resolve('src/modules/system'),
+      '@sales': utils.resolve('src/modules/sales'),
+      '@service': utils.resolve('src/modules/service'),
+      '@others': utils.resolve('src/modules/others')
     }
   },
   module: {
