@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-06 12:48:13
+ * @Last Modified time: 2020-06-20 15:11:12
  */
 import axios from 'axios';
 import qs from 'qs';
 import config from '@/config/serverMap';
 import store from '@/store';
 import { getToken } from '@/utils/cookies';
-import router from '@/routes';
 import { notifyAction } from '@/utils';
 import i18n from '@/lang';
 
@@ -33,30 +32,26 @@ const codeMessage = {
   504: '网关超时。'
 };
 
-// 服务端成功的状态码
-const successCodes = [200];
-
 // 自定义扩展 header 请求头
 const getConfigHeaders = () => {
   return {
-    appId: 'JDMC',
-    jwt: getToken(), // token
+    jwt: getToken() || '', // token
+    Authorization: getToken() || '', // token
     lang: store.state.app.lang, // 多语言
     userAgent: 'pc', // 设备
-    Authorization: getToken(),
-    userClient: 'pc'
+    appId: 'JDMC'
   };
 };
 
 // 创建 axios 实例
 const instance = axios.create({
   baseURL: config.host,
-  timeout: 10000,
-  withCredentials: true, // 跨域请求时是否需要使用凭证
-  paramsSerializer: params => {
-    // 序列化 GET 请求参数 -> a: [1, 2] => a=1&a=2
-    return qs.stringify(params, { arrayFormat: 'repeat' });
-  }
+  timeout: 1000 * 60 * 10,
+  withCredentials: true // 跨域请求时是否需要使用凭证
+  // paramsSerializer: params => {
+  //   // 序列化 GET 请求参数 -> a: [1, 2] => a=1&a=2
+  //   return qs.stringify(params, { arrayFormat: 'repeat' });
+  // }
 });
 
 // 异常处理程序
@@ -81,11 +76,10 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(response => {
   let { config, headers, data } = response;
   // 请求异常提示信息
-  if (!successCodes.includes(data.code)) {
+  if (data.code !== 200) {
     // token 过期，需要重新登录
     if (data.code === 40105) {
       store.dispatch('app/createLogout');
-      router.push({ path: '/' }).catch(() => {});
     }
     data.msg && notifyAction(data.msg, 'error');
   }

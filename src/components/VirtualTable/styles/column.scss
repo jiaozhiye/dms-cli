@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-20 21:37:17
+ * @Last Modified time: 2020-06-03 10:13:55
  */
 .v-column-filter {
   display: inline-block;
   margin-left: $v-module-distance;
   .text {
+    @include button-align(32px);
     position: relative;
     padding-left: 20px;
     cursor: pointer;
@@ -15,9 +16,7 @@
     i {
       position: absolute;
       left: 0;
-      top: 0;
       font-size: 16px;
-      line-height: 1;
     }
     &:hover,
     &.selected {

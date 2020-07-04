@@ -2,15 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 15:32:57
+ * @Last Modified time: 2020-07-01 09:16:20
  */
 import baseProps from './props';
-import store from '../store';
+import Store from '../store';
 import config from '../config';
-import i18n from '../lang';
-import _ from 'lodash';
+import { isEqual, isUndefined } from 'lodash';
 
-import { columnsFlatMap, getAllColumns, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
+import { columnsFlatMap, getAllColumns, getAllRowKeys, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
+import warning from '../../../_utils/warning';
 
 import columnsMixin from '../columns';
 import expandableMixin from '../expandable/mixin';
@@ -25,10 +25,11 @@ import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
 import Pager from '../pager';
-import SpinLoading from '../spin';
+import SpinLoading from '../../../Spin';
 import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
+import GroupSummary from '../group-summary';
 import FullScreen from '../full-screen';
 import Export from '../export';
 import PrintTable from '../print';
@@ -37,8 +38,7 @@ import Reload from '../reload';
 const noop = () => {};
 
 export default {
-  name: 'Table',
-  store,
+  name: 'VirtualTable',
   props: {
     ...baseProps
   },
@@ -51,7 +51,11 @@ export default {
   data() {
     // 原始数据
     this.tableOriginData = [];
+    // 内存分页，每页显示的数据
+    this.pageTableData = [];
     return {
+      // 组件 store 仓库
+      store: new Store(),
       // 渲染中的数据
       tableData: [],
       // 完整数据 - 重要
@@ -68,7 +72,7 @@ export default {
         pageSize: config.pagination.pageSize
       },
       // 自适应的表格高度
-      autoHeight: 300,
+      autoHeight: 0,
       // 记录总数
       total: 0,
       // 页面是否加载中
@@ -110,9 +114,9 @@ export default {
         footerHeight: 0
       },
       // 选择列，已选中行的 keys
-      selectionKeys: this.createSelectionKeys(),
+      selectionKeys: [],
       // 已展开行的 keys
-      rowExpandedKeys: this.createRowExpandedKeys(),
+      rowExpandedKeys: [],
       // X 滚动条是否离开左边界
       isPingLeft: false,
       // X 滚动条是否离开右边界
@@ -131,20 +135,11 @@ export default {
     };
   },
   computed: {
-    $vTopInfo() {
-      return this.$refs[`v-top-info`];
-    },
     $vTable() {
       return this.$refs[`v-table`];
     },
-    $$tableHeader() {
-      return this.$refs[`tableHeader`];
-    },
     $$tableBody() {
       return this.$refs[`tableBody`];
-    },
-    $$tableFooter() {
-      return this.$refs[`tableFooter`];
     },
     flattenColumns() {
       return columnsFlatMap(this.tableColumns);
@@ -152,8 +147,11 @@ export default {
     allColumns() {
       return getAllColumns(this.tableColumns);
     },
+    allRowKeys() {
+      return getAllRowKeys(this.tableFullData, this.getRowKey);
+    },
     tableChange() {
-      return [this.pagination, this.filters, this.sorter, { currentDataSource: this.tableFullData }];
+      return [this.pagination, this.filters, this.sorter, { currentDataSource: [...this.tableFullData], allDataSource: [...this.tableOriginData] }];
     },
     leftFixedColumns() {
       return this.flattenColumns.filter(column => column.fixed === 'left');
@@ -165,13 +163,19 @@ export default {
       return this.flattenColumns.some(x => !!x.summation);
     },
     showPagination() {
-      return !!this.fetch;
+      return !!this.fetch || this.webPagination;
     },
     isHeadSorter() {
       return this.flattenColumns.some(column => column.sorter);
     },
     isHeadFilter() {
       return this.flattenColumns.some(column => column.filter);
+    },
+    isGroupSummary() {
+      return this.flattenColumns.some(column => !!column.groupSummary);
+    },
+    isTableEmpty() {
+      return !this.tableData.length;
     },
     bordered() {
       return this.border || this.isGroup;
@@ -180,18 +184,18 @@ export default {
       const params = this.fetch ? this.fetch.params : null;
       return {
         ...this.sorter,
-        ...this.filters,
+        ...(Object.keys(this.filters).length ? { theadFilter: this.filters } : null),
         ...params,
         ...this.pagination
       };
     },
     shouldUpdateHeight() {
-      return this.height || this.maxHeight;
+      return this.height || this.maxHeight || this.isTableEmpty;
     },
     fullHeight() {
       const pagerHeight = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
-        return window.innerHeight - 30 - this.$vTopInfo.offsetHeight - pagerHeight;
+        return window.innerHeight - 30 - this.$refs[`v-top-info`].offsetHeight - pagerHeight;
       }
       return null;
     },
@@ -211,21 +215,24 @@ export default {
     }
   },
   watch: {
-    dataSource(val) {
-      this.createTableData(val);
+    dataSource(next) {
+      this.createTableData(next);
     },
-    tableFullData(next, prev) {
-      this.__dataLengthState__ = next.length !== prev.length;
+    tableFullData() {
+      // 处理内存分页
+      this.createLimitData();
+      // 加载表格数据
       this.loadTableData().then(() => {
         this.doLayout();
-        this.__dataLengthState__ = !1;
       });
       // 触发 dataChange 事件
       debounce(this.dataChangeHandle)();
     },
-    columns(val) {
-      this.tableColumns = this.createTableColumns(val);
-      this.setLocalColumns(val);
+    columns(next) {
+      this.tableColumns = this.createTableColumns(next);
+      this.setLocalColumns(next);
+    },
+    tableColumns() {
       this.doLayout();
     },
     filters() {
@@ -234,11 +241,11 @@ export default {
     sorter() {
       this.$emit('change', ...this.tableChange);
     },
-    pagination() {
-      this.$emit('change', ...this.tableChange);
-    },
-    loading(val) {
-      this.showLoading = val;
+    pagination: {
+      handler() {
+        this.$emit('change', ...this.tableChange);
+      },
+      deep: true
     },
     fetchParams(next, prev) {
       if (!this.fetch) return;
@@ -249,19 +256,34 @@ export default {
         this.getTableData();
       }
     },
+    scrollYLoad(next) {
+      !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
+    },
+    [`layout.viewportHeight`](next) {
+      const visibleYSize = Number(Math.ceil(next / this.scrollYStore.rowHeight));
+      const renderSize = browse()['webkit'] ? visibleYSize + 3 : visibleYSize + 5;
+      Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
+    },
+    selectionKeys(next, prev) {
+      if (!this.rowSelection || isEqual(next, prev)) return;
+      const { onChange = noop } = this.rowSelection;
+      const selectedRows = this.tableFullData.filter(record => next.includes(this.getRowKey(record, record.index)));
+      onChange(next, selectedRows);
+    },
+    rowSelection() {
+      this.tableColumns = this.createTableColumns(this.columns);
+    },
     [`rowSelection.selectedRowKeys`]() {
       this.selectionKeys = this.createSelectionKeys();
     },
-    selectionKeys(val) {
-      if (!this.rowSelection) return;
-      const { onChange = noop } = this.rowSelection;
-      onChange(
-        val,
-        this.tableFullData.filter(x => val.includes(this.getRowKey(x)))
-      );
+    expandable() {
+      this.tableColumns = this.createTableColumns(this.columns);
     },
-    scrollX(val) {
-      this.isPingRight = val;
+    loading(next) {
+      this.showLoading = next;
+    },
+    scrollX(next) {
+      this.isPingRight = next;
     }
   },
   created() {
@@ -270,6 +292,11 @@ export default {
     } else {
       this.getTableData();
     }
+    // 设置选择列
+    this.selectionKeys = this.createSelectionKeys();
+    // 设置展开行
+    this.rowExpandedKeys = this.createRowExpandedKeys();
+    // 加载表格数据
     this.loadTableData().then(() => {
       this.doLayout();
     });
@@ -290,7 +317,7 @@ export default {
       const { rowKey } = this;
       const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {
-        console.error('[Table]: Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
+        warning(false, 'Table', 'Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
         return index;
       }
       return key;
@@ -316,6 +343,7 @@ export default {
       isGroup,
       isHeadSorter,
       isHeadFilter,
+      isTableEmpty,
       sortDirections,
       scrollX,
       scrollY,
@@ -334,10 +362,10 @@ export default {
       showRefresh,
       tablePrint,
       exportExcel,
+      isGroupSummary,
       showColumnDefine
     } = this;
     const vWrapperCls = { [`v-is--maximize`]: isFullScreen };
-    const vTopInfoCls = [`v-top-info`];
     const vTableCls = [
       `v-table`,
       {
@@ -347,7 +375,7 @@ export default {
         [`is--group`]: isGroup,
         [`is--sortable`]: isHeadSorter,
         [`is--filterable`]: isHeadFilter,
-        [`is--empty`]: !tableData.length,
+        [`is--empty`]: isTableEmpty,
         [`show--head`]: showHeader,
         [`show--foot`]: showFooter,
         [`ping--left`]: isPingLeft,
@@ -404,7 +432,7 @@ export default {
             flattenColumns,
             showHeader,
             showFooter,
-            showLogo: _.isUndefined(tablePrint.showLogo) ? true : tablePrint.showLogo
+            showLogo: isUndefined(tablePrint.showLogo) ? true : tablePrint.showLogo
           }
         }
       : null;
@@ -428,12 +456,10 @@ export default {
     return (
       <div class={vWrapperCls}>
         {/* 表格信息 */}
-        <div ref="v-top-info" class={vTopInfoCls}>
-          <div>
-            {/* 通知 */}
-            {showAlert && <Alert {...alertProps} />}
-          </div>
-          <div>
+        <div ref="v-top-info" class="v-top-info clearfix">
+          {/* 通知 */}
+          {showAlert && <Alert class="fl" {...alertProps} />}
+          <div class="v-actions fr">
             {/* 默认槽口 */}
             {this.$slots[`default`]}
             {/* 全屏 */}
@@ -444,6 +470,8 @@ export default {
             {tablePrint && <PrintTable {...printProps} />}
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
+            {/* 分组汇总 */}
+            {isGroupSummary && <GroupSummary columns={flattenColumns} />}
             {/* 列定义 */}
             {showColumnDefine && <ColumnFilter columns={columns} />}
           </div>
@@ -462,7 +490,7 @@ export default {
             {/* 边框线 */}
             {this.renderBorderLine()}
             {/* 空数据 */}
-            {!tableData.length && <EmptyContent />}
+            {isTableEmpty && <EmptyContent />}
             {/* 列宽线 */}
             {this.renderResizableLine()}
           </div>

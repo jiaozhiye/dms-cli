@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 22:48:49
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-15 14:36:14
+ * @Last Modified time: 2020-06-04 13:54:43
  */
-import PropTypes from '@/components/_utils/vue-types';
+import PropTypes from '../../../_utils/vue-types';
 
 export default {
   name: 'Radio',
@@ -13,6 +13,7 @@ export default {
     trueValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).def(true),
     falseValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).def(false),
     label: PropTypes.string,
+    readonly: PropTypes.bool.def(false),
     disabled: PropTypes.bool.def(false)
   },
   data() {
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     change(event) {
-      if (this.disabled) return;
+      if (this.disabled || this.readonly) return;
 
       const checked = event.target.checked;
       this.currentValue = checked;
@@ -78,7 +79,7 @@ export default {
       <label class={wrapCls}>
         <span class={radioCls}>
           <span class={innerCls}></span>
-          <input type="radio" class={inputCls} disabled={this.disabled} checked={this.currentValue} onChange={this.change} onFocus={this.onFocus} onBlur={this.onBlur} />
+          <input type="radio" class={inputCls} readOnly={this.readonly} disabled={this.disabled} checked={this.currentValue} onChange={this.change} onFocus={this.onFocus} onBlur={this.onBlur} />
         </span>
         {this.label && <span class={textCls}>{this.label}</span>}
       </label>

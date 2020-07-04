@@ -2,15 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-31 12:42:48
+ * @Last Modified time: 2020-06-30 18:03:04
  */
 @import './common.scss';
-
-%TextEllipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 %DefaultColumnHeight {
   height: $v-table-row-height-default;
@@ -30,11 +24,12 @@
 
 %CellEllipsis {
   .v-cell {
-    @extend %TextEllipsis;
+    @include text-overflow-cut;
   }
 }
 
 .v-table--body-wrapper {
+  @include reset-component();
   overflow-y: auto;
   overflow-x: auto;
 }
@@ -51,11 +46,9 @@
 
 /* 顶部信息 */
 .v-top-info {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: $v-module-distance;
-  & > div {
-    display: inherit;
+  .v-actions {
+    display: flex;
     align-items: center;
   }
 }
@@ -262,50 +255,27 @@
     }
   }
 
-  &.size--medium {
-    font-size: $v-font-size-medium;
-    .v-header--column,
-    .v-body--column,
-    .v-footer--column {
-      &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-medium - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-  }
-
-  &.size--small {
-    font-size: $v-font-size-small;
-    .v-header--column,
-    .v-body--column,
-    .v-footer--column {
-      &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-small - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-  }
-
-  &.size--mini {
-    font-size: $v-font-size-mini;
-    .v-header--column,
-    .v-body--column,
-    .v-footer--column {
-      &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-mini - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-  }
-
   .v-cell {
     line-height: 1.5;
-    white-space: normal;
     word-break: break-all;
+    /* 保留空白字符 */
+    white-space: pre !important;
     padding: 0 $v-module-distance;
+    .v-cell--indent {
+      float: left;
+      height: 1px;
+      visibility: hidden;
+    }
   }
 
   /* body 填充元素 */
   .v-body--x-space {
     width: 100%;
     height: 0;
+    visibility: hidden;
+    &::after {
+      content: '.';
+    }
   }
   .v-body--y-space {
     width: 0;
@@ -368,66 +338,6 @@
     }
   }
 
-  &.size--medium {
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
-      &.col--ellipsis {
-        @extend %MediumColumnHeight;
-      }
-    }
-    &.virtual--y {
-      .col--ellipsis {
-        .v-cell {
-          max-height: $v-table-row-height-medium;
-        }
-      }
-    }
-  }
-
-  &.size--small {
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
-      &.col--ellipsis {
-        @extend %SmallColumnHeight;
-        .v-cell {
-          max-height: $v-table-row-height-small;
-        }
-      }
-    }
-    &.virtual--y {
-      .col--ellipsis {
-        .v-cell {
-          max-height: $v-table-row-height-small;
-        }
-      }
-    }
-  }
-
-  &.size--mini {
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
-      &.col--ellipsis {
-        @extend %MiniColumnHeight;
-        .v-cell {
-          max-height: $v-table-row-height-mini;
-        }
-      }
-    }
-    &.virtual--y {
-      .col--ellipsis {
-        .v-cell {
-          max-height: $v-table-row-height-mini;
-        }
-      }
-    }
-  }
-
   /* 暂无数据 */
   .v-table--empty-placeholder,
   .v-table--empty-block {
@@ -447,13 +357,11 @@
     display: none;
     position: absolute;
     top: 0;
-    z-index: 8;
   }
   .v-table--empty-content {
     display: block;
-    width: 50%;
     color: $v-font-secondary-color;
-    pointer-events: auto;
+    pointer-events: none;
   }
   &.is--empty {
     .v-table--empty-block,
@@ -466,9 +374,7 @@
 /* 全屏、刷新 */
 .v-full-screen,
 .v-reload-data {
-  display: inline-block;
-  margin-left: 5px;
-  padding: 2px;
+  margin-left: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   &:hover {
@@ -485,10 +391,12 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9;
-  width: 100%;
+  right: 0;
   height: 100%;
+  z-index: 100;
+  overflow-y: auto;
   padding: $v-module-distance;
+  padding-bottom: 0;
   background-color: $v-table-background-color;
   box-sizing: border-box;
 }

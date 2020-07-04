@@ -1,0 +1,20 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-19 19:18:15
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-20 18:23:07
+ */
+.v-empty--wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .icon {
+    width: 70px;
+    height: 60px;
+  }
+  .text {
+    color: $v-font-disabled-color;
+    line-height: 20px;
+  }
+}

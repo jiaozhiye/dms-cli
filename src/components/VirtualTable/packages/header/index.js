@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 16:33:08
+ * @Last Modified time: 2020-07-01 15:59:21
  */
-import _ from 'lodash';
+import { pickBy, intersection, isFunction, isNumber } from 'lodash';
 import moment from 'moment';
 
 import config from '../config';
-import i18n from '../lang';
+import Locale from '../locale/mixin';
 import { convertToRows, getCellValue, isEmpty } from '../utils';
 
 import Resizable from './resizable';
@@ -17,6 +17,7 @@ import THeadFilter from '../filter';
 
 export default {
   name: 'TableHeader',
+  mixins: [Locale],
   props: ['tableColumns', 'flattenColumns', 'sortDirections'],
   provide() {
     return {
@@ -25,7 +26,6 @@ export default {
   },
   inject: ['$$table'],
   data() {
-    this.tableFilterData = [...this.$$table.tableFullData];
     return {
       filters: {},
       sorter: {},
@@ -35,21 +35,21 @@ export default {
   },
   computed: {
     isClientSorter() {
-      return _.isUndefined(this.$$table.clientSorter) ? config.clientSorter : this.$$table.clientSorter;
+      return !this.$$table.fetch;
     },
     isClientFilter() {
-      return _.isUndefined(this.$$table.clientFilter) ? config.clientFilter : this.$$table.clientFilter;
+      return !this.$$table.fetch;
     }
   },
   watch: {
     filters(val) {
       this.filterHandle();
-      if (this.isClientFilter) return;
+      // if (this.isClientFilter) return;
       this.$$table.filters = this.formatFilterValue(val);
     },
     sorter(val) {
       this.sorterHandle();
-      if (this.isClientSorter) return;
+      // if (this.isClientSorter) return;
       this.$$table.sorter = this.formatSorterValue(val);
     }
   },
@@ -125,7 +125,7 @@ export default {
         : null;
       const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
       return (
-        <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onMousedown={ev => this.thClickHandle(ev, column)}>
+        <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={ev => this.thClickHandle(ev, column)}>
           <div class="v-cell--wrapper">{this.renderCell(column)}</div>
           {isResizable && <Resizable column={column} />}
         </th>
@@ -174,8 +174,8 @@ export default {
       ];
       return (
         <span class="v-cell--sort">
-          <i class={ascCls} title={i18n.t('sorter.asc')} />
-          <i class={descCls} title={i18n.t('sorter.desc')} />
+          <i class={ascCls} title={this.t('table.sorter.asc')} />
+          <i class={descCls} title={this.t('table.sorter.desc')} />
         </span>
       );
     },
@@ -183,18 +183,27 @@ export default {
       return <THeadFilter column={column} filters={this.filters} />;
     },
     thClickHandle(ev, column) {
+      const { multipleSort } = this.$$table;
       const { sorter, orderBy, dataIndex } = column;
       if (sorter) {
         const order = orderBy ? (orderBy === this.descend ? null : this.descend) : this.ascend;
         // 取消其他排序
-        this.flattenColumns.forEach(x => {
-          if (!x.sorter || x.dataIndex === dataIndex) return;
-          x.orderBy = null;
-        });
+        if (!multipleSort) {
+          this.flattenColumns.forEach(x => {
+            if (!x.sorter || x.dataIndex === dataIndex) return;
+            x.orderBy = null;
+          });
+        }
         // 同步状态
         column.orderBy = order;
         // 设置排序值
-        this.sorter = Object.assign({}, { [dataIndex]: order });
+        if (!multipleSort) {
+          this.sorter = Object.assign({}, { [dataIndex]: order });
+        } else {
+          // 后点击的排序列，key 排在最后
+          delete this.sorter[dataIndex];
+          this.sorter = Object.assign({}, this.sorter, { [dataIndex]: order });
+        }
       }
     },
     // 表头排序
@@ -204,27 +213,24 @@ export default {
     },
     // 客户端排序
     clientSorter() {
-      for (let key in this.sorter) {
-        const order = this.sorter[key];
-        const column = this.flattenColumns.find(column => column.dataIndex === key);
-        if (!order) {
-          this.doResetHandle();
-        } else {
-          this.doSortHandle(column, order);
-        }
+      const validSorter = pickBy(this.sorter);
+      for (let key in validSorter) {
+        let column = this.flattenColumns.find(column => column.dataIndex === key);
+        this.doSortHandle(column, validSorter[key]);
       }
-      if (!Object.keys(this.sorter).length) {
+      if (!Object.keys(validSorter).length) {
         this.doResetHandle();
       }
     },
     // 还原排序数据
     doResetHandle() {
-      this.$$table.tableFullData = [...this.tableFilterData];
+      const { tableFullData, tableOriginData } = this.$$table;
+      this.$$table.tableFullData = intersection(tableOriginData, tableFullData);
     },
     // 排序算法
     doSortHandle(column, order) {
       const { dataIndex, sorter } = column;
-      if (_.isFunction(sorter)) {
+      if (isFunction(sorter)) {
         this.$$table.tableFullData.sort(sorter);
       } else {
         this.$$table.tableFullData.sort((a, b) => {
@@ -244,19 +250,18 @@ export default {
     },
     // 客户端筛选
     clientFilter() {
-      const { tableOriginData } = this.$$table;
       const filterList = [];
 
       for (let key in this.filters) {
         const [type, property] = key.split('|');
-        const results = tableOriginData.filter(row => {
+        const results = this.$$table.tableOriginData.filter(row => {
           const cellVal = getCellValue(row, property);
           const filterVal = this.filters[key];
           if (isEmpty(filterVal)) {
             return true;
           }
           if (type === 'text') {
-            if (_.isNumber(cellVal)) {
+            if (isNumber(cellVal)) {
               return Number(filterVal) === cellVal;
             }
             return cellVal.toLowerCase().includes(filterVal.toString().toLowerCase());
@@ -289,31 +294,29 @@ export default {
         filterList.push(results);
       }
 
-      this.createTableFilterData(Object.keys(this.filters).length ? _.intersection(...filterList) : tableOriginData);
-      this.$$table.tableFullData = [...this.tableFilterData];
+      this.$$table.tableFullData = Object.keys(this.filters).length ? intersection(...filterList) : [...this.$$table.tableOriginData];
 
       // 执行排序
       this.sorterHandle();
     },
-    // 设置 tableFilterData 值
-    createTableFilterData(dataList) {
-      this.tableFilterData = [...dataList];
-    },
     // 格式化排序参数
     formatSorterValue(option) {
-      const result = {};
-      const dataIndex = Object.keys(option)[0];
-      if (option[dataIndex] !== null) {
-        result[config.sorterFieldName] = `${dataIndex}|${option[dataIndex]}`;
-      }
-      return result;
+      const result = [];
+      Object.keys(option).forEach(dataIndex => {
+        if (option[dataIndex] !== null) {
+          result.push(`${dataIndex}|${option[dataIndex]}`);
+        }
+      });
+      return result.length ? { [config.sorterFieldName]: result.join(',') } : {};
     },
     // 格式化筛选参数
     formatFilterValue(option) {
       const result = {};
       for (let key in option) {
         if (!key.includes('|')) break;
-        result[key.split('|')[1]] = option[key];
+        let [type, attr] = key.split('|');
+        // result[attr] = option[key];
+        result[`${attr}|${type}`] = Array.isArray(option[key]) ? option[key].join('#') : option[key];
       }
       return result;
     },

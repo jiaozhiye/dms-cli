@@ -49,7 +49,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-25 20:12:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:41:54
+ * @Last Modified time: 2020-05-23 16:46:17
  */
 import { scrollParent } from './utils';
 
@@ -556,55 +556,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.virtual-scroll {
-  position: relative;
-}
-
-.virtual-scroll.direction-vertical:not(.page-mode) {
-  overflow-y: auto;
-}
-
-.virtual-scroll.direction-horizontal:not(.page-mode) {
-  overflow-x: auto;
-}
-
-.virtual-scroll.direction-horizontal {
-  display: flex;
-}
-
-.virtual-scroll__slot {
-  flex: auto 0 0;
-}
-
-.virtual-scroll__item-wrapper {
-  flex: 1;
-  box-sizing: border-box;
-  overflow: hidden;
-  position: relative;
-}
-
-.virtual-scroll.ready .virtual-scroll__item-view {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-
-.virtual-scroll.direction-vertical .virtual-scroll__item-wrapper {
-  width: 100%;
-}
-
-.virtual-scroll.direction-horizontal .virtual-scroll__item-wrapper {
-  height: 100%;
-}
-
-.virtual-scroll.ready.direction-vertical .virtual-scroll__item-view {
-  width: 100%;
-}
-
-.virtual-scroll.ready.direction-horizontal .virtual-scroll__item-view {
-  height: 100%;
-}
-</style>

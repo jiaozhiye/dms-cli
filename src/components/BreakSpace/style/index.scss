@@ -1,0 +1,50 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 11:38:42
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-form-panel--divider';
+
+.#{$prefix-cls} {
+  width: 100%;
+  height: 32px;
+  overflow: hidden;
+  .el-divider--horizontal {
+    margin: 15px 0;
+    .el-divider__text {
+      padding: 0 $padding-base;
+      &.is-left {
+        left: -$padding-base;
+      }
+      .title {
+        display: inline-block;
+        height: 20px;
+        font-size: $font-size-base;
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 100%;
+          background-color: $primary-color;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  // small
+  &-sm {
+    .title {
+      font-size: $font-size-sm !important;
+    }
+  }
+  // large
+  &-lg {
+    .title {
+      font-size: $font-size-base !important;
+    }
+  }
+}

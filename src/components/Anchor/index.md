@@ -2,10 +2,10 @@
 
 ### Anchor
 
-| 参数       | 说明                                   | 类型   | 默认值 |
-| ---------- | -------------------------------------- | ------ | ------ |
-| labelList  | 锚点选项卡的配置列表，[配置项](#label) | array  | -      |
-| labelWidth | 左侧 Label 容器的宽度，单位 px         | number | -      |
+| 参数       | 说明                                    | 类型   | 默认值 |
+| ---------- | --------------------------------------- | ------ | ------ |
+| labelList  | 锚点选项卡的配置列表，[配置项](#labels) | array  | -      |
+| labelWidth | 左侧 Label 容器的宽度，单位 px          | number | -      |
 
 ### 方法
 
@@ -13,7 +13,7 @@
 | -------- | -------------------- | ---- | ------ |
 | REFRESH  | 重新计算 Scroll 组件 | -    | -      |
 
-### label
+### labels
 
 | 参数  | 说明                          | 类型   | 默认值 |
 | ----- | ----------------------------- | ------ | ------ |
@@ -22,19 +22,21 @@
 
 ### 示例
 
+说明：锚点组件的外层容器，需要有固定高度，否则锚点组件不会出现滚动条
+
 ```bash
 # template
 <template>
   <anchor :labelList="labels">
-    <div class="line" id="row-01">
+    <anchor-item id="row-01">
       内容1
-    </div>
-    <div class="line" id="row-02">
+    </anchor-item>
+    <anchor-item id="row-02">
       内容2
-    </div>
-    <div class="line" id="row-03">
+    </anchor-item>
+    <anchor-item id="row-03">
       内容3
-    </div>
+    </anchor-item>
   </anchor>
 </template>
 

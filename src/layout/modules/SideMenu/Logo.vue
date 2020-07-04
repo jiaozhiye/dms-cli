@@ -11,7 +11,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:43:41
+ * @Last Modified time: 2020-05-17 16:20:04
  **/
 const logoEp = require('@/assets/img/logo_ep.png');
 const logo = require('@/assets/img/logo.png');
@@ -52,12 +52,12 @@ export default {
 
 <style lang="scss" scoped>
 .logo {
-  height: 60px;
+  height: 56px;
   background-color: $logoBgColor;
   overflow: hidden;
   a {
     height: 100%;
-    line-height: 58px;
+    line-height: 54px;
     display: block;
     img {
       display: inline-block;
@@ -70,7 +70,7 @@ export default {
     }
     .img2 {
       width: 140px;
-      margin-left: 12px;
+      margin-left: 16px;
       animation: hide 0.3s ease both;
     }
     .none {
@@ -81,7 +81,7 @@ export default {
 @keyframes show {
   0% {
     opacity: 0;
-    width: 40px;
+    width: 30px;
   }
   100% {
     opacity: 1;
@@ -91,11 +91,11 @@ export default {
 @keyframes hide {
   0% {
     opacity: 0;
-    width: 80px;
+    width: 50px;
   }
   100% {
     opacity: 1;
-    width: 40px;
+    width: 30px;
   }
 }
 </style>

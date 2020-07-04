@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 22:30:04
+ * @Last Modified time: 2020-06-09 17:18:48
  */
-import PropTypes from '@/components/_utils/vue-types';
+import PropTypes from '../../../_utils/vue-types';
 
 const columnItem = {
   dataIndex: PropTypes.string.isRequired,
@@ -39,6 +39,7 @@ const columnItem = {
     unit: PropTypes.string, // 合计字段的单位
     onChange: PropTypes.func // 字段合计变化时触发
   }),
+  groupSummary: PropTypes.bool.def(false), // 分组汇总
   render: PropTypes.func, // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
   extraRender: PropTypes.func // 额外的渲染方法，用于处理导出或打印单元格的值，参数: text, row, column, rowIndex, cellIndex; 返回值类型: string/number
 };
@@ -61,6 +62,12 @@ const columnItem = {
  *     falseValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
  *     text: PropTypes.string,
  *     disabled: PropTypes.bool // 表单禁用状态
+ *     clearable: PropTypes.bool
+ *   }),
+ *   helper: PropTypes.shape({
+ *     filters: PropTypes.object,
+ *     table: PropTypes.object,
+ *     fieldAliasMap: PropTypes.func
  *   }),
  *   rules: PropTypes.arrayOf(PropTypes.shape({
  *     required: PropTypes.bool,
@@ -101,7 +108,7 @@ export default {
   // 所有列是否允许拖动列宽调整大小
   resizable: PropTypes.bool.def(true),
   // 表格尺寸
-  size: PropTypes.oneOf(['default', 'medium', 'small', 'mini']).def('default'),
+  size: PropTypes.oneOf(['default', 'medium', 'small', 'mini']).def('small'),
   // 存储列配置的字段名，不能重复
   cacheColumnsKey: PropTypes.string,
   // 是否显示表头
@@ -118,7 +125,7 @@ export default {
   rowSelection: PropTypes.shape({
     type: PropTypes.oneOf(['checkbox', 'radio']).isRequired, // 选择类型
     selectedRowKeys: PropTypes.array, // 选中项的 key 数组，支持动态赋值
-    rowSelectable: PropTypes.func, // 是否允许行选择，参数：row，返回值 bool
+    disabled: PropTypes.func, // 是否允许行选择，参数：row，返回值 bool
     onChange: PropTypes.func // 选中项发生变化时触发
   }),
   // 展开行配置项
@@ -128,10 +135,10 @@ export default {
     expandedRowRender: PropTypes.func.isRequired, // 额外的展开行渲染方法
     onChange: PropTypes.func // 展开的行变化时触发
   },
-  // 客户端排序
-  clientSorter: PropTypes.bool,
-  // 客户端筛选
-  clientFilter: PropTypes.bool,
+  // 多列排序
+  multipleSort: PropTypes.bool.def(true),
+  // 是否为前端内存分页
+  webPagination: PropTypes.bool.def(false),
   // 是否显示表格顶部信息
   showAlert: PropTypes.bool.def(true),
   // 是否显示全屏按钮
@@ -152,7 +159,7 @@ export default {
 
 /**
  * 事件：
- * change: 分页、排序、筛选变化时触发，参数：pagination, filters, sorter, { currentDataSource: tableData }
+ * change: 分页、排序、筛选变化时触发，参数：pagination, filters, sorter, { currentDataSource: tableData, allDataSource: allTableData }
  * dataChange: 表格数据变化时触发，参数 tableData
  * rowClick: 行单击事件，参数 row, column, event
  * rowDblclick: 行双击事件，参数 row, column, event

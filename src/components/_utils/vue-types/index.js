@@ -1,10 +1,10 @@
 /*
  * @Author: 焦质晔
  * @Date: 2020-02-29 10:40:05
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2020-02-29 10:40:05
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-06-20 11:30:57
  */
-import isPlainObject from 'lodash/isPlainObject';
+import { isPlainObject } from 'lodash';
 import { toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils';
 
 const VuePropTypes = {

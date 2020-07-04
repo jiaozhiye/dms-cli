@@ -1,0 +1,19 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 14:10:36
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-web-print--preview';
+
+.#{$prefix-cls} {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: calc(80vh - 80px);
+  border: 0;
+}

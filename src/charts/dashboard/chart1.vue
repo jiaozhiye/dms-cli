@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Spin :spinning="loading" tip="Loading...">
+    <Spin :spinning="loading">
       <div ref="chart" class="chartWrap" :style="containerStyle" />
     </Spin>
   </div>
@@ -11,9 +11,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-29 16:51:50
+ * @Last Modified time: 2020-05-29 17:15:28
  */
 import echarts from 'echarts';
+import Resize from '../_utils/resize-mixin';
 import { sleep } from '@/utils';
 import config from '@/config';
 // eharts  配置
@@ -21,6 +22,7 @@ const chartConf = config.charts;
 
 export default {
   name: 'Chart1',
+  mixins: [Resize],
   props: {
     fetchapi: {
       type: Function,
@@ -37,10 +39,15 @@ export default {
   },
   data() {
     // echart 实例
-    this.myChart = null;
+    this.chartRef = null;
     return {
       loading: false
     };
+  },
+  computed: {
+    $chart() {
+      return this.$refs.chart;
+    }
   },
   watch: {
     params() {
@@ -51,15 +58,16 @@ export default {
     this.initial();
   },
   destroyed() {
-    if (this.myChart) {
-      this.myChart.dispose();
+    if (this.chartRef) {
+      this.chartRef.dispose();
     }
-    this.myChart = null;
+    this.chartRef = null;
   },
   methods: {
     async initial() {
       this.loading = true;
-      if (process.env.MOCK_DATA) {
+      // if (process.env.MOCK_DATA) {
+      if (1) {
         await sleep(500);
         const { chart1 } = require('@/mock/chartData').default;
         this.draw(chart1);
@@ -74,7 +82,7 @@ export default {
       this.loading = false;
     },
     draw({ names, values }) {
-      this.myChart = echarts.init(this.$refs.chart);
+      this.chartRef = echarts.init(this.$chart);
       const option = {
         color: ['#2b9df7'],
         tooltip: {
@@ -150,15 +158,16 @@ export default {
           {
             name: '电耗',
             type: 'bar',
-            barWidth: '40%',
+            barWidth: '36%',
             data: values
           }
         ]
       };
-      if (option && this.myChart) {
-        this.myChart.clear();
-        this.myChart.setOption(option, true);
+      if (option && this.chartRef) {
+        this.chartRef.clear();
+        this.chartRef.setOption(option, true);
       }
+      this.bindResizeEvent();
     }
   }
 };

@@ -15,21 +15,21 @@
     </div>
     <div class="box bg1">
       <h4>
-        <CountUp :end-val="2147" />
+        <span>2147</span>
         <i>项</i>
       </h4>
       <h5>待办事项</h5>
     </div>
     <div class="box bg2">
       <h4>
-        <CountUp :end-val="215" />
+        <span>215</span>
         <i>项</i>
       </h4>
       <h5>维修项目</h5>
     </div>
     <div class="box bg3">
       <h4>
-        <CountUp :end-val="28" />
+        <span>28</span>
         <i>人</i>
       </h4>
       <h5>接待人数</h5>
@@ -57,6 +57,7 @@ export default {
   border-radius: $borderRadius;
   box-shadow: $boxShadow;
   align-items: center;
+  overflow: hidden;
   .welcome {
     flex: 1;
     margin-left: 15px;
@@ -66,7 +67,6 @@ export default {
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      vertical-align: middle;
       overflow: hidden;
       img {
         object-fit: cover;
@@ -76,6 +76,7 @@ export default {
     }
     .info {
       flex: 1;
+      min-width: 340px;
       margin-left: 15px;
       h3 {
         font-weight: 700;
@@ -88,12 +89,11 @@ export default {
     }
   }
   .box {
-    width: 80px;
+    min-width: 80px;
     border-radius: 6px;
-    margin-right: 15px;
-    padding: 10px;
+    margin-right: 10px;
+    padding: 6px 10px;
     color: #fff;
-    user-select: none;
     h4 {
       font-size: 20px;
       border-bottom: 1px solid #fff;
@@ -103,7 +103,7 @@ export default {
       }
     }
     h5 {
-      padding-top: 6px;
+      padding-top: 5px;
       font-size: 12px;
     }
   }

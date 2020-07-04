@@ -2,19 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 22:17:14
+ * @Last Modified time: 2020-07-01 14:44:39
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
 import Checkbox from '../checkbox';
 
 import config from '../config';
-import i18n from '../lang';
+import Locale from '../locale/mixin';
 
 const noop = () => {};
 
 export default {
   name: 'ColumnFilter',
+  mixins: [Locale],
   props: ['columns'],
   inject: ['$$table'],
   data() {
@@ -40,7 +41,7 @@ export default {
     this.createColumns();
   },
   methods: {
-    popperVisibleHandle({ showPopper }) {
+    popperVisibleHandle(showPopper) {
       this.showPopper = showPopper;
     },
     createColumns() {
@@ -67,16 +68,16 @@ export default {
       return (
         <li key={column.dataIndex} class="item">
           <Checkbox value={!column.hidden} onInput={val => (column.hidden = !val)} onChange={this.changeHandle} />
-          <i class={cls} title={i18n.t('columnFilter.draggable')} />
+          <i class={cls} title={this.t('table.columnFilter.draggable')} />
           <span>{column.title}</span>
           {type === 'main' ? (
             <span class="fixed">
-              <i class="iconfont icon-step-backward" title={i18n.t('columnFilter.fixedLeft')} onClick={() => this.fixedChangeHandle(column, 'left')} />
-              <i class="iconfont icon-step-forward" title={i18n.t('columnFilter.fixedRight')} onClick={() => this.fixedChangeHandle(column, 'right')} />
+              <i class="iconfont icon-step-backward" title={this.t('table.columnFilter.fixedLeft')} onClick={() => this.fixedChangeHandle(column, 'left')} />
+              <i class="iconfont icon-step-forward" title={this.t('table.columnFilter.fixedRight')} onClick={() => this.fixedChangeHandle(column, 'right')} />
             </span>
           ) : (
             <span class="fixed">
-              <i class="iconfont icon-close-circle" title={i18n.t('columnFilter.cancelFixed')} onClick={() => this.cancelFixedHandle(column)} />
+              <i class="iconfont icon-close-circle" title={this.t('table.columnFilter.cancelFixed')} onClick={() => this.cancelFixedHandle(column)} />
             </span>
           )}
         </li>
@@ -132,6 +133,21 @@ export default {
     }
   },
   render() {
+    const wrapProps = {
+      ref: 'vPopper',
+      props: {
+        trigger: 'clickToToggle',
+        rootClass: 'v-popper--wrapper',
+        transition: 'v-zoom-in-top',
+        options: { placement: 'bottom-end' },
+        containerStyle: { zIndex: 9999 },
+        appendToBody: true
+      },
+      on: {
+        show: this.popperVisibleHandle,
+        hide: this.popperVisibleHandle
+      }
+    };
     const cls = [
       `text`,
       {
@@ -140,18 +156,7 @@ export default {
     ];
     return (
       <div class="v-column-filter">
-        <Popper
-          ref="vPopper"
-          trigger="clickToToggle"
-          root-class="v-popper--wrapper"
-          containerStyle={{ zIndex: 9999 }}
-          transition="v-zoom-in-top"
-          options={{ placement: 'bottom-end' }}
-          visible-arrow={false}
-          append-to-body={true}
-          onShow={this.popperVisibleHandle}
-          onHide={this.popperVisibleHandle}
-        >
+        <Popper {...wrapProps}>
           <span slot="reference" class={cls}>
             <i class="iconfont icon-pic-right" />
             {config.columnFilterText()}

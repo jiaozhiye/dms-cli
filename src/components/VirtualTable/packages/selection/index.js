@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-01 13:30:02
+ * @Last Modified time: 2020-06-05 17:12:22
  */
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -11,63 +11,67 @@ const noop = () => {};
 
 export default {
   name: 'Selection',
-  props: ['column', 'record', 'rowKey'],
+  props: ['selectionKeys', 'column', 'record', 'rowKey'],
   inject: ['$$table'],
+  computed: {
+    selectionType() {
+      return this.column.type;
+    }
+  },
   methods: {
     setRowSelection(val) {
+      if (this.selectionKeys.includes(val)) return;
       this.$$table.selectionKeys = [val];
     },
-    toggleRowSelection(val, state) {
-      const { selectionKeys } = this.$$table;
-      this.$$table.selectionKeys = state ? [...new Set([...selectionKeys, val])] : selectionKeys.filter(x => x !== val);
+    toggleRowSelection(val) {
+      this.$$table.selectionKeys = !this.selectionKeys.includes(val) ? [...new Set([...this.selectionKeys, val])] : this.selectionKeys.filter(x => x !== val);
     },
     renderRadio() {
       const { record, rowKey } = this;
       const {
-        selectionKeys,
-        rowSelection: { rowSelectable = noop }
+        rowSelection: { disabled = noop }
       } = this.$$table;
-      const disabled = rowSelectable(record);
-      const prevValue = !disabled ? selectionKeys[0] : null;
+      const isDisabled = disabled(record);
+      const prevValue = !isDisabled ? this.selectionKeys[0] : null;
       return (
         <Radio
           value={prevValue}
           onInput={val => {
-            // this.setRowSelection(val);
+            this.setRowSelection(val);
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={disabled}
+          disabled={isDisabled}
+          readonly={!0}
         />
       );
     },
     renderCheckbox() {
       const { record, rowKey } = this;
       const {
-        selectionKeys,
-        rowSelection: { rowSelectable = noop }
+        rowSelection: { disabled = noop }
       } = this.$$table;
-      const disabled = rowSelectable(record);
-      const prevValue = !disabled && selectionKeys.includes(rowKey) ? rowKey : null;
+      const isDisabled = disabled(record);
+      const prevValue = !isDisabled && this.selectionKeys.includes(rowKey) ? rowKey : null;
       return (
         <Checkbox
           value={prevValue}
           onInput={val => {
-            // if (val !== null) {
-            //   this.toggleRowSelection(val, true);
-            // } else {
-            //   this.toggleRowSelection(prevValue, false);
-            // }
+            if (val !== null) {
+              this.toggleRowSelection(val);
+            } else {
+              this.toggleRowSelection(prevValue);
+            }
           }}
           trueValue={rowKey}
           falseValue={null}
-          disabled={disabled}
+          disabled={isDisabled}
+          readonly={!0}
         />
       );
     }
   },
   render() {
-    const { type } = this.column;
-    return type === 'radio' ? this.renderRadio() : this.renderCheckbox();
+    return this.selectionType === 'radio' ? this.renderRadio() : this.renderCheckbox();
   }
 };

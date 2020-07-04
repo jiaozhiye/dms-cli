@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 11:34:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 11:47:39
+ * @Last Modified time: 2020-06-20 10:41:31
  */
-import _ from 'lodash';
+import { xor, isUndefined } from 'lodash';
 
 const noop = () => {};
 
@@ -20,14 +20,14 @@ const localStorageMixin = {
       try {
         localColumns = JSON.parse(result);
       } catch (e) {}
-      const diffs = _.xor(
+      const diffs = xor(
         localColumns.map(x => x.dataIndex),
         this.columns.map(x => x.dataIndex)
       );
       if (diffs.length > 0) return;
       return localColumns.map(x => {
         let target = this.columns.find(k => k.dataIndex === x.dataIndex);
-        if (_.isUndefined(x.fixed)) {
+        if (isUndefined(x.fixed)) {
           delete target.fixed;
         }
         return { ...target, ...x };
@@ -38,16 +38,16 @@ const localStorageMixin = {
       if (!this.cacheColumnsKey) return;
       const result = columns.map(x => {
         const target = {};
-        if (!_.isUndefined(x.hidden)) {
+        if (!isUndefined(x.hidden)) {
           target.hidden = x.hidden;
         }
-        if (!_.isUndefined(x.fixed)) {
+        if (!isUndefined(x.fixed)) {
           target.fixed = x.fixed;
         }
-        if (!_.isUndefined(x.width)) {
+        if (!isUndefined(x.width)) {
           target.width = x.width;
         }
-        if (!_.isUndefined(x.renderWidth)) {
+        if (!isUndefined(x.renderWidth)) {
           target.renderWidth = x.renderWidth;
         }
         return {

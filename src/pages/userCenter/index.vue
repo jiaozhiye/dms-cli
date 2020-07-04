@@ -2,10 +2,10 @@
   <div class="setting">
     <el-dropdown trigger="click" class="el-dropdown">
       <span class="el-dropdown-link">
-        <span class="avatar">
+        <span class="avatar fl">
           <img class="img" src="@/assets/img/avatar.jpg" />
         </span>
-        <span>{{ username }}</span>
+        <span class="text text_overflow_cut fl">{{ username }}</span>
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
@@ -21,7 +21,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 11:37:16
+ * @Last Modified time: 2020-05-18 08:13:24
  **/
 import { mapActions } from 'vuex';
 import { getUser } from '@/utils/cookies';
@@ -48,22 +48,23 @@ export default {
   margin-left: 10px;
   .el-dropdown {
     .el-dropdown-link {
-      display: inline-block;
-      padding: 5px 0;
       font-size: $textSize;
+      line-height: 24px;
       cursor: pointer;
       .avatar {
-        display: inline-block;
         overflow: hidden;
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        vertical-align: middle;
+        margin-right: 4px;
         .img {
           object-fit: cover;
           display: block;
           height: 100%;
         }
+      }
+      .text {
+        max-width: 70px;
       }
     }
   }

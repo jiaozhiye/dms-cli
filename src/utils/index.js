@@ -2,20 +2,32 @@
  * @Author: 焦质晔
  * @Date: 2019-11-11 23:01:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 07:26:34
+ * @Last Modified time: 2020-05-24 10:45:40
  */
 import { MessageBox, Notification, Message } from 'element-ui';
-import Cookies from 'js-cookie';
+import moment from 'moment';
 import config from '@/config';
 import i18n from '@/lang';
 import store from '@/store';
 
 /**
- * @description 异步加载路由组件
- * @param {string} __name__ 页面组件的路径，从 pages 文件夹开始
- * @returns
+ * @description 判断浏览器是否 IE11
+ * @param
+ * @returns {boolean}
  */
-export const asyncLoadComponent = __name__ => () => import(`@/pages/${__name__}`);
+export const isIE = () => {
+  return !!window.ActiveXObject || 'ActiveXObject' in window;
+};
+
+/**
+ * @description 判断对象属性是否为自身属性
+ * @param {object} 目标对象
+ * @param {string} 属性名
+ * @returns {boolean}
+ */
+export const hasOwn = (obj, key) => {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+};
 
 /**
  * @description 延迟方法，异步函数
@@ -109,14 +121,31 @@ export const messageAction = async (msg = '', type = 'info') => {
 };
 
 /**
- * @description 清空所有 cookie
- * @returns
+ * @description 字符串转 moment 对象
+ * @param {string|array} value 入参
+ * @param {string} valueFormat 日期类型
+ * @returns moment 对象
  */
-export const clearAllCookie = () => {
-  const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];
-  keys.forEach(x => {
-    Cookies.remove(x);
-  });
+export const stringToMoment = (value, valueFormat) => {
+  if (Array.isArray(value)) {
+    return value.map(val => (typeof val === 'string' && val ? moment(val, valueFormat) : val || null));
+  } else {
+    return typeof value === 'string' && value ? moment(value, valueFormat) : value || null;
+  }
+};
+
+/**
+ * @description moment 对象转成日期格式字符串
+ * @param {string|array} value 入参
+ * @param {string} valueFormat 日期类型
+ * @returns 转换后的日期格式字符串
+ */
+export const momentToString = (value, valueFormat) => {
+  if (Array.isArray(value)) {
+    return value.map(val => (moment.isMoment(val) ? val.format(valueFormat) : val));
+  } else {
+    return moment.isMoment(value) ? value.format(valueFormat) : value;
+  }
 };
 
 /**
@@ -126,4 +155,18 @@ export const clearAllCookie = () => {
  */
 export const isFormEmpty = val => {
   return typeof val === 'undefined' || val === '' || val === null;
+};
+
+/**
+ * @description 生成 uuid
+ * @param {string} key uuid 的前缀标识
+ * @returns {boolean} 生成的 uuid 字符串
+ */
+export const createUidKey = (key = '') => {
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    let r = (Math.random() * 16) | 0;
+    let v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+  return key + uuid;
 };

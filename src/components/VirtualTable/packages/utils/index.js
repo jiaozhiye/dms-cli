@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 20:04:43
+ * @Last Modified time: 2020-07-01 08:15:04
  */
-import _ from 'lodash';
+import { get, set, transform, isEqual, isObject } from 'lodash';
 
 export const hasOwn = (obj, key) => {
   return Object.prototype.hasOwnProperty.call(obj, key);
@@ -57,11 +57,9 @@ export const deepMapColumns = (columns, callback) => {
 export const getAllColumns = columns => {
   const result = [];
   columns.forEach(column => {
+    result.push(column);
     if (column.children) {
-      result.push(column);
       result.push.apply(result, getAllColumns(column.children));
-    } else {
-      result.push(column);
     }
   });
   return result;
@@ -111,6 +109,31 @@ export const findLastColumn = column => {
 // 根据条件过滤 columns
 export const filterTableColumns = (columns, marks) => {
   return columns.filter(x => !marks.includes(x.dataIndex));
+};
+
+// 所有 rowKey
+export const getAllRowKeys = (data, getRowKey, disabled = () => {}) => {
+  const result = [];
+  data.forEach(record => {
+    if (!!disabled(record)) return;
+    result.push(getRowKey(record, record.index));
+    if (record.children) {
+      result.push.apply(result, getAllRowKeys(record.children, getRowKey, disabled));
+    }
+  });
+  return result;
+};
+
+// 展平 tableData
+export const tableDataFlatMap = data => {
+  const result = [];
+  data.forEach(record => {
+    result.push({ ...record, children: undefined });
+    if (record.children) {
+      result.push.apply(result, tableDataFlatMap(record.children));
+    }
+  });
+  return result;
 };
 
 // 表头分组
@@ -182,7 +205,7 @@ export const throttle = (fn, delay) => {
 };
 
 // 函数防抖
-export const debounce = (fn, delay) => {
+export const debounce = (fn, delay = 0) => {
   return function(...args) {
     fn.timer && clearTimeout(fn.timer);
     fn.timer = setTimeout(() => fn.apply(this, args), delay);
@@ -190,8 +213,7 @@ export const debounce = (fn, delay) => {
 };
 
 // 根据属性路径获取对象的值
-export const getValueByPath = (object, prop) => {
-  prop = prop || '';
+export const getValueByPath = (object, prop = '') => {
   const paths = prop.split('.');
   let current = object;
   let result = null;
@@ -295,13 +317,12 @@ function isBrowseType(type) {
 export const browse = () => {
   const isWebkit = isBrowseType('AppleWebKit');
   const isEdge = isBrowseType('Edge');
-  let result = {
+  return {
     webkit: isWebkit && !isEdge, // 苹果、谷歌内核
     moz: isBrowseType('Gecko') && isBrowseType('KHTML') == -1, // 火狐内核
-    edge: isBrowseType('Edge'), // Edge 内核
+    edge: isEdge, // Edge 内核
     msie: isBrowseType('Trident') // IE 内核
   };
-  return result;
 };
 
 // 判断参数是否为空
@@ -334,22 +355,25 @@ export const isEmpty = val => {
 
 // 比对两个对象的差异
 export const difference = (object, base) => {
-  return _.transform(object, function(result, value, key) {
-    if (!_.isEqual(value, base[key])) {
-      result[key] = _.isObject(value) && _.isObject(base[key]) ? difference(value, base[key]) : value;
+  return transform(object, function(result, value, key) {
+    if (!isEqual(value, base[key])) {
+      result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
     }
   });
 };
 
 // 获取格式化后的数据
 export const getCellValue = (record, dataIndex) => {
-  const val = _.get(record, dataIndex, '');
-  return _.isNull(val) ? '' : val;
+  return get(record, dataIndex) ?? '';
 };
 
 // 设置单元格的数据
-export const setCellValue = (record, dataIndex, val = '') => {
-  _.set(record, dataIndex, val);
+export const setCellValue = (record, dataIndex, val = '', precision) => {
+  val = val ?? '';
+  if (precision >= 0 && val !== '') {
+    val = Number(val).toFixed(precision);
+  }
+  set(record, dataIndex, val);
 };
 
 // 数字格式化
@@ -407,4 +431,22 @@ export const createUidKey = (key = '') => {
     return v.toString(16);
   });
   return key + uuid;
+};
+
+// 多列分组聚合
+export const groupBy = (array = [], props = []) => {
+  let fn = x => {
+    let res = [];
+    props.forEach(k => res.push(x[k]));
+    return res;
+  };
+  let groups = {};
+  array.forEach(x => {
+    let group = JSON.stringify(fn(x));
+    groups[group] = groups[group] || [];
+    groups[group].push(x);
+  });
+  return Object.keys(groups).map(group => {
+    return groups[group];
+  });
 };

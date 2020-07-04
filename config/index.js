@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-28 19:39:09
+ * @Last Modified time: 2020-05-12 11:43:11
  */
 'use strict';
 const path = require('path');
@@ -20,8 +20,8 @@ module.exports = {
         changeOrigin: true, // 支持跨域
         // secure: false, // 支持 https
         pathRewrite: {
-          // '^/api': '/api' // 连接开发环境，走网关的那种
-          '^/api/[a-zA-Z_]+/': '/' // 本地开发，不走网关，直接调本地服务
+          '^/api': '/api' // 连接开发环境，走网关的那种
+          // '^/api/[a-zA-Z_]+/': '/' // 本地开发，不走网关，直接调本地服务
         }
       }
     },

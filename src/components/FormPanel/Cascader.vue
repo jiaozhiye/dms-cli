@@ -3,9 +3,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:38:37
+ * @Last Modified time: 2020-06-20 10:13:25
  **/
-import _ from 'lodash';
+import { isEqual, isString } from 'lodash';
 
 export default {
   name: 'Cascader',
@@ -45,7 +45,7 @@ export default {
   watch: {
     currentValues(val) {
       if (val.length || !this.value) {
-        if (_.isEqual(val, this.prevValue)) return;
+        if (isEqual(val, this.prevValue)) return;
         this.$emit('input', val);
         if (this.clicked === 'on') {
           this.clicked = 'off';
@@ -67,7 +67,7 @@ export default {
   methods: {
     createValues(valText) {
       let res = [];
-      if (valText && _.isString(valText)) {
+      if (valText && isString(valText)) {
         const valStrList = valText.split(',');
         let arr = this.list;
         valStrList.forEach(x => {

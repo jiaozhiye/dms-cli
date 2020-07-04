@@ -7,16 +7,71 @@
     <meta name="theme-color" content="#000000" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <title></title>
-    <style>
-      .ld-rt {
-        animation: ld-rt-kf 3s linear infinite;
+    <style type="text/css">
+      .spin-wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
       }
-      @keyframes ld-rt-kf {
-        0% {
-          transform: rotate(0);
+      .spin-wrapper .spin-dot {
+        position: relative;
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+      }
+      .spin-wrapper .spin-dot > i {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        background-color: #0d74b5;
+        border-radius: 100%;
+        transform: scale(0.75);
+        transform-origin: 50% 50%;
+        opacity: 0.3;
+        animation: antSpinMove 1s infinite linear alternate;
+      }
+      .spin-wrapper .spin-dot > i:nth-child(1) {
+        top: 0;
+        left: 0;
+      }
+      .spin-wrapper .spin-dot > i:nth-child(2) {
+        top: 0;
+        right: 0;
+        animation-delay: 0.4s;
+      }
+      .spin-wrapper .spin-dot > i:nth-child(3) {
+        right: 0;
+        bottom: 0;
+        animation-delay: 0.8s;
+      }
+      .spin-wrapper .spin-dot > i:nth-child(4) {
+        bottom: 0;
+        left: 0;
+        animation-delay: 1.2s;
+      }
+      .spin-wrapper .spin-dot-spin {
+        transform: rotate(45deg);
+        animation: antRotate 1.2s infinite linear;
+      }
+      .spin-wrapper .spin-text {
+        padding-top: 10px;
+        font-size: 16px;
+        color: #0d74b5;
+      }
+      @keyframes antSpinMove {
+        to {
+          opacity: 1;
         }
-        100% {
-          transform: rotate(360deg);
+      }
+      @keyframes antRotate {
+        to {
+          transform: rotate(405deg);
         }
       }
     </style>
@@ -24,12 +79,25 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="app">
-      <div style="position: absolute; top: 50%; left: 50%; margin-top: -20px; text-align: center; font-size:14px;">
-        <svg class="ld-rt" width="28" height="28" viewBox="0,0,32,32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 2h2v8h-2v-8zM15 22h2v8h-2v-8zM30 15v2h-8v-2h8zM10 15v2h-8v-2h8zM5.406 6.813l1.406-1.406 5.656 5.656-1.406 1.406zM19.531 20.938l1.406-1.406 5.656 5.656-1.406 1.406zM25.188 5.406l1.406 1.406-5.656 5.656-1.406-1.406zM11.063 19.531l1.406 1.406-5.656 5.656-1.406-1.406z"
-                  stroke-width="1.5"/>
-        </svg>
-        <div>Loading...</div>
+      <div class="spin-wrapper">
+        <span id="spin-dot" class="spin-dot spin-dot-spin">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <span id="spin-text" class="spin-text">Loading...</span>
+      </div>
     </div>
+    <script type="text/javascript">
+      (function() {
+        var aSpinDotList = document.getElementById('spin-dot').children;
+        var theme = localStorage.getItem('theme') || '#0d74b5';
+        for (var i = 0; i < aSpinDotList.length; i++) {
+          aSpinDotList[i].style.backgroundColor = theme;
+        }
+        document.getElementById('spin-text').style.color = theme;
+      })();
+    </script>
   </body>
 </html>

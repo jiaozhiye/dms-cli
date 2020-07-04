@@ -1,13 +1,13 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-29 16:25:45
  */
 export default {
   chart1: {
-    names: ['奥迪A4', '奥迪A6', '奥迪A8', '奥迪Q3', '奥迪Q5', '奥迪Q7'],
-    values: [120, 149, 127, 130, 225, 133]
+    names: ['奥迪A4', '奥迪A4L', '奥迪A6', '奥迪A8', '奥迪Q3', '奥迪Q5', '奥迪Q7', '奥迪R8', '奥迪A8L'],
+    values: [120, 137, 149, 127, 130, 225, 133, 115, 70]
   },
   chart2: {
     names: ['一月', '二月', '三月', '四月', '五月', '六月'],

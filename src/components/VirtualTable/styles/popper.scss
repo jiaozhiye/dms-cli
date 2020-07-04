@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 17:46:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 13:17:43
+ * @Last Modified time: 2020-06-30 11:33:01
  */
 .v-popper--wrapper {
   position: absolute;
@@ -12,7 +12,7 @@
 }
 
 .v-popper {
-  min-width: 150px;
+  min-width: 160px;
   min-height: 40px;
   max-height: calc(100vh - 10px);
   overflow-y: auto;

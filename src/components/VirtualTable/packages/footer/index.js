@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 22:18:49
+ * @Last Modified time: 2020-06-30 13:37:01
  */
-import _ from 'lodash';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
 import config from '../config';
 
@@ -26,11 +25,11 @@ export default {
           precision,
           summation: { unit = '', onChange = noop }
         } = column;
-        const values = tableFullData.map(x => Number(_.get(x, dataIndex, 0)));
+        const values = tableFullData.map(x => Number(getCellValue(x, dataIndex)));
         // 累加求和
         let result = values.reduce((prev, curr) => {
           const value = Number(curr);
-          if (!isNaN(value)) {
+          if (!Number.isNaN(value)) {
             return prev + curr;
           }
           return prev;

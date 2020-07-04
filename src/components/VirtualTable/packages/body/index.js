@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 07:14:54
+ * @Last Modified time: 2020-07-01 08:36:28
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
 import config from '../config';
-import _ from 'lodash';
+import { isEqual, isFunction, isObject } from 'lodash';
 
 import formatMixin from './format';
 import keyboardMixin from './keyboard';
@@ -32,7 +32,8 @@ export default {
     this.prevST = 0;
     this.prevSL = 0;
     return {
-      clicked: [] // 被点击单元格的坐标
+      clicked: [], // 被点击单元格的坐标
+      checked: [] // 可选择列选中的 rowKey
     };
   },
   computed: {
@@ -45,25 +46,31 @@ export default {
       return tableBodyWidth ? `${tableBodyWidth - (scrollY ? gutterWidth : 0)}px` : null;
     },
     wrapStyle() {
-      const { layout, height, maxHeight, fullHeight, autoHeight } = this.$$table;
+      const { layout, height, maxHeight, fullHeight, autoHeight, isTableEmpty } = this.$$table;
       const { headerHeight, viewportHeight, footerHeight } = layout;
       if (fullHeight || autoHeight || height) {
-        return {
-          height: `${viewportHeight}px`
-        };
+        return { height: `${viewportHeight}px` };
+      }
+      if (isTableEmpty) {
+        return { minHeight: `100px` };
       }
       if (maxHeight) {
         const maxTableHeight = parseHeight(maxHeight);
         if (typeof maxTableHeight === 'number') {
-          return {
-            maxHeight: `${maxTableHeight - headerHeight - footerHeight}px`
-          };
+          return { maxHeight: `${maxTableHeight - headerHeight - footerHeight}px` };
         }
       }
       return null;
     },
     editableColumns() {
-      return this.flattenColumns.filter(x => _.isFunction(x.editRender));
+      return this.flattenColumns.filter(x => isFunction(x.editRender));
+    },
+    firstDataIndex() {
+      const effectColumns = this.flattenColumns.filter(x => !['__expandable__', '__selection__', config.operationColumn].includes(x.dataIndex));
+      return effectColumns.length ? effectColumns[0].dataIndex : '';
+    },
+    isTreeTable() {
+      return this.tableData.some(x => Array.isArray(x.children) && x.children.length);
     }
   },
   mounted() {
@@ -78,15 +85,15 @@ export default {
   },
   methods: {
     scrollEvent(ev) {
-      const { scrollYLoad, $$tableHeader, $$tableFooter, scrollY, layout, triggerScrollYEvent } = this.$$table;
+      const { scrollYLoad, scrollY, layout, triggerScrollYEvent, $refs } = this.$$table;
       const scrollYWidth = scrollY ? layout.gutterWidth : 0;
       const { scrollTop: st, scrollLeft: sl } = ev.target;
       if (sl !== this.prevSL) {
-        if ($$tableHeader) {
-          $$tableHeader.$el.scrollLeft = sl;
+        if ($refs[`tableHeader`]) {
+          $refs[`tableHeader`].$el.scrollLeft = sl;
         }
-        if ($$tableFooter) {
-          $$tableFooter.$el.scrollLeft = sl;
+        if ($refs[`tableFooter`]) {
+          $refs[`tableFooter`].$el.scrollLeft = sl;
         }
         this.$$table.isPingLeft = sl > 0;
         this.$$table.isPingRight = sl + layout.tableWidth < layout.tableBodyWidth + scrollYWidth;
@@ -100,11 +107,11 @@ export default {
     cancelEvent(ev) {
       const { target, currentTarget } = ev;
       if (target === currentTarget) return;
-      if (target.className === 'v-cell--normal' || contains(this.$vTableBody, target)) return;
+      if (target.className === 'v-cell--text' || contains(this.$vTableBody, target)) return;
       this.setClickedValues([]);
     },
     renderBodyXSpace() {
-      return <div class="v-body--x-space" style={{ height: `1px`, visibility: `hidden`, width: this.bodyWidth }} />;
+      return <div class="v-body--x-space" style={{ width: this.bodyWidth }} />;
     },
     renderBodyYSpace() {
       return <div class="v-body--y-space" />;
@@ -119,15 +126,14 @@ export default {
         </colgroup>
       );
     },
-    renderRows() {
+    renderRows(list, depth = 0) {
       const { getRowKey, selectionKeys, expandable, rowExpandedKeys, ellipsis } = this.$$table;
       const rows = [];
-      this.tableData.forEach(row => {
+      list.forEach(row => {
         // 行记录 索引
         const rowIndex = row.index;
         // 行记录 rowKey
         const rowKey = getRowKey(row, rowIndex);
-        const extraStys = this.rowStyle ? (_.isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
         const cls = [
           `v-body--row`,
           {
@@ -135,8 +141,8 @@ export default {
           }
         ];
         rows.push(
-          <tr key={rowKey} data-row-key={rowKey} class={cls} style={extraStys}>
-            {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey))}
+          <tr key={rowKey} data-row-key={rowKey} class={cls}>
+            {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey, depth))}
           </tr>
         );
         // 展开行
@@ -148,9 +154,10 @@ export default {
               [`col--ellipsis`]: ellipsis
             }
           ];
+          // 展开状态
           if (!rowExpandable(row) && rowExpandedKeys.includes(rowKey)) {
             rows.push(
-              <tr key={`expand_${rowKey}`} class="v-body--expanded-row" style={extraStys}>
+              <tr key={`expand_${rowKey}`} class="v-body--expanded-row">
                 <td colspan={this.flattenColumns.length} class={expandColumnCls}>
                   <div class="v-cell">{expandable.expandedRowRender(row)}</div>
                 </td>
@@ -158,10 +165,17 @@ export default {
             );
           }
         }
+        // 树表格
+        if (this.isTreeNode(row)) {
+          // 展开状态
+          if (rowExpandedKeys.includes(rowKey)) {
+            rows.push(...this.renderRows(row.children, depth + 1));
+          }
+        }
       });
       return rows;
     },
-    renderColumn(column, columnIndex, row, rowIndex, rowKey) {
+    renderColumn(column, columnIndex, row, rowIndex, rowKey, depth) {
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, isIE } = this.$$table;
       const { dataIndex, fixed, align, className, orderBy } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
@@ -189,7 +203,8 @@ export default {
             right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null
           }
         : null;
-      const extraStys = this.cellStyle ? (_.isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, columnIndex) : this.cellStyle) : null;
+      const trExtraStys = this.rowStyle ? (isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
+      const tdExtraStys = this.cellStyle ? (isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, columnIndex) : this.cellStyle) : null;
       return (
         <td
           key={dataIndex}
@@ -197,47 +212,54 @@ export default {
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
-          style={{ ...stys, ...extraStys }}
+          style={{ ...stys, ...trExtraStys, ...tdExtraStys }}
           onClick={ev => this.cellClickHandle(ev, row, column)}
           onDblclick={ev => this.cellDbclickHandle(ev, row, column)}
         >
-          <div class="v-cell">{this.renderCell(column, row, rowIndex, columnIndex, rowKey)}</div>
+          <div class="v-cell">{this.renderCell(column, row, rowIndex, columnIndex, rowKey, depth)}</div>
         </td>
       );
     },
-    renderCell(column, row, rowIndex, columnIndex, rowKey) {
-      const { expandable } = this.$$table;
+    renderCell(column, row, rowIndex, columnIndex, rowKey, depth) {
+      const { expandable, selectionKeys } = this.$$table;
       const { dataIndex, editRender, render } = column;
       const text = getCellValue(row, dataIndex);
       if (dataIndex === '__expandable__') {
         const { rowExpandable = noop } = expandable;
         // Expandable -> 受控组件
-        return !rowExpandable(row) ? <Expandable record={row} rowKey={rowKey} /> : null;
+        return !rowExpandable(row) && <Expandable record={row} rowKey={rowKey} />;
       }
       if (dataIndex === '__selection__') {
         // Selection -> 受控组件
-        return <Selection ref="selection" column={column} record={row} rowKey={rowKey} />;
+        return <Selection selectionKeys={selectionKeys} column={column} record={row} rowKey={rowKey} />;
       }
-      if (_.isFunction(editRender)) {
+      if (isFunction(editRender)) {
         // CellEdit -> UI 组件，无状态组件
         return <CellEdit column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
-      if (_.isFunction(render)) {
-        return render(text, row, column, rowIndex, columnIndex);
+      // Content Node
+      const vNodeText = isFunction(render) ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column);
+      if (this.isTreeNode(row) && dataIndex === this.firstDataIndex) {
+        // Tree Expandable + vNodeText
+        return [this.renderIndent(depth), <Expandable record={row} rowKey={rowKey} />, vNodeText];
       }
-      return this.renderText(text, column);
+      if (this.isTreeTable && dataIndex === this.firstDataIndex) {
+        // Node Indent
+        return [this.renderIndent(depth), vNodeText];
+      }
+      return vNodeText;
     },
     renderText(text, column) {
       const { dictItems, formatType } = column;
       const dicts = dictItems || [];
       const target = dicts.find(x => x.value == text);
-      let result = target ? target.text : text;
+      let result = target?.text ?? text;
       // 数据是数组的情况
       if (Array.isArray(text)) {
         result = text
           .map(x => {
             let target = dicts.find(k => k.value == x);
-            return target ? target.text : x;
+            return target?.text ?? x;
           })
           .join(',');
       }
@@ -252,16 +274,19 @@ export default {
       }
       return result;
     },
+    renderIndent(level) {
+      return level ? <span class={`v-cell--indent indent-level-${level}`} style={{ paddingLeft: `${level * config.treeTable.textIndent}px` }} /> : null;
+    },
     getSpan(row, column, rowIndex, columnIndex) {
       let rowspan = 1;
       let colspan = 1;
       const fn = this.$$table.spanMethod;
-      if (_.isFunction(fn)) {
+      if (isFunction(fn)) {
         const result = fn({ row, column, rowIndex, columnIndex });
         if (Array.isArray(result)) {
           rowspan = result[0];
           colspan = result[1];
-        } else if (_.isObject(result)) {
+        } else if (isObject(result)) {
           rowspan = result.rowspan;
           colspan = result.colspan;
         }
@@ -269,21 +294,24 @@ export default {
       return { rowspan, colspan };
     },
     cellClickHandle(ev, row, column) {
-      const { getRowKey, rowSelection, selectionKeys } = this.$$table;
+      const { getRowKey, rowSelection = {}, selectionKeys } = this.$$table;
       const { dataIndex } = column;
       const rowKey = getRowKey(row, row.index);
       if (['__expandable__', config.operationColumn].includes(dataIndex)) return;
-      // 处理选择列
-      if (dataIndex === '__selection__') {
-        const { type, rowSelectable = noop } = rowSelection;
-        if (rowSelectable(row)) return;
-        if (type === 'radio') {
-          return this.$refs['selection'].setRowSelection(rowKey);
-        }
-        if (type === 'checkbox') {
-          return this.$refs['selection'].toggleRowSelection(rowKey, !selectionKeys.includes(rowKey));
+      // 不可编辑单元格
+      if (!column.editRender) {
+        let { type, disabled = noop } = rowSelection;
+        if (type && !disabled(row)) {
+          if (type === 'radio') {
+            this.setSelectionKeys([rowKey]);
+          }
+          if (type === 'checkbox') {
+            this.setSelectionKeys(!selectionKeys.includes(rowKey) ? [...new Set([...selectionKeys, rowKey])] : selectionKeys.filter(x => x !== rowKey));
+          }
         }
       }
+      // 单击 展开列、可选择列、操作列 不触发行单击事件
+      if (['__selection__'].includes(dataIndex)) return;
       this.setClickedValues([rowKey, dataIndex]);
       this.$$table.$emit('rowClick', row, column, ev);
     },
@@ -293,19 +321,25 @@ export default {
       this.$$table.$emit('rowDblclick', row, column, ev);
     },
     setClickedValues(arr) {
-      if (_.isEqual(arr, this.clicked)) return;
+      if (isEqual(arr, this.clicked)) return;
       this.clicked = arr;
+    },
+    setSelectionKeys(arr) {
+      this.$$table.selectionKeys = arr;
+    },
+    isTreeNode(row) {
+      return Array.isArray(row.children) && row.children.length > 0;
     }
   },
   render() {
-    const { bodyWidth, wrapStyle } = this;
+    const { bodyWidth, wrapStyle, tableData } = this;
     return (
       <div class="v-table--body-wrapper body--wrapper" style={{ ...wrapStyle }}>
-        {this.renderBodyXSpace()}
         {this.renderBodyYSpace()}
+        {this.renderBodyXSpace()}
         <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
-          <tbody>{this.renderRows()}</tbody>
+          <tbody>{this.renderRows(tableData)}</tbody>
         </table>
       </div>
     );

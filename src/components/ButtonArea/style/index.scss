@@ -1,0 +1,31 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 11:51:41
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-btn-area--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0;
+  .el-button {
+    margin: 0 0 $padding-base !important;
+  }
+  &.btn-align-left {
+    justify-content: flex-start;
+    & > * {
+      margin-right: $padding-base !important;
+    }
+  }
+  &.btn-align-right {
+    justify-content: flex-end;
+    & > * {
+      margin-left: $padding-base !important;
+    }
+  }
+}

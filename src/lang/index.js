@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-04-30 14:59:03
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 20:07:14
+ * @Last Modified time: 2020-05-25 08:13:18
  */
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import elementEnLocale from 'element-ui/lib/locale/lang/en'; // element-ui lang
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'; // element-ui lang
-import vTableEnLocale from '@/components/VirtualTable/packages/lang/en'; // VirtualTable lang
-import vTableZhLocale from '@/components/VirtualTable/packages/lang/zh'; // VirtualTable lang
+import vDesignEnLocale from '../components/locale/lang/en';
+import vDesignZhLocale from '../components/locale/lang/zh';
 import enLocale from './en';
 import zhLocale from './zh';
 
@@ -19,12 +19,12 @@ const messages = {
   en: {
     ...enLocale,
     ...elementEnLocale,
-    ...vTableEnLocale
+    ...vDesignEnLocale
   },
   zh: {
     ...zhLocale,
     ...elementZhLocale,
-    ...vTableZhLocale
+    ...vDesignZhLocale
   }
 };
 

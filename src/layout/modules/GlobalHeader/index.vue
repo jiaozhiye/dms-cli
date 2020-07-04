@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <span class="trigger fl" @click="clickHandler">
-      <i :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']" />
-    </span>
-    <div class="action fr">
+    <div class="box fl">
+      <slot name="collapse" />
+    </div>
+    <div class="box fr">
       <slot name="action" />
     </div>
     <div class="menus">
@@ -17,59 +17,27 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-30 15:54:00
+ * @Last Modified time: 2020-05-18 08:15:07
  **/
 export default {
-  name: 'GlobalHeader',
-  props: {
-    collapsed: {
-      type: Boolean,
-      default: false
-    },
-    toggle: {
-      type: Function,
-      default: () => {}
-    }
-  },
-  data() {
-    return {
-      isCollapse: this.collapsed
-    };
-  },
-  methods: {
-    clickHandler() {
-      this.isCollapse = !this.isCollapse;
-      this.toggle(this.isCollapse);
-    }
-  }
+  name: 'GlobalHeader'
 };
 </script>
 
 <style lang="scss" scoped>
 .header {
-  height: 60px;
+  height: 56px;
   margin: 0 -20px;
   background-color: #fff;
   border-bottom: 1px solid $borderColor;
   position: relative;
   z-index: 3;
-  .trigger {
-    display: inline-block;
-    font-size: 24px;
-    line-height: 60px;
-    padding: 0 20px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-  }
   .menus {
-    margin: 0 240px 0 65px;
-    padding-top: 20px;
+    margin: 0 240px 0 60px;
+    padding-top: 16px;
   }
-  .action {
-    height: 60px;
+  .box {
+    height: 100%;
   }
 }
 </style>

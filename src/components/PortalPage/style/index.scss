@@ -1,0 +1,30 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-06-12 16:56:47
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-portal--wrapper';
+
+.#{$prefix-cls} {
+  width: 100%;
+  height: 100%;
+  .form {
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    display: none;
+  }
+  .t-iframe {
+    display: none;
+  }
+  .s-iframe {
+    display: block;
+    margin: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

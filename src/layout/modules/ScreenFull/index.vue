@@ -1,15 +1,9 @@
-<template>
-  <div class="v-screen-full">
-    <SvgIcon class="screenfull-svg" :icon-class="isFullscreen ? 'exit-fullscreen' : 'fullscreen'" @click="clickHandle" />
-  </div>
-</template>
-
 <script>
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 09:02:34
+ * @Last Modified time: 2020-06-28 19:27:17
  **/
 import screenfull from 'screenfull';
 
@@ -27,35 +21,45 @@ export default {
     this.destroy();
   },
   methods: {
-    clickHandle() {
-      screenfull.toggle();
-    },
-    change() {
-      this.isFullscreen = screenfull.isFullscreen;
-    },
     init() {
       if (screenfull.enabled) {
         screenfull.on('change', this.change);
       }
+    },
+    change() {
+      this.isFullscreen = screenfull.isFullscreen;
+    },
+    clickHandle() {
+      screenfull.toggle();
     },
     destroy() {
       if (screenfull.enabled) {
         screenfull.off('change', this.change);
       }
     }
+  },
+  render() {
+    const cls = [`iconfont`, this.isFullscreen ? `icon-fullscreen-exit` : `icon-fullscreen`];
+    return (
+      <div class="v-screen-full" onClick={this.clickHandle}>
+        <i class={cls} />
+      </div>
+    );
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .v-screen-full {
-  /deep/ .screenfull-svg {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    padding: 5px;
-    fill: $textColor;
-    cursor: pointer;
+  display: flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  i {
+    font-size: 22px;
+    font-weight: 700;
   }
 }
 </style>

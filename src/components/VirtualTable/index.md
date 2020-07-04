@@ -2,78 +2,81 @@
 
 ### Table
 
-| 参数             | 说明                                      | 类型                                                   | 默认值  |
-| ---------------- | ----------------------------------------- | ------------------------------------------------------ | ------- |
-| columns          | 表格列的配置，[配置项](#column)，必要参数 | array                                                  | -       |
-| columnsChange    | 表格列变化事件，必要参数                  | Function(columns)                                      | -       |
-| dataSource       | 数据数组                                  | array                                                  | -       |
-| rowKey           | 表格行 key 的取值，可以是字符串或一个函数 | string\|Function(row, index) => string                 | uid     |
-| fetch            | 向后台请求数据的接口，[配置项](#fetch)    | object                                                 | -       |
-| border           | 是否带有纵向边框                          | boolean                                                | true    |
-| height           | 表格的高度，单位 px                       | number \| auto                                         | -       |
-| maxHeight        | 表格的最大高度，单位 px                   | number                                                 | -       |
-| loading          | 页面是否加载中                            | boolean                                                | false   |
-| resizable        | 所有列是否允许拖动列宽调整大小            | boolean                                                | true    |
-| size             | 表格尺寸                                  | default \| medium \| small \| mini                     | default |
-| cacheColumnsKey  | 存储列配置的字段名，不能重复              | string                                                 | -       |
-| showHeader       | 是否显示表头                              | boolean                                                | true    |
-| ellipsis         | 设置所有内容过长时显示为省略号            | boolean                                                | true    |
-| rowStyle         | 给行附加样式                              | object \| Function(row, rowIndex)                      | -       |
-| cellStyle        | 给单元格附加样式                          | object \| Function(row, column, rowIndex, columnIndex) | -       |
-| spanMethod       | 合并行或列的计算方法                      | Function({row, column, rowIndex, columnIndex})         | -       |
-| rowSelection     | 列表项是否可选择，[配置项](#rowSelection) | object                                                 | -       |
-| expandable       | 展开行配置项，[配置项](#expandable)       | object                                                 | -       |
-| clientSorter     | 是否开启客户端表头排序                    | boolean                                                | true    |
-| clientFilter     | 是否开启客户端表头筛选                    | boolean                                                | true    |
-| showAlert        | 是否显示表格信息                          | boolean                                                | true    |
-| showFullScreen   | 是否显示全屏按钮                          | boolean                                                | true    |
-| showRefresh      | 是否显示刷新按钮                          | boolean                                                | true    |
-| exportExcel      | 导出表格数据，[配置项](#exportExcel)      | object                                                 | -       |
-| tablePrint       | 表格打印，[配置项](#tablePrint)           | object                                                 | -       |
-| showColumnDefine | 是否显示列定义                            | boolean                                                | true    |
+| 参数             | 说明                                      | 类型                                                   | 默认值 |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ | ------ |
+| columns          | 表格列的配置，[配置项](#column)，必要参数 | array                                                  | -      |
+| columnsChange    | 表格列变化事件，必要参数                  | Function(columns)                                      | -      |
+| dataSource       | 数据数组                                  | array                                                  | -      |
+| rowKey           | 表格行 key 的取值，可以是字符串或一个函数 | string\|Function(row, index) => string                 | uid    |
+| fetch            | 向后台请求数据的接口，[配置项](#fetch)    | object                                                 | -      |
+| border           | 是否带有纵向边框                          | boolean                                                | true   |
+| height           | 表格的高度，单位 px                       | number \| auto                                         | -      |
+| maxHeight        | 表格的最大高度，单位 px                   | number                                                 | -      |
+| loading          | 页面是否加载中                            | boolean                                                | false  |
+| resizable        | 所有列是否允许拖动列宽调整大小            | boolean                                                | true   |
+| size             | 表格尺寸                                  | default \| medium \| small \| mini                     | small  |
+| cacheColumnsKey  | 存储列配置的字段名，不能重复              | string                                                 | -      |
+| showHeader       | 是否显示表头                              | boolean                                                | true   |
+| ellipsis         | 设置所有内容过长时显示为省略号            | boolean                                                | true   |
+| rowStyle         | 给行附加样式                              | object \| Function(row, rowIndex)                      | -      |
+| cellStyle        | 给单元格附加样式                          | object \| Function(row, column, rowIndex, columnIndex) | -      |
+| spanMethod       | 合并行或列的计算方法                      | Function({row, column, rowIndex, columnIndex})         | -      |
+| rowSelection     | 列表项是否可选择，[配置项](#rowSelection) | object                                                 | -      |
+| expandable       | 展开行配置项，[配置项](#expandable)       | object                                                 | -      |
+| multipleSort     | 是否为多列排序模式                        | boolean                                                | true   |
+| webPagination    | 是否为前端内存分页                        | boolean                                                | false  |
+| showAlert        | 是否显示表格信息                          | boolean                                                | true   |
+| showFullScreen   | 是否显示全屏按钮                          | boolean                                                | true   |
+| showRefresh      | 是否显示刷新按钮                          | boolean                                                | true   |
+| exportExcel      | 导出表格数据，[配置项](#exportExcel)      | object                                                 | -      |
+| tablePrint       | 表格打印，[配置项](#tablePrint)           | object                                                 | -      |
+| showColumnDefine | 是否显示列定义                            | boolean                                                | true   |
 
 ### 事件
 
-| 事件名称    | 说明                       | 回调参数                                                                |
-| ----------- | -------------------------- | ----------------------------------------------------------------------- |
-| change      | 分页、排序、筛选变化时触发 | Function(pagination, filters, sorter, { currentDataSource: tableData }) |
-| dataChange  | 表格数据变化时触发         | Function(tableData)                                                     |
-| rowClick    | 行单击事件                 | Function(row, column, event)                                            |
-| rowDblclick | 行双击事件                 | Function(row, column, event)                                            |
+| 事件名称    | 说明                       | 回调参数                                                                                             |
+| ----------- | -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| change      | 分页、排序、筛选变化时触发 | Function(pagination, filters, sorter, { currentDataSource: tableData, allDataSource: allTableData }) |
+| dataChange  | 表格数据变化时触发         | Function(tableData)                                                                                  |
+| rowClick    | 行单击事件                 | Function(row, column, event)                                                                         |
+| rowDblclick | 行双击事件                 | Function(row, column, event)                                                                         |
 
 ### 方法
 
-| 方法名称         | 说明                                       | 参数                                       | 返回值 |
-| ---------------- | ------------------------------------------ | ------------------------------------------ | ------ |
-| CALCULATE_HEIGHT | 计算表格高度                               | -                                          | -      |
-| DO_REFRESH       | 执行查询接口，刷新表格数据                 | -                                          | -      |
-| GET_LOG          | 获取操作记录，非空校验、格式校验、更新记录 | -                                          | object |
-| INSERT_RECORDS   | 插入表格行数据                             | Function(rows \| row, bottom(默认) \| top) | -      |
-| FORM_VALIDATE    | 表格中的表单校验                           | -                                          | object |
+| 方法名称         | 说明                                           | 参数                                       | 返回值 |
+| ---------------- | ---------------------------------------------- | ------------------------------------------ | ------ |
+| CALCULATE_HEIGHT | 计算表格高度                                   | -                                          | -      |
+| DO_REFRESH       | 刷新表格数据，同时会清空列选中状态             | -                                          | -      |
+| GET_LOG          | 获取操作记录，非空校验、格式校验、数据操作记录 | -                                          | object |
+| CLEAR_LOG        | 清空表格操作记录                               | -                                          | -      |
+| INSERT_RECORDS   | 插入表格行数据                                 | Function(rows \| row, bottom(默认) \| top) | -      |
+| REMOVE_RECORDS   | 移除表格数据                                   | Function(rowKeys \| rows \| row )          | -      |
+| FORM_VALIDATE    | 表格中的表单校验                               | -                                          | object |
 
 ### column
 
-| 参数        | 说明                                           | 类型                                                         | 默认值 |
-| ----------- | ---------------------------------------------- | ------------------------------------------------------------ | ------ |
-| dataIndex   | 数据的 key，支持 `a.b.c` 的路径写法，必要参数  | string                                                       | -      |
-| title       | 列头显示文字，必要参数                         | string                                                       | -      |
-| width       | 列宽度/最小宽度                                | number                                                       | -      |
-| fixed       | 列固定（IE 下无效）                            | left \| right                                                | -      |
-| align       | 设置列的对齐方式                               | left \| center \| right                                      | left   |
-| hidden      | 是否隐藏列                                     | boolean                                                      | false  |
-| ellipsis    | 超过宽度将自动省略                             | boolean                                                      | false  |
-| className   | 列样式类名                                     | string                                                       | -      |
-| children    | 内嵌 children，以渲染分组表头                  | array                                                        |        |
-| sorter      | 列排序                                         | boolean \| func                                              | -      |
-| filter      | 列筛选，[配置项](#filter)                      | object                                                       | -      |
-| precision   | 数值类型字段的精度                             | number                                                       | -      |
-| formatType  | 字段的格式化类型，[配置项](#formatType)        | string                                                       | -      |
-| required    | 可编辑列是否必填                               | boolean                                                      | false  |
-| editRender  | 可编辑单元格，返回值请参考 [配置项](#editable) | Function(row, column):object                                 | -      |
-| dictItems   | 数据字典配置，[配置项](#item)                  | array                                                        | -      |
-| summation   | 底部合计，[配置项](#summation)                 | object                                                       | -      |
-| render      | 列渲染方法                                     | Function(text, row, column, rowIndex, cellIndex) => JSX Node | -      |
-| extraRender | 额外的列渲染方法，用于处理导出和打印数据       | Function(text, row, column, rowIndex, cellIndex):any         | -      |
+| 参数         | 说明                                           | 类型                                                              | 默认值 |
+| ------------ | ---------------------------------------------- | ----------------------------------------------------------------- | ------ |
+| dataIndex    | 数据的 key，支持 `a.b.c` 的路径写法，必要参数  | string                                                            | -      |
+| title        | 列头显示文字，必要参数                         | string                                                            | -      |
+| width        | 列宽度/最小宽度                                | number                                                            | -      |
+| fixed        | 列固定（IE 下无效）                            | left \| right                                                     | -      |
+| align        | 设置列的对齐方式                               | left \| center \| right                                           | left   |
+| hidden       | 是否隐藏列                                     | boolean                                                           | false  |
+| ellipsis     | 超过宽度将自动省略                             | boolean                                                           | false  |
+| className    | 列样式类名                                     | string                                                            | -      |
+| children     | 内嵌 children，以渲染分组表头                  | array                                                             |        |
+| sorter       | 列排序                                         | boolean \| func                                                   | -      |
+| filter       | 列筛选，[配置项](#filter)                      | object                                                            | -      |
+| precision    | 数值类型字段的精度                             | number                                                            | -      |
+| formatType   | 字段的格式化类型，[配置项](#formatType)        | string                                                            | -      |
+| required     | 可编辑列是否必填                               | boolean                                                           | false  |
+| editRender   | 可编辑单元格，返回值请参考 [配置项](#editable) | Function(row, column):object                                      | -      |
+| dictItems    | 数据字典配置，[配置项](#item)                  | array                                                             | -      |
+| summation    | 底部合计，[配置项](#summation)                 | object                                                            | -      |
+| groupSummary | 分组汇总                                       | boolean                                                           | false  |
+| render       | 列渲染方法                                     | Function(text, row, column, rowIndex, cellIndex):JSX Node         | -      |
+| extraRender  | 额外的列渲染方法，用于处理导出和打印数据       | Function(text, row, column, rowIndex, cellIndex):string \| number | -      |
 
 ### fetch
 
@@ -105,18 +108,19 @@
 
 ### editable
 
-| 参数     | 说明                                        | 类型                            | 默认值 |
-| -------- | ------------------------------------------- | ------------------------------- | ------ |
-| type     | 可编辑类型，[配置项](#editType)，必要参数   | string                          | -      |
-| items    | 下拉框的列表项，[配置项](#item)             | array                           | -      |
-| editable | 是否可编辑                                  | boolean                         | -      |
-| disabled | 是否禁用编辑功能，且禁止切换                | boolean                         | -      |
-| extra    | 可编辑表单的额外配置项，[配置项](#extra)    | object                          | -      |
-| rules    | 表单校验规则，数组值请参考[配置项](#rule)   | array                           | -      |
-| onInput  | 表单的 input 事件                           | Function(cell, row)             | -      |
-| onChange | 表单的 change 事件                          | Function(cell, row)             | -      |
-| onEnter  | 表单的 enter 事件                           | Function(cell, row)             | -      |
-| onClick  | 搜索帮助的单击事件，只对 search-helper 有效 | Function，[参数列表](#shParams) | -      |
+| 参数     | 说明                                          | 类型                            | 默认值 |
+| -------- | --------------------------------------------- | ------------------------------- | ------ |
+| type     | 可编辑类型，[配置项](#editType)，必要参数     | string                          | -      |
+| items    | 下拉框的列表项，[配置项](#item)               | array                           | -      |
+| editable | 是否可编辑                                    | boolean                         | -      |
+| disabled | 是否禁用编辑功能，且禁止切换                  | boolean                         | -      |
+| extra    | 可编辑表单的额外配置项，[配置项](#extra)      | object                          | -      |
+| helper   | 可编辑单元格搜索帮助配置项，[配置项](#helper) | object                          | -      |
+| rules    | 表单校验规则，数组值请参考[配置项](#rule)     | array                           | -      |
+| onInput  | 表单的 input 事件                             | Function(cell, row)             | -      |
+| onChange | 表单的 change 事件                            | Function(cell, row)             | -      |
+| onEnter  | 表单的 enter 事件                             | Function(cell, row)             | -      |
+| onClick  | 搜索帮助的单击事件，只对 search-helper 有效   | Function，[参数列表](#shParams) | -      |
 
 ### editType
 
@@ -170,6 +174,15 @@
 | falseValue | 针对 checkbox 生效 | string \| number | -      |
 | text       | 显示的文本         | string           | -      |
 | disabled   | 表单禁用状态       | boolean          | -      |
+| clearable  | 是否显示清除按钮   | boolean          | -      |
+
+### helper
+
+| 参数          | 说明                                                      | 类型  | 默认值 |
+| ------------- | --------------------------------------------------------- | ----- | ------ |
+| filters       | 顶部筛选条件配置，参考 TopFilter 组件，必要参数           | array | -      |
+| table         | 列表组件配置，[配置项](#table)，必要参数                  | array | -      |
+| fieldAliasMap | 表单字段与回传数据字段的映射，[配置项](#alias)， 必要参数 | func  | -      |
 
 ### rule
 
@@ -193,7 +206,7 @@
 | --------------- | -------------------- | -------------------------------------- | ------ |
 | type            | 选择类型，必要参数   | checkbox \| radio                      | -      |
 | selectedRowKeys | 选中项的 rowKey 数组 | array                                  | -      |
-| rowSelectable   | 是否允许行选择       | Function(row) => boolean               | -      |
+| disabled        | 是否允许行选择       | Function(row) => boolean               | -      |
 | onChange        | 选中项发生变化时触发 | Function(selectionKeys, selectionRows) | -      |
 
 ### expandable
@@ -219,9 +232,11 @@
 
 ## 注意
 
-在 Table 中，`dataSource` 和 `columns` 里的数据值都需要指定 `key` 值。对于 `dataSource` 默认将每列数据的 `key` 属性作为唯一的标识。
+1. 在 Table 中，`dataSource` 和 `columns` 里的数据值都需要指定 `key` 值。对于 `dataSource` 默认将每列数据的 `key` 属性作为唯一的标识。
 
-如果你的数据没有这个属性，务必使用 `rowKey` 来指定数据列的主键。若没有指定，控制台会出现缺少 key 的提示，表格组件也会出现各类奇怪的错误。
+2. 如果你的数据没有这个属性，务必使用 `rowKey` 来指定数据列的主键。若没有指定，控制台会出现缺少 key 的提示，表格组件也会出现各类奇怪的错误。
+
+3. 表格支持树形数据的展示，当数据中有 children 字段时会自动展示为树形表格，渲染形表格时，必须要指定 rowKey 且值不能为 index。
 
 ```bash
 // 比如你的数据主键是 uid
@@ -268,7 +283,7 @@ export default {
       selection: {
         type: 'checkbox',
         selectedRowKeys: this.selectedKeys,
-        rowSelectable: row => {
+        disabled: row => {
           return row.id === 3;
         },
         onChange: (val, rows) => {

@@ -1,0 +1,71 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 11:47:23
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-dialog--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  .el-dialog {
+    margin: 0 auto;
+    .el-dialog__header {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 15px;
+      box-sizing: border-box;
+      border-bottom: 1px solid $border-color-base;
+      .el-dialog__title {
+        font-size: 16px;
+      }
+      .el-dialog__headerbtn {
+        position: absolute;
+        top: 14px;
+        right: 15px;
+        font-size: 18px;
+        line-height: 1;
+      }
+    }
+    .el-dialog__body {
+      padding: 0;
+      height: calc(100% - 50px);
+      > .fullscreen-btn {
+        position: absolute;
+        right: 38px;
+        top: 15px;
+        color: #909090;
+        line-height: 1;
+        cursor: pointer;
+        &:hover {
+          color: $primary-color;
+        }
+        i {
+          font-size: 16px;
+          font-weight: 700;
+        }
+      }
+      > .container {
+        height: 100%;
+        padding: $padding-base;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
+    }
+    .el-dialog__footer {
+      padding: $padding-base 15px;
+      border-top: 1px solid $border-color-base;
+    }
+  }
+  // small
+  &-sm {
+    // ...
+  }
+  // large
+  &-lg {
+    // ...
+  }
+}

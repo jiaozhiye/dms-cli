@@ -1,0 +1,93 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-06-11 10:34:01
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-super-tab--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  width: 100%;
+  overflow: hidden;
+  .tab-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $border-color-base;
+    margin-bottom: $padding-base;
+    .tabs-nav-container {
+      height: 100%;
+      margin-bottom: -1px;
+      .tabs-nav-animated {
+        height: 100%;
+        position: relative;
+        .tabs-tab {
+          display: inline-block;
+          padding: 10px 12px;
+          transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+          cursor: pointer;
+          &.tab-active,
+          &:hover {
+            color: $primary-color;
+          }
+          &.no-events,
+          &.no-events:hover {
+            color: $disabled-color;
+            cursor: not-allowed;
+          }
+          &.tab-small {
+            padding: 8px 10px;
+          }
+          &.tab-large {
+            padding: 12px 16px;
+          }
+        }
+        .tabs-ink-bar {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          height: 2px;
+          z-index: 1;
+          background-color: $primary-color;
+          transform-origin: 0 50%;
+          transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+      }
+    }
+    .tabs-extra-content {
+      margin-right: $padding-base;
+    }
+  }
+  .tabs-content {
+    width: 100%;
+    .tabs-tabpane {
+      flex-shrink: 0;
+      width: 100%;
+      box-sizing: border-box;
+      height: 0;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      &.tabs-tabpane-active {
+        height: auto;
+        opacity: 1;
+      }
+    }
+  }
+  .tabs-content-animated {
+    display: flex;
+    flex-direction: row;
+    will-change: margin-left;
+    transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  // small
+  &-sm {
+    // ...
+  }
+  // large
+  &-lg {
+    // ...
+  }
+}

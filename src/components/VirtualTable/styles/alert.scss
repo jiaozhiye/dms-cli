@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:26:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-07 09:39:54
+ * @Last Modified time: 2020-05-30 14:26:12
  */
 .v-alert {
   position: relative;
   line-height: 1.5;
   word-wrap: break-word;
-  padding: 6px 10px 6px 30px;
+  padding: 5px 10px 4px 30px;
   border: 1px solid $v-table-border-color;
   border-radius: $v-border-radius;
   background-color: $v-table-header-background-color;
@@ -22,6 +22,7 @@
   }
   em {
     display: inline-block;
+    line-height: 1;
     color: $v-primary-color;
     padding: 0 $v-module-distance;
     margin-right: -5px;

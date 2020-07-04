@@ -1,0 +1,16 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 14:57:10
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2020-05-23 14:57:10
+ */
+// Sizing shortcuts
+
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin square($size) {
+  @include size($size, $size);
+}

@@ -3,14 +3,14 @@
     <div class="left">
       <div class="logo-wrap">
         <span>
-          <img src="@/assets/img/logo_yq.png" width="140" />
+          <img src="@/assets/img/logo_ep.png" width="140" />
         </span>
         <span>
           <img src="@/assets/img/logo_audi.png" width="240" />
         </span>
       </div>
       <div class="copy-wrap">
-        <img src="@/assets/img/login_copy.png" width="640" />
+        <!-- <img src="@/assets/img/login_copy.png" width="640" /> -->
       </div>
       <div class="btn-wrap">
         <a href="javascript:;" class="audi-button">
@@ -22,7 +22,8 @@
     <div class="right">
       <div class="wrap">
         <h3>
-          <img src="@/assets/img/login_title.png" width="260" />
+          <!-- <img src="@/assets/img/login_title.png" width="260" /> -->
+          Welcome to MEP
         </h3>
         <div class="main">
           <div class="top">
@@ -41,7 +42,7 @@
                   <el-form-item prop="password">
                     <el-input v-model="form.password" :type="passwordType" :placeholder="$t('login.password')" prefix-icon="el-icon-lock" auto-complete="on" @keyup.enter.native="loginHandle" />
                     <span class="show-pwd" @click="showPwdHandle">
-                      <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                      <i :class="['iconfont', passwordType === 'password' ? 'icon-eye-close' : 'icon-eye']" />
                     </span>
                   </el-form-item>
                 </el-form>
@@ -80,6 +81,10 @@
         </div>
       </div>
     </div>
+    <div v-if="!isWebkit" class="browser-alert tc">
+      您使用的浏览器版本过旧，为了更好的访问体验，请升级浏览器至
+      <a title="下载" href="https://dl.google.com/release2/chrome/SUNIxoKtCgg7dyJg8AWJDw_83.0.4103.116/83.0.4103.116_chrome_installer.exe">谷歌浏览器</a>
+    </div>
     <BaseDialog :visible.sync="actionWx.visible" :title="actionWx.title" width="500px" destroy-on-close>
       <div class="tc">
         <img :src="wxLoginQrcode" width="300" />
@@ -101,7 +106,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { sleep } from '@/utils';
-import { phone } from '@/utils/validate';
+import { phoneValidate } from '@/utils/validate';
 import { doLogin } from '@/api/login';
 import { language } from '@/mixins/langMixin';
 
@@ -140,7 +145,7 @@ export default {
       rules: {
         username: [{ required: true, message: this.$t('login.username'), trigger: 'blur' }],
         password: [{ required: true, message: this.$t('login.password'), trigger: 'blur' }],
-        phone: [{ required: true, validator: phone, trigger: 'blur' }]
+        phone: [{ required: true, validator: phoneValidate, trigger: 'blur' }]
       },
       passwordType: 'password',
       currentMark: 'user', // 当前标记
@@ -161,6 +166,9 @@ export default {
     };
   },
   computed: {
+    isWebkit() {
+      return this.isBrowseType('AppleWebKit') && !this.isBrowseType('Edge');
+    },
     scrollTranslate() {
       const index = this.labels.findIndex(x => x.value === this.currentMark);
       const val = -1 * (index / this.labels.length) * 100 + '%';
@@ -171,6 +179,9 @@ export default {
   },
   methods: {
     ...mapActions('app', ['createLoginInfo']),
+    isBrowseType(type) {
+      return navigator.userAgent.indexOf(type) > -1;
+    },
     clickHandler(type) {
       this.currentMark = type;
     },
@@ -196,9 +207,11 @@ export default {
         pwd: this.form.password
       });
       if (res.code === 200) {
+        const { jwt, rData = {} } = res.data;
         this.createLoginInfo({
-          name: res.data.rData.vRoleName,
-          token: res.data.jwt || 'jwt'
+          name: rData.vPersonName || '',
+          token: jwt || 'jwt',
+          vDealerName: rData.vDealerName || ''
         });
         this.$router.push({ path: '/' }).catch(() => {});
       }
@@ -215,12 +228,12 @@ export default {
   background-size: 100%;
   .left {
     flex: 1;
-    background: url(../../assets/img/login_left_bg.jpg) 100% 0 no-repeat;
+    background: url(../../assets/img/login_left_bg.jpg) 50% 50% no-repeat;
     background-size: cover;
     overflow-y: hidden;
     .logo-wrap {
       display: flex;
-      padding: 40px 50px 0;
+      padding: 40px 40px 0;
       justify-content: space-between;
       align-items: center;
     }
@@ -260,6 +273,10 @@ export default {
     overflow-y: auto;
     .wrap {
       padding: 15vh 40px 0;
+      > h3 {
+        font-size: 36px;
+        font-weight: 700;
+      }
       .main {
         padding-top: 10vh;
         .top {
@@ -301,12 +318,13 @@ export default {
               }
               .show-pwd {
                 position: absolute;
-                top: 0;
-                right: 10px;
-                font-size: 16px;
+                right: 5px;
                 color: $textColorSecondary;
                 cursor: pointer;
                 user-select: none;
+                i {
+                  font-size: 18px;
+                }
               }
               .forget {
                 margin-top: -5px;
@@ -345,6 +363,19 @@ export default {
           }
         }
       }
+    }
+  }
+  .browser-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    line-height: 2;
+    color: #f5222d;
+    background-color: #faad14;
+    a {
+      color: #1587ce;
+      text-decoration: underline;
     }
   }
 }

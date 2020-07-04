@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <SuperTabs :initial-value="defaultTabLabel" :tab-bar-gutter="15" animated>
-      <tab-panel :label="noticeList.title">
+      <tab-panel key="1" :label="noticeList.title">
         <div class="list">
           <ul v-if="noticeList.list.length">
             <li v-for="item in noticeList.list" :key="item.id">{{ item.title }}</li>
@@ -12,7 +12,7 @@
           </dl>
         </div>
       </tab-panel>
-      <tab-panel :label="messageList.title">
+      <tab-panel key="2" :label="messageList.title">
         <div class="list">
           <ul v-if="messageList.list.length">
             <li v-for="item in messageList.list" :key="item.id">{{ item.title }}</li>
@@ -23,7 +23,7 @@
           </dl>
         </div>
       </tab-panel>
-      <tab-panel :label="todoList.title">
+      <tab-panel key="3" :label="todoList.title">
         <div class="list">
           <ul v-if="todoList.list.length">
             <li v-for="item in todoList.list" :key="item.id">{{ item.title }}</li>
@@ -45,7 +45,7 @@ export default {
   name: 'InsideLetter',
   data() {
     return {
-      defaultTabLabel: this.$t('insideLetter.notice'),
+      defaultTabLabel: '1',
       noticeList: {
         title: this.$t('insideLetter.notice'),
         list: []
@@ -63,7 +63,6 @@ export default {
   mounted() {
     const title = `${this.$t('insideLetter.notice')}(${dataList.data.length})`;
     this.noticeList.list = dataList.data;
-    this.defaultTabLabel = title;
     this.noticeList.title = title;
   }
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-06 10:10:14
+ * @Last Modified time: 2020-05-26 14:44:36
  */
 'use strict';
 
@@ -11,11 +11,11 @@ const utils = require('./utils');
 const webpack = require('webpack');
 const config = require('../config');
 const { VueLoaderPlugin } = require('vue-loader');
-const ThemeColorReplacer = require('webpack-theme-color-replacer');
-const forElementUI = require('webpack-theme-color-replacer/forElementUI');
+const ThemeColorReplacer = require('webpack-custom-theme');
+const forElementUI = require('webpack-custom-theme/forElementUI');
 
 // 主题色
-const primaryColor = '#1890ff';
+const primaryColor = '#0d74b5';
 
 // Eslint 校验
 const createLintingRule = () => ({
@@ -45,9 +45,11 @@ module.exports = {
     alias: {
       vue$: 'vue/dist/vue.esm.js',
       '@': utils.resolve('src'),
+      '@test': utils.resolve('src/modules/test'),
       '@system': utils.resolve('src/modules/system'),
       '@sales': utils.resolve('src/modules/sales'),
       '@service': utils.resolve('src/modules/service'),
+      '@usedcar': utils.resolve('src/modules/usedcar'),
       '@others': utils.resolve('src/modules/others')
     }
   },
@@ -84,7 +86,7 @@ module.exports = {
         exclude: [utils.resolve('src/components/SvgIcon/svg')],
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: utils.assetsPath('img/[name].[ext]')
         }
       },
       {
@@ -92,7 +94,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('media/[name].[hash:7].[ext]')
+          name: utils.assetsPath('media/[name].[ext]')
         }
       },
       {
@@ -100,7 +102,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: utils.assetsPath('fonts/[name].[ext]')
         }
       }
     ]
@@ -114,7 +116,7 @@ module.exports = {
       }
     }),
     new ThemeColorReplacer({
-      fileName: utils.assetsPath('css/theme-colors.[contenthash:8].css'),
+      fileName: utils.assetsPath('css/theme-colors.css'),
       matchColors: [
         ...forElementUI.getElementUISeries(primaryColor), // element-ui 主题色
         primaryColor // 自定义主题色

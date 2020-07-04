@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 20:02:37
+ * @Last Modified time: 2020-06-10 09:04:48
  */
-import i18n from '../lang';
+import Locale from '../locale/mixin';
 
 export default {
   name: 'Alert',
+  mixins: [Locale],
   props: ['total', 'selectionKeys'],
   inject: ['$$table'],
   methods: {
@@ -21,14 +22,15 @@ export default {
     }
   },
   render() {
-    const { total, selectionKeys } = this.$$table;
+    const { total, rowSelection, selectionKeys } = this.$$table;
     return (
       <div class="v-alert">
         <i class="iconfont icon-info-circle-fill" />
         <span>
-          {i18n.t('alert.total', { total })}，{i18n.t('alert.selected', { total: selectionKeys.length })}
+          {this.t('table.alert.total', { total })}
+          {!!rowSelection ? `，${this.t('table.alert.selected', { total: selectionKeys.length })}` : ''}
         </span>
-        <em onClick={this.clearHandle}>{i18n.t('alert.clear')}</em>
+        <em onClick={this.clearHandle}>{this.t('table.alert.clear')}</em>
       </div>
     );
   }

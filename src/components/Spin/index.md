@@ -2,12 +2,12 @@
 
 ### Spin
 
-| 参数           | 说明                                            | 类型                      | 默认值  |
-| -------------- | ----------------------------------------------- | ------------------------- | ------- |
-| spinning       | 是否加载中状态，必选参数                        | boolean                   | false   |
-| size           | 尺寸                                            | small \| default \| large | default |
-| tip            | 自定义描述文字                                  | string                    |         |
-| containerStyle | 外层容器的 style 样式，此样式会再加载过后被移除 | object                    | -       |
+| 参数           | 说明                     | 类型                      | 默认值  |
+| -------------- | ------------------------ | ------------------------- | ------- |
+| spinning       | 是否加载中状态，必选参数 | boolean                   | false   |
+| size           | 尺寸                     | small \| default \| large | default |
+| tip            | 自定义描述文字           | string                    |         |
+| containerStyle | 外层容器的 style 样式    | object                    | -       |
 
 ### 示例
 

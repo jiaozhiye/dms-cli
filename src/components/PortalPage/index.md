@@ -24,12 +24,7 @@
   <portal-page loginUrl="https://portal.faw-vw.com/pkmslogin.form" :loginParams="params" pageUrl="https://portal.faw-vw.com/EP/topicSource/toInsert.do" @success="successHandle" />
 </template>
 
-import PortalPage from '@/components/PortalPage';
-
 export default {
-  components: {
-    PortalPage
-  },
   data() {
     return {
       params: {

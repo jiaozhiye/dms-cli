@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:46:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 23:25:54
+ * @Last Modified time: 2020-07-02 20:08:13
  */
 .v-pager {
   height: $v-table-row-height-default;
@@ -33,7 +33,7 @@
     .v-pager--num-btn,
     .v-pager--jump-next {
       background-color: #f4f4f5;
-      &:hover {
+      &:hover:not(.is--active) {
         color: $v-primary-color;
       }
       &.is--active {
@@ -156,6 +156,10 @@
   .v-pager--jump .v-pager--goto,
   .v-pager--sizes > .el-input {
     height: 30px;
+    .el-input__inner,
+    .el-input__icon {
+      line-height: 1;
+    }
   }
   .v-pager--sizes > .v-select--panel .v-select-option {
     height: 22px;

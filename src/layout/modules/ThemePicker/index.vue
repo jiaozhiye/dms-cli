@@ -3,7 +3,7 @@
     v-model="theme"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
-    :predefine="['#1890ff', '#2f54eb', '#722ed1', '#11a983', '#13c2c2', '#52c41a', '#304156', '#f5222d', '#fa541c', '#faad14']"
+    :predefine="['#0d74b5', '#1890ff', '#001e50', '#722ed1', '#11a983', '#13c2c2', '#52c41a', '#f5222d', '#fa541c', '#faad14']"
     @change="changeThemeColor"
   />
 </template>
@@ -13,41 +13,22 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 19:44:29
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 15:44:58
+ * @Last Modified time: 2020-05-17 16:56:33
  */
-import client from 'webpack-theme-color-replacer/client';
-import forElementUI from 'webpack-theme-color-replacer/forElementUI';
-
-const savedColor = localStorage.getItem('theme');
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'ThemePicker',
   data() {
-    this.defaultTheme = this.$store.state.app.theme;
     return {
-      theme: savedColor || this.defaultTheme
+      theme: localStorage.getItem('theme') || this.$store.state.app.theme
     };
   },
-  mounted() {
-    this.initThemeColor();
-  },
   methods: {
-    initThemeColor() {
-      if (savedColor && savedColor !== this.defaultTheme) {
-        this.changeThemeColor(savedColor);
-      }
-    },
+    ...mapActions('app', ['emitThemeColor', 'createThemeColor']),
     changeThemeColor(newColor) {
-      const options = {
-        newColors: [...forElementUI.getElementUISeries(newColor), newColor],
-        changeUrl: cssUrl => {
-          // 当 router 不是 hash mode 时，它需要将 url 更改为绝对路径(以 / 开头)
-          return `/${cssUrl}`;
-        }
-      };
-      return client.changer.changeColor(options, Promise).then(x => {
-        localStorage.setItem('theme', newColor);
-      });
+      this.emitThemeColor(newColor);
+      this.createThemeColor(newColor);
     }
   }
 };
@@ -55,16 +36,16 @@ export default {
 
 <style lang="scss">
 .theme-picker {
-  height: 30px;
-  margin-left: 4px;
+  width: 26px;
+  height: 26px;
   .el-color-picker__trigger {
-    height: 30px;
-    width: 30px;
-    border-radius: $borderRadius;
+    height: 100%;
+    width: 100%;
+    border: 0;
   }
 }
 .theme-picker-dropdown {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-left: -230px;
   .el-color-dropdown__link-btn {
     display: none;

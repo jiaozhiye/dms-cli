@@ -1,0 +1,63 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-29 09:25:42
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-anchor--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  .labels {
+    width: 80px;
+    height: 100%;
+    margin-right: $padding-base;
+    border-right: 1px solid $border-color-base;
+    li {
+      height: 36px;
+      padding-right: $padding-base;
+      position: relative;
+      cursor: pointer;
+      &.selected {
+        color: $primary-color;
+        &::after {
+          content: '';
+          position: absolute;
+          right: -2px;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          background-color: $primary-color;
+        }
+      }
+      span {
+        @include text-overflow-cut();
+        display: block;
+        line-height: 36px;
+        text-align: right;
+      }
+    }
+  }
+  .scroll-wrapper {
+    flex: 1;
+    margin-right: -$padding-base;
+    padding-right: $padding-base;
+    height: 100%;
+    position: relative;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+  }
+  // small
+  &-sm {
+    // ...
+  }
+  // large
+  &-lg {
+    // ...
+  }
+}

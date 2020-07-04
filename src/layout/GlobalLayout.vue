@@ -3,10 +3,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 14:47:51
+ * @Last Modified time: 2020-05-17 17:58:41
  */
 import SideMenu from './modules/SideMenu';
 import GlobalHeader from './modules/GlobalHeader';
+import MenuFold from './modules/MenuFold';
 import HeadNavBar from './modules/HeadNavBar';
 import MultiTab from './modules/MultiTab';
 import Breadcrumb from './modules/Breadcrumb';
@@ -40,8 +41,9 @@ export default {
         </el-aside>
         {/* width: 0 -> 解决 IE bug */}
         <el-container style={{ width: 0 }}>
-          <el-header>
-            <GlobalHeader collapsed={collapsed} toggle={this.changeHandle}>
+          <el-header style={{ height: '56px' }}>
+            <GlobalHeader>
+              <MenuFold slot="collapse" collapsed={collapsed} onChange={this.changeHandle} />
               <MultiTab slot="menu" />
               <HeadNavBar slot="action" />
             </GlobalHeader>
@@ -71,7 +73,7 @@ export default {
     overflow-x: hidden;
     .route-view {
       flex: 1;
-      padding: $modulePadding $modulePadding 0;
+      padding: 10px 10px 0;
       box-sizing: border-box;
     }
     &.bg-color {

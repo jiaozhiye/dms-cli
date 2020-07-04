@@ -35,10 +35,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 07:41:03
+ * @Last Modified time: 2020-06-20 10:48:52
  **/
 import { mapState, mapActions } from 'vuex';
-import _ from 'lodash';
+import { flatten } from 'lodash';
 import { notifyAction } from '@/utils';
 import pinyin, { STYLE_FIRST_LETTER } from '@/components/Pinyin/index';
 
@@ -79,7 +79,7 @@ export default {
     },
     createFilter(queryString) {
       return state => {
-        const pyt = _.flatten(pinyin(state.title, { style: STYLE_FIRST_LETTER })).join('');
+        const pyt = flatten(pinyin(state.title, { style: STYLE_FIRST_LETTER })).join('');
         const str = `${state.title}|${pyt}`;
         return str.toLowerCase().includes(queryString.toLowerCase());
       };
@@ -135,6 +135,9 @@ export default {
           background: $allMenuBgColor;
           border: none;
           border-bottom: 1px solid #626466;
+          &:-ms-input-placeholder {
+            color: $menuText !important;
+          }
         }
       }
     }

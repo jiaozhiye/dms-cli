@@ -24,7 +24,7 @@
 
 <script>
 import { language } from '@/mixins/langMixin';
-import { phone } from '@/utils/validate';
+import { phoneValidate } from '@/utils/validate';
 
 export default {
   mixins: [language],
@@ -36,7 +36,7 @@ export default {
       },
       newPassword: '',
       rules: {
-        phone: [{ required: true, validator: phone, trigger: 'blur' }]
+        phone: [{ required: true, validator: phoneValidate, trigger: 'blur' }]
       },
       isNextStep: false
     };

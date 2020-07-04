@@ -1,44 +1,23 @@
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2019-06-20 10:00:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 12:49:13
  */
 import Vue from 'vue';
+import PropTypes from '../_utils/vue-types';
 
 export default {
   props: {
-    autoMount: {
-      type: Boolean,
-      default: true
-    },
-    autoDestroy: {
-      type: Boolean,
-      default: true
-    },
-    visible: {
-      type: Boolean
-    },
-    forceRender: {
-      type: Boolean,
-      default: false
-    },
+    autoMount: PropTypes.bool.def(true),
+    autoDestroy: PropTypes.bool.def(true),
+    visible: PropTypes.bool,
+    forceRender: PropTypes.bool.def(false),
     // 任意类型
-    parent: {
-      type: null
-    },
-    getComponent: {
-      type: Function,
-      required: true
-    },
-    getContainer: {
-      type: Function,
-      required: true
-    },
-    children: {
-      type: Function,
-      required: true
-    }
+    parent: PropTypes.any,
+    getComponent: PropTypes.func.isRequired,
+    getContainer: PropTypes.func.isRequired,
+    children: PropTypes.func.isRequired
   },
   data() {
     this.componentEl = null;

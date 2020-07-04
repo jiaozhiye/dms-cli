@@ -9,10 +9,10 @@
           <el-radio-button label="1004">本年</el-radio-button>
         </el-radio-group>
       </div>
-      <tab-panel label="成交量">
+      <tab-panel key="1" label="成交量">
         <Chart1 :fetchapi="() => {}" :params="fetchParams" :container-style="{ height: '345px' }" />
       </tab-panel>
-      <tab-panel label="同比增长">
+      <tab-panel key="2" label="同比增长">
         <Chart2 :fetchapi="() => {}" :params="fetchParams" :container-style="{ height: '345px' }" />
       </tab-panel>
     </SuperTabs>
@@ -33,10 +33,10 @@ export default {
   mixins: [language],
   data() {
     return {
+      defaultTabLabel: '1',
       fetchParams: {
         radioValue: '1001'
-      },
-      defaultTabLabel: '成交量'
+      }
     };
   },
   methods: {

@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 22:18:43
+ * @Last Modified time: 2020-06-20 11:12:13
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
-import i18n from '../lang';
+import Locale from '../locale/mixin';
 import _ from 'lodash';
 
 export default {
   name: 'PrintTable',
+  mixins: [Locale],
   props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter', 'showLogo'],
   inject: ['$$table'],
   data() {
@@ -97,13 +98,12 @@ export default {
       });
     },
     doMerge(columns, mark) {
-      return _(_.cloneDeep(columns))
-        .flatten()
+      return _(_.flatten(columns))
         .groupBy(mark)
         .map(
           _.spread((...values) => {
             return _.mergeWith(...values, (objValue, srcValue) => {
-              if (_.isArray(objValue)) {
+              if (Array.isArray(objValue)) {
                 return this.doMerge(objValue.concat(srcValue), mark);
               }
             });
@@ -184,8 +184,8 @@ export default {
       return html + `</body></html>`;
     },
     _toTable(columnRows, flatColumns) {
-      const { tableFullData, $$tableFooter } = this.$$table;
-      const summationRows = this.showFooter ? $$tableFooter.summationRows : [];
+      const { tableFullData, $refs } = this.$$table;
+      const summationRows = this.showFooter ? $refs[`tableFooter`].summationRows : [];
       let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns.map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px"}>`).join('')}</colgroup>`;
       if (this.showHeader) {
@@ -221,10 +221,10 @@ export default {
         <table class="no-border" width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="50%" align="left">
-              <img src="${baseUrl}/static/img/logo_l.png" border="0" width="120" />
+              <img src="${baseUrl}/static/img/logo_l.png" border="0" height="26" />
             </td>
             <td width="50%" align="right">
-              <img src="${baseUrl}/static/img/logo_r.png" border="0" width="240" height="36" />
+              <img src="${baseUrl}/static/img/logo_r.png" border="0" height="36" />
             </td>
           </tr>
         </table>
@@ -245,7 +245,7 @@ export default {
   render() {
     return (
       <span class="v-print--wrapper" onClick={this.printHandle}>
-        <i class="iconfont icon-printer" /> {i18n.t('print.text')}
+        <i class="iconfont icon-printer" /> {this.t('table.print.text')}
       </span>
     );
   }

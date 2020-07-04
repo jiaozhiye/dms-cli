@@ -1,0 +1,220 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-07-04 11:13:57
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-form-panel';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  .el-col {
+    min-height: 32px;
+    margin-bottom: 12px;
+    &[type='FIXED'] {
+      height: 32px !important;
+    }
+    .el-form-item {
+      margin-bottom: 0;
+      .el-form-item__label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        line-height: 1.2;
+        height: 32px;
+        font-size: $font-size-base;
+        padding-right: 6px;
+        .label-wrap {
+          display: inline-block;
+          .el-input__inner {
+            border-color: $border-color-base;
+            & + span.el-input__suffix {
+              right: 0;
+            }
+          }
+        }
+      }
+      .el-form-item__content {
+        .el-form-item__error {
+          margin-top: -2px;
+          transform-origin: 0 50%;
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+      }
+      .el-select {
+        width: 100%;
+        .el-select__tags {
+          height: 24px;
+          overflow-y: auto;
+          .el-select__input {
+            height: inherit;
+          }
+        }
+      }
+      .el-autocomplete {
+        width: 100%;
+      }
+      .el-date-editor {
+        width: 100%;
+      }
+      .range-date {
+        display: flex;
+        border: 1px solid $border-color-base;
+        border-radius: $border-radius-base;
+        transition: border-color 0.3s ease;
+        &:hover:not(.disabled) {
+          border-color: #b8b8b8;
+        }
+        * {
+          line-height: 30px;
+        }
+        .el-date-editor {
+          input {
+            border: 0 !important;
+            height: 30px;
+            padding-right: 0;
+          }
+          &:nth-of-type(1) {
+            input {
+              padding-left: 30px;
+            }
+            .el-input__suffix {
+              right: -5px;
+            }
+          }
+          &:nth-of-type(2) {
+            input {
+              padding-left: 25px;
+            }
+            .el-input__prefix {
+              left: 0;
+            }
+            .el-input__suffix {
+              right: 0;
+            }
+          }
+        }
+        &.disabled {
+          background-color: $disabled-bg;
+          .is-disabled {
+            color: $disabled-color;
+            cursor: not-allowed;
+          }
+        }
+      }
+      .el-textarea {
+        display: block;
+        .el-textarea__inner {
+          font-family: inherit;
+          overflow-y: auto;
+        }
+        .el-input__count {
+          line-height: 1;
+          right: 6px;
+        }
+      }
+      .el-input-number {
+        width: 100%;
+        .el-input__inner {
+          text-align: left !important;
+        }
+        .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
+        .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+          border-color: $border-color-base;
+        }
+      }
+      .el-range-editor {
+        padding-right: 5px;
+        .el-range-separator {
+          padding-left: 0;
+          padding-right: 0;
+        }
+        .el-range__close-icon {
+          width: 20px;
+        }
+      }
+      .desc-icon {
+        padding: 7px 6px;
+        font-size: 18px;
+        vertical-align: top;
+      }
+      .desc-text {
+        font-size: $font-size-base;
+        vertical-align: top;
+        cursor: default;
+      }
+      &.is-required {
+        .el-form-item__label {
+          color: $error-color;
+        }
+      }
+      &.is-error {
+        .range-date {
+          border-color: $error-color;
+          &:hover {
+            border-color: $error-color !important;
+          }
+        }
+      }
+    }
+  }
+  &-show {
+    .el-col {
+      .el-form-item {
+        .is-disabled {
+          .el-input__inner,
+          .el-textarea__inner {
+            color: $text-color;
+            border-style: dashed;
+            background-color: #fff;
+          }
+          .el-input-group__append {
+            background-color: transparent;
+            border-style: dashed;
+          }
+        }
+        .range-date {
+          border-style: dashed;
+          background-color: #fff !important;
+        }
+      }
+    }
+  }
+  // small
+  &-sm {
+    .el-form-item__label {
+      font-size: $font-size-sm !important;
+    }
+    .desc-text {
+      font-size: $font-size-sm !important;
+    }
+  }
+  // large
+  &-lg {
+    .el-form-item__label {
+      font-size: $font-size-base !important;
+    }
+    .desc-text {
+      font-size: $font-size-base !important;
+    }
+  }
+}
+.input-tree {
+  .input-tree-wrap {
+    padding-right: $padding-base;
+    margin-right: -$padding-base;
+  }
+  .el-tree {
+    .el-tree-node[aria-disabled='true'] > .el-tree-node__content {
+      color: $disabled-color;
+      background: none;
+      cursor: not-allowed;
+      .is-leaf {
+        pointer-events: none;
+      }
+    }
+  }
+}

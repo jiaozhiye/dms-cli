@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 16:26:42
+ * @Last Modified time: 2020-07-01 15:55:39
  */
 import Popper from '../popper';
 
 import { isEmpty, validateNumber } from '../utils';
-import i18n from '../lang';
+import { isUndefined } from 'lodash';
+import Locale from '../locale/mixin';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -16,10 +17,12 @@ import { PopupManager } from 'element-ui/lib/utils/popup';
 
 export default {
   name: 'THeadFilter',
+  mixins: [Locale],
   props: ['column', 'filters'],
   inject: ['$$header'],
   data() {
     this.arrayTypes = ['checkbox', 'range-number', 'range-date'];
+    this.defaultVal = this.arrayTypes.includes(this.column.filter.type) ? [] : undefined;
     return {
       showPopper: false,
       filterValues: this.initialFilterValue()
@@ -46,12 +49,16 @@ export default {
     }
   },
   methods: {
-    popperVisibleHandle({ showPopper }) {
+    popperVisibleHandle(showPopper) {
+      if (showPopper) {
+        let { dataKey } = this;
+        this.filterValues[dataKey] = isUndefined(this.filters[dataKey]) ? this.defaultVal : this.filters[dataKey];
+      }
       this.showPopper = showPopper;
     },
     initialFilterValue() {
       const { dataIndex, filter } = this.column;
-      return { [`${filter.type}|${dataIndex}`]: this.arrayTypes.includes(filter.type) ? [] : undefined };
+      return { [`${filter.type}|${dataIndex}`]: this.defaultVal };
     },
     doFinish() {
       const cloneFilters = { ...this.filters };
@@ -91,10 +98,10 @@ export default {
       return (
         <div style="padding: 10px 0 6px">
           <el-button type="primary" size="mini" onClick={this.doFinish}>
-            {i18n.t('filter.search')}
+            {this.t('table.filter.search')}
           </el-button>
           <el-button size="mini" onClick={this.doReset}>
-            {i18n.t('filter.reset')}
+            {this.t('table.filter.reset')}
           </el-button>
         </div>
       );
@@ -106,7 +113,7 @@ export default {
           <el-input
             size="small"
             v-model={this.filterValues[this.dataKey]}
-            placeholder={i18n.t('filter.searchText', { text: title })}
+            placeholder={this.t('table.filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -128,7 +135,7 @@ export default {
               if (!validateNumber(val)) return;
               this.filterValues[this.dataKey] = val;
             }}
-            placeholder={i18n.t('filter.searchText', { text: title })}
+            placeholder={this.t('table.filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
               if (ev.keyCode === 13) {
@@ -154,7 +161,7 @@ export default {
               setValue([val, this.filterValues[this.dataKey][1]]);
             }}
             style={{ width: '93px' }}
-            placeholder={i18n.t('filter.startValuePlaceholder')}
+            placeholder={this.t('table.filter.startValuePlaceholder')}
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
                 setValue([endVal, this.filterValues[this.dataKey][1]]);
@@ -176,7 +183,7 @@ export default {
             }}
             min={startVal}
             style={{ width: '93px' }}
-            placeholder={i18n.t('filter.endValuePlaceholder')}
+            placeholder={this.t('table.filter.endValuePlaceholder')}
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
                 setValue([this.filterValues[this.dataKey][0], startVal]);
@@ -241,7 +248,14 @@ export default {
     dateHandle(column) {
       return (
         <div style="padding-top: 6px">
-          <el-date-picker size="small" type="date" v-model={this.filterValues[this.dataKey]} style={{ width: '180px' }} value-format="yyyy-MM-dd" placeholder={i18n.t('filter.datePlaceholder')} />
+          <el-date-picker
+            size="small"
+            type="date"
+            v-model={this.filterValues[this.dataKey]}
+            style={{ width: '180px' }}
+            value-format="yyyy-MM-dd"
+            placeholder={this.t('table.filter.datePlaceholder')}
+          />
         </div>
       );
     },
@@ -256,8 +270,8 @@ export default {
             style={{ width: '230px' }}
             value-format="yyyy-MM-dd"
             range-separator="-"
-            start-placeholder={i18n.t('filter.startDatePlaceholder')}
-            end-placeholder={i18n.t('filter.endDatePlaceholder')}
+            start-placeholder={this.t('table.filter.startDatePlaceholder')}
+            end-placeholder={this.t('table.filter.endDatePlaceholder')}
           />
         </div>
       );
@@ -265,6 +279,21 @@ export default {
   },
   render() {
     const { showPopper, isActived } = this;
+    const wrapProps = {
+      ref: 'vPopper',
+      props: {
+        trigger: 'clickToToggle',
+        rootClass: 'v-popper--wrapper',
+        transition: 'v-zoom-in-top',
+        options: { placement: 'bottom-end' },
+        containerStyle: { zIndex: PopupManager.nextZIndex() || 1000 },
+        appendToBody: true
+      },
+      on: {
+        show: this.popperVisibleHandle,
+        hide: this.popperVisibleHandle
+      }
+    };
     const filterBtnCls = [
       `v-filter-btn`,
       {
@@ -273,19 +302,8 @@ export default {
       }
     ];
     return (
-      <span class="v-cell--filter" title={i18n.t('filter.text')} onMousedown={ev => ev.stopPropagation()}>
-        <Popper
-          ref="vPopper"
-          trigger="clickToToggle"
-          root-class="v-popper--wrapper"
-          containerStyle={{ zIndex: PopupManager.nextZIndex() || 1000 }}
-          transition="v-zoom-in-top"
-          options={{ placement: 'bottom-end' }}
-          visible-arrow={false}
-          append-to-body={true}
-          onShow={this.popperVisibleHandle}
-          onHide={this.popperVisibleHandle}
-        >
+      <span class="v-cell--filter" title={this.t('table.filter.text')}>
+        <Popper {...wrapProps}>
           <div class={filterBtnCls} slot="reference">
             <i class="iconfont icon-filter-fill" />
           </div>

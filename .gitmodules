@@ -1,0 +1,18 @@
+[submodule "src/modules/system"]
+	path = src/modules/system
+	url = http://202.38.164.237/mep-vue/mep-vue-system.git
+[submodule "src/modules/sales"]
+	path = src/modules/sales
+	url = http://202.38.164.237/mep-vue/mep-vue-sales.git
+[submodule "src/modules/service"]
+	path = src/modules/service
+	url = http://202.38.164.237/mep-vue/mep-vue-service.git
+[submodule "src/modules/others"]
+	path = src/modules/others
+	url = http://202.38.164.237/mep-vue/mep-vue-others.git
+[submodule "src/modules/usedcar"]
+	path = src/modules/usedcar
+	url = http://202.38.164.237/mep-vue/mep-vue-usedcar.git
+[submodule "src/modules/lifecycle"]
+	path = src/modules/lifecycle
+	url = http://202.38.164.237/mep-vue/mep-vue-lifecycle.git

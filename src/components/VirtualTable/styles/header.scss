@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 12:20:26
+ * @Last Modified time: 2020-05-29 11:30:50
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -19,7 +19,6 @@
 .v-header--column {
   position: relative;
   user-select: none;
-
   &.v-column--required {
     .v-cell {
       &::before {
@@ -42,19 +41,21 @@
   /* 排序 */
   .v-cell--sort {
     position: absolute;
+    font-size: 12px;
+    width: 1em;
+    height: 20px;
     right: 0.5em;
     top: 50%;
     margin-top: -10px;
-    width: 12px;
-    height: 20px;
     text-align: left;
     .v-sort--asc-btn,
     .v-sort--desc-btn {
       position: absolute;
-      font-size: 12px;
+      font-size: inherit;
       line-height: 1;
       color: $v-icon-color;
       cursor: pointer;
+      transform: scale(0.9);
       &.sort--active {
         color: $v-primary-color;
       }

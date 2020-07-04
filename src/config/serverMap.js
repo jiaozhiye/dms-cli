@@ -2,23 +2,23 @@
  * @Author: 焦质晔
  * @Date: 2020-04-23 13:28:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-27 13:58:21
+ * @Last Modified time: 2020-05-23 13:40:50
  */
 const config = {
   dev: {
     host: '/'
   },
   tst: {
-    host: '//tst.xxx.com'
+    host: '/'
   },
   uat: {
-    host: '//uat.xxx.com'
+    host: '/'
   },
   pre: {
-    host: '//pre.xxx.com'
+    host: '/'
   },
   prod: {
-    host: '//xxx.com'
+    host: '/'
   }
 };
 

@@ -1,0 +1,28 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 14:57:20
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2020-05-23 14:57:20
+ */
+// Compatibility for browsers.
+
+// Placeholder text
+@mixin placeholder($color: $input-placeholder-color) {
+  // Firefox
+  &::-moz-placeholder {
+    color: $color;
+    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+  }
+  // Internet Explorer 10+
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+  // Safari and Chrome
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+
+  &:placeholder-shown {
+    text-overflow: ellipsis;
+  }
+}

@@ -1,0 +1,212 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-27 19:43:07
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-spin';
+
+// Spin Size
+$spin-dot-size-sm: 20px;
+$spin-dot-size: 28px;
+$spin-dot-size-lg: 36px;
+
+.#{$prefix-cls} {
+  @include reset-component();
+  position: absolute;
+  display: none;
+  color: $primary-color;
+  text-align: center;
+  vertical-align: middle;
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+
+  &-spinning {
+    position: static;
+    display: inline-block;
+    opacity: 1;
+  }
+
+  &-nested-loading {
+    position: relative;
+    > div > .#{$prefix-cls} {
+      position: absolute;
+      z-index: 4;
+      display: block;
+      width: 100%;
+      height: 100%;
+      .#{$prefix-cls}-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -$spin-dot-size / 2;
+      }
+      .#{$prefix-cls}-text {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        padding-top: 8px;
+      }
+      &.#{$prefix-cls}-show-text .#{$prefix-cls}-dot {
+        margin-top: -$spin-dot-size / 2 - 10px;
+      }
+    }
+
+    > div > .#{$prefix-cls}-sm {
+      .#{$prefix-cls}-dot {
+        margin: -$spin-dot-size-sm / 2;
+      }
+      .#{$prefix-cls}-text {
+        padding-top: 4px;
+        font-size: $font-size-sm;
+      }
+      &.#{$prefix-cls}-show-text .#{$prefix-cls}-dot {
+        margin-top: -$spin-dot-size-sm / 2 - 10px;
+      }
+    }
+
+    > div > .#{$prefix-cls}-lg {
+      .#{$prefix-cls}-dot {
+        margin: -$spin-dot-size-lg / 2;
+      }
+      .#{$prefix-cls}-text {
+        padding-top: 12px;
+        font-size: $font-size-lg;
+      }
+      &.#{$prefix-cls}-show-text .#{$prefix-cls}-dot {
+        margin-top: -$spin-dot-size-lg / 2 - 10px;
+      }
+    }
+  }
+
+  &-container {
+    position: relative;
+    transition: opacity 0.3s;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+  }
+
+  &-blur {
+    clear: both;
+    overflow: hidden;
+    opacity: 0.5;
+    user-select: none;
+    pointer-events: none;
+    &::after {
+      opacity: 0.4;
+      pointer-events: auto;
+    }
+  }
+
+  // dots
+  &-dot {
+    position: relative;
+    display: inline-block;
+
+    width: $spin-dot-size;
+    height: $spin-dot-size;
+
+    i {
+      position: absolute;
+      display: block;
+      width: 12px;
+      height: 12px;
+      background-color: $primary-color;
+      border-radius: 100%;
+      transform: scale(0.75);
+      transform-origin: 50% 50%;
+      opacity: 0.3;
+      animation: antSpinMove 1s infinite linear alternate;
+
+      &:nth-child(1) {
+        top: 0;
+        left: 0;
+      }
+      &:nth-child(2) {
+        top: 0;
+        right: 0;
+        animation-delay: 0.4s;
+      }
+      &:nth-child(3) {
+        right: 0;
+        bottom: 0;
+        animation-delay: 0.8s;
+      }
+      &:nth-child(4) {
+        bottom: 0;
+        left: 0;
+        animation-delay: 1.2s;
+      }
+    }
+
+    &-spin {
+      transform: rotate(45deg);
+      animation: antRotate 1.2s infinite linear;
+    }
+  }
+
+  // small
+  &-sm {
+    .#{$prefix-cls}-dot {
+      width: $spin-dot-size-sm;
+      height: $spin-dot-size-sm;
+      i {
+        width: 8px;
+        height: 8px;
+      }
+    }
+    .#{$prefix-cls}-text {
+      font-size: $font-size-sm;
+    }
+  }
+
+  // large
+  &-lg {
+    .#{$prefix-cls}-dot {
+      width: $spin-dot-size-lg;
+      height: $spin-dot-size-lg;
+      i {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .#{$prefix-cls}-text {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* IE10+ */
+  .#{$prefix-cls}-blur {
+    background: #fff;
+    opacity: 0.5;
+  }
+}
+
+@keyframes antSpinMove {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes antRotate {
+  to {
+    transform: rotate(405deg);
+  }
+}

@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 22:18:53
+ * @Last Modified time: 2020-06-17 18:52:29
  */
-import i18n from '../lang';
+import i18n from '../locale';
 
 const config = {
   // 表格列的默认最小宽度
@@ -19,7 +19,22 @@ const config = {
   // 分页
   pagination: {
     currentPage: 1,
-    pageSize: 20
+    pageSize: 20,
+    sizes: [10, 20, 30, 40, 50]
+  },
+  // 汇总
+  groupSummary: {
+    total: { text: '记录数', value: '__total__' },
+    calcItems: [
+      { text: '列值汇总', value: 'sum' },
+      { text: '列最大值', value: 'max' },
+      { text: '列最小值', value: 'min' },
+      { text: '列平均值', value: 'avg' }
+    ]
+  },
+  // 树表格
+  treeTable: {
+    textIndent: 22 // 缩进 22px
   },
   // 后台返回数据的路径
   dataKey: 'items',
@@ -28,21 +43,19 @@ const config = {
   // 虚拟滚动的阀值
   virtualScrollY: 150,
   // 表头排序的参数名
-  sorterFieldName: 'sortby',
-  // 客户端表头排序
-  clientSorter: true,
-  // 客户端表头筛选
-  clientFilter: true,
+  sorterFieldName: 'tsortby',
   // 打印纸的宽度 A4 -> 1040px
   printWidth: 1040,
+  // 可选择列
+  selectionText: () => i18n.t('table.config.selectionText'),
   // 操作列 dataIndex
   operationColumn: '__action__',
   // 合计行第一列的文本
-  summaryText: () => i18n.t('config.summaryText'),
+  summaryText: () => i18n.t('table.config.summaryText'),
   // 暂无数据
-  emptyText: () => i18n.t('config.emptyText'),
+  emptyText: () => i18n.t('table.config.emptyText'),
   // 列定义
-  columnFilterText: () => i18n.t('config.columnFilterText')
+  columnFilterText: () => i18n.t('table.config.columnFilterText')
 };
 
 export default config;

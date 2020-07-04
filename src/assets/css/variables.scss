@@ -2,21 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 19:33:55
+ * @Last Modified time: 2020-05-24 18:50:53
  */
 // 全局主色
-$primaryColor: #1890ff;
-
-// 主色的过滤色
-$primaryLight-1: mix(#fff, $primaryColor, 10%);
-$primaryLight-2: mix(#fff, $primaryColor, 20%);
-$primaryLight-3: mix(#fff, $primaryColor, 30%);
-$primaryLight-4: mix(#fff, $primaryColor, 40%);
-$primaryLight-5: mix(#fff, $primaryColor, 50%);
-$primaryLight-6: mix(#fff, $primaryColor, 60%);
-$primaryLight-7: mix(#fff, $primaryColor, 70%);
-$primaryLight-8: mix(#fff, $primaryColor, 80%);
-$primaryLight-9: mix(#fff, $primaryColor, 90%);
+$primaryColor: #0d74b5;
 
 // 成功色
 $successColor: #52c41a;
@@ -72,7 +61,7 @@ $subMenuBg: #1a1a1a;
 $subMenuHover: #2e2e2e;
 
 // Logo 背景色
-$logoBgColor: #1c2327;
+$logoBgColor: #1f1f1f;
 
 // AllMenu 划出面板背景色
 $allMenuBgColor: #313538;

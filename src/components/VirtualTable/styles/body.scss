@@ -2,12 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-14 22:26:23
+ * @Last Modified time: 2020-06-09 11:02:43
  */
 .v-cell--edit {
+  .el-input-group {
+    display: table;
+  }
   .el-input__inner {
     padding: 0 $v-module-distance;
-    font-size: 14px;
+    font-size: $v-font-size;
   }
   .el-date-editor {
     width: 100%;
@@ -24,13 +27,21 @@
     }
   }
   &.is-error {
+    position: relative;
     .el-input__inner {
       border-color: $v-danger-color;
     }
+    .search-helper + .cell-error {
+      right: 40px;
+    }
     .cell-error {
-      font-size: 12px;
+      position: absolute;
+      font-size: $v-font-size-mini;
+      line-height: 1.2;
       color: $v-danger-color;
-      line-height: 1;
+      right: 8px;
+      top: 8px;
+      pointer-events: none;
     }
   }
 }

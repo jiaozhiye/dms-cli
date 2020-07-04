@@ -3,10 +3,10 @@
     <i class="iconfont icon-earth" />
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="lang === 'zh'" command="zh">
-        中文
+        CN&nbsp;&nbsp;简体中文
       </el-dropdown-item>
       <el-dropdown-item :disabled="lang === 'en'" command="en">
-        English
+        US&nbsp;&nbsp;English
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -17,7 +17,7 @@
  * @Author: 焦质晔
  * @Date: 2020-04-30 15:17:48
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 11:34:02
+ * @Last Modified time: 2020-05-17 18:48:54
  */
 import { mapState, mapActions } from 'vuex';
 
@@ -27,13 +27,14 @@ export default {
     ...mapState('app', ['lang'])
   },
   methods: {
-    ...mapActions('app', ['setLanguage']),
+    ...mapActions('app', ['setLanguage', 'refreshView']),
     languageChangeHandle(lang) {
       this.$i18n.locale = lang;
       this.setLanguage(lang);
       localStorage.setItem('lang', lang);
       // 浏览器刷新，重新获取数据
-      // ...
+      window.history.go(0);
+      // this.refreshView({ path: this.$route.path });
       // 可能需要重新获取基础信息
       // ...
     }
@@ -43,10 +44,12 @@ export default {
 
 <style lang="scss" scoped>
 .lang-select {
-  margin-left: 4px;
+  display: flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
   .icon-earth {
-    display: inline-block;
-    padding: 5px 0 5px 3px;
     font-size: 20px;
     cursor: pointer;
   }

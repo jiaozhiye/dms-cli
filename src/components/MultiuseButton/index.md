@@ -34,7 +34,6 @@
 
 # js
 import { authority } from '@/mixins/authMixin';
-import { saveApi } from '@/api/xxx/xxx';
 
 export default {
   mixins: [authority],
@@ -48,7 +47,7 @@ export default {
       // if (type === 1) {
       //   业务逻辑判断
       // }
-      const res = await saveApi(this.formData);
+      const res = await api(this.formData);
     },
     closeHandle() {}
   }

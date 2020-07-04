@@ -6,6 +6,7 @@
 | ----------- | --------------------------------------------- | ---------------------- | -------- |
 | data        | 打印的数据                                    | array \| object        | -        |
 | template    | 打印模板路径，默认前缀 @/pages/printTemplate/ | string                 | -        |
+| render      | 打印模板的导入方法(Vue 异步加载组件的方法)    | func                   | -        |
 | printerType | 打印机类型，激光 或 针式                      | laser \| stylus        | laser    |
 | printCopies | 打印的份数                                    | number                 | -        |
 | direction   | 打印方向                                      | vertical \| horizontal | vertical |
@@ -46,7 +47,7 @@
 # template
 <template>
   <el-button @click="printHandler">打印</el-button>
-  <base-print ref="print" :data="printList" template="template1" />
+  <base-print ref="print" :data="printList" :render="() => import(`@service/pages/printTemplate/xxx.vue`)" />
 </template>
 
 # js

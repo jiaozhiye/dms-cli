@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-05 23:03:40
+ * @Last Modified time: 2020-06-24 09:27:09
  */
 import router from '@/routes';
 import store from '@/store';
@@ -13,13 +13,14 @@ import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css'; // Progress 进度条样式
 import i18n from '@/lang';
 
+// 设置 NProgress 样式
 NProgress.configure({ showSpinner: false });
 
 // 访问白名单
 const whiteList = ['/login'];
 
 // 权限白名单
-const whiteAuth = ['/login', '/home', '/iframe', '/redirect', '/404', '/test'];
+const whiteAuth = ['/login', '/home', '/iframe', '/redirect', '/404', '/test', '/cors'];
 
 // 路由重定向
 const redirect = (next, path) => {
@@ -36,13 +37,18 @@ const isLogin = () => {
   }
 };
 
+// iframe 判断
+const isIframe = path => {
+  return path.startsWith(whiteAuth[2]);
+};
+
 router.beforeEach(async (to, from, next) => {
-  !to.path.startsWith(whiteAuth[2]) && NProgress.start();
+  !isIframe(to.path) && NProgress.start();
   if (isLogin()) {
     if (to.path === '/login') {
       redirect(next, '/');
     } else {
-      if (!store.state.app.navList.length) {
+      if (!isIframe(to.path) && !store.state.app.navList.length) {
         // 通过 vuex 管理导航数据
         const bool = await store.dispatch('app/createNavList');
         bool ? next({ ...to, replace: true }) : redirect(next, false);
@@ -74,9 +80,10 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(to => {
-  const title = to.meta && to.meta.title ? to.meta.title : '';
-  if (title) {
-    document.title = `${config.systemName}-${title}`;
-  }
+  const title = to.meta?.title ?? '404';
+  document.title = `${config.systemName}-${title}`;
   NProgress.done();
+  if (whiteList.includes(to.path) || title === '404') return;
+  // 菜单埋点
+  store.dispatch('app/createMenuRecord', { path: to.path, title });
 });

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 07:46:10
+ * @Last Modified time: 2020-06-28 19:28:29
  */
 import i18n from '@/lang';
 
@@ -10,14 +10,13 @@ const config = {
   systemName: i18n.t('app.title'),
   prefix: '/api', // ajax 请求前缀
   maxCacheNum: 10, // 路由组件最大缓存数量
-  showBreadcrumb: true, // 是否显示面包屑
+  showBreadcrumb: false, // 是否显示面包屑
+  showScreenFull: true, // 是否显示全屏按钮
+  showCustomTheme: true, // 是否显示自定义主题
+  showLangSelect: true, // 是否显示多语言
+  showCTICenter: true, // 是否显示 CTI
+  showNotification: true, // 是否显示通知
   notifyDuration: 3000, // 通知消息组件显示时间
-  table: {
-    pageNum: 1,
-    pageSize: 20, // 10, 20, 30, 40, 50
-    serverSorter: false,
-    serverFilter: false
-  },
   charts: {
     // 文字大小
     textSize: 12,

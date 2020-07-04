@@ -2,15 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-05 23:58:10
+ * @Last Modified time: 2020-06-29 10:59:19
  */
-import _ from 'lodash';
+import { uniqWith, isEqual } from 'lodash';
 import * as types from '../types';
 import router from '@/routes';
-import { setToken, setUser, removeToken } from '@/utils/cookies';
+import { setToken, setUser, removeToken, set_vDealerName } from '@/utils/cookies';
 import variables from '@/assets/css/variables.scss';
 import localDict from '@/utils/localDict';
-import { getNavList, getAllDict, getStarMenuList, getCommonMenuList } from '@/api/login';
+import { getNavList, getAllDict, getStarMenuList, getCommonMenuList, createMenuPoint } from '@/api/login';
+// 自定义主题
+import client from 'webpack-custom-theme/client';
+import forElementUI from 'webpack-custom-theme/forElementUI';
 
 const deepMapRoutes = (arr, mark) => {
   let res = null;
@@ -75,6 +78,7 @@ const actions = {
   createLoginInfo({ commit, state }, params) {
     setToken(params.token);
     setUser(params.name);
+    set_vDealerName(params.vDealerName);
     commit({
       type: types.LOGININFO,
       data: params
@@ -87,7 +91,12 @@ const actions = {
       data: {}
     });
     dispatch('clearNavList');
-    router.push({ path: '/' }).catch(() => {});
+    if (process.env.NODE_ENV === 'development') {
+      router.push({ path: '/login' }).catch(() => {});
+    } else {
+      // 刷新浏览器，释放内存
+      setTimeout(() => window.history.go(0), 300);
+    }
   },
   async createNavList({ dispatch, commit, state }, params) {
     if (state.navList.length) return;
@@ -168,13 +177,17 @@ const actions = {
     } else {
       const res = await getAllDict();
       if (res.code === 200) {
-        data = { ...localDict, ...res.data };
+        data = { ...localDict, ...res.data.dict, dealerBranch: res.data.branch.map(x => ({ value: x.ID, cnText: x.VBranchName })) };
       }
     }
     // 数据字典本地存储
     localStorage.setItem('dict', JSON.stringify(data));
-    // Vuex 状态存储
+    // vuex 状态存储
     commit({ type: types.DICT_DATA, data });
+  },
+  async createMenuRecord({ commit, state }, params) {
+    if (process.env.MOCK_DATA === 'true') return;
+    await createMenuPoint({ vpath: params.path, vcaseName: params.title });
   },
   addKeepAliveCache({ commit, state }, params) {
     if (state.keepAliveList.some(x => x.value === params.value)) return;
@@ -208,10 +221,20 @@ const actions = {
     });
   },
   refreshView({ dispatch, commit, state }, { path, query = {} }) {
-    if (document.getElementById(path)) {
+    let $iframe = document.getElementById(path);
+    if ($iframe) {
+      // 释放 iframe 内存
+      $iframe.src = 'about:blank';
+      try {
+        $iframe.contentWindow.document.write('');
+        $iframe.contentWindow.document.clear();
+      } catch (e) {}
+      $iframe.parentNode.removeChild($iframe);
+      $iframe = null;
+      // 释放 iframe 内存 END
       const data = state.iframeList.find(x => x.key === path);
       commit({ type: types.DEL_IFRAME, data: path });
-      setTimeout(() => commit({ type: types.ADD_IFRAME, data }));
+      setTimeout(() => commit({ type: types.ADD_IFRAME, data }), 10);
     } else {
       router.replace({ path: `/redirect${path}`, query }).catch(() => {});
     }
@@ -224,16 +247,31 @@ const actions = {
     });
   },
   setLanguage({ commit, state }, params) {
+    state.iframeList.forEach(x => {
+      const $iframe = document.getElementById(x.key);
+      if (!$iframe) return;
+      $iframe.contentWindow.postMessage({ type: 'lang', data: params });
+    });
     commit({
       type: types.LANGUAGE,
       data: params
     });
   },
-  setThemeColor({ commit, state }, params) {
-    commit({
-      type: types.THEME_COLOR,
-      data: params
+  emitThemeColor({ dispatch, commit, state }, params) {
+    state.iframeList.forEach(x => {
+      const $iframe = document.getElementById(x.key);
+      if (!$iframe) return;
+      $iframe.contentWindow.postMessage({ type: 'theme', data: params }, '*');
     });
+  },
+  createThemeColor({ commit, state }, params) {
+    const options = {
+      newColors: [...forElementUI.getElementUISeries(params), params],
+      // 当 router 不是 hash mode 时，它需要将 url 更改为绝对路径(以 / 开头)
+      changeUrl: cssUrl => `/${cssUrl}`
+    };
+    commit({ type: types.THEME_COLOR, data: params });
+    client.changer.changeColor(options, Promise).then(() => localStorage.setItem('theme', params));
   }
 };
 
@@ -279,7 +317,7 @@ const mutations = {
     state.iframeList = state.iframeList.filter(x => x.key !== data);
   },
   [types.ADD_STAR_MENU](state, { data }) {
-    state.starMenuList = _.uniqWith([...state.starMenuList, data], _.isEqual);
+    state.starMenuList = uniqWith([...state.starMenuList, data], isEqual);
   },
   [types.DEL_STAR_MENU](state, { data }) {
     state.starMenuList = state.starMenuList.filter(x => x.key !== data);

@@ -1,12 +1,12 @@
 <template>
-  <component :is="tagName">
+  <span v-clickOutside="doClose">
     <transition :name="transition" :duration="200" @after-leave="doDestroy">
       <span v-show="!disabled && showPopper" ref="popper" :class="rootClass" :style="containerStyle">
         <slot>{{ content }}</slot>
       </span>
     </transition>
-    <slot name="reference"></slot>
-  </component>
+    <slot name="reference" />
+  </span>
 </template>
 
 <script>
@@ -14,95 +14,39 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 18:07:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 13:10:39
+ * @Last Modified time: 2020-07-03 10:46:15
  */
+import PropTypes from '../../../_utils/vue-types';
+import clickOutside from '../../../_utils/click-outside';
+import { on, off } from '../../../_utils/tool';
 import Popper from './popper.js';
-import config from '../config';
-
-function on(element, event, handler) {
-  if (element && event && handler) {
-    document.addEventListener ? element.addEventListener(event, handler, false) : element.attachEvent('on' + event, handler);
-  }
-}
-
-function off(element, event, handler) {
-  if (element && event) {
-    document.removeEventListener ? element.removeEventListener(event, handler, false) : element.detachEvent('on' + event, handler);
-  }
-}
 
 export default {
   name: 'Popper',
-
-  props: {
-    tagName: {
-      type: String,
-      default: 'span'
-    },
-    trigger: {
-      type: String,
-      default: 'hover',
-      validator: value => ['clickToOpen', 'clickToToggle', 'hover', 'focus'].indexOf(value) > -1
-    },
-    delayOnMouseOver: {
-      type: Number,
-      default: 10
-    },
-    delayOnMouseOut: {
-      type: Number,
-      default: 10
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    content: String,
-    enterActiveClass: String,
-    leaveActiveClass: String,
-    boundariesSelector: String,
-    reference: {},
-    forceShow: {
-      type: Boolean,
-      default: false
-    },
-    appendToBody: {
-      type: Boolean,
-      default: false
-    },
-    visibleArrow: {
-      type: Boolean,
-      default: true
-    },
-    transition: {
-      type: String,
-      default: ''
-    },
-    stopPropagation: {
-      type: Boolean,
-      default: false
-    },
-    preventDefault: {
-      type: Boolean,
-      default: false
-    },
-    options: {
-      type: Object,
-      default() {
-        return {};
-      }
-    },
-    rootClass: {
-      type: String,
-      default: ''
-    },
-    containerStyle: {
-      type: Object,
-      default: () => ({})
-    }
+  directives: {
+    clickOutside
   },
-
   inject: ['$$table'],
-
+  props: {
+    trigger: PropTypes.oneOf(['clickToOpen', 'clickToToggle', 'hover', 'focus']).def('hover'),
+    transition: PropTypes.string,
+    rootClass: PropTypes.string,
+    delayOnMouseOver: PropTypes.number.def(10),
+    delayOnMouseOut: PropTypes.number.def(10),
+    content: PropTypes.string,
+    enterActiveClass: PropTypes.string,
+    leaveActiveClass: PropTypes.string,
+    boundariesSelector: PropTypes.string,
+    reference: PropTypes.any,
+    forceShow: PropTypes.bool.def(false),
+    appendToBody: PropTypes.bool.def(true),
+    visibleArrow: PropTypes.bool.def(false),
+    stopPropagation: PropTypes.bool.def(true),
+    preventDefault: PropTypes.bool.def(false),
+    options: PropTypes.object.def({}),
+    disabled: PropTypes.bool.def(false),
+    containerStyle: PropTypes.object.def({})
+  },
   data() {
     return {
       referenceElm: null,
@@ -115,55 +59,51 @@ export default {
       }
     };
   },
-
   computed: {
     $tableBody() {
-      return this.$$table ? this.$$table.$$tableBody.$el : null;
+      return this.$$table?.$$tableBody?.$el ?? null;
     }
   },
-
   watch: {
     showPopper(value) {
       if (value) {
-        this.$emit('show', this);
+        this.$emit('show', value);
         this.updatePopper();
       } else {
-        this.$emit('hide', this);
+        this.$emit('hide', value);
       }
     },
-
     forceShow: {
       handler(value) {
         this[value ? 'doShow' : 'doClose']();
       },
       immediate: true
     },
-
     disabled(value) {
       if (value) {
-        this.showPopper = false;
+        this.doClose();
       }
     }
   },
-
   created() {
     this.appendedArrow = false;
     this.appendedToBody = false;
     this.popperOptions = Object.assign(this.popperOptions, this.options);
   },
-
   mounted() {
     this.referenceElm = this.reference || this.$slots.reference[0].elm;
     this.popper = this.$slots.default[0].elm;
-
+    this.popperElm = this.popper;
+    this.popperElmCls = 'el-picker-panel';
+    // 事件绑定
     switch (this.trigger) {
       case 'clickToOpen':
         on(this.referenceElm, 'click', this.doShow);
-        on(document.body, 'click', this.handleDocumentClick);
+        // on(document, 'click', this.handleDocumentClick);
         break;
       case 'clickToToggle':
         on(this.referenceElm, 'click', this.doToggle);
-        on(document.body, 'click', this.handleDocumentClick);
+        // on(document, 'click', this.handleDocumentClick);
         break;
       case 'hover':
         on(this.referenceElm, 'mouseover', this.onMouseOver);
@@ -178,141 +118,104 @@ export default {
         on(this.popper, 'blur', this.onMouseOut);
         break;
     }
-
-    // tableBody 绑定事件
+    on(this.popper, 'click', this.stopEventBubble);
     if (this.$tableBody) {
       on(this.$tableBody, 'mousedown', this.onMouseDown);
     }
   },
-
   destroyed() {
     this.destroyPopper();
   },
-
   methods: {
-    doToggle(event) {
+    doToggle(ev) {
       if (this.stopPropagation) {
-        event.stopPropagation();
+        ev.stopPropagation();
       }
-
       if (this.preventDefault) {
-        event.preventDefault();
+        ev.preventDefault();
       }
-
       if (!this.forceShow) {
         this.showPopper = !this.showPopper;
       }
     },
-
     doShow() {
       this.showPopper = true;
     },
-
     doClose() {
       this.showPopper = false;
     },
-
-    doDestroy() {
-      if (this.showPopper) {
-        return;
-      }
-
-      if (this.popperJS) {
-        this.popperJS.destroy();
-        this.popperJS = null;
-      }
-
-      if (this.appendedToBody) {
-        this.appendedToBody = false;
-        document.body.removeChild(this.popper.parentElement);
-      }
-    },
-
     createPopper() {
       this.$nextTick(() => {
         if (this.visibleArrow) {
           this.appendArrow(this.popper);
         }
-
         if (this.appendToBody && !this.appendedToBody) {
           this.appendedToBody = true;
           document.body.appendChild(this.popper.parentElement);
         }
-
         if (this.popperJS && this.popperJS.destroy) {
           this.popperJS.destroy();
         }
-
         if (this.boundariesSelector) {
           const boundariesElement = document.querySelector(this.boundariesSelector);
-
           if (boundariesElement) {
             this.popperOptions.modifiers = Object.assign({}, this.popperOptions.modifiers);
             this.popperOptions.modifiers.preventOverflow = Object.assign({}, this.popperOptions.modifiers.preventOverflow);
             this.popperOptions.modifiers.preventOverflow.boundariesElement = boundariesElement;
           }
         }
-
         this.popperOptions.onCreate = () => {
-          this.$emit('created', this);
           this.$nextTick(this.updatePopper);
         };
-
         this.popperJS = new Popper(this.referenceElm, this.popper, this.popperOptions);
       });
     },
-
     destroyPopper() {
+      // 事件解绑
+      off(this.referenceElm, 'click', this.doShow);
+      // off(document, 'click', this.handleDocumentClick);
       off(this.referenceElm, 'click', this.doToggle);
-      off(this.referenceElm, 'mouseup', this.doClose);
-      off(this.referenceElm, 'mousedown', this.doShow);
-      off(this.referenceElm, 'focus', this.doShow);
-      off(this.referenceElm, 'blur', this.doClose);
-      off(this.referenceElm, 'mouseout', this.onMouseOut);
+      // off(document, 'click', this.handleDocumentClick);
       off(this.referenceElm, 'mouseover', this.onMouseOver);
-
-      off(document.body, 'click', this.handleDocumentClick);
-      off(this.$tableBody, 'mousedown', this.onMouseDown);
-
-      this.showPopper = false;
+      off(this.popper, 'mouseover', this.onMouseOver);
+      off(this.referenceElm, 'mouseout', this.onMouseOut);
+      off(this.popper, 'mouseout', this.onMouseOut);
+      off(this.referenceElm, 'focus', this.onMouseOver);
+      off(this.popper, 'focus', this.onMouseOver);
+      off(this.referenceElm, 'blur', this.onMouseOut);
+      off(this.popper, 'blur', this.onMouseOut);
+      off(this.popper, 'click', this.stopEventBubble);
+      if (this.$tableBody) {
+        off(this.$tableBody, 'mousedown', this.onMouseDown);
+      }
+      this.doClose();
       this.doDestroy();
     },
-
     appendArrow(element) {
-      if (this.appendedArrow) {
-        return;
-      }
-
+      if (this.appendedArrow) return;
       this.appendedArrow = true;
-
       const arrow = document.createElement('div');
       arrow.setAttribute('x-arrow', '');
       arrow.className = 'popper__arrow';
       element.appendChild(arrow);
     },
-
     updatePopper() {
       this.popperJS ? this.popperJS.scheduleUpdate() : this.createPopper();
     },
-
     onMouseOver() {
       clearTimeout(this._timer);
-      this._timer = setTimeout(() => {
-        this.showPopper = true;
-      }, this.delayOnMouseOver);
+      this._timer = setTimeout(() => this.doShow(), this.delayOnMouseOver);
     },
-
     onMouseOut() {
       clearTimeout(this._timer);
-      this._timer = setTimeout(() => {
-        this.showPopper = false;
-      }, this.delayOnMouseOut);
+      this._timer = setTimeout(() => this.doClose(), this.delayOnMouseOut);
     },
-
     onMouseDown(ev) {
       ev.target === this.$tableBody && this.handleDocumentClick(ev);
     },
-
+    stopEventBubble(ev) {
+      ev.stopPropagation();
+    },
     handleDocumentClick(e) {
       if (
         !this.$el ||
@@ -324,22 +227,27 @@ export default {
       ) {
         return;
       }
-
-      this.$emit('documentClick', this);
-
       if (this.forceShow) {
         return;
       }
-
-      this.showPopper = false;
+      this.doClose();
     },
-
     elementContains(elm, otherElm) {
       if (typeof elm.contains === 'function') {
         return elm.contains(otherElm);
       }
-
       return false;
+    },
+    doDestroy() {
+      if (this.showPopper) return;
+      if (this.popperJS) {
+        this.popperJS.destroy();
+        this.popperJS = null;
+      }
+      if (this.appendedToBody) {
+        this.appendedToBody = false;
+        document.body.removeChild(this.popper.parentElement);
+      }
     }
   }
 };

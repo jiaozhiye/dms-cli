@@ -2,16 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 21:58:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 15:38:16
+ * @Last Modified time: 2020-05-23 15:33:21
  */
 /* font-family */
-$v-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-  Segoe UI Symbol;
+$v-font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 
 $v-font-size: 14px;
 $v-font-size-medium: 14px;
-$v-font-size-small: 13px;
-$v-font-size-mini: 12px;
+$v-font-size-small: 14px;
+$v-font-size-mini: 13px;
 
 $v-font-color: $textColor;
 $v-font-secondary-color: $textColorSecondary;

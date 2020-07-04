@@ -1,0 +1,25 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 14:57:14
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-29 09:16:09
+ */
+@import '../themes/index';
+
+@mixin reset-component() {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: $text-color;
+  font-size: $font-size-base;
+  font-variant: $font-variant-base;
+  line-height: $line-height-base;
+  list-style: none;
+  font-feature-settings: $font-feature-settings-base;
+}
+
+@mixin text-overflow-cut {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

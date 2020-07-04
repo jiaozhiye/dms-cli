@@ -1,0 +1,86 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 13:02:39
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-drawer--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  .drawer-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
+    transform-origin: 50% 50% 0;
+  }
+  .mask-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .drawer-container {
+    position: fixed;
+    visibility: hidden;
+    background-color: #fff;
+    transition: all 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+    > .header {
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 48px;
+      padding: 0 15px;
+      box-sizing: border-box;
+      border-bottom: 1px solid $border-color-base;
+      border-radius: $border-radius-base $border-radius-base 0 0;
+      .title {
+        font-size: 16px;
+      }
+      .close {
+        position: absolute;
+        padding: 5px;
+        right: 10px;
+        top: 10px;
+        color: $text-color-secondary;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        &:hover {
+          color: $primary-color;
+          text-decoration: none;
+        }
+        i {
+          font-size: 18px;
+        }
+      }
+    }
+    > .container {
+      height: calc(100% - 48px);
+      padding: $padding-base 15px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      .loading {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  // small
+  &-sm {
+    // ...
+  }
+  // large
+  &-lg {
+    // ...
+  }
+}

@@ -1,0 +1,19 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 14:05:09
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-23 14:46:18
+ */
+// mixins for clearfix
+// ------------------------
+@mixin clearfix() {
+  zoom: 1;
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+  &::after {
+    clear: both;
+  }
+}

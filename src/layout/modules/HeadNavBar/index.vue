@@ -1,37 +1,30 @@
-<template>
-  <div class="actions">
-    <ScreenFull />
-    <ThemePicker />
-    <LangSelect />
-    <NoticePanel />
-    <UserCenter />
-  </div>
-</template>
-
 <script>
 /**
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 10:35:12
+ * @Last Modified time: 2020-06-28 19:45:57
  **/
+import config from '@/config';
+
 import ScreenFull from '../ScreenFull';
 import ThemePicker from '../ThemePicker';
 import LangSelect from '../LangSelect';
-import NoticePanel from './noticePanel';
+import NoticeCenter from '../NoticeCenter';
 import UserCenter from '@/pages/userCenter/index';
 
 export default {
   name: 'HeadNavBar',
-  components: {
-    ScreenFull,
-    ThemePicker,
-    LangSelect,
-    NoticePanel,
-    UserCenter
-  },
-  data() {
-    return {};
+  render() {
+    return (
+      <div class="actions">
+        {config.showScreenFull && <ScreenFull />}
+        {config.showCustomTheme && <ThemePicker />}
+        {config.showLangSelect && <LangSelect />}
+        {config.showNotification && <NoticeCenter />}
+        <UserCenter />
+      </div>
+    );
   }
 };
 </script>

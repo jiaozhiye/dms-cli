@@ -3,15 +3,17 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-23 14:36:08
+ * @Last Modified time: 2020-06-30 11:19:06
  **/
-import _ from 'lodash';
-import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
+import { mergeProps, getOptionProps } from '../_utils/props-util';
+import { throttle, debounce } from '../_utils/tool';
+import Locale from '../_utils/mixins/locale';
 import PageTable from './pageTable.vue';
 import DropDown from './dropDown.vue';
 
 export default {
   name: 'FilterTable',
+  mixins: [Locale],
   props: {
     columns: {
       type: Array,
@@ -199,7 +201,7 @@ export default {
       let target = {};
       columns.forEach(x => {
         if (Array.isArray(x.children)) {
-          Object.assign(target, this.createVisibleData(x.children));
+          Object.assign(target, this.createPanelOffset(x.children));
         }
         if (x.filter) {
           target[x.dataIndex] = 0;
@@ -240,7 +242,7 @@ export default {
         this.search[`${property}Val`] = val;
       }
       let curVal = this.search[`${property}Val`];
-      if (type === 'input' && _.isString(curVal)) {
+      if (type === 'input' && typeof curVal === 'string') {
         curVal = curVal.trim();
       }
       this.filters = Object.assign({}, this.filters, {
@@ -300,10 +302,10 @@ export default {
       return (
         <div class="popover-bottom">
           <el-button type="primary" size="mini" disabled={this.isEmpty(this.search[`${property}Val`])} onClick={e => this.filterHandler(property, type)}>
-            {this.$t('baseTable.search')}
+            {this.t('baseTable.search')}
           </el-button>
           <el-button size="mini" onClick={e => this.filterHandler(property, type, val)}>
-            {this.$t('baseTable.reset')}
+            {this.t('baseTable.reset')}
           </el-button>
         </div>
       );
@@ -362,7 +364,7 @@ export default {
       return (
         <el-input
           v-model={this.search[`${dataIndex}Val`]}
-          placeholder={this.$t('baseTable.inputPlaceholder', { title })}
+          placeholder={this.t('baseTable.inputPlaceholder', { title })}
           style={{ width: '180px' }}
           nativeOnKeydown={e => {
             e.stopPropagation();
@@ -388,7 +390,7 @@ export default {
               setValue([val, this.search[`${dataIndex}Val`][1]]);
             }}
             style={{ width: '100px' }}
-            placeholder={this.$t('baseTable.startValue')}
+            placeholder={this.t('baseTable.startValue')}
             onChange={val => {
               if (val !== '' && val - endVal > 0) {
                 setValue([endVal, this.search[`${dataIndex}Val`][1]]);
@@ -410,7 +412,7 @@ export default {
             }}
             min={startVal}
             style={{ width: '100px' }}
-            placeholder={this.$t('baseTable.endValue')}
+            placeholder={this.t('baseTable.endValue')}
             onChange={val => {
               if (val !== '' && val - startVal < 0) {
                 setValue([this.search[`${dataIndex}Val`][0], startVal]);
@@ -463,8 +465,8 @@ export default {
             value-format="yyyy-MM-dd"
             clearable={false}
             range-separator="-"
-            start-placeholder={this.$t('baseTable.startDate')}
-            end-placeholder={this.$t('baseTable.endDate')}
+            start-placeholder={this.t('baseTable.startDate')}
+            end-placeholder={this.t('baseTable.endDate')}
           />
         </div>
       );
@@ -477,10 +479,10 @@ export default {
     scrollEventHandle(e) {
       const { scrollLeft = 0 } = e.target;
       if (scrollLeft !== this.scrollLeft) {
-        this.throttle(this.doMove, 10)(this.$tableHeader, scrollLeft);
+        throttle(this.doMove, 10)(this.$tableHeader, scrollLeft);
       }
       // 处理滚动防抖，避免出现表格线框对不齐的 bug
-      this.debounce(this.RESET_RENDER, 300)();
+      debounce(this.RESET_RENDER, 300)();
     },
     documentEventHandle(e) {
       this.closeAllPopover();
@@ -524,23 +526,6 @@ export default {
     validateNumber(val) {
       const numberReg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
       return (!Number.isNaN(val) && numberReg.test(val)) || val === '' || val === '-';
-    },
-    // 函数截流
-    throttle(fn, delay) {
-      return function(...args) {
-        let nowTime = +new Date();
-        if (!fn.lastTime || nowTime - fn.lastTime > delay) {
-          fn.apply(this, args);
-          fn.lastTime = nowTime;
-        }
-      };
-    },
-    // 函数防抖
-    debounce(fn, delay) {
-      return function(...args) {
-        fn.timer && clearTimeout(fn.timer);
-        fn.timer = setTimeout(() => fn.apply(this, args), delay);
-      };
     },
     // 数组的深度查找
     deepFind(arr, mark) {
@@ -665,6 +650,7 @@ export default {
   }
   /deep/ .range-number {
     display: block;
+    white-space: nowrap;
     .el-input {
       padding: 0;
       vertical-align: middle;

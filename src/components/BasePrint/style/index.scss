@@ -1,0 +1,21 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 11:31:24
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-lodop-print';
+
+.#{$prefix-cls}--wrapper {
+  display: none;
+  visibility: hidden;
+}
+.#{$prefix-cls}--preview {
+  @include reset-component();
+  width: 960px;
+  padding: $padding-base;
+  border: 1px solid $border-color-base;
+  margin: 0 auto;
+}

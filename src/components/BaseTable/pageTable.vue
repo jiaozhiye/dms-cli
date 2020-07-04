@@ -3,20 +3,23 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 19:32:46
+ * @Last Modified time: 2020-06-30 13:39:09
  **/
-import _ from 'lodash';
+import { get, set, cloneDeep, uniqBy, intersection, isEqual, isUndefined, isNumber, isObject, isNull, isFunction, isRegExp } from 'lodash';
 import moment from 'moment';
-import config from '@/config';
-import { mergeProps, getOptionProps } from '@/components/_utils/props-util';
+import config from './config';
+import { mergeProps, getOptionProps } from '../_utils/props-util';
+import { debounce } from '../_utils/tool';
+import Locale from '../_utils/mixins/locale';
 import TopInfo from './topInfo';
 import ColumnFilter from './columnFilter';
 import ExportExcel from './exportExcel';
 import Pagination from './pagination';
-import Spin from '@/components/Spin';
+import Spin from '../Spin';
 
 export default {
   name: 'PageTable',
+  mixins: [Locale],
   props: {
     columns: {
       type: Array,
@@ -157,8 +160,8 @@ export default {
       sorterParams: {}, // 表头排序参数
       // 分页
       pagination: {
-        currentPage: config.table.pageNum || 1,
-        pageSize: config.table.pageSize || 20,
+        currentPage: config.currentPage || 1,
+        pageSize: config.pageSize || 20,
         total: 0
       },
       // 单元格的上一步操作
@@ -200,10 +203,10 @@ export default {
       return this.isPagination || this.isMemoryPagination;
     },
     boolServerSorter() {
-      return _.isUndefined(this.isServerSorter) ? config.table.serverSorter : this.isServerSorter;
+      return isUndefined(this.isServerSorter) ? config.serverSorter : this.isServerSorter;
     },
     boolServerFilter() {
-      return _.isUndefined(this.isServerFilter) ? config.table.serverFilter : this.isServerFilter;
+      return isUndefined(this.isServerFilter) ? config.serverFilter : this.isServerFilter;
     },
     fetchParams() {
       const { currentPage, pageSize } = this.pagination;
@@ -240,7 +243,7 @@ export default {
       }
       return this.list.map(x => {
         let item = {};
-        editableKeys.forEach(key => _.set(item, key, _.get(x, key)));
+        editableKeys.forEach(key => set(item, key, get(x, key)));
         return item;
       });
     }
@@ -264,9 +267,9 @@ export default {
         onlyPageChange && this.createLimitRecords();
       } else {
         // 两次请求的参数不等 && 有其他搜索条件变化，清空行选中
-        !_.isEqual(nextProps, prevProps) && !onlyPageChange && this.clearSelectionHandle();
+        !isEqual(nextProps, prevProps) && !onlyPageChange && this.clearSelectionHandle();
         // 请求数据
-        this.debounce(this.getTableData, 0)();
+        debounce(this.getTableData, 0)();
       }
     },
     columnKeysChange() {
@@ -274,7 +277,7 @@ export default {
       this.$nextTick(() => this.resetRender());
     },
     defaultSelections(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
+      if (isEqual(nextProps, prevProps)) return;
       this.createRowSelection(nextProps);
     },
     columns(nextProps) {
@@ -282,12 +285,12 @@ export default {
       this.editPos.marks = this.createEditableKeys(this.createFilterColumns(nextProps));
     },
     filters(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
+      if (isEqual(nextProps, prevProps)) return;
       this.filterHandler();
     },
     listChange(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
-      this.debounce(this.syncTableList, 0)();
+      if (isEqual(nextProps, prevProps)) return;
+      debounce(this.syncTableList, 0)();
     }
   },
   mounted() {
@@ -313,7 +316,7 @@ export default {
   methods: {
     // 处理 table 组件的高度
     createTableHeight(val) {
-      return _.isNumber(val) ? `${val}px` : val;
+      return isNumber(val) ? `${val}px` : val;
     },
     // 可编辑单元格的 dataIndex，支持对隐藏列的过滤
     createEditableKeys(columns) {
@@ -347,7 +350,7 @@ export default {
     createTableList(data) {
       const keypath = this.datakey;
       const uidkey = this.uidkey;
-      const dataList = Array.isArray(data) ? data : _.get(data, keypath, []) || [];
+      const dataList = Array.isArray(data) ? data : get(data, keypath, []) || [];
       // 说明不是外部对 dataSource 重新赋值，不重新处理数据
       if (dataList.dataMark) return;
       // 设置数据标识符，状态变量
@@ -388,14 +391,14 @@ export default {
           const { dataIndex, precision, editable, editType } = column;
           // 操作列
           if (dataIndex === 'column-action') return;
-          let val = _.get(x, dataIndex);
+          let val = get(x, dataIndex);
           // 设置数据默认值
-          if (_.isUndefined(val) || _.isNull(val)) {
+          if (isUndefined(val) || isNull(val)) {
             val = '';
-            _.set(x, dataIndex, val);
+            set(x, dataIndex, val);
           }
-          if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
-            _.set(x, dataIndex, Number(val).toFixed(precision));
+          if (editType === 'number' && precision >= 0 && !Number.isNaN(Number(val))) {
+            set(x, dataIndex, Number(val).toFixed(precision));
           }
           // 设置单元格默认编辑状态
           if (editable) {
@@ -412,7 +415,7 @@ export default {
       if (Array.isArray(data)) {
         total = data.length;
       } else {
-        total = _.get(data, keypath.replace(/[^\.]+$/, 'total')) || _.get(data, keypath, []).length || 0;
+        total = get(data, keypath.replace(/[^\.]+$/, 'total')) || get(data, keypath, []).length || 0;
       }
       // 处理服务端合计
       if (this.isShowSummary) {
@@ -453,7 +456,7 @@ export default {
     // 单元格编辑后的渲染方法
     editedScopedRender(column, props) {
       // const { editType } = column;
-      // let res = _.get(props.row, column.dataIndex);
+      // let res = get(props.row, column.dataIndex);
       // if (editType === 'select' || editType === 'select-multiple' || editType === 'checkbox') {
       //   if (Array.isArray(column.editItems) && column.editItems.length) {
       //     const editItems = editType === 'checkbox' ? column.editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x })) : column.editItems;
@@ -465,7 +468,7 @@ export default {
       //   }
       // }
       let { dataIndex, dictItems, editItems, editType } = column;
-      const val = _.get(props.row, dataIndex);
+      const val = get(props.row, dataIndex);
       // 处理 checkbox 的情况
       if (editType === 'checkbox') {
         editItems = editItems.map(x => ({ value: x['trueValue'] || x['falseValue'], ...x }));
@@ -491,15 +494,15 @@ export default {
     edittingScopedRender(column, props) {
       const { dataIndex, editType } = column;
       const isDisabled = Boolean(props.row[`${dataIndex}Disabled`]);
-      const prevValue = _.get(props.row, dataIndex);
+      const prevValue = get(props.row, dataIndex);
       if (editType === 'select' || editType === 'select-multiple') {
         return (
           <el-select
             size="small"
             multiple={editType === 'select-multiple'}
             value={prevValue}
-            onInput={val => _.set(props.row, dataIndex, val)}
-            placeholder={this.$t('baseTable.selectPlaceholder')}
+            onInput={val => set(props.row, dataIndex, val)}
+            placeholder={this.t('baseTable.selectPlaceholder')}
             clearable={true}
             disabled={column.disabled || isDisabled}
             onChange={value => {
@@ -520,7 +523,7 @@ export default {
         return (
           <el-checkbox
             value={prevValue}
-            onInput={val => _.set(props.row, dataIndex, val)}
+            onInput={val => set(props.row, dataIndex, val)}
             disabled={column.disabled || isDisabled}
             trueLabel={trueValue}
             falseLabel={falseValue}
@@ -541,7 +544,7 @@ export default {
             type={conf.dateType}
             size="small"
             value={prevValue ? moment(prevValue).format(momentFormat) : prevValue}
-            onInput={val => _.set(props.row, dataIndex, val)}
+            onInput={val => set(props.row, dataIndex, val)}
             placeholder={conf.placeholder}
             format={conf.format}
             value-format={conf.format}
@@ -600,10 +603,10 @@ export default {
               // 判断浮点型
               if (precision > 0 && chunks.length > 1 && chunks[1].length > precision) return;
               // 判断最大值/最小值
-              if (_.isNumber(column.max) && Number(val) > column.max) return;
-              if (_.isNumber(column.min) && Number(val) < column.min) return;
+              if (isNumber(column.max) && Number(val) > column.max) return;
+              if (isNumber(column.min) && Number(val) < column.min) return;
             }
-            _.set(props.row, dataIndex, val);
+            set(props.row, dataIndex, val);
             // column 配置的 input 事件
             let inputHandle = column.onInput;
             inputHandle && inputHandle({ [`${props.row._uid}|${dataIndex}`]: val }, props.row);
@@ -617,7 +620,7 @@ export default {
           onBlur={e => {
             const { value } = e.target;
             if (editType === 'number') {
-              _.set(props.row, dataIndex, this.parseNumber(value, precision));
+              set(props.row, dataIndex, this.parseNumber(value, precision));
             }
             // 当前值
             const val = this.getFormatData(props.row, dataIndex);
@@ -626,7 +629,7 @@ export default {
               this.validateRequired(dataIndex, props.row._uid, val);
             }
             // 单元格正则校验
-            if (_.isRegExp(column.editPattern)) {
+            if (isRegExp(column.editPattern)) {
               if (val) {
                 this.validateFormat(dataIndex, props.row._uid, column.editPattern.test(val));
               } else {
@@ -644,7 +647,7 @@ export default {
         searchHelper: { aliasKey, supportInput }
       } = column;
       const isDisabled = Boolean(props.row[`${dataIndex}Disabled`]);
-      const prevValue = _.get(props.row, dataIndex);
+      const prevValue = get(props.row, dataIndex);
       return (
         <el-autocomplete
           class={`input-${props.$index}-${this.createClassName(dataIndex)}`}
@@ -654,7 +657,7 @@ export default {
           style={{ width: '100%' }}
           value={prevValue}
           disabled={column.disabled || isDisabled}
-          onInput={val => _.set(props.row, dataIndex, val)}
+          onInput={val => set(props.row, dataIndex, val)}
           onSelect={val => this.syncAllCellValue(val, props.row, column)}
           fetchSuggestions={(queryString, cb) => this.querySearchAsync(column, props.row, queryString, cb)}
           nativeOnChange={e => {
@@ -681,7 +684,7 @@ export default {
             }
             // 单元格非空校验
             if (column.editRequired) {
-              this.validateRequired(dataIndex, props.row._uid, _.get(props.row, dataIndex));
+              this.validateRequired(dataIndex, props.row._uid, get(props.row, dataIndex));
             }
             this.cellValChange = false;
           }}
@@ -795,7 +798,7 @@ export default {
             default: props => {
               return (
                 <el-radio
-                  value={_.get(this.selectionRows[0], '_uid')}
+                  value={get(this.selectionRows[0], '_uid')}
                   onInput={val => {
                     const row = this.list.find(x => x._uid === val);
                     if (!row) return;
@@ -895,7 +898,7 @@ export default {
       if (value.charAt(value.length - 1) === '.' || value === '-') {
         value = value.slice(0, -1);
       }
-      if (value !== '' && n >= 0 && !isNaN(Number(value))) {
+      if (value !== '' && n >= 0 && !Number.isNaN(Number(value))) {
         value = Number(value).toFixed(n);
       }
       return value;
@@ -903,7 +906,7 @@ export default {
     // 数值的精度及金融数字格式化方法
     numberFormat(column, input) {
       const { precision } = column;
-      if (precision >= 0 && !isNaN(Number(input))) {
+      if (precision >= 0 && !Number.isNaN(Number(input))) {
         input = Number(input).toFixed(precision);
       }
       if (column.numberFormat) {
@@ -942,8 +945,8 @@ export default {
     createDateType(format = 'yyyy-MM-dd HH:mm:ss') {
       // 配置项
       const dateTypeConfig = {
-        date: { placeholder: this.$t('baseTable.datePlaceholder'), format: 'yyyy-MM-dd' },
-        datetime: { placeholder: this.$t('baseTable.datetimePlaceholder'), format: 'yyyy-MM-dd HH:mm:ss' }
+        date: { placeholder: this.t('baseTable.datePlaceholder'), format: 'yyyy-MM-dd' },
+        datetime: { placeholder: this.t('baseTable.datetimePlaceholder'), format: 'yyyy-MM-dd HH:mm:ss' }
       };
       let res = {};
       for (let key in dateTypeConfig) {
@@ -958,7 +961,7 @@ export default {
     createSerachHelperList(arr, aliasKey) {
       // 服务端未返回数据
       if (!arr.length) {
-        return [{ __empty__: true, message: this.$t('baseTable.noData') }];
+        return [{ __empty__: true, message: this.t('baseTable.noData') }];
       }
       return arr.map(x => {
         const item = {};
@@ -969,7 +972,7 @@ export default {
             if (!target) continue;
             const { editType, precision } = target;
             // 处理数值类型的可编辑单元格，显示数据的精度
-            if (editType === 'number' && precision >= 0 && !isNaN(Number(x[attr]))) {
+            if (editType === 'number' && precision >= 0 && !Number.isNaN(Number(x[attr]))) {
               item[dataIndex] = Number(x[attr]).toFixed(precision);
             } else {
               item[dataIndex] = x[attr];
@@ -993,7 +996,7 @@ export default {
         // 如果值是 undefined，重置为空串
         data[key] = typeof data[key] !== 'undefined' ? data[key] : '';
         // 设置相关单元格的值
-        _.set(item, key, data[key]);
+        set(item, key, data[key]);
         // 其他单元格的非空校验
         if (target.editRequired) {
           this.validateRequired(key, item._uid, data[key]);
@@ -1063,7 +1066,7 @@ export default {
       } = column;
       // 搜索帮助数据的 key
       const [key] = Object.entries(aliasKey).find(x => x[1].dataIndex === dataIndex) || [];
-      if (_.isUndefined(key)) return;
+      if (isUndefined(key)) return;
       if (process.env.MOCK_DATA === 'true') {
         const res = require('@/mock/sHelperData').default;
         setTimeout(() => {
@@ -1072,7 +1075,7 @@ export default {
       } else {
         const res = await fetchApi({ ...{ [key]: queryString }, ...params });
         if (res.code === 200) {
-          const list = !datakey ? res.data : _.get(res.data, datakey, []);
+          const list = !datakey ? res.data : get(res.data, datakey, []);
           cb(this.createSerachHelperList(list, aliasKey));
         }
       }
@@ -1084,7 +1087,7 @@ export default {
       if (!fetchapi || fetchParams.xhrAbort) return;
       // console.log(`ajax 请求参数：`, fetchParams);
       if (process.env.MOCK_DATA === 'true') {
-        const { data } = _.cloneDeep(require('@/mock/tableData').default);
+        const { data } = cloneDeep(require('@/mock/tableData').default);
         // 模拟分页
         const { currentPage, pageSize } = fetchParams;
         const start = (currentPage - 1) * pageSize;
@@ -1119,7 +1122,7 @@ export default {
     // 删除列表记录方法
     deleteHandler(rows = []) {
       // 需要移除的数据，选中行 + 参数
-      const removedRows = _.uniqBy([...rows, ...this.selectionRows], '_uid');
+      const removedRows = uniqBy([...rows, ...this.selectionRows], '_uid');
       // 移除数据
       for (let i = 0; i < this.list.length; i++) {
         if (removedRows.includes(this.list[i])) {
@@ -1254,8 +1257,8 @@ export default {
     },
     // 获取格式化后的表格数据
     getFormatData(row, dataIndex) {
-      const val = _.get(row, dataIndex, '');
-      return _.isNull(val) ? '' : val;
+      const val = get(row, dataIndex, '');
+      return isNull(val) ? '' : val;
     },
     // 表头的过滤筛选
     filterHandler() {
@@ -1284,8 +1287,8 @@ export default {
         const tmpList = rows.filter(row => {
           const target = this.getFormatData(row, property);
           if (type === 'input' && this.filters[attr] !== '') {
-            if (_.isNumber(target)) {
-              return !isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
+            if (isNumber(target)) {
+              return !Number.isNaN(Number(this.filters[attr])) && Number(this.filters[attr]) === target;
             } else {
               return target.toLowerCase().includes(this.filters[attr].toString().toLowerCase());
             }
@@ -1318,7 +1321,7 @@ export default {
         filterList.push(this.isMemoryPagination ? this.backUpData : this.originData);
       }
       // 求给定数组的交集
-      const interList = _.intersection(...filterList);
+      const interList = intersection(...filterList);
       if (this.isMemoryPagination) {
         this.originData = [...interList];
         this.toFirstPage();
@@ -1360,14 +1363,14 @@ export default {
       const tColumn = this.deepFind(this.columns, prop);
       const tList = this.isMemoryPagination ? this.originData : this.list;
       if (order === 'ascending') {
-        if (_.isFunction(tColumn.sorter)) {
+        if (isFunction(tColumn.sorter)) {
           tColumn.sorter(tList, order);
         } else {
           this.ascSortHandle(tList, prop);
         }
       }
       if (order === 'descending') {
-        if (_.isFunction(tColumn.sorter)) {
+        if (isFunction(tColumn.sorter)) {
           tColumn.sorter(tList, order);
         } else {
           this.descSortHandle(tList, prop);
@@ -1393,7 +1396,7 @@ export default {
       arr.sort((a, b) => {
         a = this.getFormatData(a, prop);
         b = this.getFormatData(b, prop);
-        if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        if (!Number.isNaN(Number(a)) && !Number.isNaN(Number(b))) {
           return a - b;
         } else {
           return a.toString().localeCompare(b.toString());
@@ -1405,7 +1408,7 @@ export default {
       arr.sort((a, b) => {
         a = this.getFormatData(a, prop);
         b = this.getFormatData(b, prop);
-        if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        if (!Number.isNaN(Number(a)) && !Number.isNaN(Number(b))) {
           return b - a;
         } else {
           return b.toString().localeCompare(a.toString());
@@ -1416,7 +1419,7 @@ export default {
     handleSelectionChange(rows) {
       rows = Array.isArray(rows) ? rows : [rows];
       this.selectionRows = rows;
-      this.debounce(this.onRowSelectChange, 0)(rows);
+      debounce(this.onRowSelectChange, 0)(rows);
     },
     // 清空 table row 的选中
     clearSelectionHandle() {
@@ -1470,13 +1473,13 @@ export default {
     // 设置 table 的禁用行
     createDisabledRows(rows) {
       rows = Array.isArray(rows) ? rows : [rows];
-      this.disabledRows = rows.filter(x => _.isObject(x));
+      this.disabledRows = rows.filter(x => isObject(x));
     },
     // 重新设置记录表格操作的动作
     resetExecuteLog() {
       const { insert, remove } = this.actionsLog;
       // 求 insert, remove 的交集
-      const intersections = _.intersection(insert, remove);
+      const intersections = intersection(insert, remove);
       this.actionsLog.insert = insert.filter(x => !intersections.includes(x));
       this.actionsLog.remove = remove.filter(x => !intersections.includes(x));
     },
@@ -1490,7 +1493,7 @@ export default {
         const { property } = column;
         // 第一列显示合计
         if (index === 0) {
-          sums[index] = this.$t('baseTable.summaryText');
+          sums[index] = this.t('baseTable.summaryText');
           return;
         }
         const targetColumn = this.deepFind(this.columns, property);
@@ -1500,12 +1503,12 @@ export default {
           return;
         }
         const values = data.map(x => {
-          return Number(_.get(x, property, 0));
+          return Number(get(x, property, 0));
         });
         // 累加求和
         let result = values.reduce((prev, curr) => {
           const value = Number(curr);
-          if (!isNaN(value)) {
+          if (!Number.isNaN(value)) {
             return prev + curr;
           } else {
             return prev;
@@ -1525,7 +1528,7 @@ export default {
         res.push({ dataIndex: property, value: result.toString() });
       });
       // 触发合计 change 事件
-      this.debounce(this.onSummationChange, 0)(res);
+      debounce(this.onSummationChange, 0)(res);
       return sums;
     },
     // table 头被拖拽改变列宽度
@@ -1669,10 +1672,10 @@ export default {
       const res = { ...row };
       this.columnFlatMap(this.columns).forEach(column => {
         const { dataIndex, precision, editType } = column;
-        _.set(res, dataIndex, this.getFormatData(row, dataIndex));
-        const val = _.get(res, dataIndex);
-        if (editType === 'number' && precision >= 0 && !isNaN(Number(val))) {
-          _.set(res, dataIndex, Number(val).toFixed(precision));
+        set(res, dataIndex, this.getFormatData(row, dataIndex));
+        const val = get(res, dataIndex);
+        if (editType === 'number' && precision >= 0 && !Number.isNaN(Number(val))) {
+          set(res, dataIndex, Number(val).toFixed(precision));
         }
         if (column.editable || column.defaultEditable) {
           this.setCellEditState(res, dataIndex, true);
@@ -1688,7 +1691,7 @@ export default {
         const target = this.setDefaultValue(row);
         // 获取最大 index
         const lastRow = this.originData[this.originData.length - 1];
-        const maxIndex = _.isUndefined(lastRow) ? -1 : lastRow.index;
+        const maxIndex = isUndefined(lastRow) ? -1 : lastRow.index;
         const newRow = Object.assign({}, target, {
           $index: maxIndex + 1,
           index: maxIndex + 1,
@@ -1743,7 +1746,7 @@ export default {
     difference(newVal, oldVal) {
       const res = {};
       for (let key in newVal) {
-        if (!_.isEqual(newVal[key], oldVal[key])) {
+        if (!isEqual(newVal[key], oldVal[key])) {
           res[key] = newVal[key];
         }
       }
@@ -1760,13 +1763,6 @@ export default {
         }
       });
       return res;
-    },
-    // 函数防抖
-    debounce(fn, delay) {
-      return function(...args) {
-        fn.timer && clearTimeout(fn.timer);
-        fn.timer = setTimeout(() => fn.apply(this, args), delay);
-      };
     },
     // 判断参数是否为空
     isEmpty(val) {
@@ -1795,7 +1791,7 @@ export default {
     },
     // 判断参数是否是日期类型
     isDate(date = '') {
-      return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
+      return new Date(date) !== 'Invalid Date' && !Number.isNaN(new Date(date));
     },
     // 清除组件的操作记录
     clearHandleLogs() {
@@ -1830,8 +1826,8 @@ export default {
         this.createTableList([...rows]);
       } else {
         const data = {};
-        _.set(data, keypath, [...rows]);
-        _.set(data, keypath.replace(/[^\.]+$/, 'total'), _.isUndefined(total) ? rows.length : total);
+        set(data, keypath, [...rows]);
+        set(data, keypath.replace(/[^\.]+$/, 'total'), isUndefined(total) ? rows.length : total);
         this.createTableList(data);
       }
     },
@@ -1915,7 +1911,7 @@ export default {
     GET_FORMAT_ERROR() {
       this.list.forEach(row => {
         this.editableColumns.forEach(column => {
-          if (_.isRegExp(column.editPattern)) {
+          if (isRegExp(column.editPattern)) {
             const val = this.getFormatData(row, column.dataIndex);
             if (val) {
               this.validateFormat(column.dataIndex, row._uid, column.editPattern.test(val));

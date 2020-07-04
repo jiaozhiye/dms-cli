@@ -3,13 +3,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 19:24:34
+ * @Last Modified time: 2020-06-20 10:04:54
  */
-import _ from 'lodash';
-import JsonToExcel from '@/components/JsonToExcel/JsonToExcel.vue';
+import { get, set } from 'lodash';
+import Locale from '../_utils/mixins/locale';
+import JsonToExcel from '../JsonToExcel';
 
 export default {
   name: 'ExportExcel',
+  mixins: [Locale],
   props: {
     columns: {
       type: Array,
@@ -52,7 +54,7 @@ export default {
         let item = { ...x };
         this.filterColumns.forEach(x => {
           const { dataIndex, dictItems, editItems, editType } = x;
-          const val = _.get(item, dataIndex);
+          const val = get(item, dataIndex);
           const dicts = dictItems || editItems || [];
           const target = dicts.find(x => x.value == val);
           let res = target ? target.text : val;
@@ -65,10 +67,10 @@ export default {
               })
               .join(',');
           }
-          _.set(item, dataIndex, res);
+          set(item, dataIndex, res);
         });
         // 设置 index 序号
-        _.set(item, 'index', i + 1);
+        set(item, 'index', i + 1);
         // 处理计算导出数据
         this.onCalcExportData(item);
         return item;
@@ -112,7 +114,7 @@ export default {
     return (
       <div class="export-wrap">
         <JsonToExcel size="small" type="text" {...wrapProps}>
-          {this.$t('baseTable.export')}
+          {this.t('baseTable.export')}
         </JsonToExcel>
       </div>
     );

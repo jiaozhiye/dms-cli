@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 15:59:26
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-30 23:37:04
+ * @Last Modified time: 2020-06-16 09:38:43
  */
 const noop = () => {};
 
@@ -10,37 +10,34 @@ export default {
   name: 'Expandable',
   props: ['record', 'rowKey'],
   inject: ['$$table'],
-  data() {
-    return {};
-  },
   computed: {
-    expandable() {
+    expanded() {
       return this.$$table.rowExpandedKeys.includes(this.rowKey);
     }
   },
   watch: {
-    expandable(val) {
-      const { onChange = noop } = this.$$table.expandable;
+    expanded(val) {
+      const { onChange = noop } = this.$$table.expandable || {};
       onChange({ [this.rowKey]: val });
     }
   },
   methods: {
-    clickHandle() {
+    clickHandle(ev) {
+      ev.stopPropagation();
       const { rowExpandedKeys } = this.$$table;
       // 展开状态 -> 收起
-      const res = this.expandable ? rowExpandedKeys.filter(x => x !== this.rowKey) : [...new Set([...rowExpandedKeys, this.rowKey])];
-      this.$$table.rowExpandedKeys = res;
+      const result = this.expanded ? rowExpandedKeys.filter(x => x !== this.rowKey) : [...new Set([...rowExpandedKeys, this.rowKey])];
+      this.$$table.rowExpandedKeys = result;
     }
   },
   render() {
-    const { expandable } = this;
     const cls = [
       `v-expand--icon`,
       {
-        expanded: expandable,
-        collapsed: !expandable
+        expanded: this.expanded,
+        collapsed: !this.expanded
       }
     ];
-    return <span class={cls} onClick={this.clickHandle}></span>;
+    return <span class={cls} onClick={this.clickHandle} />;
   }
 };

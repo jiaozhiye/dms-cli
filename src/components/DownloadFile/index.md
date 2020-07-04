@@ -2,12 +2,13 @@
 
 ### DownloadFile
 
-| 参数      | 说明                   | 类型    | 默认值 |
-| --------- | ---------------------- | ------- | ------ |
-| actionUrl | 下载的地址，必要参数   | string  | -      |
-| fileName  | 下载后的文件名         | string  | -      |
-| params    | 下载接口的额外请求参数 | object  | -      |
-| disabled  | 是否禁用               | boolean | false  |
+| 参数      | 说明                                     | 类型    | 默认值 |
+| --------- | ---------------------------------------- | ------- | ------ |
+| actionUrl | 下载的地址，必要参数                     | string  | -      |
+| headers   | 上传/下载请求，header 头携带的自定义参数 | object  | -      |
+| fileName  | 下载后的文件名                           | string  | -      |
+| params    | 下载接口的额外请求参数                   | object  | -      |
+| disabled  | 是否禁用                                 | boolean | false  |
 
 ### 事件
 

@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-06 00:34:40
+ * @Last Modified time: 2020-06-22 12:58:28
  */
 import { mapState, mapActions } from 'vuex';
 import GlobalLayout from './GlobalLayout';
@@ -31,11 +31,19 @@ export default {
     this.createStarMenuList();
     // 获取常用导航
     this.createCommonMenuList();
+    // 挂载刷新方法
+    window.$$refresh = this.refreshView;
+    // 子窗口
+    // window.parent.$$refresh({ path: window.parent.location.pathname });
   },
   methods: {
-    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList']),
+    ...mapActions('app', ['createDictData', 'createStarMenuList', 'createCommonMenuList', 'refreshView']),
     createIframeView() {
-      return this.iframeList.map(x => <iframe v-show={this.key === x.key} key={x.key} id={x.key} src={x.value} width="100%" height="100%" border="0" />);
+      return this.iframeList.map(x => (
+        <div key={x.key} class="iframe-wrapper" v-show={this.key === x.key}>
+          <iframe id={x.key} src={x.value} width="100%" height="100%" frameborder="0" />
+        </div>
+      ));
     }
   },
   render() {
@@ -43,7 +51,7 @@ export default {
       <GlobalLayout>
         {/* <transition name="fade-transform" mode="out-in"> */}
         <keep-alive include={this.cachedNames} max={config.maxCacheNum}>
-          <router-view />
+          <router-view key={this.key} />
         </keep-alive>
         {/* </transition> */}
         {this.createIframeView()}
@@ -54,6 +62,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* iframe */
+.iframe-wrapper {
+  margin: -10px -10px 0;
+  height: calc(100% + 10px);
+}
 /* fade-transition */
 .fade-transition-enter-active {
   transition: all 0.3s ease-in;

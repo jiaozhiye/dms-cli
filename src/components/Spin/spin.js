@@ -2,13 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 17:57:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:40:19
+ * @Last Modified time: 2020-06-12 16:46:26
  */
-import PropTypes from '@/components/_utils/vue-types';
-import { filterEmpty, getListeners } from '@/components/_utils/props-util';
+import PropTypes from '../_utils/vue-types';
+import { filterEmpty, getListeners } from '../_utils/props-util';
+import Size from '../_utils/mixins/size';
+import PrefixCls from '../_utils/mixins/prefix-cls';
 
 export default {
   name: 'Spin',
+  mixins: [Size, PrefixCls],
   props: {
     spinning: PropTypes.bool.def(false),
     size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
@@ -44,9 +47,9 @@ export default {
       }
       return null;
     },
-    renderIndicator() {
+    renderIndicator(prefixCls) {
       return (
-        <span class={`v-spin-dot v-spin-dot-spin`}>
+        <span class={`${prefixCls}-dot ${prefixCls}-dot-spin`}>
           <i />
           <i />
           <i />
@@ -56,21 +59,22 @@ export default {
     }
   },
   render() {
-    const { size, tip, containerStyle, ...restProps } = this.$props;
+    const { tip, containerStyle, ...restProps } = this.$props;
     const { sSpinning } = this;
 
+    const prefixCls = this.getPrefixCls('spin');
     const spinClassName = {
-      [`v-spin`]: true,
-      [`v-spin-sm`]: size === 'small',
-      [`v-spin-lg`]: size === 'large',
-      [`v-spin-spinning`]: sSpinning,
-      [`v-spin-show-text`]: !!tip
+      [prefixCls]: true,
+      [`${prefixCls}-sm`]: this.currentSize === 'small',
+      [`${prefixCls}-lg`]: this.currentSize === 'large',
+      [`${prefixCls}-spinning`]: sSpinning,
+      [`${prefixCls}-show-text`]: !!tip
     };
 
     const spinElement = (
       <div {...restProps} class={spinClassName}>
-        {this.renderIndicator()}
-        {tip ? <div class={`v-spin-text`}>{tip}</div> : null}
+        {this.renderIndicator(prefixCls)}
+        {tip ? <div class={`${prefixCls}-text`}>{tip}</div> : null}
       </div>
     );
 
@@ -78,15 +82,13 @@ export default {
 
     if (children) {
       const containerClassName = {
-        [`v-spin-container`]: true,
-        [`v-spin-blur`]: sSpinning
+        [`${prefixCls}-container`]: true,
+        [`${prefixCls}-blur`]: sSpinning
       };
-      // 外层容器 style 样式
-      const wrapperStyle = sSpinning && containerStyle ? containerStyle : null;
       return (
-        <div {...{ on: getListeners(this) }} class={`v-spin-nested-loading`} style={wrapperStyle}>
+        <div {...{ on: getListeners(this) }} class={`${prefixCls}-nested-loading`} style={containerStyle}>
           {sSpinning && <div key="loading">{spinElement}</div>}
-          <div key="container" class={containerClassName}>
+          <div key="container" class={containerClassName} style={containerStyle}>
             {children}
           </div>
         </div>

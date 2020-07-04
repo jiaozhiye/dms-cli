@@ -1,0 +1,40 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-05-23 13:14:53
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-05-25 14:29:20
+ */
+@import '../../style/index.scss';
+
+$prefix-cls: '#{$v-prefix}-lazy-tab--wrapper';
+
+.#{$prefix-cls} {
+  @include reset-component();
+  .el-tabs__header {
+    margin-bottom: $padding-base;
+    .el-tabs__nav-wrap {
+      .el-tabs__item {
+        padding: 0 5px;
+        height: 34px;
+        line-height: 34px;
+      }
+      &.is-top::after {
+        height: 1px;
+      }
+      &.is-left::after {
+        width: 1px;
+      }
+    }
+  }
+  .el-tabs__content {
+    position: static !important;
+  }
+  // small
+  &-sm {
+    // ...
+  }
+  // large
+  &-lg {
+    // ...
+  }
+}

@@ -2,36 +2,37 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-25 11:37:14
+ * @Last Modified time: 2020-05-25 10:56:38
  */
-$--color-primary: #1890ff;
+$--color-primary: $primaryColor;
 
-$--color-success: #52c41a;
-$--color-warning: #faad14;
-$--color-danger: #f5222d;
-$--color-info: #909399;
+$--color-success: $successColor;
+$--color-warning: $warningColor;
+$--color-danger: $errorColor;
+$--color-info: #909090;
 
-$--font-size-base: 14px;
-$--font-size-small: 14px;
-$--input-small-font-size: 14px;
-$--button-small-font-size: 14px;
+$--font-size-base: $textSize;
+// $--font-size-small: $textSize - 2px;
+$--font-size-small: $textSize;
+$--input-small-font-size: $--font-size-small;
+$--button-small-font-size: $--font-size-small;
 
-$--color-text-primary: rgba(0, 0, 0, 0.65);
+$--color-text-primary: $textColor;
 $--color-text-regular: #606060;
 $--color-text-secondary: #979797;
 $--color-text-placeholder: #b8b8b8;
 
-$--border-color-base: #d9d9d9;
-$--border-color-light: #d9d9d9;
-$--border-color-lighter: #e4e7ed;
+$--border-color-base: $borderColor;
+$--border-color-light: $borderColor;
+$--border-color-lighter: $borderColorSecondary;
 
-$--border-radius-base: 2px;
-$--button-small-border-radius: 2px;
-$--button-mini-border-radius: 2px;
-$--button-small-padding-vertical: 8px;
+$--border-radius-base: $borderRadius;
+$--button-small-border-radius: $--border-radius-base;
+$--button-mini-border-radius: $--border-radius-base;
+$--button-small-padding-vertical: (30px - $--button-small-font-size) / 2;
 
-$--background-color-base: #f2f2f2;
-$--table-border-color: #e8e8e8;
+$--background-color-base: $backgroundColor;
+$--table-border-color: $borderColorSecondary;
 
 $--checkbox-disabled-checked-icon-color: #333;
 $--radio-disabled-checked-icon-color: #666;

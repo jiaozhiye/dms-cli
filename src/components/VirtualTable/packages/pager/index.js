@@ -2,14 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:45:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-03 15:58:36
+ * @Last Modified time: 2020-07-01 09:00:25
  */
-import PropTypes from '@/components/_utils/vue-types';
+import PropTypes from '../../../_utils/vue-types';
 import config from '../config';
-import i18n from '../lang';
+import Locale from '../locale/mixin';
 
 export default {
   name: 'Pager',
+  mixins: [Locale],
   props: {
     // 尺寸
     size: PropTypes.string,
@@ -24,7 +25,7 @@ export default {
     // 显示页码按钮的数量
     pagerCount: PropTypes.number.def(7),
     // 每页大小选项列表
-    pageSizes: PropTypes.array.def([10, 20, 30, 40, 50]),
+    pageSizes: PropTypes.array.def(config.pagination.sizes),
     // 列对其方式
     align: PropTypes.string.def('right'),
     // 带背景颜色
@@ -91,7 +92,7 @@ export default {
             }
           ],
           attrs: {
-            title: i18n.t('pagination.prev')
+            title: this.t('table.pagination.prev')
           },
           on: {
             click: this.prevPage
@@ -117,7 +118,7 @@ export default {
             }
           ],
           attrs: {
-            title: i18n.t('pagination.jumpPrev')
+            title: this.t('table.pagination.jumpPrev')
           },
           on: {
             click: this.prevJump
@@ -172,7 +173,7 @@ export default {
             }
           ],
           attrs: {
-            title: i18n.t('pagination.jumpNext')
+            title: this.t('table.pagination.jumpNext')
           },
           on: {
             click: this.nextJump
@@ -206,7 +207,7 @@ export default {
             }
           ],
           attrs: {
-            title: i18n.t('pagination.next')
+            title: this.t('table.pagination.next')
           },
           on: {
             click: this.nextPage
@@ -231,7 +232,7 @@ export default {
           }}
         >
           {this.pageSizes.map(x => (
-            <el-option key={x} label={`${x}${i18n.t('pagination.pagesize')}`} value={x} />
+            <el-option key={x} label={`${x}${this.t('table.pagination.pagesize')}`} value={x} />
           ))}
         </el-select>
       );
@@ -254,7 +255,7 @@ export default {
                 {
                   class: 'v-pager--goto-text'
                 },
-                i18n.t('pagination.goto')
+                this.t('table.pagination.goto')
               )
             : null,
           h('input', {
@@ -277,7 +278,7 @@ export default {
                 {
                   class: 'v-pager--classifier-text'
                 },
-                i18n.t('pagination.pageClassifier')
+                this.t('table.pagination.pageClassifier')
               )
             : null
         ]
@@ -305,7 +306,7 @@ export default {
         {
           class: 'v-pager--total'
         },
-        i18n.t('pagination.total', { total: this.total })
+        this.t('table.pagination.total', { total: this.total })
       );
     },
     // number
@@ -417,10 +418,12 @@ export default {
     jumpKeydownEvent(evnt) {
       if (evnt.keyCode === 13) {
         this.triggerJumpEvent(evnt);
-      } else if (evnt.keyCode === 38) {
+      }
+      if (evnt.keyCode === 38) {
         evnt.preventDefault();
         this.nextPage();
-      } else if (evnt.keyCode === 40) {
+      }
+      if (evnt.keyCode === 40) {
         evnt.preventDefault();
         this.prevPage();
       }

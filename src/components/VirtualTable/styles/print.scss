@@ -2,12 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:45:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-26 18:43:01
+ * @Last Modified time: 2020-06-03 10:19:24
  */
 .v-print--wrapper {
+  @include button-align(32px);
   margin-left: $v-module-distance;
   cursor: pointer;
   transition: all 0.3s ease;
+  i {
+    margin-right: 4px;
+  }
   &:hover {
     color: $v-primary-color;
   }

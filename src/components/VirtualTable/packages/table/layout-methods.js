@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-04-13 16:27:42
+ * @Last Modified time: 2020-07-01 17:32:29
  */
 import addEventListener from 'add-dom-event-listener';
-import { addResizeListener, removeResizeListener } from '@/components/_utils/resize-event';
-import _ from 'lodash';
+import { addResizeListener, removeResizeListener } from '../../../_utils/resize-event';
 
 export default {
   renderBorderLine() {
@@ -20,9 +19,14 @@ export default {
     this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
   },
   updateElsHeight() {
+    const { tableHeader, tableFooter } = this.$refs;
     const tableOuterHeight = this.$vTable.offsetHeight;
-    this.layout.headerHeight = this.showHeader ? this.$$tableHeader.$el.offsetHeight : 0;
-    this.layout.footerHeight = this.showFooter ? this.$$tableFooter.$el.offsetHeight : 0;
+    if (this.showHeader) {
+      this.layout.headerHeight = tableHeader?.$el.offsetHeight || 0;
+    }
+    if (this.showFooter) {
+      this.layout.footerHeight = tableFooter?.$el.offsetHeight || 0;
+    }
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
     this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.v-table--body').offsetHeight;
@@ -39,13 +43,13 @@ export default {
     const shouldUpdateLayout = isXChange || isYChange;
     if (!shouldUpdateLayout) return;
     this.resizeState = { width, height };
-    this.doLayout();
     if (isYChange && this.scrollYLoad) {
-      setTimeout(this.loadTableData);
+      this.loadTableData();
     }
+    this.doLayout();
   },
   calcTableHeight(ev) {
-    ev && ev.preventDefault();
+    ev?.preventDefault();
     const disY = this.showPagination ? 50 : 10;
     this.autoHeight = window.innerHeight - this.$vTable.getBoundingClientRect().top - disY;
     this.doLayout();
@@ -59,12 +63,11 @@ export default {
   },
   removeEvents() {
     removeResizeListener(this.$vTable, this.resizeListener);
-    this.resizeEvent && this.resizeEvent.remove();
+    this.resizeEvent?.remove();
   },
   doLayout() {
+    this.updateElsHeight();
     this.updateColumnsWidth();
-    if (this.shouldUpdateHeight) {
-      this.$nextTick(this.updateElsHeight);
-    }
+    return this.$nextTick().then(() => this.updateElsHeight());
   }
 };

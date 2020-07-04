@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-02 18:15:02
+ * @Last Modified time: 2020-05-10 17:02:16
  **/
 import { mapState } from 'vuex';
 
@@ -57,7 +57,7 @@ export default {
   render() {
     return (
       <div class="breadcrumb-wrap">
-        <span>{this.$t('dreadcrumb.location')}&nbsp;:&nbsp;</span>
+        <span class="location">{this.$t('dreadcrumb.location')}&nbsp;:&nbsp;</span>
         <el-breadcrumb separator="/">
           {this.breadcrumbs.map(x => (
             <el-breadcrumb-item key={x}>{x}</el-breadcrumb-item>
@@ -73,6 +73,9 @@ export default {
 .breadcrumb-wrap {
   display: flex;
   padding: $modulePadding $modulePadding 0;
+  .location {
+    line-height: 1;
+  }
   /deep/ .el-breadcrumb__item {
     .el-breadcrumb__inner {
       color: $textColor;

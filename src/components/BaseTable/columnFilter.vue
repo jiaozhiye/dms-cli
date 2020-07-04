@@ -3,12 +3,14 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-04 18:41:08
+ * @Last Modified time: 2020-06-20 10:03:49
  **/
-import _ from 'lodash';
+import { isEqual } from 'lodash';
+import Locale from '../_utils/mixins/locale';
 
 export default {
   name: 'ColumnFilter',
+  mixins: [Locale],
   props: {
     columns: {
       type: Array,
@@ -34,7 +36,7 @@ export default {
   },
   watch: {
     columns(nextProps, prevProps) {
-      if (_.isEqual(nextProps, prevProps)) return;
+      if (isEqual(nextProps, prevProps)) return;
       this.checkedKeys = this.createCheckedKeys(nextProps);
       this.treeList = this.createTreeList(nextProps);
       this.setLocalColumns(nextProps);
@@ -136,7 +138,7 @@ export default {
       <el-dropdown hide-on-click={false} trigger="click">
         <span class="columns-dropdown">
           <i class="icon el-icon-s-operation" />
-          {this.$t('baseTable.columnFilterText')}
+          {this.t('baseTable.columnFilterText')}
         </span>
         <el-dropdown-menu style={{ minWidth: '120px', maxHeight: 'calc(100vh - 30px)', overflowY: 'auto' }} slot="dropdown">
           <el-tree

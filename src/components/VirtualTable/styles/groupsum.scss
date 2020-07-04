@@ -1,0 +1,82 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-03-26 11:45:02
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-06-03 10:15:51
+ */
+.v-group-summary--wrapper {
+  .summary-button {
+    @include button-align(32px);
+    margin-left: $v-module-distance;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    i {
+      margin-right: 4px;
+    }
+    &:hover {
+      color: $v-primary-color;
+    }
+  }
+}
+.v-group-summary--setting {
+  .main {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: $v-module-distance;
+    .saved {
+      flex: 1;
+      width: 0;
+      .form-wrap {
+        display: flex;
+      }
+      .card-wrap {
+        margin-top: $v-module-distance;
+        border: 1px solid $v-table-border-color;
+        > h5 {
+          display: flex;
+          align-items: center;
+          padding: 0 $v-module-distance;
+          font-size: $v-font-size;
+          border-bottom: 1px solid $v-table-border-color;
+          background-color: $v-table-header-background-color;
+          box-sizing: border-box;
+        }
+        > ul > li {
+          position: relative;
+          line-height: 20px;
+          padding: 8px $v-module-distance;
+          border-bottom: 1px solid $v-table-border-color;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          &:last-of-type {
+            border-bottom: 0;
+          }
+          &:hover {
+            background-color: $v-table-row-hover-background-color;
+            .close {
+              visibility: visible;
+            }
+          }
+          &.selected {
+            background-color: $v-table-row-selected-background-color;
+          }
+          .title {
+            i {
+              margin-right: 5px;
+            }
+          }
+          .close {
+            position: absolute;
+            right: $v-module-distance;
+            visibility: hidden;
+          }
+        }
+      }
+    }
+    .line {
+      border-left: 1px dashed #d9d9d9;
+      padding-left: $v-module-distance;
+      margin-left: $v-module-distance;
+    }
+  }
+}

@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-03-08 18:24:39
+ * @Last Modified time: 2020-06-20 11:30:47
  */
-import isPlainObject from 'lodash/isPlainObject';
+import { isPlainObject } from 'lodash';
 import classNames from 'classnames';
 
 function getType(fn) {
