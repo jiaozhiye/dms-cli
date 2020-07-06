@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-04 10:01:07
+ * @Last Modified time: 2020-07-04 14:36:34
  */
 import { isEqual, isUndefined, isObject } from 'lodash';
 import moment from 'moment';
@@ -243,7 +243,7 @@ export default {
             const otherValue = others[otherDataIndex];
             const otherColumn = deepFindColumn(this.$$table.columns, otherDataIndex);
             setCellValue(row, otherDataIndex, otherValue, otherColumn?.precision);
-            const otherOptions = otherColumn?.editRender(row, otherColumn);
+            const otherOptions = otherColumn?.editRender?.(row, otherColumn);
             if (!Array.isArray(otherOptions?.rules)) continue;
             this.$$table.createFieldValidate(otherOptions.rules, otherValue, this.rowKey, otherDataIndex);
           }
