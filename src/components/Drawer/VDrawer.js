@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-19 08:43:05
+ * @Last Modified time: 2020-07-07 21:09:16
  **/
 import PropTypes from '../_utils/vue-types';
+import { getConfig } from '../_utils/globle-config';
 import { isIE } from '../_utils/tool';
 import Spin from '../Spin';
 import Size from '../_utils/mixins/size';
@@ -16,13 +17,13 @@ export default {
   mixins: [Locale, Size, PrefixCls],
   props: {
     visible: PropTypes.bool.def(false),
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     closable: PropTypes.bool.def(true),
     destroyOnClose: PropTypes.bool.def(false),
     title: PropTypes.string.def(''),
     position: PropTypes.string.def('right'),
     lockScroll: PropTypes.bool.def(true),
-    maskClosable: PropTypes.bool.def(false),
+    maskClosable: PropTypes.bool,
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).def('75%'),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).def('300px'),
     level: PropTypes.number.def(1),
@@ -82,6 +83,9 @@ export default {
     delayTime() {
       return !isIE() ? 300 : 400;
     },
+    maskToClose() {
+      return this.maskClosable ?? getConfig('Drawer_maskClosable') ?? false;
+    },
     containerPosition() {
       return this.STYLE[this.position];
     },
@@ -129,7 +133,7 @@ export default {
       this.$emit('update:visible', true);
     },
     close(from) {
-      if (from === 'mask' && !this.maskClosable) return;
+      if (from === 'mask' && !this.maskToClose) return;
       this.$emit('update:visible', false);
     },
     calcPanelSize(val) {

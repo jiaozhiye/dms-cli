@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 15:59:21
+ * @Last Modified time: 2020-07-12 15:00:15
  */
 import { pickBy, intersection, isFunction, isNumber } from 'lodash';
+import { where, stringify, array_format } from '../filter-sql';
 import moment from 'moment';
 
 import config from '../config';
@@ -13,6 +14,7 @@ import { convertToRows, getCellValue, isEmpty } from '../utils';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
+import SvgIcon from '../../../SvgIcon';
 import THeadFilter from '../filter';
 
 export default {
@@ -157,16 +159,12 @@ export default {
     },
     renderSorter(order) {
       const ascCls = [
-        `iconfont`,
-        `icon-caret-up`,
         `v-sort--asc-btn`,
         {
           [`sort--active`]: order === this.ascend
         }
       ];
       const descCls = [
-        `iconfont`,
-        `icon-caret-down`,
         `v-sort--desc-btn`,
         {
           [`sort--active`]: order === this.descend
@@ -174,8 +172,8 @@ export default {
       ];
       return (
         <span class="v-cell--sort">
-          <i class={ascCls} title={this.t('table.sorter.asc')} />
-          <i class={descCls} title={this.t('table.sorter.desc')} />
+          <SvgIcon class={ascCls} icon-class="caret-up" title={this.t('table.sorter.asc')} />
+          <SvgIcon class={descCls} icon-class="caret-down" title={this.t('table.sorter.desc')} />
         </span>
       );
     },
@@ -250,54 +248,26 @@ export default {
     },
     // 客户端筛选
     clientFilter() {
-      const filterList = [];
-
-      for (let key in this.filters) {
-        const [type, property] = key.split('|');
-        const results = this.$$table.tableOriginData.filter(row => {
-          const cellVal = getCellValue(row, property);
-          const filterVal = this.filters[key];
-          if (isEmpty(filterVal)) {
-            return true;
-          }
-          if (type === 'text') {
-            if (isNumber(cellVal)) {
-              return Number(filterVal) === cellVal;
-            }
-            return cellVal.toLowerCase().includes(filterVal.toString().toLowerCase());
-          }
-          if (type === 'number') {
-            return Number(filterVal) === cellVal;
-          }
-          if (type === 'range-number') {
-            const [minVal = -Infinity, maxVal = Infinity] = filterVal;
-            return cellVal >= Number(minVal) && cellVal <= Number(maxVal);
-          }
-          if (type === 'radio') {
-            return cellVal === filterVal;
-          }
-          if (type === 'checkbox') {
-            // 单元格的值是数组，说明是多选
-            if (Array.isArray(cellVal)) {
-              return filterVal.every(x => cellVal.includes(x));
-            }
-            return filterVal.includes(cellVal);
-          }
-          if (type === 'date') {
-            return moment(cellVal, 'YYYY-MM-DD').diff(moment(filterVal), 'days') === 0;
-          }
-          if (type === 'range-date') {
-            return moment(cellVal, 'YYYY-MM-DD').isBetween(filterVal[0], filterVal[1], null, '[]');
-          }
-          return true;
-        });
-        filterList.push(results);
-      }
-
-      this.$$table.tableFullData = Object.keys(this.filters).length ? intersection(...filterList) : [...this.$$table.tableOriginData];
-
+      const __query__ = this.createWhereSQL(this.filters);
+      this.$$table.tableFullData = __query__ !== '' ? where(this.$$table.tableOriginData, __query__) : [...this.$$table.tableOriginData];
       // 执行排序
       this.sorterHandle();
+    },
+    // 生成查询 sql 片段
+    createWhereSQL(filters) {
+      let __query__ = ``;
+      for (let key in filters) {
+        const property = key.includes('|') ? key.split('|')[1] : key;
+        const filterVal = filters[key];
+        for (let mark in filterVal) {
+          let val = Array.isArray(filterVal[mark]) ? array_format(filterVal[mark]) : stringify(filterVal[mark]);
+          if (val === "''" || val === '[]') continue;
+          __query__ += `${property} ${mark} ${val} and `;
+        }
+      }
+      __query__ = __query__.slice(0, -5);
+      console.log(`where:`, __query__);
+      return __query__;
     },
     // 格式化排序参数
     formatSorterValue(option) {
@@ -314,9 +284,14 @@ export default {
       const result = {};
       for (let key in option) {
         if (!key.includes('|')) break;
-        let [type, attr] = key.split('|');
-        // result[attr] = option[key];
-        result[`${attr}|${type}`] = Array.isArray(option[key]) ? option[key].join('#') : option[key];
+        let [type, property] = key.split('|');
+        for (let mark in option[key]) {
+          if (isEmpty(option[key][mark])) {
+            delete option[key][mark];
+          }
+        }
+        // result[`${type}|${property}`]
+        result[property] = option[key];
       }
       return result;
     },

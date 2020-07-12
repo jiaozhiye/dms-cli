@@ -196,6 +196,30 @@ export default {
           id: 'aaa2'
         },
         {
+          type: 'INPUT_CASCADER',
+          label: '表单项17',
+          fieldName: 's',
+          options: {
+            titles: ['品牌', '车型'],
+            itemList: [
+              {
+                value: '1',
+                text: 'aaa',
+                children: [
+                  {
+                    value: '3',
+                    text: 'aaa-1'
+                  }
+                ]
+              },
+              {
+                value: '2',
+                text: 'bbb'
+              }
+            ]
+          }
+        },
+        {
           type: 'INPUT_TREE',
           label: '表单项10',
           fieldName: 'k',
@@ -344,7 +368,7 @@ export default {
           width: 220,
           sorter: true,
           filter: {
-            type: 'range-date'
+            type: 'date'
           },
           editRender: row => {
             return {
@@ -392,7 +416,7 @@ export default {
           width: 100,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           }
         },
         {
@@ -403,7 +427,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -423,7 +447,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -443,7 +467,7 @@ export default {
           align: 'right',
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           summation: {
             unit: '元'

@@ -19,10 +19,10 @@
     </button-area>
     <VirtualTable
       ref="table"
-      cacheColumnsKey="jzyDemoTable"
+      uniqueKey="jzyDemoTable"
       height="auto"
       :columns="columns"
-      :fetch="fetch"
+      :dataSource="list"
       :rowKey="record => record.id"
       :rowSelection="selection"
       :exportExcel="exportExcel"
@@ -138,6 +138,7 @@ export default {
           type: 'INPUT',
           label: this.$t('demo.label1'),
           fieldName: 'a',
+          noResetable: true,
           rules: [
             { required: true, message: '请输入条件', trigger: 'change' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'change' }
@@ -257,6 +258,17 @@ export default {
             datakey: 'items',
             valueKey: 'name'
           }
+        },
+        {
+          type: 'RADIO',
+          label: '条件7',
+          fieldName: 'p',
+          options: {
+            itemList: [
+              { text: '男', value: '1' },
+              { text: '女', value: '0' }
+            ]
+          }
         }
       ];
     },
@@ -296,7 +308,7 @@ export default {
           width: 220,
           sorter: true,
           filter: {
-            type: 'range-date'
+            type: 'date'
           },
           editRender: row => {
             return {
@@ -335,7 +347,7 @@ export default {
                       title: '创建时间',
                       dataIndex: 'date',
                       filter: {
-                        type: 'range-date'
+                        type: 'date'
                       }
                     },
                     {
@@ -383,7 +395,7 @@ export default {
           width: 100,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -403,7 +415,7 @@ export default {
                       title: '创建时间',
                       dataIndex: 'date',
                       filter: {
-                        type: 'range-date'
+                        type: 'date'
                       }
                     },
                     {
@@ -433,7 +445,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -452,7 +464,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -472,7 +484,7 @@ export default {
           align: 'right',
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           summation: {
             unit: '元'
@@ -511,7 +523,7 @@ export default {
           dataIndex: 'state',
           width: 150,
           filter: {
-            type: 'checkbox',
+            type: 'radio',
             items: [
               { text: '已完成', value: 1 },
               { text: '进行中', value: 2 },

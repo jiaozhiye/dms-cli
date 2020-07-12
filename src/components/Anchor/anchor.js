@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-29 09:29:46
+ * @Last Modified time: 2020-07-06 18:35:43
  **/
 import PropTypes from '../_utils/vue-types';
 import { isIE, debounce } from '../_utils/tool';
@@ -20,7 +20,7 @@ export default {
       })
     ).isRequired,
     activeId: PropTypes.string,
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     labelWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).def(80)
   },
   data() {

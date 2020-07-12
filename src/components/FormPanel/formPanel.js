@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-02 14:02:10
+ * @Last Modified time: 2020-07-10 10:58:39
  **/
-import { get, set, difference, cloneDeep, isEqual, isUndefined, isObject, isFunction, isRegExp, isElement } from 'lodash';
+import { get, set, xor, transform, cloneDeep, isEqual, isUndefined, isObject, isFunction, isRegExp, isElement } from 'lodash';
 import moment from 'moment';
 import PropTypes from '../_utils/vue-types';
 import { sleep } from '../_utils/tool';
@@ -33,7 +33,7 @@ export default {
         fieldName: PropTypes.string
       }).loose
     ).isRequired,
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     initialValue: PropTypes.object.def({}),
     formType: PropTypes.string.def('default'),
     cols: PropTypes.number,
@@ -44,7 +44,8 @@ export default {
   data() {
     this.arrayTypes = ['RANGE_DATE', 'RANGE_TIME', 'RANGE_TIME_SELECT', 'RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'MULTIPLE_SELECT', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE'];
     return {
-      form: {},
+      form: {}, // 表单的值
+      desc: {}, // 描述信息
       visible: {},
       loading: false
     };
@@ -53,7 +54,7 @@ export default {
     formItemList() {
       const res = [];
       this.list
-        .filter(x => !x.hidden && x.fieldName)
+        .filter(x => x.fieldName)
         .forEach(x => {
           if (x.type === 'BREAK_SPACE') return;
           if (isObject(x.labelOptions) && x.labelOptions.fieldName) {
@@ -73,21 +74,28 @@ export default {
         res[x.fieldName] = x.rules;
       });
       return res;
+    },
+    descContents() {
+      return this.formItemList.filter(x => isObject(x.descOptions)).map(x => ({ fieldName: x.fieldName, content: x.descOptions.content }));
     }
   },
   watch: {
     fieldNames(nextProps, prevProps) {
-      const diffRes = difference(nextProps, prevProps);
-      if (diffRes.length) {
-        diffRes.forEach(x => {
-          const target = this.formItemList.find(k => k.fieldName === x);
-          target && this.$set(this.form, x, this.getInitialValue(target));
-        });
-      }
-      this.$nextTick(() => this.doClearValidate(this.$refs.form));
+      const diffs = xor(prevProps, nextProps);
+      if (!diffs.length) return;
+      diffs.forEach(x => {
+        if (prevProps.includes(x)) {
+          delete this.form[x];
+        } else {
+          this.$set(this.form, x, this.getInitialValue(this.formItemList.find(k => k.fieldName === x)));
+        }
+      });
     },
     rules() {
       this.$nextTick(() => this.doClearValidate(this.$refs.form));
+    },
+    descContents(val) {
+      val.forEach(x => (this.desc[x.fieldName] = x.content));
     },
     formType(nextProps) {
       this.formItemList.forEach(x => {
@@ -95,6 +103,14 @@ export default {
           x.disabled = true;
         }
       });
+    },
+    form: {
+      handler(val) {
+        const diff = this.difference(val, this.initialValues);
+        if (!Object.keys(diff).length) return;
+        this.$emit('valuesChange', diff);
+      },
+      deep: true
     }
   },
   created() {
@@ -106,6 +122,10 @@ export default {
   methods: {
     initialHandle() {
       this.form = this.createFormValue();
+      this.desc = this.createDescription();
+      // Object.assign(this.form, this.createFormValue());
+      this.initialValues = cloneDeep(this.form);
+      this.initialExtras = cloneDeep(this.desc);
     },
     getInitialValue(item) {
       const { type = '', fieldName, options = {}, readonly } = item;
@@ -115,13 +135,16 @@ export default {
         item.disabled = true;
       }
       if (this.arrayTypes.includes(type)) {
-        val = val || [];
+        val = val ?? [];
       }
       if (type === 'INPUT' && (readonly || item.disabled)) {
         const { secretType } = options;
         if (!!secretType) {
           val = this.secretFormat(val, secretType);
         }
+      }
+      if (type === 'CHECKBOX') {
+        val = val ?? options.falseValue ?? '0';
       }
       if (type === 'INPUT_TREE' && isUndefined(this[`${fieldName}TreeFilterTexts`])) {
         this[`${fieldName}TreeFilterTexts`] = '';
@@ -137,6 +160,15 @@ export default {
         target[x.fieldName] = this.getInitialValue(x);
       });
       return Object.assign({}, this.initialValue, target);
+    },
+    createDescription() {
+      const target = {};
+      this.formItemList
+        .filter(x => isObject(x.descOptions))
+        .forEach(x => {
+          target[x.fieldName] = x.descOptions.content;
+        });
+      return Object.assign({}, target);
     },
     createFormItemLabel(option) {
       const { form } = this;
@@ -163,13 +195,13 @@ export default {
       );
     },
     createFormItemDesc(option) {
-      if (!option) return null;
-      const { isTooltip, style = {}, content = '' } = option;
+      const { fieldName, isTooltip, style = {} } = option;
+      const content = this.desc[fieldName] ?? '';
       if (isTooltip) {
         return (
           <el-tooltip effect="dark" placement="right">
             <div slot="content">{content}</div>
-            <i class="desc-icon el-icon-info"></i>
+            <i class="desc-icon el-icon-info" />
           </el-tooltip>
         );
       }
@@ -237,7 +269,7 @@ export default {
                     onChange(form[key]);
                   }
                 } else {
-                  descOptions && (descOptions.content = data[alias[key]]);
+                  this.desc[fieldName] = data[alias[key]];
                 }
               }
               if (extraKeys.length) {
@@ -252,78 +284,76 @@ export default {
       };
       const prevValue = form[fieldName];
       return (
-        <div>
-          <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
-            {labelOptions && this.createFormItemLabel(labelOptions)}
-            <el-input
-              value={prevValue}
-              onInput={val => {
-                // 搜索帮助，不允许输入
-                if (isSearchHelper || noInput) return;
-                if (isRegExp(pattern)) {
-                  // 是否为删除动作
-                  const isRemoveHandle = val.length < (prevValue && prevValue.length);
-                  // 单元格正则校验
-                  if (!isRemoveHandle && !pattern.test(val)) return;
+        <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
+          {labelOptions && this.createFormItemLabel(labelOptions)}
+          <el-input
+            value={prevValue}
+            onInput={val => {
+              // 搜索帮助，不允许输入
+              if (isSearchHelper || noInput) return;
+              if (isRegExp(pattern)) {
+                // 是否为删除动作
+                const isRemoveHandle = val.length < (prevValue && prevValue.length);
+                // 单元格正则校验
+                if (!isRemoveHandle && !pattern.test(val)) return;
+              }
+              form[fieldName] = val;
+              onInput(val);
+            }}
+            title={prevValue}
+            minlength={minlength}
+            maxlength={maxlength}
+            placeholder={formType !== 'onlyShow' ? placeholder : ''}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ ...style }}
+            show-password={password}
+            show-word-limit={showLimit}
+            clearable
+            onClear={() => {
+              // 搜索帮助
+              if (isSearchHelper || noInput) {
+                if (Array.isArray(this[`${fieldName}ExtraKeys`]) && this[`${fieldName}ExtraKeys`].length) {
+                  this[`${fieldName}ExtraKeys`].forEach(key => (form[key] = ''));
                 }
-                form[fieldName] = val;
-                onInput(val);
-              }}
-              title={prevValue}
-              minlength={minlength}
-              maxlength={maxlength}
-              placeholder={formType !== 'onlyShow' ? placeholder : ''}
-              readonly={readonly}
-              disabled={disabled}
-              style={{ ...style }}
-              show-password={password}
-              show-word-limit={showLimit}
-              clearable
-              onClear={() => {
-                // 搜索帮助
-                if (isSearchHelper || noInput) {
-                  if (Array.isArray(this[`${fieldName}ExtraKeys`]) && this[`${fieldName}ExtraKeys`].length) {
-                    this[`${fieldName}ExtraKeys`].forEach(key => (form[key] = ''));
-                  }
-                  descOptions && (descOptions.content = '');
-                }
-              }}
-              onChange={val => {
-                form[fieldName] = val.trim();
-                onChange(form[fieldName]);
-              }}
-              onFocus={onFocus}
-              onBlur={() => onBlur(form[fieldName])}
-              nativeOnKeydown={e => {
-                if (e.keyCode !== 13) return;
-                onEnter(e.target.value);
-                this.doFormItemValidate(fieldName);
-              }}
-            >
-              {isSearchHelper && (
-                <template slot="append">
-                  <el-button
-                    icon="el-icon-search"
-                    style={disabled && { cursor: 'not-allowed' }}
-                    onClick={ev => {
-                      if (disabled) return;
-                      const { open = () => true } = searchHelper;
-                      if (!open(this.form)) return;
-                      this.visible = Object.assign({}, this.visible, { [fieldName]: !0 });
-                    }}
-                  />
-                </template>
-              )}
-              {isFunction(unitRender) && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
-            </el-input>
-            {this.createFormItemDesc(descOptions)}
-          </el-form-item>
+                this.desc[fieldName] = '';
+              }
+            }}
+            onChange={val => {
+              form[fieldName] = val.trim();
+              onChange(form[fieldName]);
+            }}
+            onFocus={onFocus}
+            onBlur={() => onBlur(form[fieldName])}
+            nativeOnKeydown={e => {
+              if (e.keyCode !== 13) return;
+              onEnter(e.target.value);
+              this.doFormItemValidate(fieldName);
+            }}
+          >
+            {isSearchHelper && (
+              <template slot="append">
+                <el-button
+                  icon="el-icon-search"
+                  style={disabled && { cursor: 'not-allowed' }}
+                  onClick={ev => {
+                    if (disabled) return;
+                    const { open = () => true } = searchHelper;
+                    if (!open(this.form)) return;
+                    this.visible = Object.assign({}, this.visible, { [fieldName]: !0 });
+                  }}
+                />
+              </template>
+            )}
+            {isFunction(unitRender) && <template slot="append">{<div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>}</template>}
+          </el-input>
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
           {isSearchHelper && (
             <BaseDialog {...dialogProps}>
               <SearchHelper {...shProps} />
             </BaseDialog>
           )}
-        </div>
+        </el-form-item>
       );
     },
     INPUT_NUMBER(option) {
@@ -355,7 +385,7 @@ export default {
               onChange(form[fieldName]);
             }}
           />
-          {this.createFormItemDesc(descOptions)}
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
         </el-form-item>
       );
     },
@@ -497,7 +527,7 @@ export default {
     INPUT_CASCADER(option) {
       const { form, formType } = this;
       const { label, fieldName, labelWidth, labelOptions, options = {}, style = {}, placeholder = this.t('form.selectPlaceholder'), readonly, disabled, onChange = noop } = option;
-      const { itemList, titles = [] } = options;
+      const { itemList, titles = [], mustCheckLast } = options;
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && this.createFormItemLabel(labelOptions)}
@@ -510,11 +540,14 @@ export default {
                 }}
                 list={itemList}
                 labels={titles}
+                mustCheckLast={mustCheckLast}
                 style={style}
-                onChange={data => {
+                onChange={() => {
                   onChange(form[fieldName], this[`${fieldName}CascaderTexts`]);
                 }}
-                onClose={() => (this.visible[fieldName] = false)}
+                onClose={val => {
+                  this.visible[fieldName] = val;
+                }}
               />
             </div>
             <el-input
@@ -987,12 +1020,11 @@ export default {
       const { form } = this;
       const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, onChange = noop } = option;
       const { trueValue = '1', falseValue = '0' } = options;
-      form[fieldName] !== trueValue && (form[fieldName] = falseValue);
       return (
         <el-form-item key={fieldName} label={label} labelWidth={labelWidth} prop={fieldName}>
           {labelOptions && this.createFormItemLabel(labelOptions)}
           <el-checkbox v-model={form[fieldName]} disabled={disabled} style={{ ...style }} trueLabel={trueValue} falseLabel={falseValue} onChange={onChange} />
-          {this.createFormItemDesc(descOptions)}
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
         </el-form-item>
       );
     },
@@ -1012,7 +1044,7 @@ export default {
               );
             })}
           </el-checkbox-group>
-          {this.createFormItemDesc(descOptions)}
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
         </el-form-item>
       );
     },
@@ -1030,7 +1062,7 @@ export default {
               </el-radio>
             ))}
           </el-radio-group>
-          {this.createFormItemDesc(descOptions)}
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
         </el-form-item>
       );
     },
@@ -1189,7 +1221,7 @@ export default {
               <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
             ))}
           </el-select>
-          {this.createFormItemDesc(descOptions)}
+          {descOptions && this.createFormItemDesc({ fieldName, ...descOptions })}
         </el-form-item>
       );
     },
@@ -1308,7 +1340,7 @@ export default {
         });
     },
     doClearValidate($ref) {
-      $ref && $ref.clearValidate();
+      $ref?.clearValidate();
     },
     doFormItemValidate(fieldName) {
       this.$refs.form.validateField(fieldName);
@@ -1385,7 +1417,7 @@ export default {
       this.$emit('change', { ...this.form });
     },
     submitForm(ev) {
-      ev && ev.preventDefault();
+      ev?.preventDefault();
       let isErr;
       this.excuteFormData(this.form);
       this.$refs.form.validate((valid, fields) => {
@@ -1402,16 +1434,20 @@ export default {
       return isErr;
     },
     resetForm() {
-      let cloneForm = cloneDeep(this.form);
-      this.$refs.form.resetFields();
+      const noResetValue = {};
       this.formItemList.forEach(x => {
-        if (x.noResetable) {
-          this.form[x.fieldName] = cloneForm[x.fieldName];
+        // 搜索帮助
+        let extraKeys = this[`${x.fieldName}ExtraKeys`];
+        if (Array.isArray(extraKeys) && extraKeys.length) {
+          extraKeys.forEach(key => (this.form[key] = undefined));
         }
+        if (!x.noResetable) return;
+        noResetValue[x.fieldName] = this.form[x.fieldName];
       });
+      this.$refs.form.resetFields();
+      this.desc = Object.assign({}, this.initialExtras);
+      Object.assign(this.form, noResetValue);
       this.excuteFormData(this.form);
-      // 清空变量，释放内存
-      cloneForm = null;
       // 解决 附件/图片 重复校验的 bug
       this.$nextTick(() => {
         this.formItemList.forEach(x => {
@@ -1550,6 +1586,13 @@ export default {
     toPercent(num) {
       return Number(num * 100).toFixed(5) + '%';
     },
+    difference(object, base) {
+      return transform(object, (result, value, key) => {
+        if (!isEqual(value, base[key])) {
+          result[key] = isObject(value) && isObject(base[key]) ? this.difference(value, base[key]) : value;
+        }
+      });
+    },
     deepFind(arr, mark) {
       let res = null;
       for (let i = 0; i < arr.length; i++) {
@@ -1576,9 +1619,14 @@ export default {
     // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }
     SET_FIELDS_VALUE(values = {}, whiteList = []) {
       for (let key in values) {
-        if ([...new Set([...this.fieldNames, ...whiteList])].includes(key)) {
+        if (this.fieldNames.includes(key)) {
           this.form[key] = values[key];
         }
+      }
+    },
+    SET_FORM_VALUES(values = {}) {
+      for (let key in values) {
+        this.form[key] = values[key];
       }
     },
     async GET_FORM_DATA() {
@@ -1607,7 +1655,6 @@ export default {
     };
     const wrapProps = {
       props: {
-        size: 'small',
         model: form,
         rules,
         labelWidth: labelWidth > 0 ? `${labelWidth}px` : labelWidth

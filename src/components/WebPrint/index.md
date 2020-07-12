@@ -18,7 +18,7 @@
 ```bash
 # template
 <template>
-  <web-print size="small" type="primary" fileUrl="/static/webPrint/222.pdf">pdf 打印</web-print>
+  <web-print type="primary" fileUrl="/static/webPrint/222.pdf">pdf 打印</web-print>
 </template>
 
 # js

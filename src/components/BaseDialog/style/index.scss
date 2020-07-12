@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 13:14:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-25 11:47:23
+ * @Last Modified time: 2020-07-07 10:41:10
  */
 @import '../../style/index.scss';
 
@@ -33,7 +33,7 @@ $prefix-cls: '#{$v-prefix}-dialog--wrapper';
     .el-dialog__body {
       padding: 0;
       height: calc(100% - 50px);
-      > .fullscreen-btn {
+      & > .fullscreen-btn {
         position: absolute;
         right: 38px;
         top: 15px;
@@ -48,7 +48,7 @@ $prefix-cls: '#{$v-prefix}-dialog--wrapper';
           font-weight: 700;
         }
       }
-      > .container {
+      & > .container {
         height: 100%;
         padding: $padding-base;
         overflow-y: auto;

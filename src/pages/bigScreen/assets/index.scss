@@ -1,0 +1,47 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-07-06 09:41:57
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-07-06 13:07:00
+ */
+.v-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #040509;
+  &--toper-title {
+    font-size: 26px;
+    padding-top: 10px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 4px #fff;
+  }
+  &--wrapper {
+    display: flex;
+    flex: 1;
+    &-left {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    &-middle {
+      display: flex;
+      flex-direction: column;
+      width: 45vw;
+    }
+    &-right {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .chart {
+      flex: 1;
+      margin: 10px;
+      background: #fff;
+    }
+    .map {
+      flex: none;
+      height: 55vh;
+    }
+  }
+}

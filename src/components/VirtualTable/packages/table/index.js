@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 09:16:20
+ * @Last Modified time: 2020-07-12 14:59:57
  */
 import baseProps from './props';
 import Store from '../store';
@@ -12,6 +12,7 @@ import { isEqual, isUndefined } from 'lodash';
 import { columnsFlatMap, getAllColumns, getAllRowKeys, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
 import warning from '../../../_utils/warning';
 
+import sizeMixin from '../../../_utils/mixins/size';
 import columnsMixin from '../columns';
 import expandableMixin from '../expandable/mixin';
 import selectionMixin from '../selection/mixin';
@@ -47,7 +48,7 @@ export default {
       $$table: this
     };
   },
-  mixins: [columnsMixin, expandableMixin, selectionMixin, validateMixin, localStorageMixin],
+  mixins: [sizeMixin, columnsMixin, expandableMixin, selectionMixin, validateMixin, localStorageMixin],
   data() {
     // 原始数据
     this.tableOriginData = [];
@@ -92,7 +93,7 @@ export default {
         renderSize: 0,
         offsetSize: 0,
         visibleSize: 0,
-        rowHeight: config.rowHeightMaps[this.size]
+        rowHeight: 0
       },
       // 支持的排序方式
       sortDirections: ['ascend', 'descend'],
@@ -184,10 +185,15 @@ export default {
       const params = this.fetch ? this.fetch.params : null;
       return {
         ...this.sorter,
-        ...(Object.keys(this.filters).length ? { theadFilter: this.filters } : null),
+        ...(Object.keys(this.filters).length ? { where: this.$refs[`tableHeader`]?.createWhereSQL(this.filters) } : null),
         ...params,
         ...this.pagination
       };
+    },
+    tableSize() {
+      const size = this.size || config.toTableSize[this.currentSize];
+      Object.assign(this.scrollYStore, { rowHeight: config.rowHeightMaps[size] });
+      return size;
     },
     shouldUpdateHeight() {
       return this.height || this.maxHeight || this.isTableEmpty;
@@ -260,7 +266,7 @@ export default {
       !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
     },
     [`layout.viewportHeight`](next) {
-      const visibleYSize = Number(Math.ceil(next / this.scrollYStore.rowHeight));
+      const visibleYSize = Math.ceil(next / this.scrollYStore.rowHeight);
       const renderSize = browse()['webkit'] ? visibleYSize + 3 : visibleYSize + 5;
       Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
     },
@@ -331,7 +337,7 @@ export default {
       columns,
       tableColumns,
       flattenColumns,
-      size,
+      tableSize,
       showLoading,
       bordered,
       tableStyles,
@@ -358,6 +364,8 @@ export default {
       total,
       selectionKeys,
       showAlert,
+      alertPosition,
+      topSpaceAlign,
       showFullScreen,
       showRefresh,
       tablePrint,
@@ -369,7 +377,7 @@ export default {
     const vTableCls = [
       `v-table`,
       {
-        [`size--${size}`]: !!size,
+        [`size--${tableSize}`]: !0,
         [`is--border`]: bordered,
         [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
         [`is--group`]: isGroup,
@@ -383,6 +391,13 @@ export default {
         [`scroll--x`]: scrollX,
         [`scroll--y`]: scrollY,
         [`virtual--y`]: scrollYLoad
+      }
+    ];
+    const spaceSlotCls = [
+      `v-slot`,
+      {
+        [`fl`]: topSpaceAlign === 'left',
+        [`fr`]: topSpaceAlign === 'right'
       }
     ];
     const tableHeaderProps = {
@@ -406,17 +421,6 @@ export default {
       ref: 'tableFooter',
       props: {
         flattenColumns
-      }
-    };
-    const pagerProps = {
-      ref: 'pager',
-      props: {
-        currentPage: pagination.currentPage,
-        pageSize: pagination.pageSize,
-        total
-      },
-      on: {
-        change: this.pagerChangeHandle
       }
     };
     const alertProps = {
@@ -453,15 +457,31 @@ export default {
           }
         }
       : null;
+    const pagerProps = {
+      ref: 'pager',
+      props: {
+        size: tableSize,
+        currentPage: pagination.currentPage,
+        pageSize: pagination.pageSize,
+        total,
+        extraRender: () => (showAlert && alertPosition === 'bottom' ? <Alert {...alertProps} /> : null)
+      },
+      on: {
+        change: this.pagerChangeHandle
+      }
+    };
     return (
       <div class={vWrapperCls}>
-        {/* 表格信息 */}
-        <div ref="v-top-info" class="v-top-info clearfix">
-          {/* 通知 */}
-          {showAlert && <Alert class="fl" {...alertProps} />}
-          <div class="v-actions fr">
-            {/* 默认槽口 */}
-            {this.$slots[`default`]}
+        <div ref="v-top-info" class="v-top-info">
+          <div class="v-space clearfix">
+            {/* 顶部信息 */}
+            {showAlert && alertPosition === 'top' && <Alert class="fl" {...alertProps} />}
+            <div class={spaceSlotCls}>
+              {/* 默认槽口 */}
+              {this.$slots[`default`]}
+            </div>
+          </div>
+          <div class="v-actions">
             {/* 全屏 */}
             {showFullScreen && <FullScreen />}
             {/* 刷新 */}

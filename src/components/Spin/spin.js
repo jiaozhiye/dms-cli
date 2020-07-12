@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 17:57:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-12 16:46:26
+ * @Last Modified time: 2020-07-06 18:36:37
  */
 import PropTypes from '../_utils/vue-types';
 import { filterEmpty, getListeners } from '../_utils/props-util';
@@ -14,7 +14,7 @@ export default {
   mixins: [Size, PrefixCls],
   props: {
     spinning: PropTypes.bool.def(false),
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     delay: PropTypes.number.def(100),
     tip: PropTypes.string,
     containerStyle: PropTypes.object

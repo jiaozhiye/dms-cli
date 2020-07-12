@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 14:44:39
+ * @Last Modified time: 2020-07-11 09:22:54
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -85,8 +85,9 @@ export default {
     },
     renderColumnFilter() {
       const { leftFixedColumns, mainColumns, rightFixedColumns, dragOptions } = this;
+      const cls = [`v-column-filter--wrap`, `size--${this.$$table.tableSize}`];
       return (
-        <div class="v-column-filter--wrap">
+        <div class={cls}>
           <div class="left">
             <Draggable
               value={leftFixedColumns}
@@ -148,18 +149,13 @@ export default {
         hide: this.popperVisibleHandle
       }
     };
-    const cls = [
-      `text`,
-      {
-        selected: this.showPopper
-      }
-    ];
+    const cls = [`v-column-filter`, `size--${this.$$table.tableSize}`];
     return (
-      <div class="v-column-filter">
+      <div class={cls}>
         <Popper {...wrapProps}>
-          <span slot="reference" class={cls}>
-            <i class="iconfont icon-pic-right" />
-            {config.columnFilterText()}
+          <span slot="reference" class={{ [`text`]: !0, [`selected`]: this.showPopper }}>
+            <i class="iconfont icon-funnelplot" />
+            {this.t('table.columnFilter.text')}
           </span>
           <div class="v-popper">{this.renderColumnFilter()}</div>
         </Popper>

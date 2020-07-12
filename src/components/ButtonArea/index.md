@@ -13,9 +13,9 @@
 # template
 <template>
   <button-area :containerStyle="{ paddingLeft: '80px' }">
-    <el-button size="small" type="primary">按钮1</el-button>
-    <el-button size="small">按钮2</el-button>
-    <el-button size="small">按钮3</el-button>
+    <el-button type="primary">按钮1</el-button>
+    <el-button>按钮2</el-button>
+    <el-button>按钮3</el-button>
   </button-area>
 </template>
 ```

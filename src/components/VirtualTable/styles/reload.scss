@@ -1,0 +1,23 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2020-03-26 11:45:02
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2020-07-09 10:34:34
+ */
+.v-reload-data {
+  @include button-align(28px);
+  padding: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  i {
+    font-size: $v-font-size + 2px;
+  }
+  &:hover {
+    color: $v-primary-color;
+  }
+  &.size--mini {
+    i {
+      font-size: $v-font-size;
+    }
+  }
+}

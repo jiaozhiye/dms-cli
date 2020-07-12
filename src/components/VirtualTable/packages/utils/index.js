@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 08:15:04
+ * @Last Modified time: 2020-07-11 13:10:08
  */
 import { get, set, transform, isEqual, isObject } from 'lodash';
 
@@ -212,23 +212,6 @@ export const debounce = (fn, delay = 0) => {
   };
 };
 
-// 根据属性路径获取对象的值
-export const getValueByPath = (object, prop = '') => {
-  const paths = prop.split('.');
-  let current = object;
-  let result = null;
-  for (let i = 0, j = paths.length; i < j; i++) {
-    const path = paths[i];
-    if (!current) break;
-    if (i === j - 1) {
-      result = current[path];
-      break;
-    }
-    current = current[path];
-  }
-  return result;
-};
-
 // 获取滚动条宽度
 let cached;
 
@@ -355,7 +338,7 @@ export const isEmpty = val => {
 
 // 比对两个对象的差异
 export const difference = (object, base) => {
-  return transform(object, function(result, value, key) {
+  return transform(object, (result, value, key) => {
     if (!isEqual(value, base[key])) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
     }

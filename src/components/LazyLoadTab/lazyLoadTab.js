@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:18:42
+ * @Last Modified time: 2020-07-06 18:36:24
  **/
 import PropTypes from '../_utils/vue-types';
 import Size from '../_utils/mixins/size';
@@ -19,7 +19,7 @@ export default {
         title: PropTypes.string
       }).loose
     ).isRequired,
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     type: PropTypes.string.def(''),
     position: PropTypes.string.def('top'),
     destroyOnClose: PropTypes.bool.def(false)

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-30 18:03:04
+ * @Last Modified time: 2020-07-09 21:48:35
  */
 @import './common.scss';
 
@@ -46,9 +46,17 @@
 
 /* 顶部信息 */
 .v-top-info {
+  display: flex;
   margin-bottom: $v-module-distance;
+  .v-space {
+    flex: 1;
+    .v-slot {
+      display: inline-flex;
+      margin-right: $v-module-distance;
+    }
+  }
   .v-actions {
-    display: flex;
+    display: inherit;
     align-items: center;
   }
 }
@@ -144,6 +152,7 @@
 
   .v-header--column,
   .v-body--column,
+  .v-body--expanded-column,
   .v-footer--column {
     position: relative;
     line-height: $v-table-row-line-height;
@@ -202,7 +211,7 @@
 
   &.is--sortable {
     .v-column-has-sorter {
-      padding-right: 1em;
+      padding-right: 10px;
       cursor: pointer;
       transition: background-color 0.3s ease;
       &:hover {
@@ -219,15 +228,15 @@
 
   &.is--filterable {
     .v-column-has-filter {
-      padding-right: 1.5em;
+      padding-right: 10px;
     }
   }
 
   &.is--sortable.is--filterable {
     .v-column-has-sorter.v-column-has-filter {
-      padding-right: 2.5em !important;
+      padding-right: 26px !important;
       .v-cell--sort {
-        right: 2em !important;
+        right: 20px !important;
       }
     }
   }
@@ -256,7 +265,6 @@
   }
 
   .v-cell {
-    line-height: 1.5;
     word-break: break-all;
     /* 保留空白字符 */
     white-space: pre !important;
@@ -368,21 +376,6 @@
     .v-table--empty-placeholder {
       display: flex;
     }
-  }
-}
-
-/* 全屏、刷新 */
-.v-full-screen,
-.v-reload-data {
-  margin-left: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    color: $v-primary-color;
-  }
-  i {
-    font-size: 16px;
-    font-weight: bold;
   }
 }
 

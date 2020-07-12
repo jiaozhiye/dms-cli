@@ -4,7 +4,7 @@
       <h2>404</h2>
       <div class="desc">{{ $t('noMatch.text') }}</div>
       <div class="actions">
-        <el-button type="primary" size="small" @click="goHome">{{ $t('login.backHome') }}</el-button>
+        <el-button type="primary" @click="goHome">{{ $t('login.backHome') }}</el-button>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@ export default {
     }
     .desc {
       margin-bottom: 16px;
-      color: rgba(0, 0, 0, 0.45);
+      color: $textColorSecondary;
       font-size: 20px;
       line-height: 28px;
     }

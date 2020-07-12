@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-28 09:26:03
+ * @Last Modified time: 2020-07-07 18:48:46
  */
-import localforage from 'localforage';
 import config from '../config';
 import Locale from '../locale/mixin';
 
@@ -45,10 +44,11 @@ export default {
       }
     };
     const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', config.operationColumn].includes(x.dataIndex));
+    const cls = [`v-group-summary--wrapper`, `size--${this.$$table.tableSize}`];
     return (
-      <div class="v-group-summary--wrapper">
-        <span class="summary-button" onClick={this.clickHandle}>
-          <i class="iconfont icon-linechart" /> {this.t('table.groupSummary.text')}
+      <div class={cls}>
+        <span class="summary-button" title={this.t('table.groupSummary.text')} onClick={this.clickHandle}>
+          <i class="iconfont icon-linechart" />
         </span>
         <BaseDialog {...wrapProps}>
           <GroupSummarySetting columns={columns} onClose={this.closeHandle} />

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 13:14:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-04 11:13:57
+ * @Last Modified time: 2020-07-09 20:12:37
  */
 @import '../../style/index.scss';
 
@@ -22,8 +22,8 @@ $prefix-cls: '#{$v-prefix}-form-panel';
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        line-height: 1.2;
         height: 32px;
+        line-height: 1.2;
         font-size: $font-size-base;
         padding-right: 6px;
         .label-wrap {
@@ -185,20 +185,60 @@ $prefix-cls: '#{$v-prefix}-form-panel';
   }
   // small
   &-sm {
-    .el-form-item__label {
-      font-size: $font-size-sm !important;
-    }
-    .desc-text {
-      font-size: $font-size-sm !important;
+    .el-col {
+      min-height: 28px;
+      margin-bottom: 12px;
+      &[type='FIXED'] {
+        height: 28px !important;
+      }
+      .el-form-item {
+        .el-form-item__label {
+          height: 28px;
+          font-size: $font-size-sm !important;
+        }
+        .range-date {
+          * {
+            line-height: 26px;
+          }
+          .el-date-editor {
+            input {
+              height: 26px;
+            }
+          }
+        }
+      }
+      .desc-text {
+        font-size: $font-size-sm !important;
+      }
     }
   }
   // large
   &-lg {
-    .el-form-item__label {
-      font-size: $font-size-base !important;
-    }
-    .desc-text {
-      font-size: $font-size-base !important;
+    .el-col {
+      min-height: 36px;
+      margin-bottom: 12px;
+      &[type='FIXED'] {
+        height: 36px !important;
+      }
+      .el-form-item {
+        .el-form-item__label {
+          height: 36px;
+          font-size: $font-size-base !important;
+        }
+        .range-date {
+          * {
+            line-height: 34px;
+          }
+          .el-date-editor {
+            input {
+              height: 34px;
+            }
+          }
+        }
+      }
+      .desc-text {
+        font-size: $font-size-base !important;
+      }
     }
   }
 }

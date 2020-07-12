@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 11:48:57
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-25 14:54:45
+ * @Last Modified time: 2020-07-08 13:45:49
  */
 import './style';
 import locale from './locale';
@@ -64,10 +64,10 @@ const install = function(Vue, opts = {}) {
   locale.i18n(opts.i18n);
   Vue.prototype.$VDESIGN = {
     size: opts.size || 'default',
-    prefixCls: opts.prefix || 'v'
+    prefixCls: opts.prefix || 'v',
+    config: Object.assign({}, opts.config)
   };
   components.forEach(component => {
-    // Vue.component(component.name, component);
     component.install(Vue, opts);
   });
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 13:14:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-25 13:02:39
+ * @Last Modified time: 2020-07-06 20:43:43
  */
 @import '../../style/index.scss';
 
@@ -32,7 +32,7 @@ $prefix-cls: '#{$v-prefix}-drawer--wrapper';
     background-color: #fff;
     transition: all 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-    > .header {
+    & > .header {
       display: flex;
       align-items: center;
       position: relative;
@@ -46,9 +46,9 @@ $prefix-cls: '#{$v-prefix}-drawer--wrapper';
       }
       .close {
         position: absolute;
-        padding: 5px;
-        right: 10px;
-        top: 10px;
+        padding: 10px;
+        right: 4px;
+        top: 4px;
         color: $text-color-secondary;
         line-height: 1;
         cursor: pointer;
@@ -58,11 +58,11 @@ $prefix-cls: '#{$v-prefix}-drawer--wrapper';
           text-decoration: none;
         }
         i {
-          font-size: 18px;
+          font-size: 20px;
         }
       }
     }
-    > .container {
+    & > .container {
       height: calc(100% - 48px);
       padding: $padding-base 15px;
       overflow-y: auto;

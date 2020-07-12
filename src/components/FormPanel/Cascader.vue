@@ -3,25 +3,24 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:13:25
+ * @Last Modified time: 2020-07-10 10:58:40
  **/
+import PropTypes from '../_utils/vue-types';
 import { isEqual, isString } from 'lodash';
 
 export default {
   name: 'Cascader',
   props: {
-    value: {
-      type: String
-    },
-    list: {
-      type: Array,
-      required: true,
-      default: () => []
-    },
-    labels: {
-      type: Array,
-      default: () => []
-    }
+    value: PropTypes.string,
+    list: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string,
+        text: PropTypes.string,
+        children: PropTypes.array
+      }).loose
+    ).isRequired,
+    labels: PropTypes.array,
+    mustCheckLast: PropTypes.bool.def(false)
   },
   data() {
     this.prevValue = null;
@@ -46,10 +45,10 @@ export default {
     currentValues(val) {
       if (val.length || !this.value) {
         if (isEqual(val, this.prevValue)) return;
-        this.$emit('input', val);
+        !this.mustCheckLast && this.$emit('input', val);
         if (this.clicked === 'on') {
           this.clicked = 'off';
-          this.$emit('change', val);
+          !this.mustCheckLast && this.$emit('change', val);
         }
         this.prevValue = [...val];
       }
@@ -74,7 +73,7 @@ export default {
           const target = arr.find(k => k.value === x);
           if (target) {
             res.push({ value: x, text: target.text });
-            arr = target.children || [];
+            arr = target.children ?? [];
           }
         });
       }
@@ -86,6 +85,8 @@ export default {
       this.$set(this.currentValues, index, { value, text });
       this.currentValues.length = index + 1;
       if (!children) {
+        this.mustCheckLast && this.$emit('input', this.currentValues);
+        this.mustCheckLast && this.$emit('change', this.currentValues);
         this.$emit('close', false);
       }
     }

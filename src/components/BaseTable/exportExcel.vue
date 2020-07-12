@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:04:54
+ * @Last Modified time: 2020-07-06 20:11:10
  */
 import { get, set } from 'lodash';
 import Locale from '../_utils/mixins/locale';
@@ -113,7 +113,7 @@ export default {
     };
     return (
       <div class="export-wrap">
-        <JsonToExcel size="small" type="text" {...wrapProps}>
+        <JsonToExcel type="text" {...wrapProps}>
           {this.t('baseTable.export')}
         </JsonToExcel>
       </div>

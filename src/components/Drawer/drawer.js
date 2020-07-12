@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-11 13:52:08
+ * @Last Modified time: 2020-07-07 21:00:42
  **/
 import PropTypes from '../_utils/vue-types';
 import VDrawer from './VDrawer';
@@ -19,7 +19,7 @@ export default {
     title: PropTypes.string.def(''),
     position: PropTypes.string.def('right'),
     lockScroll: PropTypes.bool.def(true),
-    maskClosable: PropTypes.bool.def(false),
+    maskClosable: PropTypes.bool,
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     zIndex: PropTypes.number.def(100),

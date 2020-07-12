@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-19 13:45:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 09:00:25
+ * @Last Modified time: 2020-07-07 19:46:05
  */
 import PropTypes from '../../../_utils/vue-types';
 import config from '../config';
@@ -29,12 +29,13 @@ export default {
     // 列对其方式
     align: PropTypes.string.def('right'),
     // 带背景颜色
-    background: PropTypes.bool.def(true)
+    background: PropTypes.bool.def(true),
+    // 额外的组件渲染
+    extraRender: PropTypes.func
   },
-  inject: ['$$table'],
   computed: {
     vSize() {
-      return this.size || this.$$table.size;
+      return this.size;
     },
     isSizes() {
       return this.layouts.some(name => name === 'Sizes');
@@ -55,28 +56,20 @@ export default {
     }
   },
   render(h) {
-    const { vSize, align } = this;
-    return h(
-      'div',
+    const { vSize, align, extraRender } = this;
+    const cls = [
+      'v-pager',
       {
-        class: [
-          'v-pager',
-          {
-            [`size--${vSize}`]: vSize,
-            [`align--${align}`]: align,
-            'is--background': this.background
-          }
-        ]
-      },
-      [
-        h(
-          'div',
-          {
-            class: 'v-pager--wrapper'
-          },
-          this.layouts.map(name => this[`render${name}`](h))
-        )
-      ]
+        [`size--${vSize}`]: vSize,
+        [`align--${align}`]: align,
+        'is--background': this.background
+      }
+    ];
+    return (
+      <div class={cls}>
+        {typeof extraRender === 'function' && extraRender()}
+        <div class="v-pager--wrapper">{this.layouts.map(name => this[`render${name}`](h))}</div>
+      </div>
     );
   },
   methods: {

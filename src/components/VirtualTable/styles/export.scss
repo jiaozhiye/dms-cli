@@ -2,16 +2,28 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:26:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-03 10:16:40
+ * @Last Modified time: 2020-07-09 10:33:21
  */
 .v-export--wrapper {
-  @include button-align(32px);
-  margin-left: $v-module-distance;
   .el-button {
+    @include button-align(28px);
+    padding: 3px;
     color: $v-font-color;
+    border: 0;
     transition: color 0.3s ease;
+    i {
+      font-size: $v-font-size + 2px;
+      margin-right: 0;
+    }
     &:hover {
       color: $v-primary-color;
+    }
+  }
+  &.size--mini {
+    .el-button {
+      i {
+        font-size: $v-font-size;
+      }
     }
   }
 }

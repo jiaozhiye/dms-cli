@@ -2,42 +2,58 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 15:55:39
+ * @Last Modified time: 2020-07-12 14:43:06
  */
+import SvgIcon from '../../../SvgIcon';
 import Popper from '../popper';
 
 import { isEmpty, validateNumber } from '../utils';
-import { isUndefined } from 'lodash';
+import { cloneDeep } from 'lodash';
 import Locale from '../locale/mixin';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
-// element-ui Popup -> zIndex
+// element-ui -> zIndex
 import { PopupManager } from 'element-ui/lib/utils/popup';
 
 export default {
   name: 'THeadFilter',
   mixins: [Locale],
   props: ['column', 'filters'],
-  inject: ['$$header'],
+  inject: ['$$table', '$$header'],
   data() {
-    this.arrayTypes = ['checkbox', 'range-number', 'range-date'];
-    this.defaultVal = this.arrayTypes.includes(this.column.filter.type) ? [] : undefined;
     return {
       showPopper: false,
       filterValues: this.initialFilterValue()
     };
   },
   computed: {
+    size() {
+      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
+    },
     dataKey() {
       const { dataIndex, filter } = this.column;
       return Object.keys(this.filterValues)[0] || `${filter.type}|${dataIndex}`;
     },
-    isValueEmpty() {
-      return isEmpty(this.filterValues[this.dataKey]);
+    isFilterEmpty() {
+      let res = !0; // 假设是空
+      for (let key in this.filterValues[this.dataKey]) {
+        if (!isEmpty(this.filterValues[this.dataKey][key])) {
+          res = !1;
+          break;
+        }
+      }
+      return res;
     },
     isActived() {
-      return !isEmpty(this.filters[this.dataKey]);
+      let res = !1; // 假设非激活状态
+      for (let key in this.filters[this.dataKey]) {
+        if (!isEmpty(this.filters[this.dataKey][key])) {
+          res = !0;
+          break;
+        }
+      }
+      return res;
     }
   },
   watch: {
@@ -49,31 +65,36 @@ export default {
     }
   },
   methods: {
+    initialFilterValue() {
+      const { dataIndex, filter } = this.column;
+      return { [`${filter.type}|${dataIndex}`]: undefined };
+    },
     popperVisibleHandle(showPopper) {
-      if (showPopper) {
-        let { dataKey } = this;
-        this.filterValues[dataKey] = isUndefined(this.filters[dataKey]) ? this.defaultVal : this.filters[dataKey];
+      const { dataKey } = this;
+      if (showPopper && this.filters[dataKey]) {
+        this.filterValues[dataKey] = cloneDeep(this.filters[dataKey]);
       }
       this.showPopper = showPopper;
     },
-    initialFilterValue() {
-      const { dataIndex, filter } = this.column;
-      return { [`${filter.type}|${dataIndex}`]: this.defaultVal };
-    },
     doFinish() {
-      const cloneFilters = { ...this.filters };
-      const cloneFilterValues = { ...this.filterValues };
+      const { dataKey } = this;
       // 筛选值为空，移除该筛选属性
-      if (this.isValueEmpty) {
-        delete cloneFilters[this.dataKey];
-        delete cloneFilterValues[this.dataKey];
+      if (this.isFilterEmpty) {
+        delete this.filters[dataKey];
+        delete this.filterValues[dataKey];
+      } else {
+        for (let key in this.filterValues[dataKey]) {
+          if (isEmpty(this.filterValues[dataKey][key])) {
+            delete this.filterValues[dataKey][key];
+          }
+        }
       }
       // 设置父组件 filters 值
-      this.$$header.filters = Object.assign({}, cloneFilters, cloneFilterValues);
+      this.$$header.filters = Object.assign({}, cloneDeep(this.filters), cloneDeep(this.filterValues));
       this.$refs[`vPopper`].doClose();
     },
     doReset() {
-      if (this.isValueEmpty && !this.isActived) {
+      if (this.isFilterEmpty && !this.isActived) {
         return this.$refs[`vPopper`].doClose();
       }
       // 恢复初始值
@@ -108,11 +129,15 @@ export default {
     },
     textHandle(column) {
       const { title } = column;
+      const { dataKey } = this;
       return (
         <div style="padding-top: 6px">
           <el-input
-            size="small"
-            v-model={this.filterValues[this.dataKey]}
+            size={this.size}
+            value={this.filterValues[dataKey]?.[`like`]}
+            onInput={val => {
+              this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
+            }}
             placeholder={this.t('table.filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={ev => {
@@ -125,87 +150,86 @@ export default {
       );
     },
     numberHandle(column) {
-      const { title } = column;
+      const { dataKey } = this;
       return (
-        <div style="padding-top: 6px">
-          <el-input
-            size="small"
-            value={this.filterValues[this.dataKey]}
-            onInput={val => {
-              if (!validateNumber(val)) return;
-              this.filterValues[this.dataKey] = val;
-            }}
-            placeholder={this.t('table.filter.searchText', { text: title })}
-            style={{ width: '180px' }}
-            nativeOnKeydown={ev => {
-              if (ev.keyCode === 13) {
-                this.doFinish();
-              }
-            }}
-          />
-        </div>
-      );
-    },
-    [`range-numberHandle`](column) {
-      const [startVal, endVal] = this.filterValues[this.dataKey];
-      const setValue = arr => {
-        this.filterValues[this.dataKey] = arr.every(x => isEmpty(x)) ? [] : arr.map(x => (x !== '' ? x : undefined));
-      };
-      return (
-        <div style="padding-top: 6px; width: 200px;">
-          <el-input
-            size="small"
-            value={this.filterValues[this.dataKey][0]}
-            onInput={val => {
-              if (!validateNumber(val)) return;
-              setValue([val, this.filterValues[this.dataKey][1]]);
-            }}
-            style={{ width: '93px' }}
-            placeholder={this.t('table.filter.startValuePlaceholder')}
-            onChange={val => {
-              if (val !== '' && val - endVal > 0) {
-                setValue([endVal, this.filterValues[this.dataKey][1]]);
-              }
-            }}
-            nativeOnKeydown={ev => {
-              if (ev.keyCode === 13) {
-                this.doFinish();
-              }
-            }}
-          />
-          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
-          <el-input
-            size="small"
-            value={this.filterValues[this.dataKey][1]}
-            onInput={val => {
-              if (!validateNumber(val)) return;
-              setValue([this.filterValues[this.dataKey][0], val]);
-            }}
-            min={startVal}
-            style={{ width: '93px' }}
-            placeholder={this.t('table.filter.endValuePlaceholder')}
-            onChange={val => {
-              if (val !== '' && val - startVal < 0) {
-                setValue([this.filterValues[this.dataKey][0], startVal]);
-              }
-            }}
-            nativeOnKeydown={ev => {
-              if (ev.keyCode === 13) {
-                this.doFinish();
-              }
-            }}
-          />
+        <div>
+          <ul class="v-filter-list">
+            <li>
+              <span>&gt;=</span>
+              <el-input
+                size={this.size}
+                value={this.filterValues[dataKey]?.[`>=`]}
+                onInput={val => {
+                  if (!validateNumber(val)) return;
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>=`]: val !== '' ? Number(val) : '' });
+                }}
+                placeholder={this.t('table.filter.gtePlaceholder')}
+                style={{ width: '100%' }}
+                nativeOnKeydown={ev => {
+                  if (ev.keyCode === 13) {
+                    this.doFinish();
+                  }
+                }}
+              />
+            </li>
+            <li>
+              <span>&lt;=</span>
+              <el-input
+                size={this.size}
+                value={this.filterValues[dataKey]?.[`<=`]}
+                onInput={val => {
+                  if (!validateNumber(val)) return;
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<=`]: val !== '' ? Number(val) : '' });
+                }}
+                placeholder={this.t('table.filter.ltePlaceholder')}
+                style={{ width: '100%' }}
+                nativeOnKeydown={ev => {
+                  if (ev.keyCode === 13) {
+                    this.doFinish();
+                  }
+                }}
+              />
+            </li>
+            <li>
+              <span>!=</span>
+              <el-input
+                size={this.size}
+                value={this.filterValues[dataKey]?.[`!=`]}
+                onInput={val => {
+                  if (!validateNumber(val)) return;
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val !== '' ? Number(val) : '' });
+                }}
+                placeholder={this.t('table.filter.neqPlaceholder')}
+                style={{ width: '100%' }}
+                nativeOnKeydown={ev => {
+                  if (ev.keyCode === 13) {
+                    this.doFinish();
+                  }
+                }}
+              />
+            </li>
+          </ul>
         </div>
       );
     },
     radioHandle(column) {
       const { filter } = column;
+      const { dataKey } = this;
       return (
         <div>
-          <ul>
+          <ul class="v-filter-list">
             {filter.items.map(x => (
-              <li style="marginTop: 8px">
-                <Radio v-model={this.filterValues[this.dataKey]} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
+              <li>
+                <Radio
+                  value={this.filterValues[dataKey]?.[`==`] ?? null}
+                  onInput={val => {
+                    this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val });
+                  }}
+                  trueValue={x.value}
+                  falseValue={null}
+                  label={x.text}
+                  disabled={x.disabled}
+                />
               </li>
             ))}
           </ul>
@@ -216,22 +240,20 @@ export default {
       const {
         filter: { items = [] }
       } = column;
-      const results = this.filterValues[this.dataKey];
+      const { dataKey } = this;
+      const results = this.filterValues[dataKey]?.[`in`] ?? [];
       return (
         <div>
-          <ul>
+          <ul class="v-filter-list">
             {items.map(x => {
               const prevValue = results.includes(x.value) ? x.value : null;
               return (
-                <li style="marginTop: 8px">
+                <li>
                   <Checkbox
                     value={prevValue}
                     onInput={val => {
-                      if (val !== null) {
-                        this.filterValues[this.dataKey] = [...new Set([...results, val])];
-                      } else {
-                        this.filterValues[this.dataKey] = results.filter(x => x !== prevValue);
-                      }
+                      const arr = val !== null ? [...new Set([...results, val])] : results.filter(x => x !== prevValue);
+                      this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`in`]: arr });
                     }}
                     trueValue={x.value}
                     falseValue={null}
@@ -246,33 +268,53 @@ export default {
       );
     },
     dateHandle(column) {
+      const { dataKey } = this;
       return (
-        <div style="padding-top: 6px">
-          <el-date-picker
-            size="small"
-            type="date"
-            v-model={this.filterValues[this.dataKey]}
-            style={{ width: '180px' }}
-            value-format="yyyy-MM-dd"
-            placeholder={this.t('table.filter.datePlaceholder')}
-          />
-        </div>
-      );
-    },
-    [`range-dateHandle`](column) {
-      return (
-        <div style="padding-top: 6px">
-          <el-date-picker
-            size="small"
-            type="daterange"
-            v-model={this.filterValues[this.dataKey]}
-            unlink-panels={true}
-            style={{ width: '230px' }}
-            value-format="yyyy-MM-dd"
-            range-separator="-"
-            start-placeholder={this.t('table.filter.startDatePlaceholder')}
-            end-placeholder={this.t('table.filter.endDatePlaceholder')}
-          />
+        <div>
+          <ul class="v-filter-list">
+            <li>
+              <span>&gt;=</span>
+              <el-date-picker
+                size={this.size}
+                type="date"
+                value={this.filterValues[dataKey]?.[`>=`]}
+                valueFormat="yyyy-MM-dd"
+                onInput={val => {
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>=`]: val ?? '' });
+                }}
+                placeholder={this.t('table.filter.gtePlaceholder')}
+                style={{ width: '140px' }}
+              />
+            </li>
+            <li>
+              <span>&lt;=</span>
+              <el-date-picker
+                size={this.size}
+                type="date"
+                value={this.filterValues[dataKey]?.[`<=`]}
+                valueFormat="yyyy-MM-dd"
+                onInput={val => {
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<=`]: val ?? '' });
+                }}
+                placeholder={this.t('table.filter.ltePlaceholder')}
+                style={{ width: '140px' }}
+              />
+            </li>
+            <li>
+              <span>!=</span>
+              <el-date-picker
+                size={this.size}
+                type="date"
+                value={this.filterValues[dataKey]?.[`!=`]}
+                valueFormat="yyyy-MM-dd"
+                onInput={val => {
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val ?? '' });
+                }}
+                placeholder={this.t('table.filter.neqPlaceholder')}
+                style={{ width: '140px' }}
+              />
+            </li>
+          </ul>
         </div>
       );
     }
@@ -305,7 +347,7 @@ export default {
       <span class="v-cell--filter" title={this.t('table.filter.text')}>
         <Popper {...wrapProps}>
           <div class={filterBtnCls} slot="reference">
-            <i class="iconfont icon-filter-fill" />
+            <SvgIcon class="icon-filter" icon-class="filter" />
           </div>
           <div class="v-popper">{this.renderContent()}</div>
         </Popper>

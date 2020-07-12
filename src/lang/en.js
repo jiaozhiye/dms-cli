@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-02 09:16:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-29 08:40:39
+ * @Last Modified time: 2020-07-08 17:27:24
  */
 export default {
   app: {
@@ -92,5 +92,10 @@ export default {
   },
   fetch: {
     default: '网络连接错误，请检查网络。'
+  },
+  sizeSelect: {
+    large: '大尺寸',
+    default: '中等',
+    small: '小尺寸'
   }
 };

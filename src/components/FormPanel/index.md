@@ -14,19 +14,21 @@
 
 ### 事件
 
-| 事件名称 | 说明                 | 回调参数                   |
-| -------- | -------------------- | -------------------------- |
-| change   | 表单提交，触发的事件 | Function(formValue:object) |
+| 事件名称     | 说明                     | 回调参数                     |
+| ------------ | ------------------------ | ---------------------------- |
+| change       | 表单提交，触发的事件     | Function(formValue:object)   |
+| valuesChange | 字段值更新时，触发的事件 | Function(changeValue:object) |
 
 ### 方法
 
-| 方法名称         | 说明                   | 参数                       | 返回值                                        |
-| ---------------- | ---------------------- | -------------------------- | --------------------------------------------- |
-| SUBMIT_FORM      | 执行表单提交           | -                          | 通过校验，返回表单对象；未通过校验，返回 null |
-| RESET_FORM       | 重置表单控件           | -                          | -                                             |
-| SET_FIELDS_VALUE | 设置表单字段的值       | Function(values:object)    | -                                             |
-| GET_FORM_DATA    | 获取表单数据，异步方法 | -                          | 返回错误前置的数组 [error, formValue]         |
-| GET_FIELD_VALUE  | 获取表单项的值         | Function(fieldName:string) | 返回表单字段值                                |
+| 方法名称         | 说明                         | 参数                       | 返回值                                        |
+| ---------------- | ---------------------------- | -------------------------- | --------------------------------------------- |
+| SUBMIT_FORM      | 执行表单提交                 | -                          | 通过校验，返回表单对象；未通过校验，返回 null |
+| RESET_FORM       | 重置表单控件                 | -                          | -                                             |
+| SET_FIELDS_VALUE | 设置表单字段的值             | Function(values:object)    | -                                             |
+| SET_FORM_VALUES  | 可以设置除了表单字段的额外值 | Function(values:object)    | -                                             |
+| GET_FORM_DATA    | 获取表单数据，异步方法       | -                          | 返回错误前置的数组 [error, formValue]         |
+| GET_FIELD_VALUE  | 获取表单项的值               | Function(fieldName:string) | 返回表单字段值                                |
 
 ### formType
 
@@ -88,39 +90,40 @@
 
 ### options
 
-| 参数        | 说明                                                             | 类型                                 | 默认值   |
-| ----------- | ---------------------------------------------------------------- | ------------------------------------ | -------- |
-| itemList    | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX     | array                                | -        |
-| filterable  | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX    | bool                                 | false    |
-| limit       | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX         | number                               | -        |
-| rows        | 文本域的行数 - TEXT_AREA                                         | number                               | -        |
-| minlength   | 原生属性，最小输入长度 - INPUT                                   | number                               | 0        |
-| maxlength   | 原生属性，最大输入长度 - INPUT/TEXT_AREA                         | number                               | 200      |
-| showLimit   | 是否显示输入字数统计，配合 maxlength 组合使用 - INPUT            | boolean                              | false    |
-| pattern     | 表单元素值得正则格式校验                                         | regExp                               | -        |
-| password    | 是否显示切换密码图标                                             | boolean                              | false    |
-| secretType  | 字段值的保密类型，并切在只读或禁用的状态下有效 - INPUT           | finance \| name \| phone \| IDnumber | -        |
-| min         | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               | 0        |
-| max         | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               |          |
-| step        | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER                 | number                               | 1        |
-| precision   | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                       | number                               | -        |
-| disabled    | 是否禁用列表项 - SELECT/MULTIPLE_SELECT/MULTIPLE_CHECKBOX/RADIO/ | boolean                              | false    |
-| noInput     | 不允许手动输入，支持清除操作 - INPUT                             | boolean                              | false    |
-| trueValue   | 选中的值 - CHECKBOX                                              | number \| string                     | 1        |
-| falseValue  | 非中的值 - CHECKBOX                                              | number \| string                     | 0        |
-| dateType    | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE            | string                               | -        |
-| minDateTime | 最小日期，小于该时间的日期段将被禁用                             | string                               | -        |
-| maxDateTime | 最大日期，大于该时间的日期段将被禁用                             | string                               | -        |
-| defaultTime | 默认的时间，格式 HH:mm:ss                                        | string                               | -        |
-| startTime   | 开始时间 - TIME_SELECT                                           | string                               | 00:00    |
-| endTime     | 结束时间 - TIME_SELECT                                           | string                               | 23:45    |
-| stepTime    | 时间变化的步长 - TIME_SELECT                                     | string                               | 00:15    |
-| titles      | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER          | array                                | -        |
-| onInput     | 输入框 input 事件的回调 - INPUT                                  | func                                 | -        |
-| onEnter     | 输入框回车事件的回调 - INPUT                                     | func                                 | -        |
-| onFocus     | 输入框获得焦点事件的回调 - INPUT                                 | func                                 | -        |
-| onBlur      | 输入框失去焦点事件的回调 - INPUT                                 | func                                 | -        |
-| unitRender  | 输入框后置内容的渲染方法 - INPUT                                 | func                                 | JSX Node |
+| 参数          | 说明                                                             | 类型                                 | 默认值   |
+| ------------- | ---------------------------------------------------------------- | ------------------------------------ | -------- |
+| itemList      | 下拉框的列表数据，[配置项](#item) - SELECT/MULTIPLE_CHECKBOX     | array                                | -        |
+| filterable    | 是否开启下拉框的拼音头快速检索功能 - SELECT/MULTIPLE_CHECKBOX    | bool                                 | false    |
+| limit         | 最多可以选择的项目数 - MULTIPLE_SELECT/MULTIPLE_CHECKBOX         | number                               | -        |
+| rows          | 文本域的行数 - TEXT_AREA                                         | number                               | -        |
+| minlength     | 原生属性，最小输入长度 - INPUT                                   | number                               | 0        |
+| maxlength     | 原生属性，最大输入长度 - INPUT/TEXT_AREA                         | number                               | 200      |
+| showLimit     | 是否显示输入字数统计，配合 maxlength 组合使用 - INPUT            | boolean                              | false    |
+| pattern       | 表单元素值得正则格式校验                                         | regExp                               | -        |
+| password      | 是否显示切换密码图标                                             | boolean                              | false    |
+| secretType    | 字段值的保密类型，并切在只读或禁用的状态下有效 - INPUT           | finance \| name \| phone \| IDnumber | -        |
+| min           | 最小值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               | 0        |
+| max           | 最大值 - INPUT_NUMBER/RANGE_INPUT_NUMBER                         | number                               |          |
+| step          | 数值变化的步长 - INPUT_NUMBER/RANGE_INPUT_NUMBER                 | number                               | 1        |
+| precision     | 数值精度 - INPUT_NUMBER/RANGE_INPUT_NUMBER                       | number                               | -        |
+| disabled      | 是否禁用列表项 - SELECT/MULTIPLE_SELECT/MULTIPLE_CHECKBOX/RADIO/ | boolean                              | false    |
+| noInput       | 不允许手动输入，支持清除操作 - INPUT                             | boolean                              | false    |
+| trueValue     | 选中的值 - CHECKBOX                                              | number \| string                     | 1        |
+| falseValue    | 非中的值 - CHECKBOX                                              | number \| string                     | 0        |
+| dateType      | 日期控件的类型，[配置项](#dateType) - DATE/RANGE_DATE            | string                               | -        |
+| minDateTime   | 最小日期，小于该时间的日期段将被禁用                             | string                               | -        |
+| maxDateTime   | 最大日期，大于该时间的日期段将被禁用                             | string                               | -        |
+| defaultTime   | 默认的时间，格式 HH:mm:ss                                        | string                               | -        |
+| startTime     | 开始时间 - TIME_SELECT                                           | string                               | 00:00    |
+| endTime       | 结束时间 - TIME_SELECT                                           | string                               | 23:45    |
+| stepTime      | 时间变化的步长 - TIME_SELECT                                     | string                               | 00:15    |
+| titles        | 级联选择器的标题，数组元素为字符串类型 - INPUT_CASCADER          | array                                | -        |
+| mustCheckLast | 级联选择器只能选择最后一级 - INPUT_CASCADER                      | bool                                 | false    |
+| onInput       | 输入框 input 事件的回调 - INPUT                                  | func                                 | -        |
+| onEnter       | 输入框回车事件的回调 - INPUT                                     | func                                 | -        |
+| onFocus       | 输入框获得焦点事件的回调 - INPUT                                 | func                                 | -        |
+| onBlur        | 输入框失去焦点事件的回调 - INPUT                                 | func                                 | -        |
+| unitRender    | 输入框后置内容的渲染方法 - INPUT                                 | func                                 | JSX Node |
 
 ### dateType
 
@@ -140,7 +143,7 @@
 | 参数   | 说明                                                            | 类型                     | 默认值 |
 | ------ | --------------------------------------------------------------- | ------------------------ | ------ |
 | open   | 打开搜索帮助的前置钩子，返回 bool 类型，true 打开、false 不打开 | Function(formData): bool | -      |
-| closed | 关闭搜索帮助的后置钩子                                          | Function(tableData)      | -      |
+| closed | 关闭搜索帮助的后置钩子，参数是带回的行数据                      | Function(tableData)      | -      |
 
 ### labelOption
 

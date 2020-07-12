@@ -4,7 +4,7 @@
     <div v-if="visible">
       <VirtualTable
         ref="table"
-        cacheColumnsKey="jzyDemoTable2"
+        uniqueKey="jzyDemoTable2"
         :exportExcel="{
           fileName: 'aaa.xlsx'
         }"
@@ -122,7 +122,7 @@ export default {
           sorter: true,
           groupSummary: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {

@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-04 14:36:34
+ * @Last Modified time: 2020-07-08 20:46:22
  */
-import { isEqual, isUndefined, isObject } from 'lodash';
+import { isEqual, isUndefined, isFunction, isObject } from 'lodash';
 import moment from 'moment';
 import Locale from '../locale/mixin';
 import { getCellValue, setCellValue, deepFindColumn } from '../utils';
@@ -35,6 +35,9 @@ export default {
     editable() {
       const { editable, disabled } = this.options;
       return (editable || isEqual(this.clicked, [this.rowKey, this.columnKey])) && !disabled;
+    },
+    size() {
+      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
     },
     dataKey() {
       return `${this.rowKey}|${this.columnKey}`;
@@ -76,7 +79,7 @@ export default {
       return (
         <el-input
           ref={`text-${this.dataKey}`}
-          size="small"
+          size={this.size}
           value={prevValue}
           maxlength={extra.maxlength}
           onInput={val => {
@@ -106,7 +109,7 @@ export default {
       return (
         <el-input
           ref={`number-${this.dataKey}`}
-          size="small"
+          size={this.size}
           value={prevValue}
           onInput={val => {
             let isPassCheck = (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
@@ -152,8 +155,9 @@ export default {
       const prevValue = getCellValue(row, dataIndex);
       return (
         <el-select
-          size="small"
+          size={this.size}
           multiple={isMultiple}
+          collapse-tags={isMultiple}
           value={prevValue}
           onInput={val => {
             setCellValue(row, dataIndex, val);
@@ -184,7 +188,7 @@ export default {
       const dateFormat = !isDateTime ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm:ss';
       return (
         <el-date-picker
-          size="small"
+          size={this.size}
           type={!isDateTime ? 'date' : 'datetime'}
           style={{ width: '100%' }}
           value={prevValue ? moment(prevValue).format(dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD')) : prevValue}
@@ -279,6 +283,9 @@ export default {
         on: {
           close: (visible, data) => {
             if (isObject(data)) {
+              if (!isFunction(helper.fieldAliasMap)) {
+                console.error('[Table]: 单元格的搜索帮助 `fieldAliasMap` 配置不正确');
+              }
               // 字段映射
               const alias = helper.fieldAliasMap();
               const result = {};
@@ -291,6 +298,8 @@ export default {
               // 对表格单元格赋值
               setHelperValues(current, result);
             }
+            const { closed = noop } = helper;
+            closed(data);
             this.shVisible = visible;
           }
         }
@@ -300,7 +309,7 @@ export default {
         <div class="search-helper">
           <el-input
             ref={`search-helper-${this.dataKey}`}
-            size="small"
+            size={this.size}
             value={prevValue}
             clearable
             disabled={extra.disabled}
@@ -309,10 +318,13 @@ export default {
             }}
           >
             <el-button
+              size={this.size}
               slot="append"
               icon="el-icon-search"
               onClick={ev => {
-                if (helper) {
+                if (isObject(helper)) {
+                  const { open = () => true } = helper;
+                  if (!open({ [this.dataKey]: prevValue }, row, column)) return;
                   this.shVisible = !0;
                 } else {
                   onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
@@ -320,7 +332,7 @@ export default {
               }}
             />
           </el-input>
-          {helper && (
+          {isObject(helper) && (
             <BaseDialog {...dialogProps}>
               <SearchHelper {...shProps} />
             </BaseDialog>

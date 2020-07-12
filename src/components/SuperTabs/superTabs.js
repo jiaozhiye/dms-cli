@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-24 14:34:57
+ * @Last Modified time: 2020-07-06 18:36:44
  **/
 import { isEqual } from 'lodash';
 import PropTypes from '../_utils/vue-types';
@@ -16,7 +16,7 @@ export default {
   props: {
     initialValue: PropTypes.string.isRequired,
     tabBarGutter: PropTypes.number.def(0),
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     animated: PropTypes.bool.def(false),
     lazyLoad: PropTypes.bool.def(true),
     destroyOnClose: PropTypes.bool.def(false),

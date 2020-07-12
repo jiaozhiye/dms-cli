@@ -1,5 +1,5 @@
 <template>
-  <div class="side-wrap">
+  <div :class="sideMenuCls">
     <logo :collapsed="collapsed" :title="title" />
     <all-menu :collapsed="collapsed">
       <MenuList :menu="navList" />
@@ -18,9 +18,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-17 16:18:18
+ * @Last Modified time: 2020-07-07 20:12:04
  **/
 import { mapState } from 'vuex';
+import { size } from '@/mixins/sizeMixin';
 import config from '@/config';
 import Logo from './Logo';
 import AllMenu from './AllMenu';
@@ -37,6 +38,7 @@ export default {
     StarMenu,
     MenuTree
   },
+  mixins: [size],
   props: {
     collapsed: {
       type: Boolean,
@@ -45,6 +47,13 @@ export default {
   },
   computed: {
     ...mapState('app', ['navList']),
+    sideMenuCls() {
+      return {
+        [`side-wrap`]: !0,
+        [`side-wrap-sm`]: this.currentSize === 'small',
+        [`side-wrap-lg`]: this.currentSize === 'large'
+      };
+    },
     title() {
       return config.systemName;
     }
@@ -75,8 +84,8 @@ export default {
     height: 100%;
     width: 100% !important;
     .el-menu-item {
-      height: 40px;
-      line-height: 40px;
+      height: 36px;
+      line-height: 36px;
       /* 文本溢出截断 */
       overflow: hidden;
       white-space: nowrap;
@@ -93,11 +102,11 @@ export default {
         margin-right: 5px;
         width: 24px;
         text-align: center;
-        font-size: 18px;
+        font-size: 16px;
       }
       .el-submenu__title {
-        height: 40px;
-        line-height: 40px;
+        height: 36px;
+        line-height: 36px;
         &:hover {
           background-color: $menuHover !important;
         }
@@ -119,7 +128,7 @@ export default {
       }
     }
   }
-  /* 不包含 我的收藏/常用导航 */
+  /* 导航菜单，不包含 我的收藏/常用导航 */
   .side-menu {
     /deep/ .el-menu {
       .is-active {
@@ -131,6 +140,44 @@ export default {
         }
       }
     }
+  }
+  &-lg {
+    /deep/ .el-menu {
+      .el-menu-item {
+        height: 40px;
+        line-height: 40px;
+      }
+      .el-submenu {
+        .el-submenu__title {
+          height: 40px;
+          line-height: 40px;
+        }
+      }
+    }
+  }
+  &-sm {
+    /deep/ .el-menu {
+      .el-menu-item {
+        height: 32px;
+        line-height: 32px;
+      }
+      .el-submenu {
+        .el-submenu__title {
+          height: 32px;
+          line-height: 32px;
+        }
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.el-menu--vertical {
+  .el-submenu__title,
+  .el-menu-item {
+    height: 36px;
+    line-height: 36px;
   }
 }
 </style>

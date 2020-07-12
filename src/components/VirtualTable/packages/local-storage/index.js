@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-30 11:34:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:41:31
+ * @Last Modified time: 2020-07-07 19:59:29
  */
 import { xor, isUndefined } from 'lodash';
 
@@ -12,9 +12,9 @@ const localStorageMixin = {
   methods: {
     // 获取本地存储 columns
     getLocalColumns() {
-      if (!this.cacheColumnsKey) return;
+      if (!this.uniqueKey) return;
       // 本地存储
-      const result = localStorage.getItem(this.cacheColumnsKey);
+      const result = localStorage.getItem(this.uniqueKey);
       if (!result) return;
       let localColumns = [];
       try {
@@ -35,7 +35,7 @@ const localStorageMixin = {
     },
     // 本地存储 columns
     setLocalColumns(columns) {
-      if (!this.cacheColumnsKey) return;
+      if (!this.uniqueKey) return;
       const result = columns.map(x => {
         const target = {};
         if (!isUndefined(x.hidden)) {
@@ -56,7 +56,7 @@ const localStorageMixin = {
         };
       });
       // 本地存储
-      localStorage.setItem(this.cacheColumnsKey, JSON.stringify(result));
+      localStorage.setItem(this.uniqueKey, JSON.stringify(result));
     },
     initLocalColumns() {
       const { columnsChange = noop } = this;

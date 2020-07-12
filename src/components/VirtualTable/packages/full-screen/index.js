@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-24 09:20:12
+ * @Last Modified time: 2020-07-09 10:32:19
  */
 import addEventListener from 'add-dom-event-listener';
 import Locale from '../locale/mixin';
@@ -41,16 +41,17 @@ export default {
   },
   render() {
     const { isFull, title } = this;
-    const cls = [
+    const iconCls = [
       `iconfont`,
       {
         [`icon-fullscreen`]: !isFull,
         [`icon-fullscreen-exit`]: isFull
       }
     ];
+    const cls = [`v-full-screen`, `size--${this.$$table.tableSize}`];
     return (
-      <span class="v-full-screen" title={title} onClick={this.clickHandle}>
-        <i class={cls} style="font-size: 18px" />
+      <span class={cls} title={title} onClick={this.clickHandle}>
+        <i class={iconCls} />
       </span>
     );
   }

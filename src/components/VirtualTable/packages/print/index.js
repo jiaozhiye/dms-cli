@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 11:12:13
+ * @Last Modified time: 2020-07-07 17:54:58
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
@@ -243,9 +243,10 @@ export default {
     }
   },
   render() {
+    const cls = [`v-print--wrapper`, `size--${this.$$table.tableSize}`];
     return (
-      <span class="v-print--wrapper" onClick={this.printHandle}>
-        <i class="iconfont icon-printer" /> {this.t('table.print.text')}
+      <span class={cls} title={this.t('table.print.text')} onClick={this.printHandle}>
+        <i class="iconfont icon-printer" />
       </span>
     );
   }

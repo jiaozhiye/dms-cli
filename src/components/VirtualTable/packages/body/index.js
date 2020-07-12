@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 08:36:28
+ * @Last Modified time: 2020-07-08 11:48:31
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -239,13 +239,9 @@ export default {
       }
       // Content Node
       const vNodeText = isFunction(render) ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column);
-      if (this.isTreeNode(row) && dataIndex === this.firstDataIndex) {
-        // Tree Expandable + vNodeText
-        return [this.renderIndent(depth), <Expandable record={row} rowKey={rowKey} />, vNodeText];
-      }
+      // Tree Expandable + vNodeText
       if (this.isTreeTable && dataIndex === this.firstDataIndex) {
-        // Node Indent
-        return [this.renderIndent(depth), vNodeText];
+        return [this.renderIndent(depth), <Expandable record={row} rowKey={rowKey} style={this.isTreeNode(row) ? null : { visibility: 'hidden' }} />, vNodeText];
       }
       return vNodeText;
     },

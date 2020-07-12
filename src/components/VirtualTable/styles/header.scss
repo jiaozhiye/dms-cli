@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-29 11:30:50
+ * @Last Modified time: 2020-07-12 11:37:49
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -41,21 +41,21 @@
   /* 排序 */
   .v-cell--sort {
     position: absolute;
-    font-size: 12px;
-    width: 1em;
+    width: 12px;
     height: 20px;
-    right: 0.5em;
+    right: 5px;
     top: 50%;
     margin-top: -10px;
     text-align: left;
+    -webkit-transform: scale(0.9);
+    transform: scale(0.9);
     .v-sort--asc-btn,
     .v-sort--desc-btn {
       position: absolute;
-      font-size: inherit;
-      line-height: 1;
+      width: 12px;
+      height: 12px;
       color: $v-icon-color;
       cursor: pointer;
-      transform: scale(0.9);
       &.sort--active {
         color: $v-primary-color;
       }
@@ -74,7 +74,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 1.75em;
+    width: 20px;
     z-index: 1;
     .v-filter-btn {
       display: flex;
@@ -85,6 +85,10 @@
       cursor: pointer;
       color: $v-icon-color;
       transition: all 0.3s ease;
+      .icon-filter {
+        width: 12px;
+        height: 12px;
+      }
       &:hover,
       &.selected {
         color: $v-font-secondary-color;
@@ -128,5 +132,16 @@
 .v-popper--wrapper {
   .v-filter--wrap {
     padding: 0 $v-module-distance;
+    .v-filter-list {
+      li {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+        & > span {
+          font-family: 'Consolas';
+          margin-right: 5px;
+        }
+      }
+    }
   }
 }

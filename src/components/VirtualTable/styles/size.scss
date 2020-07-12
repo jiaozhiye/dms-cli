@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-30 14:30:24
+ * @Last Modified time: 2020-07-07 18:24:23
  */
 .v-table {
   &.size--medium {
     font-size: $v-font-size-medium;
     .v-header--column,
     .v-body--column,
+    .v-body--expanded-column,
     .v-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
@@ -30,6 +31,7 @@
     font-size: $v-font-size-small;
     .v-header--column,
     .v-body--column,
+    .v-body--expanded-column,
     .v-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
@@ -54,6 +56,7 @@
     font-size: $v-font-size-mini;
     .v-header--column,
     .v-body--column,
+    .v-body--expanded-column,
     .v-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 13:15:51
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-24 19:56:08
+ * @Last Modified time: 2020-07-08 14:53:05
  */
 // The prefix to use on all css classes.
 $v-prefix: v;
@@ -11,7 +11,7 @@ $v-prefix: v;
 $html-selector: html;
 
 // -------- Colors -----------
-$primary-color: #0d74b5;
+$primary-color: $primaryColor !default;
 $success-color: #52c41a;
 $error-color: #f5222d;
 $warning-color: #faad14;
@@ -67,6 +67,9 @@ $link-hover-color: mix($black, $primary-color, 10%);
 $link-active-color: mix($black, $primary-color, 20%);
 $link-decoration: none;
 $link-hover-decoration: none;
+
+// Icon color
+$icon-color: rgb(191, 191, 191);
 
 // Animation
 $ease-base-out: cubic-bezier(0.7, 0.3, 0.1, 1);

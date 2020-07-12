@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 11:43:54
+ * @Last Modified time: 2020-07-07 21:08:53
  **/
 import PropTypes from '../_utils/vue-types';
+import { getConfig } from '../_utils/globle-config';
 import { isIE } from '../_utils/tool';
 import Size from '../_utils/mixins/size';
 import Locale from '../_utils/mixins/locale';
@@ -19,7 +20,7 @@ export default {
   },
   props: {
     visible: PropTypes.bool.def(false),
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     closable: PropTypes.bool.def(true),
     showFullScreen: PropTypes.bool.def(true),
     destroyOnClose: PropTypes.bool.def(false),
@@ -31,7 +32,7 @@ export default {
     modal: PropTypes.bool.def(true),
     lockScroll: PropTypes.bool.def(true),
     customClass: PropTypes.string,
-    maskClosable: PropTypes.bool.def(false),
+    maskClosable: PropTypes.bool,
     containerStyle: PropTypes.object.def({})
   },
   data() {
@@ -51,6 +52,9 @@ export default {
     },
     isShowDialog() {
       return this.destroyOnClose ? this.isVisible : true;
+    },
+    maskToClose() {
+      return this.maskClosable ?? getConfig('BaseDialog_maskClosable') ?? false;
     },
     fullCls() {
       return ['iconfont', this.fullscreen ? 'icon-fullscreen-exit' : 'icon-fullscreen'];
@@ -107,7 +111,7 @@ export default {
     }
   },
   render() {
-    const { isShowDialog, showFullScreen, fullscreen, dragable, closable, fullCls, maskClosable, stopEventBubble, containerStyle, $props, $attrs, $listeners, $slots } = this;
+    const { isShowDialog, showFullScreen, fullscreen, dragable, closable, fullCls, maskToClose, stopEventBubble, containerStyle, $props, $attrs, $listeners, $slots } = this;
     const prefixCls = this.getPrefixCls('dialog--wrapper');
     const cls = {
       [prefixCls]: true,
@@ -121,8 +125,8 @@ export default {
         appendToBody: true,
         showClose: closable,
         fullscreen,
-        closeOnClickModal: maskClosable,
-        closeOnPressEscape: maskClosable,
+        closeOnClickModal: maskToClose,
+        closeOnPressEscape: maskToClose,
         destroyOnClose: false,
         beforeClose: this.close
       },

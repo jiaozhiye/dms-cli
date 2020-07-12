@@ -2,33 +2,34 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 21:58:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-23 15:33:21
+ * @Last Modified time: 2020-07-08 12:39:50
  */
+@import '../../style/index.scss';
+
 /* font-family */
-$v-font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+$v-font-family: $font-family;
 
-$v-font-size: 14px;
-$v-font-size-medium: 14px;
-$v-font-size-small: 14px;
-$v-font-size-mini: 13px;
+$v-font-size: $font-size-base;
+$v-font-size-medium: $font-size-base;
+$v-font-size-small: $font-size-base;
+$v-font-size-mini: $font-size-sm;
 
-$v-font-color: $textColor;
-$v-font-secondary-color: $textColorSecondary;
-$v-font-disabled-color: $disabledColor;
+$v-font-color: $text-color;
+$v-font-secondary-color: $text-color-secondary;
+$v-font-disabled-color: $disabled-color;
 
 /* primary color */
-$v-primary-color: $primaryColor;
-$v-danger-color: $errorColor;
+$v-primary-color: $primary-color;
+$v-danger-color: $error-color;
 
 // module distance
-$v-module-distance: $moduleMargin;
+$v-module-distance: $padding-base;
 
 /* border radius */
-$v-border-radius: $borderRadius;
+$v-border-radius: $border-radius-base;
 
 /* icon */
-$v-icon-font-family: Verdana, Arial, Tahoma;
-$v-icon-color: rgb(190, 190, 190);
+$v-icon-color: $icon-color;
 
 /* table color */
 $v-table-header-background-color: #fafafa;
@@ -41,10 +42,10 @@ $v-table-column-sorted-color: #f5f5f5;
 $v-table-column-filter-hover-color: #e5e5e5;
 
 /* table row */
-$v-table-row-height-default: 48px;
-$v-table-row-height-medium: 44px;
-$v-table-row-height-small: 40px;
-$v-table-row-height-mini: 36px;
+$v-table-row-height-default: 43px;
+$v-table-row-height-medium: 39px;
+$v-table-row-height-small: 35px;
+$v-table-row-height-mini: 31px;
 $v-table-row-line-height: 24px;
 $v-table-row-hover-background-color: #f5f5f5;
 $v-table-row-selected-background-color: #e6f7ff;

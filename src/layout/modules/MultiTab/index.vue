@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-05-05 23:44:05
+ * @Last Modified time: 2020-07-06 17:01:06
  **/
 import { mapActions } from 'vuex';
 import addEventListener from 'add-dom-event-listener';
@@ -203,6 +203,7 @@ export default {
       .el-tabs__nav {
         border-color: $borderColor;
         .el-tabs__item {
+          font-size: $textSize;
           border-left-color: $borderColor;
           &.is-active {
             font-weight: 700;

@@ -2,15 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:15:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-17 18:52:25
+ * @Last Modified time: 2020-07-12 11:44:54
  */
 export default {
   table: {
     config: {
       selectionText: '选择',
       summaryText: '合计',
-      emptyText: '暂无数据...',
-      columnFilterText: '列筛选排序'
+      emptyText: '暂无数据...'
     },
     alert: {
       total: '共 {total} 条',
@@ -28,6 +27,7 @@ export default {
       pageClassifier: '页'
     },
     columnFilter: {
+      text: '列定义',
       draggable: '拖动排序',
       fixedLeft: '固定左侧',
       fixedRight: '固定右侧',
@@ -48,11 +48,9 @@ export default {
       search: '搜索',
       reset: '重置',
       searchText: '搜索{text}',
-      startValuePlaceholder: '开始值',
-      endValuePlaceholder: '结束值',
-      datePlaceholder: '选择日期',
-      startDatePlaceholder: '开始日期',
-      endDatePlaceholder: '结束日期',
+      gtePlaceholder: '大于等于',
+      ltePlaceholder: '小于等于',
+      neqPlaceholder: '不等于',
       text: '筛选'
     },
     screen: {
@@ -72,6 +70,7 @@ export default {
     groupSummary: {
       text: '汇总',
       settingTitle: '汇总设置',
+      savedSetting: '报存的汇总设置',
       saveButton: '保存',
       closeButton: '关闭',
       confirmButton: '显示汇总',

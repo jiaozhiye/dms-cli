@@ -27,8 +27,8 @@
 ```bash
 # template
 <template>
-  <multiuse-button size="small" @click="closeHandle">关闭</multiuse-button>
-  <multiuse-button size="small" :click="saveHandle" :auth-list="auths" auth-mark="/api/aaa">保存<multiuse-button>
+  <multiuse-button @click="closeHandle">关闭</multiuse-button>
+  <multiuse-button :click="saveHandle" :auth-list="auths" auth-mark="/api/aaa">保存<multiuse-button>
   <multiuse-button type="warning" :click="saveHandle.bind(this, 1)">保存</multiuse-button>
 </template>
 

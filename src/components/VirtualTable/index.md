@@ -15,7 +15,7 @@
 | loading          | 页面是否加载中                            | boolean                                                | false  |
 | resizable        | 所有列是否允许拖动列宽调整大小            | boolean                                                | true   |
 | size             | 表格尺寸                                  | default \| medium \| small \| mini                     | small  |
-| cacheColumnsKey  | 存储列配置的字段名，不能重复              | string                                                 | -      |
+| uniqueKey        | 设置表格各种配置信息的本地缓存，不能重复  | string                                                 | -      |
 | showHeader       | 是否显示表头                              | boolean                                                | true   |
 | ellipsis         | 设置所有内容过长时显示为省略号            | boolean                                                | true   |
 | rowStyle         | 给行附加样式                              | object \| Function(row, rowIndex)                      | -      |
@@ -26,6 +26,8 @@
 | multipleSort     | 是否为多列排序模式                        | boolean                                                | true   |
 | webPagination    | 是否为前端内存分页                        | boolean                                                | false  |
 | showAlert        | 是否显示表格信息                          | boolean                                                | true   |
+| alertPosition    | 表格顶部信息放置的位置                    | top \| bottom                                          | top    |
+| topSpaceAlign    | 顶部按钮插槽的对其方式                    | left \| right                                          | right  |
 | showFullScreen   | 是否显示全屏按钮                          | boolean                                                | true   |
 | showRefresh      | 是否显示刷新按钮                          | boolean                                                | true   |
 | exportExcel      | 导出表格数据，[配置项](#exportExcel)      | object                                                 | -      |
@@ -96,15 +98,13 @@
 
 ### filterType
 
-| 参数         | 说明         |
-| ------------ | ------------ |
-| text         | 文本输入框   |
-| checkbox     | 复选框       |
-| radio        | 单选按钮     |
-| number       | 数值输入框   |
-| range-number | 数值区间     |
-| date         | 日期类型     |
-| range-date   | 日期区间类型 |
+| 参数     | 说明       |
+| -------- | ---------- |
+| text     | 文本输入框 |
+| checkbox | 复选框     |
+| radio    | 单选按钮   |
+| number   | 数值输入框 |
+| date     | 日期类型   |
 
 ### editable
 
@@ -178,11 +178,13 @@
 
 ### helper
 
-| 参数          | 说明                                                      | 类型  | 默认值 |
-| ------------- | --------------------------------------------------------- | ----- | ------ |
-| filters       | 顶部筛选条件配置，参考 TopFilter 组件，必要参数           | array | -      |
-| table         | 列表组件配置，[配置项](#table)，必要参数                  | array | -      |
-| fieldAliasMap | 表单字段与回传数据字段的映射，[配置项](#alias)， 必要参数 | func  | -      |
+| 参数          | 说明                                                            | 类型                                  | 默认值 |
+| ------------- | --------------------------------------------------------------- | ------------------------------------- | ------ |
+| filters       | 顶部筛选条件配置，参考 TopFilter 组件，必要参数                 | array                                 | -      |
+| table         | 列表组件配置，[配置项](#table)，必要参数                        | array                                 | -      |
+| fieldAliasMap | 表单字段与回传数据字段的映射，[配置项](#alias)， 必要参数       | func                                  | -      |
+| open          | 打开搜索帮助的前置钩子，返回 bool 类型，true 打开、false 不打开 | Function，[参数列表](#shParams): bool | -      |
+| closed        | 关闭搜索帮助的后置钩子，参数是带回的行数据                      | Function(tableData)                   | -      |
 
 ### rule
 
@@ -252,7 +254,7 @@ return <Table rowKey={record => record.uid} />;
 <template>
   <VirtualTable
     ref="table"
-    cacheColumnsKey="jzyDemoTable"
+    uniqueKey="jzyDemoTable"
     height="auto"
     :columns="columns"
     :fetch="fetch"
@@ -331,7 +333,7 @@ export default {
           width: 220,
           sorter: true,
           filter: {
-            type: 'range-date'
+            type: 'date'
           },
           editRender: row => {
             return {
@@ -379,7 +381,7 @@ export default {
           width: 100,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           }
         },
         {
@@ -390,7 +392,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -409,7 +411,7 @@ export default {
           required: true,
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           editRender: row => {
             return {
@@ -429,7 +431,7 @@ export default {
           align: 'right',
           sorter: true,
           filter: {
-            type: 'range-number'
+            type: 'number'
           },
           summation: {
             unit: '元'

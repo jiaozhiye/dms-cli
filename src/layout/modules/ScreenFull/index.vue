@@ -3,7 +3,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-28 19:27:17
+ * @Last Modified time: 2020-07-09 10:17:52
  **/
 import screenfull from 'screenfull';
 
@@ -58,7 +58,7 @@ export default {
   justify-content: center;
   cursor: pointer;
   i {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
   }
 }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 10:26:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:18:26
+ * @Last Modified time: 2020-07-11 09:24:08
  */
 import { get, isFunction, isObject, isBoolean } from 'lodash';
 import XLSX from 'xlsx';
@@ -176,7 +176,7 @@ export default {
       attrs: {
         id: this.idName,
         ...$attrs,
-        icon: 'iconfont icon-download'
+        icon: 'iconfont icon-export'
       },
       on: {
         click: this.generate

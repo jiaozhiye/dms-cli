@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-28 08:36:39
+ * @Last Modified time: 2020-07-07 20:04:02
  */
 import { getCellValue, setCellValue, createUidKey } from '../utils';
 import localforage from 'localforage';
@@ -45,8 +45,11 @@ export default {
     $tableSummary() {
       return this.$refs.summary;
     },
-    cacheUniqKey() {
-      return this.$$table.cacheColumnsKey;
+    size() {
+      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
+    },
+    groupSummaryKey() {
+      return `summary_${this.$$table.uniqueKey}`;
     },
     // 显示汇总 按钮的状态
     confirmDisabled() {
@@ -70,7 +73,7 @@ export default {
   },
   async created() {
     try {
-      const res = await localforage.getItem(this.cacheUniqKey);
+      const res = await localforage.getItem(this.groupSummaryKey);
       if (Array.isArray(res) && res.length) {
         this.savedItems = res;
         this.currentKey = res[0].value;
@@ -109,7 +112,7 @@ export default {
             const prevValue = getCellValue(row, column.dataIndex);
             return (
               <el-select
-                size="small"
+                size={this.size}
                 value={prevValue}
                 onInput={val => {
                   setCellValue(row, column.dataIndex, val);
@@ -160,7 +163,7 @@ export default {
             const prevValue = getCellValue(row, column.dataIndex);
             return (
               <el-select
-                size="small"
+                size={this.size}
                 value={prevValue}
                 onInput={val => {
                   setCellValue(row, column.dataIndex, val);
@@ -187,7 +190,7 @@ export default {
             const itemList = row.summary === '__total__' ? config.groupSummary.calcItems.slice(0, 1) : [...config.groupSummary.calcItems];
             return (
               <el-select
-                size="small"
+                size={this.size}
                 value={prevValue}
                 onInput={val => {
                   setCellValue(row, column.dataIndex, val);
@@ -224,7 +227,7 @@ export default {
         }
       });
       try {
-        await localforage.setItem(this.cacheUniqKey, this.savedItems);
+        await localforage.setItem(this.groupSummaryKey, this.savedItems);
         this.currentKey = uuid;
       } catch (err) {}
     },
@@ -239,7 +242,7 @@ export default {
       const index = this.savedItems.findIndex(x => x.value === key);
       this.savedItems.splice(index, 1);
       try {
-        await localforage.setItem(this.cacheUniqKey, this.savedItems);
+        await localforage.setItem(this.groupSummaryKey, this.savedItems);
         if (key === this.currentKey) {
           this.currentKey = '';
         }
@@ -307,14 +310,14 @@ export default {
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input class="form-item" size="small" placeholder={this.t('table.groupSummary.configText')} value={form.name} onInput={val => (this.form.name = val)} disabled={confirmDisabled} />
+              <el-input class="form-item" placeholder={this.t('table.groupSummary.configText')} value={form.name} onInput={val => (this.form.name = val)} disabled={confirmDisabled} />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {this.t('table.groupSummary.saveButton')}
               </el-button>
             </div>
             <div class="card-wrap">
-              <h5 style={{ height: `${config.rowHeightMaps[this.$$table.size]}px` }}>
-                <span>保存的汇总配置</span>
+              <h5 style={{ height: `${config.rowHeightMaps[this.$$table.tableSize]}px` }}>
+                <span>{this.t('table.groupSummary.savedSetting')}</span>
               </h5>
               <ul>
                 {savedItems.map(x => (

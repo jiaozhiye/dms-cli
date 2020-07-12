@@ -13,7 +13,7 @@ export default {
   mixins: [Size, PrefixCls],
   props: {
     label: PropTypes.string.def(''),
-    size: PropTypes.oneOf(['small', 'default', 'large']).def('default'),
+    size: PropTypes.oneOf(['small', 'default', 'large']),
     containerStyle: PropTypes.object.def({}),
     labelStyle: PropTypes.object.def({})
   },

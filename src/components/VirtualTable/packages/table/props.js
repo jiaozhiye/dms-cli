@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-09 17:18:48
+ * @Last Modified time: 2020-07-12 11:34:10
  */
 import PropTypes from '../../../_utils/vue-types';
 
@@ -19,7 +19,7 @@ const columnItem = {
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
   // 列筛选
   filter: PropTypes.shape({
-    type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
+    type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
   precision: PropTypes.number, // 数值类型字段的精度
@@ -67,7 +67,9 @@ const columnItem = {
  *   helper: PropTypes.shape({
  *     filters: PropTypes.object,
  *     table: PropTypes.object,
- *     fieldAliasMap: PropTypes.func
+ *     fieldAliasMap: PropTypes.func,
+ *     open: PropTypes.func,
+ *     closed: PropTypes.func
  *   }),
  *   rules: PropTypes.arrayOf(PropTypes.shape({
  *     required: PropTypes.bool,
@@ -108,9 +110,9 @@ export default {
   // 所有列是否允许拖动列宽调整大小
   resizable: PropTypes.bool.def(true),
   // 表格尺寸
-  size: PropTypes.oneOf(['default', 'medium', 'small', 'mini']).def('small'),
-  // 存储列配置的字段名，不能重复
-  cacheColumnsKey: PropTypes.string,
+  size: PropTypes.oneOf(['default', 'medium', 'small', 'mini']),
+  // 各种配置的本地存储，值不能重复
+  uniqueKey: PropTypes.string,
   // 是否显示表头
   showHeader: PropTypes.bool.def(true),
   // 设置所有内容过长时显示为省略号
@@ -141,6 +143,10 @@ export default {
   webPagination: PropTypes.bool.def(false),
   // 是否显示表格顶部信息
   showAlert: PropTypes.bool.def(true),
+  // 表格顶部信息放置的位置
+  alertPosition: PropTypes.oneOf(['top', 'bottom']).def('top'),
+  // 顶部按钮插槽的对其方式
+  topSpaceAlign: PropTypes.oneOf(['left', 'right']).def('right'),
   // 是否显示全屏按钮
   showFullScreen: PropTypes.bool.def(true),
   // 是否显示刷新按钮
@@ -163,4 +169,15 @@ export default {
  * dataChange: 表格数据变化时触发，参数 tableData
  * rowClick: 行单击事件，参数 row, column, event
  * rowDblclick: 行双击事件，参数 row, column, event
+ */
+
+/**
+ * 方法：
+ * DO_REFRESH: 刷新表格数据，同时会清空列选中状态
+ * INSERT_RECORDS: 插入表格行数据，参数 row|rows, bottom(默认)|top
+ * REMOVE_RECORDS: 移除表格数据，参数 rowKeys|rows|row
+ * FORM_VALIDATE: 触发表格中的表单校验，返回值：object
+ * GET_LOG: 获取操作记录，非空校验、格式校验、数据操作记录，返回值：object
+ * CLEAR_LOG：清空表格操作记录
+ * CALCULATE_HEIGHT：计算表格高度
  */

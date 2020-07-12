@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div :class="noticeCls">
     <SuperTabs :initial-value="defaultTabLabel" :tab-bar-gutter="15" animated>
       <tab-panel key="1" :label="noticeList.title">
         <div class="list">
@@ -7,7 +7,6 @@
             <li v-for="item in noticeList.list" :key="item.id">{{ item.title }}</li>
           </ul>
           <dl v-else class="no-info">
-            <i class="el-icon-warning-outline" />
             <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
@@ -18,7 +17,6 @@
             <li v-for="item in messageList.list" :key="item.id">{{ item.title }}</li>
           </ul>
           <dl v-else class="no-info">
-            <i class="el-icon-warning-outline" />
             <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
@@ -29,7 +27,6 @@
             <li v-for="item in todoList.list" :key="item.id">{{ item.title }}</li>
           </ul>
           <dl v-else class="no-info">
-            <i class="el-icon-warning-outline" />
             <span>{{ $t('app.emptyText') }}</span>
           </dl>
         </div>
@@ -39,10 +36,12 @@
 </template>
 
 <script>
+import { size } from '@/mixins/sizeMixin';
 import dataList from '@/mock/noticeData';
 
 export default {
   name: 'InsideLetter',
+  mixins: [size],
   data() {
     return {
       defaultTabLabel: '1',
@@ -60,6 +59,15 @@ export default {
       }
     };
   },
+  computed: {
+    noticeCls() {
+      return {
+        [`notice-wrapper`]: !0,
+        [`notice-wrapper-sm`]: this.currentSize === 'small',
+        [`notice-wrapper-lg`]: this.currentSize === 'large'
+      };
+    }
+  },
   mounted() {
     const title = `${this.$t('insideLetter.notice')}(${dataList.data.length})`;
     this.noticeList.list = dataList.data;
@@ -69,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.notice-wrapper {
   margin: -12px;
   width: 340px;
   .list {
@@ -78,20 +86,28 @@ export default {
       padding: 10px 15px;
       line-height: 20px;
       font-size: $textSize;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid $borderColorSecondary;
     }
     .no-info {
       text-align: center;
-      padding: 30px 0;
+      padding: 40px 0;
       color: $disabledColor;
-      i {
-        font-size: 26px;
-      }
       span {
         display: inline-block;
         width: 100%;
-        padding-top: 5px;
         font-size: $textSize;
+      }
+    }
+  }
+  &-sm {
+    .list {
+      ul > li {
+        font-size: $textSizeSecondary;
+      }
+      .no-info {
+        span {
+          font-size: $textSizeSecondary;
+        }
       }
     }
   }

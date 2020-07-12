@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-29 10:51:30
+ * @Last Modified time: 2020-07-09 10:46:19
  */
 export default {
   sex: [
@@ -1847,5 +1847,12 @@ export default {
   SPAvProperty: [
     { value: '00', cnText: '正常' },
     { value: '10', cnText: '紧急' }
+  ],
+  ZDPFmSPrtcCFMQuery: [
+    { value: 'N', cnText: '新建' },
+    { value: 'D', cnText: '删除' },
+    { value: 'C', cnText: '确认' },
+    { value: 'P', cnText: '审核' },
+    { value: 'Q', cnText: '作废' }
   ]
 };

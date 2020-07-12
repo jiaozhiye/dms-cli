@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-17 18:52:29
+ * @Last Modified time: 2020-07-11 09:18:46
  */
 import i18n from '../locale';
 
@@ -11,10 +11,16 @@ const config = {
   defaultColumnWidth: 80,
   // 行高的映射表
   rowHeightMaps: {
-    default: 48,
-    medium: 44,
-    small: 40,
-    mini: 36
+    default: 43,
+    medium: 39,
+    small: 35,
+    mini: 31
+  },
+  // table 尺寸的映射
+  toTableSize: {
+    large: 'medium',
+    default: 'small',
+    small: 'mini'
   },
   // 分页
   pagination: {
@@ -34,7 +40,7 @@ const config = {
   },
   // 树表格
   treeTable: {
-    textIndent: 22 // 缩进 22px
+    textIndent: 17 // 缩进 17px
   },
   // 后台返回数据的路径
   dataKey: 'items',
@@ -53,9 +59,7 @@ const config = {
   // 合计行第一列的文本
   summaryText: () => i18n.t('table.config.summaryText'),
   // 暂无数据
-  emptyText: () => i18n.t('table.config.emptyText'),
-  // 列定义
-  columnFilterText: () => i18n.t('table.config.columnFilterText')
+  emptyText: () => i18n.t('table.config.emptyText')
 };
 
 export default config;

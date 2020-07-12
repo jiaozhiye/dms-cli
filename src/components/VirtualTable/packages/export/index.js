@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 08:47:33
+ * @Last Modified time: 2020-07-07 17:54:50
  */
 import PropTypes from '../../../_utils/vue-types';
 import JsonToExcel from '../../../JsonToExcel';
@@ -22,6 +22,7 @@ export default {
     fileName: PropTypes.string.def(`${i18n.t('table.export.fileName')}.xlsx`),
     fetch: PropTypes.object
   },
+  inject: ['$$table'],
   computed: {
     filterColumns() {
       return filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]);
@@ -96,11 +97,10 @@ export default {
         formatHandle: this.createDataList
       }
     };
+    const cls = [`v-export--wrapper`, `size--${this.$$table.tableSize}`];
     return (
-      <div class="v-export--wrapper">
-        <JsonToExcel size="small" type="text" {...wrapProps}>
-          {this.t('table.export.text')}
-        </JsonToExcel>
+      <div class={cls} title={this.t('table.export.text')}>
+        <JsonToExcel type="text" {...wrapProps} />
       </div>
     );
   }

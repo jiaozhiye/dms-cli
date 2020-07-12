@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-29 10:59:19
+ * @Last Modified time: 2020-07-08 12:30:37
  */
 import { uniqWith, isEqual } from 'lodash';
 import * as types from '../types';
+import config from '@/config';
 import router from '@/routes';
 import { setToken, setUser, removeToken, set_vDealerName } from '@/utils/cookies';
 import variables from '@/assets/css/variables.scss';
@@ -65,7 +66,8 @@ const state = {
   starMenuList: [], // 收藏导航
   commonMenuList: [], // 常用导航
   tabNavList: [], // 导航选项卡列表
-  lang: localStorage.getItem('lang') || 'zh', // 多语言
+  lang: localStorage.getItem('lang') || config.lang, // 多语言
+  size: localStorage.getItem('size') || config.size, // 尺寸
   theme: variables.theme, // 主题色
   dict: {}, // 数据字典
   keepAliveList: [], // 路由组件缓存列表
@@ -257,7 +259,22 @@ const actions = {
       data: params
     });
   },
-  emitThemeColor({ dispatch, commit, state }, params) {
+  setSize({ commit, state }, params) {
+    state.iframeList.forEach(x => {
+      const $iframe = document.getElementById(x.key);
+      if (!$iframe) return;
+      $iframe.contentWindow.postMessage({ type: 'size', data: params });
+    });
+    commit({
+      type: types.SIZE,
+      data: params
+    });
+  },
+  createElementSize({ commit, state }, params) {
+    this._vm.$ELEMENT.size = config.toElementSize[params];
+    this._vm.$VDESIGN.size = params;
+  },
+  emitThemeColor({ commit, state }, params) {
     state.iframeList.forEach(x => {
       const $iframe = document.getElementById(x.key);
       if (!$iframe) return;
@@ -327,6 +344,9 @@ const mutations = {
   },
   [types.LANGUAGE](state, { data }) {
     state.lang = data;
+  },
+  [types.SIZE](state, { data }) {
+    state.size = data;
   },
   [types.THEME_COLOR](state, { data }) {
     state.theme = data;

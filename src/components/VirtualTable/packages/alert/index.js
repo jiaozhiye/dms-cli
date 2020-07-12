@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-10 09:04:48
+ * @Last Modified time: 2020-07-07 17:54:30
  */
 import Locale from '../locale/mixin';
 
@@ -23,8 +23,9 @@ export default {
   },
   render() {
     const { total, rowSelection, selectionKeys } = this.$$table;
+    const cls = [`v-alert`, `size--${this.$$table.tableSize}`];
     return (
-      <div class="v-alert">
+      <div class={cls}>
         <i class="iconfont icon-info-circle-fill" />
         <span>
           {this.t('table.alert.total', { total })}
