@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 14:43:06
+ * @Last Modified time: 2020-07-12 15:40:46
  */
 import SvgIcon from '../../../SvgIcon';
 import Popper from '../popper';
@@ -155,15 +155,15 @@ export default {
         <div>
           <ul class="v-filter-list">
             <li>
-              <span>&gt;=</span>
+              <span>&gt;&nbsp;</span>
               <el-input
                 size={this.size}
-                value={this.filterValues[dataKey]?.[`>=`]}
+                value={this.filterValues[dataKey]?.[`>`]}
                 onInput={val => {
                   if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>=`]: val !== '' ? Number(val) : '' });
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val !== '' ? Number(val) : '' });
                 }}
-                placeholder={this.t('table.filter.gtePlaceholder')}
+                placeholder={this.t('table.filter.gtPlaceholder')}
                 style={{ width: '100%' }}
                 nativeOnKeydown={ev => {
                   if (ev.keyCode === 13) {
@@ -173,15 +173,15 @@ export default {
               />
             </li>
             <li>
-              <span>&lt;=</span>
+              <span>&lt;&nbsp;</span>
               <el-input
                 size={this.size}
-                value={this.filterValues[dataKey]?.[`<=`]}
+                value={this.filterValues[dataKey]?.[`<`]}
                 onInput={val => {
                   if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<=`]: val !== '' ? Number(val) : '' });
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val !== '' ? Number(val) : '' });
                 }}
-                placeholder={this.t('table.filter.ltePlaceholder')}
+                placeholder={this.t('table.filter.ltPlaceholder')}
                 style={{ width: '100%' }}
                 nativeOnKeydown={ev => {
                   if (ev.keyCode === 13) {
@@ -273,30 +273,30 @@ export default {
         <div>
           <ul class="v-filter-list">
             <li>
-              <span>&gt;=</span>
+              <span>&gt;&nbsp;</span>
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`>=`]}
+                value={this.filterValues[dataKey]?.[`>`]}
                 valueFormat="yyyy-MM-dd"
                 onInput={val => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>=`]: val ?? '' });
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.gtePlaceholder')}
+                placeholder={this.t('table.filter.gtPlaceholder')}
                 style={{ width: '140px' }}
               />
             </li>
             <li>
-              <span>&lt;=</span>
+              <span>&lt;&nbsp;</span>
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`<=`]}
+                value={this.filterValues[dataKey]?.[`<`]}
                 valueFormat="yyyy-MM-dd"
                 onInput={val => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<=`]: val ?? '' });
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.ltePlaceholder')}
+                placeholder={this.t('table.filter.ltPlaceholder')}
                 style={{ width: '140px' }}
               />
             </li>

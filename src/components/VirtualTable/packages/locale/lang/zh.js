@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:15:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 11:44:54
+ * @Last Modified time: 2020-07-12 15:31:39
  */
 export default {
   table: {
@@ -48,8 +48,8 @@ export default {
       search: '搜索',
       reset: '重置',
       searchText: '搜索{text}',
-      gtePlaceholder: '大于等于',
-      ltePlaceholder: '小于等于',
+      gtPlaceholder: '大于',
+      ltPlaceholder: '小于',
       neqPlaceholder: '不等于',
       text: '筛选'
     },

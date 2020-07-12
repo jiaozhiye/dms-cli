@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 11:37:49
+ * @Last Modified time: 2020-07-12 15:29:44
  */
 .v-table--header-wrapper {
   background-color: $v-table-header-background-color;
@@ -138,7 +138,6 @@
         align-items: center;
         margin-top: 8px;
         & > span {
-          font-family: 'Consolas';
           margin-right: 5px;
         }
       }

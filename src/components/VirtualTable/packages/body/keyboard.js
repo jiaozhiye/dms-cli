@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-30 20:24:24
+ * @Last Modified time: 2020-07-12 15:49:10
  */
 import { isUndefined } from 'lodash';
 
@@ -13,16 +13,26 @@ const keyboardMixin = {
       // 至少一个单元格获得焦点
       if (!this.clicked.length) return;
       const { keyCode } = ev;
-      // 左  右
-      if (keyCode === 37 || keyCode === 39) {
+      // Tab
+      if (keyCode === 9) {
         ev.preventDefault();
         const total = this.editableColumns.length;
         let index = this.editableColumns.findIndex(x => x.dataIndex === this.clicked[1]);
-        let yIndex = keyCode === 37 ? (--index + total) % total : ++index % total;
+        let yIndex = ++index % total;
         const dataIndex = this.editableColumns[yIndex].dataIndex;
         this.setClickedValues([this.clicked[0], dataIndex]);
         this.scrollXToColumn(dataIndex);
       }
+      // 左  右
+      // if (keyCode === 37 || keyCode === 39) {
+      //   ev.preventDefault();
+      //   const total = this.editableColumns.length;
+      //   let index = this.editableColumns.findIndex(x => x.dataIndex === this.clicked[1]);
+      //   let yIndex = keyCode === 37 ? (--index + total) % total : ++index % total;
+      //   const dataIndex = this.editableColumns[yIndex].dataIndex;
+      //   this.setClickedValues([this.clicked[0], dataIndex]);
+      //   this.scrollXToColumn(dataIndex);
+      // }
       // 上  下
       if (keyCode === 38 || keyCode === 40) {
         ev.preventDefault();
