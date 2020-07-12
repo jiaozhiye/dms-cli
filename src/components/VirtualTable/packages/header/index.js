@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 15:00:15
+ * @Last Modified time: 2020-07-12 17:22:10
  */
-import { pickBy, intersection, isFunction, isNumber } from 'lodash';
+import { pickBy, intersection, isFunction } from 'lodash';
 import { where, stringify, array_format } from '../filter-sql';
-import moment from 'moment';
 
 import config from '../config';
 import Locale from '../locale/mixin';
@@ -253,7 +252,7 @@ export default {
       // 执行排序
       this.sorterHandle();
     },
-    // 生成查询 sql 片段
+    // 生成查询条件的 sql 片段
     createWhereSQL(filters) {
       let __query__ = ``;
       for (let key in filters) {

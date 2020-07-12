@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 08:07:29
+ * @Last Modified time: 2020-07-12 17:26:34
  */
 import { isFormEmpty } from './index';
 
@@ -112,7 +112,7 @@ export const pwdValidate = (rule, value, callback) => {
 };
 
 // 身份证校验
-export function IDNumber(rule, value, callback) {
+export const IDNumber = (rule, value, callback) => {
   if (rule.required && isFormEmpty(value)) {
     return callback(new Error('身份证号不能为空'));
   }
@@ -153,8 +153,8 @@ export function IDNumber(rule, value, callback) {
     82: '澳门',
     91: '国外 '
   };
-  let regExp = /^\d{15}$/ || !/^\d{6}(18|19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i;
-  let checkLastNumber = val => {
+  const regExp = /^\d{15}$/ || !/^\d{6}(18|19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i;
+  const checkLastNumber = val => {
     val = val.split('');
     // ∑(ai×Wi)(mod 11)
     // 加权因子
@@ -182,4 +182,4 @@ export function IDNumber(rule, value, callback) {
     }
   }
   callback(new Error('请输入正确的证件号'));
-}
+};

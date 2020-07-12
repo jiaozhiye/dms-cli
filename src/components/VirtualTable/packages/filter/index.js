@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 15:40:46
+ * @Last Modified time: 2020-07-12 17:44:28
  */
 import SvgIcon from '../../../SvgIcon';
 import Popper from '../popper';
@@ -164,7 +164,7 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val !== '' ? Number(val) : '' });
                 }}
                 placeholder={this.t('table.filter.gtPlaceholder')}
-                style={{ width: '100%' }}
+                style={{ width: '120px' }}
                 nativeOnKeydown={ev => {
                   if (ev.keyCode === 13) {
                     this.doFinish();
@@ -182,7 +182,7 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val !== '' ? Number(val) : '' });
                 }}
                 placeholder={this.t('table.filter.ltPlaceholder')}
-                style={{ width: '100%' }}
+                style={{ width: '120px' }}
                 nativeOnKeydown={ev => {
                   if (ev.keyCode === 13) {
                     this.doFinish();
@@ -200,7 +200,7 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val !== '' ? Number(val) : '' });
                 }}
                 placeholder={this.t('table.filter.neqPlaceholder')}
-                style={{ width: '100%' }}
+                style={{ width: '120px' }}
                 nativeOnKeydown={ev => {
                   if (ev.keyCode === 13) {
                     this.doFinish();
@@ -211,6 +211,10 @@ export default {
           </ul>
         </div>
       );
+    },
+    // 处理兼容
+    [`range-numberHandle`](column) {
+      return this.numberHandle(column);
     },
     radioHandle(column) {
       const { filter } = column;
@@ -283,7 +287,7 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val ?? '' });
                 }}
                 placeholder={this.t('table.filter.gtPlaceholder')}
-                style={{ width: '140px' }}
+                style={{ width: '150px' }}
               />
             </li>
             <li>
@@ -297,7 +301,7 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val ?? '' });
                 }}
                 placeholder={this.t('table.filter.ltPlaceholder')}
-                style={{ width: '140px' }}
+                style={{ width: '150px' }}
               />
             </li>
             <li>
@@ -311,12 +315,16 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val ?? '' });
                 }}
                 placeholder={this.t('table.filter.neqPlaceholder')}
-                style={{ width: '140px' }}
+                style={{ width: '150px' }}
               />
             </li>
           </ul>
         </div>
       );
+    },
+    // 处理兼容
+    [`range-dateHandle`](column) {
+      return this.dateHandle(column);
     }
   },
   render() {

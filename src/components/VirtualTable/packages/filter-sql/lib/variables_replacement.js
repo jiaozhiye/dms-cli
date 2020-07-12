@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:52:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 11:55:51
+ * @Last Modified time: 2020-07-12 17:27:54
  */
 // SQL example
 // 1 == 1 AND (2 == 3 OR 23 != 5) AND as == a
@@ -35,6 +35,7 @@ export default {
           splits[i - 1] = variable;
         }
       }
+
       // to function
       if (['like', 'in', 'nin'].includes(splits[i])) {
         splits.splice(i - 1, 3, `_query(${splits[i - 1]}, '${splits[i]}', ${splits[i + 1]})`);

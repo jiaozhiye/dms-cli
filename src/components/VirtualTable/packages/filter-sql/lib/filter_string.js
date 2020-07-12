@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:24:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 12:17:03
+ * @Last Modified time: 2020-07-12 17:27:26
  */
 const conjuctions = ['&&', '||', 'AND', 'OR', 'and', 'or', 'like', 'in', 'nin', 'LIKE', 'IN', 'NIN'];
 
@@ -53,7 +53,7 @@ export default {
     }
   },
 
-  // return string
+  // return string with array
   array_format: function(array) {
     array = Array.isArray(array) ? array : [array];
     let string = `[`;

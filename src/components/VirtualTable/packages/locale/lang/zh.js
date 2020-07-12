@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:15:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 15:31:39
+ * @Last Modified time: 2020-07-12 16:48:04
  */
 export default {
   table: {
@@ -77,6 +77,12 @@ export default {
       removeText: '移除',
       configText: '配置名称',
       resultText: '汇总结果'
+    },
+    highSearch: {
+      text: '高级检索',
+      settingTitle: '高级检索设置',
+      searchButton: '开始检索',
+      closeButton: '关闭'
     }
   }
 };

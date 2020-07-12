@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 11:34:10
+ * @Last Modified time: 2020-07-12 17:33:26
  */
 import PropTypes from '../../../_utils/vue-types';
 
@@ -19,7 +19,7 @@ const columnItem = {
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
   // 列筛选
   filter: PropTypes.shape({
-    type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'date']).isRequired, // 列筛选类型
+    type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'range-number', 'date', 'range-date']).isRequired, // 列筛选类型
     items: PropTypes.array // 筛选列表项
   }),
   precision: PropTypes.number, // 数值类型字段的精度

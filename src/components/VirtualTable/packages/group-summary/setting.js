@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-07 20:04:02
+ * @Last Modified time: 2020-07-12 17:24:39
  */
-import { getCellValue, setCellValue, createUidKey } from '../utils';
 import localforage from 'localforage';
+
+import { getCellValue, setCellValue, createUidKey } from '../utils';
 import config from '../config';
 import Locale from '../locale/mixin';
 
@@ -49,7 +50,7 @@ export default {
       return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
     },
     groupSummaryKey() {
-      return `summary_${this.$$table.uniqueKey}`;
+      return this.$$table.uniqueKey ? `summary_${this.$$table.uniqueKey}` : '';
     },
     // 显示汇总 按钮的状态
     confirmDisabled() {
@@ -72,6 +73,7 @@ export default {
     }
   },
   async created() {
+    if (!this.groupSummaryKey) return;
     try {
       const res = await localforage.getItem(this.groupSummaryKey);
       if (Array.isArray(res) && res.length) {
@@ -216,6 +218,9 @@ export default {
     },
     // 保存配置
     async saveConfigHandle() {
+      if (!this.groupSummaryKey) {
+        return console.error('[Table]: 必须设置组件参数 `uniqueKey` 才能保存');
+      }
       const title = this.form.name;
       const uuid = createUidKey();
       this.savedItems.push({

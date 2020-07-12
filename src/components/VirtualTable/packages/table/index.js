@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 14:59:57
+ * @Last Modified time: 2020-07-12 17:20:37
  */
 import baseProps from './props';
 import Store from '../store';
@@ -31,6 +31,7 @@ import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
 import GroupSummary from '../group-summary';
+import HighSearch from '../high-search';
 import FullScreen from '../full-screen';
 import Export from '../export';
 import PrintTable from '../print';
@@ -185,7 +186,7 @@ export default {
       const params = this.fetch ? this.fetch.params : null;
       return {
         ...this.sorter,
-        ...(Object.keys(this.filters).length ? { where: this.$refs[`tableHeader`]?.createWhereSQL(this.filters) } : null),
+        ...{ where: this.$refs[`tableHeader`]?.createWhereSQL(this.filters) || undefined },
         ...params,
         ...this.pagination
       };
@@ -490,6 +491,8 @@ export default {
             {tablePrint && <PrintTable {...printProps} />}
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
+            {/* 高级检索 */}
+            {isHeadFilter && <HighSearch columns={flattenColumns} />}
             {/* 分组汇总 */}
             {isGroupSummary && <GroupSummary columns={flattenColumns} />}
             {/* 列定义 */}

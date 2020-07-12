@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-11 09:22:54
+ * @Last Modified time: 2020-07-12 16:41:31
  */
 import Popper from '../popper';
 import Draggable from '../draggable';
@@ -154,7 +154,7 @@ export default {
       <div class={cls}>
         <Popper {...wrapProps}>
           <span slot="reference" class={{ [`text`]: !0, [`selected`]: this.showPopper }}>
-            <i class="iconfont icon-funnelplot" />
+            <i class="iconfont icon-unorderedlist" />
             {this.t('table.columnFilter.text')}
           </span>
           <div class="v-popper">{this.renderColumnFilter()}</div>

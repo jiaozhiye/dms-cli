@@ -77,6 +77,12 @@ export default {
       removeText: 'remove',
       configText: 'config name',
       resultText: 'summary result'
+    },
+    highSearch: {
+      text: 'advanced search',
+      settingTitle: 'advanced search setting',
+      searchButton: 'start search',
+      closeButton: 'close'
     }
   }
 };
