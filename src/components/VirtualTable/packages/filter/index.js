@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 17:44:28
+ * @Last Modified time: 2020-07-13 09:18:10
  */
 import SvgIcon from '../../../SvgIcon';
 import Popper from '../popper';
@@ -191,6 +191,24 @@ export default {
               />
             </li>
             <li>
+              <span>=&nbsp;</span>
+              <el-input
+                size={this.size}
+                value={this.filterValues[dataKey]?.[`==`]}
+                onInput={val => {
+                  if (!validateNumber(val)) return;
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val !== '' ? Number(val) : '' });
+                }}
+                placeholder={this.t('table.filter.eqPlaceholder')}
+                style={{ width: '120px' }}
+                nativeOnKeydown={ev => {
+                  if (ev.keyCode === 13) {
+                    this.doFinish();
+                  }
+                }}
+              />
+            </li>
+            <li>
               <span>!=</span>
               <el-input
                 size={this.size}
@@ -301,6 +319,20 @@ export default {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val ?? '' });
                 }}
                 placeholder={this.t('table.filter.ltPlaceholder')}
+                style={{ width: '150px' }}
+              />
+            </li>
+            <li>
+              <span>=&nbsp;</span>
+              <el-date-picker
+                size={this.size}
+                type="date"
+                value={this.filterValues[dataKey]?.[`==`]}
+                valueFormat="yyyy-MM-dd"
+                onInput={val => {
+                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val ?? '' });
+                }}
+                placeholder={this.t('table.filter.eqPlaceholder')}
                 style={{ width: '150px' }}
               />
             </li>

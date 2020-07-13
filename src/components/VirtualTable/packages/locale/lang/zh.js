@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:15:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 16:48:04
+ * @Last Modified time: 2020-07-13 17:32:50
  */
 export default {
   table: {
@@ -50,6 +50,7 @@ export default {
       searchText: '搜索{text}',
       gtPlaceholder: '大于',
       ltPlaceholder: '小于',
+      eqPlaceholder: '等于',
       neqPlaceholder: '不等于',
       text: '筛选'
     },
@@ -70,7 +71,7 @@ export default {
     groupSummary: {
       text: '汇总',
       settingTitle: '汇总设置',
-      savedSetting: '报存的汇总设置',
+      savedSetting: '保存的汇总设置',
       saveButton: '保存',
       closeButton: '关闭',
       confirmButton: '显示汇总',
@@ -82,7 +83,22 @@ export default {
       text: '高级检索',
       settingTitle: '高级检索设置',
       searchButton: '开始检索',
-      closeButton: '关闭'
+      closeButton: '关闭',
+      removeText: '移除',
+      andText: '并且',
+      orText: '或者',
+      gtText: '大于',
+      ltText: '小于',
+      gteText: '大于等于',
+      lteText: '小于等于',
+      eqText: '等于',
+      neqText: '不等于',
+      inText: '包含',
+      ninText: '不包含',
+      likeText: '模糊匹配',
+      configText: '配置名称',
+      saveButton: '保存',
+      savedSetting: '保存的高级检索设置'
     }
   }
 };

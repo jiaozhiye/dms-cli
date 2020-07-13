@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-07 18:48:46
+ * @Last Modified time: 2020-07-13 10:06:50
  */
 import config from '../config';
 import Locale from '../locale/mixin';
@@ -43,7 +43,7 @@ export default {
         'update:visible': val => (this.visible = val)
       }
     };
-    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', config.operationColumn].includes(x.dataIndex));
+    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex));
     const cls = [`v-group-summary--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>

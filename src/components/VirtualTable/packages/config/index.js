@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-11 09:18:46
+ * @Last Modified time: 2020-07-13 16:48:25
  */
 import i18n from '../locale';
 
@@ -37,6 +37,10 @@ const config = {
       { text: '列最小值', value: 'min' },
       { text: '列平均值', value: 'avg' }
     ]
+  },
+  // 高级检索
+  highSearch: {
+    showSQL: true
   },
   // 树表格
   treeTable: {

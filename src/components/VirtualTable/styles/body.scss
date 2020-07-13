@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-09 11:02:43
+ * @Last Modified time: 2020-07-13 13:47:24
  */
 .v-cell--edit {
   .el-input-group {
@@ -16,6 +16,12 @@
     width: 100%;
     .el-input__inner {
       padding-left: 30px;
+    }
+  }
+  .el-select {
+    .el-select__tags {
+      height: 28px;
+      overflow-y: auto;
     }
   }
   .is-disabled {
@@ -39,8 +45,8 @@
       font-size: $v-font-size-mini;
       line-height: 1.2;
       color: $v-danger-color;
+      top: 9px;
       right: 8px;
-      top: 8px;
       pointer-events: none;
     }
   }

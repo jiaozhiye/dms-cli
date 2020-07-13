@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-08 11:48:31
+ * @Last Modified time: 2020-07-13 13:41:51
  */
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, contains } from '../utils';
@@ -208,7 +208,7 @@ export default {
       return (
         <td
           key={dataIndex}
-          title={isEllipsis && this.renderText(getCellValue(row, dataIndex), column)}
+          title={isEllipsis && this.renderText(getCellValue(row, dataIndex), column, row)}
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
@@ -238,16 +238,16 @@ export default {
         return <CellEdit column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
       // Content Node
-      const vNodeText = isFunction(render) ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column);
+      const vNodeText = isFunction(render) ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column, row);
       // Tree Expandable + vNodeText
       if (this.isTreeTable && dataIndex === this.firstDataIndex) {
         return [this.renderIndent(depth), <Expandable record={row} rowKey={rowKey} style={this.isTreeNode(row) ? null : { visibility: 'hidden' }} />, vNodeText];
       }
       return vNodeText;
     },
-    renderText(text, column) {
-      const { dictItems, formatType } = column;
-      const dicts = dictItems || [];
+    renderText(text, column, row) {
+      const { dictItems, formatType, editRender } = column;
+      const dicts = dictItems || editRender?.(row, column)?.items || [];
       const target = dicts.find(x => x.value == text);
       let result = target?.text ?? text;
       // 数据是数组的情况

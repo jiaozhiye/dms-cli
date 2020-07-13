@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 17:24:39
+ * @Last Modified time: 2020-07-13 10:00:14
  */
 import localforage from 'localforage';
 
@@ -292,7 +292,7 @@ export default {
               onDataChange={tableData => (this.groupTableData = [...tableData])}
             >
               <template slot="default">
-                <el-button type="primary" icon="el-icon-plus" onClick={() => this.$tableGroup.INSERT_RECORDS({})} style={{ marginLeft: '10px' }} />
+                <el-button type="primary" icon="el-icon-plus" onClick={() => this.$tableGroup.INSERT_RECORDS({})} style={{ marginLeft: '10px', marginRight: '-10px' }} />
               </template>
             </VTable>
           </div>
@@ -309,7 +309,7 @@ export default {
               onDataChange={tableData => (this.summaryTableData = [...tableData])}
             >
               <template slot="default">
-                <el-button type="primary" icon="el-icon-plus" onClick={() => this.$tableSummary.INSERT_RECORDS({})} />
+                <el-button type="primary" icon="el-icon-plus" style={{ marginRight: '-10px' }} onClick={() => this.$tableSummary.INSERT_RECORDS({})} />
               </template>
             </VTable>
           </div>

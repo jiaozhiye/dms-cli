@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-08 20:46:22
+ * @Last Modified time: 2020-07-13 16:40:56
  */
 import { isEqual, isUndefined, isFunction, isObject } from 'lodash';
 import moment from 'moment';
@@ -133,7 +133,10 @@ export default {
           }}
           onChange={val => {
             // 处理 val 值得特殊情况
-            val = val !== '-' && val !== '' ? Number(val).toFixed(precision) : '';
+            val = val === '-' ? '' : val;
+            if (precision >= 0 && val !== '') {
+              val = Number(val).toFixed(precision);
+            }
             setCellValue(row, dataIndex, val);
             this.createFieldValidate(rules, val);
             this.store.addToUpdated(row);
@@ -157,7 +160,6 @@ export default {
         <el-select
           size={this.size}
           multiple={isMultiple}
-          collapse-tags={isMultiple}
           value={prevValue}
           onInput={val => {
             setCellValue(row, dataIndex, val);
@@ -364,7 +366,7 @@ export default {
     renderCell() {
       const { record, column } = this;
       const text = getCellValue(record, column.dataIndex);
-      return <span class="v-cell--text">{this.$$body.renderText(text, column)}</span>;
+      return <span class="v-cell--text">{this.$$body.renderText(text, column, record)}</span>;
     }
   },
   render() {

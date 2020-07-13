@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 16:39:41
+ * @Last Modified time: 2020-07-13 13:48:38
  */
 import config from '../config';
 import Locale from '../locale/mixin';
@@ -35,7 +35,7 @@ export default {
         visible,
         title: this.t('table.highSearch.settingTitle'),
         showFullScreen: false,
-        width: '1000px',
+        width: '1100px',
         destroyOnClose: true,
         containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' }
       },
@@ -43,7 +43,7 @@ export default {
         'update:visible': val => (this.visible = val)
       }
     };
-    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', config.operationColumn].includes(x.dataIndex));
+    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex));
     const cls = [`v-high-search--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>

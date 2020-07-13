@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-07 17:54:58
+ * @Last Modified time: 2020-07-13 13:36:43
  */
 import { convertToRows, deepFindColumn, filterTableColumns, downloadFile, getCellValue } from '../utils';
 import config from '../config';
@@ -239,7 +239,7 @@ export default {
       if (_.isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
       }
-      return this.$$table.$$tableBody.renderText(text, column);
+      return this.$$table.$$tableBody.renderText(text, column, row);
     }
   },
   render() {

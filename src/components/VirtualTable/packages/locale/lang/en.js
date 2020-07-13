@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:18:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 15:32:54
+ * @Last Modified time: 2020-07-13 17:33:33
  */
 export default {
   table: {
@@ -50,6 +50,7 @@ export default {
       searchText: 'search {text}',
       gtPlaceholder: 'greater than',
       ltPlaceholder: 'less than',
+      eqPlaceholder: 'equal',
       neqPlaceholder: 'unequal',
       text: 'filter'
     },
@@ -82,7 +83,22 @@ export default {
       text: 'advanced search',
       settingTitle: 'advanced search setting',
       searchButton: 'start search',
-      closeButton: 'close'
+      closeButton: 'close',
+      removeText: 'remove',
+      andText: 'and',
+      orText: 'or',
+      gtText: '大于',
+      ltText: '小于',
+      gteText: '大于等于',
+      lteText: '小于等于',
+      eqText: '等于',
+      neqText: '不等于',
+      inText: '包含',
+      ninText: '不包含',
+      likeText: '模糊匹配',
+      configText: 'config name',
+      saveButton: 'save',
+      savedSetting: 'saved advanced search setting'
     }
   }
 };
