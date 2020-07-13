@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 17:34:24
+ * @Last Modified time: 2020-07-13 22:05:37
  */
 import localforage from 'localforage';
 import { stringify, array_format, isBracketBalance } from '../filter-sql';
@@ -25,12 +25,13 @@ export default {
       { value: 'or', text: this.t('table.highSearch.orText') }
     ];
     return {
+      loading: !1,
       searchColumns: this.createVTableColumns(),
-      list: [],
+      list: [], // 初始数据
       currentData: [],
-      savedItems: [], // 已经保存的检索配置项(本地存储)
-      currentKey: '', // 当前的检索配置项
-      form: { name: '' } // 要保存的配置项名称
+      savedItems: [],
+      currentKey: '',
+      form: { name: '' }
     };
   },
   computed: {
@@ -43,7 +44,7 @@ export default {
     filterColumns() {
       return this.columns.filter(column => !!column.filter);
     },
-    sqlFragment() {
+    query() {
       let __query__ = ``;
       let cutStep = 0;
       for (let i = 0, len = this.currentData.length; i < len; i++) {
@@ -55,10 +56,10 @@ export default {
         cutStep = x.logic.length;
       }
       __query__ = __query__.slice(0, -1 * cutStep - 2);
-      return __query__;
+      return __query__.trim();
     },
     confirmDisabled() {
-      return !(this.sqlFragment && isBracketBalance(this.sqlFragment));
+      return !(this.query && isBracketBalance(this.query));
     }
   },
   watch: {
@@ -310,13 +311,23 @@ export default {
         }
       } catch (err) {}
     },
+    confirmHandle() {
+      this.loading = !0;
+      this.$$table.clearTableFilter();
+      this.$$table.createSuperSearch(this.query);
+      // this.$nextTick(() => {
+      this.$refs[`tableHeader`]?.filterHandle(this.query);
+      // });
+      setTimeout(() => this.cancelHandle(), 200);
+    },
     // 关闭
     cancelHandle() {
+      this.loading = !1;
       this.$emit('close', false);
     }
   },
   render() {
-    const { list, searchColumns, form, savedItems, currentKey, sqlFragment, confirmDisabled } = this;
+    const { list, searchColumns, form, savedItems, currentKey, query, confirmDisabled, loading } = this;
     return (
       <div class="v-high-search--setting">
         <div class="main">
@@ -339,7 +350,7 @@ export default {
                 <el-button type="primary" icon="el-icon-plus" onClick={this.insertRowsHandle} style={{ marginRight: '-10px' }} />
               </template>
             </VTable>
-            {config.highSearch.showSQL && sqlFragment && <code class="lang-js">{sqlFragment}</code>}
+            {config.highSearch.showSQL && query && <code class="lang-js">{query}</code>}
           </div>
           <div class="saved line">
             <div class="form-wrap">
@@ -385,7 +396,7 @@ export default {
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{this.t('table.highSearch.closeButton')}</el-button>
-          <el-button type="primary" disabled={confirmDisabled}>
+          <el-button type="primary" loading={loading} disabled={confirmDisabled} onClick={() => this.confirmHandle()}>
             {this.t('table.highSearch.searchButton')}
           </el-button>
         </div>

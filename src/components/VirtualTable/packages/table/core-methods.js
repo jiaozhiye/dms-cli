@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-01 17:20:41
+ * @Last Modified time: 2020-07-13 21:40:03
  */
 import { throttle, browse, difference, sleep, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -230,6 +230,10 @@ export default {
     const { currentPage, pageSize } = this.pagination;
     this.pageTableData = this.tableFullData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   },
+  // 设置高级检索的条件
+  createSuperSearch(val = '') {
+    this.superSearchQuery = val;
+  },
   // 是否仅有分页参数产生变化
   onlyPaginationChange(next, prev) {
     const diff = Object.keys(difference(next, prev));
@@ -250,6 +254,10 @@ export default {
   // 清空表头筛选
   clearTableFilter() {
     this.$refs[`tableHeader`]?.clearTheadFilter();
+  },
+  // 清空高级检索的条件
+  clearSuperSearch() {
+    this.createSuperSearch('');
   },
   // 清空表格各种操作记录
   clearTableLog() {

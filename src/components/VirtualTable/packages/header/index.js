@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-12 17:22:10
+ * @Last Modified time: 2020-07-13 22:17:07
  */
 import { pickBy, intersection, isFunction } from 'lodash';
-import { where, stringify, array_format } from '../filter-sql';
-
 import config from '../config';
 import Locale from '../locale/mixin';
-import { convertToRows, getCellValue, isEmpty } from '../utils';
+import { where } from '../filter-sql';
+import { convertToRows, getCellValue, createWhereSQL, isEmpty } from '../utils';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
@@ -241,32 +240,18 @@ export default {
       }
     },
     // 表头筛选
-    filterHandle() {
+    filterHandle(sql) {
       if (!this.isClientFilter) return;
-      this.clientFilter();
+      this.clientFilter(sql);
     },
     // 客户端筛选
-    clientFilter() {
-      const __query__ = this.createWhereSQL(this.filters);
-      this.$$table.tableFullData = __query__ !== '' ? where(this.$$table.tableOriginData, __query__) : [...this.$$table.tableOriginData];
+    clientFilter(sql) {
+      if (typeof sql === 'undefined') {
+        sql = createWhereSQL(this.filters);
+      }
+      this.$$table.tableFullData = sql !== '' ? where(this.$$table.tableOriginData, sql) : [...this.$$table.tableOriginData];
       // 执行排序
       this.sorterHandle();
-    },
-    // 生成查询条件的 sql 片段
-    createWhereSQL(filters) {
-      let __query__ = ``;
-      for (let key in filters) {
-        const property = key.includes('|') ? key.split('|')[1] : key;
-        const filterVal = filters[key];
-        for (let mark in filterVal) {
-          let val = Array.isArray(filterVal[mark]) ? array_format(filterVal[mark]) : stringify(filterVal[mark]);
-          if (val === "''" || val === '[]') continue;
-          __query__ += `${property} ${mark} ${val} and `;
-        }
-      }
-      __query__ = __query__.slice(0, -5);
-      console.log(`where:`, __query__);
-      return __query__;
     },
     // 格式化排序参数
     formatSorterValue(option) {

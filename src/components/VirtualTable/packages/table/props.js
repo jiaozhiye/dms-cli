@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-10 13:48:51
+ * @Last Modified time: 2020-07-13 22:13:53
  */
 import PropTypes from '../../../_utils/vue-types';
 
@@ -181,3 +181,5 @@ export default {
  * CLEAR_LOG：清空表格操作记录
  * CALCULATE_HEIGHT：计算表格高度
  */
+
+// 清空高级检索: 1. fetch.params 变化  2. headFilters 变化  3. 点击清空按钮

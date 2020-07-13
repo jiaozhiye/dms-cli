@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 11:23:46
+ * @Last Modified time: 2020-07-13 22:11:46
  */
 import baseProps from './props';
 import Store from '../store';
 import config from '../config';
 import { isEqual, isUndefined } from 'lodash';
 
-import { columnsFlatMap, getAllColumns, getAllRowKeys, getScrollBarSize, parseHeight, debounce, browse } from '../utils';
+import { columnsFlatMap, getAllColumns, getAllRowKeys, getScrollBarSize, createWhereSQL, parseHeight, debounce, browse } from '../utils';
 import warning from '../../../_utils/warning';
 
 import sizeMixin from '../../../_utils/mixins/size';
@@ -55,6 +55,8 @@ export default {
     this.tableOriginData = [];
     // 内存分页，每页显示的数据
     this.pageTableData = [];
+    // 高级检索的条件
+    this.superSearchQuery = '';
     return {
       // 组件 store 仓库
       store: new Store(),
@@ -184,9 +186,10 @@ export default {
     },
     fetchParams() {
       const params = this.fetch ? this.fetch.params : null;
+      const query = createWhereSQL(this.filters) || this.superSearchQuery || undefined;
       return {
         ...this.sorter,
-        ...{ where: this.$refs[`tableHeader`]?.createWhereSQL(this.filters) || undefined },
+        ...{ where: query },
         ...params,
         ...this.pagination
       };
@@ -247,6 +250,9 @@ export default {
     },
     sorter() {
       this.$emit('change', ...this.tableChange);
+    },
+    [`fetch.params`]() {
+      this.clearSuperSearch();
     },
     pagination: {
       handler() {

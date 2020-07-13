@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 09:18:10
+ * @Last Modified time: 2020-07-13 21:38:22
  */
 import SvgIcon from '../../../SvgIcon';
 import Popper from '../popper';
@@ -89,6 +89,8 @@ export default {
           }
         }
       }
+      // 清空高级检索
+      this.$$table.clearSuperSearch();
       // 设置父组件 filters 值
       this.$$header.filters = Object.assign({}, cloneDeep(this.filters), cloneDeep(this.filterValues));
       this.$refs[`vPopper`].doClose();

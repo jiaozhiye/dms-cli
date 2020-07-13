@@ -22,7 +22,7 @@
       uniqueKey="jzyDemoTable"
       height="auto"
       :columns="columns"
-      :dataSource="list"
+      :fetch="fetch"
       :rowKey="record => record.id"
       :rowSelection="selection"
       :exportExcel="exportExcel"
