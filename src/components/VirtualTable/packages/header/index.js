@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 22:17:07
+ * @Last Modified time: 2020-07-14 10:14:52
  */
 import { pickBy, intersection, isFunction } from 'lodash';
 import config from '../config';
@@ -35,10 +35,10 @@ export default {
   },
   computed: {
     isClientSorter() {
-      return !this.$$table.fetch;
+      return !this.$$table.isFetch;
     },
     isClientFilter() {
-      return !this.$$table.fetch;
+      return !this.$$table.isFetch;
     }
   },
   watch: {
@@ -267,7 +267,7 @@ export default {
     formatFilterValue(option) {
       const result = {};
       for (let key in option) {
-        if (!key.includes('|')) break;
+        if (!key.includes('|')) continue;
         let [type, property] = key.split('|');
         for (let mark in option[key]) {
           if (isEmpty(option[key][mark])) {

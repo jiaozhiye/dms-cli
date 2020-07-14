@@ -225,8 +225,8 @@ export default {
           label: '条件3',
           fieldName: 'c',
           options: {
-            dateType: 'exactdate',
-            minDateTime: '2020-06-20'
+            dateType: 'date'
+            // minDateTime: '2020-06-20'
           }
         },
         {
@@ -244,7 +244,7 @@ export default {
           style: { minWidth: '220px' },
           fieldName: 'startTime|endTime',
           options: {
-            minDateTime: '2020-06-10'
+            // minDateTime: '2020-06-10'
           },
           rules: [{ required: true, message: '请选择日期', trigger: 'change' }]
         },
@@ -444,6 +444,7 @@ export default {
           precision: 2,
           required: true,
           sorter: true,
+          groupSummary: true,
           filter: {
             type: 'number'
           },
@@ -463,6 +464,7 @@ export default {
           width: 150,
           required: true,
           sorter: true,
+          groupSummary: true,
           filter: {
             type: 'number'
           },
@@ -483,6 +485,7 @@ export default {
           precision: 2,
           align: 'right',
           sorter: true,
+          groupSummary: true,
           filter: {
             type: 'number'
           },

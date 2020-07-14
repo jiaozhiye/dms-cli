@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 22:11:46
+ * @Last Modified time: 2020-07-14 10:14:10
  */
 import baseProps from './props';
 import Store from '../store';
@@ -167,7 +167,7 @@ export default {
       return this.flattenColumns.some(x => !!x.summation);
     },
     showPagination() {
-      return !!this.fetch || this.webPagination;
+      return this.isFetch || this.webPagination;
     },
     isHeadSorter() {
       return this.flattenColumns.some(column => column.sorter);
@@ -181,18 +181,22 @@ export default {
     isTableEmpty() {
       return !this.tableData.length;
     },
-    bordered() {
-      return this.border || this.isGroup;
+    isFetch() {
+      return !!this.fetch;
     },
     fetchParams() {
-      const params = this.fetch ? this.fetch.params : null;
-      const query = createWhereSQL(this.filters) || this.superSearchQuery || undefined;
+      const params = this.isFetch ? this.fetch.params : null;
+      const query = createWhereSQL(this.filters) || this.superSearchQuery || '';
+      const where = query ? { where: query } : null;
       return {
         ...this.sorter,
-        ...{ where: query },
+        ...where,
         ...params,
         ...this.pagination
       };
+    },
+    bordered() {
+      return this.border || this.isGroup;
     },
     tableSize() {
       const size = this.size || config.toTableSize[this.currentSize];
@@ -251,31 +255,29 @@ export default {
     sorter() {
       this.$emit('change', ...this.tableChange);
     },
-    [`fetch.params`]() {
-      this.clearSuperSearch();
-    },
     pagination: {
       handler() {
         this.$emit('change', ...this.tableChange);
       },
       deep: true
     },
+    [`fetch.params`]() {
+      this.clearSuperSearch();
+    },
     fetchParams(next, prev) {
-      if (!this.fetch) return;
+      if (!this.isFetch) return;
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange && next.currentPage > 1) {
         this.toFirstPage();
       } else {
-        this.getTableData();
+        debounce(this.getTableData)();
       }
     },
-    scrollYLoad(next) {
-      !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
+    expandable() {
+      this.tableColumns = this.createTableColumns(this.columns);
     },
-    [`layout.viewportHeight`](next) {
-      const visibleYSize = Math.ceil(next / this.scrollYStore.rowHeight);
-      const renderSize = browse()['webkit'] ? visibleYSize + 3 : visibleYSize + 5;
-      Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
+    rowSelection() {
+      this.tableColumns = this.createTableColumns(this.columns);
     },
     selectionKeys(next, prev) {
       if (!this.rowSelection || isEqual(next, prev)) return;
@@ -283,24 +285,26 @@ export default {
       const selectedRows = this.tableFullData.filter(record => next.includes(this.getRowKey(record, record.index)));
       onChange(next, selectedRows);
     },
-    rowSelection() {
-      this.tableColumns = this.createTableColumns(this.columns);
-    },
     [`rowSelection.selectedRowKeys`]() {
       this.selectionKeys = this.createSelectionKeys();
     },
-    expandable() {
-      this.tableColumns = this.createTableColumns(this.columns);
+    [`layout.viewportHeight`](next) {
+      const visibleYSize = Math.ceil(next / this.scrollYStore.rowHeight);
+      const renderSize = browse()['webkit'] ? visibleYSize + 3 : visibleYSize + 5;
+      Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
     },
-    loading(next) {
-      this.showLoading = next;
+    scrollYLoad(next) {
+      !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
     },
     scrollX(next) {
       this.isPingRight = next;
+    },
+    loading(next) {
+      this.showLoading = next;
     }
   },
   created() {
-    if (!this.fetch) {
+    if (!this.isFetch) {
       this.createTableData(this.dataSource);
     } else {
       this.getTableData();

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 14:13:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 20:48:46
+ * @Last Modified time: 2020-07-14 14:23:48
  */
 import { get, set, transform, isEqual, isObject } from 'lodash';
 import { stringify, array_format } from '../filter-sql';
@@ -439,7 +439,7 @@ export const createWhereSQL = filters => {
 export const groupBy = (array = [], props = []) => {
   let fn = x => {
     let res = [];
-    props.forEach(k => res.push(x[k]));
+    props.forEach(k => res.push(getCellValue(x, k)));
     return res;
   };
   let groups = {};

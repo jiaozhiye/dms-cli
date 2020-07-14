@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-10 10:58:39
+ * @Last Modified time: 2020-07-14 15:31:38
  **/
 import { get, set, xor, transform, cloneDeep, isEqual, isUndefined, isObject, isFunction, isRegExp, isElement } from 'lodash';
 import moment from 'moment';
@@ -684,7 +684,7 @@ export default {
             value={form[fieldName]}
             onInput={val => {
               val = !val ? this.getDefaultStartTime(minDateTime) : val;
-              form[fieldName] = this.formatDate(val, conf[dateType].valueFormat);
+              form[fieldName] = this.formatDate(val, conf[dateType].valueFormat, dateType === 'datetime');
             }}
             default-time={defaultTime}
             value-format={conf[dateType].valueFormat}
@@ -757,7 +757,6 @@ export default {
         const end = new Date();
         const start = new Date();
         start.setTime(start.getTime() - 3600 * 1000 * 24 * Number(days));
-        form[fieldName][1] = this.getDefaultEndTime();
         picker.$emit('pick', start);
       };
       const pickers = [
@@ -845,8 +844,7 @@ export default {
               type={dateType.replace('exact', '').slice(0, -5)}
               value={form[fieldName][1]}
               onInput={val => {
-                val = !val ? this.getDefaultEndTime() : val;
-                form[fieldName] = this.formatDate([form[fieldName][0], val], conf[dateType].valueFormat);
+                form[fieldName] = this.formatDate([form[fieldName][0], val ?? ''], conf[dateType].valueFormat);
               }}
               pickerOptions={{
                 disabledDate: time => {
@@ -1524,13 +1522,14 @@ export default {
       return datetime ? `${moment(datetime).format('YYYY-MM-DD')} 00:00:00` : '1900-01-01 00:00:00';
     },
     getDefaultEndTime(datetime) {
-      return `${moment(datetime).format('YYYY-MM-DD')} 23:59:59`;
+      return datetime ? `${moment(datetime).format('YYYY-MM-DD')} 23:59:59` : `${moment().format('YYYY-MM-DD')} 23:59:59`;
     },
     // 日期格式化
-    formatDate(val, vf) {
+    formatDate(val, vf, nft) {
       const arr = Array.isArray(val) ? val : [val];
       const mType = vf.replace('yyyy', 'YYYY').replace('dd', 'DD');
-      let res = arr.map((x = '', i) => {
+      let res = arr.map((x, i) => {
+        x = x ?? '';
         let item = /^[\d-\s\:]+$/.test(x) ? moment(x).format(mType) : '';
         if (item === 'Invalid date') {
           item = '';
@@ -1544,9 +1543,11 @@ export default {
       if (res.length > 1 && moment(res[1]).isBefore(res[0])) {
         res[1] = res[0];
       }
-      res = res.map((x, i) => {
-        return i === 0 ? x.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : x.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
-      });
+      if (!nft) {
+        res = res.map((x, i) => {
+          return i === 0 ? x.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : x.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
+        });
+      }
       return Array.isArray(val) ? res : res[0];
     },
     // 数字格式化

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-03 15:15:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 17:32:50
+ * @Last Modified time: 2020-07-14 13:39:20
  */
 export default {
   table: {
@@ -77,7 +77,12 @@ export default {
       confirmButton: '显示汇总',
       removeText: '移除',
       configText: '配置名称',
-      resultText: '汇总结果'
+      resultText: '汇总结果',
+      sumText: '列值汇总',
+      maxText: '列最大值',
+      minText: '列最小值',
+      avgText: '列平均值',
+      countText: '条数汇总'
     },
     highSearch: {
       text: '高级检索',

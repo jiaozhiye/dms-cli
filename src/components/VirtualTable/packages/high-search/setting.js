@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 22:05:37
+ * @Last Modified time: 2020-07-14 13:49:28
  */
 import localforage from 'localforage';
 import { stringify, array_format, isBracketBalance } from '../filter-sql';
@@ -205,8 +205,7 @@ export default {
                 clearable: false
               }
             };
-          },
-          dictItems: this.logicDicts
+          }
         }
       ];
     },
@@ -315,12 +314,9 @@ export default {
       this.loading = !0;
       this.$$table.clearTableFilter();
       this.$$table.createSuperSearch(this.query);
-      // this.$nextTick(() => {
-      this.$refs[`tableHeader`]?.filterHandle(this.query);
-      // });
+      this.$nextTick(() => this.$$table.$refs[`tableHeader`]?.filterHandle(this.query));
       setTimeout(() => this.cancelHandle(), 200);
     },
-    // 关闭
     cancelHandle() {
       this.loading = !1;
       this.$emit('close', false);

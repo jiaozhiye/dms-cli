@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 21:40:03
+ * @Last Modified time: 2020-07-14 10:12:38
  */
 import { throttle, browse, difference, sleep, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -108,7 +108,7 @@ export default {
     }
 
     this.handleTableData();
-    !this.fetch && this.setRecordsTotal();
+    !this.isFetch && this.setRecordsTotal();
 
     return this.computeScrollLoad();
   },

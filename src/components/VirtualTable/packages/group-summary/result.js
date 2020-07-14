@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-05-20 09:36:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-06-20 10:39:12
+ * @Last Modified time: 2020-07-14 14:43:01
  */
 import { maxBy, minBy, sumBy } from 'lodash';
+import { sleep, groupBy, getCellValue, setCellValue } from '../utils';
 import config from '../config';
-import { groupBy, getCellValue, setCellValue } from '../utils';
 
 import VTable from '../table';
 
@@ -15,14 +15,18 @@ export default {
   props: ['columns', 'group', 'summary'],
   inject: ['$$table'],
   data() {
-    const groupColumns = this.group.map(x => ({ dataIndex: x.group, title: this.findColumnTitle(x.group) }));
+    const groupColumns = this.group.map(x => ({
+      dataIndex: x.group,
+      ...this.formatColumn(x.group)
+    }));
     const summaryColumns = this.summary.map(x => {
       if (x.summary === config.groupSummary.total.value) {
         return { dataIndex: x.summary, title: config.groupSummary.total.text };
       }
-      return { dataIndex: x.summary, title: this.findColumnTitle(x.summary) };
+      return { dataIndex: x.summary, ...this.formatColumn(x.summary) };
     });
     return {
+      loading: !1,
       list: [], // 汇总表格数据
       vColumns: this.createvTableColumns(groupColumns, summaryColumns),
       exportExcel: {
@@ -33,12 +37,40 @@ export default {
       }
     };
   },
+  computed: {
+    fetchParams() {
+      const { fetchParams, pagination } = this.$$table;
+      const result = {};
+      const pageKeys = Object.keys(pagination);
+      for (let key in fetchParams) {
+        if (pageKeys.includes(key)) continue;
+        result[key] = fetchParams[key];
+      }
+      return result;
+    },
+    params() {
+      const selectSQL = this.summary.map(x => `${x.formula}(${x.summary})`).join(',');
+      const groupBySQL = this.group.map(x => `${x.group}`).join(',');
+      return {
+        ...this.fetchParams,
+        summary: `${selectSQL}|${groupBySQL}`
+      };
+    }
+  },
   mounted() {
-    this.list = this.createvTableData(this.$$table.tableFullData);
+    if (this.$$table.isFetch) {
+      this.getvTableData();
+    } else {
+      this.list = this.createvTableData(this.$$table.tableFullData);
+    }
   },
   methods: {
-    findColumnTitle(dataIndex) {
-      return this.columns.find(x => x.dataIndex === dataIndex).title;
+    formatColumn(dataIndex) {
+      const column = this.columns.find(x => x.dataIndex === dataIndex);
+      return {
+        title: column.title,
+        dictItems: column.dictItems ?? []
+      };
     },
     createvTableColumns(groupColumns, summaryColumns) {
       return [
@@ -52,7 +84,8 @@ export default {
         },
         ...groupColumns.map(x => ({
           title: x.title,
-          dataIndex: x.dataIndex
+          dataIndex: x.dataIndex,
+          dictItems: x.dictItems
         })),
         ...summaryColumns.map(x => ({
           title: x.title,
@@ -78,8 +111,11 @@ export default {
         this.summary.forEach(x => {
           let key = x.summary;
           let fn = x.formula;
+          if (fn === 'count') {
+            setCellValue(record, key, arr.length);
+          }
           if (fn === 'sum') {
-            setCellValue(record, key, key !== '__total__' ? sumBy(arr, key) : arr.length);
+            setCellValue(record, key, sumBy(arr, key));
           }
           if (fn === 'max') {
             setCellValue(record, key, maxBy(arr, key)[key]);
@@ -95,14 +131,33 @@ export default {
       });
       // =================
       return res;
+    },
+    async getvTableData() {
+      this.loading = !0;
+      if (process.env.MOCK_DATA === 'true') {
+        await sleep(500);
+        this.list = this.createvTableData(this.$$table.tableFullData);
+      } else {
+        // console.log(`ajax 请求参数：`, this.params);
+        try {
+          const res = await this.$$table.fetch.api(this.params);
+          if (res.code === 200) {
+            this.list = res.data ?? [];
+          } else {
+            this.list = [];
+          }
+        } catch (e) {}
+      }
+      this.loading = !1;
     }
   },
   render() {
-    const { vColumns, list, exportExcel, tablePrint } = this;
+    const { vColumns, list, loading, exportExcel, tablePrint } = this;
     return (
       <div>
         <VTable
           height={400}
+          loading={loading}
           dataSource={list}
           columns={vColumns}
           showFullScreen={false}

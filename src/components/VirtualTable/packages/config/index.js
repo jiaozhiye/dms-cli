@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 16:48:25
+ * @Last Modified time: 2020-07-14 13:21:11
  */
 import i18n from '../locale';
 
@@ -30,13 +30,7 @@ const config = {
   },
   // 汇总
   groupSummary: {
-    total: { text: '记录数', value: '__total__' },
-    calcItems: [
-      { text: '列值汇总', value: 'sum' },
-      { text: '列最大值', value: 'max' },
-      { text: '列最小值', value: 'min' },
-      { text: '列平均值', value: 'avg' }
-    ]
+    total: { text: '记录数', value: '*' }
   },
   // 高级检索
   highSearch: {

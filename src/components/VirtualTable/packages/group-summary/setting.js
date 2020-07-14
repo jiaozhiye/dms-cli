@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 10:00:14
+ * @Last Modified time: 2020-07-14 14:03:00
  */
 import localforage from 'localforage';
-
-import { getCellValue, setCellValue, createUidKey } from '../utils';
+import { createUidKey } from '../utils';
 import config from '../config';
 import Locale from '../locale/mixin';
 
@@ -21,21 +20,28 @@ export default {
   props: ['columns'],
   inject: ['$$table'],
   data() {
+    // 分组项 字典
+    this.groupItems = this.columns.filter(x => !x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex }));
+    // 汇总列 字典
+    this.summaryItems = [config.groupSummary.total, ...this.columns.filter(x => !!x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex }))];
+    // 计算公式 字典
+    this.formulaItems = [
+      { text: this.t('table.groupSummary.sumText'), value: 'sum' },
+      { text: this.t('table.groupSummary.maxText'), value: 'max' },
+      { text: this.t('table.groupSummary.minText'), value: 'min' },
+      { text: this.t('table.groupSummary.avgText'), value: 'avg' },
+      { text: this.t('table.groupSummary.countText'), value: 'count' }
+    ];
     return {
-      savedItems: [], // 已经保存的汇总配置项(本地存储)
-      currentKey: '', // 当前的汇总配置项
-      form: { name: '' }, // 要保存的配置项名称
+      savedItems: [],
+      currentKey: '',
+      form: { name: '' },
       groupList: [],
-      groupColumns: this.createGroupColumns(), // 分组项表格列
+      groupColumns: this.createGroupColumns(),
       summaryList: [],
-      summaryColumns: this.createSummaryColumns(), // 汇总表格列
+      summaryColumns: this.createSummaryColumns(),
       groupTableData: [], // 分组项表格数据
       summaryTableData: [], // 汇总表格数据
-      // 分组项 -> 下拉别表
-      groupItems: this.columns.filter(x => !x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex })),
-      // 汇总列 -> 下拉别表
-      summaryItems: [config.groupSummary.total, ...this.columns.filter(x => !!x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex }))],
-      // 汇总结果 状态
       visible: false
     };
   },
@@ -46,13 +52,9 @@ export default {
     $tableSummary() {
       return this.$refs.summary;
     },
-    size() {
-      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
-    },
     groupSummaryKey() {
       return this.$$table.uniqueKey ? `summary_${this.$$table.uniqueKey}` : '';
     },
-    // 显示汇总 按钮的状态
     confirmDisabled() {
       const { groupTableData, summaryTableData } = this;
       const isGroup = groupTableData.length && groupTableData.every(x => Object.values(x).every(k => k !== ''));
@@ -83,6 +85,9 @@ export default {
     } catch (err) {}
   },
   methods: {
+    findColumn(columns, dataIndex) {
+      return columns.find(x => x.dataIndex === dataIndex);
+    },
     createGroupColumns() {
       return [
         {
@@ -96,7 +101,6 @@ export default {
                 <el-button
                   type="text"
                   onClick={() => {
-                    this.setGroupDisabled(row.group, false);
                     this.$tableGroup.REMOVE_RECORDS(row);
                   }}
                 >
@@ -110,26 +114,15 @@ export default {
           dataIndex: 'group',
           title: '分组项',
           width: 200,
-          render: (text, row, column) => {
-            const prevValue = getCellValue(row, column.dataIndex);
-            return (
-              <el-select
-                size={this.size}
-                value={prevValue}
-                onInput={val => {
-                  setCellValue(row, column.dataIndex, val);
-                }}
-                clearable={!0}
-                onChange={val => {
-                  prevValue && this.setGroupDisabled(prevValue, false);
-                  val && this.setGroupDisabled(val, true);
-                }}
-              >
-                {this.groupItems.map(x => (
-                  <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
-                ))}
-              </el-select>
-            );
+          editRender: row => {
+            return {
+              type: 'select',
+              editable: true,
+              items: this.setGroupDisabled(),
+              extra: {
+                clearable: false
+              }
+            };
           }
         }
       ];
@@ -147,7 +140,6 @@ export default {
                 <el-button
                   type="text"
                   onClick={() => {
-                    this.setSummaryDisabled(row.summary, false);
                     this.$tableSummary.REMOVE_RECORDS(row);
                   }}
                 >
@@ -161,60 +153,48 @@ export default {
           dataIndex: 'summary',
           title: '汇总列',
           width: 200,
-          render: (text, row, column) => {
-            const prevValue = getCellValue(row, column.dataIndex);
-            return (
-              <el-select
-                size={this.size}
-                value={prevValue}
-                onInput={val => {
-                  setCellValue(row, column.dataIndex, val);
-                }}
-                clearable={!0}
-                onChange={val => {
-                  prevValue && this.setSummaryDisabled(prevValue, false);
-                  val && this.setSummaryDisabled(val, true);
-                }}
-              >
-                {this.summaryItems.map(x => (
-                  <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
-                ))}
-              </el-select>
-            );
+          editRender: row => {
+            return {
+              type: 'select',
+              editable: true,
+              items: this.setSummaryDisabled(),
+              extra: {
+                clearable: false
+              },
+              onChange: (cell, row) => {
+                row[`formula`] = '';
+              }
+            };
           }
         },
         {
           dataIndex: 'formula',
           title: '计算公式',
           width: 150,
-          render: (text, row, column) => {
-            const prevValue = getCellValue(row, column.dataIndex);
-            const itemList = row.summary === '__total__' ? config.groupSummary.calcItems.slice(0, 1) : [...config.groupSummary.calcItems];
-            return (
-              <el-select
-                size={this.size}
-                value={prevValue}
-                onInput={val => {
-                  setCellValue(row, column.dataIndex, val);
-                }}
-                clearable={!0}
-              >
-                {itemList.map(x => (
-                  <el-option key={x.value} label={x.text} value={x.value} />
-                ))}
-              </el-select>
-            );
+          editRender: row => {
+            return {
+              type: 'select',
+              editable: true,
+              items: row.summary === config.groupSummary.total.value ? this.formulaItems.slice(this.formulaItems.length - 1) : this.formulaItems,
+              extra: {
+                clearable: false
+              }
+            };
           }
         }
       ];
     },
-    setGroupDisabled(val, bool) {
-      if (!val) return;
-      this.groupItems.find(x => x.value === val).disabled = bool;
+    setGroupDisabled() {
+      return this.groupItems.map(x => ({
+        ...x,
+        disabled: this.groupTableData.findIndex(k => k.group === x.value) > -1
+      }));
     },
-    setSummaryDisabled(val, bool) {
-      if (!val) return;
-      this.summaryItems.find(x => x.value === val).disabled = bool;
+    setSummaryDisabled() {
+      return this.summaryItems.map(x => ({
+        ...x,
+        disabled: this.summaryTableData.findIndex(k => k.summary === x.value) > -1
+      }));
     },
     // 保存配置
     async saveConfigHandle() {
@@ -289,7 +269,9 @@ export default {
               showColumnDefine={false}
               rowKey={record => record.index}
               columnsChange={columns => (this.groupColumns = columns)}
-              onDataChange={tableData => (this.groupTableData = [...tableData])}
+              onDataChange={tableData => {
+                this.groupTableData = tableData;
+              }}
             >
               <template slot="default">
                 <el-button type="primary" icon="el-icon-plus" onClick={() => this.$tableGroup.INSERT_RECORDS({})} style={{ marginLeft: '10px', marginRight: '-10px' }} />
@@ -306,7 +288,9 @@ export default {
               showColumnDefine={false}
               rowKey={record => record.index}
               columnsChange={columns => (this.summaryColumns = columns)}
-              onDataChange={tableData => (this.summaryTableData = [...tableData])}
+              onDataChange={tableData => {
+                this.summaryTableData = tableData;
+              }}
             >
               <template slot="default">
                 <el-button type="primary" icon="el-icon-plus" style={{ marginRight: '-10px' }} onClick={() => this.$tableSummary.INSERT_RECORDS({})} />
@@ -315,7 +299,7 @@ export default {
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input class="form-item" placeholder={this.t('table.groupSummary.configText')} value={form.name} onInput={val => (this.form.name = val)} disabled={confirmDisabled} />
+              <el-input class="form-item" placeholder={this.t('table.groupSummary.configText')} value={form.name} disabled={confirmDisabled} onInput={val => (this.form.name = val)} />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {this.t('table.groupSummary.saveButton')}
               </el-button>
@@ -357,7 +341,7 @@ export default {
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{this.t('table.groupSummary.closeButton')}</el-button>
-          <el-button type="primary" onClick={() => this.confirmHandle()} disabled={confirmDisabled}>
+          <el-button type="primary" disabled={confirmDisabled} onClick={() => this.confirmHandle()}>
             {this.t('table.groupSummary.confirmButton')}
           </el-button>
         </div>
